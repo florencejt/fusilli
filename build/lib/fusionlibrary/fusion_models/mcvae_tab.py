@@ -12,8 +12,8 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
     This class implements a model that fuses the two types of tabular data using the MCVAE approach.
     MCVAE: multi-channel variational autoencoder.
 
-    The MCVAE creates a joint latent space of the two types of tabular data based off a joint latent prior
-    and joint decoding.
+    The MCVAE creates a joint latent space of the two types of tabular data based off a joint
+    latent prior and joint decoding.
 
     Attributes
     ----------

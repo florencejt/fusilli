@@ -797,8 +797,8 @@ class GraphDataModule:
         self.graph_data = self.graph_creation_method(self.dataset)
 
         # plot and save the graph
-        # TODO make this better
-        plot_graph(self.graph_data, self.params)
+        # TODO move to the soon-to-be-made plotting module? or just remove
+        # plot_graph(self.graph_data, self.params)
 
     def get_lightning_module(self):
         """
@@ -938,6 +938,7 @@ class KFoldGraphDataModule:
             graph_data = self.graph_creation_method(self.dataset)
 
             # plot and save the graph?
+            # TODO remove?
             plot_graph(graph_data, self.params)
 
             new_folds.append((graph_data, train_idxs, test_idxs))
@@ -974,3 +975,51 @@ class KFoldGraphDataModule:
             lightning_modules.append(lightning_module)
 
         return lightning_modules  # list of lightning modules for each fold
+
+
+def get_data_module(init_model, params):
+    # needs model attributes: fusion_type and modality_type
+    # needs params: kfold, pred_type etc
+    if init_model.fusion_type == "graph":
+        if params["kfold_flag"]:
+            dmg = KFoldGraphDataModule(
+                params,
+                init_model.modality_type,
+                sources=params["data_sources"],
+                graph_creation_method=init_model.graph_maker,
+            )
+        else:
+            dmg = GraphDataModule(
+                params,
+                init_model.modality_type,
+                sources=params["data_sources"],
+                graph_creation_method=init_model.graph_maker,
+            )
+
+        dmg.prepare_data()
+        dmg.setup()
+        dm = dmg.get_lightning_module()
+
+        if params["kfold_flag"]:
+            for dm_instance in dm:
+                dm_instance.data_dims = dmg.data_dims
+        else:
+            dm.data_dims = dmg.data_dims
+
+    else:
+        # another other than graph fusion
+        if params["kfold_flag"]:
+            datamodule_func = KFoldDataModule
+        else:
+            datamodule_func = CustomDataModule
+
+        dm = datamodule_func(
+            params,
+            init_model.modality_type,
+            sources=params["data_sources"],
+            subspace_method=init_model.subspace_method,
+        )
+        dm.prepare_data()
+        dm.setup()
+
+    return dm

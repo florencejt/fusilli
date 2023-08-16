@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fusionlibrary.train_functions &mdash; fusionlibrary  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fusionlibrary
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fusionlibrary</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fusionlibrary.train_functions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fusionlibrary.train_functions</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Contains the train_and_test function: trains and tests a model for a given</span>
+<span class="sd">repetition and, if k_fold trained, a fold.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">fusionlibrary.fusion_models.base_pl_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span> <span class="nn">fusionlibrary.utils.pl_utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_final_val_metrics</span><span class="p">,</span>
+    <span class="n">init_trainer</span><span class="p">,</span>
+    <span class="n">set_logger</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="train_and_test"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.train_and_test">[docs]</a><span class="k">def</span> <span class="nf">train_and_test</span><span class="p">(</span>
+    <span class="n">dm</span><span class="p">,</span>
+    <span class="n">params</span><span class="p">,</span>
+    <span class="n">rep_n</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">,</span>
+    <span class="n">fusion_model</span><span class="p">,</span>
+    <span class="n">init_model</span><span class="p">,</span>
+    <span class="n">metric_name_list</span><span class="p">,</span>
+    <span class="n">method_name</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Trains and tests a model for a given repetition and, if k_fold trained, a fold.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dm : pytorch lightning data module</span>
+<span class="sd">        Data module.</span>
+<span class="sd">    params : dict</span>
+<span class="sd">        Dictionary of parameters.</span>
+<span class="sd">    rep_n : int</span>
+<span class="sd">        Repetition number.</span>
+<span class="sd">    k : int</span>
+<span class="sd">        Fold number.</span>
+<span class="sd">    fusion_model : class</span>
+<span class="sd">        Fusion model class.</span>
+<span class="sd">    init_model : class</span>
+<span class="sd">        Init model class (initialized empty for method details).</span>
+<span class="sd">    metric_name_list : list</span>
+<span class="sd">        List of metric names.</span>
+<span class="sd">    method_name : str</span>
+<span class="sd">        Name of the method.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    model : pytorch lightning model</span>
+<span class="sd">        Trained model.</span>
+<span class="sd">    trainer : pytorch lightning trainer</span>
+<span class="sd">        Trained trainer.</span>
+<span class="sd">    metric_1 : float</span>
+<span class="sd">        Metric 1 (depends on metric_name_list and params[&quot;pred_type&quot;]).</span>
+<span class="sd">    metric_2 : float</span>
+<span class="sd">        Metric 2 (depends on metric_name_list and params[&quot;pred_type&quot;]).</span>
+<span class="sd">    val_reals : list</span>
+<span class="sd">        List of validation real values.</span>
+<span class="sd">    val_preds : list</span>
+<span class="sd">        List of validation predicted values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">init_model</span><span class="o">.</span><span class="n">fusion_type</span> <span class="o">==</span> <span class="s2">&quot;graph&quot;</span><span class="p">:</span>
+            <span class="c1"># graph k-fold loader is different to normal k-fold loader</span>
+            <span class="n">dm</span> <span class="o">=</span> <span class="n">dm</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">()</span>
+            <span class="n">val_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">val_dataloader</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">(</span><span class="n">fold_idx</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">val_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">val_dataloader</span><span class="p">(</span><span class="n">fold_idx</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="c1"># update plot file name suffix</span>
+        <span class="n">plot_file_suffix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">method_name</span><span class="si">}</span><span class="s2">_rep_</span><span class="si">{</span><span class="n">rep_n</span><span class="si">}</span><span class="s2">_fold_</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">()</span>
+        <span class="n">val_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">val_dataloader</span><span class="p">()</span>
+        <span class="n">plot_file_suffix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">method_name</span><span class="si">}</span><span class="s2">_rep_</span><span class="si">{</span><span class="n">rep_n</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">rep_n</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">init_model</span><span class="p">)</span>  <span class="c1"># set logger</span>
+
+    <span class="n">trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>  <span class="c1"># init trainer</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="p">(</span>
+        <span class="n">fusion_model</span><span class="p">(</span>
+            <span class="n">pred_type</span><span class="o">=</span><span class="n">params</span><span class="p">[</span>
+                <span class="s2">&quot;pred_type&quot;</span>
+            <span class="p">],</span>  <span class="c1"># pred_type is a string (binary, regression, multiclass)</span>
+            <span class="n">data_dims</span><span class="o">=</span><span class="n">dm</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span>  <span class="c1"># data_dims is a list of tuples</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>  <span class="c1"># params is a dict</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># graph-methods use masks to select train and val nodes rather than train and val dataloaders</span>
+    <span class="c1"># train and val dataloaders are still used for graph but they&#39;re identical</span>
+    <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">fusion_type</span> <span class="o">==</span> <span class="s2">&quot;graph&quot;</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">train_mask</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">input_train_nodes</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">val_mask</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">input_test_nodes</span>
+
+    <span class="c1"># fit model</span>
+    <span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+        <span class="n">model</span><span class="p">,</span>
+        <span class="n">train_dataloaders</span><span class="o">=</span><span class="n">train_dataloader</span><span class="p">,</span>
+        <span class="n">val_dataloaders</span><span class="o">=</span><span class="n">val_dataloader</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># test model</span>
+    <span class="n">trainer</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">val_dataloader</span><span class="p">)</span>
+
+    <span class="c1"># update results</span>
+    <span class="n">metric_1</span><span class="p">,</span> <span class="n">metric_2</span> <span class="o">=</span> <span class="n">get_final_val_metrics</span><span class="p">(</span><span class="n">metric_name_list</span><span class="p">,</span> <span class="n">trainer</span><span class="p">)</span>
+
+    <span class="c1"># plot end of run figures</span>
+    <span class="n">eval_figs</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">plot_eval_figs</span><span class="p">(</span>
+        <span class="n">train_dataloader</span><span class="p">,</span>
+        <span class="n">val_dataloader</span><span class="p">,</span>
+        <span class="n">plot_file_suffix</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">metric_1</span><span class="p">,</span> <span class="n">metric_2</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Florence J Townend.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -627,7 +627,7 @@ class ParentFusionModel:
         params : dict
             Dictionary of parameters.
         """
-        super(ParentFusionModel, self).__init__()
+        super().__init__()
         self.pred_type = pred_type
         self.data_dims = data_dims
         self.mod1_dim = self.data_dims[0]

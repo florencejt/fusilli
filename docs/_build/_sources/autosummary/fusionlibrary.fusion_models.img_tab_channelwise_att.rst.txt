@@ -1,0 +1,29 @@
+fusionlibrary.fusion\_models.img\_tab\_channelwise\_att
+=======================================================
+
+.. automodule:: fusionlibrary.fusion_models.img_tab_channelwise_att
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ImageChannelWiseMultiAttention
+   
+   
+
+   
+   
+   
+
+
+

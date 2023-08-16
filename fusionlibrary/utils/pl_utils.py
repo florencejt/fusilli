@@ -7,6 +7,8 @@ import wandb
 from pytorch_lightning.loggers import TensorBoardLogger, WandbLogger
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning import Trainer
+from tqdm import tqdm
+from pytorch_lightning.callbacks import TQDMProgressBar
 
 
 def set_logger(params, rep, fold, init_model):
@@ -27,6 +29,7 @@ def set_logger(params, rep, fold, init_model):
     modality_type = init_model.modality_type
     fusion_type = init_model.fusion_type
 
+    # MOVE TO LOCAL RUN?
     if params["kfold_flag"]:
         name = f"{method_name}_rep_{rep}_fold_{fold}"
         tags = [modality_type, fusion_type, f"rep_{str(rep)}", f"fold_{str(fold)}"]
@@ -50,6 +53,14 @@ def set_logger(params, rep, fold, init_model):
     return logger
 
 
+class LitProgressBar(TQDMProgressBar):
+    def init_validation_tqdm(self):
+        bar = tqdm(
+            disable=True,
+        )
+        return bar
+
+
 def init_trainer(logger, max_epochs=10000):
     """
     Initialize the pytorch lightning trainer object.
@@ -61,6 +72,7 @@ def init_trainer(logger, max_epochs=10000):
     Returns:
         trainer (object): Pytorch lightning trainer object.
     """
+
     early_stop_callback = EarlyStopping(
         monitor="val_loss",
         min_delta=0.00,
@@ -69,12 +81,14 @@ def init_trainer(logger, max_epochs=10000):
         mode="min",
     )
 
+    bar = LitProgressBar()
+
     trainer = Trainer(
         max_epochs=max_epochs,
         num_sanity_val_steps=0,
         # accelerator="mps",
         devices=1,
-        callbacks=[early_stop_callback],
+        callbacks=[early_stop_callback, bar],
         log_every_n_steps=2,
         # default_root_dir=run_dir,
         logger=logger,
