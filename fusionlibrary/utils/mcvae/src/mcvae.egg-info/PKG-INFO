@@ -1,0 +1,10 @@
+Metadata-Version: 2.1
+Name: mcvae
+Version: 2.0.0
+Summary: Multi-Channel Variational Autoencoder
+Author: Luigi Antelmi
+Author-email: luigi.antelmi@inria.fr
+License: Inria
+License-File: LICENSE
+
+TODO

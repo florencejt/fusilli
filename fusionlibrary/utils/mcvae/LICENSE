@@ -1,0 +1,43 @@
+SOFTWARE LICENSE AGREEMENT
+
+
+Software "mcvae" ©Inria – 2019, all rights reserved, hereinafter "the Software".
+
+This Software has been developed by researchers of EPIONE project team of Inria (Institut National de Recherche en Informatique et Automatique).
+
+Inria, Domaine de Voluceau, Rocquencourt - BP 105
+78153 Le Chesnay Cedex, FRANCE
+
+Inria holds all the ownership rights on the Software.
+
+The Software is still being currently developed.
+It is the Inria's aim for the Software to be used by the scientific community so as to test it and, evaluate it so that Inria may improve it.
+
+For these reasons Inria has decided to distribute the Software via github server. 
+
+Inria grants to the academic user, a free of charge, without right to sublicense non-exclusive right to use the Software for research purposes for a period of one (1) year from the date of the download of the source code.
+Any other use without of prior consent of Inria is prohibited.
+
+The academic user explicitly acknowledges having received from Inria all information allowing him to appreciate the adequacy between of the Software and his needs and to undertake all necessary precautions for his execution and use.
+
+The Software is provided only as a source file.
+
+In case of using the Software for a publication or other results obtained through the use of the Software, user should cite the Software as follows:
+
+@inproceedings{Antelmi2019,
+author = {Antelmi, Luigi and Ayache, Nicholas and Robert, Philippe and Lorenzi, Marco},
+booktitle = {Proceedings of the 36th International Conference on Machine Learning},
+editor = {Chaudhuri, Kamalika and Salakhutdinov, Ruslan},
+pages = {302--311},
+publisher = {PMLR},
+title = {{Sparse Multi-Channel Variational Autoencoder for the Joint Analysis of Heterogeneous Data}}, 
+year = {2019}
+}
+
+Every user of the Software could communicate to the developers at the following addresses [luigi.antelmi@inria.fr, marco.lorenzi@inria.fr] his or her remarks as to the use of the Software.
+
+THE USER CANNOT USE, EXPLOIT OR COMMERCIALLY DISTRIBUTE THE SOFTWARE WITHOUT PRIOR AND EXPLICIT CONSENT OF INRIA (stip-sam@inria.fr). ANY SUCH ACTION WILL CONSTITUTE A FORGERY.
+
+THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTIES OF ANY NATURE AND ANY EXPRESS OR IMPLIED WARRANTIES,WITH REGARDS TO COMMERCIAL USE, PROFESSIONAL USE, LEGAL OR NOT, OR OTHER, OR COMMERCIALISATION OR ADAPTATION. 
+
+UNLESS EXPLICITLY PROVIDED BY LAW, IN NO EVENT, SHALL INRIA OR THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, LOSS OF USE, DATA, OR PROFITS OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

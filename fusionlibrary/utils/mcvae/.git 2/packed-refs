@@ -1,0 +1,8 @@
+# pack-refs with: peeled fully-peeled sorted 
+b675f88bc4eaf52e34afe78563ef5b0901a9c990 refs/remotes/origin/dev
+94ad5e67dd3635b898d6255a0afad2fac8b72df4 refs/remotes/origin/master
+29dc0f617ed150430ab9c4f12912db63fd2d136c refs/remotes/origin/mt-mcvae
+7858dc5d221bf8cc02d702616e41ea50da7d09da refs/tags/v1.0.0
+^02404a5da754dcc3daf50667f78e25428f778557
+7b79fe31a77f587ddb65f3d72fd3d661f5a86de6 refs/tags/v2.0.0
+^408fbfcaad37ac4376c068313f907936c3a21675
