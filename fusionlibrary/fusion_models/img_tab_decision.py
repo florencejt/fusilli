@@ -31,6 +31,10 @@ class ImageDecision(ParentFusionModel, nn.Module):
         Forward pass of the model.
     """
 
+    fusion_type = "decision"
+    modality_type = "tab_img"
+    method_name = "Image decision fusion"
+
     def __init__(self, pred_type, data_dims, params):
         """
         Parameters
@@ -43,9 +47,7 @@ class ImageDecision(ParentFusionModel, nn.Module):
             Dictionary containing the parameters of the model.
         """
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
-        self.method_name = "ImageDecision"
-        self.modality_type = "tab_img"
-        self.fusion_type = "operation"
+
         self.pred_type = pred_type
 
         self.set_img_layers()

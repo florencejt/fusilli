@@ -84,8 +84,8 @@
 <span class="sd">    This class implements a model that fuses the two types of tabular data using the MCVAE approach.</span>
 <span class="sd">    MCVAE: multi-channel variational autoencoder.</span>
 
-<span class="sd">    The MCVAE creates a joint latent space of the two types of tabular data based off a joint latent prior</span>
-<span class="sd">    and joint decoding.</span>
+<span class="sd">    The MCVAE creates a joint latent space of the two types of tabular data based off a joint</span>
+<span class="sd">    latent prior and joint decoding.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -121,6 +121,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;MCVAE Tabular&quot;</span>
+    <span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;both_tab&quot;</span>
+    <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;subspace&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -133,9 +137,7 @@
 <span class="sd">            Dictionary containing the parameters of the model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ParentFusionModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;MCVAE Tabular&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;both_tab&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;subspace&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="n">mcvae_subspace_method</span>
 

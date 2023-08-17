@@ -29,6 +29,10 @@ class Tabular2Unimodal(ParentFusionModel, nn.Module):
         Forward pass of the model.
     """
 
+    method_name = "Tabular2 uni-modal"
+    modality_type = "tabular2"
+    fusion_type = "Uni-modal"
+
     def __init__(self, pred_type, data_dims, params):
         """
         Parameters
@@ -47,9 +51,7 @@ class Tabular2Unimodal(ParentFusionModel, nn.Module):
 
         """
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
-        self.method_name = "BV only"
-        self.modality_type = "tabular2"
-        self.fusion_type = "Uni-modal"
+
         self.pred_type = pred_type
 
         self.set_mod2_layers()

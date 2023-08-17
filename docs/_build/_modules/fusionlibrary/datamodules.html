@@ -866,11 +866,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">test_idxs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span><span class="o">.</span><span class="n">indices</span>
 
         <span class="c1"># get the graph data structure</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span></div>
 
         <span class="c1"># plot and save the graph</span>
-        <span class="c1"># TODO make this better</span>
-        <span class="n">plot_graph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span></div>
+        <span class="c1"># TODO move to the soon-to-be-made plotting module? or just remove</span>
+        <span class="c1"># plot_graph(self.graph_data, self.params)</span>
 
 <div class="viewcode-block" id="GraphDataModule.get_lightning_module"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusionlibrary.datamodules.GraphDataModule.get_lightning_module">[docs]</a>    <span class="k">def</span> <span class="nf">get_lightning_module</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1010,6 +1010,7 @@
             <span class="n">graph_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
 
             <span class="c1"># plot and save the graph?</span>
+            <span class="c1"># TODO remove?</span>
             <span class="n">plot_graph</span><span class="p">(</span><span class="n">graph_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 
             <span class="n">new_folds</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">graph_data</span><span class="p">,</span> <span class="n">train_idxs</span><span class="p">,</span> <span class="n">test_idxs</span><span class="p">))</span>
@@ -1046,6 +1047,54 @@
             <span class="n">lightning_modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lightning_module</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">lightning_modules</span>  <span class="c1"># list of lightning modules for each fold</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">get_data_module</span><span class="p">(</span><span class="n">init_model</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+    <span class="c1"># needs model attributes: fusion_type and modality_type</span>
+    <span class="c1"># needs params: kfold, pred_type etc</span>
+    <span class="k">if</span> <span class="n">init_model</span><span class="o">.</span><span class="n">fusion_type</span> <span class="o">==</span> <span class="s2">&quot;graph&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
+            <span class="n">dmg</span> <span class="o">=</span> <span class="n">KFoldGraphDataModule</span><span class="p">(</span>
+                <span class="n">params</span><span class="p">,</span>
+                <span class="n">init_model</span><span class="o">.</span><span class="n">modality_type</span><span class="p">,</span>
+                <span class="n">sources</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;data_sources&quot;</span><span class="p">],</span>
+                <span class="n">graph_creation_method</span><span class="o">=</span><span class="n">init_model</span><span class="o">.</span><span class="n">graph_maker</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dmg</span> <span class="o">=</span> <span class="n">GraphDataModule</span><span class="p">(</span>
+                <span class="n">params</span><span class="p">,</span>
+                <span class="n">init_model</span><span class="o">.</span><span class="n">modality_type</span><span class="p">,</span>
+                <span class="n">sources</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;data_sources&quot;</span><span class="p">],</span>
+                <span class="n">graph_creation_method</span><span class="o">=</span><span class="n">init_model</span><span class="o">.</span><span class="n">graph_maker</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">dmg</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">()</span>
+        <span class="n">dmg</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+        <span class="n">dm</span> <span class="o">=</span> <span class="n">dmg</span><span class="o">.</span><span class="n">get_lightning_module</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">dm_instance</span> <span class="ow">in</span> <span class="n">dm</span><span class="p">:</span>
+                <span class="n">dm_instance</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">dmg</span><span class="o">.</span><span class="n">data_dims</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dm</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">dmg</span><span class="o">.</span><span class="n">data_dims</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># another other than graph fusion</span>
+        <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
+            <span class="n">datamodule_func</span> <span class="o">=</span> <span class="n">KFoldDataModule</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">datamodule_func</span> <span class="o">=</span> <span class="n">CustomDataModule</span>
+
+        <span class="n">dm</span> <span class="o">=</span> <span class="n">datamodule_func</span><span class="p">(</span>
+            <span class="n">params</span><span class="p">,</span>
+            <span class="n">init_model</span><span class="o">.</span><span class="n">modality_type</span><span class="p">,</span>
+            <span class="n">sources</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;data_sources&quot;</span><span class="p">],</span>
+            <span class="n">subspace_method</span><span class="o">=</span><span class="n">init_model</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">dm</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">()</span>
+        <span class="n">dm</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">dm</span>
 </pre></div>
 
            </div>

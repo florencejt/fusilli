@@ -107,6 +107,10 @@
 <span class="sd">        Forward pass of the model.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;Concatenating tabular and image feature maps&quot;</span>
+    <span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;tab_img&quot;</span>
+    <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;operation&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -119,9 +123,7 @@
 <span class="sd">            Dictionary containing the parameters of the model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ParentFusionModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;Concatenating clinical feature maps and MRI feature maps&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;tab_img&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;operation&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_img_layers</span><span class="p">()</span>

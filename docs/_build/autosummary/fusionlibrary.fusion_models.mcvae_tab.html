@@ -51,6 +51,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html">fusionlibrary.fusion_models.base_pl_model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html">fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html">fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_maps_tabular_data.html">fusionlibrary.fusion_models.concat_img_maps_tabular_data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html">fusionlibrary.fusion_models.concat_img_maps_tabular_maps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fusionlibrary.fusion_models.concat_tabular_data.html">fusionlibrary.fusion_models.concat_tabular_data</a></li>
@@ -73,6 +74,9 @@
 <li class="toctree-l3"><a class="reference internal" href="fusionlibrary.fusion_models.tabular_decision.html">fusionlibrary.fusion_models.tabular_decision</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.eval_functions.html">fusionlibrary.eval_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.utils.pl_utils.html">fusionlibrary.utils.pl_utils</a></li>
 </ul>
 </li>
 </ul>
@@ -130,8 +134,8 @@
 <dd><p>Bases: <a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <a class="reference external" href="https://pytorch.org/docs/master/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch vmaster (2.1.0a0+gitbe0b12e ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a></p>
 <p>This class implements a model that fuses the two types of tabular data using the MCVAE approach.
 MCVAE: multi-channel variational autoencoder.</p>
-<p>The MCVAE creates a joint latent space of the two types of tabular data based off a joint latent prior
-and joint decoding.</p>
+<p>The MCVAE creates a joint latent space of the two types of tabular data based off a joint
+latent prior and joint decoding.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.method_name">
 <span class="sig-name descname"><span class="pre">method_name</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.method_name" title="Permalink to this definition"></a></dt>

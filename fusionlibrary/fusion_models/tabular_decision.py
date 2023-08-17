@@ -31,6 +31,10 @@ class TabularDecision(ParentFusionModel, nn.Module):
         Forward pass of the model.
     """
 
+    method_name = "Tabular decision"
+    modality_type = "both_tab"
+    fusion_type = "operation"
+
     def __init__(self, pred_type, data_dims, params):
         """
         Parameters
@@ -44,9 +48,7 @@ class TabularDecision(ParentFusionModel, nn.Module):
 
         """
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
-        self.method_name = "TabularDecision"
-        self.modality_type = "both_tab"
-        self.fusion_type = "operation"
+
         self.pred_type = pred_type
 
         self.set_mod1_layers()

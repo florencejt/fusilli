@@ -49,6 +49,10 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
 
     """
 
+    method_name = "MCVAE Tabular"
+    modality_type = "both_tab"
+    fusion_type = "subspace"
+
     def __init__(self, pred_type, data_dims, params):
         """
         Parameters
@@ -61,9 +65,7 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
             Dictionary containing the parameters of the model.
         """
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
-        self.method_name = "MCVAE Tabular"
-        self.modality_type = "both_tab"
-        self.fusion_type = "subspace"
+
         self.pred_type = pred_type
         self.subspace_method = mcvae_subspace_method
 

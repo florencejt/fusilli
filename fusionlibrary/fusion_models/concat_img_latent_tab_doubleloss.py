@@ -43,6 +43,12 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
 
     """
 
+    method_name = (
+        "Concatenating image latent space with tabular data, trained altogether"
+    )
+    modality_type = "tab_img"
+    fusion_type = "subspace"
+
     def __init__(self, pred_type, data_dims, params):
         """
         Parameters
@@ -55,11 +61,7 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
             Dictionary containing the parameters of the model.
         """
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
-        self.method_name = (
-            "Concatenating image latent space with tabular data, trained altogether"
-        )
-        self.modality_type = "tab_img"
-        self.fusion_type = "subspace"
+
         self.pred_type = pred_type
         self.custom_loss = nn.MSELoss()
 

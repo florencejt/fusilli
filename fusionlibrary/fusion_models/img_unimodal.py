@@ -27,6 +27,10 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
         Forward pass of the model.
     """
 
+    method_name = "Image unimodal"
+    modality_type = "img"
+    fusion_type = "Uni-modal"
+
     def __init__(self, pred_type, data_dims, params):
         """
         Parameters
@@ -39,9 +43,7 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
             Dictionary containing the parameters of the model.
         """
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
-        self.method_name = "ImgUnimodal"
-        self.modality_type = "img"
-        self.fusion_type = "Uni-modal"
+
         self.pred_type = pred_type
 
         self.set_img_layers()

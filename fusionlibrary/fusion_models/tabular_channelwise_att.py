@@ -52,6 +52,10 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
 
     """
 
+    method_name = "Channel-wise multiplication net (tabular)"
+    modality_type = "both_tab"
+    fusion_type = "attention"
+
     def __init__(self, pred_type, data_dims, params):
         """
         Parameters
@@ -69,9 +73,7 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
           If the prediction type is not valid.
         """
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
-        self.method_name = "Channel-wise multiplication net (BV)"
-        self.modality_type = "both_tab"
-        self.fusion_type = "attention"
+
         self.pred_type = pred_type
 
         self.set_mod1_layers()

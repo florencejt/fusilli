@@ -14,6 +14,7 @@
    .. autosummary::
    
       downsample_img_batch
+      get_data_module
    
    
 

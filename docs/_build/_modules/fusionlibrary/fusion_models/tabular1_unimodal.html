@@ -101,6 +101,10 @@
 <span class="sd">        Forward pass of the model.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;Tabular1 uni-modal&quot;</span>
+    <span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;tabular1&quot;</span>
+    <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;Uni-modal&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -119,9 +123,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">ParentFusionModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;Clinical only&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;tabular1&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;Uni-modal&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_mod1_layers</span><span class="p">()</span>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fusionlibrary.utils.model_chooser &mdash; fusionlibrary  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            fusionlibrary
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">fusionlibrary</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fusionlibrary.utils.model_chooser</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fusionlibrary.utils.model_chooser</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Function/functions to help user choose model&#39;s to run</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="c1"># all the fusion models&#39; names and paths</span>
+<span class="n">fusion_model_dict</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Tabular1Unimodal&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabular1_unimodal&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Tabular2Unimodal&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabular2_unimodal&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ImgUnimodal&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.img_unimodal&quot;</span><span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ConcatTabularFeatureMaps&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.concat_tabular_feature_maps&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ConcatImageMapsTabularData&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.concat_img_maps_tabular_data&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ConcatTabularData&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.concat_tabular_data&quot;</span><span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ConcatImageMapsTabularMaps&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.concat_img_maps_tabular_maps&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;TabularChannelWiseMultiAttention&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabular_channelwise_att&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ImageChannelWiseMultiAttention&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.img_tab_channelwise_att&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;CrossmodalMultiheadAttention&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.crossmodal_att&quot;</span><span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;TabularCrossmodalMultiheadAttention&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tab_crossmodal_att&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;TabularDecision&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabular_decision&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ImageDecision&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.img_tab_decision&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;MCVAE_tab&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.mcvae_tab&quot;</span><span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ConcatImgLatentTabDoubleTrain&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.concat_img_latent_tab_doubletrain&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ConcatImgLatentTabDoubleLoss&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.concat_img_latent_tab_doubleloss&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;EdgeCorrGNN&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.edge_corr_gnn&quot;</span><span class="p">},</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="model_importer"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.model_chooser.html#fusionlibrary.utils.model_chooser.model_importer">[docs]</a><span class="k">def</span> <span class="nf">model_importer</span><span class="p">(</span><span class="n">fusion_model_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Imports all the fusion models in the fusion_model_dict.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fusion_model_dict : list</span>
+<span class="sd">        List of dictionaries containing the fusion models&#39; names and paths.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fusion_models : list</span>
+<span class="sd">        List of all the fusion models class objects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fusion_models</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">fusion_model_dict</span><span class="p">:</span>
+        <span class="n">module_name</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="n">module_path</span> <span class="o">=</span> <span class="s2">&quot;fusionlibrary.&quot;</span> <span class="o">+</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span>
+
+        <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module_path</span><span class="p">)</span>
+        <span class="n">module_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">module_name</span><span class="p">)</span>
+
+        <span class="n">fusion_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">module_class</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fusion_models</span></div>
+
+
+<div class="viewcode-block" id="get_models"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.model_chooser.html#fusionlibrary.utils.model_chooser.get_models">[docs]</a><span class="k">def</span> <span class="nf">get_models</span><span class="p">(</span><span class="n">conditions_dict</span><span class="p">,</span> <span class="n">fusion_model_dict</span><span class="o">=</span><span class="n">fusion_model_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    conditions_dict : dict</span>
+<span class="sd">        Dictionary containing the conditions to filter the models.</span>
+<span class="sd">        Structure: {feature1: condition, feature2: condition, ...}</span>
+<span class="sd">            or {feature1: [condition1, condition2, ...], feature2: [condition1, ...], ...}</span>
+
+<span class="sd">            Accepted features and accepted conditions:</span>
+
+<span class="sd">            - &quot;fusion_type&quot;: &quot;Uni-modal&quot;, &quot;operation&quot;, &quot;attention&quot;, &quot;subspace&quot;, &quot;graph&quot;, or &quot;all&quot;</span>
+<span class="sd">            - &quot;modality_type&quot;: &quot;tabular1&quot;, &quot;tabular2&quot;, &quot;img&quot;, &quot;both_tab&quot;, &quot;tab_img&quot;, or &quot;all&quot;</span>
+<span class="sd">            - &quot;method_name&quot;: any method name currently implemented (e.g. &quot;Tabular decision&quot;), or &quot;all&quot;</span>
+<span class="sd">            - &quot;class_name&quot;: any model name currently implemented (e.g. &quot;TabularDecision&quot;), or &quot;all&quot;</span>
+
+<span class="sd">            Example: To get all the models that are uni-modal and attention-based, the dictionary would be:</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                conditions_dict = {</span>
+<span class="sd">                    &quot;fusion_type&quot;: [&quot;Uni-modal&quot;, &quot;operation&quot;],</span>
+<span class="sd">                    &quot;modality_type&quot;: &quot;all&quot;,</span>
+<span class="sd">                    }</span>
+
+
+<span class="sd">    fusion_model_dict : list</span>
+<span class="sd">        List of dictionaries containing the fusion models&#39; names and paths. Default is</span>
+<span class="sd">            fusion_model_dict. Defined inside fusionlibrary.utils.model_chooser.py.</span>
+
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    filtered_models : pd.DataFrame</span>
+<span class="sd">        Dataframe containing the filtered models.</span>
+<span class="sd">        Column names:</span>
+<span class="sd">            - &quot;method_name&quot;: name of the model (e.g. &quot;Tabular decision&quot;)</span>
+<span class="sd">            - &quot;fusion_type&quot;: type of fusion (e.g. &quot;operation&quot;)</span>
+<span class="sd">            - &quot;modality_type&quot;: type of modality (e.g. &quot;both_tab&quot;)</span>
+<span class="sd">            - &quot;class_name&quot;: name of the class (e.g. &quot;TabularDecision&quot;)</span>
+<span class="sd">            - &quot;method_path&quot;: path to the method&#39;s py file (e.g. &quot;fusionlibrary.fusion_models.tabular_decision&quot;)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># raise error if condition is not &quot;all&quot; and feature is not one of the options</span>
+    <span class="n">valid_features</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fusion_type&quot;</span><span class="p">,</span> <span class="s2">&quot;modality_type&quot;</span><span class="p">,</span> <span class="s2">&quot;method_name&quot;</span><span class="p">,</span> <span class="s2">&quot;class_name&quot;</span><span class="p">]</span>
+    <span class="n">valid_fusion_types</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;Uni-modal&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;operation&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;attention&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;subspace&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;graph&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;tensor&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">valid_modality_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;tabular1&quot;</span><span class="p">,</span> <span class="s2">&quot;tabular2&quot;</span><span class="p">,</span> <span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;both_tab&quot;</span><span class="p">,</span> <span class="s2">&quot;tab_img&quot;</span><span class="p">]</span>
+
+    <span class="n">fusion_models</span> <span class="o">=</span> <span class="n">model_importer</span><span class="p">(</span><span class="n">fusion_model_dict</span><span class="p">)</span>
+
+    <span class="c1"># get model names, fusion types, modality types</span>
+
+    <span class="n">method_names</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">fusion_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">method_name</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fusion_model_dict</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">fusion_types</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">fusion_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fusion_type</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fusion_model_dict</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">modality_types</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">fusion_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">modality_type</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fusion_model_dict</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="n">class_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">fusion_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fusion_models</span><span class="p">)]</span>
+
+    <span class="n">method_paths</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;fusionlibrary.&quot;</span> <span class="o">+</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fusion_model_dict</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="c1"># create a dataframe of all the models</span>
+    <span class="n">models_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;method_name&quot;</span><span class="p">:</span> <span class="n">method_names</span><span class="p">,</span>
+            <span class="s2">&quot;fusion_type&quot;</span><span class="p">:</span> <span class="n">fusion_types</span><span class="p">,</span>
+            <span class="s2">&quot;modality_type&quot;</span><span class="p">:</span> <span class="n">modality_types</span><span class="p">,</span>
+            <span class="s2">&quot;class_name&quot;</span><span class="p">:</span> <span class="n">class_names</span><span class="p">,</span>
+            <span class="s2">&quot;method_path&quot;</span><span class="p">:</span> <span class="n">method_paths</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="n">filtered_models</span> <span class="o">=</span> <span class="n">models_df</span>
+
+    <span class="k">for</span> <span class="n">feature</span><span class="p">,</span> <span class="n">condition</span> <span class="ow">in</span> <span class="n">conditions_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">feature</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_features</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid feature:&quot;</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">feature</span> <span class="o">==</span> <span class="s2">&quot;fusion_type&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">invalid_fusion_types</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">ftype</span> <span class="k">for</span> <span class="n">ftype</span> <span class="ow">in</span> <span class="n">condition</span> <span class="k">if</span> <span class="n">ftype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_fusion_types</span>
+                <span class="p">]</span>
+                <span class="k">if</span> <span class="n">invalid_fusion_types</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;Invalid fusion types for feature&quot;</span><span class="p">,</span>
+                        <span class="n">feature</span><span class="p">,</span>
+                        <span class="s2">&quot;:&quot;</span><span class="p">,</span>
+                        <span class="n">invalid_fusion_types</span><span class="p">,</span>
+                    <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">condition</span> <span class="o">!=</span> <span class="s2">&quot;all&quot;</span> <span class="ow">and</span> <span class="n">condition</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_fusion_types</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Invalid fusion type for feature&quot;</span><span class="p">,</span>
+                    <span class="n">feature</span><span class="p">,</span>
+                    <span class="s2">&quot;. Choose from:&quot;</span><span class="p">,</span>
+                    <span class="n">valid_fusion_types</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">feature</span> <span class="o">==</span> <span class="s2">&quot;modality_type&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">invalid_modality_types</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">mtype</span> <span class="k">for</span> <span class="n">mtype</span> <span class="ow">in</span> <span class="n">condition</span> <span class="k">if</span> <span class="n">mtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_modality_types</span>
+                <span class="p">]</span>
+                <span class="k">if</span> <span class="n">invalid_modality_types</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;Invalid modality types for feature&quot;</span><span class="p">,</span>
+                        <span class="n">feature</span><span class="p">,</span>
+                        <span class="s2">&quot;:&quot;</span><span class="p">,</span>
+                        <span class="n">invalid_modality_types</span><span class="p">,</span>
+                    <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">condition</span> <span class="o">!=</span> <span class="s2">&quot;all&quot;</span> <span class="ow">and</span> <span class="n">condition</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_modality_types</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Invalid modality type for feature&quot;</span><span class="p">,</span>
+                    <span class="n">feature</span><span class="p">,</span>
+                    <span class="s2">&quot;. Choose from:&quot;</span><span class="p">,</span>
+                    <span class="n">valid_modality_types</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">condition</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">filtered_models</span> <span class="o">=</span> <span class="n">filtered_models</span><span class="p">[</span><span class="n">filtered_models</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">condition</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">filtered_models</span> <span class="o">=</span> <span class="n">filtered_models</span><span class="p">[</span><span class="n">filtered_models</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span> <span class="o">==</span> <span class="n">condition</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">filtered_models</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No models match the specified conditions.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">filtered_models</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Florence J Townend.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -32,6 +32,10 @@ class ConcatImageMapsTabularData(ParentFusionModel, nn.Module):
         Forward pass of the model.
     """
 
+    method_name = "Concatenating tabular data with image feature maps"
+    modality_type = "tab_img"
+    fusion_type = "operation"
+
     def __init__(self, pred_type, data_dims, params):
         """
         Parameters
@@ -44,9 +48,7 @@ class ConcatImageMapsTabularData(ParentFusionModel, nn.Module):
             Dictionary containing the parameters of the model.
         """
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
-        self.method_name = "Concatenating clinical data and MRI feature maps"
-        self.modality_type = "tab_img"
-        self.fusion_type = "operation"
+
         self.pred_type = pred_type
 
         self.set_img_layers()
