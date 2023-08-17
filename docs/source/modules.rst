@@ -8,4 +8,3 @@ fusionlibrary
    eval_functions
    fusion_models
    train_functions
-   utils

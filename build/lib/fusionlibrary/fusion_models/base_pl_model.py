@@ -8,9 +8,6 @@ import matplotlib.pyplot as plt
 import pytorch_lightning as pl
 import pytorch_lightning.loggers as pl_loggers
 import torch
-
-# from torchvision.datasets import MNIST
-# from torchvision import datasets, transforms
 import torchmetrics as tm
 import wandb
 from torch import nn
@@ -112,8 +109,12 @@ class BaseModel(pl.LightningModule):
             self.subspace_method = model.subspace_method
         else:
             self.subspace_method = None
+
         if hasattr(model, "graph_maker"):
             self.graph_maker = model.graph_maker
+        # else:
+        #     self.graph_maker = None # <-- don't know if this is necessary yet
+
         self.params = model.params
 
         if hasattr(model, "train_mask") is False:
@@ -167,6 +168,8 @@ class BaseModel(pl.LightningModule):
                 {"metric": tm.MeanAbsoluteError(), "name": "MAE"},
             ],
         }
+        if self.pred_type not in self.metrics:
+            raise ValueError(f"Unsupported pred_type: {self.pred_type}")
 
         self.eval_plots = {
             "regression": [reals_vs_preds],
@@ -180,8 +183,9 @@ class BaseModel(pl.LightningModule):
             "multiclass": k_fold_confusion_matrix,
         }
 
-        if self.pred_type not in self.metrics:
-            raise ValueError(f"Unsupported pred_type: {self.pred_type}")
+        self.metric_names_list = [
+            metric["name"] for metric in self.metrics[self.pred_type]
+        ]
 
     def safe_squeeze(self, tensor):
         """
@@ -341,19 +345,23 @@ class BaseModel(pl.LightningModule):
             else:
                 predicted = end_output
 
-            train_step_acc = metric["metric"].to(self.device)(
-                self.safe_squeeze(predicted),
-                self.safe_squeeze(y[self.train_mask])
-                # .squeeze(),  # we can do self.train_mask even if it's None bc y is a tensor
-            )
+            if self.safe_squeeze(predicted).shape[0] == 1:
+                # if it's a single value, we can't calculate a metric
+                pass
+            else:
+                train_step_acc = metric["metric"].to(self.device)(
+                    self.safe_squeeze(predicted),
+                    self.safe_squeeze(y[self.train_mask])
+                    # .squeeze(),  # we can do self.train_mask even if it's None bc y is a tensor
+                )
 
-            self.log(
-                metric["name"] + "_train",
-                train_step_acc,
-                logger=True,
-                on_epoch=True,
-                on_step=False,
-            )
+                self.log(
+                    metric["name"] + "_train",
+                    train_step_acc,
+                    logger=True,
+                    on_epoch=True,
+                    on_step=False,
+                )
 
         return loss
 
@@ -404,6 +412,56 @@ class BaseModel(pl.LightningModule):
         """
         optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
         return optimizer
+
+    def get_reals_and_preds(self, train_loader, val_loader):
+        """
+        Gets real and predicted values for train and validation data.
+
+        Parameters
+        ----------
+        train_loader : DataLoader
+            Training data loader.
+        val_loader : DataLoader
+            Validation data loader.
+
+        """
+        self.model.eval()
+
+        train_reals = []
+        train_preds = []
+        val_reals = []
+        val_preds = []
+
+        for batch in train_loader:
+            x, y = self.get_data_from_batch(batch, train=True)
+
+            logits, reconstructions = self.get_model_outputs(x)
+            outputs = self.output_activation_functions[self.pred_type](logits)
+
+            if self.train_mask is not None:
+                # if it's a graph, we can visualise the final graph space
+                outputs = outputs[self.train_mask]
+                y = y[self.train_mask]
+
+            train_reals.append(y.detach())
+            train_preds.append(outputs.detach())
+
+        for batch in val_loader:
+            x, y = self.get_data_from_batch(batch, train=False)
+            logits, reconstructions = self.get_model_outputs(x)
+            outputs = self.output_activation_functions[self.pred_type](logits)
+
+            if self.val_mask is not None:
+                outputs = outputs[self.val_mask]
+                y = y[self.val_mask]
+
+            val_reals.append(y.detach())
+            val_preds.append(outputs.detach())
+
+        self.train_reals = torch.cat(train_reals)
+        self.train_preds = torch.cat(train_preds)
+        self.val_reals = torch.cat(val_reals)
+        self.val_preds = torch.cat(val_preds)
 
     def plot_eval_figs(self, train_loader, val_loader, path_suffix):
         """

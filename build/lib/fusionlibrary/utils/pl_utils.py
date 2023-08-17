@@ -11,7 +11,7 @@ from tqdm import tqdm
 from pytorch_lightning.callbacks import TQDMProgressBar
 
 
-def set_logger(params, rep, fold, init_model):
+def set_logger(params, fold, init_model, extra_log_string_dict=None):
     """
     Set the logger for the current run. If params["log"] is True, then the logger is set to
     WandbLogger, otherwise it is set to None.
@@ -21,6 +21,10 @@ def set_logger(params, rep, fold, init_model):
         rep (int): Repetition number.
         fold (int): Fold number.
         init_model (object): Initialized model object.
+        extra_string_dict (dict): Extra string to add to the run name. e.g. if you're running
+            the same model with different hyperparameters, you can add the hyperparameters.
+            Input format {"name": "value"}. In the run name, the extra string will be added
+            as "name_value". And a tag will be added as "name_value".
 
     Returns:
         logger (object): Pytorch lightning logger object.
@@ -29,13 +33,22 @@ def set_logger(params, rep, fold, init_model):
     modality_type = init_model.modality_type
     fusion_type = init_model.fusion_type
 
-    # MOVE TO LOCAL RUN?
-    if params["kfold_flag"]:
-        name = f"{method_name}_rep_{rep}_fold_{fold}"
-        tags = [modality_type, fusion_type, f"rep_{str(rep)}", f"fold_{str(fold)}"]
+    if extra_log_string_dict is not None:
+        extra_name_string = ""
+        extra_tags = []
+        for key, value in extra_log_string_dict.items():
+            extra_name_string += f"_{key}_{str(value)}"
+            extra_tags.append(f"{key}_{str(value)}")
     else:
-        name = f"{method_name}_rep_{rep}"
-        tags = [modality_type, fusion_type, f"rep_{str(rep)}"]
+        extra_name_string = ""
+        extra_tags = []
+
+    if params["kfold_flag"]:
+        name = f"{method_name}_fold_{fold}{extra_name_string}"
+        tags = [modality_type, fusion_type, f"fold_{str(fold)}"] + extra_tags
+    else:
+        name = f"{method_name}{extra_name_string}"
+        tags = [modality_type, fusion_type] + extra_tags
 
     if params["log"]:
         logger = WandbLogger(
@@ -116,7 +129,7 @@ def update_repetition_results(repetition_results, method_name, metric_names, met
     return repetition_results
 
 
-def get_final_val_metrics(metric_names, trainer):
+def get_final_val_metrics(trainer):
     """
     Get the final validation metrics from the trainer object.
 
@@ -128,6 +141,7 @@ def get_final_val_metrics(metric_names, trainer):
         metric1 (float): Final validation metric 1.
         metric2 (float): Final validation metric 2.
     """
+    metric_names = trainer.model.metric_names_list
     metric1 = trainer.callback_metrics[f"{metric_names[0]}_val"].item()
     metric2 = trainer.callback_metrics[f"{metric_names[1]}_val"].item()
 
@@ -148,8 +162,9 @@ def get_model_info(init_model):
     """
     modality_type = init_model.modality_type
     fusion_type = init_model.fusion_type
-    metric_1_name = init_model.metrics[init_model.pred_type][0]["name"]
-    metric_2_name = init_model.metrics[init_model.pred_type][1]["name"]
-    metric_name_list = [metric_1_name, metric_2_name]
+    # metric_1_name = init_model.metrics[init_model.pred_type][0]["name"]
+    # metric_2_name = init_model.metrics[init_model.pred_type][1]["name"]
+    # metric_name_list = [metric_1_name, metric_2_name]
 
-    return modality_type, fusion_type, metric_name_list
+    return modality_type, fusion_type
+    # , metric_name_list

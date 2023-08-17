@@ -340,7 +340,7 @@ class CustomDataModule(pl.LightningDataModule):
         params,
         modality_type,
         sources,
-        batch_size=8,
+        batch_size,
         subspace_method=None,
     ):
         """
@@ -507,7 +507,7 @@ class KFoldDataModule(pl.LightningDataModule):
     """
 
     def __init__(
-        self, params, modality_type, sources, batch_size=8, subspace_method=None
+        self, params, modality_type, sources, batch_size, subspace_method=None
     ):
         """
         Parameters
@@ -726,7 +726,7 @@ class GraphDataModule:
         modality_type,
         sources,
         graph_creation_method,
-        batch_size=8,
+        batch_size,
     ):
         """
         Parameters
@@ -860,7 +860,7 @@ class KFoldGraphDataModule:
         modality_type,
         sources,
         graph_creation_method,
-        batch_size=8,
+        batch_size,
     ):
         """
         Parameters
@@ -977,23 +977,32 @@ class KFoldGraphDataModule:
         return lightning_modules  # list of lightning modules for each fold
 
 
-def get_data_module(init_model, params):
+def get_data_module(init_model, params, batch_size=16):
     # needs model attributes: fusion_type and modality_type
     # needs params: kfold, pred_type etc
+
+    data_sources = [
+        params["tabular1_source"],
+        params["tabular2_source"],
+        params["img_source"],
+    ]
+
     if init_model.fusion_type == "graph":
         if params["kfold_flag"]:
             dmg = KFoldGraphDataModule(
                 params,
                 init_model.modality_type,
-                sources=params["data_sources"],
+                sources=data_sources,
                 graph_creation_method=init_model.graph_maker,
+                batch_size=batch_size,
             )
         else:
             dmg = GraphDataModule(
                 params,
                 init_model.modality_type,
-                sources=params["data_sources"],
+                sources=data_sources,
                 graph_creation_method=init_model.graph_maker,
+                batch_size=batch_size,
             )
 
         dmg.prepare_data()
@@ -1016,8 +1025,9 @@ def get_data_module(init_model, params):
         dm = datamodule_func(
             params,
             init_model.modality_type,
-            sources=params["data_sources"],
+            sources=data_sources,
             subspace_method=init_model.subspace_method,
+            batch_size=batch_size,
         )
         dm.prepare_data()
         dm.setup()
