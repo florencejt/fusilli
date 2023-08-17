@@ -23,6 +23,7 @@ class Plotter:
 
         self.trained_model_dict = trained_model_dict
         self.params = params
+        self.pred_type = self.params["pred_type"]  # for less verbose access
 
         self.model_names = list(trained_model_dict.keys())
         print("model names:", self.model_names)
@@ -41,75 +42,126 @@ class Plotter:
                 "multiple models, comparison needed:", len(self.model_names), "models"
             )
 
-        single_model_tt_plots = {
+        self.single_model_tt_plots = {
             "regression": self.reals_vs_preds,
             "binary": self.confusion_matrix_plotter,
             "multiclass": self.confusion_matrix_plotter,
         }
 
-        single_model_kfold_plots = {
+        self.single_model_kfold_plots = {
             "regression": self.reals_vs_preds_kfold,
             "binary": self.confusion_matrix_plotter_kfold,
             "multiclass": self.confusion_matrix_plotter_kfold,
         }
 
-        multi_model_tt_plots = {
+        self.multi_model_tt_plots = {
             "regression": None,  # csv saving? bar chart?
             "binary": None,
             "multiclass": None,
         }
 
-        multi_model_kfold_plots = {
+        self.multi_model_kfold_plots = {
             "regression": None,  # violin plots of the folds
             "binary": None,
             "multiclass": None,
         }
+
+    def get_kfold_numbers(self):
+        self.train_reals = []
+        self.train_preds = []
+        self.val_reals = []
+        self.val_preds = []
+        self.kfold_plot_val_accs = []
+
+        self.trained_model_list = self.trained_model_dict[self.current_model_name]
+
+        for k in range(self.params["num_k"]):
+            k_trained_model_var = vars(self.trained_model_list[k])
+            self.train_reals.append(k_trained_model_var["train_reals"])
+            self.train_preds.append(k_trained_model_var["train_preds"])
+            self.val_reals.append(k_trained_model_var["val_reals"])
+            self.val_preds.append(k_trained_model_var["val_preds"])
+
+            self.kfold_plot_val_accs.append(
+                self.trained_model_list[k]
+                .metrics[self.pred_type][0]["metric"]
+                .to(self.trained_model_list[k].device)(
+                    k_trained_model_var["val_preds"],
+                    k_trained_model_var["val_preds"],
+                )
+            )
+
+        # altogether vals
+        self.all_preds = torch.cat(self.val_preds)
+        self.all_reals = torch.cat(self.val_reals)
+
+        self.plot_val_acc = (
+            self.trained_model_list[0]
+            .metrics[self.pred_type][0]["metric"]
+            .to(self.trained_model_list[0].device)(self.all_preds, self.all_reals)
+        )
+
+    def get_train_test_numbers(self):
+        self.trained_model = self.trained_model_dict[self.current_model_name]
+
+        # get lists of train_reals, train_preds, val_reals, val_preds and save to self
+        self.train_reals = vars(self.trained_model_dict[self.model_names[0]])[
+            "train_reals"
+        ]
+        self.train_preds = vars(self.trained_model_dict[self.model_names[0]])[
+            "train_preds"
+        ]
+        self.val_reals = vars(self.trained_model_dict[self.model_names[0]])["val_reals"]
+        self.val_preds = vars(self.trained_model_dict[self.model_names[0]])["val_preds"]
+
+        self.train_end_metrics = [
+            vars(self.trained_model_dict[self.model_names[0]])["metric1"],
+            vars(self.trained_model_dict[self.model_names[0]])["metric2"],
+        ]
+
+        print("metrics:", self.train_end_metrics)
+
+        self.plot_val_acc = self.trained_model.metrics[self.pred_type][0]["metric"].to(
+            self.trained_model.device
+        )(self.val_preds, self.val_reals)
 
     def plot_all(self):
         """
         Plots all the results.
         """
         if len(self.model_names) == 1:
+            self.current_model_name = self.model_names[0]
+
             if self.params["kfold_flag"]:
                 # get lists of train_reals, train_preds, val_reals, val_preds for all folds and save to self
-                # get altogether list of val_reals and val_preds over folds and save to self
-                # get metrics to put in the plot titles
 
-                # plot the predefined kfold models for self.params["pred_type"]
+                self.get_kfold_numbers()
 
-                # save etc
-                pass
+                results_figs = self.single_model_kfold_plots[self.pred_type]()
+
+                return results_figs
+
             else:
-                # get lists of train_reals, train_preds, val_reals, val_preds and save to self
-                self.train_reals = vars(self.trained_model_dict[self.model_names[0]])[
-                    "train_reals"
-                ]
-                self.train_preds = vars(self.trained_model_dict[self.model_names[0]])[
-                    "train_preds"
-                ]
-                self.val_reals = vars(self.trained_model_dict[self.model_names[0]])[
-                    "val_reals"
-                ]
-                self.val_preds = vars(self.trained_model_dict[self.model_names[0]])[
-                    "val_preds"
-                ]
-                self.metrics = [
-                    vars(self.trained_model_dict[self.model_names[0]])["metric1"],
-                    vars(self.trained_model_dict[self.model_names[0]])["metric2"],
-                ]
+                self.get_train_test_numbers()
 
-                print("metrics:", self.metrics)
                 self.trained_model = self.trained_model_dict[self.model_names[0]]
 
                 # plot the results for one train/test model
-                reals_v_preds = self.reals_vs_preds()
-                return reals_v_preds
+                results_fig = self.single_model_tt_plots[self.pred_type]()
+
+                return results_fig
 
         else:
             if self.params["kfold_flag"]:
-                metrics = []
+                comparing_models_metrics = (
+                    {}
+                )  # keys: model names, values: lists of kfold metrics len(k)
+                # or maybe value is another dictionary {"R2": [...,...,...], "MAE": [...,..,...]}
 
                 for model_name in self.model_names:
+                    self.current_model_name = model_name
+
+                    self.get_kfold_numbers()
                     # get lists of train_reals, train_preds, val_reals, val_preds for all folds and save to self
                     # get altogether list of val_reals and val_preds over folds and save to self
                     # get metrics to put in the plot titles, add to metrics list
@@ -119,14 +171,18 @@ class Plotter:
                     #   as well as the lists of train_reals, train_preds, val_reals, val_preds)
 
                     # save etc
-                    pass
 
                 # plot comparison of all kfold models: violin plot?
 
             else:
-                metrics = []
+                comparing_models_metrics = (
+                    {}
+                )  # keys: model names, values: metric values (single numbers)
+                # or maybe value is another dictionary {"R2": ... "MAE": ...}
                 for model_name in self.model_names:
                     # get train_reals, train_preds, val_reals, val_preds and save to self
+                    self.current_model_name = model_name
+                    self.get_train_test_numbers()
 
                     # plot the predefined models for self.params["pred_type"]
 
@@ -146,9 +202,9 @@ class Plotter:
 
         ax.scatter(self.train_reals, self.train_preds, c="blue", label="Train")
         ax.scatter(self.val_reals, self.val_preds, c="red", label="Validation")
-        val_acc = self.trained_model.metrics[self.params["pred_type"]][0]["metric"].to(
-            self.trained_model.device
-        )(self.val_preds, self.val_reals)
+        # val_acc = self.trained_model.metrics[self.params["pred_type"]][0]["metric"].to(
+        #     self.trained_model.device
+        # )(self.val_preds, self.val_reals)
 
         # Get the limits of the current scatter plot
         x_min, x_max = plt.xlim()
@@ -162,7 +218,8 @@ class Plotter:
         plt.plot(line_x, line_y, linestyle="dashed", color="black", label="x=y Line")
 
         ax.set_title(
-            f"Validation {self.trained_model.metrics[self.params['pred_type']][0]['name']}: {np.round(val_acc,3)}"
+            f"Validation {self.trained_model.metrics[self.params['pred_type']][0]['name']}: \
+                {float(self.plot_val_acc):.4f}"
         )
 
         ax.set_xlabel("Real Values")
@@ -175,7 +232,37 @@ class Plotter:
         """
         Plots the confusion matrix of a train/test model.
         """
-        pass
+        # Get the confusion matrix for the validation set
+        conf_matrix = confusion_matrix(y_true=self.val_reals, y_pred=self.val_preds)
+
+        # Create a figure and axis for the plot
+        fig, ax = plt.subplots(figsize=(7.5, 7.5))
+
+        # Plot the confusion matrix as a heatmap
+        ax.matshow(conf_matrix, cmap=plt.cm.Blues, alpha=0.3)
+        for i in range(conf_matrix.shape[0]):
+            for j in range(conf_matrix.shape[1]):
+                # Add the value of each cell to the plot
+                ax.text(
+                    x=j,
+                    y=i,
+                    s=conf_matrix[i, j],
+                    va="center",
+                    ha="center",
+                    size="xx-large",
+                )
+
+        plt.xlabel("Predictions", fontsize=18)
+        plt.ylabel("Actuals", fontsize=18)
+
+        plt.title(
+            f"Validation {self.trained_model.metrics[self.pred_type][0]['name']}: \
+                {float(self.plot_val_acc):.4f}"
+        )
+
+        plt.tight_layout()
+
+        return fig
 
     def reals_vs_preds_kfold(self):
         """
@@ -183,9 +270,65 @@ class Plotter:
         For kfold models.
         """
 
-        # JUST FOR ONE MODEL!
+        # concatenate real and pred values from all folds
 
-        pass
+        N = self.params["num_k"]
+        cols = 3
+        rows = int(math.ceil(N / cols))
+
+        gs = gridspec.GridSpec(rows, cols)
+        reals_vs_preds_fig = plt.figure()
+        for n in range(N):
+            if n == 0:
+                ax = reals_vs_preds_fig.add_subplot(gs[n])
+                ax_og = ax
+            else:
+                ax = reals_vs_preds_fig.add_subplot(gs[n], sharey=ax_og, sharex=ax_og)
+
+            # get real and predicted values for the current fold
+            reals = self.val_reals[n]
+            preds = self.val_preds[n]
+
+            # plot real vs. predicted values
+            ax.scatter(reals, preds, marker="o")
+
+            # plot x=y line as a dashed line
+            ax.plot(
+                [0, 1],
+                [0, 1],
+                color="r",
+                linestyle="--",
+                alpha=0.75,
+                zorder=0,
+                transform=ax.transAxes,
+            )
+
+            # set title of plot to the metric for the current fold
+            ax.set_title(f"Fold {n+1}: R2={float(self.kfold_plot_val_accs[n]):.4f}")
+
+        plt.suptitle(f"{self.current_model_name}: reals vs. predicteds")
+
+        reals_vs_preds_fig.tight_layout()
+
+        # plot all real vs. predicted values
+        together_reals_v_preds_fig, ax1 = plt.subplots()
+        ax1.scatter(self.all_reals, self.all_preds, marker="o")
+
+        # plot x=y line as a dashed line
+        ax1.plot(
+            [0, 1],
+            [0, 1],
+            color="r",
+            linestyle="--",
+            alpha=0.75,
+            zorder=0,
+            transform=ax1.transAxes,
+        )
+        ax1.set_title(f"{self.current_model_name}: R2={float(self.plot_val_acc):.4f}")
+        together_reals_v_preds_fig.tight_layout()
+
+        # TODO combine these images to be pretty without worrying about what k is? ask chatgpt
+        return [reals_vs_preds_fig, together_reals_v_preds_fig]
 
     def confusion_matrix_plotter_kfold(self):
         """
