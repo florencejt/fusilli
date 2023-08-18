@@ -22,11 +22,24 @@ class Plotter:
         super().__init__()
 
         self.trained_model_dict = trained_model_dict
+        self.model_names = list(trained_model_dict.keys())
+        print("model names:", self.model_names)
+
         self.params = params
         self.pred_type = self.params["pred_type"]  # for less verbose access
 
-        self.model_names = list(trained_model_dict.keys())
-        print("model names:", self.model_names)
+        # getting first model to get metric names and functions for less verbose access
+        if params["kfold_flag"]:
+            first_model = self.trained_model_dict[self.model_names[0]][0]
+        else:
+            first_model = self.trained_model_dict[self.model_names[0]]
+
+        # metric names for less verbose access (they are consistent across models)
+        self.metric1name = first_model.metrics[self.pred_type][0]["name"]
+        self.metric1func = first_model.metrics[self.pred_type][0]["metric"]
+
+        self.metric2name = first_model.metrics[self.pred_type][1]["name"]
+        self.metric2func = first_model.metrics[self.pred_type][1]["metric"]
 
         for value in trained_model_dict.values():
             if isinstance(value, list):
@@ -55,15 +68,15 @@ class Plotter:
         }
 
         self.multi_model_tt_plots = {
-            "regression": None,  # csv saving? bar chart?
-            "binary": None,
-            "multiclass": None,
+            "regression": self.compare_bar_chart,  # csv saving? bar chart?
+            "binary": self.compare_bar_chart,
+            "multiclass": self.compare_bar_chart,
         }
 
         self.multi_model_kfold_plots = {
-            "regression": None,  # violin plots of the folds
-            "binary": None,
-            "multiclass": None,
+            "regression": self.compare_violin_plot,  # violin plots of the folds
+            "binary": self.compare_violin_plot,
+            "multiclass": self.compare_violin_plot,
         }
 
     def get_kfold_numbers(self):
@@ -71,7 +84,7 @@ class Plotter:
         self.train_preds = []
         self.val_reals = []
         self.val_preds = []
-        self.kfold_plot_val_accs = []
+        self.kfold_plot_val_accs = {self.metric1name: [], self.metric2name: []}
 
         self.trained_model_list = self.trained_model_dict[self.current_model_name]
 
@@ -82,48 +95,68 @@ class Plotter:
             self.val_reals.append(k_trained_model_var["val_reals"])
             self.val_preds.append(k_trained_model_var["val_preds"])
 
-            self.kfold_plot_val_accs.append(
-                self.trained_model_list[k]
-                .metrics[self.pred_type][0]["metric"]
-                .to(self.trained_model_list[k].device)(
+            self.kfold_plot_val_accs[self.metric1name].append(
+                self.metric1func.to(self.trained_model_list[k].device)(
+                    k_trained_model_var["val_reals"],
                     k_trained_model_var["val_preds"],
+                ).item()
+            )
+
+            self.kfold_plot_val_accs[self.metric2name].append(
+                self.metric2func.to(self.trained_model_list[k].device)(
+                    k_trained_model_var["val_reals"],
                     k_trained_model_var["val_preds"],
-                )
+                ).item()
             )
 
         # altogether vals
         self.all_preds = torch.cat(self.val_preds)
         self.all_reals = torch.cat(self.val_reals)
 
-        self.plot_val_acc = (
-            self.trained_model_list[0]
-            .metrics[self.pred_type][0]["metric"]
-            .to(self.trained_model_list[0].device)(self.all_preds, self.all_reals)
-        )
+        self.plot_val_accs = {
+            self.metric1name: self.metric1func.to(self.trained_model_list[0].device)(
+                self.all_preds, self.all_reals
+            ),
+            self.metric2name: self.metric2func.to(self.trained_model_list[0].device)(
+                self.all_preds, self.all_reals
+            ),
+        }
 
     def get_train_test_numbers(self):
         self.trained_model = self.trained_model_dict[self.current_model_name]
+        self.trained_model.eval()
 
         # get lists of train_reals, train_preds, val_reals, val_preds and save to self
-        self.train_reals = vars(self.trained_model_dict[self.model_names[0]])[
+        self.train_reals = vars(self.trained_model_dict[self.current_model_name])[
             "train_reals"
         ]
-        self.train_preds = vars(self.trained_model_dict[self.model_names[0]])[
+        self.train_preds = vars(self.trained_model_dict[self.current_model_name])[
             "train_preds"
         ]
-        self.val_reals = vars(self.trained_model_dict[self.model_names[0]])["val_reals"]
-        self.val_preds = vars(self.trained_model_dict[self.model_names[0]])["val_preds"]
+        self.val_reals = vars(self.trained_model_dict[self.current_model_name])[
+            "val_reals"
+        ]
+        self.val_preds = vars(self.trained_model_dict[self.current_model_name])[
+            "val_preds"
+        ]
 
         self.train_end_metrics = [
-            vars(self.trained_model_dict[self.model_names[0]])["metric1"],
-            vars(self.trained_model_dict[self.model_names[0]])["metric2"],
+            vars(self.trained_model_dict[self.current_model_name])["metric1"],
+            vars(self.trained_model_dict[self.current_model_name])["metric2"],
         ]
 
         print("metrics:", self.train_end_metrics)
 
-        self.plot_val_acc = self.trained_model.metrics[self.pred_type][0]["metric"].to(
-            self.trained_model.device
-        )(self.val_preds, self.val_reals)
+        self.plot_val_accs = {
+            self.metric1name: self.metric1func.to(self.trained_model.device)(
+                self.val_reals,
+                self.val_preds,
+            ).item(),
+            self.metric2name: self.metric2func.to(self.trained_model.device)(
+                self.val_reals,
+                self.val_preds,
+            ).item(),
+        }
 
     def plot_all(self):
         """
@@ -137,9 +170,9 @@ class Plotter:
 
                 self.get_kfold_numbers()
 
-                results_figs = self.single_model_kfold_plots[self.pred_type]()
+                results_figs_dict = self.single_model_kfold_plots[self.pred_type]()
 
-                return results_figs
+                return results_figs_dict
 
             else:
                 self.get_train_test_numbers()
@@ -147,13 +180,17 @@ class Plotter:
                 self.trained_model = self.trained_model_dict[self.model_names[0]]
 
                 # plot the results for one train/test model
-                results_fig = self.single_model_tt_plots[self.pred_type]()
+                results_figs_dict = self.single_model_tt_plots[self.pred_type]()
 
-                return results_fig
+                return results_figs_dict
 
         else:
+            figures_dict = (
+                {}
+            )  # keys: figure names (including model name), values: figures
+
             if self.params["kfold_flag"]:
-                comparing_models_metrics = (
+                self.comparing_models_metrics = (
                     {}
                 )  # keys: model names, values: lists of kfold metrics len(k)
                 # or maybe value is another dictionary {"R2": [...,...,...], "MAE": [...,..,...]}
@@ -165,17 +202,21 @@ class Plotter:
                     # get lists of train_reals, train_preds, val_reals, val_preds for all folds and save to self
                     # get altogether list of val_reals and val_preds over folds and save to self
                     # get metrics to put in the plot titles, add to metrics list
+                    self.comparing_models_metrics[model_name] = self.kfold_plot_val_accs
 
-                    # plot the predefined kfold models for self.params["pred_type"]
-                    #   (they will also take in the altogether list of val_reals and val_preds
-                    #   as well as the lists of train_reals, train_preds, val_reals, val_preds)
-
-                    # save etc
+                    single_model_figs_dict = self.single_model_kfold_plots[
+                        self.pred_type
+                    ]()
+                    figures_dict.update(single_model_figs_dict)
 
                 # plot comparison of all kfold models: violin plot?
+                comparison_figs_dict = self.multi_model_kfold_plots[self.pred_type]()
+                figures_dict.update(comparison_figs_dict)
+
+                return figures_dict
 
             else:
-                comparing_models_metrics = (
+                self.comparing_models_metrics = (
                     {}
                 )  # keys: model names, values: metric values (single numbers)
                 # or maybe value is another dictionary {"R2": ... "MAE": ...}
@@ -185,26 +226,26 @@ class Plotter:
                     self.get_train_test_numbers()
 
                     # plot the predefined models for self.params["pred_type"]
+                    self.comparing_models_metrics[model_name] = self.plot_val_accs
 
-                    # save figures to wandb or locally, or plt.show if we can for an example notebook?
-                    pass
+                    results_figs_dict = self.single_model_tt_plots[self.pred_type]()
+                    figures_dict.update(results_figs_dict)
 
                 # plot comparison of all train/test models: bar chart?
+                comparison_figs_dict = self.multi_model_tt_plots[self.pred_type]()
+                figures_dict.update(comparison_figs_dict)
+
+                return figures_dict
 
     def reals_vs_preds(self):
         """
         Plots the real values against the predicted values for the training and validation sets.
         """
 
-        # JUST FOR ONE MODEL!
-
         fig, ax = plt.subplots()
 
         ax.scatter(self.train_reals, self.train_preds, c="blue", label="Train")
         ax.scatter(self.val_reals, self.val_preds, c="red", label="Validation")
-        # val_acc = self.trained_model.metrics[self.params["pred_type"]][0]["metric"].to(
-        #     self.trained_model.device
-        # )(self.val_preds, self.val_reals)
 
         # Get the limits of the current scatter plot
         x_min, x_max = plt.xlim()
@@ -218,15 +259,14 @@ class Plotter:
         plt.plot(line_x, line_y, linestyle="dashed", color="black", label="x=y Line")
 
         ax.set_title(
-            f"Validation {self.trained_model.metrics[self.params['pred_type']][0]['name']}: \
-                {float(self.plot_val_acc):.4f}"
+            f"Validation {self.metric1name}: {float(self.plot_val_accs[self.metric1name]):.3f}"
         )
 
         ax.set_xlabel("Real Values")
         ax.set_ylabel("Predictions")
         ax.legend()
 
-        return fig
+        return {f"{self.current_model_name}_reals_vs_preds": fig}
 
     def confusion_matrix_plotter(self):
         """
@@ -256,13 +296,12 @@ class Plotter:
         plt.ylabel("Actuals", fontsize=18)
 
         plt.title(
-            f"Validation {self.trained_model.metrics[self.pred_type][0]['name']}: \
-                {float(self.plot_val_acc):.4f}"
+            f"Validation {self.metric1name}: {float(self.plot_val_accs[self.metric1name]):.3f}"
         )
 
         plt.tight_layout()
 
-        return fig
+        return {f"{self.current_model_name}_confusion_matrix": fig}
 
     def reals_vs_preds_kfold(self):
         """
@@ -304,7 +343,9 @@ class Plotter:
             )
 
             # set title of plot to the metric for the current fold
-            ax.set_title(f"Fold {n+1}: R2={float(self.kfold_plot_val_accs[n]):.4f}")
+            ax.set_title(
+                f"Fold {n+1}: R2={float(self.kfold_plot_val_accs[self.metric1name][n]):.3f}"
+            )
 
         plt.suptitle(f"{self.current_model_name}: reals vs. predicteds")
 
@@ -324,23 +365,235 @@ class Plotter:
             zorder=0,
             transform=ax1.transAxes,
         )
-        ax1.set_title(f"{self.current_model_name}: R2={float(self.plot_val_acc):.4f}")
+        ax1.set_title(
+            f"{self.current_model_name}: {self.metric1name}={float(self.plot_val_accs[self.metric1name]):.3f}"
+        )
         together_reals_v_preds_fig.tight_layout()
 
         # TODO combine these images to be pretty without worrying about what k is? ask chatgpt
-        return [reals_vs_preds_fig, together_reals_v_preds_fig]
+        # return [reals_vs_preds_fig, together_reals_v_preds_fig]
+        return {
+            f"{self.current_model_name}_reals_vs_preds_kfold": reals_vs_preds_fig,
+            f"{self.current_model_name}_reals_vs_preds_kfold_together": together_reals_v_preds_fig,
+        }
 
     def confusion_matrix_plotter_kfold(self):
         """
         Plots the confusion matrix of a kfold model.
         """
-        pass
+
+        N = self.params["num_k"]
+        cols = 3
+        rows = int(math.ceil(N / cols))
+
+        gs = gridspec.GridSpec(rows, cols)
+        k_fold_confusion_matrix_fig = plt.figure()
+        for n in range(N):
+            if n == 0:
+                ax = k_fold_confusion_matrix_fig.add_subplot(gs[n])
+                ax_og = ax
+            else:
+                ax = k_fold_confusion_matrix_fig.add_subplot(
+                    gs[n], sharey=ax_og, sharex=ax_og
+                )
+
+            # get real and predicted values for the current fold
+            reals = self.val_reals[n]
+            preds = self.val_preds[n]
+
+            # confusion plot time
+            # Get the confusion matrix for the validation set
+            conf_matrix = confusion_matrix(y_true=reals, y_pred=preds)
+
+            # Plot the confusion matrix as a heatmap
+            ax.matshow(conf_matrix, cmap=plt.cm.Blues, alpha=0.3)
+            for i in range(conf_matrix.shape[0]):
+                for j in range(conf_matrix.shape[1]):
+                    # Add the value of each cell to the plot
+                    ax.text(
+                        x=j,
+                        y=i,
+                        s=conf_matrix[i, j],
+                        va="center",
+                        ha="center",
+                        size="large",
+                    )
+
+            ax.set_xlabel("Predictions", fontsize=10)
+            ax.set_ylabel("Actuals", fontsize=10)
+
+            ax.set_title(
+                f"Fold {n+1} {self.metric1name}: \n{float(self.kfold_plot_val_accs[self.metric1name][n]):.3f}"
+            )
+
+        plt.suptitle(f"{self.current_model_name}: confusion matrices")
+        k_fold_confusion_matrix_fig.tight_layout()
+
+        # altogether confusion matrix
+        together_k_fold_confusion_matrix_fig, ax1 = plt.subplots()
+        # Get the confusion matrix for the validation set
+        conf_matrix = confusion_matrix(y_true=self.all_reals, y_pred=self.all_preds)
+
+        # Plot the confusion matrix as a heatmap
+        ax1.matshow(conf_matrix, cmap=plt.cm.Blues, alpha=0.3)
+        for i in range(conf_matrix.shape[0]):
+            for j in range(conf_matrix.shape[1]):
+                # Add the value of each cell to the plot
+                ax1.text(
+                    x=j,
+                    y=i,
+                    s=conf_matrix[i, j],
+                    va="center",
+                    ha="center",
+                    size="xx-large",
+                )
+
+        ax1.set_xlabel("Predictions", fontsize=18)
+        ax1.set_ylabel("Actuals", fontsize=18)
+        ax1.set_title(
+            f"{self.current_model_name}: {self.metric1name} = {float(self.plot_val_accs[self.metric1name]):.3f}"
+        )
+        together_k_fold_confusion_matrix_fig.tight_layout()
+
+        return {
+            f"{self.current_model_name}_confusion_matrix_kfold": k_fold_confusion_matrix_fig,
+            f"{self.current_model_name}_confusion_matrix_kfold_together": together_k_fold_confusion_matrix_fig,
+        }
 
     def compare_violin_plot(self):
         """
-        Plots a violin plot comparing the results of multiple models.
+        Plots a violin plot comparing the results of multiple kfold models.
         """
-        pass
+
+        # get method names and metric names
+        method_names = list(
+            self.comparing_models_metrics.keys()
+        )  # [method1name, method2name,...]
+
+        # get metric values for each method
+        metric_1_values = [
+            self.comparing_models_metrics[method][self.metric1name]
+            for method in method_names
+        ]
+        metric_2_values = [
+            self.comparing_models_metrics[method][self.metric2name]
+            for method in method_names
+        ]
+
+        # Calculate mean or median of metric_1_values for sorting
+        metric_1_means = np.array(metric_1_values).mean(
+            axis=1
+        )  # Change to median if needed
+        print("metric 1 means", metric_1_means)
+
+        sorted_indices = np.argsort(metric_1_means)
+
+        # Reorder method names, metric values, and other related data
+        method_names = np.array(method_names)[sorted_indices]
+        metric_1_values = np.array(metric_1_values)[sorted_indices].transpose()
+        metric_2_values = np.array(metric_2_values)[sorted_indices].transpose()
+
+        # create figure 1x2 subplots
+        fig, ax = plt.subplots(1, 2)
+        ax[0].grid()
+        ax[1].grid()
+
+        # create violin plots for each metric
+        bp = ax[0].violinplot(metric_1_values, vert=False, showmeans=True)
+
+        def set_violin_colors(instance, colour):
+            for pc in instance["bodies"]:
+                pc.set_facecolor(colour)
+                pc.set_edgecolor("black")
+                pc.set_alpha(0.5)
+            instance["cmeans"].set_edgecolor("black")
+            instance["cmins"].set_edgecolor("black")
+            instance["cmaxes"].set_edgecolor("black")
+            instance["cbars"].set_edgecolor("black")
+
+        set_violin_colors(bp, "violet")
+
+        ax[0].yaxis.set_ticks(np.arange(len(method_names)) + 1)
+        ax[0].set_yticklabels(method_names)
+        ax[0].get_xaxis().tick_bottom()
+        ax[0].set_xlim(right=1.0)
+
+        bp2 = ax[1].violinplot(metric_2_values, vert=False, showmeans=True)
+        set_violin_colors(bp2, "powderblue")
+
+        ax[1].yaxis.set_ticks(np.arange(len(method_names)) + 1)
+        ax[1].set_yticklabels([] * len(metric_2_values))
+        ax[1].get_xaxis().tick_bottom()
+
+        # set titles and limits
+        ax[0].set_title(self.metric1name)
+        ax[1].set_title(self.metric2name)
+        ax[1].set_xlim(left=0.0)
+
+        plt.suptitle("Distribution of metrics between cross-validation folds")
+
+        plt.tight_layout()
+
+        return {"compare_kfold_models": fig}
+
+    def compare_bar_chart(self):
+        """
+        Plots a bar chart comparing the results of multiple train/test models.
+        """
+
+        # get method names and metric names
+        method_names = list(
+            self.comparing_models_metrics.keys()
+        )  # [method1name, method2name,...]
+
+        # get metric values for each method
+        metric_1_values = [
+            self.comparing_models_metrics[method][self.metric1name]
+            for method in method_names
+        ]
+        metric_2_values = [
+            self.comparing_models_metrics[method][self.metric2name]
+            for method in method_names
+        ]
+
+        sorted_indices = np.argsort(metric_1_values)
+        method_names = np.array(method_names)[sorted_indices]
+        metric_1_values = np.array(metric_1_values)[sorted_indices]
+        metric_2_values = np.array(metric_2_values)[sorted_indices]
+
+        # Create an array of indices for the x-axis
+        y_indices = np.arange(len(method_names))
+
+        # Width of the bars
+        bar_width = 0.35
+
+        fig, ax = plt.subplots()
+
+        # Create the bar chart
+        ax.barh(
+            y_indices - bar_width / 2,
+            metric_1_values,
+            bar_width,
+            label=self.metric1name,
+        )
+        ax.barh(
+            y_indices + bar_width / 2,
+            metric_2_values,
+            bar_width,
+            label=self.metric2name,
+        )
+
+        # Set x-axis labels and title
+        ax.set_xlabel("Models")
+        ax.set_ylabel("Scores")
+        ax.set_title("Model Performance Comparison")
+        ax.set_yticks(y_indices, method_names)
+        ax.legend()
+
+        # Show the plot
+        plt.tight_layout()
+
+        return {"compare_tt_models": fig}
 
 
 def reals_vs_preds(model, train_reals, train_preds, val_reals, val_preds):
