@@ -134,7 +134,9 @@ def train_and_test(
 
     # get reals and preds for plotting later
     # now model object has train_preds, train_reals, val_preds, val_reals
-    model.get_reals_and_preds(train_dataloader, val_dataloader)
+
+    # COMMENTING TO CHECK IF THIS IS NEEDED
+    # model.get_reals_and_preds(train_dataloader, val_dataloader)
 
     return model
 
@@ -165,7 +167,7 @@ def store_trained_model(trained_model, trained_models_dict):
 
 
 def train_and_save_models(
-    trained_models, data_module, params, fusion_model, init_model
+    trained_models_dict, data_module, params, fusion_model, init_model
 ):
     """
     Trains/tests the model and saves the trained model to a dictionary for further analysis.
@@ -174,7 +176,7 @@ def train_and_save_models(
 
     Parameters
     ----------
-    trained_models : dict
+    trained_models_dicts : dict
         Dictionary of trained models.
     data_module : pytorch lightning data module
         Data module.
@@ -197,7 +199,9 @@ def train_and_save_models(
                 fusion_model=fusion_model,
                 init_model=init_model,
             )
-            trained_models = store_trained_model(trained_model, trained_models)
+            trained_models_dict = store_trained_model(
+                trained_model, trained_models_dict
+            )
 
     else:
         trained_model = train_and_test(
@@ -207,9 +211,9 @@ def train_and_save_models(
             fusion_model=fusion_model,
             init_model=init_model,
         )
-        trained_models = store_trained_model(trained_model, trained_models)
+        trained_models_dict = store_trained_model(trained_model, trained_models_dict)
 
-    return trained_models
+    return trained_models_dict
 
     # , trainer <-- I don't think I need to return the trainer?
 

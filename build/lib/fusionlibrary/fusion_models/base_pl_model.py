@@ -125,7 +125,9 @@ class BaseModel(pl.LightningModule):
             "binary": lambda logits, y: F.binary_cross_entropy_with_logits(
                 logits, y.float()
             ),
-            "multiclass": F.cross_entropy,
+            "multiclass": lambda logits, y: F.cross_entropy(
+                self.safe_squeeze(logits), self.safe_squeeze(y)
+            ),
             "regression": F.mse_loss,
         }
 
@@ -186,6 +188,14 @@ class BaseModel(pl.LightningModule):
         self.metric_names_list = [
             metric["name"] for metric in self.metrics[self.pred_type]
         ]
+
+        # storing the final validation reals and preds
+        self.batch_val_reals = []
+        self.batch_val_preds = []
+        self.batch_val_logits = []
+        self.batch_train_reals = []
+        self.batch_train_preds = []
+        self.batch_train_logits = []
 
     def safe_squeeze(self, tensor):
         """
@@ -315,6 +325,11 @@ class BaseModel(pl.LightningModule):
 
         return loss, end_output, logits
 
+    # def on_train_start(self):
+    #     # Clear the stored validation values at the beginning of training
+    #     self.val_reals = []
+    #     self.val_preds = []
+
     def training_step(self, batch, batch_idx):
         """
         Training step.
@@ -331,6 +346,17 @@ class BaseModel(pl.LightningModule):
         loss : tensor
             Loss.
         """
+        # if batch_idx == 0:
+        # Clear the stored training values at the beginning of training again
+        # we don't want to save the old values from the previous epoch,
+        # only final validation epoch
+        # self.batch_train_reals = []
+        # self.batch_train_preds = []
+        # self.batch_train_logits = []
+        # self.batch_val_preds = []
+        # self.batch_val_reals = []
+        # self.batch_val_logits = []
+
         x, y = self.get_data_from_batch(batch)
 
         loss, end_output, logits = self.get_model_outputs_and_loss(x, y)
@@ -363,6 +389,11 @@ class BaseModel(pl.LightningModule):
                     on_step=False,
                 )
 
+        # Store real and predicted values for training
+        self.batch_train_reals.append(y.detach())
+        self.batch_train_preds.append(predicted.detach())
+        self.batch_train_logits.append(logits.detach())
+
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -388,14 +419,64 @@ class BaseModel(pl.LightningModule):
             "val_loss", loss, on_step=False, on_epoch=True, prog_bar=True, logger=True
         )
 
+        # for i, metric in enumerate(self.metrics[self.pred_type]):
+        #     if "auroc" in metric["name"]:
+        #         predicted = logits
+        #     else:
+        #         predicted = end_output
+
+        #     val_step_acc = metric["metric"].to(self.device)(
+        #         self.safe_squeeze(predicted), self.safe_squeeze(y[self.val_mask])
+        #     )
+
+        #     # print("what's used to calc the end metric:")
+        #     # print("preds:", self.safe_squeeze(predicted))
+        #     # print("reals:", self.safe_squeeze(y[self.val_mask]))
+        #     # print("reals without mask:", self.safe_squeeze(y))
+
+        #     self.log(
+        #         metric["name"] + "_val",
+        #         val_step_acc,
+        #         logger=True,
+        #         on_epoch=True,
+        #     )
+
+        # Store real and predicted values for later access
+        self.batch_val_reals.append(y.detach())
+        self.batch_val_preds.append(end_output.detach())
+        self.batch_val_logits.append(self.safe_squeeze(logits).detach())
+        # print(self.safe_squeeze(logits).detach().shape)
+
+    def validation_epoch_end(self, outputs):
+        """
+        Gets the final validation epoch outputs and metrics.
+        When metrics are calculated at the validation step and logged on on_epoch=True,
+        the batch metrics are averaged. However, some metrics don't average well (e.g. R2).
+        Therefore, we're calculating the final validation metrics here on the full validation set.
+        """
+
+        self.val_reals = torch.cat(self.batch_val_reals, dim=-1)
+        self.val_preds = torch.cat(self.batch_val_preds, dim=-1)
+        # print(self.batch_val_logits[0])
+        # print(self.batch_val_logits[1])
+        # print(len(self.batch_val_logits))
+        self.val_logits = torch.cat(self.batch_val_logits, dim=0)
+
+        try:
+            self.train_reals = torch.cat(self.batch_train_reals, dim=-1)
+            self.train_preds = torch.cat(self.batch_train_preds, dim=-1)
+        except:
+            pass
+
         for i, metric in enumerate(self.metrics[self.pred_type]):
             if "auroc" in metric["name"]:
-                predicted = logits
+                predicted = self.val_logits
             else:
-                predicted = end_output
+                predicted = self.val_preds
 
             val_step_acc = metric["metric"].to(self.device)(
-                self.safe_squeeze(predicted), self.safe_squeeze(y[self.val_mask])
+                self.safe_squeeze(predicted),
+                self.safe_squeeze(self.val_reals[self.val_mask]),
             )
 
             self.log(
@@ -403,8 +484,14 @@ class BaseModel(pl.LightningModule):
                 val_step_acc,
                 logger=True,
                 on_epoch=True,
-                on_step=False,
             )
+
+        self.batch_val_reals = []
+        self.batch_val_preds = []
+        self.batch_val_logits = []
+        self.batch_train_reals = []
+        self.batch_train_preds = []
+        self.batch_train_logits = []
 
     def configure_optimizers(self):
         """
@@ -413,228 +500,228 @@ class BaseModel(pl.LightningModule):
         optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
         return optimizer
 
-    def get_reals_and_preds(self, train_loader, val_loader):
-        """
-        Gets real and predicted values for train and validation data.
+    # def get_reals_and_preds(self, train_loader, val_loader):
+    #     """
+    #     Gets real and predicted values for train and validation data.
 
-        Parameters
-        ----------
-        train_loader : DataLoader
-            Training data loader.
-        val_loader : DataLoader
-            Validation data loader.
+    #     Parameters
+    #     ----------
+    #     train_loader : DataLoader
+    #         Training data loader.
+    #     val_loader : DataLoader
+    #         Validation data loader.
 
-        """
-        self.model.eval()
+    #     """
+    #     self.model.eval()
 
-        train_reals = []
-        train_preds = []
-        val_reals = []
-        val_preds = []
+    #     train_reals = []
+    #     train_preds = []
+    #     val_reals = []
+    #     val_preds = []
 
-        for batch in train_loader:
-            x, y = self.get_data_from_batch(batch, train=True)
+    #     for batch in train_loader:
+    #         x, y = self.get_data_from_batch(batch, train=True)
 
-            logits, reconstructions = self.get_model_outputs(x)
-            outputs = self.output_activation_functions[self.pred_type](logits)
+    #         logits, reconstructions = self.get_model_outputs(x)
+    #         outputs = self.output_activation_functions[self.pred_type](logits)
 
-            if self.train_mask is not None:
-                # if it's a graph, we can visualise the final graph space
-                outputs = outputs[self.train_mask]
-                y = y[self.train_mask]
+    #         if self.train_mask is not None:
+    #             # if it's a graph, we can visualise the final graph space
+    #             outputs = outputs[self.train_mask]
+    #             y = y[self.train_mask]
 
-            train_reals.append(y.detach())
-            train_preds.append(outputs.detach())
+    #         train_reals.append(y.detach())
+    #         train_preds.append(outputs.detach())
 
-        for batch in val_loader:
-            x, y = self.get_data_from_batch(batch, train=False)
-            logits, reconstructions = self.get_model_outputs(x)
-            outputs = self.output_activation_functions[self.pred_type](logits)
+    #     for batch in val_loader:
+    #         x, y = self.get_data_from_batch(batch, train=False)
+    #         logits, reconstructions = self.get_model_outputs(x)
+    #         outputs = self.output_activation_functions[self.pred_type](logits)
 
-            if self.val_mask is not None:
-                outputs = outputs[self.val_mask]
-                y = y[self.val_mask]
+    #         if self.val_mask is not None:
+    #             outputs = outputs[self.val_mask]
+    #             y = y[self.val_mask]
 
-            val_reals.append(y.detach())
-            val_preds.append(outputs.detach())
+    #         val_reals.append(y.detach())
+    #         val_preds.append(outputs.detach())
 
-        self.train_reals = torch.cat(train_reals)
-        self.train_preds = torch.cat(train_preds)
-        self.val_reals = torch.cat(val_reals)
-        self.val_preds = torch.cat(val_preds)
+    #     self.train_reals = torch.cat(train_reals)
+    #     self.train_preds = torch.cat(train_preds)
+    #     self.val_reals = torch.cat(val_reals)
+    #     self.val_preds = torch.cat(val_preds)
 
-    def plot_eval_figs(self, train_loader, val_loader, path_suffix):
-        """
-        Plot evaluation figures.
+    # def plot_eval_figs(self, train_loader, val_loader, path_suffix):
+    #     """
+    #     Plot evaluation figures.
 
-        Parameters
-        ----------
-        train_loader : DataLoader
-            Training data loader.
-        val_loader : DataLoader
-            Validation data loader.
-        path_suffix : str
-            Path suffix.
+    #     Parameters
+    #     ----------
+    #     train_loader : DataLoader
+    #         Training data loader.
+    #     val_loader : DataLoader
+    #         Validation data loader.
+    #     path_suffix : str
+    #         Path suffix.
 
-        Returns
-        -------
-        fig_outputs : list
-            List of figures.
-        val_reals : list
-            List of validation real values.
-        val_preds : list
-            List of validation predicted values.
-        """
-        self.model.eval()
+    #     Returns
+    #     -------
+    #     fig_outputs : list
+    #         List of figures.
+    #     val_reals : list
+    #         List of validation real values.
+    #     val_preds : list
+    #         List of validation predicted values.
+    #     """
+    #     self.model.eval()
 
-        train_reals = []
-        train_preds = []
-        val_reals = []
-        val_preds = []
-        fig_outputs = []
+    #     train_reals = []
+    #     train_preds = []
+    #     val_reals = []
+    #     val_preds = []
+    #     fig_outputs = []
 
-        for batch in train_loader:
-            x, y = self.get_data_from_batch(batch, train=True)
+    #     for batch in train_loader:
+    #         x, y = self.get_data_from_batch(batch, train=True)
 
-            logits, reconstructions = self.get_model_outputs(x)
-            # logits = self.model(x).squeeze(dim=1)
-            outputs = self.output_activation_functions[self.pred_type](logits)
+    #         logits, reconstructions = self.get_model_outputs(x)
+    #         # logits = self.model(x).squeeze(dim=1)
+    #         outputs = self.output_activation_functions[self.pred_type](logits)
 
-            if self.train_mask is not None:
-                # if it's a graph, we can visualise the final graph space
-                if self.params["pred_type"] != "regression":
-                    graphspace_fig = visualise_graphspace(
-                        outputs, y, self.params, path_suffix, self.method_name
-                    )
+    #         if self.train_mask is not None:
+    #             # if it's a graph, we can visualise the final graph space
+    #             if self.params["pred_type"] != "regression":
+    #                 graphspace_fig = visualise_graphspace(
+    #                     outputs, y, self.params, path_suffix, self.method_name
+    #                 )
 
-                outputs = outputs[self.train_mask]
-                y = y[self.train_mask]
+    #             outputs = outputs[self.train_mask]
+    #             y = y[self.train_mask]
 
-            train_reals.append(y.detach())
-            train_preds.append(outputs.detach())
+    #         train_reals.append(y.detach())
+    #         train_preds.append(outputs.detach())
 
-        for batch in val_loader:
-            x, y = self.get_data_from_batch(batch, train=False)
-            logits, reconstructions = self.get_model_outputs(x)
-            outputs = self.output_activation_functions[self.pred_type](logits)
+    #     for batch in val_loader:
+    #         x, y = self.get_data_from_batch(batch, train=False)
+    #         logits, reconstructions = self.get_model_outputs(x)
+    #         outputs = self.output_activation_functions[self.pred_type](logits)
 
-            if self.val_mask is not None:
-                outputs = outputs[self.val_mask]
-                y = y[self.val_mask]
+    #         if self.val_mask is not None:
+    #             outputs = outputs[self.val_mask]
+    #             y = y[self.val_mask]
 
-            val_reals.append(y.detach())
-            val_preds.append(outputs.detach())
+    #         val_reals.append(y.detach())
+    #         val_preds.append(outputs.detach())
 
-        train_reals = torch.cat(train_reals)
-        train_preds = torch.cat(train_preds)
-        val_reals = torch.cat(val_reals)
-        val_preds = torch.cat(val_preds)
+    #     train_reals = torch.cat(train_reals)
+    #     train_preds = torch.cat(train_preds)
+    #     val_reals = torch.cat(val_reals)
+    #     val_preds = torch.cat(val_preds)
 
-        for fig_type in self.eval_plots[self.pred_type]:
-            fig = fig_type(self, train_reals, train_preds, val_reals, val_preds)
-            fig_outputs.append(fig)
+    #     for fig_type in self.eval_plots[self.pred_type]:
+    #         fig = fig_type(self, train_reals, train_preds, val_reals, val_preds)
+    #         fig_outputs.append(fig)
 
-        if self.params["pred_type"] != "regression":
-            graphspace_fig = visualise_graphspace(
-                torch.cat([train_preds, val_preds]),
-                torch.cat([train_reals, val_reals]),
-                self.params,
-                path_suffix,
-                self.method_name,
-            )
+    #     if self.params["pred_type"] != "regression":
+    #         graphspace_fig = visualise_graphspace(
+    #             torch.cat([train_preds, val_preds]),
+    #             torch.cat([train_reals, val_reals]),
+    #             self.params,
+    #             path_suffix,
+    #             self.method_name,
+    #         )
 
-        if self.params["log"] is False:
-            for fig_type, fig in zip(self.eval_plots[self.pred_type], fig_outputs):
-                fig.savefig(
-                    f"{self.params['local_fig_path']}/{fig_type.__name__}{path_suffix}",
-                    dpi=180,
-                )
-                plt.close()
+    #     if self.params["log"] is False:
+    #         for fig_type, fig in zip(self.eval_plots[self.pred_type], fig_outputs):
+    #             fig.savefig(
+    #                 f"{self.params['local_fig_path']}/{fig_type.__name__}{path_suffix}",
+    #                 dpi=180,
+    #             )
+    #             plt.close()
 
-            if self.params["pred_type"] != "regression":
-                graphspace_fig.savefig(
-                    f"{self.params['local_fig_path']}/graphspace{path_suffix}",
-                    dpi=180,
-                )
-                plt.close()
+    #         if self.params["pred_type"] != "regression":
+    #             graphspace_fig.savefig(
+    #                 f"{self.params['local_fig_path']}/graphspace{path_suffix}",
+    #                 dpi=180,
+    #             )
+    #             plt.close()
 
-        if isinstance(self.logger, pl_loggers.TensorBoardLogger):
-            # if it's not wandb logger
-            # self.logger.experiment.add_image(fig_type.__name__ + path_suffix, fig, 0)
-            pass
-        elif isinstance(self.logger, pl_loggers.WandbLogger):
-            # self.logger.experiment.log(
-            #     {fig_type.__name__ + path_suffix: wandb.Image(fig)}
-            # )
-            pass
+    #     if isinstance(self.logger, pl_loggers.TensorBoardLogger):
+    #         # if it's not wandb logger
+    #         # self.logger.experiment.add_image(fig_type.__name__ + path_suffix, fig, 0)
+    #         pass
+    #     elif isinstance(self.logger, pl_loggers.WandbLogger):
+    #         # self.logger.experiment.log(
+    #         #     {fig_type.__name__ + path_suffix: wandb.Image(fig)}
+    #         # )
+    #         pass
 
-        return (fig_outputs, val_reals, val_preds)
+    #     return (fig_outputs, val_reals, val_preds)
 
-    def plot_kfold_eval_figs(
-        self, all_kf_val_preds, all_kf_val_reals, kfold_metrics, path_suffix
-    ):
-        """
-        Plot k-fold evaluation figures.
+    # def plot_kfold_eval_figs(
+    #     self, all_kf_val_preds, all_kf_val_reals, kfold_metrics, path_suffix
+    # ):
+    #     """
+    #     Plot k-fold evaluation figures.
 
-        Parameters
-        ----------
-        all_kf_val_preds : list
-            List of all k-fold validation predicted values.
-        all_kf_val_reals : list
-            List of all k-fold validation real values.
-        kfold_metrics : list
-            List of k-fold metrics.
-        path_suffix : str
-            Path suffix.
+    #     Parameters
+    #     ----------
+    #     all_kf_val_preds : list
+    #         List of all k-fold validation predicted values.
+    #     all_kf_val_reals : list
+    #         List of all k-fold validation real values.
+    #     kfold_metrics : list
+    #         List of k-fold metrics.
+    #     path_suffix : str
+    #         Path suffix.
 
-        Returns
-        -------
-        list
-            List of overall metrics.
-        """
-        # TODO add options for multiclass and binary
-        self.model.eval()
+    #     Returns
+    #     -------
+    #     list
+    #         List of overall metrics.
+    #     """
+    #     # TODO add options for multiclass and binary
+    #     self.model.eval()
 
-        all_preds = torch.cat(all_kf_val_preds)
-        all_reals = torch.cat(all_kf_val_reals)
+    #     all_preds = torch.cat(all_kf_val_preds)
+    #     all_reals = torch.cat(all_kf_val_reals)
 
-        overall_metric = self.metrics[self.pred_type][0]["metric"](all_preds, all_reals)
-        overall_metric_2 = self.metrics[self.pred_type][1]["metric"](
-            all_preds, all_reals
-        )
+    #     overall_metric = self.metrics[self.pred_type][0]["metric"](all_preds, all_reals)
+    #     overall_metric_2 = self.metrics[self.pred_type][1]["metric"](
+    #         all_preds, all_reals
+    #     )
 
-        figures = self.kfold_plots[self.pred_type](
-            reals_list=all_kf_val_reals,
-            preds_list=all_kf_val_preds,
-            overall_metric=overall_metric,
-            method_name=self.model.method_name,
-            metric_list=kfold_metrics,
-            params=self.model.params,
-        )
+    #     figures = self.kfold_plots[self.pred_type](
+    #         reals_list=all_kf_val_reals,
+    #         preds_list=all_kf_val_preds,
+    #         overall_metric=overall_metric,
+    #         method_name=self.model.method_name,
+    #         metric_list=kfold_metrics,
+    #         params=self.model.params,
+    #     )
 
-        # figures = k_fold_reals_vs_preds(
-        #     reals_list=all_kf_val_reals,
-        #     preds_list=all_kf_val_preds,
-        #     overall_metric=overall_metric,
-        #     method_name=self.model.method_name,
-        #     metric_list=kfold_metrics,
-        #     params=self.model.params,
-        # )
+    #     # figures = k_fold_reals_vs_preds(
+    #     #     reals_list=all_kf_val_reals,
+    #     #     preds_list=all_kf_val_preds,
+    #     #     overall_metric=overall_metric,
+    #     #     method_name=self.model.method_name,
+    #     #     metric_list=kfold_metrics,
+    #     #     params=self.model.params,
+    #     # )
 
-        figure_names = ["real_vs_pred_per_fold", "overall_kfold_real_vs_pred"]
-        if figures is not None:
-            for i, figure in enumerate(figures):
-                if isinstance(self.logger, pl_loggers.TensorBoardLogger):
-                    # if it's not wandb logger
-                    # self.logger.experiment.add_image(fig_type.__name__ + path_suffix, fig, 0)
-                    pass
-                elif isinstance(self.logger, pl_loggers.WandbLogger):
-                    self.logger.experiment.log(
-                        {figure_names[i] + path_suffix: wandb.Image(figure)}
-                    )
-                    plt.close(figure)
+    #     figure_names = ["real_vs_pred_per_fold", "overall_kfold_real_vs_pred"]
+    #     if figures is not None:
+    #         for i, figure in enumerate(figures):
+    #             if isinstance(self.logger, pl_loggers.TensorBoardLogger):
+    #                 # if it's not wandb logger
+    #                 # self.logger.experiment.add_image(fig_type.__name__ + path_suffix, fig, 0)
+    #                 pass
+    #             elif isinstance(self.logger, pl_loggers.WandbLogger):
+    #                 self.logger.experiment.log(
+    #                     {figure_names[i] + path_suffix: wandb.Image(figure)}
+    #                 )
+    #                 plt.close(figure)
 
-        return [overall_metric, overall_metric_2]
+    #     return [overall_metric, overall_metric_2]
 
 
 class ParentFusionModel:

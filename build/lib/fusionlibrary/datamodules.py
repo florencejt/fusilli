@@ -977,7 +977,7 @@ class KFoldGraphDataModule:
         return lightning_modules  # list of lightning modules for each fold
 
 
-def get_data_module(init_model, params, batch_size=16):
+def get_data_module(init_model, params, batch_size=8):
     # needs model attributes: fusion_type and modality_type
     # needs params: kfold, pred_type etc
 

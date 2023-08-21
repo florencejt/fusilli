@@ -12,15 +12,44 @@ import wandb
 import torch_geometric as pyg
 import networkx as nx
 from sklearn.manifold import TSNE
-
-
-# creating a new Plotter class for plotting the results of one model or multiple models
+import pandas as pd
 
 
 class Plotter:
+    """
+    Class for plotting the results of the models.
+
+    Parameters
+    ----------
+    trained_model_dict : dict
+        Dictionary of trained models.
+    params : dict
+        Dictionary of parameters.
+
+    Attributes
+    ----------
+    trained_model_dict : dict
+        Dictionary of trained models.
+    model_names : list
+        List of model names.
+    params : dict
+        Dictionary of parameters.
+    pred_type : str
+        Prediction type.
+    metric1name : str
+        Name of metric 1.
+    metric1func : function
+        Function for calculating metric 1.
+    metric2name : str
+        Name of metric 2.
+    metric2func : function
+        Function for calculating metric 2.
+    """
+
     def __init__(self, trained_model_dict, params):
         super().__init__()
 
+        # initialising variables for use later in the class
         self.trained_model_dict = trained_model_dict
         self.model_names = list(trained_model_dict.keys())
         print("model names:", self.model_names)
@@ -41,18 +70,15 @@ class Plotter:
         self.metric2name = first_model.metrics[self.pred_type][1]["name"]
         self.metric2func = first_model.metrics[self.pred_type][1]["metric"]
 
-        for value in trained_model_dict.values():
-            if isinstance(value, list):
-                print("kfold!")
-                print("num_k:", len(value))
-                break
-
         # if there is one model
         if len(self.model_names) == 1:
-            print("only one model, no comparison needed")
+            print("Plotting results of a single model.")
         else:
             print(
-                "multiple models, comparison needed:", len(self.model_names), "models"
+                "Plotting comparison plots for",
+                len(self.model_names),
+                "models:",
+                self.model_names,
             )
 
         self.single_model_tt_plots = {
@@ -80,49 +106,86 @@ class Plotter:
         }
 
     def get_kfold_numbers(self):
+        """
+        Gets the lists of train_reals, train_preds, val_reals, val_preds for all folds and saves to self.
+        Gets the altogether list of val_reals and val_preds over folds and saves to self.
+        Gets metrics to put in the plot titles, adds to metrics list.
+
+        Returns
+        -------
+        None
+        """
+
+        # create empty lists for the folds of train_reals, train_preds, val_reals, val_preds
         self.train_reals = []
         self.train_preds = []
         self.val_reals = []
         self.val_preds = []
+        self.val_logits = []
+
+        # dictionary to store the metrics for each fold
         self.kfold_plot_val_accs = {self.metric1name: [], self.metric2name: []}
 
         self.trained_model_list = self.trained_model_dict[self.current_model_name]
 
         for k in range(self.params["num_k"]):
             k_trained_model_var = vars(self.trained_model_list[k])
+
+            self.trained_model_list[k].eval()
+
             self.train_reals.append(k_trained_model_var["train_reals"])
             self.train_preds.append(k_trained_model_var["train_preds"])
             self.val_reals.append(k_trained_model_var["val_reals"])
             self.val_preds.append(k_trained_model_var["val_preds"])
+            self.val_logits.append(k_trained_model_var["val_logits"])
 
             self.kfold_plot_val_accs[self.metric1name].append(
-                self.metric1func.to(self.trained_model_list[k].device)(
-                    k_trained_model_var["val_reals"],
-                    k_trained_model_var["val_preds"],
-                ).item()
+                k_trained_model_var["metric1"]
             )
-
             self.kfold_plot_val_accs[self.metric2name].append(
-                self.metric2func.to(self.trained_model_list[k].device)(
-                    k_trained_model_var["val_reals"],
-                    k_trained_model_var["val_preds"],
-                ).item()
+                k_trained_model_var["metric2"]
             )
 
-        # altogether vals
-        self.all_preds = torch.cat(self.val_preds)
-        self.all_reals = torch.cat(self.val_reals)
+        # altogether validation sets: concatenate all the lists of val_reals and val_preds
+        self.all_preds = torch.cat(self.val_preds, dim=-1)
+        self.all_reals = torch.cat(self.val_reals, dim=-1)
+        self.all_logits = torch.cat(self.val_logits, dim=0)
 
-        self.plot_val_accs = {
-            self.metric1name: self.metric1func.to(self.trained_model_list[0].device)(
-                self.all_preds, self.all_reals
-            ),
-            self.metric2name: self.metric2func.to(self.trained_model_list[0].device)(
-                self.all_preds, self.all_reals
-            ),
-        }
+        self.plot_val_accs = {}
+
+        # saving the metrics for the altogether validation sets
+        for i, metric in enumerate(self.trained_model_list[0].metrics[self.pred_type]):
+            if "auroc" in metric["name"]:
+                predicted = self.all_logits  # AUROC needs logits
+            else:
+                predicted = self.all_preds
+
+            val_step_acc = metric["metric"](
+                self.trained_model_list[0].safe_squeeze(predicted),
+                self.trained_model_list[0].safe_squeeze(self.all_reals),
+            )
+            self.plot_val_accs[metric["name"]] = val_step_acc
+
+        # # saving the metrics for the altogether validation sets
+        # self.plot_val_accs = {
+        #     self.metric1name: self.metric1func.to(self.trained_model_list[0].device)(
+        #         self.all_preds, self.all_reals
+        #     ),
+        #     self.metric2name: self.metric2func.to(self.trained_model_list[0].device)(
+        #         self.all_preds, self.all_reals
+        #     ),
+        # }
 
     def get_train_test_numbers(self):
+        """
+        Gets the lists of train_reals, train_preds, val_reals, val_preds and saves to self.
+        Gets metrics to put in the plot titles, adds to metrics list.
+
+        Returns
+        -------
+        None
+        """
+
         self.trained_model = self.trained_model_dict[self.current_model_name]
         self.trained_model.eval()
 
@@ -140,28 +203,32 @@ class Plotter:
             "val_preds"
         ]
 
-        self.train_end_metrics = [
-            vars(self.trained_model_dict[self.current_model_name])["metric1"],
-            vars(self.trained_model_dict[self.current_model_name])["metric2"],
-        ]
-
-        print("metrics:", self.train_end_metrics)
-
         self.plot_val_accs = {
-            self.metric1name: self.metric1func.to(self.trained_model.device)(
-                self.val_reals,
-                self.val_preds,
-            ).item(),
-            self.metric2name: self.metric2func.to(self.trained_model.device)(
-                self.val_reals,
-                self.val_preds,
-            ).item(),
+            self.metric1name: vars(self.trained_model_dict[self.current_model_name])[
+                "metric1"
+            ],
+            self.metric2name: vars(self.trained_model_dict[self.current_model_name])[
+                "metric2"
+            ],
         }
+
+        # self.plot_val_accs = {
+        #     self.metric1name: self.metric1func.to(self.trained_model.device)(
+        #         self.val_reals,
+        #         self.val_preds,
+        #     ).item(),
+        #     self.metric2name: self.metric2func.to(self.trained_model.device)(
+        #         self.val_reals,
+        #         self.val_preds,
+        #     ).item(),
+        # }
 
     def plot_all(self):
         """
         Plots all the results.
         """
+
+        # if there is only one model
         if len(self.model_names) == 1:
             self.current_model_name = self.model_names[0]
 
@@ -184,6 +251,7 @@ class Plotter:
 
                 return results_figs_dict
 
+        # if there are multiple models, plot the comparison plots
         else:
             figures_dict = (
                 {}
@@ -193,6 +261,8 @@ class Plotter:
                 self.comparing_models_metrics = (
                     {}
                 )  # keys: model names, values: lists of kfold metrics len(k)
+
+                self.overall_kfold_metrics = {}
                 # or maybe value is another dictionary {"R2": [...,...,...], "MAE": [...,..,...]}
 
                 for model_name in self.model_names:
@@ -203,15 +273,19 @@ class Plotter:
                     # get altogether list of val_reals and val_preds over folds and save to self
                     # get metrics to put in the plot titles, add to metrics list
                     self.comparing_models_metrics[model_name] = self.kfold_plot_val_accs
+                    self.overall_kfold_metrics[model_name] = self.plot_val_accs
 
-                    single_model_figs_dict = self.single_model_kfold_plots[
-                        self.pred_type
-                    ]()
-                    figures_dict.update(single_model_figs_dict)
+                    # single_model_figs_dict = self.single_model_kfold_plots[
+                    #     self.pred_type
+                    # ]()
+                    # figures_dict.update(single_model_figs_dict)
 
                 # plot comparison of all kfold models: violin plot?
                 comparison_figs_dict = self.multi_model_kfold_plots[self.pred_type]()
                 figures_dict.update(comparison_figs_dict)
+
+                # self.save_performance_csv()
+                # incorporate self.plot_val_accs (overall kfold performance) into this csv
 
                 return figures_dict
 
@@ -228,14 +302,56 @@ class Plotter:
                     # plot the predefined models for self.params["pred_type"]
                     self.comparing_models_metrics[model_name] = self.plot_val_accs
 
-                    results_figs_dict = self.single_model_tt_plots[self.pred_type]()
-                    figures_dict.update(results_figs_dict)
+                    # results_figs_dict = self.single_model_tt_plots[self.pred_type]()
+                    # figures_dict.update(results_figs_dict)
 
                 # plot comparison of all train/test models: bar chart?
                 comparison_figs_dict = self.multi_model_tt_plots[self.pred_type]()
                 figures_dict.update(comparison_figs_dict)
 
+                # self.save_performance_csv()
+
                 return figures_dict
+
+    def save_performance_csv(self):
+        if self.params["kfold_flag"]:
+            print(self.comparing_models_metrics)
+            print(self.overall_kfold_metrics)
+            # create a dataframe of the metrics for each model
+            # incorporate self.plot_val_accs (overall kfold performance) into this csv
+            # Create a DataFrame from the kfold_metrics dictionary
+            df = pd.DataFrame(self.comparing_models_metrics)
+
+            # Add the overall kfold metrics to the DataFrame
+            df = df.append(self.overall_kfold_metrics, ignore_index=True)
+
+            # Reset the index of the DataFrame
+            df.reset_index(inplace=True)
+            df.rename(columns={"index": "Metric"}, inplace=True)
+
+            # Melt the DataFrame to create a multi-index
+            melted_df = df.melt(
+                id_vars=["Metric"], var_name="Method", value_name="Value"
+            )
+
+            # Set multi-index for the DataFrame
+            multi_indexed_df = melted_df.set_index(["Method", "Metric"])
+
+            print(multi_indexed_df)
+            return multi_indexed_df
+        else:
+            # Reshape the data into a list of dictionaries
+            reshaped_data = []
+            for method, metrics in self.comparing_models_metrics.items():
+                reshaped_data.append({"Method": method, **metrics})
+
+            # Create a DataFrame from the reshaped data
+            df = pd.DataFrame(reshaped_data)
+
+            print(df)
+            return df
+            # models_df = pd.DataFrame(self.comparing_models_metrics)
+            # models_df.to_csv("performance.csv")
 
     def reals_vs_preds(self):
         """
@@ -403,7 +519,7 @@ class Plotter:
 
             # confusion plot time
             # Get the confusion matrix for the validation set
-            conf_matrix = confusion_matrix(y_true=reals, y_pred=preds)
+            conf_matrix = confusion_matrix(y_true=reals, y_pred=preds.squeeze())
 
             # Plot the confusion matrix as a heatmap
             ax.matshow(conf_matrix, cmap=plt.cm.Blues, alpha=0.3)
@@ -432,7 +548,9 @@ class Plotter:
         # altogether confusion matrix
         together_k_fold_confusion_matrix_fig, ax1 = plt.subplots()
         # Get the confusion matrix for the validation set
-        conf_matrix = confusion_matrix(y_true=self.all_reals, y_pred=self.all_preds)
+        conf_matrix = confusion_matrix(
+            y_true=self.all_reals, y_pred=self.all_preds.squeeze()
+        )
 
         # Plot the confusion matrix as a heatmap
         ax1.matshow(conf_matrix, cmap=plt.cm.Blues, alpha=0.3)
@@ -594,6 +712,15 @@ class Plotter:
         plt.tight_layout()
 
         return {"compare_tt_models": fig}
+
+    def save_to_local(self, plots_dict, extra_string=""):
+        """
+        Save dictionary of plots to local directory.
+        """
+        for figure_name, figure in plots_dict.items():
+            figure.savefig(
+                f"{self.params['local_fig_path']}/{figure_name}{extra_string}.png"
+            )
 
 
 def reals_vs_preds(model, train_reals, train_preds, val_reals, val_preds):
