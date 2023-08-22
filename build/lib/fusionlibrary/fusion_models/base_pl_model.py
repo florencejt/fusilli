@@ -390,7 +390,8 @@ class BaseModel(pl.LightningModule):
                 )
 
         # Store real and predicted values for training
-        self.batch_train_reals.append(y.detach())
+
+        self.batch_train_reals.append(self.safe_squeeze(y[self.train_mask]).detach())
         self.batch_train_preds.append(predicted.detach())
         self.batch_train_logits.append(logits.detach())
 
@@ -442,7 +443,8 @@ class BaseModel(pl.LightningModule):
         #     )
 
         # Store real and predicted values for later access
-        self.batch_val_reals.append(y.detach())
+
+        self.batch_val_reals.append(self.safe_squeeze(y[self.val_mask]).detach())
         self.batch_val_preds.append(end_output.detach())
         self.batch_val_logits.append(self.safe_squeeze(logits).detach())
         # print(self.safe_squeeze(logits).detach().shape)
@@ -476,7 +478,7 @@ class BaseModel(pl.LightningModule):
 
             val_step_acc = metric["metric"].to(self.device)(
                 self.safe_squeeze(predicted),
-                self.safe_squeeze(self.val_reals[self.val_mask]),
+                self.safe_squeeze(self.val_reals),
             )
 
             self.log(

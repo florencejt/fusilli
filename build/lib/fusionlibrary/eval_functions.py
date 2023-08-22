@@ -706,31 +706,101 @@ class Plotter:
         # Width of the bars
         bar_width = 0.35
 
-        fig, ax = plt.subplots()
+        # Create the figure and the primary y-axis
+        fig, ax = plt.subplots(1, 2)
+        ax[0].grid()
+        ax[1].grid()
 
-        # Create the bar chart
-        ax.barh(
-            y_indices - bar_width / 2,
+        # Create the first bar chart using the primary y-axis (ax1)
+        bars1 = ax[0].barh(
+            y_indices,
+            #   - bar_width / 2,
             metric_1_values,
             bar_width,
-            label=self.metric1name,
+            color="violet",
+            edgecolor="purple"
+            # label=self.metric1name,
         )
-        ax.barh(
-            y_indices + bar_width / 2,
+
+        # black dashed line at x=0
+        ax[0].axvline(x=0, color="black", linestyle="--", alpha=0.5)
+
+        ax[0].yaxis.set_ticks(np.arange(len(method_names)))
+        ax[0].set_yticklabels(method_names)
+        ax[0].get_xaxis().tick_bottom()
+        ax[0].set_xlim(right=1.0)
+
+        # Create a secondary y-axis for the second metric
+        # ax2 = ax1.twiny()
+
+        # Create the second bar chart using the secondary y-axis (ax2)
+        bars2 = ax[1].barh(
+            y_indices,
+            #   + bar_width / 2,
             metric_2_values,
             bar_width,
-            label=self.metric2name,
+            color="powderblue",
+            edgecolor="steelblue",
+            # label=self.metric2name,
         )
 
+        ax[1].yaxis.set_ticks(np.arange(len(method_names)))
+        ax[1].set_yticklabels([] * len(metric_2_values))
+        ax[1].get_xaxis().tick_bottom()
+
+        # set titles and limits
+        ax[0].set_title(self.metric1name)
+        ax[1].set_title(self.metric2name)
+        ax[1].set_xlim(left=0.0)
+
         # Set x-axis labels and title
-        ax.set_xlabel("Models")
-        ax.set_ylabel("Scores")
-        ax.set_title("Model Performance Comparison")
-        ax.set_yticks(y_indices, method_names)
-        ax.legend()
+        # ax1.set_xlabel("Scores for " + self.metric1name)
+        # ax2.set_xlabel("Scores for " + self.metric2name)
+        # ax1.set_ylabel("Models")
+        # ax1.set_title("Model Performance Comparison")
+
+        # Combine the bars from both axes for the legend
+        # all_bars = bars1 + bars2
+        # all_labels = [bar.get_label() for bar in all_bars]
+
+        # Show the legend
+        # ax1.legend(all_bars, all_labels)
 
         # Show the plot
+        plt.suptitle("Model Performance Comparison")
         plt.tight_layout()
+
+        # # Create an array of indices for the x-axis
+        # y_indices = np.arange(len(method_names))
+
+        # # Width of the bars
+        # bar_width = 0.35
+
+        # fig, ax = plt.subplots()
+
+        # # Create the bar chart
+        # ax.barh(
+        #     y_indices - bar_width / 2,
+        #     metric_1_values,
+        #     bar_width,
+        #     label=self.metric1name,
+        # )
+        # ax.barh(
+        #     y_indices + bar_width / 2,
+        #     metric_2_values,
+        #     bar_width,
+        #     label=self.metric2name,
+        # )
+
+        # # Set x-axis labels and title
+        # ax.set_xlabel("Models")
+        # ax.set_ylabel("Scores")
+        # ax.set_title("Model Performance Comparison")
+        # ax.set_yticks(y_indices, method_names)
+        # ax.legend()
+
+        # # Show the plot
+        # plt.tight_layout()
 
         return {"compare_tt_models": fig}
 
