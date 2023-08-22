@@ -727,7 +727,7 @@ class GraphDataModule:
         modality_type,
         sources,
         graph_creation_method,
-        batch_size,
+        batch_size=None,
     ):
         """
         Parameters
@@ -861,7 +861,7 @@ class KFoldGraphDataModule:
         modality_type,
         sources,
         graph_creation_method,
-        batch_size,
+        batch_size=None,
     ):
         """
         Parameters
@@ -995,7 +995,6 @@ def get_data_module(init_model, params, batch_size=8):
                 init_model.modality_type,
                 sources=data_sources,
                 graph_creation_method=init_model.graph_maker,
-                batch_size=batch_size,
             )
         else:
             dmg = GraphDataModule(
@@ -1003,7 +1002,6 @@ def get_data_module(init_model, params, batch_size=8):
                 init_model.modality_type,
                 sources=data_sources,
                 graph_creation_method=init_model.graph_maker,
-                batch_size=batch_size,
             )
 
         dmg.prepare_data()

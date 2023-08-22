@@ -1,6 +1,5 @@
 """
-Functions for initializing the pytorch lightning logger and trainer, and for updating the
-repetition results dictionary with the final validation metrics.
+Functions for initializing the pytorch lightning logger and trainer.
 """
 
 import wandb
@@ -9,6 +8,7 @@ from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning import Trainer
 from tqdm import tqdm
 from pytorch_lightning.callbacks import TQDMProgressBar
+import os
 
 
 def set_logger(params, fold, init_model, extra_log_string_dict=None):
@@ -18,7 +18,6 @@ def set_logger(params, fold, init_model, extra_log_string_dict=None):
 
     Args:
         params (dict): Dictionary of parameters.
-        rep (int): Repetition number.
         fold (int): Fold number.
         init_model (object): Initialized model object.
         extra_string_dict (dict): Extra string to add to the run name. e.g. if you're running
@@ -52,7 +51,7 @@ def set_logger(params, fold, init_model, extra_log_string_dict=None):
 
     if params["log"]:
         logger = WandbLogger(
-            save_dir="logs",
+            save_dir=os.getcwd() + "/logs",
             project=params["timestamp"],
             name=name,
             tags=tags,
@@ -60,6 +59,11 @@ def set_logger(params, fold, init_model, extra_log_string_dict=None):
             group=method_name,
             reinit=True,
         )
+        logger.experiment.config["method_name"] = method_name
+        if extra_log_string_dict is not None:
+            for key, value in extra_log_string_dict.items():
+                logger.experiment.config[key] = value
+
     else:
         logger = None
 
@@ -110,25 +114,6 @@ def init_trainer(logger, max_epochs=10000):
     return trainer
 
 
-def update_repetition_results(repetition_results, method_name, metric_names, metrics):
-    """
-    Update the repetition results dictionary with the final validation metrics.
-
-    Args:
-        repetition_results (dict): Dictionary of repetition results.
-        method_name (str): Name of the method.
-        metric_names (list): List of metric names.
-        metrics (list): List of metric values.
-
-    Returns:
-        repetition_results (dict): Updated dictionary of repetition results.
-    """
-    repetition_results[method_name][metric_names[0]].append(metrics[0])
-    repetition_results[method_name][metric_names[1]].append(metrics[1])
-
-    return repetition_results
-
-
 def get_final_val_metrics(trainer):
     """
     Get the final validation metrics from the trainer object.
@@ -148,23 +133,23 @@ def get_final_val_metrics(trainer):
     return metric1, metric2
 
 
-def get_model_info(init_model):
-    """
-    Get the model information from the initialized model object.
+# def get_model_info(init_model):
+#     """
+#     Get the model information from the initialized model object.
 
-    Args:
-        init_model (object): Initialized model object.
+#     Args:
+#         init_model (object): Initialized model object.
 
-    Returns:
-        modality_type (str): Modality type.
-        fusion_type (str): Fusion type.
-        metric_name_list (list): List of metric names.
-    """
-    modality_type = init_model.modality_type
-    fusion_type = init_model.fusion_type
-    # metric_1_name = init_model.metrics[init_model.pred_type][0]["name"]
-    # metric_2_name = init_model.metrics[init_model.pred_type][1]["name"]
-    # metric_name_list = [metric_1_name, metric_2_name]
+#     Returns:
+#         modality_type (str): Modality type.
+#         fusion_type (str): Fusion type.
+#         metric_name_list (list): List of metric names.
+#     """
+#     modality_type = init_model.modality_type
+#     fusion_type = init_model.fusion_type
+#     # metric_1_name = init_model.metrics[init_model.pred_type][0]["name"]
+#     # metric_2_name = init_model.metrics[init_model.pred_type][1]["name"]
+#     # metric_name_list = [metric_1_name, metric_2_name]
 
-    return modality_type, fusion_type
-    # , metric_name_list
+#     return modality_type, fusion_type
+#     # , metric_name_list
