@@ -14,13 +14,13 @@ from torch import nn
 from torch.nn import functional as F
 from torch.utils.data import DataLoader, random_split
 
-from fusionlibrary.eval_functions import (
-    confusion_matrix_plot,
-    k_fold_confusion_matrix,
-    k_fold_reals_vs_preds,
-    reals_vs_preds,
-    visualise_graphspace,
-)
+# from fusionlibrary.eval_functions import (
+#     confusion_matrix_plot,
+#     k_fold_confusion_matrix,
+#     k_fold_reals_vs_preds,
+#     reals_vs_preds,
+#     visualise_graphspace,
+# )
 
 
 class BaseModel(pl.LightningModule):
@@ -173,17 +173,17 @@ class BaseModel(pl.LightningModule):
         if self.pred_type not in self.metrics:
             raise ValueError(f"Unsupported pred_type: {self.pred_type}")
 
-        self.eval_plots = {
-            "regression": [reals_vs_preds],
-            "binary": [confusion_matrix_plot],
-            "multiclass": [confusion_matrix_plot],
-        }
+        # self.eval_plots = {
+        #     "regression": [reals_vs_preds],
+        #     "binary": [confusion_matrix_plot],
+        #     "multiclass": [confusion_matrix_plot],
+        # }
 
-        self.kfold_plots = {
-            "regression": k_fold_reals_vs_preds,
-            "binary": k_fold_confusion_matrix,
-            "multiclass": k_fold_confusion_matrix,
-        }
+        # self.kfold_plots = {
+        #     "regression": k_fold_reals_vs_preds,
+        #     "binary": k_fold_confusion_matrix,
+        #     "multiclass": k_fold_confusion_matrix,
+        # }
 
         self.metric_names_list = [
             metric["name"] for metric in self.metrics[self.pred_type]

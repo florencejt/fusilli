@@ -12,7 +12,8 @@ import torch.nn.functional as F
 from sklearn.model_selection import KFold
 from torch.utils.data import DataLoader, Dataset
 from torch_geometric.data.lightning import LightningNodeData
-from fusionlibrary.eval_functions import plot_graph
+
+# from fusionlibrary.eval_functions import plot_graph
 
 
 def downsample_img_batch(imgs, output_size):
@@ -939,7 +940,7 @@ class KFoldGraphDataModule:
 
             # plot and save the graph?
             # TODO remove?
-            plot_graph(graph_data, self.params)
+            # plot_graph(graph_data, self.params)
 
             new_folds.append((graph_data, train_idxs, test_idxs))
 
