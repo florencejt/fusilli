@@ -253,9 +253,9 @@ class mcvae_subspace_method:
         mcvae_fit.optimizer = torch.optim.Adam(mcvae_fit.parameters(), lr=0.001)
 
         with contextlib.redirect_stdout(None):
-            mcvae_fit.optimize(epochs=1000, data=mcvae_training_data)
+            mcvae_fit.optimize(epochs=5000, data=mcvae_training_data)
             ideal_epoch = mcvae_early_stopping_tol(
-                tolerance=3, patience=10, loss_logs=mcvae_fit.loss["ll"]
+                tolerance=3, patience=10, loss_logs=mcvae_fit.loss["total"]
             )
 
         mcvae_esfit = Mcvae(**init_dict, sparse=True)

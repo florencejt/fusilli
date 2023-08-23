@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss &mdash; fusionlibrary  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain" href="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html" />
+    <link rel="prev" title="fusionlibrary.fusion_models.base_pl_model" href="fusionlibrary.fusion_models.base_pl_model.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            fusionlibrary
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">📚 Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html#creating-your-own-fusion-model-examples">Creating your own fusion model examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">📚 API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html">fusionlibrary.fusion_models.base_pl_model</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.method_name"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.modality_type"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fusion_type"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.pred_type"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.pred_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.img_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.img_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.final_prediction"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.custom_loss"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.custom_loss</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_size"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.latent_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.encoder"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.encoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.decoder"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.decoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fc1"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.fc1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.forward"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.forward()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html">fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_maps_tabular_data.html">fusionlibrary.fusion_models.concat_img_maps_tabular_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html">fusionlibrary.fusion_models.concat_img_maps_tabular_maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_tabular_data.html">fusionlibrary.fusion_models.concat_tabular_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_tabular_feature_maps.html">fusionlibrary.fusion_models.concat_tabular_feature_maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.crossmodal_att.html">fusionlibrary.fusion_models.crossmodal_att</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.edge_corr_gnn.html">fusionlibrary.fusion_models.edge_corr_gnn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.img_tab_channelwise_att.html">fusionlibrary.fusion_models.img_tab_channelwise_att</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.img_tab_decision.html">fusionlibrary.fusion_models.img_tab_decision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.img_unimodal.html">fusionlibrary.fusion_models.img_unimodal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.mcvae_tab.html">fusionlibrary.fusion_models.mcvae_tab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.tab_crossmodal_att.html">fusionlibrary.fusion_models.tab_crossmodal_att</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.tabular1_unimodal.html">fusionlibrary.fusion_models.tabular1_unimodal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.tabular2_unimodal.html">fusionlibrary.fusion_models.tabular2_unimodal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.tabular_channelwise_att.html">fusionlibrary.fusion_models.tabular_channelwise_att</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.tabular_decision.html">fusionlibrary.fusion_models.tabular_decision</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.train_functions.html">fusionlibrary.train_functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.eval_functions.html">fusionlibrary.eval_functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.pl_utils.html">fusionlibrary.utils.pl_utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fusionlibrary</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
+      <li class="breadcrumb-item active">fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss">
+<span id="fusionlibrary-fusion-models-concat-img-latent-tab-doubleloss"></span><h1>fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss<a class="headerlink" href="#module-fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss" title="Permalink to this heading"></a></h1>
+<p>Concat image latent space with tabular data, trained altogether with a custom loss function: MSE + BCE.</p>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss</span></code></a>(pred_type, ...)</p></td>
+<td><p>Concatenating image latent space with tabular data, trained altogether with a custom loss function: MSE + BCE.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentFusionModel</span></code>(pred_type, data_dims, params)</p></td>
+<td><p>Parent class for all fusion models.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.</span></span><span class="sig-name descname"><span class="pre">ConcatImgLatentTabDoubleLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubleloss.html#ConcatImgLatentTabDoubleLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Concatenating image latent space with tabular data, trained altogether with a custom loss
+function: MSE + BCE.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.method_name">
+<span class="sig-name descname"><span class="pre">method_name</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.method_name" title="Permalink to this definition"></a></dt>
+<dd><p>Name of the method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.modality_type">
+<span class="sig-name descname"><span class="pre">modality_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.modality_type" title="Permalink to this definition"></a></dt>
+<dd><p>Type of modality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fusion_type">
+<span class="sig-name descname"><span class="pre">fusion_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fusion_type" title="Permalink to this definition"></a></dt>
+<dd><p>Type of fusion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.pred_type">
+<span class="sig-name descname"><span class="pre">pred_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.pred_type" title="Permalink to this definition"></a></dt>
+<dd><p>Type of prediction to be performed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.img_layers">
+<span class="sig-name descname"><span class="pre">img_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.img_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Dictionary containing the layers of the image data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_layers">
+<span class="sig-name descname"><span class="pre">fused_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Sequential layer containing the fused layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nn.Sequential</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.final_prediction">
+<span class="sig-name descname"><span class="pre">final_prediction</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.final_prediction" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Sequential layer containing the final prediction layers. The final prediction layers</dt><dd><p>take in the number of features of the fused layers as input.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nn.Sequential</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.custom_loss">
+<span class="sig-name descname"><span class="pre">custom_loss</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.custom_loss" title="Permalink to this definition"></a></dt>
+<dd><p>Additional loss function to be used for training the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nn.Module</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_size">
+<span class="sig-name descname"><span class="pre">latent_size</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_size" title="Permalink to this definition"></a></dt>
+<dd><p>Size of the latent space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.encoder">
+<span class="sig-name descname"><span class="pre">encoder</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.encoder" title="Permalink to this definition"></a></dt>
+<dd><p>Sequential layer containing the encoder layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nn.Sequential</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.decoder">
+<span class="sig-name descname"><span class="pre">decoder</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.decoder" title="Permalink to this definition"></a></dt>
+<dd><p>Sequential layer containing the decoder layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nn.Sequential</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fc1">
+<span class="sig-name descname"><span class="pre">fc1</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fc1" title="Permalink to this definition"></a></dt>
+<dd><p>Linear layer to be used for the latent space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nn.Linear</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubleloss.html#ConcatImgLatentTabDoubleLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Forward pass of the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubleloss.html#ConcatImgLatentTabDoubleLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><p>Forward pass of the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>list</em>) – List containing the input data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>list</strong> – List containing the output data: prediction and reconstructed image.
+[ [prediction], [reconstructed_image] ]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fusionlibrary.fusion_models.base_pl_model.html" class="btn btn-neutral float-left" title="fusionlibrary.fusion_models.base_pl_model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html" class="btn btn-neutral float-right" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Florence J Townend.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

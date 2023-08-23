@@ -1,3 +1,7 @@
+"""
+Concatenating the two tabular modalities at the data-level (early fusion)
+"""
+
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch
@@ -48,7 +52,7 @@ class ConcatTabularData(ParentFusionModel, nn.Module):
         params : dict
             Dictionary containing the parameters of the model.
         """
-
+        # super(ParentFusionModel, self).__init__(pred_type, data_dims, params)
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
 
         self.pred_type = pred_type

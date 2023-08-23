@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fusionlibrary.train_functions &mdash; fusionlibrary  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fusionlibrary.eval_functions" href="fusionlibrary.eval_functions.html" />
+    <link rel="prev" title="fusionlibrary.datamodules" href="fusionlibrary.datamodules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            fusionlibrary
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">📚 Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html#creating-your-own-fusion-model-examples">Creating your own fusion model examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">📚 API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">fusionlibrary.train_functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.store_trained_model"><code class="docutils literal notranslate"><span class="pre">store_trained_model()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.train_and_save_models"><code class="docutils literal notranslate"><span class="pre">train_and_save_models()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.train_and_test"><code class="docutils literal notranslate"><span class="pre">train_and_test()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.eval_functions.html">fusionlibrary.eval_functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.pl_utils.html">fusionlibrary.utils.pl_utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fusionlibrary</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">fusionlibrary.train_functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/autosummary/fusionlibrary.train_functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-fusionlibrary.train_functions">
+<span id="fusionlibrary-train-functions"></span><h1>fusionlibrary.train_functions<a class="headerlink" href="#module-fusionlibrary.train_functions" title="Permalink to this heading"></a></h1>
+<p>Contains the train_and_test function: trains and tests a model and, if k_fold trained, a fold.</p>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_final_val_metrics</span></code>(trainer)</p></td>
+<td><p>Get the final validation metrics from the trainer object.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_trainer</span></code>(logger[, max_epochs])</p></td>
+<td><p>Initialize the pytorch lightning trainer object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_logger</span></code>(params, fold, init_model[, ...])</p></td>
+<td><p>Set the logger for the current run.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.store_trained_model" title="fusionlibrary.train_functions.store_trained_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">store_trained_model</span></code></a>(trained_model, ...)</p></td>
+<td><p>Stores the trained model to a dictionary. If model type is already in dictionary (e.g. if it's a kfold model), append the model to     the list of models.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.train_and_save_models" title="fusionlibrary.train_functions.train_and_save_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_and_save_models</span></code></a>(trained_models_dict, ...)</p></td>
+<td><p>Trains/tests the model and saves the trained model to a dictionary for further analysis.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.train_and_test" title="fusionlibrary.train_functions.train_and_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_and_test</span></code></a>(dm, params, k, fusion_model, ...)</p></td>
+<td><p>BLAHHHHH TEST FOR DOCS Trains and tests a model and, if k_fold trained, a fold.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseModel</span></code>(model)</p></td>
+<td><p>Base model for all fusion models</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="fusionlibrary.train_functions.store_trained_model">
+<span class="sig-prename descclassname"><span class="pre">fusionlibrary.train_functions.</span></span><span class="sig-name descname"><span class="pre">store_trained_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trained_models_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#store_trained_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.store_trained_model" title="Permalink to this definition"></a></dt>
+<dd><p>Stores the trained model to a dictionary.
+If model type is already in dictionary (e.g. if it’s a kfold model), append the model to</p>
+<blockquote>
+<div><p>the list of models.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fusionlibrary.train_functions.train_and_save_models">
+<span class="sig-prename descclassname"><span class="pre">fusionlibrary.train_functions.</span></span><span class="sig-name descname"><span class="pre">train_and_save_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_models_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#train_and_save_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.train_and_save_models" title="Permalink to this definition"></a></dt>
+<dd><p>Trains/tests the model and saves the trained model to a dictionary for further analysis.
+If the training type is kfold, it will train and test the model for each fold and store the
+trained models in a list under the model type key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trained_models_dicts</strong> (<em>dict</em>) – Dictionary of trained models.</p></li>
+<li><p><strong>data_module</strong> (<em>pytorch lightning data module</em>) – Data module.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
+<li><p><strong>fusion_model</strong> (<em>class</em>) – Fusion model class.</p></li>
+<li><p><strong>init_model</strong> (<em>class</em>) – Init model class (initialized empty for method details).</p></li>
+<li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – <dl class="simple">
+<dt>Dictionary of extra log strings. Extra string to add to the run name during logging.</dt><dd><p>e.g. if you’re running the same model with different hyperparameters, you can add
+the hyperparameters.
+Input format {“name”: “value”}. In the run name, the extra string will be added
+as “name_value”. And a tag will be added as “name_value”.</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fusionlibrary.train_functions.train_and_test">
+<span class="sig-prename descclassname"><span class="pre">fusionlibrary.train_functions.</span></span><span class="sig-name descname"><span class="pre">train_and_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#train_and_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.train_and_test" title="Permalink to this definition"></a></dt>
+<dd><p>BLAHHHHH TEST FOR DOCS
+Trains and tests a model and, if k_fold trained, a fold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dm</strong> (<em>pytorch lightning data module</em>) – Data module.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – Fold number.</p></li>
+<li><p><strong>fusion_model</strong> (<em>class</em>) – Fusion model class.</p></li>
+<li><p><strong>init_model</strong> (<em>class</em>) – Init model class (initialized empty for method details).</p></li>
+<li><p><strong>metric_name_list</strong> (<em>list</em>) – List of metric names.</p></li>
+<li><p><strong>method_name</strong> (<em>str</em>) – Name of the method.</p></li>
+<li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – <dl class="simple">
+<dt>Dictionary of extra log strings. Extra string to add to the run name during logging.</dt><dd><p>e.g. if you’re running the same model with different hyperparameters, you can add
+the hyperparameters.
+Input format {“name”: “value”}. In the run name, the extra string will be added
+as “name_value”. And a tag will be added as “name_value”.</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>model</strong> (<em>pytorch lightning model</em>) – Trained model.</p></li>
+<li><p><strong>trainer</strong> (<em>pytorch lightning trainer</em>) – Trained trainer.</p></li>
+<li><p><strong>metric_1</strong> (<em>float</em>) – Metric 1 (depends on metric_name_list and params[“pred_type”]).</p></li>
+<li><p><strong>metric_2</strong> (<em>float</em>) – Metric 2 (depends on metric_name_list and params[“pred_type”]).</p></li>
+<li><p><strong>val_reals</strong> (<em>list</em>) – List of validation real values.</p></li>
+<li><p><strong>val_preds</strong> (<em>list</em>) – List of validation predicted values.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fusionlibrary.datamodules.html" class="btn btn-neutral float-left" title="fusionlibrary.datamodules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fusionlibrary.eval_functions.html" class="btn btn-neutral float-right" title="fusionlibrary.eval_functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Florence J Townend.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

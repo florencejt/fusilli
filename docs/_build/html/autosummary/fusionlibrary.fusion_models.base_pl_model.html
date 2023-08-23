@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fusionlibrary.fusion_models.base_pl_model &mdash; fusionlibrary  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss" href="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html" />
+    <link rel="prev" title="fusionlibrary.fusion_models" href="fusionlibrary.fusion_models.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            fusionlibrary
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">📚 Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html#creating-your-own-fusion-model-examples">Creating your own fusion model examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">📚 API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">fusionlibrary.fusion_models.base_pl_model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel"><code class="docutils literal notranslate"><span class="pre">BaseModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.model"><code class="docutils literal notranslate"><span class="pre">BaseModel.model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.pred_type"><code class="docutils literal notranslate"><span class="pre">BaseModel.pred_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.multiclass_dim"><code class="docutils literal notranslate"><span class="pre">BaseModel.multiclass_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.fusion_type"><code class="docutils literal notranslate"><span class="pre">BaseModel.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.kfold_flag"><code class="docutils literal notranslate"><span class="pre">BaseModel.kfold_flag</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.modality_type"><code class="docutils literal notranslate"><span class="pre">BaseModel.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.method_name"><code class="docutils literal notranslate"><span class="pre">BaseModel.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.subspace_method"><code class="docutils literal notranslate"><span class="pre">BaseModel.subspace_method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.graph_maker"><code class="docutils literal notranslate"><span class="pre">BaseModel.graph_maker</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.params"><code class="docutils literal notranslate"><span class="pre">BaseModel.params</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.train_mask"><code class="docutils literal notranslate"><span class="pre">BaseModel.train_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.val_mask"><code class="docutils literal notranslate"><span class="pre">BaseModel.val_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.loss_functions"><code class="docutils literal notranslate"><span class="pre">BaseModel.loss_functions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.output_activation_functions"><code class="docutils literal notranslate"><span class="pre">BaseModel.output_activation_functions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.metrics"><code class="docutils literal notranslate"><span class="pre">BaseModel.metrics</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.eval_plots"><code class="docutils literal notranslate"><span class="pre">BaseModel.eval_plots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.kfold_plots"><code class="docutils literal notranslate"><span class="pre">BaseModel.kfold_plots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.safe_squeeze"><code class="docutils literal notranslate"><span class="pre">BaseModel.safe_squeeze()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.get_data_from_batch"><code class="docutils literal notranslate"><span class="pre">BaseModel.get_data_from_batch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.get_model_outputs"><code class="docutils literal notranslate"><span class="pre">BaseModel.get_model_outputs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.get_model_outputs_and_loss"><code class="docutils literal notranslate"><span class="pre">BaseModel.get_model_outputs_and_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.training_step"><code class="docutils literal notranslate"><span class="pre">BaseModel.training_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.validation_step"><code class="docutils literal notranslate"><span class="pre">BaseModel.validation_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.configure_optimizers"><code class="docutils literal notranslate"><span class="pre">BaseModel.configure_optimizers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">BaseModel.configure_optimizers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">BaseModel.get_data_from_batch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">BaseModel.get_model_outputs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">BaseModel.get_model_outputs_and_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">BaseModel.safe_squeeze()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">BaseModel.training_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.validation_epoch_end"><code class="docutils literal notranslate"><span class="pre">BaseModel.validation_epoch_end()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6"><code class="docutils literal notranslate"><span class="pre">BaseModel.validation_step()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.pred_type"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.pred_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.data_dims"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.data_dims</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.mod1_dim"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.mod1_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.mod2_dim"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.mod2_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.img_dim"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.img_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.params"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.params</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.multiclass_dim"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.multiclass_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.kfold_flag"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.kfold_flag</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.set_final_pred_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.set_final_pred_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.set_mod1_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.set_mod1_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.set_mod2_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.set_mod2_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.set_img_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.set_img_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.set_fused_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.set_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.set_final_pred_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.set_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.set_img_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.set_mod1_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.set_mod2_layers()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html">fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html">fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_maps_tabular_data.html">fusionlibrary.fusion_models.concat_img_maps_tabular_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html">fusionlibrary.fusion_models.concat_img_maps_tabular_maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_tabular_data.html">fusionlibrary.fusion_models.concat_tabular_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_tabular_feature_maps.html">fusionlibrary.fusion_models.concat_tabular_feature_maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.crossmodal_att.html">fusionlibrary.fusion_models.crossmodal_att</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.edge_corr_gnn.html">fusionlibrary.fusion_models.edge_corr_gnn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.img_tab_channelwise_att.html">fusionlibrary.fusion_models.img_tab_channelwise_att</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.img_tab_decision.html">fusionlibrary.fusion_models.img_tab_decision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.img_unimodal.html">fusionlibrary.fusion_models.img_unimodal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.mcvae_tab.html">fusionlibrary.fusion_models.mcvae_tab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.tab_crossmodal_att.html">fusionlibrary.fusion_models.tab_crossmodal_att</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.tabular1_unimodal.html">fusionlibrary.fusion_models.tabular1_unimodal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.tabular2_unimodal.html">fusionlibrary.fusion_models.tabular2_unimodal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.tabular_channelwise_att.html">fusionlibrary.fusion_models.tabular_channelwise_att</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.tabular_decision.html">fusionlibrary.fusion_models.tabular_decision</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.train_functions.html">fusionlibrary.train_functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.eval_functions.html">fusionlibrary.eval_functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.pl_utils.html">fusionlibrary.utils.pl_utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fusionlibrary</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
+      <li class="breadcrumb-item active">fusionlibrary.fusion_models.base_pl_model</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/autosummary/fusionlibrary.fusion_models.base_pl_model.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-fusionlibrary.fusion_models.base_pl_model">
+<span id="fusionlibrary-fusion-models-base-pl-model"></span><h1>fusionlibrary.fusion_models.base_pl_model<a class="headerlink" href="#module-fusionlibrary.fusion_models.base_pl_model" title="Permalink to this heading"></a></h1>
+<p>BLAH BLAH base lightning module for all fusion models and parent class for all fusion models.</p>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">random_split</span></code>(dataset, lengths[, generator])</p></td>
+<td><p>Randomly split a dataset into non-overlapping new datasets of given lengths.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel" title="fusionlibrary.fusion_models.base_pl_model.BaseModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseModel</span></code></a>(model)</p></td>
+<td><p>Base model for all fusion models</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataLoader</span></code>(dataset[, batch_size, shuffle, ...])</p></td>
+<td><p>Data loader.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>(pred_type, data_dims, params)</p></td>
+<td><p>Parent class for all fusion models.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fusionlibrary.fusion_models.base_pl_model.</span></span><span class="sig-name descname"><span class="pre">BaseModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">LightningModule</span></code></p>
+<p>Base model for all fusion models</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.model" title="Permalink to this definition"></a></dt>
+<dd><p>Fusion model class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.pred_type">
+<span class="sig-name descname"><span class="pre">pred_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.pred_type" title="Permalink to this definition"></a></dt>
+<dd><p>Type of prediction to be made. Options: binary, multiclass, regression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.multiclass_dim">
+<span class="sig-name descname"><span class="pre">multiclass_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.multiclass_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Number of classes for multiclass prediction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.fusion_type">
+<span class="sig-name descname"><span class="pre">fusion_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.fusion_type" title="Permalink to this definition"></a></dt>
+<dd><p>Type of fusion to be used. Options: early, late, graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.kfold_flag">
+<span class="sig-name descname"><span class="pre">kfold_flag</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.kfold_flag" title="Permalink to this definition"></a></dt>
+<dd><p>Whether to use k-fold cross validation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.modality_type">
+<span class="sig-name descname"><span class="pre">modality_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.modality_type" title="Permalink to this definition"></a></dt>
+<dd><p>Type of modality fusion to be used. Options: operation, subspace, graph, tensor, attention, Uni-modal</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.method_name">
+<span class="sig-name descname"><span class="pre">method_name</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.method_name" title="Permalink to this definition"></a></dt>
+<dd><p>Name of the method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.subspace_method">
+<span class="sig-name descname"><span class="pre">subspace_method</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.subspace_method" title="Permalink to this definition"></a></dt>
+<dd><p>Subspace method to be used - specific to the subspace fusion method</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.graph_maker">
+<span class="sig-name descname"><span class="pre">graph_maker</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.graph_maker" title="Permalink to this definition"></a></dt>
+<dd><p>Graph maker to be used - specific to the graph fusion method</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.params">
+<span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.params" title="Permalink to this definition"></a></dt>
+<dd><p>Dictionary of parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.train_mask">
+<span class="sig-name descname"><span class="pre">train_mask</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.train_mask" title="Permalink to this definition"></a></dt>
+<dd><p>Mask for training data - used for the graph fusion methods</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.val_mask">
+<span class="sig-name descname"><span class="pre">val_mask</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.val_mask" title="Permalink to this definition"></a></dt>
+<dd><p>Mask for validation data - used for the graph fusion methods</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.loss_functions">
+<span class="sig-name descname"><span class="pre">loss_functions</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.loss_functions" title="Permalink to this definition"></a></dt>
+<dd><p>Dictionary of loss functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.output_activation_functions">
+<span class="sig-name descname"><span class="pre">output_activation_functions</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.output_activation_functions" title="Permalink to this definition"></a></dt>
+<dd><p>Dictionary of output activation functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.metrics">
+<span class="sig-name descname"><span class="pre">metrics</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.metrics" title="Permalink to this definition"></a></dt>
+<dd><p>Dictionary of metrics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.eval_plots">
+<span class="sig-name descname"><span class="pre">eval_plots</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.eval_plots" title="Permalink to this definition"></a></dt>
+<dd><p>Dictionary of evaluation plots.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.kfold_plots">
+<span class="sig-name descname"><span class="pre">kfold_plots</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.kfold_plots" title="Permalink to this definition"></a></dt>
+<dd><p>Dictionary of k-fold plots.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.safe_squeeze">
+<span class="sig-name descname"><span class="pre">safe_squeeze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel.safe_squeeze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.safe_squeeze" title="Permalink to this definition"></a></dt>
+<dd><p>Squeeze tensor if it is not 1D.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.get_data_from_batch">
+<span class="sig-name descname"><span class="pre">get_data_from_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel.get_data_from_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.get_data_from_batch" title="Permalink to this definition"></a></dt>
+<dd><p>Get data from batch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.get_model_outputs">
+<span class="sig-name descname"><span class="pre">get_model_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel.get_model_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.get_model_outputs" title="Permalink to this definition"></a></dt>
+<dd><p>Get model outputs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.get_model_outputs_and_loss">
+<span class="sig-name descname"><span class="pre">get_model_outputs_and_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel.get_model_outputs_and_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.get_model_outputs_and_loss" title="Permalink to this definition"></a></dt>
+<dd><p>Get model outputs and loss.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.training_step">
+<span class="sig-name descname"><span class="pre">training_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel.training_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.training_step" title="Permalink to this definition"></a></dt>
+<dd><p>Training step.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.validation_step">
+<span class="sig-name descname"><span class="pre">validation_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel.validation_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.validation_step" title="Permalink to this definition"></a></dt>
+<dd><p>Validation step.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.configure_optimizers">
+<span class="sig-name descname"><span class="pre">configure_optimizers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel.configure_optimizers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.configure_optimizers" title="Permalink to this definition"></a></dt>
+<dd><p>Configure optimizers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">configure_optimizers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel.configure_optimizers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><p>Configure optimizers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">get_data_from_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel.get_data_from_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
+<dd><p>Get data from batch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> (<em>tensor</em>) – Batch of data.</p></li>
+<li><p><strong>train</strong> (<em>bool</em>) – Whether the data is training data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>x</strong> (<em>tensor</em>) – Input data.</p></li>
+<li><p><strong>y</strong> (<em>tensor</em>) – Labels.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">get_model_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel.get_model_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition"></a></dt>
+<dd><p>Get model outputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>tensor</em>) – Input data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul>
+<li><p><strong>logits</strong> (<em>tensor</em>) – Logits.</p></li>
+<li><p><strong>reconstructions</strong> (<em>tensor</em>) –</p>
+<dl class="simple">
+<dt>Reconstructions (returned if the model has a custom loss function such as a subspace</dt><dd><p>method)</p>
+</dd>
+</dl>
+</li>
+<li><p><em>note</em></p></li>
+<li><p><em>if you get an error here, check that the forward output is [out,] or [out, reconstructions]</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">get_model_outputs_and_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel.get_model_outputs_and_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Permalink to this definition"></a></dt>
+<dd><p>Get model outputs and loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>tensor</em>) – Input data.</p></li>
+<li><p><strong>y</strong> (<em>tensor</em>) – Labels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>loss</strong> (<em>tensor</em>) – Loss.</p></li>
+<li><p><strong>end_output</strong> (<em>tensor</em>) – Final output.</p></li>
+<li><p><strong>logits</strong> (<em>tensor</em>) – Logits.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">safe_squeeze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel.safe_squeeze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Permalink to this definition"></a></dt>
+<dd><p>Squeeze tensor if it is not 1D.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tensor</strong> (<em>tensor</em>) – Tensor to be squeezed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Squeezed tensor.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">training_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel.training_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Permalink to this definition"></a></dt>
+<dd><p>Training step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> (<em>tensor</em>) – Batch of data.</p></li>
+<li><p><strong>batch_idx</strong> (<em>int</em>) – Batch index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>loss</strong> – Loss.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.BaseModel.validation_epoch_end">
+<span class="sig-name descname"><span class="pre">validation_epoch_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel.validation_epoch_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.BaseModel.validation_epoch_end" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the final validation epoch outputs and metrics.
+When metrics are calculated at the validation step and logged on on_epoch=True,
+the batch metrics are averaged. However, some metrics don’t average well (e.g. R2).
+Therefore, we’re calculating the final validation metrics here on the full validation set.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">validation_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#BaseModel.validation_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id6" title="Permalink to this definition"></a></dt>
+<dd><p>Validation step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> (<em>tensor</em>) – Batch of data.</p></li>
+<li><p><strong>batch_idx</strong> (<em>int</em>) – Batch index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fusionlibrary.fusion_models.base_pl_model.</span></span><span class="sig-name descname"><span class="pre">ParentFusionModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#ParentFusionModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parent class for all fusion models.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.pred_type">
+<span class="sig-name descname"><span class="pre">pred_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.pred_type" title="Permalink to this definition"></a></dt>
+<dd><p>Type of prediction to be made. Options: binary, multiclass, regression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.data_dims">
+<span class="sig-name descname"><span class="pre">data_dims</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.data_dims" title="Permalink to this definition"></a></dt>
+<dd><p>List of data dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.mod1_dim">
+<span class="sig-name descname"><span class="pre">mod1_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.mod1_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Dimension of modality 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.mod2_dim">
+<span class="sig-name descname"><span class="pre">mod2_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.mod2_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Dimension of modality 2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.img_dim">
+<span class="sig-name descname"><span class="pre">img_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.img_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Dimensions of image modality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.params">
+<span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.params" title="Permalink to this definition"></a></dt>
+<dd><p>Dictionary of parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.multiclass_dim">
+<span class="sig-name descname"><span class="pre">multiclass_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.multiclass_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Number of classes for multiclass prediction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.kfold_flag">
+<span class="sig-name descname"><span class="pre">kfold_flag</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.kfold_flag" title="Permalink to this definition"></a></dt>
+<dd><p>Whether to use k-fold cross validation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.set_final_pred_layers">
+<span class="sig-name descname"><span class="pre">set_final_pred_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#ParentFusionModel.set_final_pred_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.set_final_pred_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Set final prediction layers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.set_mod1_layers">
+<span class="sig-name descname"><span class="pre">set_mod1_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#ParentFusionModel.set_mod1_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.set_mod1_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Set layers for modality 1.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.set_mod2_layers">
+<span class="sig-name descname"><span class="pre">set_mod2_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#ParentFusionModel.set_mod2_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.set_mod2_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Set layers for modality 2.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.set_img_layers">
+<span class="sig-name descname"><span class="pre">set_img_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#ParentFusionModel.set_img_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.set_img_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Set layers for image modality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.set_fused_layers">
+<span class="sig-name descname"><span class="pre">set_fused_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fused_dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#ParentFusionModel.set_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel.set_fused_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Set layers for fused modality.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">set_final_pred_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#ParentFusionModel.set_final_pred_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id7" title="Permalink to this definition"></a></dt>
+<dd><p>Set final prediction layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_dim</strong> (<em>int</em>) – Input dimension to final layers - may depend on fusion configuration.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">set_fused_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fused_dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#ParentFusionModel.set_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id8" title="Permalink to this definition"></a></dt>
+<dd><p>Set layers for fused modality</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fused_dim</strong> (<em>int</em>) – <dl class="simple">
+<dt>Dimension of fused modality: how many features are there after fusion?</dt><dd><dl class="simple">
+<dt>e.g. if we have 2 modalities with 64 features each, and the fusion method</dt><dd><p>was concatenation, the fused_dim would be 128</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">set_img_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#ParentFusionModel.set_img_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id9" title="Permalink to this definition"></a></dt>
+<dd><p>Set layers for image modality</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong> – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">set_mod1_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#ParentFusionModel.set_mod1_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id10" title="Permalink to this definition"></a></dt>
+<dd><p>Set layers for modality 1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong> – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">set_mod2_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/base_pl_model.html#ParentFusionModel.set_mod2_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id11" title="Permalink to this definition"></a></dt>
+<dd><p>Set layers for modality 2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong> – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fusionlibrary.fusion_models.html" class="btn btn-neutral float-left" title="fusionlibrary.fusion_models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html" class="btn btn-neutral float-right" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Florence J Townend.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

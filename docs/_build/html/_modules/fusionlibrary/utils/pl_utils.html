@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fusionlibrary.utils.pl_utils &mdash; fusionlibrary  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            fusionlibrary
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">📚 Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html#creating-your-own-fusion-model-examples">Creating your own fusion model examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">📚 API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.train_functions.html">fusionlibrary.train_functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.eval_functions.html">fusionlibrary.eval_functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.pl_utils.html">fusionlibrary.utils.pl_utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">fusionlibrary</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fusionlibrary.utils.pl_utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fusionlibrary.utils.pl_utils</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Functions for initializing the pytorch lightning logger and trainer.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">wandb</span>
+<span class="kn">from</span> <span class="nn">pytorch_lightning.loggers</span> <span class="kn">import</span> <span class="n">TensorBoardLogger</span><span class="p">,</span> <span class="n">WandbLogger</span>
+<span class="kn">from</span> <span class="nn">pytorch_lightning.callbacks.early_stopping</span> <span class="kn">import</span> <span class="n">EarlyStopping</span>
+<span class="kn">from</span> <span class="nn">pytorch_lightning</span> <span class="kn">import</span> <span class="n">Trainer</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">pytorch_lightning.callbacks</span> <span class="kn">import</span> <span class="n">TQDMProgressBar</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<div class="viewcode-block" id="set_logger"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.pl_utils.html#fusionlibrary.utils.pl_utils.set_logger">[docs]</a><span class="k">def</span> <span class="nf">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">init_model</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the logger for the current run. If params[&quot;log&quot;] is True, then the logger is set to</span>
+<span class="sd">    WandbLogger, otherwise it is set to None.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        params (dict): Dictionary of parameters.</span>
+<span class="sd">        fold (int): Fold number.</span>
+<span class="sd">        init_model (object): Initialized model object.</span>
+<span class="sd">        extra_string_dict (dict): Extra string to add to the run name. e.g. if you&#39;re running</span>
+<span class="sd">            the same model with different hyperparameters, you can add the hyperparameters.</span>
+<span class="sd">            Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
+<span class="sd">            as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        logger (object): Pytorch lightning logger object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">method_name</span> <span class="o">=</span> <span class="n">init_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="n">modality_type</span> <span class="o">=</span> <span class="n">init_model</span><span class="o">.</span><span class="n">modality_type</span>
+    <span class="n">fusion_type</span> <span class="o">=</span> <span class="n">init_model</span><span class="o">.</span><span class="n">fusion_type</span>
+
+    <span class="k">if</span> <span class="n">extra_log_string_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">extra_name_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">extra_tags</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">extra_log_string_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">extra_name_string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">extra_tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">extra_name_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">extra_tags</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">method_name</span><span class="si">}</span><span class="s2">_fold_</span><span class="si">{</span><span class="n">fold</span><span class="si">}{</span><span class="n">extra_name_string</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">modality_type</span><span class="p">,</span> <span class="n">fusion_type</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;fold_</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">fold</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">extra_tags</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">method_name</span><span class="si">}{</span><span class="n">extra_name_string</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">modality_type</span><span class="p">,</span> <span class="n">fusion_type</span><span class="p">]</span> <span class="o">+</span> <span class="n">extra_tags</span>
+
+    <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;log&quot;</span><span class="p">]:</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">WandbLogger</span><span class="p">(</span>
+            <span class="n">save_dir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;/logs&quot;</span><span class="p">,</span>
+            <span class="n">project</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">],</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span>
+            <span class="n">log_model</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">group</span><span class="o">=</span><span class="n">method_name</span><span class="p">,</span>
+            <span class="n">reinit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">experiment</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;method_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">method_name</span>
+        <span class="k">if</span> <span class="n">extra_log_string_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">extra_log_string_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">experiment</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">logger</span></div>
+
+
+<div class="viewcode-block" id="LitProgressBar"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.pl_utils.html#fusionlibrary.utils.pl_utils.LitProgressBar">[docs]</a><span class="k">class</span> <span class="nc">LitProgressBar</span><span class="p">(</span><span class="n">TQDMProgressBar</span><span class="p">):</span>
+<div class="viewcode-block" id="LitProgressBar.init_validation_tqdm"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.pl_utils.html#fusionlibrary.utils.pl_utils.LitProgressBar.init_validation_tqdm">[docs]</a>    <span class="k">def</span> <span class="nf">init_validation_tqdm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">bar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span>
+            <span class="n">disable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">bar</span></div></div>
+
+
+<div class="viewcode-block" id="init_trainer"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.pl_utils.html#fusionlibrary.utils.pl_utils.init_trainer">[docs]</a><span class="k">def</span> <span class="nf">init_trainer</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize the pytorch lightning trainer object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        logger (object): Pytorch lightning logger object.</span>
+<span class="sd">        max_epochs (int): Maximum number of epochs.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        trainer (object): Pytorch lightning trainer object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">early_stop_callback</span> <span class="o">=</span> <span class="n">EarlyStopping</span><span class="p">(</span>
+        <span class="n">monitor</span><span class="o">=</span><span class="s2">&quot;val_loss&quot;</span><span class="p">,</span>
+        <span class="n">min_delta</span><span class="o">=</span><span class="mf">0.00</span><span class="p">,</span>
+        <span class="n">patience</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">bar</span> <span class="o">=</span> <span class="n">LitProgressBar</span><span class="p">()</span>
+
+    <span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span>
+        <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
+        <span class="n">num_sanity_val_steps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="c1"># accelerator=&quot;mps&quot;,</span>
+        <span class="n">devices</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">early_stop_callback</span><span class="p">,</span> <span class="n">bar</span><span class="p">],</span>
+        <span class="n">log_every_n_steps</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="c1"># default_root_dir=run_dir,</span>
+        <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">trainer</span></div>
+
+
+<div class="viewcode-block" id="get_final_val_metrics"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.pl_utils.html#fusionlibrary.utils.pl_utils.get_final_val_metrics">[docs]</a><span class="k">def</span> <span class="nf">get_final_val_metrics</span><span class="p">(</span><span class="n">trainer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the final validation metrics from the trainer object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        metric_names (list): List of metric names.</span>
+<span class="sd">        trainer (object): Pytorch lightning trainer object.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        metric1 (float): Final validation metric 1.</span>
+<span class="sd">        metric2 (float): Final validation metric 2.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">metric_names</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">metric_names_list</span>
+    <span class="n">metric1</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">callback_metrics</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_val&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+    <span class="n">metric2</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">callback_metrics</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric_names</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">_val&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">metric1</span><span class="p">,</span> <span class="n">metric2</span></div>
+
+
+<span class="c1"># def get_model_info(init_model):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Get the model information from the initialized model object.</span>
+
+<span class="c1">#     Args:</span>
+<span class="c1">#         init_model (object): Initialized model object.</span>
+
+<span class="c1">#     Returns:</span>
+<span class="c1">#         modality_type (str): Modality type.</span>
+<span class="c1">#         fusion_type (str): Fusion type.</span>
+<span class="c1">#         metric_name_list (list): List of metric names.</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     modality_type = init_model.modality_type</span>
+<span class="c1">#     fusion_type = init_model.fusion_type</span>
+<span class="c1">#     # metric_1_name = init_model.metrics[init_model.pred_type][0][&quot;name&quot;]</span>
+<span class="c1">#     # metric_2_name = init_model.metrics[init_model.pred_type][1][&quot;name&quot;]</span>
+<span class="c1">#     # metric_name_list = [metric_1_name, metric_2_name]</span>
+
+<span class="c1">#     return modality_type, fusion_type</span>
+<span class="c1">#     # , metric_name_list</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Florence J Townend.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

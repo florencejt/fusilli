@@ -1,3 +1,8 @@
+"""
+Concatenating the input data of the first tabular modality and the feature maps of the
+image modality.
+"""
+
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch

@@ -380,7 +380,7 @@ class Plotter:
         plt.plot(line_x, line_y, linestyle="dashed", color="black", label="x=y Line")
 
         ax.set_title(
-            f"Validation {self.metric1name}: {float(self.plot_val_accs[self.metric1name]):.3f}"
+            f"{self.current_model_name} - Validation {self.metric1name}: {float(self.plot_val_accs[self.metric1name]):.3f}"
         )
 
         ax.set_xlabel("Real Values")

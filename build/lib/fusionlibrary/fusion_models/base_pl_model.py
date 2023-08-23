@@ -96,7 +96,11 @@ class BaseModel(pl.LightningModule):
         super().__init__()
         self.model = model
         self.pred_type = model.pred_type
-        self.multiclass_dim = model.multiclass_dim
+        if self.pred_type == "multiclass":
+            self.multiclass_dim = model.multiclass_dim
+        else:
+            self.multiclass_dim = 3  # default value so metrics dict can be built
+
         self.fusion_type = model.fusion_type
         self.kfold_flag = model.kfold_flag
         self.modality_type = model.modality_type
@@ -572,7 +576,8 @@ class ParentFusionModel:
         self.mod2_dim = self.data_dims[1]
         self.img_dim = self.data_dims[2]
         self.params = params
-        self.multiclass_dim = params["multiclass_dims"]
+        if self.pred_type == "multiclass":
+            self.multiclass_dim = params["multiclass_dims"]
         self.kfold_flag = params["kfold_flag"]
         # self.subspace_method = None
 
