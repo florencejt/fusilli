@@ -86,6 +86,7 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
             List containing the output of the model.
         """
         x_n, edge_index, edge_attr = x
+
         x_n = self.conv1(x_n, edge_index, edge_attr)
         x_n = x_n.relu()
         x_n = F.dropout(x_n, p=0.5, training=self.training)
@@ -127,14 +128,18 @@ def edgecorr_graph_maker(dataset):
     # correlation matrix between nodes' tab1 features
     corr_matrix = torch.corrcoef(tab1) - torch.eye(num_nodes)
 
-    threshold = 0.5  # how correlated the nodes need to be to be connected
+    threshold = 0.8  # how correlated the nodes need to be to be connected
 
     edge_indices = np.where(np.abs(corr_matrix) >= threshold)
     edge_indices = np.stack(edge_indices, axis=0)
 
+    # print("Number of edges: ", edge_indices.shape[1])
+
     x = tab2
     edge_index = torch.tensor(edge_indices, dtype=torch.long)
-    edge_attr = corr_matrix[edge_indices[0], edge_indices[1]]
+    edge_attr = (
+        corr_matrix[edge_indices[0], edge_indices[1]] + 1
+    )  # add 1 to make all edge_attr positive
 
     data = Data(x=x, edge_index=edge_index, edge_attr=edge_attr, y=labels)
 

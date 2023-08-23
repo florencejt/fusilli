@@ -705,7 +705,7 @@ class Plotter:
             edgecolor="purple"
             # label=self.metric1name,
         )
-        ax[0].bar_label(bars1, fmt="%.2f", label_type="edge")
+        # ax[0].bar_label(bars1, fmt="%.2f", label_type="edge")
 
         # black dashed line at x=0
         ax[0].axvline(x=0, color="black", linestyle="--", alpha=0.5)
@@ -728,7 +728,7 @@ class Plotter:
             edgecolor="steelblue",
             # label=self.metric2name,
         )
-        ax[1].bar_label(bars2, fmt="%.2f", label_type="edge")
+        # ax[1].bar_label(bars2, fmt="%.2f", label_type="edge")
 
         ax[1].yaxis.set_ticks(np.arange(len(method_names)))
         ax[1].set_yticklabels([] * len(metric_2_values))

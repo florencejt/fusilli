@@ -298,7 +298,11 @@ class BaseModel(pl.LightningModule):
         """
         logits, reconstructions = self.get_model_outputs(x)
 
+        # print("logits\n", logits, end="\n\n")
+        # print("y\n", y, end="\n\n")
+
         end_output = self.output_activation_functions[self.pred_type](logits)
+        # print("end_output\n", end_output, end="\n\n")
 
         # if we're doing graph-based fusion and train/test doesn't work the same as normal
         if hasattr(self, "train_mask"):
