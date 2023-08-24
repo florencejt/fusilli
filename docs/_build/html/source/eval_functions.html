@@ -62,7 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.train_functions.html">fusionlibrary.train_functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.eval_functions.html">fusionlibrary.eval_functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.eval_functions.Plotter.html">fusionlibrary.eval_functions.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.pl_utils.html">fusionlibrary.utils.pl_utils</a></li>
 </ul>
@@ -99,14 +99,6 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eval_functions.</span></span><span class="sig-name descname"><span class="pre">Plotter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_model_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval_functions.html#Plotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval_functions.Plotter" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class for plotting the results of the models.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>trained_model_dict</strong> (<em>dict</em>) – Dictionary of trained models.</p></li>
-<li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
-</ul>
-</dd>
-</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="eval_functions.Plotter.trained_model_dict">
 <span class="sig-name descname"><span class="pre">trained_model_dict</span></span><a class="headerlink" href="#eval_functions.Plotter.trained_model_dict" title="Permalink to this definition"></a></dt>
@@ -233,6 +225,20 @@ Gets metrics to put in the plot titles, adds to metrics list.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="eval_functions.Plotter.get_performance_df">
+<span class="sig-name descname"><span class="pre">get_performance_df</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval_functions.html#Plotter.get_performance_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval_functions.Plotter.get_performance_df" title="Permalink to this definition"></a></dt>
+<dd><p>Saves the performance metrics to a CSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame containing the performance metrics.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="eval_functions.Plotter.get_train_test_numbers">
 <span class="sig-name descname"><span class="pre">get_train_test_numbers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval_functions.html#Plotter.get_train_test_numbers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval_functions.Plotter.get_train_test_numbers" title="Permalink to this definition"></a></dt>
 <dd><p>Gets the lists of train_reals, train_preds, val_reals, val_preds and saves to self.
@@ -264,20 +270,6 @@ For kfold models.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="eval_functions.Plotter.save_performance_csv">
-<span class="sig-name descname"><span class="pre">save_performance_csv</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval_functions.html#Plotter.save_performance_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval_functions.Plotter.save_performance_csv" title="Permalink to this definition"></a></dt>
-<dd><p>Saves the performance metrics to a CSV file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>DataFrame containing the performance metrics.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>pandas.DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="eval_functions.Plotter.save_to_local">
 <span class="sig-name descname"><span class="pre">save_to_local</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plots_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_string</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval_functions.html#Plotter.save_to_local"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval_functions.Plotter.save_to_local" title="Permalink to this definition"></a></dt>
 <dd><p>Save dictionary of plots to local directory.</p>
@@ -289,43 +281,6 @@ For kfold models.</p>
 <dd><p>Show all plots in dictionary.</p>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="eval_functions.plot_graph">
-<span class="sig-prename descclassname"><span class="pre">eval_functions.</span></span><span class="sig-name descname"><span class="pre">plot_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval_functions.html#plot_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval_functions.plot_graph" title="Permalink to this definition"></a></dt>
-<dd><p>Plots the graph structure.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>graph_data</strong> (<em>pyg.data.Data</em>) – Graph data.</p></li>
-<li><p><strong>params</strong> (<em>dict</em>) – Additional parameters.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="eval_functions.visualise_graphspace">
-<span class="sig-prename descclassname"><span class="pre">eval_functions.</span></span><span class="sig-name descname"><span class="pre">visualise_graphspace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_suffix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval_functions.html#visualise_graphspace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval_functions.visualise_graphspace" title="Permalink to this definition"></a></dt>
-<dd><p>Visualizes the graph space using t-SNE.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>h</strong> (<em>torch.Tensor</em>) – Graph data.</p></li>
-<li><p><strong>color</strong> (<em>list</em>) – List of colors.</p></li>
-<li><p><strong>params</strong> (<em>dict</em>) – Additional parameters.</p></li>
-<li><p><strong>path_suffix</strong> (<em>str</em>) – Suffix for the saved image.</p></li>
-<li><p><strong>method_name</strong> (<em>str</em>) – Name of the method.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>fig</strong> – The figure containing the t-SNE plot.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>matplotlib.figure.Figure</p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>

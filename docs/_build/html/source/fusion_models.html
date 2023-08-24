@@ -62,7 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.train_functions.html">fusionlibrary.train_functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.eval_functions.html">fusionlibrary.eval_functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.eval_functions.Plotter.html">fusionlibrary.eval_functions.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.pl_utils.html">fusionlibrary.utils.pl_utils</a></li>
 </ul>
@@ -530,7 +530,8 @@ Therefore, we’re calculating the final validation metrics here on the full val
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusion_models.base_pl_model.ParentFusionModel.img_dim">
 <span class="sig-name descname"><span class="pre">img_dim</span></span><a class="headerlink" href="#fusion_models.base_pl_model.ParentFusionModel.img_dim" title="Permalink to this definition"></a></dt>
-<dd><p>Dimensions of image modality.</p>
+<dd><p>Dimensions of image modality. If using 2D images, then the dimensions will be (x, y). If using 3D images, then
+the dimensions will be (x, y, z).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple</p>
@@ -639,7 +640,8 @@ Therefore, we’re calculating the final validation metrics here on the full val
 <dl class="py method">
 <dt class="sig sig-object py" id="id9">
 <span class="sig-name descname"><span class="pre">set_img_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/base_pl_model.html#ParentFusionModel.set_img_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id9" title="Permalink to this definition"></a></dt>
-<dd><p>Set layers for image modality</p>
+<dd><p>Set layers for image modality. If using 2D images, then the layers will use Conv2D layers. If using 3D images,
+then the layers will use Conv3D layers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>None</strong> – </p>

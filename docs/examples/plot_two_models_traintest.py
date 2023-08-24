@@ -2,7 +2,7 @@
 Regression: comparing two tabular models trained on simulated data
 ==================================================================
 
-This script shows how to train two fusion models on a regression task with train/test protocol and multi-modal tabular data.
+This script shows how to train two fusion models on a regression task with train/test protocol and multimodal tabular data.
 
 Key Features:
 
@@ -218,6 +218,6 @@ comparison_plotter.show_all(comparison_plot_dict)
 # %%
 # 9. Saving the metrics of the two models
 # ------------------------------------
-# We can also get the metrics of the two models into a Pandas DataFrame using the :func:`~fusionlibrary.eval_functions.Plotter.save_performance_csv` function.
-performances_df = comparison_plotter.save_performance_csv()
+# We can also get the metrics of the two models into a Pandas DataFrame using the :func:`~fusionlibrary.eval_functions.Plotter.get_performance_df` function.
+performances_df = comparison_plotter.get_performance_df()
 performances_df

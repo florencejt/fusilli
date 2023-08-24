@@ -7,7 +7,7 @@ from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 
 class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
     """
-    Channel-wise multiplication net (MRI)
+    Channel-wise multiplication net with image and tabular
 
     Inspired by the work of Duanmu et al. (2020) [1]., we use channel-wise multiplication to combine
     tabular data and image data.

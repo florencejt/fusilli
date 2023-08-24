@@ -187,6 +187,7 @@ class mcvae_subspace_method:
             Datamodule object containing the data.
         """
         self.datamodule = datamodule
+        self.num_latent_dims = 10
 
     def get_latents(self, dataset):
         """
@@ -216,7 +217,7 @@ class mcvae_subspace_method:
             latent_temp = np.vstack([latent_vars_ch0[:, i], latent_vars_ch1[:, i]])
             latents.append(np.mean(latent_temp, axis=0))
 
-        indices = [i for i in range(self.datamodule.num_latent_dims)]
+        indices = [i for i in range(self.num_latent_dims)]
         latents = [latents[i] for i in indices]
 
         mean_latents = np.vstack([latents]).transpose()  # 43 people
@@ -248,7 +249,7 @@ class mcvae_subspace_method:
 
         init_dict = {
             "n_channels": 2,
-            "lat_dim": self.datamodule.num_latent_dims,
+            "lat_dim": self.num_latent_dims,
             "n_feats": tuple(
                 [mcvae_training_data[0].shape[1], mcvae_training_data[1].shape[1]]
             ),
@@ -291,7 +292,7 @@ class mcvae_subspace_method:
             Tensor containing the mean latents of the dataset.
         labels : pd.DataFrame
             Dataframe containing the labels of the dataset.
-        [self.datamodule.num_latent_dims, None, None] : list
+        [self.num_latent_dims, None, None] : list
             List containing the dimensions of the data.
         """
         tab1 = test_dataset[:][0]
@@ -304,5 +305,5 @@ class mcvae_subspace_method:
         return (
             torch.Tensor(test_mean_latents),
             pd.DataFrame(labels, columns=["pred_label"]),
-            [self.datamodule.num_latent_dims, None, None],
+            [self.num_latent_dims, None, None],
         )

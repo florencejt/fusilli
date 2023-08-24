@@ -36,7 +36,7 @@ This library provides a way to compare different fusion methods for your multimo
     fusionlibrary.fusion_models
     fusionlibrary.datamodules
     fusionlibrary.train_functions
-    fusionlibrary.eval_functions
+    fusionlibrary.eval_functions.Plotter
     fusionlibrary.utils.model_chooser
     fusionlibrary.utils.pl_utils
 

@@ -300,7 +300,7 @@ class img_latent_subspace_method:
             Data module containing the data.
         """
         self.datamodule = datamodule
-        self.trainer = init_trainer(None, max_epochs=2)
+        self.trainer = init_trainer(None, max_epochs=100)
         self.autoencoder = ImgLatentSpace(self.datamodule.data_dims)
 
     def train(self, train_dataset, val_dataset):
@@ -340,10 +340,9 @@ class img_latent_subspace_method:
 
         encoded_imgs = self.autoencoder.encode_image(img_train.unsqueeze(1))
         flatten_encoded_imgs = torch.flatten(encoded_imgs, start_dim=2)
-        print("flattened encoded img shape", flatten_encoded_imgs.shape)
 
         return [tab_train, flatten_encoded_imgs.detach()], pd.DataFrame(
-            labels_train, columns=["survival_time"]
+            labels_train, columns=["pred_label"]
         )
 
     def convert_to_latent(self, test_dataset):
@@ -374,6 +373,6 @@ class img_latent_subspace_method:
         flatten_encoded_imgs = torch.flatten(encoded_imgs, start_dim=2).squeeze(dim=1)
         return (
             [tab_val, flatten_encoded_imgs.detach()],
-            pd.DataFrame(label_val, columns=["survival_time"]),
+            pd.DataFrame(label_val, columns=["pred_label"]),
             [tab_val.shape[1], flatten_encoded_imgs.shape[1], None],
         )

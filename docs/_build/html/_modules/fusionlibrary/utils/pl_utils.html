@@ -61,7 +61,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.train_functions.html">fusionlibrary.train_functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.eval_functions.html">fusionlibrary.eval_functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.eval_functions.Plotter.html">fusionlibrary.eval_functions.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.pl_utils.html">fusionlibrary.utils.pl_utils</a></li>
 </ul>
@@ -196,7 +196,7 @@
     <span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span>
         <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
         <span class="n">num_sanity_val_steps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="c1"># accelerator=&quot;mps&quot;,</span>
+        <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;mps&quot;</span><span class="p">,</span>
         <span class="n">devices</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">early_stop_callback</span><span class="p">,</span> <span class="n">bar</span><span class="p">],</span>
         <span class="n">log_every_n_steps</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>

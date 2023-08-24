@@ -400,9 +400,10 @@ class CustomDataModule(pl.LightningDataModule):
         self.modality_type = modality_type
         self.batch_size = batch_size
         self.test_size = params["test_size"]
+        self.pred_type = params["pred_type"]
         self.subspace_method = subspace_method
-        if self.subspace_method is not None:
-            self.num_latent_dims = params["subspace_latdims"]
+        # if self.subspace_method is not None:
+        #     self.num_latent_dims = self.subspace_method.num_latent_dims
 
     def prepare_data(self):
         """
@@ -580,14 +581,14 @@ class KFoldDataModule(pl.LightningDataModule):
                 self.sources, self.image_downsample_size
             ).load_tab_and_img,
         }
-
+        self.pred_type = params["pred_type"]
         self.modality_type = modality_type
         self.batch_size = batch_size
         self.subspace_method = (
             subspace_method  # subspace method class (only for subspace methods)
         )
-        if self.subspace_method is not None:
-            self.num_latent_dims = params["subspace_latdims"]
+        # if self.subspace_method is not None:
+        #     self.num_latent_dims = self.params["subspace_latdims"]
 
     def prepare_data(self):
         """

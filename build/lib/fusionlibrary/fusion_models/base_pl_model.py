@@ -350,16 +350,6 @@ class BaseModel(pl.LightningModule):
         loss : tensor
             Loss.
         """
-        # if batch_idx == 0:
-        # Clear the stored training values at the beginning of training again
-        # we don't want to save the old values from the previous epoch,
-        # only final validation epoch
-        # self.batch_train_reals = []
-        # self.batch_train_preds = []
-        # self.batch_train_logits = []
-        # self.batch_val_preds = []
-        # self.batch_val_reals = []
-        # self.batch_val_logits = []
 
         x, y = self.get_data_from_batch(batch)
 

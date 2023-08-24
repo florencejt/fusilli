@@ -1,0 +1,653 @@
+"""
+Denoising autoencoder for tabular data concatenated with image feature maps
+"""
+import torch.nn as nn
+from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
+import torch
+import pytorch_lightning as pl
+from fusionlibrary.utils.pl_utils import init_trainer
+from torch.utils.data import DataLoader
+import pandas as pd
+
+
+class DAETabImgMaps(ParentFusionModel, nn.Module):
+    """
+    Using a denoising autoencoder to upsample tabular data, then concatenating with feature maps
+    from final 3 conv layers of image data.
+    From Yan et al 2021: Richer fusion network for breast cancer classification on multimodal data.
+
+    Attributes
+    ----------
+    pred_type : str
+        Type of prediction.
+    data_dims : list
+        List containing the dimensions of the data.
+    params : dict
+        Dictionary containing the parameters.
+    subspace_method : denoising_autoencoder_subspace_method
+        Subspace method.
+    fused_layers : nn.Sequential
+        Fused layers.
+    final_prediction : nn.Sequential
+        Final prediction layers.
+
+    Methods
+    -------
+    forward(x)
+        Forward pass.
+
+
+    """
+
+    method_name = "Denoising tabular autoencoder with image maps"
+    modality_type = "tab_img"
+    fusion_type = "subspace"
+
+    def __init__(self, pred_type, data_dims, params):
+        """
+        Initialise the model.
+
+        Parameters
+        ----------
+        pred_type : str
+            Type of prediction.
+        data_dims : list
+            List containing the dimensions of the data.
+        params : dict
+            Dictionary containing the parameters.
+        """
+
+        ParentFusionModel.__init__(self, pred_type, data_dims, params)
+        self.subspace_method = denoising_autoencoder_subspace_method
+        self.pred_type = pred_type
+
+        # self.set_fused_layers(self.data_dims[0])
+
+        self.fused_layers = nn.Sequential(
+            nn.Linear(self.data_dims[0], 500),
+            nn.ReLU(),
+            nn.Linear(500, 100),
+            nn.ReLU(),
+            nn.Linear(100, 64),
+        )
+
+        self.set_final_pred_layers()
+
+    def forward(self, x):
+        """
+        Forward pass.
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            Input data.
+
+        Returns
+        -------
+        list
+            List containing the output.
+        """
+        x = self.fused_layers(x)
+
+        out = self.final_prediction(x)
+
+        return [
+            out,
+        ]
+
+
+class DenoisingAutoencoder(pl.LightningModule):
+    """
+    Denoising autoencoder for tabular data: pytorch lightning module.
+
+    Attributes
+    ----------
+    data_dims : list
+        List containing the dimensions of the data.
+    tab_dims : int
+        Dimension of the tabular data.
+    subspace_lat_dims : int
+        Dimension of the latent subspace.
+    upsampler : nn.Sequential
+        Upsampling layers.
+    downsampler : nn.Sequential
+        Downsampling layers.
+    loss : nn.MSELoss
+        Loss function.
+
+    Methods
+    -------
+    forward(x)
+        Forward pass.
+    training_step(batch, batch_idx)
+        Training step.
+    validation_step(batch, batch_idx)
+        Validation step.
+    configure_optimizers()
+        Configure the optimizers of the model.
+    denoise(x)
+        Denoise the data to create the latent subspace.
+    """
+
+    def __init__(self, data_dims):
+        """
+        Initialise the model.
+
+        Parameters
+        ----------
+        data_dims : list
+            List containing the dimensions of the data.
+
+        """
+        super().__init__()
+
+        self.data_dims = data_dims
+        self.tab_dims = data_dims[0]
+        self.subspace_lat_dims = 28 * 28
+
+        self.upsampler = nn.Sequential(
+            nn.Linear(self.tab_dims, 128),
+            nn.ReLU(),
+            nn.Linear(128, 256),
+            nn.ReLU(),
+            nn.Linear(256, self.subspace_lat_dims),
+            nn.ReLU(),
+        )
+
+        self.downsampler = nn.Sequential(
+            nn.Linear(self.subspace_lat_dims, 256),
+            nn.ReLU(),
+            nn.Linear(256, 128),
+            nn.ReLU(),
+            nn.Linear(128, self.tab_dims),
+            nn.ReLU(),
+        )
+
+        self.loss = nn.MSELoss()
+
+    def forward(self, x):
+        """
+        Forward pass.
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            Input data.
+
+        Returns
+        -------
+        list
+            List containing the output.
+        """
+        # drop out 0.2 of the tabular data to 0
+
+        x_dropout = nn.Dropout(0.2)(x)
+
+        # upsample
+        x_latent = self.upsampler(x_dropout)
+
+        # downsample
+        out = self.downsampler(x_latent)
+
+        # return downsampled tab data
+
+        return out, x_dropout
+
+    def training_step(self, batch, batch_idx):
+        """
+        Training step.
+
+        Parameters
+        ----------
+        batch : torch.Tensor
+            Input batch.
+        batch_idx : int
+            Batch index.
+
+        Returns
+        -------
+        torch.Tensor
+            Loss.
+        """
+        # loss is difference between input (non dropped out) and downsampled output
+
+        x = batch
+
+        output, x_dropout = self(x)
+
+        loss = self.loss(output, x_dropout)
+
+        self.log("train_loss", loss, logger=False)
+
+        return loss
+
+    def validation_step(self, batch, batch_idx):
+        """
+        Validation step.
+
+        Parameters
+        ----------
+        batch : torch.Tensor
+            Input batch.
+        batch_idx : int
+            Batch index.
+
+        Returns
+        -------
+        torch.Tensor
+            Loss.
+        """
+        x = batch
+
+        output, x_dropout = self(x)
+
+        loss = self.loss(output, x_dropout)
+
+        self.log("val_loss", loss, logger=False)
+
+        return loss
+
+    def configure_optimizers(self):
+        """
+        Configure the optimizers of the model.
+
+        Returns
+        -------
+        torch.optim.Adam
+            Adam optimizer.
+        """
+        return torch.optim.Adam(self.parameters(), lr=0.001)
+
+    def denoise(self, x):
+        """
+        Denoise the data to create the latent subspace.
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            Input data.
+
+        Returns
+        -------
+        torch.Tensor
+            Latent subspace.
+        """
+        # don't do the dropout here, only in the training step
+
+        # upsample
+        x_latent = self.upsampler(x)
+        x_latent.flatten()
+
+        return x_latent.detach()
+
+
+class ImgUnimodalDAE(pl.LightningModule):
+    """
+    Image unimodal network to go alongside the tabular denoising autoencoder: pytorch
+    lightning module.
+
+    Attributes
+    ----------
+    data_dims : list
+        List containing the dimensions of the data.
+    img_dim : int
+        Dimension of the image data.
+    img_layers : nn.ModuleDict
+        Image layers.
+    num_layers : int
+        Number of layers.
+    fused_dim : int
+        Dimension of the fused layers.
+    pred_type : str
+        Type of prediction.
+    loss : function
+        Loss function. Depends on the prediction type.
+    fused_layers : nn.Sequential
+        Fused layers.
+    final_prediction : nn.Sequential
+        Final prediction layers.
+
+    Methods
+    -------
+    forward(x)
+        Forward pass.
+    training_step(batch, batch_idx)
+        Training step.
+    validation_step(batch, batch_idx)
+        Validation step.
+    configure_optimizers()
+        Configure the optimizers of the model.
+    get_intermediate_featuremaps(x)
+        Get the intermediate feature maps to concatenate with the tabular latent subspace.
+
+    """
+
+    def __init__(self, data_dims, pred_type):
+        """
+        Initialise the model.
+
+        Parameters
+        ----------
+        data_dims : list
+            List containing the dimensions of the data.
+        pred_type : str
+            Type of prediction.
+        """
+        super().__init__()
+
+        self.data_dims = data_dims
+        self.img_dim = data_dims[2]
+
+        # get the img layers from ParentFusionModel
+        ParentFusionModel.set_img_layers(self)
+        self.num_layers = len(self.img_layers)
+
+        self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
+
+        # linear layer to get it to 1280
+        # self.linear = nn.Linear(self.fused_dim, 1280)
+
+        ParentFusionModel.set_fused_layers(self, fused_dim=self.fused_dim)
+
+        # getting pred type from datamodule
+        self.pred_type = pred_type
+        ParentFusionModel.set_final_pred_layers(self)
+
+        self.output_activation_functions = {
+            "binary": torch.round,
+            "multiclass": lambda x: torch.argmax(nn.Softmax(dim=-1)(x), dim=-1),
+            "regression": lambda x: x,
+        }
+
+        # what loss function?
+        if self.pred_type == "regression":
+            self.loss = nn.MSELoss()
+            self.activation = lambda x: x
+        elif self.pred_type == "binary":
+            self.loss = nn.BCEWithLogitsLoss()
+            self.activation = lambda x: torch.round(x).to(torch.int)
+
+        elif self.pred_type == "multiclass":
+            self.loss = nn.CrossEntropyLoss()
+            self.activation = lambda x: torch.argmax(nn.Softmax(dim=-1)(x), dim=-1)
+
+    def forward(self, x):
+        """
+        Forward pass.
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            Input data.
+
+        Returns
+        -------
+        list
+            List containing the output.
+        """
+        # feed image data through conv network
+        x = x.unsqueeze(dim=1)
+
+        for i, layer in enumerate(self.img_layers.values()):
+            x = layer(x)
+        # flatten
+        x = x.view(x.size(0), -1)
+
+        # # linear layer to get it to 1280
+        # x = self.linear(x)
+
+        # feed through fused layers
+        x = self.fused_layers(x)
+
+        # feed through final pred layers
+        out = self.final_prediction(x)
+
+        return out
+
+    def training_step(self, batch, batch_idx):
+        """
+        Training step.
+
+        Parameters
+        ----------
+        batch : torch.Tensor
+            Input batch.
+        batch_idx : int
+            Batch index.
+
+        Returns
+        -------
+        torch.Tensor
+            Loss.
+        """
+        _, images, y = batch
+
+        output = self.activation(self(images))
+
+        # print dtype
+        print("output dtype", output.dtype)
+        print(output)
+        print("y dtype", y.dtype)
+
+        loss = self.loss(output, y.unsqueeze(dim=1))
+
+        self.log("train_loss", loss, logger=False)
+
+        return loss
+
+    def validation_step(self, batch, batch_idx):
+        """
+        Validation step.
+
+        Parameters
+        ----------
+        batch : torch.Tensor
+            Input batch.
+        batch_idx : int
+            Batch index.
+
+        Returns
+        -------
+        torch.Tensor
+            Loss.
+        """
+        _, images, y = batch
+
+        output = self.activation(self(images))
+
+        loss = self.loss(output, y.unsqueeze(dim=1))
+
+        self.log("val_loss", loss, logger=False)
+
+        return loss
+
+    def configure_optimizers(self):
+        """
+        Configure the optimizers of the model.
+
+        Returns
+        -------
+        torch.optim.Adam
+            Adam optimizer.
+        """
+        return torch.optim.Adam(self.parameters(), lr=0.001)
+
+    def get_intermediate_featuremaps(self, x):
+        """
+        Get the intermediate feature maps to concatenate with the tabular latent subspace.
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            Input data.
+
+        Returns
+        -------
+        torch.Tensor
+            Intermediate feature maps.
+        """
+        feature_maps = []
+        x = x.unsqueeze(dim=1)
+
+        for i, layer in enumerate(self.img_layers.values()):
+            x = layer(x)
+
+            if i >= self.num_layers - 2:
+                # get the feature maps from the last 2 conv layers
+
+                # view the feature maps as a 1D vector
+                out_view = x.view(x.size(0), -1)
+
+                feature_maps.append(out_view)
+
+        concatenated_feature_maps = torch.cat(feature_maps, dim=1).detach()
+
+        return concatenated_feature_maps
+
+
+class denoising_autoencoder_subspace_method:
+
+    """
+    Class containing the method to train the denoising autoencoder and to convert the image data
+    to the latent image space.
+
+    Attributes
+    ----------
+    datamodule : pl.LightningDataModule
+        Data module containing the data.
+    dae_trainer : pl.Trainer
+        Trainer for the denoising autoencoder.
+    img_unimodal_trainer : pl.Trainer
+        Trainer for the image unimodal network.
+    autoencoder : DenoisingAutoencoder
+        Denoising autoencoder.
+    img_unimodal : ImgUnimodalDAE
+        Image unimodal network.
+
+    Methods
+    -------
+    train(train_dataset, val_dataset)
+        Train the latent image space.
+    convert_to_latent(test_dataset)
+        Convert the image data to the latent image space.
+    """
+
+    def __init__(self, datamodule):
+        """
+        Parameters
+        ----------
+        datamodule : pl.LightningDataModule
+            Data module containing the data.
+        """
+        self.datamodule = datamodule
+        self.dae_trainer = init_trainer(None)
+        self.img_unimodal_trainer = init_trainer(None)
+
+        self.autoencoder = DenoisingAutoencoder(self.datamodule.data_dims)
+
+        self.img_unimodal = ImgUnimodalDAE(
+            self.datamodule.data_dims, self.datamodule.pred_type
+        )
+
+    def train(self, train_dataset, val_dataset):
+        """
+        Train the latent image space.
+
+        Parameters
+        ----------
+        train_dataset : Dataset
+            Training dataset.
+        val_dataset : Dataset
+            Validation dataset.
+
+        Returns
+        -------
+        list
+            List containing the raw tabular data and the latent image space.
+        pd.DataFrame
+            Dataframe containing the labels.
+        """
+        tab_train = train_dataset[:][0]
+        img_train = train_dataset[:][1]
+        labels_train = train_dataset[:][2]
+
+        # train and test DAE
+        tab_train_dataloader = DataLoader(tab_train, batch_size=8, shuffle=False)
+        tab_val_dataloader = DataLoader(tab_train, batch_size=8, shuffle=False)
+
+        self.dae_trainer.fit(self.autoencoder, tab_train_dataloader, tab_val_dataloader)
+        self.dae_trainer.validate(self.autoencoder, tab_val_dataloader)
+
+        self.autoencoder.eval()
+
+        train_tab_latent_space = self.autoencoder.denoise(tab_train)
+
+        # -------train and test img unimodal----------------
+
+        img_train_dataloader = DataLoader(train_dataset, batch_size=8, shuffle=False)
+        img_val_dataloader = DataLoader(val_dataset, batch_size=8, shuffle=False)
+
+        self.img_unimodal_trainer.fit(
+            self.img_unimodal, img_train_dataloader, img_val_dataloader
+        )
+
+        self.img_unimodal_trainer.validate(self.img_unimodal, img_val_dataloader)
+
+        self.img_unimodal.eval()
+
+        train_img_feature_maps = self.img_unimodal.get_intermediate_featuremaps(
+            img_train
+        )
+
+        # concatenate them
+        train_latent_image_space = torch.cat(
+            (train_tab_latent_space, train_img_feature_maps), dim=1
+        )
+
+        # make the training dataset out of them
+        return train_latent_image_space, pd.DataFrame(
+            labels_train, columns=["pred_label"]
+        )
+
+    def convert_to_latent(self, test_dataset):
+        """
+        Convert the image data to the latent image space.
+
+        Parameters
+        ----------
+        test_dataset : Dataset
+            Test dataset.
+
+        Returns
+        -------
+        list
+            List containing the raw tabular data and the latent image space.
+        pd.DataFrame
+            Dataframe containing the labels.
+        list
+            List containing the dimensions of the data.
+        """
+        tab_val = test_dataset[:][0]
+        img_val = test_dataset[:][1]
+        label_val = test_dataset[:][2]
+
+        # ---------DAE----------------
+        self.autoencoder.eval()
+        val_tab_latent_space = self.autoencoder.denoise(tab_val)
+
+        # ---------img unimodal----------------
+        self.img_unimodal.eval()
+        val_img_feature_maps = self.img_unimodal.get_intermediate_featuremaps(img_val)
+
+        # concatenate them
+        val_latent_image_space = torch.cat(
+            (val_tab_latent_space, val_img_feature_maps), dim=1
+        )
+        print("final shape", val_latent_image_space.shape)
+
+        # make the training dataset out of them
+        return (
+            val_latent_image_space,
+            pd.DataFrame(label_val, columns=["pred_label"]),
+            [val_latent_image_space.shape[1], None, None],
+        )

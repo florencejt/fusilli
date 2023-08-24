@@ -17,6 +17,7 @@ fusionlibrary/fusion_models/concat_img_maps_tabular_maps.py
 fusionlibrary/fusion_models/concat_tabular_data.py
 fusionlibrary/fusion_models/concat_tabular_feature_maps.py
 fusionlibrary/fusion_models/crossmodal_att.py
+fusionlibrary/fusion_models/denoise_tab_img_maps.py
 fusionlibrary/fusion_models/edge_corr_gnn.py
 fusionlibrary/fusion_models/img_tab_channelwise_att.py
 fusionlibrary/fusion_models/img_tab_decision.py

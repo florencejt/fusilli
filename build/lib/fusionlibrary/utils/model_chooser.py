@@ -49,6 +49,7 @@ fusion_model_dict = [
         "path": "fusion_models.concat_img_latent_tab_doubleloss",
     },
     {"name": "EdgeCorrGNN", "path": "fusion_models.edge_corr_gnn"},
+    {"name": "DAETabImgMaps", "path": "fusion_models.denoise_tab_img_maps"},
 ]
 
 
