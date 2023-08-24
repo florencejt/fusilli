@@ -4,9 +4,10 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to fusionlibrary’s documentation! &mdash; fusionlibrary  documentation</title>
+  <title>FuseIt: A PyTorch Library for Multimodal Fusion &mdash; fusionlibrary  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/florencestheme.css" type="text/css" />
       <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
       <link rel="stylesheet" href="_static/sg_gallery-binder.css" type="text/css" />
       <link rel="stylesheet" href="_static/sg_gallery-dataframe.css" type="text/css" />
@@ -23,7 +24,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Introduction" href="introduction.html" /> 
+    <link rel="next" title="FuseIt: an introduction" href="introduction.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -36,6 +37,7 @@
           
           <a href="#" class="icon icon-home">
             fusionlibrary
+              <img src="_static/computergif.gif" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -45,16 +47,18 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">FuseIt: an introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">📚 Tutorials</span></p>
+<p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Tutorials and Examples Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html#creating-your-own-fusion-model-examples">Creating your own fusion model examples</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">📚 API Reference</span></p>
+<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
@@ -78,7 +82,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Welcome to fusionlibrary’s documentation!</li>
+      <li class="breadcrumb-item active">FuseIt: A PyTorch Library for Multimodal Fusion</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -88,16 +92,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="welcome-to-fusionlibrary-s-documentation">
-<h1>Welcome to fusionlibrary’s documentation!<a class="headerlink" href="#welcome-to-fusionlibrary-s-documentation" title="Permalink to this heading"></a></h1>
+  <section id="fuseit-a-pytorch-library-for-multimodal-fusion">
+<h1>FuseIt: A PyTorch Library for Multimodal Fusion<a class="headerlink" href="#fuseit-a-pytorch-library-for-multimodal-fusion" title="Permalink to this heading"></a></h1>
+<section id="welcome-to-fuseit">
+<h2>Welcome to FuseIt!<a class="headerlink" href="#welcome-to-fuseit" title="Permalink to this heading"></a></h2>
+<p>Have you got multimodal data but not sure how to combine them for your machine learning task? Look no further!
+This library provides a way to compare different fusion methods for your multimodal data.</p>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">FuseIt: an introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#what-is-multimodal-fusion">What is multimodal fusion?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#who-will-get-the-most-out-of-fuseit">Who will get the most out of FuseIt?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#why-fuseit">Why FuseIt?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#simple-example">Simple Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fusion_model_explanations.html#operation-based">Operation-based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_model_explanations.html#attention-based">Attention-based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_model_explanations.html#subspace-based">Subspace-based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_model_explanations.html#tensor-based">Tensor-based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_model_explanations.html#graph-based">Graph-based</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">📚 Tutorials</span></p>
+<p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Tutorials and Examples Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html#creating-your-own-fusion-model-examples">Creating your own fusion model examples</a></li>
@@ -106,7 +132,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.html#module-fusionlibrary.fusion_models" title="fusionlibrary.fusion_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fusionlibrary.fusion_models</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Fusion models: one py file per model</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="autosummary/fusionlibrary.datamodules.html#module-fusionlibrary.datamodules" title="fusionlibrary.datamodules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fusionlibrary.datamodules</span></code></a></p></td>
 <td><p>This file contains the datamodules for the different modalities and the different fusion methods.</p></td>
@@ -126,6 +152,7 @@
 </tbody>
 </table>
 </section>
+</section>
 <section id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h1>
 <ul class="simple">
@@ -139,7 +166,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="introduction.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="introduction.html" class="btn btn-neutral float-right" title="FuseIt: an introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

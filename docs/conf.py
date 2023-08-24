@@ -73,6 +73,7 @@ autosummary_imported_members = True
 
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
+html_logo = "computergif.gif"
 
 sphinx_gallery_conf = {
     "doc_module": "fusionlibrary",
@@ -81,3 +82,7 @@ sphinx_gallery_conf = {
     "ignore_pattern": "__init__.py",
     "run_stale_examples": False,
 }
+
+
+def setup(app):
+    app.add_css_file("florencestheme.css")

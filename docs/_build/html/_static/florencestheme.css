@@ -1,0 +1,61 @@
+/* Top left bit */
+.wy-side-nav-search,
+.wy-nav-top {
+    background: #FA69F4;
+}
+
+/* Side bar background */
+.wy-nav-side {
+    background: #EFFFE9;
+}
+
+/* inline code style */
+code.literal {
+    color: #404040 !important;
+    background-color: #fbfbfb !important;
+}
+
+
+/* font colour in side bar */
+.wy-menu-vertical a {
+    color: #2f2f2f;
+}
+
+
+
+.example a:link,
+.example a:visited {
+    color: green;
+}
+
+a:hover {
+    color: pink;
+    background-color: #404040;
+}
+
+a:link {
+    color: #0044B3;
+}
+
+/* unvisited link is black*/
+a:visited {
+    color: #9800B3;
+}
+
+/* visited link is black (reverse the color back to black)*/
+a:active {
+    color: #EA00E7;
+}
+
+/* selected link (blue in the split second which you loading the page.)*/
+
+
+/* all toc tree caption headers */
+/* span.caption-text {
+    color: #990092;
+} */
+
+
+.wy-menu>.caption>span.caption-text {
+    color: #990092;
+}
