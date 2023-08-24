@@ -583,10 +583,11 @@ class KFoldDataModule(pl.LightningDataModule):
 
         self.modality_type = modality_type
         self.batch_size = batch_size
-        self.num_latent_dims = params["subspace_latdims"]
         self.subspace_method = (
             subspace_method  # subspace method class (only for subspace methods)
         )
+        if self.subspace_method is not None:
+            self.num_latent_dims = params["subspace_latdims"]
 
     def prepare_data(self):
         """

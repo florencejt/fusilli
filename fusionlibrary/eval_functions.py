@@ -143,11 +143,11 @@ class Plotter:
 
             self.trained_model_list[k].eval()
 
-            self.train_reals.append(k_trained_model_var["train_reals"])
-            self.train_preds.append(k_trained_model_var["train_preds"])
-            self.val_reals.append(k_trained_model_var["val_reals"])
-            self.val_preds.append(k_trained_model_var["val_preds"])
-            self.val_logits.append(k_trained_model_var["val_logits"])
+            self.train_reals.append(k_trained_model_var["train_reals"].cpu())
+            self.train_preds.append(k_trained_model_var["train_preds"].cpu())
+            self.val_reals.append(k_trained_model_var["val_reals"].cpu())
+            self.val_preds.append(k_trained_model_var["val_preds"].cpu())
+            self.val_logits.append(k_trained_model_var["val_logits"].cpu())
 
             self.kfold_plot_val_accs[self.metric1name].append(
                 k_trained_model_var["metric1"]
@@ -192,16 +192,16 @@ class Plotter:
         # get lists of train_reals, train_preds, val_reals, val_preds and save to self
         self.train_reals = vars(self.trained_model_dict[self.current_model_name])[
             "train_reals"
-        ]
+        ].cpu()
         self.train_preds = vars(self.trained_model_dict[self.current_model_name])[
             "train_preds"
-        ]
+        ].cpu()
         self.val_reals = vars(self.trained_model_dict[self.current_model_name])[
             "val_reals"
-        ]
+        ].cpu()
         self.val_preds = vars(self.trained_model_dict[self.current_model_name])[
             "val_preds"
-        ]
+        ].cpu()
 
         self.plot_val_accs = {
             self.metric1name: vars(self.trained_model_dict[self.current_model_name])[
@@ -380,7 +380,11 @@ class Plotter:
         fig, ax = plt.subplots()
 
         ax.scatter(
-            self.train_reals, self.train_preds, c="#f082ef", marker="o", label="Train"
+            self.train_reals,
+            self.train_preds,
+            c="#f082ef",
+            marker="o",
+            label="Train",
         )
         ax.scatter(
             self.val_reals, self.val_preds, c="#00b64e", marker="^", label="Validation"
