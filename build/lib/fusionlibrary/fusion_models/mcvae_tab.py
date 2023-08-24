@@ -1,3 +1,8 @@
+"""
+This module implements the MCVAE (multi-channel variational autoencoder) model for fusing
+two types of tabular data.
+"""
+
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch

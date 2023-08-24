@@ -693,35 +693,75 @@ class ParentFusionModel:
         -------
         None
         """
-        self.img_layers = nn.ModuleDict(
-            {
-                "layer 1": nn.Sequential(
-                    nn.Conv3d(1, 32, kernel_size=(3, 3, 3), padding=0),
-                    nn.ReLU(),
-                    nn.MaxPool3d((2, 2, 2)),
-                ),
-                "layer 2": nn.Sequential(
-                    nn.Conv3d(32, 64, kernel_size=(3, 3, 3), padding=0),
-                    nn.ReLU(),
-                    nn.MaxPool3d((2, 2, 2)),
-                ),
-                "layer 3": nn.Sequential(
-                    nn.Conv3d(64, 128, kernel_size=(3, 3, 3), padding=0),
-                    nn.ReLU(),
-                    nn.MaxPool3d((2, 2, 2)),
-                ),
-                "layer 4": nn.Sequential(
-                    nn.Conv3d(128, 256, kernel_size=(3, 3, 3), padding=0),
-                    nn.ReLU(),
-                    nn.MaxPool3d((2, 2, 2)),
-                ),
-                "layer 5": nn.Sequential(
-                    nn.Conv3d(256, 256, kernel_size=(3, 3, 3), padding=0),
-                    nn.ReLU(),
-                    nn.MaxPool3d((2, 2, 2)),
-                ),
-            }
-        )
+        # TODO make flexible to conv2d
+
+        print("img_dim", self.img_dim)
+
+        if len(self.img_dim) == 2:  # 2D images
+            print("2D layers")
+            self.img_layers = nn.ModuleDict(
+                {
+                    "layer 1": nn.Sequential(
+                        nn.Conv2d(1, 32, kernel_size=(3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool2d((2, 2)),
+                    ),
+                    "layer 2": nn.Sequential(
+                        nn.Conv2d(32, 64, kernel_size=(3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool2d((2, 2)),
+                    ),
+                    "layer 3": nn.Sequential(
+                        nn.Conv2d(64, 128, kernel_size=(3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool2d((2, 2)),
+                    ),
+                    "layer 4": nn.Sequential(
+                        nn.Conv2d(128, 256, kernel_size=(3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool2d((2, 2)),
+                    ),
+                    "layer 5": nn.Sequential(
+                        nn.Conv2d(256, 256, kernel_size=(3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool2d((2, 2)),
+                    ),
+                }
+            )
+
+        elif len(self.img_dim) == 3:  # 3D images
+            self.img_layers = nn.ModuleDict(
+                {
+                    "layer 1": nn.Sequential(
+                        nn.Conv3d(1, 32, kernel_size=(3, 3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool3d((2, 2, 2)),
+                    ),
+                    "layer 2": nn.Sequential(
+                        nn.Conv3d(32, 64, kernel_size=(3, 3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool3d((2, 2, 2)),
+                    ),
+                    "layer 3": nn.Sequential(
+                        nn.Conv3d(64, 128, kernel_size=(3, 3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool3d((2, 2, 2)),
+                    ),
+                    "layer 4": nn.Sequential(
+                        nn.Conv3d(128, 256, kernel_size=(3, 3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool3d((2, 2, 2)),
+                    ),
+                    "layer 5": nn.Sequential(
+                        nn.Conv3d(256, 256, kernel_size=(3, 3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool3d((2, 2, 2)),
+                    ),
+                }
+            )
+
+        else:
+            raise ValueError("Image dimensionality not supported")
 
     def set_fused_layers(self, fused_dim):
         """

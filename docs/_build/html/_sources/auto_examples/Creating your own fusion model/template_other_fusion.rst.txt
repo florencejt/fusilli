@@ -18,8 +18,8 @@
 .. _sphx_glr_auto_examples_Creating your own fusion model_template_other_fusion.py:
 
 
-Operation/attention/tensor fusion template
-==========================================
+Operation / attention / tensor fusion template
+===============================================
 
 This is a template for creating your own fusion model: operation-based, attention-based, or tensor-based.
 If you want to implement a graph-based or subspace-based fusion model, please refer to the other templates. They require additional functions to be implemented.

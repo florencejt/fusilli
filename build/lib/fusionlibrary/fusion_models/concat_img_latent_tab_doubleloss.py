@@ -1,3 +1,7 @@
+"""
+Concat image latent space with tabular data, trained altogether with a custom loss function: MSE + BCE.
+"""
+
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch

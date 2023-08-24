@@ -1,3 +1,8 @@
+"""
+Crossmodal multi-head attention model. This model uses the self attention and cross modal attention
+between the two modalities: tabular and image.
+"""
+
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch

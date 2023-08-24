@@ -1,3 +1,7 @@
+"""
+Uni-modal model using only the image data.
+"""
+
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 

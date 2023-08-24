@@ -74,6 +74,7 @@ autosummary_imported_members = True
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 html_logo = "computergif.gif"
+html_favicon = "favicon.png"
 
 sphinx_gallery_conf = {
     "doc_module": "fusionlibrary",

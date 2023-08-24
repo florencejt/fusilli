@@ -1,3 +1,7 @@
+"""
+Concatenating the two tabular modalities at the data-level (early fusion)
+"""
+
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch

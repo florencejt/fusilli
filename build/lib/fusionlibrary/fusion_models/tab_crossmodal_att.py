@@ -1,3 +1,7 @@
+"""
+Crossmodal multi-head attention for tabular data.
+"""
+
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch

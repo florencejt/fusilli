@@ -1,3 +1,9 @@
+"""
+Concatenating the latent img space and tabular data. The latent image space is
+trained separately from both the tabular data and the labels, using the
+img_latent_subspace_method class.
+"""
+
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch

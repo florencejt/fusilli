@@ -1,3 +1,8 @@
+"""
+Model that fuses the first tabular data and the image data using a decision
+fusion approach.
+"""
+
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch

@@ -476,9 +476,6 @@ class BaseModel(pl.LightningModule):
 
         self.val_reals = torch.cat(self.batch_val_reals, dim=-1)
         self.val_preds = torch.cat(self.batch_val_preds, dim=-1)
-        # print(self.batch_val_logits[0])
-        # print(self.batch_val_logits[1])
-        # print(len(self.batch_val_logits))
         self.val_logits = torch.cat(self.batch_val_logits, dim=0)
 
         try:
@@ -536,7 +533,8 @@ class ParentFusionModel:
     mod2_dim : int
         Dimension of modality 2.
     img_dim : tuple
-        Dimensions of image modality.
+        Dimensions of image modality. If using 2D images, then the dimensions will be (x, y). If using 3D images, then
+        the dimensions will be (x, y, z).
     params : dict
         Dictionary of parameters.
     multiclass_dim : int
@@ -683,7 +681,8 @@ class ParentFusionModel:
 
     def set_img_layers(self):
         """
-        Set layers for image modality
+        Set layers for image modality. If using 2D images, then the layers will use Conv2D layers. If using 3D images,
+        then the layers will use Conv3D layers.
 
         Parameters
         ----------
@@ -693,35 +692,71 @@ class ParentFusionModel:
         -------
         None
         """
-        self.img_layers = nn.ModuleDict(
-            {
-                "layer 1": nn.Sequential(
-                    nn.Conv3d(1, 32, kernel_size=(3, 3, 3), padding=0),
-                    nn.ReLU(),
-                    nn.MaxPool3d((2, 2, 2)),
-                ),
-                "layer 2": nn.Sequential(
-                    nn.Conv3d(32, 64, kernel_size=(3, 3, 3), padding=0),
-                    nn.ReLU(),
-                    nn.MaxPool3d((2, 2, 2)),
-                ),
-                "layer 3": nn.Sequential(
-                    nn.Conv3d(64, 128, kernel_size=(3, 3, 3), padding=0),
-                    nn.ReLU(),
-                    nn.MaxPool3d((2, 2, 2)),
-                ),
-                "layer 4": nn.Sequential(
-                    nn.Conv3d(128, 256, kernel_size=(3, 3, 3), padding=0),
-                    nn.ReLU(),
-                    nn.MaxPool3d((2, 2, 2)),
-                ),
-                "layer 5": nn.Sequential(
-                    nn.Conv3d(256, 256, kernel_size=(3, 3, 3), padding=0),
-                    nn.ReLU(),
-                    nn.MaxPool3d((2, 2, 2)),
-                ),
-            }
-        )
+
+        if len(self.img_dim) == 2:  # 2D images
+            self.img_layers = nn.ModuleDict(
+                {
+                    "layer 1": nn.Sequential(
+                        nn.Conv2d(1, 32, kernel_size=(3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool2d((2, 2)),
+                    ),
+                    "layer 2": nn.Sequential(
+                        nn.Conv2d(32, 64, kernel_size=(3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool2d((2, 2)),
+                    ),
+                    "layer 3": nn.Sequential(
+                        nn.Conv2d(64, 128, kernel_size=(3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool2d((2, 2)),
+                    ),
+                    "layer 4": nn.Sequential(
+                        nn.Conv2d(128, 256, kernel_size=(3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool2d((2, 2)),
+                    ),
+                    "layer 5": nn.Sequential(
+                        nn.Conv2d(256, 256, kernel_size=(3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool2d((2, 2)),
+                    ),
+                }
+            )
+
+        elif len(self.img_dim) == 3:  # 3D images
+            self.img_layers = nn.ModuleDict(
+                {
+                    "layer 1": nn.Sequential(
+                        nn.Conv3d(1, 32, kernel_size=(3, 3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool3d((2, 2, 2)),
+                    ),
+                    "layer 2": nn.Sequential(
+                        nn.Conv3d(32, 64, kernel_size=(3, 3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool3d((2, 2, 2)),
+                    ),
+                    "layer 3": nn.Sequential(
+                        nn.Conv3d(64, 128, kernel_size=(3, 3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool3d((2, 2, 2)),
+                    ),
+                    "layer 4": nn.Sequential(
+                        nn.Conv3d(128, 256, kernel_size=(3, 3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool3d((2, 2, 2)),
+                    ),
+                    "layer 5": nn.Sequential(
+                        nn.Conv3d(256, 256, kernel_size=(3, 3, 3), padding=0),
+                        nn.ReLU(),
+                        nn.MaxPool3d((2, 2, 2)),
+                    ),
+                }
+            )
+
+        else:
+            raise ValueError("Image dimensionality not supported")
 
     def set_fused_layers(self, fused_dim):
         """

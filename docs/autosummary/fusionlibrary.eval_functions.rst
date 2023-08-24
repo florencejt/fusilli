@@ -14,6 +14,8 @@
    .. autosummary::
    
       confusion_matrix
+      plot_graph
+      visualise_graphspace
    
    
 

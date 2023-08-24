@@ -8,7 +8,6 @@ import torch
 from sklearn.metrics import confusion_matrix
 import math
 from matplotlib import gridspec
-import wandb
 import torch_geometric as pyg
 import networkx as nx
 from sklearn.manifold import TSNE
@@ -47,12 +46,23 @@ class Plotter:
     """
 
     def __init__(self, trained_model_dict, params):
+        """
+        Initialize the Plotter instance.
+
+        Parameters
+        ----------
+        trained_model_dict : dict
+            Dictionary of trained models.
+        params : dict
+            Dictionary of parameters.
+        """
+
         super().__init__()
 
-        # initialising variables for use later in the class
+        # Initialise variables for use later in the class
         self.trained_model_dict = trained_model_dict
         self.model_names = list(trained_model_dict.keys())
-        print("model names:", self.model_names)
+        print("Plotting models", self.model_names, "...")
 
         self.params = params
         self.pred_type = self.params["pred_type"]  # for less verbose access
@@ -293,6 +303,14 @@ class Plotter:
                 return figures_dict
 
     def save_performance_csv(self):
+        """
+        Saves the performance metrics to a CSV file.
+
+        Returns
+        -------
+        pandas.DataFrame
+            DataFrame containing the performance metrics.
+        """
         if self.params["kfold_flag"]:
             # copy self.overall_kfold_metrics to a new dictionary
             # so that we can change the values from lists to single numbers
@@ -770,99 +788,99 @@ class Plotter:
 #####################################
 
 
-# def plot_graph(graph_data, params):
-#     """
-#     Plots the graph structure.
+def plot_graph(graph_data, params):
+    """
+    Plots the graph structure.
 
-#     Parameters
-#     ----------
-#     graph_data: pyg.data.Data
-#         Graph data.
-#     params: dict
-#         Additional parameters.
-#     """
+    Parameters
+    ----------
+    graph_data: pyg.data.Data
+        Graph data.
+    params: dict
+        Additional parameters.
+    """
 
-#     # convert graph data to networkx graph
-#     G = pyg.utils.convert.to_networkx(
-#         graph_data,
-#         to_undirected=True,
-#         remove_self_loops=True,
-#         node_attrs=["x"],
-#         edge_attrs=["edge_attr"],
-#     )
-#     for u, v, d in G.edges(data=True):
-#         d["weight"] = d["edge_attr"]
-#         # d['nodecolor'] = d["y"].item()
+    # convert graph data to networkx graph
+    G = pyg.utils.convert.to_networkx(
+        graph_data,
+        to_undirected=True,
+        remove_self_loops=True,
+        node_attrs=["x"],
+        edge_attrs=["edge_attr"],
+    )
+    for u, v, d in G.edges(data=True):
+        d["weight"] = d["edge_attr"]
+        # d['nodecolor'] = d["y"].item()
 
-#     # colour nodes with their label
-#     for n, d in G.nodes(data=True):
-#         d["nodecolor"] = graph_data.y[n].item()
+    # colour nodes with their label
+    for n, d in G.nodes(data=True):
+        d["nodecolor"] = graph_data.y[n].item()
 
-#     edges, weights = zip(*nx.get_edge_attributes(G, "weight").items())
-#     nodes, colors = zip(*nx.get_node_attributes(G, "nodecolor").items())
+    edges, weights = zip(*nx.get_edge_attributes(G, "weight").items())
+    nodes, colors = zip(*nx.get_node_attributes(G, "nodecolor").items())
 
-#     pos = nx.spectral_layout(G)
+    pos = nx.spectral_layout(G)
 
-#     # draw graph with node colour and edge weight
-#     nx.draw(
-#         G,
-#         pos,
-#         node_color=colors,
-#         edgelist=edges,
-#         edge_color=weights,
-#         width=5.0,
-#         edge_cmap=plt.cm.Blues,
-#         cmap=plt.cm.coolwarm,
-#         node_size=50,
-#     )
-#     vmin = np.min(weights)
-#     vmax = np.max(weights)
-#     sm = plt.cm.ScalarMappable(
-#         cmap=plt.cm.Blues, norm=plt.Normalize(vmin=vmin, vmax=vmax)
-#     )
-#     sm.set_array([])
-#     cbar = plt.colorbar(sm)
+    # draw graph with node colour and edge weight
+    nx.draw(
+        G,
+        pos,
+        node_color=colors,
+        edgelist=edges,
+        edge_color=weights,
+        width=5.0,
+        edge_cmap=plt.cm.Blues,
+        cmap=plt.cm.coolwarm,
+        node_size=50,
+    )
+    vmin = np.min(weights)
+    vmax = np.max(weights)
+    sm = plt.cm.ScalarMappable(
+        cmap=plt.cm.Blues, norm=plt.Normalize(vmin=vmin, vmax=vmax)
+    )
+    sm.set_array([])
+    cbar = plt.colorbar(sm)
 
-#     if params["cluster"] is False and params["log"] is False:
-#         # save graph structure plot as a png locally
-#         plt.savefig(f"{params['local_fig_path']}/graph_structure", dpi=180)
-#         plt.close()
+    if params["cluster"] is False and params["log"] is False:
+        # save graph structure plot as a png locally
+        plt.savefig(f"{params['local_fig_path']}/graph_structure", dpi=180)
+        plt.close()
 
 
-# def visualise_graphspace(h, color, params, path_suffix, method_name):
-#     """
-#     Visualizes the graph space using t-SNE.
+def visualise_graphspace(h, color, params, path_suffix, method_name):
+    """
+    Visualizes the graph space using t-SNE.
 
-#     Parameters
-#     ----------
-#     h: torch.Tensor
-#         Graph data.
-#     color: list
-#         List of colors.
-#     params: dict
-#         Additional parameters.
-#     path_suffix: str
-#         Suffix for the saved image.
-#     method_name: str
-#         Name of the method.
+    Parameters
+    ----------
+    h: torch.Tensor
+        Graph data.
+    color: list
+        List of colors.
+    params: dict
+        Additional parameters.
+    path_suffix: str
+        Suffix for the saved image.
+    method_name: str
+        Name of the method.
 
-#     Returns
-#     -------
-#     fig: matplotlib.figure.Figure
-#         The figure containing the t-SNE plot.
-#     """
+    Returns
+    -------
+    fig: matplotlib.figure.Figure
+        The figure containing the t-SNE plot.
+    """
 
-#     z = TSNE(n_components=2, perplexity=30).fit_transform(
-#         h.reshape(-1, 1).detach().cpu().numpy()
-#     )
+    z = TSNE(n_components=2, perplexity=30).fit_transform(
+        h.reshape(-1, 1).detach().cpu().numpy()
+    )
 
-#     fig, ax = plt.subplots(figsize=(10, 10))
+    fig, ax = plt.subplots(figsize=(10, 10))
 
-#     ax.set_xticks([])
-#     ax.set_yticks([])
+    ax.set_xticks([])
+    ax.set_yticks([])
 
-#     scatter = ax.scatter(z[:, 0], z[:, 1], s=70, c=color, cmap="Set2")
-#     cbar = fig.colorbar(scatter)
-#     cbar.set_label("Color Legend")
-#     ax.set_title(f"Method: {method_name}")
-#     return fig
+    scatter = ax.scatter(z[:, 0], z[:, 1], s=70, c=color, cmap="Set2")
+    cbar = fig.colorbar(scatter)
+    cbar.set_label("Color Legend")
+    ax.set_title(f"Method: {method_name}")
+    return fig

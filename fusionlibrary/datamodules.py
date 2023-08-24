@@ -26,16 +26,20 @@ def downsample_img_batch(imgs, output_size):
         Batch of images.
     output_size : tuple
         Size to downsample the images to (height, width).
+        If None, no downsampling is performed
 
     Returns
     -------
     downsampled_img : array-like
         Downsampled image.
     """
-    imgs = torch.unsqueeze(imgs, dim=0)
-    downsampled_img = F.interpolate(imgs, size=output_size, mode="nearest")
+    if output_size is None:
+        return imgs
+    else:
+        imgs = torch.unsqueeze(imgs, dim=0)
+        downsampled_img = F.interpolate(imgs, size=output_size, mode="nearest")
 
-    return torch.squeeze(downsampled_img)
+        return torch.squeeze(downsampled_img)
 
 
 class CustomDataset(Dataset):
@@ -160,13 +164,17 @@ class LoadDatasets:
         Loads the tabular1 and image multimodal dataset.
     """
 
-    def __init__(self, sources):
+    def __init__(self, sources, img_downsample_dims=None):
         """
         Parameters
         ----------
         sources : list
             List of source csv files.
             [tabular1_source, tabular2_source, img_source]
+        img_downsample_dims : tuple
+            Size to downsample the images to (height, width, depth) or (height, width) for 2D
+            images.
+            None if not downsampling. (default None)
 
         Raises
         ------
@@ -174,7 +182,9 @@ class LoadDatasets:
             If sources is not a list.
         """
         self.tabular1_source, self.tabular2_source, self.img_source = sources
-        self.image_downsample_size = (100, 100, 100)  # can choose own image size here
+        self.image_downsample_size = (
+            img_downsample_dims  # can choose own image size here
+        )
 
     def load_tabular1(self):
         """
@@ -343,6 +353,7 @@ class CustomDataModule(pl.LightningDataModule):
         sources,
         batch_size,
         subspace_method=None,
+        image_downsample_size=None,
     ):
         """
         Parameters
@@ -368,13 +379,22 @@ class CustomDataModule(pl.LightningDataModule):
         super().__init__()
 
         self.sources = sources
+        self.image_downsample_size = image_downsample_size
 
         self.modality_methods = {
-            "tabular1": LoadDatasets(self.sources).load_tabular1,
-            "tabular2": LoadDatasets(self.sources).load_tabular2,
-            "img": LoadDatasets(self.sources).load_img,
-            "both_tab": LoadDatasets(self.sources).load_both_tabular,
-            "tab_img": LoadDatasets(self.sources).load_tab_and_img,
+            "tabular1": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_tabular1,
+            "tabular2": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_tabular2,
+            "img": LoadDatasets(self.sources, self.image_downsample_size).load_img,
+            "both_tab": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_both_tabular,
+            "tab_img": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_tab_and_img,
         }
 
         self.modality_type = modality_type
@@ -509,7 +529,13 @@ class KFoldDataModule(pl.LightningDataModule):
     """
 
     def __init__(
-        self, params, modality_type, sources, batch_size, subspace_method=None
+        self,
+        params,
+        modality_type,
+        sources,
+        batch_size,
+        subspace_method=None,
+        image_downsample_size=None,
     ):
         """
         Parameters
@@ -537,13 +563,24 @@ class KFoldDataModule(pl.LightningDataModule):
 
         self.num_folds = params["num_k"]  # total number of folds
         self.sources = sources
+        self.image_downsample_size = image_downsample_size
+
         self.modality_methods = {
-            "tabular1": LoadDatasets(self.sources).load_tabular1,
-            "tabular2": LoadDatasets(self.sources).load_tabular2,
-            "img": LoadDatasets(self.sources).load_img,
-            "both_tab": LoadDatasets(self.sources).load_both_tabular,
-            "tab_img": LoadDatasets(self.sources).load_tab_and_img,
+            "tabular1": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_tabular1,
+            "tabular2": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_tabular2,
+            "img": LoadDatasets(self.sources, self.image_downsample_size).load_img,
+            "both_tab": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_both_tabular,
+            "tab_img": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_tab_and_img,
         }
+
         self.modality_type = modality_type
         self.batch_size = batch_size
         self.num_latent_dims = params["subspace_latdims"]
@@ -729,6 +766,7 @@ class GraphDataModule:
         sources,
         graph_creation_method,
         batch_size=None,
+        image_downsample_size=None,
     ):
         """
         Parameters
@@ -755,12 +793,22 @@ class GraphDataModule:
         super().__init__()
 
         self.sources = sources
+        self.image_downsample_size = image_downsample_size
+
         self.modality_methods = {
-            "tabular1": LoadDatasets(self.sources).load_tabular1,
-            "tabular2": LoadDatasets(self.sources).load_tabular2,
-            "img": LoadDatasets(self.sources).load_img,
-            "both_tab": LoadDatasets(self.sources).load_both_tabular,
-            "tab_img": LoadDatasets(self.sources).load_tab_and_img,
+            "tabular1": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_tabular1,
+            "tabular2": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_tabular2,
+            "img": LoadDatasets(self.sources, self.image_downsample_size).load_img,
+            "both_tab": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_both_tabular,
+            "tab_img": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_tab_and_img,
         }
         self.modality_type = modality_type
         self.batch_size = batch_size
@@ -863,6 +911,7 @@ class KFoldGraphDataModule:
         sources,
         graph_creation_method,
         batch_size=None,
+        image_downsample_size=None,
     ):
         """
         Parameters
@@ -886,13 +935,22 @@ class KFoldGraphDataModule:
         """
         super().__init__()
         self.num_folds = params["num_k"]  # total number of folds
-        self.sources = sources
+        self.image_downsample_size = image_downsample_size
+
         self.modality_methods = {
-            "tabular1": LoadDatasets(self.sources).load_tabular1,
-            "tabular2": LoadDatasets(self.sources).load_tabular2,
-            "img": LoadDatasets(self.sources).load_img,
-            "both_tab": LoadDatasets(self.sources).load_both_tabular,
-            "tab_img": LoadDatasets(self.sources).load_tab_and_img,
+            "tabular1": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_tabular1,
+            "tabular2": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_tabular2,
+            "img": LoadDatasets(self.sources, self.image_downsample_size).load_img,
+            "both_tab": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_both_tabular,
+            "tab_img": LoadDatasets(
+                self.sources, self.image_downsample_size
+            ).load_tab_and_img,
         }
         self.modality_type = modality_type
         self.batch_size = batch_size
@@ -979,7 +1037,7 @@ class KFoldGraphDataModule:
         return lightning_modules  # list of lightning modules for each fold
 
 
-def get_data_module(init_model, params, batch_size=8):
+def get_data_module(init_model, params, batch_size=8, image_downsample_size=None):
     # needs model attributes: fusion_type and modality_type
     # needs params: kfold, pred_type etc
 
@@ -996,6 +1054,7 @@ def get_data_module(init_model, params, batch_size=8):
                 init_model.modality_type,
                 sources=data_sources,
                 graph_creation_method=init_model.graph_maker,
+                image_downsample_size=image_downsample_size,
             )
         else:
             dmg = GraphDataModule(
@@ -1003,6 +1062,7 @@ def get_data_module(init_model, params, batch_size=8):
                 init_model.modality_type,
                 sources=data_sources,
                 graph_creation_method=init_model.graph_maker,
+                image_downsample_size=image_downsample_size,
             )
 
         dmg.prepare_data()
@@ -1028,6 +1088,7 @@ def get_data_module(init_model, params, batch_size=8):
             sources=data_sources,
             subspace_method=init_model.subspace_method,
             batch_size=batch_size,
+            image_downsample_size=image_downsample_size,
         )
         dm.prepare_data()
         dm.setup()

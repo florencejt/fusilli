@@ -3,7 +3,7 @@
 Tutorials and Examples Gallery
 ================================
 
-Below is a gallery of examples
+Below is a gallery of examples on how to use this package, and scripts showing how to add/contribute new multimodal methods to this package.
 
 
 .. raw:: html
@@ -38,8 +38,8 @@ Below is a gallery of examples
 
    /auto_examples/plot_two_models_traintest
 
-Creating your own fusion model examples
-=======================================
+How to create your own fusion model
+---------------------------------------
 
 These are examples of .py files that can be used to create your own fusion models. They are not meant to be run as is, but rather to be used as a starting point for your own models.
 
@@ -97,7 +97,7 @@ These are examples of .py files that can be used to create your own fusion model
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Operation/attention/tensor fusion template</div>
+      <div class="sphx-glr-thumbnail-title">Operation / attention / tensor fusion template</div>
     </div>
 
 
