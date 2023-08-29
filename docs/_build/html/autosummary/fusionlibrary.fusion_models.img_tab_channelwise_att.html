@@ -70,6 +70,7 @@
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_tabular_data.html">fusionlibrary.fusion_models.concat_tabular_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_tabular_feature_maps.html">fusionlibrary.fusion_models.concat_tabular_feature_maps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.crossmodal_att.html">fusionlibrary.fusion_models.crossmodal_att</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.denoise_tab_img_maps.html">fusionlibrary.fusion_models.denoise_tab_img_maps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.edge_corr_gnn.html">fusionlibrary.fusion_models.edge_corr_gnn</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">fusionlibrary.fusion_models.img_tab_channelwise_att</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention</span></code></a><ul>
@@ -135,7 +136,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention" title="fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention</span></code></a>(pred_type, ...)</p></td>
-<td><p>Channel-wise multiplication net (MRI)</p></td>
+<td><p>Channel-wise multiplication net with image and tabular</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentFusionModel</span></code>(pred_type, data_dims, params)</p></td>
 <td><p>Parent class for all fusion models.</p></td>
@@ -146,7 +147,7 @@
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fusionlibrary.fusion_models.img_tab_channelwise_att.</span></span><span class="sig-name descname"><span class="pre">ImageChannelWiseMultiAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/img_tab_channelwise_att.html#ImageChannelWiseMultiAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
-<p>Channel-wise multiplication net (MRI)</p>
+<p>Channel-wise multiplication net with image and tabular</p>
 <p>Inspired by the work of Duanmu et al. (2020) [1]., we use channel-wise multiplication to combine
 tabular data and image data.</p>
 <dl class="py attribute">

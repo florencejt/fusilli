@@ -2267,7 +2267,7 @@ take in 256 features.</p>
 <dt class="sig sig-object py" id="fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fusion_models.img_tab_channelwise_att.</span></span><span class="sig-name descname"><span class="pre">ImageChannelWiseMultiAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/img_tab_channelwise_att.html#ImageChannelWiseMultiAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
-<p>Channel-wise multiplication net (MRI)</p>
+<p>Channel-wise multiplication net with image and tabular</p>
 <p>Inspired by the work of Duanmu et al. (2020) [1]., we use channel-wise multiplication to combine
 tabular data and image data.</p>
 <dl class="py attribute">
@@ -2879,7 +2879,7 @@ International Conference on Machine Learning, 302–311.
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>test_mean_latents</strong> (<em>torch.Tensor</em>) – Tensor containing the mean latents of the dataset.</p></li>
 <li><p><strong>labels</strong> (<em>pd.DataFrame</em>) – Dataframe containing the labels of the dataset.</p></li>
-<li><p><strong>[self.datamodule.num_latent_dims, None, None]</strong> (<em>list</em>) – List containing the dimensions of the data.</p></li>
+<li><p><strong>[self.num_latent_dims, None, None]</strong> (<em>list</em>) – List containing the dimensions of the data.</p></li>
 </ul>
 </p>
 </dd>

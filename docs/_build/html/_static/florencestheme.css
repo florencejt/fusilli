@@ -29,8 +29,8 @@ code.literal {
 }
 
 a:hover {
-    color: pink;
-    background-color: #404040;
+    color: green;
+    background-color: #da9fe4;
 }
 
 a:link {

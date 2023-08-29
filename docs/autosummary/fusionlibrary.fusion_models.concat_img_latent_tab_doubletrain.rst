@@ -1,4 +1,4 @@
-﻿fusionlibrary.fusion\_models.concat\_img\_latent\_tab\_doubletrain
+fusionlibrary.fusion\_models.concat\_img\_latent\_tab\_doubletrain
 ==================================================================
 
 .. automodule:: fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain

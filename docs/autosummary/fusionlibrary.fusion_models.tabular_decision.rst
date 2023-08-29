@@ -1,4 +1,4 @@
-﻿fusionlibrary.fusion\_models.tabular\_decision
+fusionlibrary.fusion\_models.tabular\_decision
 ==============================================
 
 .. automodule:: fusionlibrary.fusion_models.tabular_decision

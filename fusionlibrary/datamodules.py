@@ -401,6 +401,10 @@ class CustomDataModule(pl.LightningDataModule):
         self.batch_size = batch_size
         self.test_size = params["test_size"]
         self.pred_type = params["pred_type"]
+        if self.pred_type == "multiclass":
+            self.multiclass_dims = params["multiclass_dims"]
+        else:
+            self.multiclass_dims = None
         self.subspace_method = subspace_method
         # if self.subspace_method is not None:
         #     self.num_latent_dims = self.subspace_method.num_latent_dims
@@ -587,8 +591,10 @@ class KFoldDataModule(pl.LightningDataModule):
         self.subspace_method = (
             subspace_method  # subspace method class (only for subspace methods)
         )
-        # if self.subspace_method is not None:
-        #     self.num_latent_dims = self.params["subspace_latdims"]
+        if self.pred_type == "multiclass":
+            self.multiclass_dims = params["multiclass_dims"]
+        else:
+            self.multiclass_dims = None
 
     def prepare_data(self):
         """

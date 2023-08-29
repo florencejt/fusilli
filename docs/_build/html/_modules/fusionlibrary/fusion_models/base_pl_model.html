@@ -443,16 +443,6 @@
 <span class="sd">        loss : tensor</span>
 <span class="sd">            Loss.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># if batch_idx == 0:</span>
-        <span class="c1"># Clear the stored training values at the beginning of training again</span>
-        <span class="c1"># we don&#39;t want to save the old values from the previous epoch,</span>
-        <span class="c1"># only final validation epoch</span>
-        <span class="c1"># self.batch_train_reals = []</span>
-        <span class="c1"># self.batch_train_preds = []</span>
-        <span class="c1"># self.batch_train_logits = []</span>
-        <span class="c1"># self.batch_val_preds = []</span>
-        <span class="c1"># self.batch_val_reals = []</span>
-        <span class="c1"># self.batch_val_logits = []</span>
 
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data_from_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
 

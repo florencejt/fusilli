@@ -8,6 +8,8 @@ import pytorch_lightning as pl
 from fusionlibrary.utils.pl_utils import init_trainer
 from torch.utils.data import DataLoader
 import pandas as pd
+from torch.nn import functional as F
+from fusionlibrary.fusion_models.base_pl_model import BaseModel
 
 
 class DAETabImgMaps(ParentFusionModel, nn.Module):
@@ -322,7 +324,7 @@ class ImgUnimodalDAE(pl.LightningModule):
 
     """
 
-    def __init__(self, data_dims, pred_type):
+    def __init__(self, data_dims, pred_type, multiclass_dims):
         """
         Initialise the model.
 
@@ -337,6 +339,7 @@ class ImgUnimodalDAE(pl.LightningModule):
 
         self.data_dims = data_dims
         self.img_dim = data_dims[2]
+        self.multiclass_dim = multiclass_dims
 
         # get the img layers from ParentFusionModel
         ParentFusionModel.set_img_layers(self)
@@ -361,14 +364,19 @@ class ImgUnimodalDAE(pl.LightningModule):
 
         # what loss function?
         if self.pred_type == "regression":
-            self.loss = nn.MSELoss()
+            self.loss = lambda logits, y: nn.MSELoss()(logits, y.unsqueeze(dim=1))
             self.activation = lambda x: x
         elif self.pred_type == "binary":
-            self.loss = nn.BCEWithLogitsLoss()
+            self.loss = lambda logits, y: F.binary_cross_entropy_with_logits(
+                logits, y.unsqueeze(dim=1).float()
+            )
             self.activation = lambda x: torch.round(x).to(torch.int)
 
         elif self.pred_type == "multiclass":
-            self.loss = nn.CrossEntropyLoss()
+            self.loss = lambda logits, y: F.cross_entropy(
+                BaseModel.safe_squeeze(self, logits),
+                BaseModel.safe_squeeze(self, y).long(),
+            )
             self.activation = lambda x: torch.argmax(nn.Softmax(dim=-1)(x), dim=-1)
 
     def forward(self, x):
@@ -422,14 +430,12 @@ class ImgUnimodalDAE(pl.LightningModule):
         """
         _, images, y = batch
 
-        output = self.activation(self(images))
+        logits = self(images)
 
-        # print dtype
-        print("output dtype", output.dtype)
-        print(output)
-        print("y dtype", y.dtype)
-
-        loss = self.loss(output, y.unsqueeze(dim=1))
+        loss = self.loss(
+            logits.float().requires_grad_(True),
+            y.float().requires_grad_(True),
+        )
 
         self.log("train_loss", loss, logger=False)
 
@@ -453,9 +459,12 @@ class ImgUnimodalDAE(pl.LightningModule):
         """
         _, images, y = batch
 
-        output = self.activation(self(images))
+        logits = self(images)
 
-        loss = self.loss(output, y.unsqueeze(dim=1))
+        loss = self.loss(
+            logits.float(),
+            y.float(),
+        )
 
         self.log("val_loss", loss, logger=False)
 
@@ -546,7 +555,9 @@ class denoising_autoencoder_subspace_method:
         self.autoencoder = DenoisingAutoencoder(self.datamodule.data_dims)
 
         self.img_unimodal = ImgUnimodalDAE(
-            self.datamodule.data_dims, self.datamodule.pred_type
+            self.datamodule.data_dims,
+            self.datamodule.pred_type,
+            self.datamodule.multiclass_dims,
         )
 
     def train(self, train_dataset, val_dataset):
@@ -572,34 +583,45 @@ class denoising_autoencoder_subspace_method:
         labels_train = train_dataset[:][2]
 
         # train and test DAE
-        tab_train_dataloader = DataLoader(tab_train, batch_size=8, shuffle=False)
-        tab_val_dataloader = DataLoader(tab_train, batch_size=8, shuffle=False)
+        tab_train_dataloader = DataLoader(
+            tab_train, batch_size=self.datamodule.batch_size, shuffle=False
+        )
+        tab_val_dataloader = DataLoader(
+            tab_train, batch_size=self.datamodule.batch_size, shuffle=False
+        )
 
+        torch.set_grad_enabled(True)
         self.dae_trainer.fit(self.autoencoder, tab_train_dataloader, tab_val_dataloader)
         self.dae_trainer.validate(self.autoencoder, tab_val_dataloader)
 
-        self.autoencoder.eval()
-
-        train_tab_latent_space = self.autoencoder.denoise(tab_train)
-
         # -------train and test img unimodal----------------
 
-        img_train_dataloader = DataLoader(train_dataset, batch_size=8, shuffle=False)
-        img_val_dataloader = DataLoader(val_dataset, batch_size=8, shuffle=False)
+        img_train_dataloader = DataLoader(
+            train_dataset, batch_size=self.datamodule.batch_size, shuffle=False
+        )
+        img_val_dataloader = DataLoader(
+            val_dataset, batch_size=self.datamodule.batch_size, shuffle=False
+        )
 
+        torch.set_grad_enabled(
+            True
+        )  # need to set this to true again after the DAE training
         self.img_unimodal_trainer.fit(
             self.img_unimodal, img_train_dataloader, img_val_dataloader
         )
-
         self.img_unimodal_trainer.validate(self.img_unimodal, img_val_dataloader)
 
-        self.img_unimodal.eval()
+        # ---------get latent outputs----------------
 
+        self.autoencoder.eval()
+        train_tab_latent_space = self.autoencoder.denoise(tab_train)
+
+        self.img_unimodal.eval()
         train_img_feature_maps = self.img_unimodal.get_intermediate_featuremaps(
             img_train
         )
 
-        # concatenate them
+        # ---------concatenate them----------------
         train_latent_image_space = torch.cat(
             (train_tab_latent_space, train_img_feature_maps), dim=1
         )

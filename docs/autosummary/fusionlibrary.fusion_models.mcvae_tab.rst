@@ -1,4 +1,4 @@
-﻿fusionlibrary.fusion\_models.mcvae\_tab
+fusionlibrary.fusion\_models.mcvae\_tab
 =======================================
 
 .. automodule:: fusionlibrary.fusion_models.mcvae_tab

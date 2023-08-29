@@ -35,6 +35,7 @@
    fusionlibrary.fusion_models.concat_tabular_data
    fusionlibrary.fusion_models.concat_tabular_feature_maps
    fusionlibrary.fusion_models.crossmodal_att
+   fusionlibrary.fusion_models.denoise_tab_img_maps
    fusionlibrary.fusion_models.edge_corr_gnn
    fusionlibrary.fusion_models.img_tab_channelwise_att
    fusionlibrary.fusion_models.img_tab_decision
