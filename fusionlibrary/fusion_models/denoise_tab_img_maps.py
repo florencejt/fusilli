@@ -63,8 +63,6 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         self.subspace_method = denoising_autoencoder_subspace_method
         self.pred_type = pred_type
 
-        # self.set_fused_layers(self.data_dims[0])
-
         self.fused_layers = nn.Sequential(
             nn.Linear(self.data_dims[0], 500),
             nn.ReLU(),

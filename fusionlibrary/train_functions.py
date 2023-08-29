@@ -11,6 +11,48 @@ from fusionlibrary.utils.pl_utils import (
 import wandb
 
 
+def modify_model_architecture(model, architecture_modification):
+    changed = False
+    for model_name in architecture_modification:
+        # ~~~~~~ modifying all fusion models ~~~~~~
+        if model_name == "all":
+            for layer_group in architecture_modification[model_name]:
+                if hasattr(model, layer_group):
+                    setattr(
+                        model,
+                        layer_group,
+                        architecture_modification[model_name][layer_group],
+                    )
+                    # RESET FUSED LAYERS
+                    if (
+                        layer_group != "fused_layers"
+                    ):  # don't reset fused layers if we're modifying fused layers anyway
+                        if hasattr(model, "get_fused_layers"):
+                            model.get_fused_layers()  # reset fused layers with new fused_dim from new architecture
+                    changed = True
+
+        # ~~~~~~ modifying specific fusion models ~~~~~~
+        elif model_name == model.__class__.__name__:
+            for layer_group in architecture_modification[model_name]:
+                # if we need to access a layer within a layer group
+                split_layer_group = layer_group.split(".")
+                get_attr_1 = getattr(model, split_layer_group[0])
+                for layer_layer in split_layer_group[1:-1]:
+                    get_attr_1 = getattr(get_attr_1, layer_layer)
+
+                if hasattr(get_attr_1, split_layer_group[-1]):
+                    setattr(
+                        get_attr_1,
+                        split_layer_group[-1],
+                        architecture_modification[model_name][layer_group],
+                    )
+                    changed = True
+    if not changed:
+        raise ValueError("NOTHING CHANGED IN THIS MODEL FOR TESTING")
+
+    return model
+
+
 def train_and_test(
     dm,
     params,
@@ -18,6 +60,7 @@ def train_and_test(
     fusion_model,
     init_model,
     extra_log_string_dict=None,
+    layer_mods=None,
 ):
     """
     Trains and tests a model and, if k_fold trained, a fold.
@@ -44,6 +87,11 @@ def train_and_test(
             the hyperparameters.
             Input format {"name": "value"}. In the run name, the extra string will be added
             as "name_value". And a tag will be added as "name_value".
+    layer_mods : dict
+        Dictionary of layer modifications. Used to modify the architecture of the model.
+        Input format {"model": {"layer_group": "modification"}, ...}.
+        e.g. {"TabularCrossmodalAttention": {"mod1_layers": new mod 1 layers nn.ModuleDict}}
+        Default None.
 
     Returns
     -------
@@ -80,7 +128,7 @@ def train_and_test(
 
     logger = set_logger(params, k, init_model, extra_log_string_dict)  # set logger
 
-    trainer = init_trainer(logger)  # init trainer
+    trainer = init_trainer(logger, max_epochs=3)  # init trainer
 
     model = BaseModel(
         fusion_model(
@@ -91,6 +139,17 @@ def train_and_test(
             params=params,  # params is a dict
         )
     )
+
+    # TODO add in bit to let user choose structure of model
+    if layer_mods is not None:
+        model.model = modify_model_architecture(model.model, layer_mods)
+
+    # if architecture_modification is not None:
+    #    for layer_group in architecture_modification:
+    #        if layer_group exists in model:
+    #            modify layer_group
+    #       else:
+    #            print(f"Layer group {layer_group} does not exist in model")
 
     # graph-methods use masks to select train and val nodes rather than train and val dataloaders
     # train and val dataloaders are still used for graph but they're identical
@@ -148,6 +207,7 @@ def train_and_save_models(
     fusion_model,
     init_model,
     extra_log_string_dict=None,
+    layer_mods=None,
 ):
     """
     Trains/tests the model and saves the trained model to a dictionary for further analysis.
@@ -172,6 +232,11 @@ def train_and_save_models(
             the hyperparameters.
             Input format {"name": "value"}. In the run name, the extra string will be added
             as "name_value". And a tag will be added as "name_value".
+    layer_mods : dict
+        Dictionary of layer modifications. Used to modify the architecture of the model.
+        Input format {"model": {"layer_group": "modification"}, ...}.
+        e.g. {"TabularCrossmodalAttention": {"mod1_layers": new mod 1 layers nn.ModuleDict}}
+        Default None.
 
     """
     if params["kfold_flag"]:
@@ -183,6 +248,7 @@ def train_and_save_models(
                 fusion_model=fusion_model,
                 init_model=init_model,
                 extra_log_string_dict=extra_log_string_dict,
+                layer_mods=layer_mods,
             )
             trained_models_dict = store_trained_model(
                 trained_model, trained_models_dict
@@ -199,6 +265,7 @@ def train_and_save_models(
             fusion_model=fusion_model,
             init_model=init_model,
             extra_log_string_dict=extra_log_string_dict,
+            layer_mods=layer_mods,
         )
         trained_models_dict = store_trained_model(trained_model, trained_models_dict)
 

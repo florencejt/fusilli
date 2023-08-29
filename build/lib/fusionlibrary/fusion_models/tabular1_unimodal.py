@@ -59,7 +59,13 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
         self.pred_type = pred_type
 
         self.set_mod1_layers()
+        self.get_fused_layers()
 
+        # self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
+        # self.set_fused_layers(self.fused_dim)
+        # self.set_final_pred_layers()
+
+    def get_fused_layers(self):
         self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
         self.set_fused_layers(self.fused_dim)
         self.set_final_pred_layers()

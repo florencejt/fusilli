@@ -150,28 +150,54 @@ class ImgLatentSpace(pl.LightningModule):
         self.data_dims = data_dims
         self.img_dims = data_dims[2]
 
-        self.encoder = nn.Sequential(
-            nn.Conv3d(1, 16, kernel_size=3, stride=1),
-            nn.ReLU(),
-            nn.Conv3d(16, 32, kernel_size=3, stride=1),
-            nn.ReLU(),
-            nn.Conv3d(32, 64, kernel_size=3, stride=1),
-            nn.ReLU(),
-            # nn.Conv3d(128, 256, kernel_size=3, stride=1),
-            # nn.ReLU(),
-        )
+        if len(self.img_dims) == 2:  # 2D images
+            self.encoder = nn.Sequential(
+                nn.Conv2d(1, 16, kernel_size=3, stride=1),
+                nn.ReLU(),
+                nn.Conv2d(16, 32, kernel_size=3, stride=1),
+                nn.ReLU(),
+                nn.Conv2d(32, 64, kernel_size=3, stride=1),
+                nn.ReLU(),
+                # nn.Conv3d(128, 256, kernel_size=3, stride=1),
+                # nn.ReLU(),
+            )
 
-        self.decoder = nn.Sequential(
-            # nn.ConvTranspose3d(256, 128, kernel_size=3, stride=1, output_padding=1),
-            # nn.ReLU(),
-            nn.ConvTranspose3d(64, 32, kernel_size=3, stride=1),
-            nn.ReLU(),
-            nn.ConvTranspose3d(32, 16, kernel_size=3, stride=1),
-            nn.ReLU(),
-            nn.ConvTranspose3d(16, 1, kernel_size=3, stride=1),
-            nn.Sigmoid(),
-            nn.Upsample(size=self.img_dims, mode="trilinear", align_corners=False),
-        )
+            self.decoder = nn.Sequential(
+                # nn.ConvTranspose3d(256, 128, kernel_size=3, stride=1, output_padding=1),
+                # nn.ReLU(),
+                nn.ConvTranspose2d(64, 32, kernel_size=3, stride=1),
+                nn.ReLU(),
+                nn.ConvTranspose2d(32, 16, kernel_size=3, stride=1),
+                nn.ReLU(),
+                nn.ConvTranspose2d(16, 1, kernel_size=3, stride=1),
+                nn.Sigmoid(),
+                nn.Upsample(size=self.img_dims, mode="bilinear", align_corners=False),
+            )
+        elif len(self.img_dims) == 3:
+            self.encoder = nn.Sequential(
+                nn.Conv3d(1, 16, kernel_size=3, stride=1),
+                nn.ReLU(),
+                nn.Conv3d(16, 32, kernel_size=3, stride=1),
+                nn.ReLU(),
+                nn.Conv3d(32, 64, kernel_size=3, stride=1),
+                nn.ReLU(),
+                # nn.Conv3d(128, 256, kernel_size=3, stride=1),
+                # nn.ReLU(),
+            )
+
+            self.decoder = nn.Sequential(
+                # nn.ConvTranspose3d(256, 128, kernel_size=3, stride=1, output_padding=1),
+                # nn.ReLU(),
+                nn.ConvTranspose3d(64, 32, kernel_size=3, stride=1),
+                nn.ReLU(),
+                nn.ConvTranspose3d(32, 16, kernel_size=3, stride=1),
+                nn.ReLU(),
+                nn.ConvTranspose3d(16, 1, kernel_size=3, stride=1),
+                nn.Sigmoid(),
+                nn.Upsample(size=self.img_dims, mode="trilinear", align_corners=False),
+            )
+        else:
+            raise ValueError("Invalid image dimensions.")
 
     def forward(self, x):
         """

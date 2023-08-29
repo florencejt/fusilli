@@ -4,6 +4,8 @@ Uni-modal model using only the image data.
 
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
+from torch.autograd import Variable
+import torch
 
 
 class ImgUnimodal(ParentFusionModel, nn.Module):
@@ -51,8 +53,22 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
         self.pred_type = pred_type
 
         self.set_img_layers()
+        self.get_fused_layers()
 
-        self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
+        # self.fused_dim = self.get_fused_dim()
+        # # list(self.img_layers.values())[-1][0].out_channels
+        # self.set_fused_layers(self.fused_dim)
+        # self.set_final_pred_layers()
+
+    def get_fused_layers(self):
+        # get dummy conv output
+        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
+        for layer in self.img_layers.values():
+            dummy_conv_output = layer(dummy_conv_output)
+        n_size = dummy_conv_output.data.view(1, -1).size(1)
+
+        self.fused_dim = n_size
+        # self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
         self.set_fused_layers(self.fused_dim)
         self.set_final_pred_layers()
 
@@ -76,6 +92,7 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
             x_img = layer(x_img)
 
         x_img = x_img.view(x_img.size(0), -1)
+        print("x_img shape", x_img.shape)
 
         out_fuse = self.fused_layers(x_img)
 

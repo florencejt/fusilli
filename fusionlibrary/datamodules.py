@@ -12,6 +12,7 @@ import torch.nn.functional as F
 from sklearn.model_selection import KFold
 from torch.utils.data import DataLoader, Dataset
 from torch_geometric.data.lightning import LightningNodeData
+from fusionlibrary.train_functions import modify_model_architecture
 
 # from fusionlibrary.eval_functions import plot_graph
 
@@ -354,6 +355,7 @@ class CustomDataModule(pl.LightningDataModule):
         batch_size,
         subspace_method=None,
         image_downsample_size=None,
+        layer_mods=None,
     ):
         """
         Parameters
@@ -406,6 +408,8 @@ class CustomDataModule(pl.LightningDataModule):
         else:
             self.multiclass_dims = None
         self.subspace_method = subspace_method
+        if layer_mods is not None:
+            self.layer_mods = layer_mods
         # if self.subspace_method is not None:
         #     self.num_latent_dims = self.subspace_method.num_latent_dims
 
@@ -447,6 +451,16 @@ class CustomDataModule(pl.LightningDataModule):
 
         if self.subspace_method is not None:  # if subspace method is specified
             subspace_method = self.subspace_method(self)
+
+            # TODO this is where to modify subspace layers
+            if self.layer_mods is not None:
+                # if subspace method in layer_mods
+                subspace_method = modify_model_architecture(
+                    subspace_method, self.layer_mods
+                )
+                # if subspace_method.__class__.__name__ in self.layer_mods:
+                #     print("subspace method in layer mods")
+
             train_latents, train_labels = subspace_method.train(
                 self.train_dataset, self.test_dataset
             )
@@ -541,6 +555,7 @@ class KFoldDataModule(pl.LightningDataModule):
         batch_size,
         subspace_method=None,
         image_downsample_size=None,
+        layer_mods=None,
     ):
         """
         Parameters
@@ -775,6 +790,7 @@ class GraphDataModule:
         graph_creation_method,
         batch_size=None,
         image_downsample_size=None,
+        layer_mods=None,
     ):
         """
         Parameters
@@ -920,6 +936,7 @@ class KFoldGraphDataModule:
         graph_creation_method,
         batch_size=None,
         image_downsample_size=None,
+        layer_mods=None,
     ):
         """
         Parameters
@@ -1045,7 +1062,9 @@ class KFoldGraphDataModule:
         return lightning_modules  # list of lightning modules for each fold
 
 
-def get_data_module(init_model, params, batch_size=8, image_downsample_size=None):
+def get_data_module(
+    init_model, params, batch_size=8, image_downsample_size=None, layer_mods=None
+):
     """
     Gets the data module for the specified modality and fusion type.
 
@@ -1059,6 +1078,8 @@ def get_data_module(init_model, params, batch_size=8, image_downsample_size=None
         Batch size (default 8).
     image_downsample_size : list
         List of image dimensions to downsample to (default None).
+    layer_mods : dict
+        Dictionary of layer modifications (default None).
 
     Returns
     -------
@@ -1080,6 +1101,7 @@ def get_data_module(init_model, params, batch_size=8, image_downsample_size=None
                 sources=data_sources,
                 graph_creation_method=init_model.graph_maker,
                 image_downsample_size=image_downsample_size,
+                layer_mods=layer_mods,
             )
         else:
             dmg = GraphDataModule(
@@ -1088,6 +1110,7 @@ def get_data_module(init_model, params, batch_size=8, image_downsample_size=None
                 sources=data_sources,
                 graph_creation_method=init_model.graph_maker,
                 image_downsample_size=image_downsample_size,
+                layer_mods=layer_mods,
             )
 
         dmg.prepare_data()
@@ -1114,6 +1137,7 @@ def get_data_module(init_model, params, batch_size=8, image_downsample_size=None
             subspace_method=init_model.subspace_method,
             batch_size=batch_size,
             image_downsample_size=image_downsample_size,
+            layer_mods=layer_mods,
         )
         dm.prepare_data()
         dm.setup()
