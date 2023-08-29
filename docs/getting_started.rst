@@ -1,14 +1,14 @@
 Getting Started
 ============================
 
-This will show you how to set up the FuseIt library and start fusing!
+This will show you how to set up the Fusilli library and start fusing!
 
 Installation
 ------------
 
 .. code-block:: bash
 
-   pip install fuse-it
+   pip install fusilli
 
 Simple Example
 --------------

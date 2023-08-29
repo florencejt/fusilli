@@ -494,6 +494,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;test_size&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;pred_type&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">==</span> <span class="s2">&quot;multiclass&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dims</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;multiclass_dims&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dims</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="n">subspace_method</span>
         <span class="c1"># if self.subspace_method is not None:</span>
         <span class="c1">#     self.num_latent_dims = self.subspace_method.num_latent_dims</span>
@@ -680,8 +684,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">subspace_method</span>  <span class="c1"># subspace method class (only for subspace methods)</span>
         <span class="p">)</span>
-        <span class="c1"># if self.subspace_method is not None:</span>
-        <span class="c1">#     self.num_latent_dims = self.params[&quot;subspace_latdims&quot;]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">==</span> <span class="s2">&quot;multiclass&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dims</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;multiclass_dims&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dims</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="KFoldDataModule.prepare_data"><a class="viewcode-back" href="../source/datamodules.html#datamodules.KFoldDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

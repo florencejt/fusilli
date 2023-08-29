@@ -13,6 +13,23 @@ Below is a gallery of examples on how to use this package, and scripts showing h
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This script shows how to train one fusion models on a binary task with k-fold training protocol...">
+
+.. only:: html
+
+  .. image:: /auto_examples/images/thumb/sphx_glr_plot_one_model_binary_kfold_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_plot_one_model_binary_kfold.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Binary: training one kfold model</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This script shows how to train two fusion models on a regression task with train/test protocol ...">
 
 .. only:: html
@@ -36,6 +53,7 @@ Below is a gallery of examples on how to use this package, and scripts showing h
 .. toctree::
    :hidden:
 
+   /auto_examples/plot_one_model_binary_kfold
    /auto_examples/plot_two_models_traintest
 
 How to create your own fusion model

@@ -101,6 +101,8 @@
 <span class="kn">from</span> <span class="nn">fusionlibrary.utils.pl_utils</span> <span class="kn">import</span> <span class="n">init_trainer</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
+<span class="kn">from</span> <span class="nn">fusionlibrary.fusion_models.base_pl_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 
 
 <div class="viewcode-block" id="DAETabImgMaps"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps">[docs]</a><span class="k">class</span> <span class="nc">DAETabImgMaps</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -415,7 +417,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">multiclass_dims</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialise the model.</span>
 
@@ -430,6 +432,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span> <span class="o">=</span> <span class="n">data_dims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dim</span> <span class="o">=</span> <span class="n">multiclass_dims</span>
 
         <span class="c1"># get the img layers from ParentFusionModel</span>
         <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_img_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -454,14 +457,19 @@
 
         <span class="c1"># what loss function?</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">==</span> <span class="s2">&quot;regression&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">logits</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()(</span><span class="n">logits</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BCEWithLogitsLoss</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">logits</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">binary_cross_entropy_with_logits</span><span class="p">(</span>
+                <span class="n">logits</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+            <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">==</span> <span class="s2">&quot;multiclass&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">logits</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">cross_entropy</span><span class="p">(</span>
+                <span class="n">BaseModel</span><span class="o">.</span><span class="n">safe_squeeze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logits</span><span class="p">),</span>
+                <span class="n">BaseModel</span><span class="o">.</span><span class="n">safe_squeeze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">long</span><span class="p">(),</span>
+            <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">x</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ImgUnimodalDAE.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
@@ -515,14 +523,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">batch</span>
 
-        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">(</span><span class="bp">self</span><span class="p">(</span><span class="n">images</span><span class="p">))</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
 
-        <span class="c1"># print dtype</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;output dtype&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;y dtype&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-
-        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span>
+            <span class="n">logits</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">True</span><span class="p">),</span>
+            <span class="n">y</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">True</span><span class="p">),</span>
+        <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;train_loss&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -546,9 +552,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">batch</span>
 
-        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">(</span><span class="bp">self</span><span class="p">(</span><span class="n">images</span><span class="p">))</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
 
-        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span>
+            <span class="n">logits</span><span class="o">.</span><span class="n">float</span><span class="p">(),</span>
+            <span class="n">y</span><span class="o">.</span><span class="n">float</span><span class="p">(),</span>
+        <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;val_loss&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -639,7 +648,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span> <span class="o">=</span> <span class="n">DenoisingAutoencoder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal</span> <span class="o">=</span> <span class="n">ImgUnimodalDAE</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">pred_type</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">pred_type</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">multiclass_dims</span><span class="p">,</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="denoising_autoencoder_subspace_method.train"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="p">):</span>
@@ -665,34 +676,45 @@
         <span class="n">labels_train</span> <span class="o">=</span> <span class="n">train_dataset</span><span class="p">[:][</span><span class="mi">2</span><span class="p">]</span>
 
         <span class="c1"># train and test DAE</span>
-        <span class="n">tab_train_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">tab_train</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">tab_val_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">tab_train</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">tab_train_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span>
+            <span class="n">tab_train</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">tab_val_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span>
+            <span class="n">tab_train</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
 
+        <span class="n">torch</span><span class="o">.</span><span class="n">set_grad_enabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dae_trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span><span class="p">,</span> <span class="n">tab_train_dataloader</span><span class="p">,</span> <span class="n">tab_val_dataloader</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dae_trainer</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span><span class="p">,</span> <span class="n">tab_val_dataloader</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-
-        <span class="n">train_tab_latent_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span><span class="o">.</span><span class="n">denoise</span><span class="p">(</span><span class="n">tab_train</span><span class="p">)</span>
-
         <span class="c1"># -------train and test img unimodal----------------</span>
 
-        <span class="n">img_train_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">img_val_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">val_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">img_train_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span>
+            <span class="n">train_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">img_val_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span>
+            <span class="n">val_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
 
+        <span class="n">torch</span><span class="o">.</span><span class="n">set_grad_enabled</span><span class="p">(</span>
+            <span class="kc">True</span>
+        <span class="p">)</span>  <span class="c1"># need to set this to true again after the DAE training</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal_trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal</span><span class="p">,</span> <span class="n">img_train_dataloader</span><span class="p">,</span> <span class="n">img_val_dataloader</span>
         <span class="p">)</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal_trainer</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal</span><span class="p">,</span> <span class="n">img_val_dataloader</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="c1"># ---------get latent outputs----------------</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="n">train_tab_latent_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span><span class="o">.</span><span class="n">denoise</span><span class="p">(</span><span class="n">tab_train</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
         <span class="n">train_img_feature_maps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal</span><span class="o">.</span><span class="n">get_intermediate_featuremaps</span><span class="p">(</span>
             <span class="n">img_train</span>
         <span class="p">)</span>
 
-        <span class="c1"># concatenate them</span>
+        <span class="c1"># ---------concatenate them----------------</span>
         <span class="n">train_latent_image_space</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
             <span class="p">(</span><span class="n">train_tab_latent_space</span><span class="p">,</span> <span class="n">train_img_feature_maps</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span>
         <span class="p">)</span>

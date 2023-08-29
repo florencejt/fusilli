@@ -3,10 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-FuseIt: A PyTorch Library for Multimodal Fusion
+Fusilli: Fuse Easily
 ======================================================
 
-Welcome to FuseIt!
+Welcome to Fusilli: Fuse Easily!
 --------------------------
 Have you got multimodal data but not sure how to combine them for your machine learning task? Look no further!
 This library provides a way to compare different fusion methods for your multimodal data.

@@ -12,7 +12,7 @@
       <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
-    <link rel="shortcut icon" href="../_static/favicon.png"/>
+    <link rel="shortcut icon" href="../_static/pink_pasta_logo.png"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -39,7 +39,7 @@
           
           <a href="../index.html" class="icon icon-home">
             fusionlibrary
-              <img src="../_static/computergif.gif" class="logo" alt="Logo"/>
+              <img src="../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -51,7 +51,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../introduction.html">FuseIt: an introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
 </ul>
@@ -195,22 +195,25 @@
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps" title="fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DAETabImgMaps</span></code></a>(pred_type, data_dims, params)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseModel</span></code>(model)</p></td>
+<td><p>Base model for all fusion models</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps" title="fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DAETabImgMaps</span></code></a>(pred_type, data_dims, params)</p></td>
 <td><p>Using a denoising autoencoder to upsample tabular data, then concatenating with feature maps from final 3 conv layers of image data.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataLoader</span></code>(dataset[, batch_size, shuffle, ...])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataLoader</span></code>(dataset[, batch_size, shuffle, ...])</p></td>
 <td><p>Data loader.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder" title="fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DenoisingAutoencoder</span></code></a>(data_dims)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder" title="fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DenoisingAutoencoder</span></code></a>(data_dims)</p></td>
 <td><p>Denoising autoencoder for tabular data: pytorch lightning module.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE" title="fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ImgUnimodalDAE</span></code></a>(data_dims, pred_type)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE" title="fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ImgUnimodalDAE</span></code></a>(data_dims, pred_type, ...)</p></td>
 <td><p>Image unimodal network to go alongside the tabular denoising autoencoder: pytorch lightning module.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentFusionModel</span></code>(pred_type, data_dims, params)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentFusionModel</span></code>(pred_type, data_dims, params)</p></td>
 <td><p>Parent class for all fusion models.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method" title="fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method"><code class="xref py py-obj docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method</span></code></a>(datamodule)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method" title="fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method"><code class="xref py py-obj docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method</span></code></a>(datamodule)</p></td>
 <td><p>Class containing the method to train the denoising autoencoder and to convert the image data to the latent image space.</p></td>
 </tr>
 </tbody>
@@ -506,7 +509,7 @@ From Yan et al 2021: Richer fusion network for breast cancer classification on m
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fusionlibrary.fusion_models.denoise_tab_img_maps.</span></span><span class="sig-name descname"><span class="pre">ImgUnimodalDAE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/denoise_tab_img_maps.html#ImgUnimodalDAE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fusionlibrary.fusion_models.denoise_tab_img_maps.</span></span><span class="sig-name descname"><span class="pre">ImgUnimodalDAE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiclass_dims</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/denoise_tab_img_maps.html#ImgUnimodalDAE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">LightningModule</span></code></p>
 <p>Image unimodal network to go alongside the tabular denoising autoencoder: pytorch
 lightning module.</p>

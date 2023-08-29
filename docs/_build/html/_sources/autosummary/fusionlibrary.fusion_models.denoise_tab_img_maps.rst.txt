@@ -1,4 +1,4 @@
-fusionlibrary.fusion\_models.denoise\_tab\_img\_maps
+﻿fusionlibrary.fusion\_models.denoise\_tab\_img\_maps
 ====================================================
 
 .. automodule:: fusionlibrary.fusion_models.denoise_tab_img_maps
@@ -23,6 +23,7 @@ fusionlibrary.fusion\_models.denoise\_tab\_img\_maps
 
    .. autosummary::
    
+      BaseModel
       DAETabImgMaps
       DataLoader
       DenoisingAutoencoder

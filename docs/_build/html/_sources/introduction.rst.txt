@@ -1,4 +1,4 @@
-FuseIt: an introduction
+Fusilli: an introduction
 ==============================================================
 
 
@@ -11,7 +11,7 @@ For a more detailed explanation, see *The cui et al systematic review paper*. Th
 Who will get the most out of FuseIt?
 ------------------------------------
 
-You might want to use FuseIt if:
+You might want to use Fusilli if:
 
 1. You've got some multimodal data: this library supports two types of tabular data and either 2D or 3D image data.
 2. You want to use multimodal fusion! This library supports a variety of fusion methods, including:
@@ -25,7 +25,7 @@ You might want to use FuseIt if:
     - (and uni-modal models for comparison)
 
 
-Why FuseIt?
+Why Fusilli?
 ------------
 
 1. Florence is super cool

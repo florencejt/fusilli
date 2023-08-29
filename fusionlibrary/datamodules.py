@@ -1046,8 +1046,25 @@ class KFoldGraphDataModule:
 
 
 def get_data_module(init_model, params, batch_size=8, image_downsample_size=None):
-    # needs model attributes: fusion_type and modality_type
-    # needs params: kfold, pred_type etc
+    """
+    Gets the data module for the specified modality and fusion type.
+
+    Parameters
+    ----------
+    init_model : class
+        Initialised model class.
+    params : dict
+        Dictionary of parameters.
+    batch_size : int
+        Batch size (default 8).
+    image_downsample_size : list
+        List of image dimensions to downsample to (default None).
+
+    Returns
+    -------
+    dm : datamodule
+        Datamodule for the specified fusion method.
+    """
 
     data_sources = [
         params["tabular1_source"],
