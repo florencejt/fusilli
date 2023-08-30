@@ -3,6 +3,8 @@ Image-channel-wise attention fusion model.
 """
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
+import torch
+from torch.autograd import Variable
 
 
 class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
@@ -76,8 +78,23 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
 
         self.set_mod1_layers()
         self.set_img_layers()
+        self.calc_fused_layers()
 
-        self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
+        # self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
+        # self.set_fused_layers(self.fused_dim)
+        # self.set_final_pred_layers()
+
+    def calc_fused_layers(self):
+        """
+        Calculate the fused layers.
+        """
+        # get dummy conv output
+        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
+        for layer in self.img_layers.values():
+            dummy_conv_output = layer(dummy_conv_output)
+        flattened_img_output_size = dummy_conv_output.data.view(1, -1).size(1)
+
+        self.fused_dim = flattened_img_output_size
         self.set_fused_layers(self.fused_dim)
         self.set_final_pred_layers()
 
@@ -102,7 +119,10 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
             x_tab1 = layer(x_tab1)
             x_img = self.img_layers[k](x_img)
 
-            x_img = x_img * x_tab1[:, :, None, None, None]
+            if len(x_img.shape) == 5:
+                x_img = x_img * x_tab1[:, :, None, None, None]
+            elif len(x_img.shape) == 4:
+                x_img = x_img * x_tab1[:, :, None, None]
 
         out_fuse = x_img.view(x_img.size(0), -1)
 

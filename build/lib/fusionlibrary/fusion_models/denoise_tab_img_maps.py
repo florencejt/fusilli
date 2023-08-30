@@ -63,7 +63,7 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         self.subspace_method = denoising_autoencoder_subspace_method
         self.pred_type = pred_type
 
-        self.fused_layers = nn.Sequential(
+        self.fusion_layers = nn.Sequential(
             nn.Linear(self.data_dims[0], 500),
             nn.ReLU(),
             nn.Linear(500, 100),
@@ -71,7 +71,14 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
             nn.Linear(100, 64),
         )
 
-        self.set_final_pred_layers()
+        self.calc_fused_layers()
+
+    def calc_fused_layers(self):
+        self.fusion_layers[0] = nn.Linear(
+            self.data_dims[0], self.fusion_layers[0].out_features
+        )
+
+        self.set_final_pred_layers(self.fusion_layers[-1].out_features)
 
     def forward(self, x):
         """
@@ -87,7 +94,8 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         list
             List containing the output.
         """
-        x = self.fused_layers(x)
+
+        x = self.fusion_layers(x)
 
         out = self.final_prediction(x)
 
@@ -143,19 +151,19 @@ class DenoisingAutoencoder(pl.LightningModule):
 
         self.data_dims = data_dims
         self.tab_dims = data_dims[0]
-        self.subspace_lat_dims = 28 * 28
+        self.latent_dim = 28 * 28
 
         self.upsampler = nn.Sequential(
             nn.Linear(self.tab_dims, 128),
             nn.ReLU(),
             nn.Linear(128, 256),
             nn.ReLU(),
-            nn.Linear(256, self.subspace_lat_dims),
+            nn.Linear(256, self.latent_dim),
             nn.ReLU(),
         )
 
         self.downsampler = nn.Sequential(
-            nn.Linear(self.subspace_lat_dims, 256),
+            nn.Linear(self.latent_dim, 256),
             nn.ReLU(),
             nn.Linear(256, 128),
             nn.ReLU(),
@@ -163,7 +171,25 @@ class DenoisingAutoencoder(pl.LightningModule):
             nn.ReLU(),
         )
 
+        self.calc_fused_layers()
+
         self.loss = nn.MSELoss()
+
+    def calc_fused_layers(self):
+        # this will change the upsampler and downsampler to be consistent with a modified latent dimension
+        # you can also just change the upsampler and downsampler directly
+
+        self.upsampler[0] = nn.Linear(self.tab_dims, self.upsampler[0].out_features)
+        self.upsampler[-2] = nn.Linear(
+            self.upsampler[-2].in_features, self.latent_dim
+        )  # -2 because of the relu
+
+        self.downsampler[0] = nn.Linear(
+            self.latent_dim, self.downsampler[0].out_features
+        )
+        self.downsampler[-2] = nn.Linear(  # -2 because of the relu
+            self.downsampler[-2].in_features, self.tab_dims
+        )
 
     def forward(self, x):
         """
@@ -547,8 +573,8 @@ class denoising_autoencoder_subspace_method:
             Data module containing the data.
         """
         self.datamodule = datamodule
-        self.dae_trainer = init_trainer(None)
-        self.img_unimodal_trainer = init_trainer(None)
+        self.dae_trainer = init_trainer(None, max_epochs=2)
+        self.img_unimodal_trainer = init_trainer(None, max_epochs=2)
 
         self.autoencoder = DenoisingAutoencoder(self.datamodule.data_dims)
 
@@ -625,8 +651,12 @@ class denoising_autoencoder_subspace_method:
         )
 
         # make the training dataset out of them
-        return train_latent_image_space, pd.DataFrame(
-            labels_train, columns=["pred_label"]
+        return (
+            train_latent_image_space,
+            pd.DataFrame(
+                labels_train,
+                columns=["pred_label"],
+            ),
         )
 
     def convert_to_latent(self, test_dataset):
@@ -663,7 +693,6 @@ class denoising_autoencoder_subspace_method:
         val_latent_image_space = torch.cat(
             (val_tab_latent_space, val_img_feature_maps), dim=1
         )
-        print("final shape", val_latent_image_space.shape)
 
         # make the training dataset out of them
         return (

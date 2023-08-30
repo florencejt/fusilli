@@ -6,6 +6,7 @@ between the two modalities: tabular and image.
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch
+from torch.autograd import Variable
 
 
 class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
@@ -78,22 +79,52 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
 
         self.pred_type = pred_type
 
+        self.attention_embed_dim = 50
+
         self.set_mod1_layers()
         self.set_img_layers()
+        self.calc_fused_layers()
 
-        self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
-        self.set_fused_layers(self.fused_dim)
+        # self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
+        # self.set_fused_layers(self.fused_dim)
 
-        self.attention = nn.MultiheadAttention(embed_dim=50, num_heads=2)
+        # self.attention = nn.MultiheadAttention(
+        #     embed_dim=self.attention_embed_dim, num_heads=2
+        # )
 
-        self.img_dense = nn.Linear(50, 1)
-        self.to50 = nn.Linear(self.fused_dim, 50)
+        # self.img_dense = nn.Linear(self.attention_embed_dim, 1)
+        # self.to50 = nn.Linear(self.fused_dim, 50)
 
         self.relu = nn.ReLU()
 
         self.tab1drops = [nn.Dropout(p=0.5), nn.Dropout(p=0.3), nn.Dropout(p=0.2)]
 
-        self.set_final_pred_layers(200)
+        # self.set_final_pred_layers(200)
+
+    def calc_fused_layers(self):
+        # get dummy conv output
+        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
+        for layer in self.img_layers.values():
+            dummy_conv_output = layer(dummy_conv_output)
+        image_output_size = dummy_conv_output.data.view(1, -1).size(1)
+
+        self.fused_dim = image_output_size
+
+        self.set_fused_layers(self.fused_dim)
+
+        self.attention = nn.MultiheadAttention(
+            embed_dim=self.attention_embed_dim, num_heads=2
+        )
+
+        self.img_dense = nn.Linear(self.attention_embed_dim, 1)
+
+        self.img_to_embed_dim = nn.Linear(self.fused_dim, self.attention_embed_dim)
+        self.tab_to_embed_dim = nn.Linear(
+            list(self.mod1_layers.values())[-1][0].out_features,
+            self.attention_embed_dim,
+        )
+
+        self.set_final_pred_layers(self.attention_embed_dim * 4)
 
     def forward(self, x):
         """
@@ -117,11 +148,11 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
             x_img = self.img_layers[k](x_img)
 
         out_img = x_img.view(x_img.size(0), -1)
-        out_img = self.to50(out_img)
+        out_img = self.img_to_embed_dim(out_img)
         out_img = self.relu(out_img)
 
         out_tab1 = x_tab1.view(x_tab1.size(0), -1)
-        out_tab1 = self.to50(out_tab1)
+        out_tab1 = self.tab_to_embed_dim(out_tab1)
 
         # self attention
         img_att = self.attention(out_img, out_img, out_img)[0]

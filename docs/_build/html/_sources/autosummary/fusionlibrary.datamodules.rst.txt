@@ -15,6 +15,7 @@
    
       downsample_img_batch
       get_data_module
+      modify_model_architecture
    
    
 

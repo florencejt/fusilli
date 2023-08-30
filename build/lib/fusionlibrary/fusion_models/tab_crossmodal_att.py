@@ -83,22 +83,45 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
 
         self.pred_type = pred_type
+        self.attention_embed_dim = 50
 
         self.set_mod1_layers()
         self.set_mod2_layers()
+        self.calc_fused_layers()
 
-        self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
-        self.set_fused_layers(self.fused_dim)
+        # self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
+        # self.set_fused_layers(self.fused_dim)
 
-        self.attention = nn.MultiheadAttention(embed_dim=50, num_heads=2)
+        # self.attention = nn.MultiheadAttention(embed_dim=self.attention_embed_dim, num_heads=2)
 
-        self.to50 = nn.Linear(self.fused_dim, 50)
+        # self.to50 = nn.Linear(self.fused_dim, self.attention_embed_dim)
 
         self.relu = nn.ReLU()
 
         self.clindrops = [nn.Dropout(p=0.5), nn.Dropout(p=0.3), nn.Dropout(p=0.2)]
 
-        self.set_final_pred_layers(200)
+        # self.set_final_pred_layers(200)
+
+    def calc_fused_layers(self):
+        """
+        Calculate the fused layers.
+        """
+
+        self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
+
+        self.set_fused_layers(self.fused_dim)
+
+        self.tab1_to_embed_dim = nn.Linear(self.fused_dim, self.attention_embed_dim)
+        self.tab2_to_embed_dim = nn.Linear(
+            list(self.mod2_layers.values())[-1][0].out_features,
+            self.attention_embed_dim,
+        )
+
+        self.attention = nn.MultiheadAttention(
+            embed_dim=self.attention_embed_dim, num_heads=2
+        )
+
+        self.set_final_pred_layers(self.attention_embed_dim * 4)
 
     def forward(self, x):
         """
@@ -121,10 +144,10 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
             x_tab1 = layer(x_tab1)
             x_tab2 = self.mod2_layers[k](x_tab2)
 
-        out_tab2 = self.to50(x_tab2)
+        out_tab2 = self.tab2_to_embed_dim(x_tab2)
         out_tab2 = self.relu(out_tab2)
 
-        out_tab1 = self.to50(x_tab1)
+        out_tab1 = self.tab1_to_embed_dim(x_tab1)
         out_tab1 = self.relu(out_tab1)
 
         # self attention

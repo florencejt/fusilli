@@ -8,47 +8,47 @@ import warnings
 
 # all the fusion models' names and paths
 fusion_model_dict = [
-    {"name": "Tabular1Unimodal", "path": "fusion_models.tabular1_unimodal"},
-    {"name": "Tabular2Unimodal", "path": "fusion_models.tabular2_unimodal"},
-    {"name": "ImgUnimodal", "path": "fusion_models.img_unimodal"},
-    {
-        "name": "ConcatTabularFeatureMaps",
-        "path": "fusion_models.concat_tabular_feature_maps",
-    },
-    {
-        "name": "ConcatImageMapsTabularData",
-        "path": "fusion_models.concat_img_maps_tabular_data",
-    },
-    {"name": "ConcatTabularData", "path": "fusion_models.concat_tabular_data"},
-    {
-        "name": "ConcatImageMapsTabularMaps",
-        "path": "fusion_models.concat_img_maps_tabular_maps",
-    },
-    {
-        "name": "TabularChannelWiseMultiAttention",
-        "path": "fusion_models.tabular_channelwise_att",
-    },
-    {
-        "name": "ImageChannelWiseMultiAttention",
-        "path": "fusion_models.img_tab_channelwise_att",
-    },
-    {"name": "CrossmodalMultiheadAttention", "path": "fusion_models.crossmodal_att"},
-    {
-        "name": "TabularCrossmodalMultiheadAttention",
-        "path": "fusion_models.tab_crossmodal_att",
-    },
-    {"name": "TabularDecision", "path": "fusion_models.tabular_decision"},
-    {"name": "ImageDecision", "path": "fusion_models.img_tab_decision"},
-    {"name": "MCVAE_tab", "path": "fusion_models.mcvae_tab"},
-    {
-        "name": "ConcatImgLatentTabDoubleTrain",
-        "path": "fusion_models.concat_img_latent_tab_doubletrain",
-    },
-    {
-        "name": "ConcatImgLatentTabDoubleLoss",
-        "path": "fusion_models.concat_img_latent_tab_doubleloss",
-    },
-    {"name": "EdgeCorrGNN", "path": "fusion_models.edge_corr_gnn"},
+    # {"name": "Tabular1Unimodal", "path": "fusion_models.tabular1_unimodal"},
+    # {"name": "Tabular2Unimodal", "path": "fusion_models.tabular2_unimodal"},
+    # {"name": "ImgUnimodal", "path": "fusion_models.img_unimodal"},
+    # {
+    #     "name": "ConcatTabularFeatureMaps",
+    #     "path": "fusion_models.concat_tabular_feature_maps",
+    # },
+    # {
+    #     "name": "ConcatImageMapsTabularData",
+    #     "path": "fusion_models.concat_img_maps_tabular_data",
+    # },
+    # {"name": "ConcatTabularData", "path": "fusion_models.concat_tabular_data"},
+    # {
+    #     "name": "ConcatImageMapsTabularMaps",
+    #     "path": "fusion_models.concat_img_maps_tabular_maps",
+    # },
+    # {
+    #     "name": "TabularChannelWiseMultiAttention",
+    #     "path": "fusion_models.tabular_channelwise_att",
+    # },
+    # {
+    #     "name": "ImageChannelWiseMultiAttention",
+    #     "path": "fusion_models.img_tab_channelwise_att",
+    # },
+    # {"name": "CrossmodalMultiheadAttention", "path": "fusion_models.crossmodal_att"},
+    # {
+    #     "name": "TabularCrossmodalMultiheadAttention",
+    #     "path": "fusion_models.tab_crossmodal_att",
+    # },
+    # {"name": "TabularDecision", "path": "fusion_models.tabular_decision"},
+    # {"name": "ImageDecision", "path": "fusion_models.img_tab_decision"},
+    # {"name": "MCVAE_tab", "path": "fusion_models.mcvae_tab"},
+    # {
+    #     "name": "ConcatImgLatentTabDoubleTrain",
+    #     "path": "fusion_models.concat_img_latent_tab_doubletrain",
+    # },
+    # {
+    #     "name": "ConcatImgLatentTabDoubleLoss",
+    #     "path": "fusion_models.concat_img_latent_tab_doubleloss",
+    # },
+    # {"name": "EdgeCorrGNN", "path": "fusion_models.edge_corr_gnn"},
     {"name": "DAETabImgMaps", "path": "fusion_models.denoise_tab_img_maps"},
 ]
 

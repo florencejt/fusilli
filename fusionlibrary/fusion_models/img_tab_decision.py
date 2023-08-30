@@ -6,6 +6,7 @@ fusion approach.
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch
+from torch.autograd import Variable
 
 
 class ImageDecision(ParentFusionModel, nn.Module):
@@ -57,8 +58,25 @@ class ImageDecision(ParentFusionModel, nn.Module):
 
         self.set_img_layers()
         self.set_mod1_layers()
+        self.calc_fused_layers()
 
-        self.set_final_pred_layers(256)
+    def calc_fused_layers(self):
+        # ~~ Tabular data ~~
+
+        self.tab_fused_dim = list(self.mod1_layers.values())[-1][0].out_features
+        self.set_final_pred_layers(self.tab_fused_dim)
+        self.final_prediction_tab1 = self.final_prediction
+
+        # ~~ Image data ~~
+
+        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
+        for layer in self.img_layers.values():
+            dummy_conv_output = layer(dummy_conv_output)
+        img_fusion_size = dummy_conv_output.data.view(1, -1).size(1)
+
+        self.img_fused_dim = img_fusion_size
+        self.set_final_pred_layers(self.img_fused_dim)
+        self.final_prediction_img = self.final_prediction
 
     def forward(self, x):
         """
@@ -84,8 +102,8 @@ class ImageDecision(ParentFusionModel, nn.Module):
         x_img = x_img.view(x_img.size(0), -1)
 
         # predictions for each method
-        pred_tab1 = self.final_prediction(x_tab1)
-        pred_img = self.final_prediction(x_img)
+        pred_tab1 = self.final_prediction_tab1(x_tab1)
+        pred_img = self.final_prediction_img(x_img)
 
         # Combine predictions by averaging them together
         out_fuse = torch.mean(torch.stack([pred_tab1, pred_img]), dim=0)

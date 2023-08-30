@@ -11,7 +11,7 @@
       <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
-    <link rel="shortcut icon" href="../_static/favicon.png"/>
+    <link rel="shortcut icon" href="../_static/pink_pasta_logo.png"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -36,7 +36,7 @@
           
           <a href="../index.html" class="icon icon-home">
             fusionlibrary
-              <img src="../_static/computergif.gif" class="logo" alt="Logo"/>
+              <img src="../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -48,7 +48,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../introduction.html">FuseIt: an introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
 </ul>
@@ -105,6 +105,7 @@
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">KFold</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">Dataset</span>
 <span class="kn">from</span> <span class="nn">torch_geometric.data.lightning</span> <span class="kn">import</span> <span class="n">LightningNodeData</span>
+<span class="kn">from</span> <span class="nn">fusionlibrary.train_functions</span> <span class="kn">import</span> <span class="n">modify_model_architecture</span>
 
 <span class="c1"># from fusionlibrary.eval_functions import plot_graph</span>
 
@@ -447,6 +448,7 @@
         <span class="n">batch_size</span><span class="p">,</span>
         <span class="n">subspace_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -499,6 +501,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dims</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="n">subspace_method</span>
+        <span class="k">if</span> <span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="o">=</span> <span class="n">layer_mods</span>
         <span class="c1"># if self.subspace_method is not None:</span>
         <span class="c1">#     self.num_latent_dims = self.subspace_method.num_latent_dims</span>
 
@@ -540,6 +544,16 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if subspace method is specified</span>
             <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+            <span class="c1"># TODO this is where to modify subspace layers</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># if subspace method in layer_mods</span>
+                <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">modify_model_architecture</span><span class="p">(</span>
+                    <span class="n">subspace_method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span>
+                <span class="p">)</span>
+                <span class="c1"># if subspace_method.__class__.__name__ in self.layer_mods:</span>
+                <span class="c1">#     print(&quot;subspace method in layer mods&quot;)</span>
+
             <span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">train_dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span>
             <span class="p">)</span>
@@ -634,6 +648,7 @@
         <span class="n">batch_size</span><span class="p">,</span>
         <span class="n">subspace_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -868,6 +883,7 @@
         <span class="n">graph_creation_method</span><span class="p">,</span>
         <span class="n">batch_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -1013,6 +1029,7 @@
         <span class="n">graph_creation_method</span><span class="p">,</span>
         <span class="n">batch_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -1138,9 +1155,30 @@
         <span class="k">return</span> <span class="n">lightning_modules</span>  <span class="c1"># list of lightning modules for each fold</span></div></div>
 
 
-<div class="viewcode-block" id="get_data_module"><a class="viewcode-back" href="../source/datamodules.html#datamodules.get_data_module">[docs]</a><span class="k">def</span> <span class="nf">get_data_module</span><span class="p">(</span><span class="n">init_model</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="c1"># needs model attributes: fusion_type and modality_type</span>
-    <span class="c1"># needs params: kfold, pred_type etc</span>
+<div class="viewcode-block" id="get_data_module"><a class="viewcode-back" href="../source/datamodules.html#datamodules.get_data_module">[docs]</a><span class="k">def</span> <span class="nf">get_data_module</span><span class="p">(</span>
+    <span class="n">init_model</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gets the data module for the specified modality and fusion type.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    init_model : class</span>
+<span class="sd">        Initialised model class.</span>
+<span class="sd">    params : dict</span>
+<span class="sd">        Dictionary of parameters.</span>
+<span class="sd">    batch_size : int</span>
+<span class="sd">        Batch size (default 8).</span>
+<span class="sd">    image_downsample_size : list</span>
+<span class="sd">        List of image dimensions to downsample to (default None).</span>
+<span class="sd">    layer_mods : dict</span>
+<span class="sd">        Dictionary of layer modifications (default None).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dm : datamodule</span>
+<span class="sd">        Datamodule for the specified fusion method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">data_sources</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">params</span><span class="p">[</span><span class="s2">&quot;tabular1_source&quot;</span><span class="p">],</span>
@@ -1156,6 +1194,7 @@
                 <span class="n">sources</span><span class="o">=</span><span class="n">data_sources</span><span class="p">,</span>
                 <span class="n">graph_creation_method</span><span class="o">=</span><span class="n">init_model</span><span class="o">.</span><span class="n">graph_maker</span><span class="p">,</span>
                 <span class="n">image_downsample_size</span><span class="o">=</span><span class="n">image_downsample_size</span><span class="p">,</span>
+                <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">dmg</span> <span class="o">=</span> <span class="n">GraphDataModule</span><span class="p">(</span>
@@ -1164,6 +1203,7 @@
                 <span class="n">sources</span><span class="o">=</span><span class="n">data_sources</span><span class="p">,</span>
                 <span class="n">graph_creation_method</span><span class="o">=</span><span class="n">init_model</span><span class="o">.</span><span class="n">graph_maker</span><span class="p">,</span>
                 <span class="n">image_downsample_size</span><span class="o">=</span><span class="n">image_downsample_size</span><span class="p">,</span>
+                <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="n">dmg</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">()</span>
@@ -1190,6 +1230,7 @@
             <span class="n">subspace_method</span><span class="o">=</span><span class="n">init_model</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">,</span>
             <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
             <span class="n">image_downsample_size</span><span class="o">=</span><span class="n">image_downsample_size</span><span class="p">,</span>
+            <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">dm</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">()</span>
         <span class="n">dm</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>

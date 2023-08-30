@@ -5,6 +5,7 @@ Concatenating the feature maps of the two tabular modalities.
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch
+from torch.autograd import Variable
 
 
 class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
@@ -58,7 +59,16 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
 
         self.set_mod1_layers()
         self.set_mod2_layers()
+        self.calc_fused_layers()
 
+        # self.fused_dim = (
+        #     list(self.mod1_layers.values())[-1][0].out_features
+        #     + list(self.mod2_layers.values())[-1][0].out_features
+        # )
+        # self.set_fused_layers(self.fused_dim)
+        # self.set_final_pred_layers()
+
+    def calc_fused_layers(self):
         self.fused_dim = (
             list(self.mod1_layers.values())[-1][0].out_features
             + list(self.mod2_layers.values())[-1][0].out_features

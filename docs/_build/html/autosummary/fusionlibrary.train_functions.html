@@ -110,16 +110,19 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_trainer</span></code>(logger[, max_epochs])</p></td>
 <td><p>Initialize the pytorch lightning trainer object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_logger</span></code>(params, fold, init_model[, ...])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">modify_model_architecture</span></code>(model, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_logger</span></code>(params, fold, init_model[, ...])</p></td>
 <td><p>Set the logger for the current run.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.store_trained_model" title="fusionlibrary.train_functions.store_trained_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">store_trained_model</span></code></a>(trained_model, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.store_trained_model" title="fusionlibrary.train_functions.store_trained_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">store_trained_model</span></code></a>(trained_model, ...)</p></td>
 <td><p>Stores the trained model to a dictionary. If model type is already in dictionary (e.g. if it's a kfold model), append the model to     the list of models.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.train_and_save_models" title="fusionlibrary.train_functions.train_and_save_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_and_save_models</span></code></a>(trained_models_dict, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.train_and_save_models" title="fusionlibrary.train_functions.train_and_save_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_and_save_models</span></code></a>(trained_models_dict, ...)</p></td>
 <td><p>Trains/tests the model and saves the trained model to a dictionary for further analysis.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.train_and_test" title="fusionlibrary.train_functions.train_and_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_and_test</span></code></a>(dm, params, k, fusion_model, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.train_and_test" title="fusionlibrary.train_functions.train_and_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_and_test</span></code></a>(dm, params, k, fusion_model, ...)</p></td>
 <td><p>Trains and tests a model and, if k_fold trained, a fold.</p></td>
 </tr>
 </tbody>
@@ -144,7 +147,7 @@ If model type is already in dictionary (e.g. if it’s a kfold model), append th
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fusionlibrary.train_functions.train_and_save_models">
-<span class="sig-prename descclassname"><span class="pre">fusionlibrary.train_functions.</span></span><span class="sig-name descname"><span class="pre">train_and_save_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_models_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#train_and_save_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.train_and_save_models" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fusionlibrary.train_functions.</span></span><span class="sig-name descname"><span class="pre">train_and_save_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_models_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#train_and_save_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.train_and_save_models" title="Permalink to this definition"></a></dt>
 <dd><p>Trains/tests the model and saves the trained model to a dictionary for further analysis.
 If the training type is kfold, it will train and test the model for each fold and store the
 trained models in a list under the model type key.</p>
@@ -164,6 +167,10 @@ as “name_value”. And a tag will be added as “name_value”.</p>
 </dd>
 </dl>
 </p></li>
+<li><p><strong>layer_mods</strong> (<em>dict</em>) – Dictionary of layer modifications. Used to modify the architecture of the model.
+Input format {“model”: {“layer_group”: “modification”}, …}.
+e.g. {“TabularCrossmodalAttention”: {“mod1_layers”: new mod 1 layers nn.ModuleDict}}
+Default None.</p></li>
 </ul>
 </dd>
 </dl>
@@ -171,7 +178,7 @@ as “name_value”. And a tag will be added as “name_value”.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fusionlibrary.train_functions.train_and_test">
-<span class="sig-prename descclassname"><span class="pre">fusionlibrary.train_functions.</span></span><span class="sig-name descname"><span class="pre">train_and_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#train_and_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.train_and_test" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fusionlibrary.train_functions.</span></span><span class="sig-name descname"><span class="pre">train_and_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#train_and_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.train_and_test" title="Permalink to this definition"></a></dt>
 <dd><p>Trains and tests a model and, if k_fold trained, a fold.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -191,6 +198,10 @@ as “name_value”. And a tag will be added as “name_value”.</p>
 </dd>
 </dl>
 </p></li>
+<li><p><strong>layer_mods</strong> (<em>dict</em>) – Dictionary of layer modifications. Used to modify the architecture of the model.
+Input format {“model”: {“layer_group”: “modification”}, …}.
+e.g. {“TabularCrossmodalAttention”: {“mod1_layers”: new mod 1 layers nn.ModuleDict}}
+Default None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

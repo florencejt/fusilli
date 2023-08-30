@@ -57,8 +57,16 @@ class TabularDecision(ParentFusionModel, nn.Module):
 
         self.set_mod1_layers()
         self.set_mod2_layers()
+        self.calc_fused_layers()
 
-        self.set_final_pred_layers(256)
+    def calc_fused_layers(self):
+        self.tab1_fused_dim = list(self.mod1_layers.values())[-1][0].out_features
+        self.set_final_pred_layers(self.tab1_fused_dim)
+        self.final_prediction_tab1 = self.final_prediction
+
+        self.tab2_fused_dim = list(self.mod2_layers.values())[-1][0].out_features
+        self.set_final_pred_layers(self.tab2_fused_dim)
+        self.final_prediction_tab2 = self.final_prediction
 
     def forward(self, x):
         """
@@ -81,8 +89,8 @@ class TabularDecision(ParentFusionModel, nn.Module):
             x_tab2 = self.mod2_layers[k](x_tab2)
 
         # predictions for each method
-        pred_tab1 = self.final_prediction(x_tab1)
-        pred_tab2 = self.final_prediction(x_tab2)
+        pred_tab1 = self.final_prediction_tab1(x_tab1)
+        pred_tab2 = self.final_prediction_tab2(x_tab2)
 
         # Combine predictions by averaging them together
         out_fuse = torch.mean(torch.stack([pred_tab1, pred_tab2]), dim=0)

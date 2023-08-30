@@ -12,6 +12,8 @@ from fusionlibrary.utils.pl_utils import init_trainer
 from torch.utils.data import DataLoader, Dataset
 import pandas as pd
 import numpy as np
+from torch.autograd import Variable
+import copy
 
 
 class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
@@ -67,13 +69,27 @@ class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
             Dictionary containing the parameters of the model.
         """
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
-        self.subspace_method = img_latent_subspace_method
+        self.subspace_method = concat_img_latent_tab_subspace_method
 
-        new_encdim = 64
-        self.enc_img_layer = nn.Linear(self.mod2_dim, new_encdim)
+        self.calc_fused_layers()
 
-        self.fused_dim = self.mod1_dim + new_encdim
+        # self.latent_dim = self.subspace_method.autoencoder.latent_dim
+
+        # self.enc_img_layer = nn.Linear(self.mod2_dim, self.latent_dim)
+
+        # self.fused_dim = self.mod1_dim + new_encdim
+        # self.set_fused_layers(self.fused_dim)
+        # self.set_final_pred_layers()
+
+    def calc_fused_layers(self):
+        self.latent_dim = self.data_dims[1]
+
+        self.enc_img_layer = nn.Linear(self.latent_dim, self.latent_dim)
+
+        self.fused_dim = self.mod1_dim + self.latent_dim
+
         self.set_fused_layers(self.fused_dim)
+
         self.set_final_pred_layers()
 
     def forward(self, x):
@@ -94,6 +110,7 @@ class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
         x_tab = x[0]
         x_encimg = x[1].squeeze(dim=1)
         # pass encimg into layer to turn it into half its size? or 64
+
         x_encimg = self.enc_img_layer(x_encimg)
 
         # concatenate with x_tab
@@ -149,37 +166,46 @@ class ImgLatentSpace(pl.LightningModule):
 
         self.data_dims = data_dims
         self.img_dims = data_dims[2]
+        self.latent_dim = (
+            82  # modifiable, but you need to also change the encoder and decoder
+        )
 
         if len(self.img_dims) == 2:  # 2D images
             self.encoder = nn.Sequential(
-                nn.Conv2d(1, 16, kernel_size=3, stride=1),
+                nn.Conv2d(1, 32, kernel_size=3, padding=1),  # 100x100x1 -> 100x100x32
                 nn.ReLU(),
-                nn.Conv2d(16, 32, kernel_size=3, stride=1),
+                nn.MaxPool2d(kernel_size=2, stride=2),  # 100x100x32 -> 50x50x32
+                nn.Conv2d(32, 64, kernel_size=3, padding=1),  # 50x50x32 -> 50x50x64
                 nn.ReLU(),
-                nn.Conv2d(32, 64, kernel_size=3, stride=1),
+                nn.MaxPool2d(kernel_size=2, stride=2),  # 50x50x64 -> 25x25x64
+                nn.Conv2d(64, 128, kernel_size=3, padding=1),  # 25x25x64 -> 25x25x128
                 nn.ReLU(),
-                # nn.Conv3d(128, 256, kernel_size=3, stride=1),
-                # nn.ReLU(),
+                nn.MaxPool2d(kernel_size=2, stride=2),  # 25x25x128 -> 12x12x128
             )
 
             self.decoder = nn.Sequential(
-                # nn.ConvTranspose3d(256, 128, kernel_size=3, stride=1, output_padding=1),
-                # nn.ReLU(),
-                nn.ConvTranspose2d(64, 32, kernel_size=3, stride=1),
+                nn.ConvTranspose2d(
+                    128, 64, kernel_size=2, stride=2
+                ),  # 12x12x128 -> 25x25x64
                 nn.ReLU(),
-                nn.ConvTranspose2d(32, 16, kernel_size=3, stride=1),
+                nn.ConvTranspose2d(
+                    64, 32, kernel_size=2, stride=2
+                ),  # 25x25x64 -> 50x50x32
                 nn.ReLU(),
-                nn.ConvTranspose2d(16, 1, kernel_size=3, stride=1),
-                nn.Sigmoid(),
+                nn.ConvTranspose2d(
+                    32, 1, kernel_size=2, stride=2
+                ),  # 50x50x32 -> 100x100x1
+                nn.Sigmoid(),  # Output is scaled between 0 and 1
                 nn.Upsample(size=self.img_dims, mode="bilinear", align_corners=False),
             )
+
         elif len(self.img_dims) == 3:
             self.encoder = nn.Sequential(
                 nn.Conv3d(1, 16, kernel_size=3, stride=1),
                 nn.ReLU(),
                 nn.Conv3d(16, 32, kernel_size=3, stride=1),
                 nn.ReLU(),
-                nn.Conv3d(32, 64, kernel_size=3, stride=1),
+                nn.Conv3d(32, self.latent_dim, kernel_size=3, stride=1),
                 nn.ReLU(),
                 # nn.Conv3d(128, 256, kernel_size=3, stride=1),
                 # nn.ReLU(),
@@ -188,7 +214,7 @@ class ImgLatentSpace(pl.LightningModule):
             self.decoder = nn.Sequential(
                 # nn.ConvTranspose3d(256, 128, kernel_size=3, stride=1, output_padding=1),
                 # nn.ReLU(),
-                nn.ConvTranspose3d(64, 32, kernel_size=3, stride=1),
+                nn.ConvTranspose3d(self.latent_dim, 32, kernel_size=3, stride=1),
                 nn.ReLU(),
                 nn.ConvTranspose3d(32, 16, kernel_size=3, stride=1),
                 nn.ReLU(),
@@ -198,6 +224,36 @@ class ImgLatentSpace(pl.LightningModule):
             )
         else:
             raise ValueError("Invalid image dimensions.")
+
+        self.calc_fused_layers()
+
+    def calc_fused_layers(self):
+        # changed the latent space size? this has to run
+
+        self.flatten = nn.Flatten()
+
+        # size of final encoder output
+        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
+        dummy_conv_output = self.encoder(dummy_conv_output)
+        n_size = dummy_conv_output.data.view(1, -1).size(1)
+
+        # make linear layer to reduce to latent dim
+        self.linear_to_lat_dim = nn.Linear(n_size, self.latent_dim)
+
+        # add extra layers to encoder
+        self.new_encoder = copy.deepcopy(self.encoder)
+        self.new_encoder.append(self.flatten)
+        self.new_encoder.append(self.linear_to_lat_dim)
+
+        # add extra layer to decoder to get right shape for first decoding layer
+        self.new_decoder = copy.deepcopy(self.decoder)
+        self.linear_to_decoder = nn.Linear(
+            self.latent_dim, self.new_decoder[0].in_channels
+        )
+        # TODO make this work for 3d images too
+        self.unflatten = nn.Unflatten(1, (self.new_decoder[0].in_channels, 1, 1))
+        self.new_decoder.insert(0, self.linear_to_decoder)
+        self.new_decoder.insert(1, self.unflatten)
 
     def forward(self, x):
         """
@@ -213,8 +269,11 @@ class ImgLatentSpace(pl.LightningModule):
         torch.Tensor
             Output of the model. Reconstruction/decoded image.
         """
-        encoded = self.encoder(x)
-        decoded = self.decoder(encoded)
+
+        encoded = self.new_encoder(x)
+
+        decoded = self.new_decoder(encoded)
+
         return decoded
 
     def training_step(self, batch, batch_idx):
@@ -293,10 +352,10 @@ class ImgLatentSpace(pl.LightningModule):
         torch.Tensor
             Encoded image.
         """
-        return self.encoder(x)
+        return self.new_encoder(x)
 
 
-class img_latent_subspace_method:
+class concat_img_latent_tab_subspace_method:
     """
     Class containing the method to train the latent image space and to convert the image data
     to the latent image space.
@@ -326,7 +385,10 @@ class img_latent_subspace_method:
             Data module containing the data.
         """
         self.datamodule = datamodule
-        self.trainer = init_trainer(None, max_epochs=100)
+        self.trainer = init_trainer(
+            None, max_epochs=3
+        )  # TODO change back to big number
+        # self.latent_dim = 64
         self.autoencoder = ImgLatentSpace(self.datamodule.data_dims)
 
     def train(self, train_dataset, val_dataset):
@@ -365,9 +427,8 @@ class img_latent_subspace_method:
         self.autoencoder.eval()
 
         encoded_imgs = self.autoencoder.encode_image(img_train.unsqueeze(1))
-        flatten_encoded_imgs = torch.flatten(encoded_imgs, start_dim=2)
 
-        return [tab_train, flatten_encoded_imgs.detach()], pd.DataFrame(
+        return [tab_train, encoded_imgs.detach()], pd.DataFrame(
             labels_train, columns=["pred_label"]
         )
 
@@ -396,9 +457,9 @@ class img_latent_subspace_method:
         self.autoencoder.eval()
 
         encoded_imgs = self.autoencoder.encode_image(img_val.unsqueeze(1))
-        flatten_encoded_imgs = torch.flatten(encoded_imgs, start_dim=2).squeeze(dim=1)
+
         return (
-            [tab_val, flatten_encoded_imgs.detach()],
+            [tab_val, encoded_imgs.detach()],
             pd.DataFrame(label_val, columns=["pred_label"]),
-            [tab_val.shape[1], flatten_encoded_imgs.shape[1], None],
+            [tab_val.shape[1], encoded_imgs.shape[1], None],
         )

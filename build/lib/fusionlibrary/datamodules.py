@@ -451,7 +451,6 @@ class CustomDataModule(pl.LightningDataModule):
 
         if self.subspace_method is not None:  # if subspace method is specified
             subspace_method = self.subspace_method(self)
-
             # TODO this is where to modify subspace layers
             if self.layer_mods is not None:
                 # if subspace method in layer_mods

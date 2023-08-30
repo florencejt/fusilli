@@ -1,4 +1,4 @@
-fusionlibrary.fusion\_models.img\_unimodal
+﻿fusionlibrary.fusion\_models.img\_unimodal
 ==========================================
 
 .. automodule:: fusionlibrary.fusion_models.img_unimodal
@@ -19,6 +19,7 @@ fusionlibrary.fusion\_models.img\_unimodal
    
       ImgUnimodal
       ParentFusionModel
+      Variable
    
    
 

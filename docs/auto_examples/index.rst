@@ -13,6 +13,23 @@ Below is a gallery of examples on how to use this package, and scripts showing h
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial will show you how to modify the architectures of fusion models.">
+
+.. only:: html
+
+  .. image:: /auto_examples/images/thumb/sphx_glr_modify_layer_sizes_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_modify_layer_sizes.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">How to modify architectures of fusion models</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This script shows how to train one fusion models on a binary task with k-fold training protocol...">
 
 .. only:: html
@@ -53,6 +70,7 @@ Below is a gallery of examples on how to use this package, and scripts showing h
 .. toctree::
    :hidden:
 
+   /auto_examples/modify_layer_sizes
    /auto_examples/plot_one_model_binary_kfold
    /auto_examples/plot_two_models_traintest
 

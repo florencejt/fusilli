@@ -74,9 +74,38 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
         self.pred_type = pred_type
         self.subspace_method = mcvae_subspace_method
 
-        self.set_mod1_layers()
+        self.latent_space_layers = nn.ModuleDict(
+            {
+                "layer 1": nn.Sequential(
+                    nn.Linear(25, 32),
+                    nn.ReLU(),
+                ),
+                "layer 2": nn.Sequential(
+                    nn.Linear(32, 64),
+                    nn.ReLU(),
+                ),
+                "layer 3": nn.Sequential(
+                    nn.Linear(64, 128),
+                    nn.ReLU(),
+                ),
+                "layer 4": nn.Sequential(
+                    nn.Linear(128, 256),
+                    nn.ReLU(),
+                ),
+                "layer 5": nn.Sequential(
+                    nn.Linear(256, 256),
+                    nn.ReLU(),
+                ),
+            }
+        )
 
-        self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
+        self.calc_fused_layers()
+
+    def calc_fused_layers(self):
+        """
+        Calculates the fused layers of the model.
+        """
+        self.fused_dim = list(self.latent_space_layers.values())[-1][0].out_features
         self.set_fused_layers(self.fused_dim)
         self.set_final_pred_layers()
 
@@ -96,7 +125,7 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
         """
         x_latent = x
 
-        for layer in self.mod1_layers.values():
+        for layer in self.latent_space_layers.values():
             x_latent = layer(x_latent)
 
         out_fuse = self.fused_layers(x_latent)

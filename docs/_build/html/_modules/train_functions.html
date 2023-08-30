@@ -11,7 +11,7 @@
       <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
-    <link rel="shortcut icon" href="../_static/favicon.png"/>
+    <link rel="shortcut icon" href="../_static/pink_pasta_logo.png"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -36,7 +36,7 @@
           
           <a href="../index.html" class="icon icon-home">
             fusionlibrary
-              <img src="../_static/computergif.gif" class="logo" alt="Logo"/>
+              <img src="../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -48,7 +48,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../introduction.html">FuseIt: an introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
 </ul>
@@ -104,6 +104,48 @@
 <span class="kn">import</span> <span class="nn">wandb</span>
 
 
+<div class="viewcode-block" id="modify_model_architecture"><a class="viewcode-back" href="../source/train_functions.html#train_functions.modify_model_architecture">[docs]</a><span class="k">def</span> <span class="nf">modify_model_architecture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">architecture_modification</span><span class="p">):</span>
+    <span class="n">changed</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="n">architecture_modification</span><span class="p">:</span>
+        <span class="c1"># ~~~~~~ modifying all fusion models ~~~~~~</span>
+        <span class="k">if</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">layer_group</span> <span class="ow">in</span> <span class="n">architecture_modification</span><span class="p">[</span><span class="n">model_name</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_group</span><span class="p">):</span>
+                    <span class="nb">setattr</span><span class="p">(</span>
+                        <span class="n">model</span><span class="p">,</span>
+                        <span class="n">layer_group</span><span class="p">,</span>
+                        <span class="n">architecture_modification</span><span class="p">[</span><span class="n">model_name</span><span class="p">][</span><span class="n">layer_group</span><span class="p">],</span>
+                    <span class="p">)</span>
+                    <span class="c1"># RESET FUSED LAYERS</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">layer_group</span> <span class="o">!=</span> <span class="s2">&quot;fused_layers&quot;</span>
+                    <span class="p">):</span>  <span class="c1"># don&#39;t reset fused layers if we&#39;re modifying fused layers anyway</span>
+                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;get_fused_layers&quot;</span><span class="p">):</span>
+                            <span class="n">model</span><span class="o">.</span><span class="n">get_fused_layers</span><span class="p">()</span>  <span class="c1"># reset fused layers with new fused_dim from new architecture</span>
+                    <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># ~~~~~~ modifying specific fusion models ~~~~~~</span>
+        <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">layer_group</span> <span class="ow">in</span> <span class="n">architecture_modification</span><span class="p">[</span><span class="n">model_name</span><span class="p">]:</span>
+                <span class="c1"># if we need to access a layer within a layer group</span>
+                <span class="n">split_layer_group</span> <span class="o">=</span> <span class="n">layer_group</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+                <span class="n">get_attr_1</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">split_layer_group</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">layer_layer</span> <span class="ow">in</span> <span class="n">split_layer_group</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">get_attr_1</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">get_attr_1</span><span class="p">,</span> <span class="n">layer_layer</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">get_attr_1</span><span class="p">,</span> <span class="n">split_layer_group</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="nb">setattr</span><span class="p">(</span>
+                        <span class="n">get_attr_1</span><span class="p">,</span>
+                        <span class="n">split_layer_group</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">architecture_modification</span><span class="p">[</span><span class="n">model_name</span><span class="p">][</span><span class="n">layer_group</span><span class="p">],</span>
+                    <span class="p">)</span>
+                    <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">changed</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NOTHING CHANGED IN THIS MODEL FOR TESTING&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
 <div class="viewcode-block" id="train_and_test"><a class="viewcode-back" href="../source/train_functions.html#train_functions.train_and_test">[docs]</a><span class="k">def</span> <span class="nf">train_and_test</span><span class="p">(</span>
     <span class="n">dm</span><span class="p">,</span>
     <span class="n">params</span><span class="p">,</span>
@@ -111,6 +153,7 @@
     <span class="n">fusion_model</span><span class="p">,</span>
     <span class="n">init_model</span><span class="p">,</span>
     <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Trains and tests a model and, if k_fold trained, a fold.</span>
@@ -137,6 +180,11 @@
 <span class="sd">            the hyperparameters.</span>
 <span class="sd">            Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
 <span class="sd">            as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
+<span class="sd">    layer_mods : dict</span>
+<span class="sd">        Dictionary of layer modifications. Used to modify the architecture of the model.</span>
+<span class="sd">        Input format {&quot;model&quot;: {&quot;layer_group&quot;: &quot;modification&quot;}, ...}.</span>
+<span class="sd">        e.g. {&quot;TabularCrossmodalAttention&quot;: {&quot;mod1_layers&quot;: new mod 1 layers nn.ModuleDict}}</span>
+<span class="sd">        Default None.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -173,7 +221,7 @@
 
     <span class="n">logger</span> <span class="o">=</span> <span class="n">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">init_model</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="p">)</span>  <span class="c1"># set logger</span>
 
-    <span class="n">trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>  <span class="c1"># init trainer</span>
+    <span class="n">trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># init trainer</span>
 
     <span class="n">model</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="p">(</span>
         <span class="n">fusion_model</span><span class="p">(</span>
@@ -184,6 +232,17 @@
             <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>  <span class="c1"># params is a dict</span>
         <span class="p">)</span>
     <span class="p">)</span>
+
+    <span class="c1"># TODO add in bit to let user choose structure of model</span>
+    <span class="k">if</span> <span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">modify_model_architecture</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_mods</span><span class="p">)</span>
+
+    <span class="c1"># if architecture_modification is not None:</span>
+    <span class="c1">#    for layer_group in architecture_modification:</span>
+    <span class="c1">#        if layer_group exists in model:</span>
+    <span class="c1">#            modify layer_group</span>
+    <span class="c1">#       else:</span>
+    <span class="c1">#            print(f&quot;Layer group {layer_group} does not exist in model&quot;)</span>
 
     <span class="c1"># graph-methods use masks to select train and val nodes rather than train and val dataloaders</span>
     <span class="c1"># train and val dataloaders are still used for graph but they&#39;re identical</span>
@@ -241,6 +300,7 @@
     <span class="n">fusion_model</span><span class="p">,</span>
     <span class="n">init_model</span><span class="p">,</span>
     <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Trains/tests the model and saves the trained model to a dictionary for further analysis.</span>
@@ -265,6 +325,11 @@
 <span class="sd">            the hyperparameters.</span>
 <span class="sd">            Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
 <span class="sd">            as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
+<span class="sd">    layer_mods : dict</span>
+<span class="sd">        Dictionary of layer modifications. Used to modify the architecture of the model.</span>
+<span class="sd">        Input format {&quot;model&quot;: {&quot;layer_group&quot;: &quot;modification&quot;}, ...}.</span>
+<span class="sd">        e.g. {&quot;TabularCrossmodalAttention&quot;: {&quot;mod1_layers&quot;: new mod 1 layers nn.ModuleDict}}</span>
+<span class="sd">        Default None.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
@@ -276,6 +341,7 @@
                 <span class="n">fusion_model</span><span class="o">=</span><span class="n">fusion_model</span><span class="p">,</span>
                 <span class="n">init_model</span><span class="o">=</span><span class="n">init_model</span><span class="p">,</span>
                 <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span><span class="p">,</span>
+                <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">trained_models_dict</span> <span class="o">=</span> <span class="n">store_trained_model</span><span class="p">(</span>
                 <span class="n">trained_model</span><span class="p">,</span> <span class="n">trained_models_dict</span>
@@ -292,6 +358,7 @@
             <span class="n">fusion_model</span><span class="o">=</span><span class="n">fusion_model</span><span class="p">,</span>
             <span class="n">init_model</span><span class="o">=</span><span class="n">init_model</span><span class="p">,</span>
             <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span><span class="p">,</span>
+            <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">trained_models_dict</span> <span class="o">=</span> <span class="n">store_trained_model</span><span class="p">(</span><span class="n">trained_model</span><span class="p">,</span> <span class="n">trained_models_dict</span><span class="p">)</span>
 

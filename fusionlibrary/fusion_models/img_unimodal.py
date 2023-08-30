@@ -53,14 +53,14 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
         self.pred_type = pred_type
 
         self.set_img_layers()
-        self.get_fused_layers()
+        self.calc_fused_layers()
 
         # self.fused_dim = self.get_fused_dim()
         # # list(self.img_layers.values())[-1][0].out_channels
         # self.set_fused_layers(self.fused_dim)
         # self.set_final_pred_layers()
 
-    def get_fused_layers(self):
+    def calc_fused_layers(self):
         # get dummy conv output
         dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
         for layer in self.img_layers.values():
@@ -92,7 +92,6 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
             x_img = layer(x_img)
 
         x_img = x_img.view(x_img.size(0), -1)
-        print("x_img shape", x_img.shape)
 
         out_fuse = self.fused_layers(x_img)
 

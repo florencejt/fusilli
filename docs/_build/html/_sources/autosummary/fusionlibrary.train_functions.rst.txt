@@ -15,6 +15,7 @@
    
       get_final_val_metrics
       init_trainer
+      modify_model_architecture
       set_logger
       store_trained_model
       train_and_save_models

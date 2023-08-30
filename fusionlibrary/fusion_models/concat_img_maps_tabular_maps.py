@@ -6,6 +6,7 @@ image modality.
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch
+from torch.autograd import Variable
 
 
 class ConcatImageMapsTabularMaps(ParentFusionModel, nn.Module):
@@ -62,10 +63,27 @@ class ConcatImageMapsTabularMaps(ParentFusionModel, nn.Module):
         self.set_img_layers()
         self.set_mod1_layers()
 
-        self.fused_dim = (
-            list(self.mod1_layers.values())[-1][0].out_features
-            + list(self.img_layers.values())[-1][0].out_channels
-        )
+        self.calc_fused_layers()
+
+        # self.fused_dim = (
+        #     list(self.mod1_layers.values())[-1][0].out_features
+        #     + list(self.img_layers.values())[-1][0].out_channels
+        # )
+        # self.set_fused_layers(self.fused_dim)
+        # self.set_final_pred_layers()
+
+    def calc_fused_layers(self):
+        # get flattened image output size
+        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
+        for layer in self.img_layers.values():
+            dummy_conv_output = layer(dummy_conv_output)
+        flattened_img_size = dummy_conv_output.data.view(1, -1).size(1)
+
+        # get tabular output size
+        tab_output_size = list(self.mod1_layers.values())[-1][0].out_features
+
+        self.fused_dim = tab_output_size + flattened_img_size
+
         self.set_fused_layers(self.fused_dim)
         self.set_final_pred_layers()
 
