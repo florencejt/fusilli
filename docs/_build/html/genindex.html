@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -152,10 +153,16 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.autoencoder">autoencoder (fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method attribute)</a>
+      <li><a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.attention_embed_dim">attention_embed_dim (fusion_models.crossmodal_att.CrossmodalMultiheadAttention attribute)</a>
 
       <ul>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.autoencoder">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method attribute)</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.attention_embed_dim">(fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.autoencoder">autoencoder (fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method attribute)</a>
+
+      <ul>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.autoencoder">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method attribute)</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.autoencoder">(fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method attribute)</a>
 </li>
@@ -196,6 +203,64 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.calc_fused_layers">calc_fused_layers() (fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss method)</a>
+
+      <ul>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.calc_fused_layers">(fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain method)</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.calc_fused_layers">(fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.calc_fused_layers">(fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData method)</a>, <a href="source/fusion_models.html#id25">[1]</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers">(fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps method)</a>, <a href="source/fusion_models.html#id30">[1]</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.calc_fused_layers">(fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps method)</a>, <a href="source/fusion_models.html#id39">[1]</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.calc_fused_layers">(fusion_models.crossmodal_att.CrossmodalMultiheadAttention method)</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.calc_fused_layers">(fusion_models.edge_corr_gnn.EdgeCorrGNN method)</a>, <a href="source/fusion_models.html#id48">[1]</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.calc_fused_layers">(fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention method)</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.img_tab_decision.ImageDecision.calc_fused_layers">(fusion_models.img_tab_decision.ImageDecision method)</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.calc_fused_layers">(fusion_models.img_unimodal.ImgUnimodal method)</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.calc_fused_layers">(fusion_models.mcvae_tab.MCVAE_tab method)</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.calc_fused_layers">(fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention method)</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.calc_fused_layers">(fusion_models.tabular1_unimodal.Tabular1Unimodal method)</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.calc_fused_layers">(fusion_models.tabular2_unimodal.Tabular2Unimodal method)</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.calc_fused_layers">(fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention method)</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.tabular_decision.TabularDecision.calc_fused_layers">(fusion_models.tabular_decision.TabularDecision method)</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.calc_fused_layers">(fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss method)</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.calc_fused_layers">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain method)</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.calc_fused_layers">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_data.html#fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.calc_fused_layers">(fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_data.html#id0">[1]</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers">(fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html#id0">[1]</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_tabular_feature_maps.html#fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.calc_fused_layers">(fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_tabular_feature_maps.html#id0">[1]</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.calc_fused_layers">(fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention method)</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.calc_fused_layers">(fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN method)</a>, <a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#id0">[1]</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.calc_fused_layers">(fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention method)</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.calc_fused_layers">(fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab method)</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.tab_crossmodal_att.html#fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.calc_fused_layers">(fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention method)</a>
+</li>
+      </ul></li>
       <li><a href="source/fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.clindrops">clindrops (fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention attribute)</a>
 
       <ul>
@@ -214,6 +279,14 @@
         <li><a href="autosummary/fusionlibrary.eval_functions.Plotter.html#fusionlibrary.eval_functions.Plotter.compare_violin_plot">(fusionlibrary.eval_functions.Plotter method)</a>, <a href="autosummary/fusionlibrary.eval_functions.html#fusionlibrary.eval_functions.Plotter.compare_violin_plot">[1]</a>
 </li>
       </ul></li>
+      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method">concat_img_latent_tab_subspace_method (class in fusion_models.concat_img_latent_tab_doubletrain)</a>
+
+      <ul>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method">(class in fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData">ConcatImageMapsTabularData (class in fusion_models.concat_img_maps_tabular_data)</a>
 
       <ul>
@@ -253,19 +326,17 @@
       <li><a href="source/fusion_models.html#fusion_models.base_pl_model.BaseModel.configure_optimizers">configure_optimizers() (fusion_models.base_pl_model.BaseModel method)</a>, <a href="source/fusion_models.html#id0">[1]</a>
 
       <ul>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.configure_optimizers">(fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="source/fusion_models.html#id20">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.configure_optimizers">(fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="source/fusion_models.html#id18">[1]</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.BaseModel.configure_optimizers">(fusionlibrary.fusion_models.base_pl_model.BaseModel method)</a>, <a href="autosummary/fusionlibrary.fusion_models.base_pl_model.html#id0">[1]</a>
 </li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.configure_optimizers">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#id1">[1]</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.configure_optimizers">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#id0">[1]</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.configure_optimizers">(fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder method)</a>, <a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#id1">[1]</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.configure_optimizers">(fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE method)</a>, <a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#id6">[1]</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/eval_functions.html#eval_functions.Plotter.confusion_matrix_plotter">confusion_matrix_plotter() (eval_functions.Plotter method)</a>
 
       <ul>
@@ -278,36 +349,12 @@
         <li><a href="autosummary/fusionlibrary.eval_functions.Plotter.html#fusionlibrary.eval_functions.Plotter.confusion_matrix_plotter_kfold">(fusionlibrary.eval_functions.Plotter method)</a>, <a href="autosummary/fusionlibrary.eval_functions.html#fusionlibrary.eval_functions.Plotter.confusion_matrix_plotter_kfold">[1]</a>
 </li>
       </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.conv1">conv1 (fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>
+      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.convert_to_latent">convert_to_latent() (fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method method)</a>, <a href="source/fusion_models.html#id23">[1]</a>
 
       <ul>
-        <li><a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv1">(fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>
+        <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.mcvae_subspace_method.convert_to_latent">(fusion_models.mcvae_tab.mcvae_subspace_method method)</a>, <a href="source/fusion_models.html#id70">[1]</a>
 </li>
-      </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.conv2">conv2 (fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>
-
-      <ul>
-        <li><a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv2">(fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.conv3">conv3 (fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>
-
-      <ul>
-        <li><a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv3">(fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.conv4">conv4 (fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>
-
-      <ul>
-        <li><a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv4">(fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.convert_to_latent">convert_to_latent() (fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method method)</a>, <a href="source/fusion_models.html#id25">[1]</a>
-
-      <ul>
-        <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.mcvae_subspace_method.convert_to_latent">(fusion_models.mcvae_tab.mcvae_subspace_method method)</a>, <a href="source/fusion_models.html#id67">[1]</a>
-</li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.convert_to_latent">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#id6">[1]</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.convert_to_latent">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#id5">[1]</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.convert_to_latent">(fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method method)</a>, <a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#id11">[1]</a>
 </li>
@@ -364,25 +411,31 @@
         <li><a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.data_dims">(fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.datamodule">datamodule (fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method attribute)</a>
+      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.datamodule">datamodule (fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method attribute)</a>
 
       <ul>
         <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.mcvae_subspace_method.datamodule">(fusion_models.mcvae_tab.mcvae_subspace_method attribute)</a>
 </li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.datamodule">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method attribute)</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.datamodule">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method attribute)</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.datamodule">(fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method attribute)</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method.datamodule">(fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     datamodules
 
       <ul>
         <li><a href="source/datamodules.html#module-datamodules">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.dataset">dataset (fusion_models.edge_corr_gnn.EdgeCorrGraphMaker attribute)</a>
+
+      <ul>
+        <li><a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.dataset">(fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker attribute)</a>
 </li>
       </ul></li>
       <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.decoder">decoder (fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
@@ -409,22 +462,28 @@
       </ul></li>
       <li><a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.downsampler">downsampler (fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder attribute)</a>
 </li>
+      <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.dropout_prob">dropout_prob (fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>
+
+      <ul>
+        <li><a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.dropout_prob">(fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.edgecorr_graph_maker">edgecorr_graph_maker() (in module fusion_models.edge_corr_gnn)</a>
-
-      <ul>
-        <li><a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.edgecorr_graph_maker">(in module fusionlibrary.fusion_models.edge_corr_gnn)</a>
-</li>
-      </ul></li>
       <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN">EdgeCorrGNN (class in fusion_models.edge_corr_gnn)</a>
 
       <ul>
         <li><a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN">(class in fusionlibrary.fusion_models.edge_corr_gnn)</a>
+</li>
+      </ul></li>
+      <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGraphMaker">EdgeCorrGraphMaker (class in fusion_models.edge_corr_gnn)</a>
+
+      <ul>
+        <li><a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker">(class in fusionlibrary.fusion_models.edge_corr_gnn)</a>
 </li>
       </ul></li>
       <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.enc_img_layer">enc_img_layer (fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain attribute)</a>
@@ -433,10 +492,10 @@
         <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.enc_img_layer">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.encode_image">encode_image() (fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="source/fusion_models.html#id21">[1]</a>
+      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.encode_image">encode_image() (fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="source/fusion_models.html#id19">[1]</a>
 
       <ul>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.encode_image">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#id2">[1]</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.encode_image">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#id1">[1]</a>
 </li>
       </ul></li>
   </ul></td>
@@ -470,12 +529,6 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fc1">fc1 (fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
-
-      <ul>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fc1">(fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
-</li>
-      </ul></li>
       <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.final_prediction">final_prediction (fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
 
       <ul>
@@ -550,56 +603,56 @@
         <li><a href="autosummary/fusionlibrary.fusion_models.tabular_decision.html#fusionlibrary.fusion_models.tabular_decision.TabularDecision.final_prediction">(fusionlibrary.fusion_models.tabular_decision.TabularDecision attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.forward">forward() (fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss method)</a>, <a href="source/fusion_models.html#id12">[1]</a>
+      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.forward">forward() (fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss method)</a>
 
       <ul>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.forward">(fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain method)</a>, <a href="source/fusion_models.html#id16">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.forward">(fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain method)</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.forward">(fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="source/fusion_models.html#id22">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.forward">(fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="source/fusion_models.html#id20">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.forward">(fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData method)</a>, <a href="source/fusion_models.html#id27">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.forward">(fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData method)</a>, <a href="source/fusion_models.html#id26">[1]</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.forward">(fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps method)</a>, <a href="source/fusion_models.html#id31">[1]</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.forward">(fusion_models.concat_tabular_data.ConcatTabularData method)</a>, <a href="source/fusion_models.html#id35">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.forward">(fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps method)</a>, <a href="source/fusion_models.html#id39">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.forward">(fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps method)</a>, <a href="source/fusion_models.html#id40">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.forward">(fusion_models.crossmodal_att.CrossmodalMultiheadAttention method)</a>, <a href="source/fusion_models.html#id43">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.forward">(fusion_models.crossmodal_att.CrossmodalMultiheadAttention method)</a>, <a href="source/fusion_models.html#id44">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.forward">(fusion_models.edge_corr_gnn.EdgeCorrGNN method)</a>, <a href="source/fusion_models.html#id47">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.forward">(fusion_models.edge_corr_gnn.EdgeCorrGNN method)</a>, <a href="source/fusion_models.html#id49">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.forward">(fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention method)</a>, <a href="source/fusion_models.html#id51">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.forward">(fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention method)</a>, <a href="source/fusion_models.html#id54">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.img_tab_decision.ImageDecision.forward">(fusion_models.img_tab_decision.ImageDecision method)</a>, <a href="source/fusion_models.html#id55">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.img_tab_decision.ImageDecision.forward">(fusion_models.img_tab_decision.ImageDecision method)</a>, <a href="source/fusion_models.html#id58">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.forward">(fusion_models.img_unimodal.ImgUnimodal method)</a>, <a href="source/fusion_models.html#id59">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.forward">(fusion_models.img_unimodal.ImgUnimodal method)</a>, <a href="source/fusion_models.html#id62">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.forward">(fusion_models.mcvae_tab.MCVAE_tab method)</a>, <a href="source/fusion_models.html#id63">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.forward">(fusion_models.mcvae_tab.MCVAE_tab method)</a>, <a href="source/fusion_models.html#id66">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.forward">(fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention method)</a>, <a href="source/fusion_models.html#id70">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.forward">(fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention method)</a>, <a href="source/fusion_models.html#id73">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.forward">(fusion_models.tabular1_unimodal.Tabular1Unimodal method)</a>, <a href="source/fusion_models.html#id74">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.forward">(fusion_models.tabular1_unimodal.Tabular1Unimodal method)</a>, <a href="source/fusion_models.html#id77">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.forward">(fusion_models.tabular2_unimodal.Tabular2Unimodal method)</a>, <a href="source/fusion_models.html#id78">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.forward">(fusion_models.tabular2_unimodal.Tabular2Unimodal method)</a>, <a href="source/fusion_models.html#id81">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.forward">(fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention method)</a>, <a href="source/fusion_models.html#id82">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.forward">(fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention method)</a>, <a href="source/fusion_models.html#id85">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular_decision.TabularDecision.forward">(fusion_models.tabular_decision.TabularDecision method)</a>, <a href="source/fusion_models.html#id86">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular_decision.TabularDecision.forward">(fusion_models.tabular_decision.TabularDecision method)</a>, <a href="source/fusion_models.html#id89">[1]</a>
 </li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.forward">(fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#id0">[1]</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.forward">(fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss method)</a>
 </li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.forward">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#id0">[1]</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.forward">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain method)</a>
 </li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.forward">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#id3">[1]</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.forward">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#id2">[1]</a>
 </li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_data.html#fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.forward">(fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_data.html#id0">[1]</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_data.html#fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.forward">(fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_data.html#id1">[1]</a>
 </li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.forward">(fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html#id0">[1]</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.forward">(fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html#id1">[1]</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.concat_tabular_data.html#fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData.forward">(fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_tabular_data.html#id0">[1]</a>
 </li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_tabular_feature_maps.html#fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.forward">(fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_tabular_feature_maps.html#id0">[1]</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_tabular_feature_maps.html#fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.forward">(fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_tabular_feature_maps.html#id1">[1]</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.forward">(fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention method)</a>, <a href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#id0">[1]</a>
 </li>
@@ -609,7 +662,7 @@
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.forward">(fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE method)</a>, <a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#id7">[1]</a>
 </li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.forward">(fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN method)</a>, <a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#id0">[1]</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.forward">(fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN method)</a>, <a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#id1">[1]</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.forward">(fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention method)</a>, <a href="autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#id0">[1]</a>
 </li>
@@ -630,16 +683,24 @@
         <li><a href="autosummary/fusionlibrary.fusion_models.tabular_decision.html#fusionlibrary.fusion_models.tabular_decision.TabularDecision.forward">(fusionlibrary.fusion_models.tabular_decision.TabularDecision method)</a>, <a href="autosummary/fusionlibrary.fusion_models.tabular_decision.html#id0">[1]</a>
 </li>
       </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fused_dim">fused_dim (fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain attribute)</a>
+      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_dim">fused_dim (fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
 
       <ul>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fused_dim">(fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain attribute)</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.fused_dim">(fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData attribute)</a>
+</li>
         <li><a href="source/fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.fused_dim">(fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention attribute)</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.fused_dim">(fusion_models.tabular1_unimodal.Tabular1Unimodal attribute)</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.fused_dim">(fusion_models.tabular2_unimodal.Tabular2Unimodal attribute)</a>
 </li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_dim">(fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
+</li>
         <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fused_dim">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain attribute)</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_data.html#fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.fused_dim">(fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData attribute)</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.fused_dim">(fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE attribute)</a>
 </li>
@@ -858,39 +919,39 @@
       <li><a href="source/fusion_models.html#fusion_models.base_pl_model.BaseModel.fusion_type">fusion_type (fusion_models.base_pl_model.BaseModel attribute)</a>
 
       <ul>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fusion_type">(fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>, <a href="source/fusion_models.html#id13">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fusion_type">(fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>, <a href="source/fusion_models.html#id12">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fusion_type">(fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain attribute)</a>, <a href="source/fusion_models.html#id17">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fusion_type">(fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain attribute)</a>, <a href="source/fusion_models.html#id15">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.fusion_type">(fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData attribute)</a>, <a href="source/fusion_models.html#id28">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.fusion_type">(fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData attribute)</a>, <a href="source/fusion_models.html#id27">[1]</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fusion_type">(fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps attribute)</a>, <a href="source/fusion_models.html#id32">[1]</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.fusion_type">(fusion_models.concat_tabular_data.ConcatTabularData attribute)</a>, <a href="source/fusion_models.html#id36">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.fusion_type">(fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps attribute)</a>, <a href="source/fusion_models.html#id40">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.fusion_type">(fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps attribute)</a>, <a href="source/fusion_models.html#id41">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.fusion_type">(fusion_models.crossmodal_att.CrossmodalMultiheadAttention attribute)</a>, <a href="source/fusion_models.html#id44">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.fusion_type">(fusion_models.crossmodal_att.CrossmodalMultiheadAttention attribute)</a>, <a href="source/fusion_models.html#id45">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.fusion_type">(fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>, <a href="source/fusion_models.html#id48">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.fusion_type">(fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>, <a href="source/fusion_models.html#id50">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.fusion_type">(fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention attribute)</a>, <a href="source/fusion_models.html#id52">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.fusion_type">(fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention attribute)</a>, <a href="source/fusion_models.html#id55">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.img_tab_decision.ImageDecision.fusion_type">(fusion_models.img_tab_decision.ImageDecision attribute)</a>, <a href="source/fusion_models.html#id56">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.img_tab_decision.ImageDecision.fusion_type">(fusion_models.img_tab_decision.ImageDecision attribute)</a>, <a href="source/fusion_models.html#id59">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.fusion_type">(fusion_models.img_unimodal.ImgUnimodal attribute)</a>, <a href="source/fusion_models.html#id60">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.fusion_type">(fusion_models.img_unimodal.ImgUnimodal attribute)</a>, <a href="source/fusion_models.html#id63">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.fusion_type">(fusion_models.mcvae_tab.MCVAE_tab attribute)</a>, <a href="source/fusion_models.html#id64">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.fusion_type">(fusion_models.mcvae_tab.MCVAE_tab attribute)</a>, <a href="source/fusion_models.html#id67">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.fusion_type">(fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention attribute)</a>, <a href="source/fusion_models.html#id71">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.fusion_type">(fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention attribute)</a>, <a href="source/fusion_models.html#id74">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.fusion_type">(fusion_models.tabular1_unimodal.Tabular1Unimodal attribute)</a>, <a href="source/fusion_models.html#id75">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.fusion_type">(fusion_models.tabular1_unimodal.Tabular1Unimodal attribute)</a>, <a href="source/fusion_models.html#id78">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.fusion_type">(fusion_models.tabular2_unimodal.Tabular2Unimodal attribute)</a>, <a href="source/fusion_models.html#id79">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.fusion_type">(fusion_models.tabular2_unimodal.Tabular2Unimodal attribute)</a>, <a href="source/fusion_models.html#id82">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.fusion_type">(fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention attribute)</a>, <a href="source/fusion_models.html#id83">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.fusion_type">(fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention attribute)</a>, <a href="source/fusion_models.html#id86">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular_decision.TabularDecision.fusion_type">(fusion_models.tabular_decision.TabularDecision attribute)</a>, <a href="source/fusion_models.html#id87">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular_decision.TabularDecision.fusion_type">(fusion_models.tabular_decision.TabularDecision attribute)</a>, <a href="source/fusion_models.html#id90">[1]</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.BaseModel.fusion_type">(fusionlibrary.fusion_models.base_pl_model.BaseModel attribute)</a>
 </li>
@@ -1124,14 +1185,6 @@
       </ul></li>
       <li><a href="autosummary/fusionlibrary.utils.pl_utils.html#fusionlibrary.utils.pl_utils.get_final_val_metrics">get_final_val_metrics() (in module fusionlibrary.utils.pl_utils)</a>
 </li>
-      <li><a href="source/fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.get_fused_layers">get_fused_layers() (fusion_models.img_unimodal.ImgUnimodal method)</a>
-
-      <ul>
-        <li><a href="source/fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.get_fused_layers">(fusion_models.tabular1_unimodal.Tabular1Unimodal method)</a>
-</li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.get_fused_layers">(fusion_models.tabular2_unimodal.Tabular2Unimodal method)</a>
-</li>
-      </ul></li>
       <li><a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.get_intermediate_featuremaps">get_intermediate_featuremaps() (fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE method)</a>, <a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#id8">[1]</a>
 </li>
       <li><a href="source/eval_functions.html#eval_functions.Plotter.get_kfold_numbers">get_kfold_numbers() (eval_functions.Plotter method)</a>
@@ -1140,7 +1193,7 @@
         <li><a href="autosummary/fusionlibrary.eval_functions.Plotter.html#fusionlibrary.eval_functions.Plotter.get_kfold_numbers">(fusionlibrary.eval_functions.Plotter method)</a>, <a href="autosummary/fusionlibrary.eval_functions.html#fusionlibrary.eval_functions.Plotter.get_kfold_numbers">[1]</a>
 </li>
       </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.mcvae_subspace_method.get_latents">get_latents() (fusion_models.mcvae_tab.mcvae_subspace_method method)</a>, <a href="source/fusion_models.html#id68">[1]</a>
+      <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.mcvae_subspace_method.get_latents">get_latents() (fusion_models.mcvae_tab.mcvae_subspace_method method)</a>, <a href="source/fusion_models.html#id71">[1]</a>
 
       <ul>
         <li><a href="autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method.get_latents">(fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method method)</a>, <a href="autosummary/fusionlibrary.fusion_models.mcvae_tab.html#id2">[1]</a>
@@ -1162,16 +1215,22 @@
         <li><a href="autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.BaseModel.get_model_outputs">(fusionlibrary.fusion_models.base_pl_model.BaseModel method)</a>, <a href="autosummary/fusionlibrary.fusion_models.base_pl_model.html#id2">[1]</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/fusion_models.html#fusion_models.base_pl_model.BaseModel.get_model_outputs_and_loss">get_model_outputs_and_loss() (fusion_models.base_pl_model.BaseModel method)</a>, <a href="source/fusion_models.html#id3">[1]</a>
 
       <ul>
         <li><a href="autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.BaseModel.get_model_outputs_and_loss">(fusionlibrary.fusion_models.base_pl_model.BaseModel method)</a>, <a href="autosummary/fusionlibrary.fusion_models.base_pl_model.html#id3">[1]</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autosummary/fusionlibrary.utils.model_chooser.html#fusionlibrary.utils.model_chooser.get_models">get_models() (in module fusionlibrary.utils.model_chooser)</a>
 </li>
+      <li><a href="autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.get_nested_attr">get_nested_attr() (in module fusionlibrary.train_functions)</a>
+
+      <ul>
+        <li><a href="source/train_functions.html#train_functions.get_nested_attr">(in module train_functions)</a>
+</li>
+      </ul></li>
       <li><a href="source/eval_functions.html#eval_functions.Plotter.get_performance_df">get_performance_df() (eval_functions.Plotter method)</a>
 
       <ul>
@@ -1182,6 +1241,12 @@
 
       <ul>
         <li><a href="autosummary/fusionlibrary.eval_functions.Plotter.html#fusionlibrary.eval_functions.Plotter.get_train_test_numbers">(fusionlibrary.eval_functions.Plotter method)</a>, <a href="autosummary/fusionlibrary.eval_functions.html#fusionlibrary.eval_functions.Plotter.get_train_test_numbers">[1]</a>
+</li>
+      </ul></li>
+      <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.graph_conv_layers">graph_conv_layers (fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>
+
+      <ul>
+        <li><a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.graph_conv_layers">(fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>
 </li>
       </ul></li>
       <li><a href="source/datamodules.html#datamodules.GraphDataModule.graph_creation_method">graph_creation_method (datamodules.GraphDataModule attribute)</a>
@@ -1254,17 +1319,9 @@
         <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.img_dims">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method">img_latent_subspace_method (class in fusion_models.concat_img_latent_tab_doubletrain)</a>
+      <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.img_layers">img_layers (fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData attribute)</a>
 
       <ul>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method">(class in fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain)</a>
-</li>
-      </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.img_layers">img_layers (fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
-
-      <ul>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.img_layers">(fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData attribute)</a>
-</li>
         <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.img_layers">(fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps attribute)</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.img_layers">(fusion_models.crossmodal_att.CrossmodalMultiheadAttention attribute)</a>
@@ -1274,8 +1331,6 @@
         <li><a href="source/fusion_models.html#fusion_models.img_tab_decision.ImageDecision.img_layers">(fusion_models.img_tab_decision.ImageDecision attribute)</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.img_layers">(fusion_models.img_unimodal.ImgUnimodal attribute)</a>
-</li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.img_layers">(fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_data.html#fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.img_layers">(fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData attribute)</a>
 </li>
@@ -1380,10 +1435,24 @@
         <li><a href="autosummary/fusionlibrary.datamodules.html#fusionlibrary.datamodules.CustomDataset.labels">(fusionlibrary.datamodules.CustomDataset attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_size">latent_size (fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
+      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_dim">latent_dim (fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
 
       <ul>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_size">(fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.latent_dim">(fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain attribute)</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.latent_dim">(fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace attribute)</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_dim">(fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.latent_dim">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain attribute)</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.latent_dim">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.latent_space_layers">latent_space_layers (fusion_models.mcvae_tab.MCVAE_tab attribute)</a>
+
+      <ul>
+        <li><a href="autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.latent_space_layers">(fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab attribute)</a>
 </li>
       </ul></li>
       <li><a href="autosummary/fusionlibrary.utils.pl_utils.html#fusionlibrary.utils.pl_utils.LitProgressBar">LitProgressBar (class in fusionlibrary.utils.pl_utils)</a>
@@ -1394,6 +1463,8 @@
         <li><a href="autosummary/fusionlibrary.datamodules.html#fusionlibrary.datamodules.LoadDatasets.load_both_tabular">(fusionlibrary.datamodules.LoadDatasets method)</a>, <a href="autosummary/fusionlibrary.datamodules.html#id20">[1]</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/datamodules.html#datamodules.LoadDatasets.load_img">load_img() (datamodules.LoadDatasets method)</a>, <a href="source/datamodules.html#id19">[1]</a>
 
       <ul>
@@ -1406,8 +1477,6 @@
         <li><a href="autosummary/fusionlibrary.datamodules.html#fusionlibrary.datamodules.LoadDatasets.load_tab_and_img">(fusionlibrary.datamodules.LoadDatasets method)</a>, <a href="autosummary/fusionlibrary.datamodules.html#id22">[1]</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/datamodules.html#datamodules.LoadDatasets.load_tabular1">load_tabular1() (datamodules.LoadDatasets method)</a>, <a href="source/datamodules.html#id21">[1]</a>
 
       <ul>
@@ -1444,6 +1513,12 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.make_graph">make_graph() (fusion_models.edge_corr_gnn.EdgeCorrGraphMaker method)</a>, <a href="source/fusion_models.html#id53">[1]</a>
+
+      <ul>
+        <li><a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.make_graph">(fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker method)</a>, <a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#id2">[1]</a>
+</li>
+      </ul></li>
       <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.mcvae_early_stopping_tol">mcvae_early_stopping_tol() (in module fusion_models.mcvae_tab)</a>
 
       <ul>
@@ -1465,39 +1540,39 @@
       <li><a href="source/fusion_models.html#fusion_models.base_pl_model.BaseModel.method_name">method_name (fusion_models.base_pl_model.BaseModel attribute)</a>
 
       <ul>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.method_name">(fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>, <a href="source/fusion_models.html#id14">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.method_name">(fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>, <a href="source/fusion_models.html#id13">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.method_name">(fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain attribute)</a>, <a href="source/fusion_models.html#id18">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.method_name">(fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain attribute)</a>, <a href="source/fusion_models.html#id16">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.method_name">(fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData attribute)</a>, <a href="source/fusion_models.html#id29">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.method_name">(fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData attribute)</a>, <a href="source/fusion_models.html#id28">[1]</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.method_name">(fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps attribute)</a>, <a href="source/fusion_models.html#id33">[1]</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.method_name">(fusion_models.concat_tabular_data.ConcatTabularData attribute)</a>, <a href="source/fusion_models.html#id37">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.method_name">(fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps attribute)</a>, <a href="source/fusion_models.html#id41">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.method_name">(fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps attribute)</a>, <a href="source/fusion_models.html#id42">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.method_name">(fusion_models.crossmodal_att.CrossmodalMultiheadAttention attribute)</a>, <a href="source/fusion_models.html#id45">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.method_name">(fusion_models.crossmodal_att.CrossmodalMultiheadAttention attribute)</a>, <a href="source/fusion_models.html#id46">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.method_name">(fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>, <a href="source/fusion_models.html#id49">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.method_name">(fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>, <a href="source/fusion_models.html#id51">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.method_name">(fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention attribute)</a>, <a href="source/fusion_models.html#id53">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.method_name">(fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention attribute)</a>, <a href="source/fusion_models.html#id56">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.img_tab_decision.ImageDecision.method_name">(fusion_models.img_tab_decision.ImageDecision attribute)</a>, <a href="source/fusion_models.html#id57">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.img_tab_decision.ImageDecision.method_name">(fusion_models.img_tab_decision.ImageDecision attribute)</a>, <a href="source/fusion_models.html#id60">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.method_name">(fusion_models.img_unimodal.ImgUnimodal attribute)</a>, <a href="source/fusion_models.html#id61">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.method_name">(fusion_models.img_unimodal.ImgUnimodal attribute)</a>, <a href="source/fusion_models.html#id64">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.method_name">(fusion_models.mcvae_tab.MCVAE_tab attribute)</a>, <a href="source/fusion_models.html#id65">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.method_name">(fusion_models.mcvae_tab.MCVAE_tab attribute)</a>, <a href="source/fusion_models.html#id68">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.method_name">(fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention attribute)</a>, <a href="source/fusion_models.html#id72">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.method_name">(fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention attribute)</a>, <a href="source/fusion_models.html#id75">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.method_name">(fusion_models.tabular1_unimodal.Tabular1Unimodal attribute)</a>, <a href="source/fusion_models.html#id76">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.method_name">(fusion_models.tabular1_unimodal.Tabular1Unimodal attribute)</a>, <a href="source/fusion_models.html#id79">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.method_name">(fusion_models.tabular2_unimodal.Tabular2Unimodal attribute)</a>, <a href="source/fusion_models.html#id80">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.method_name">(fusion_models.tabular2_unimodal.Tabular2Unimodal attribute)</a>, <a href="source/fusion_models.html#id83">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.method_name">(fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention attribute)</a>, <a href="source/fusion_models.html#id84">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.method_name">(fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention attribute)</a>, <a href="source/fusion_models.html#id87">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular_decision.TabularDecision.method_name">(fusion_models.tabular_decision.TabularDecision attribute)</a>, <a href="source/fusion_models.html#id88">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular_decision.TabularDecision.method_name">(fusion_models.tabular_decision.TabularDecision attribute)</a>, <a href="source/fusion_models.html#id91">[1]</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.BaseModel.method_name">(fusionlibrary.fusion_models.base_pl_model.BaseModel attribute)</a>
 </li>
@@ -1585,8 +1660,6 @@
 </li>
         <li><a href="source/fusion_models.html#fusion_models.img_tab_decision.ImageDecision.mod1_layers">(fusion_models.img_tab_decision.ImageDecision attribute)</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.mod1_layers">(fusion_models.mcvae_tab.MCVAE_tab attribute)</a>
-</li>
         <li><a href="source/fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.mod1_layers">(fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention attribute)</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.mod1_layers">(fusion_models.tabular1_unimodal.Tabular1Unimodal attribute)</a>
@@ -1606,8 +1679,6 @@
         <li><a href="autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.mod1_layers">(fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention attribute)</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.img_tab_decision.html#fusionlibrary.fusion_models.img_tab_decision.ImageDecision.mod1_layers">(fusionlibrary.fusion_models.img_tab_decision.ImageDecision attribute)</a>
-</li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.mod1_layers">(fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab attribute)</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.tab_crossmodal_att.html#fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.mod1_layers">(fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention attribute)</a>
 </li>
@@ -1661,39 +1732,39 @@
 </li>
         <li><a href="source/fusion_models.html#fusion_models.base_pl_model.BaseModel.modality_type">(fusion_models.base_pl_model.BaseModel attribute)</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.modality_type">(fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>, <a href="source/fusion_models.html#id15">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.modality_type">(fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>, <a href="source/fusion_models.html#id14">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.modality_type">(fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain attribute)</a>, <a href="source/fusion_models.html#id19">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.modality_type">(fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain attribute)</a>, <a href="source/fusion_models.html#id17">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.modality_type">(fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData attribute)</a>, <a href="source/fusion_models.html#id30">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.modality_type">(fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData attribute)</a>, <a href="source/fusion_models.html#id29">[1]</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.modality_type">(fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps attribute)</a>, <a href="source/fusion_models.html#id34">[1]</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.modality_type">(fusion_models.concat_tabular_data.ConcatTabularData attribute)</a>, <a href="source/fusion_models.html#id38">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.modality_type">(fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps attribute)</a>, <a href="source/fusion_models.html#id42">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.modality_type">(fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps attribute)</a>, <a href="source/fusion_models.html#id43">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.modality_type">(fusion_models.crossmodal_att.CrossmodalMultiheadAttention attribute)</a>, <a href="source/fusion_models.html#id46">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.modality_type">(fusion_models.crossmodal_att.CrossmodalMultiheadAttention attribute)</a>, <a href="source/fusion_models.html#id47">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.modality_type">(fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>, <a href="source/fusion_models.html#id50">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.modality_type">(fusion_models.edge_corr_gnn.EdgeCorrGNN attribute)</a>, <a href="source/fusion_models.html#id52">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.modality_type">(fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention attribute)</a>, <a href="source/fusion_models.html#id54">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.modality_type">(fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention attribute)</a>, <a href="source/fusion_models.html#id57">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.img_tab_decision.ImageDecision.modality_type">(fusion_models.img_tab_decision.ImageDecision attribute)</a>, <a href="source/fusion_models.html#id58">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.img_tab_decision.ImageDecision.modality_type">(fusion_models.img_tab_decision.ImageDecision attribute)</a>, <a href="source/fusion_models.html#id61">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.modality_type">(fusion_models.img_unimodal.ImgUnimodal attribute)</a>, <a href="source/fusion_models.html#id62">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.modality_type">(fusion_models.img_unimodal.ImgUnimodal attribute)</a>, <a href="source/fusion_models.html#id65">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.modality_type">(fusion_models.mcvae_tab.MCVAE_tab attribute)</a>, <a href="source/fusion_models.html#id66">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.modality_type">(fusion_models.mcvae_tab.MCVAE_tab attribute)</a>, <a href="source/fusion_models.html#id69">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.modality_type">(fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention attribute)</a>, <a href="source/fusion_models.html#id73">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.modality_type">(fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention attribute)</a>, <a href="source/fusion_models.html#id76">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.modality_type">(fusion_models.tabular1_unimodal.Tabular1Unimodal attribute)</a>, <a href="source/fusion_models.html#id77">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.modality_type">(fusion_models.tabular1_unimodal.Tabular1Unimodal attribute)</a>, <a href="source/fusion_models.html#id80">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.modality_type">(fusion_models.tabular2_unimodal.Tabular2Unimodal attribute)</a>, <a href="source/fusion_models.html#id81">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.modality_type">(fusion_models.tabular2_unimodal.Tabular2Unimodal attribute)</a>, <a href="source/fusion_models.html#id84">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.modality_type">(fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention attribute)</a>, <a href="source/fusion_models.html#id85">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.modality_type">(fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention attribute)</a>, <a href="source/fusion_models.html#id88">[1]</a>
 </li>
-        <li><a href="source/fusion_models.html#fusion_models.tabular_decision.TabularDecision.modality_type">(fusion_models.tabular_decision.TabularDecision attribute)</a>, <a href="source/fusion_models.html#id89">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.tabular_decision.TabularDecision.modality_type">(fusion_models.tabular_decision.TabularDecision attribute)</a>, <a href="source/fusion_models.html#id92">[1]</a>
 </li>
         <li><a href="autosummary/fusionlibrary.datamodules.html#fusionlibrary.datamodules.CustomDataModule.modality_type">(fusionlibrary.datamodules.CustomDataModule attribute)</a>
 </li>
@@ -1756,8 +1827,12 @@
         <li><a href="autosummary/fusionlibrary.eval_functions.Plotter.html#fusionlibrary.eval_functions.Plotter.model_names">(fusionlibrary.eval_functions.Plotter attribute)</a>, <a href="autosummary/fusionlibrary.eval_functions.html#fusionlibrary.eval_functions.Plotter.model_names">[1]</a>
 </li>
       </ul></li>
-      <li><a href="source/train_functions.html#train_functions.modify_model_architecture">modify_model_architecture() (in module train_functions)</a>
+      <li><a href="autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.modify_model_architecture">modify_model_architecture() (in module fusionlibrary.train_functions)</a>
+
+      <ul>
+        <li><a href="source/train_functions.html#train_functions.modify_model_architecture">(in module train_functions)</a>
 </li>
+      </ul></li>
       <li>
     module
 
@@ -1873,12 +1948,28 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.new_encdim">new_encdim (fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain attribute)</a>
+      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.new_decoder">new_decoder (fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
 
       <ul>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.new_encdim">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain attribute)</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.new_decoder">(fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace attribute)</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.new_decoder">(fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.new_decoder">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace attribute)</a>
 </li>
       </ul></li>
+      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.new_encoder">new_encoder (fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
+
+      <ul>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.new_encoder">(fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace attribute)</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.new_encoder">(fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss attribute)</a>
+</li>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.new_encoder">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/datamodules.html#datamodules.KFoldDataModule.num_folds">num_folds (datamodules.KFoldDataModule attribute)</a>
 
       <ul>
@@ -1889,8 +1980,12 @@
         <li><a href="autosummary/fusionlibrary.datamodules.html#fusionlibrary.datamodules.KFoldGraphDataModule.num_folds">(fusionlibrary.datamodules.KFoldGraphDataModule attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.mcvae_subspace_method.num_latent_dims">num_latent_dims (fusion_models.mcvae_tab.mcvae_subspace_method attribute)</a>
+
+      <ul>
+        <li><a href="autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method.num_latent_dims">(fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method attribute)</a>
+</li>
+      </ul></li>
       <li><a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.num_layers">num_layers (fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE attribute)</a>
 </li>
   </ul></td>
@@ -2035,8 +2130,6 @@
         <li><a href="autosummary/fusionlibrary.eval_functions.Plotter.html#fusionlibrary.eval_functions.Plotter.reals_vs_preds_kfold">(fusionlibrary.eval_functions.Plotter method)</a>, <a href="autosummary/fusionlibrary.eval_functions.html#fusionlibrary.eval_functions.Plotter.reals_vs_preds_kfold">[1]</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.relu">relu (fusion_models.crossmodal_att.CrossmodalMultiheadAttention attribute)</a>
 
       <ul>
@@ -2045,6 +2138,14 @@
         <li><a href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.relu">(fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention attribute)</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.tab_crossmodal_att.html#fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.relu">(fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.reset_fused_layers">reset_fused_layers() (in module fusionlibrary.train_functions)</a>
+
+      <ul>
+        <li><a href="source/train_functions.html#train_functions.reset_fused_layers">(in module train_functions)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -2179,12 +2280,6 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.tab1drops">tab1drops (fusion_models.crossmodal_att.CrossmodalMultiheadAttention attribute)</a>
-
-      <ul>
-        <li><a href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.tab1drops">(fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention attribute)</a>
-</li>
-      </ul></li>
       <li><a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.tab_dims">tab_dims (fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder attribute)</a>
 </li>
       <li><a href="source/datamodules.html#datamodules.LoadDatasets.tabular1_source">tabular1_source (datamodules.LoadDatasets attribute)</a>
@@ -2229,22 +2324,24 @@
         <li><a href="autosummary/fusionlibrary.fusion_models.tabular_decision.html#fusionlibrary.fusion_models.tabular_decision.TabularDecision">(class in fusionlibrary.fusion_models.tabular_decision)</a>
 </li>
       </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.to50">to50 (fusion_models.crossmodal_att.CrossmodalMultiheadAttention attribute)</a>
+      <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.threshold">threshold (fusion_models.edge_corr_gnn.EdgeCorrGraphMaker attribute)</a>
 
       <ul>
-        <li><a href="source/fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.to50">(fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention attribute)</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.threshold">(fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker attribute)</a>
 </li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.to50">(fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention attribute)</a>
-</li>
+      </ul></li>
+      <li><a href="source/fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.to50">to50 (fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention attribute)</a>
+
+      <ul>
         <li><a href="autosummary/fusionlibrary.fusion_models.tab_crossmodal_att.html#fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.to50">(fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.train">train() (fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method method)</a>, <a href="source/fusion_models.html#id26">[1]</a>
+      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.train">train() (fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method method)</a>, <a href="source/fusion_models.html#id24">[1]</a>
 
       <ul>
-        <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.mcvae_subspace_method.train">(fusion_models.mcvae_tab.mcvae_subspace_method method)</a>, <a href="source/fusion_models.html#id69">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.mcvae_subspace_method.train">(fusion_models.mcvae_tab.mcvae_subspace_method method)</a>, <a href="source/fusion_models.html#id72">[1]</a>
 </li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.train">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#id7">[1]</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.train">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#id6">[1]</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.train">(fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method method)</a>, <a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#id12">[1]</a>
 </li>
@@ -2304,10 +2401,10 @@
         <li><a href="autosummary/fusionlibrary.eval_functions.Plotter.html#fusionlibrary.eval_functions.Plotter.trained_model_dict">(fusionlibrary.eval_functions.Plotter attribute)</a>, <a href="autosummary/fusionlibrary.eval_functions.html#fusionlibrary.eval_functions.Plotter.trained_model_dict">[1]</a>
 </li>
       </ul></li>
-      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.trainer">trainer (fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method attribute)</a>
+      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.trainer">trainer (fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method attribute)</a>
 
       <ul>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.trainer">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method attribute)</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.trainer">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method attribute)</a>
 </li>
       </ul></li>
       <li><a href="source/fusion_models.html#fusion_models.base_pl_model.BaseModel.training">training (fusion_models.base_pl_model.BaseModel attribute)</a>
@@ -2353,11 +2450,11 @@
       <li><a href="source/fusion_models.html#fusion_models.base_pl_model.BaseModel.training_step">training_step() (fusion_models.base_pl_model.BaseModel method)</a>, <a href="source/fusion_models.html#id5">[1]</a>
 
       <ul>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.training_step">(fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="source/fusion_models.html#id23">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.training_step">(fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="source/fusion_models.html#id21">[1]</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.BaseModel.training_step">(fusionlibrary.fusion_models.base_pl_model.BaseModel method)</a>, <a href="autosummary/fusionlibrary.fusion_models.base_pl_model.html#id5">[1]</a>
 </li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.training_step">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#id4">[1]</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.training_step">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#id3">[1]</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.training_step">(fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder method)</a>, <a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#id4">[1]</a>
 </li>
@@ -2405,11 +2502,11 @@
       <li><a href="source/fusion_models.html#fusion_models.base_pl_model.BaseModel.validation_step">validation_step() (fusion_models.base_pl_model.BaseModel method)</a>, <a href="source/fusion_models.html#id6">[1]</a>
 
       <ul>
-        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.validation_step">(fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="source/fusion_models.html#id24">[1]</a>
+        <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.validation_step">(fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="source/fusion_models.html#id22">[1]</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.BaseModel.validation_step">(fusionlibrary.fusion_models.base_pl_model.BaseModel method)</a>, <a href="autosummary/fusionlibrary.fusion_models.base_pl_model.html#id6">[1]</a>
 </li>
-        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.validation_step">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#id5">[1]</a>
+        <li><a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.validation_step">(fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace method)</a>, <a href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#id4">[1]</a>
 </li>
         <li><a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.validation_step">(fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder method)</a>, <a href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#id5">[1]</a>
 </li>

@@ -54,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -81,16 +82,18 @@
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.modality_type"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.modality_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.fusion_type"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.fusion_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.subspace_method"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.subspace_method</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.mod1_layers"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.mod1_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.latent_space_layers"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.latent_space_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.fused_layers"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.fused_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.final_prediction"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.final_prediction</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.forward"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.calc_fused_layers()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.forward()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.mcvae_early_stopping_tol"><code class="docutils literal notranslate"><span class="pre">mcvae_early_stopping_tol()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method"><code class="docutils literal notranslate"><span class="pre">mcvae_subspace_method</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method.datamodule"><code class="docutils literal notranslate"><span class="pre">mcvae_subspace_method.datamodule</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method.num_latent_dims"><code class="docutils literal notranslate"><span class="pre">mcvae_subspace_method.num_latent_dims</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method.get_latents"><code class="docutils literal notranslate"><span class="pre">mcvae_subspace_method.get_latents()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method.train"><code class="docutils literal notranslate"><span class="pre">mcvae_subspace_method.train()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method.convert_to_latent"><code class="docutils literal notranslate"><span class="pre">mcvae_subspace_method.convert_to_latent()</span></code></a></li>
@@ -222,8 +225,8 @@ latent prior and joint decoding.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.mod1_layers">
-<span class="sig-name descname"><span class="pre">mod1_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.mod1_layers" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.latent_space_layers">
+<span class="sig-name descname"><span class="pre">latent_space_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.latent_space_layers" title="Permalink to this definition"></a></dt>
 <dd><p>Dictionary containing the layers of the 1st type of tabular data.
 Here the first type of tabular data is the joint latent space created</p>
 <blockquote>
@@ -271,6 +274,12 @@ International Conference on Machine Learning, 302–311.
 <a class="reference external" href="https://proceedings.mlr.press/v97/antelmi19a.html">https://proceedings.mlr.press/v97/antelmi19a.html</a></p>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.calc_fused_layers">
+<span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/mcvae_tab.html#MCVAE_tab.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.calc_fused_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the fused layers of the model.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="id0">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/mcvae_tab.html#MCVAE_tab.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
@@ -324,6 +333,17 @@ International Conference on Machine Learning, 302–311.
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>datamodule object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method.num_latent_dims">
+<span class="sig-name descname"><span class="pre">num_latent_dims</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method.num_latent_dims" title="Permalink to this definition"></a></dt>
+<dd><p>Number of latent dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>

@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -156,7 +157,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="n">denoising_autoencoder_subspace_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fused_layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
             <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">500</span><span class="p">),</span>
             <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
             <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
@@ -164,7 +165,14 @@
             <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DAETabImgMaps.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -180,7 +188,8 @@
 <span class="sd">        list</span>
 <span class="sd">            List containing the output.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fused_layers</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_prediction</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
@@ -236,19 +245,19 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tab_dims</span> <span class="o">=</span> <span class="n">data_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subspace_lat_dims</span> <span class="o">=</span> <span class="mi">28</span> <span class="o">*</span> <span class="mi">28</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span> <span class="o">=</span> <span class="mi">28</span> <span class="o">*</span> <span class="mi">28</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">upsampler</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
             <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tab_dims</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span>
             <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
             <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
             <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
-            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_lat_dims</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span><span class="p">),</span>
             <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">downsampler</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
-            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subspace_lat_dims</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
             <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
             <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span>
             <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
@@ -256,7 +265,25 @@
             <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
         <span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># this will change the upsampler and downsampler to be consistent with a modified latent dimension</span>
+        <span class="c1"># you can also just change the upsampler and downsampler directly</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">upsampler</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tab_dims</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upsampler</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upsampler</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">upsampler</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">in_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span>
+        <span class="p">)</span>  <span class="c1"># -2 because of the relu</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">downsampler</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">downsampler</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">downsampler</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>  <span class="c1"># -2 because of the relu</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">downsampler</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">in_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dims</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="DenoisingAutoencoder.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -431,21 +458,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span> <span class="o">=</span> <span class="n">data_dims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dim</span> <span class="o">=</span> <span class="n">multiclass_dims</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
 
         <span class="c1"># get the img layers from ParentFusionModel</span>
         <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_img_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
+        <span class="c1"># self.num_layers = len(self.img_layers)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_channels</span>
+        <span class="c1"># self.fused_dim = list(self.img_layers.values())[-1][0].out_channels</span>
 
-        <span class="c1"># linear layer to get it to 1280</span>
-        <span class="c1"># self.linear = nn.Linear(self.fused_dim, 1280)</span>
+        <span class="c1"># ParentFusionModel.set_fused_layers(self, fused_dim=self.fused_dim)</span>
 
-        <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fused_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
-
-        <span class="c1"># getting pred type from datamodule</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
-        <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1"># ParentFusionModel.set_final_pred_layers(self)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">output_activation_functions</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;binary&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">round</span><span class="p">,</span>
@@ -469,6 +493,15 @@
                 <span class="n">BaseModel</span><span class="o">.</span><span class="n">safe_squeeze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">long</span><span class="p">(),</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">x</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_channels</span>
+
+        <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fused_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
+
+        <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ImgUnimodalDAE.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -640,8 +673,8 @@
 <span class="sd">            Data module containing the data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span> <span class="o">=</span> <span class="n">datamodule</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dae_trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal_trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dae_trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal_trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span> <span class="o">=</span> <span class="n">DenoisingAutoencoder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">)</span>
 
@@ -718,8 +751,12 @@
         <span class="p">)</span>
 
         <span class="c1"># make the training dataset out of them</span>
-        <span class="k">return</span> <span class="n">train_latent_image_space</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-            <span class="n">labels_train</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">train_latent_image_space</span><span class="p">,</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                <span class="n">labels_train</span><span class="p">,</span>
+                <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">],</span>
+            <span class="p">),</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="denoising_autoencoder_subspace_method.convert_to_latent"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.convert_to_latent">[docs]</a>    <span class="k">def</span> <span class="nf">convert_to_latent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">):</span>
@@ -756,7 +793,6 @@
         <span class="n">val_latent_image_space</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
             <span class="p">(</span><span class="n">val_tab_latent_space</span><span class="p">,</span> <span class="n">val_img_feature_maps</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span>
         <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;final shape&quot;</span><span class="p">,</span> <span class="n">val_latent_image_space</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
         <span class="c1"># make the training dataset out of them</span>
         <span class="k">return</span> <span class="p">(</span>

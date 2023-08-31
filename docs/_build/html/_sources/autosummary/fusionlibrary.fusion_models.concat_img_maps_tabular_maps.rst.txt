@@ -1,4 +1,4 @@
-fusionlibrary.fusion\_models.concat\_img\_maps\_tabular\_maps
+﻿fusionlibrary.fusion\_models.concat\_img\_maps\_tabular\_maps
 =============================================================
 
 .. automodule:: fusionlibrary.fusion_models.concat_img_maps_tabular_maps
@@ -19,6 +19,7 @@ fusionlibrary.fusion\_models.concat\_img\_maps\_tabular\_maps
    
       ConcatImageMapsTabularMaps
       ParentFusionModel
+      Variable
    
    
 

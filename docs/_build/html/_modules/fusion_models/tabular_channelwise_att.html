@@ -11,7 +11,7 @@
       <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
-    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+    <link rel="shortcut icon" href="../../_static/pink_pasta_logo.png"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -36,7 +36,7 @@
           
           <a href="../../index.html" class="icon icon-home">
             fusionlibrary
-              <img src="../../_static/computergif.gif" class="logo" alt="Logo"/>
+              <img src="../../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -48,9 +48,10 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">FuseIt: an introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -104,6 +105,10 @@
 
 <span class="sd">    This class implements a model that fuses the two types of tabular data using a</span>
 <span class="sd">      channel-wise multiplication approach.</span>
+
+<span class="sd">    If the two types of tabular data have different feature dimensions at each layer, the model will</span>
+<span class="sd">      use a linear layer to make the dimensions the same. This is done to ensure that the</span>
+<span class="sd">      channel-wise multiplication can be performed.</span>
 
 <span class="sd">    Inspired by the work of Duanmu et al. (2020) [1]: here we use two types of tabular data as</span>
 <span class="sd">    the multi-modal data instead of image and non-image like in the paper.</span>
@@ -176,9 +181,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_mod1_layers</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_mod2_layers</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
+        <span class="c1"># self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features</span>
+        <span class="c1"># self.set_fused_layers(self.fused_dim)</span>
+        <span class="c1"># self.set_final_pred_layers()</span>
+
+<div class="viewcode-block" id="TabularChannelWiseMultiAttention.calc_fused_layers"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># if mod1 and mod2 have a different number of layers, return error</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod2_layers</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The number of layers in the two modalities must be the same.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod2_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TabularChannelWiseMultiAttention.forward"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -201,7 +217,13 @@
             <span class="n">x_tab1</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">x_tab1</span><span class="p">)</span>
             <span class="n">x_tab2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod2_layers</span><span class="p">[</span><span class="n">k</span><span class="p">](</span><span class="n">x_tab2</span><span class="p">)</span>
 
-            <span class="n">x_tab2</span> <span class="o">=</span> <span class="n">x_tab2</span> <span class="o">*</span> <span class="n">x_tab1</span>
+            <span class="c1"># layer to get the feature maps to be the same size if they have been modified to not be</span>
+            <span class="k">if</span> <span class="n">x_tab1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x_tab2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="c1"># layer to make tab1 output the same size as tab2</span>
+                <span class="n">new_x_tab1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">x_tab1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x_tab2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])(</span><span class="n">x_tab1</span><span class="p">)</span>
+                <span class="n">x_tab2</span> <span class="o">=</span> <span class="n">x_tab2</span> <span class="o">*</span> <span class="n">new_x_tab1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">x_tab2</span> <span class="o">=</span> <span class="n">x_tab2</span> <span class="o">*</span> <span class="n">x_tab1</span>
 
         <span class="n">out_fuse</span> <span class="o">=</span> <span class="n">x_tab2</span>
 

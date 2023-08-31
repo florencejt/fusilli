@@ -11,8 +11,8 @@ from torch.autograd import Variable
 
 class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
     """
-    Crossmodal multi-head attention model. This model uses the self attention and cross modal attention
-    between the two modalities: tabular and image.
+    Crossmodal multi-head attention model. This model uses the self attention and cross modal
+    attention between the two modalities: tabular and image.
 
     Attributes
     ----------
@@ -24,6 +24,8 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
         Type of fusion.
     pred_type : str
         Type of prediction to be performed.
+    attention_embed_dim : int
+        Number of features of the multihead attention layer.
     mod1_layers : dict
         Dictionary containing the layers of the first modality.
     img_layers : dict
@@ -31,17 +33,14 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers.
     attention : nn.MultiheadAttention
-        Multihead attention layer. Takes in 50 features as input.
+        Multihead attention layer. Takes in attention_embed_dim features as input.
     img_dense : nn.Linear
-        Linear layer. Takes in 50 features as input. This is the output of the multihead attention layer.
-    to50 : nn.Linear
-        Linear layer. Takes in the number of features of the fused layers as input.
+        Linear layer. Takes in attention_embed_dim features as input. This is the output of
+        the multihead attention layer.
     relu : nn.ReLU
         ReLU activation function.
-    tab1drops : list
-        List containing the dropout layers for the tabular modality.
     final_prediction : nn.Sequential
-        Sequential layer containing the final prediction layers. The final prediction layers take in 200 features.
+        Sequential layer containing the final prediction layers.
 
     Methods
     -------
@@ -85,23 +84,16 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
         self.set_img_layers()
         self.calc_fused_layers()
 
-        # self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
-        # self.set_fused_layers(self.fused_dim)
-
-        # self.attention = nn.MultiheadAttention(
-        #     embed_dim=self.attention_embed_dim, num_heads=2
-        # )
-
-        # self.img_dense = nn.Linear(self.attention_embed_dim, 1)
-        # self.to50 = nn.Linear(self.fused_dim, 50)
-
         self.relu = nn.ReLU()
 
-        self.tab1drops = [nn.Dropout(p=0.5), nn.Dropout(p=0.3), nn.Dropout(p=0.2)]
-
-        # self.set_final_pred_layers(200)
-
     def calc_fused_layers(self):
+        """
+        Calculate the fused layers.
+
+        Returns
+        -------
+        None
+        """
         # get dummy conv output
 
         if len(self.mod1_layers) != len(self.img_layers):

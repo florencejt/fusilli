@@ -54,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -77,7 +78,9 @@
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.fused_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.final_prediction"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.final_prediction</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.forward"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.forward()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.forward()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -143,6 +146,9 @@ image modality.</p>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentFusionModel</span></code>(pred_type, data_dims, params)</p></td>
 <td><p>Parent class for all fusion models.</p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Variable</span></code></p></td>
+<td><p></p></td>
+</tr>
 </tbody>
 </table>
 <dl class="py class">
@@ -154,7 +160,7 @@ image modality.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.method_name">
 <span class="sig-name descname"><span class="pre">method_name</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.method_name" title="Permalink to this definition"></a></dt>
-<dd><p>Name of the method.</p>
+<dd><p>Name of the method. (Concatenating tabular data with image feature maps)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -165,7 +171,7 @@ image modality.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.modality_type">
 <span class="sig-name descname"><span class="pre">modality_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.modality_type" title="Permalink to this definition"></a></dt>
-<dd><p>Type of modality.</p>
+<dd><p>Type of modality. (tab_img)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -176,7 +182,7 @@ image modality.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fusion_type">
 <span class="sig-name descname"><span class="pre">fusion_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fusion_type" title="Permalink to this definition"></a></dt>
-<dd><p>Type of fusion.</p>
+<dd><p>Type of fusion. (operation)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -198,7 +204,8 @@ image modality.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.mod1_layers">
 <span class="sig-name descname"><span class="pre">mod1_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.mod1_layers" title="Permalink to this definition"></a></dt>
-<dd><p>Dictionary containing the layers of the first modality.</p>
+<dd><p>Dictionary containing the layers of the first modality.
+Calculated in the <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_mod1_layers()</span></code> method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
@@ -209,7 +216,8 @@ image modality.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.img_layers">
 <span class="sig-name descname"><span class="pre">img_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.img_layers" title="Permalink to this definition"></a></dt>
-<dd><p>Dictionary containing the layers of the image data.</p>
+<dd><p>Dictionary containing the layers of the image data.
+Calculated in the <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_img_layers()</span></code> method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
@@ -220,7 +228,8 @@ image modality.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fused_layers">
 <span class="sig-name descname"><span class="pre">fused_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fused_layers" title="Permalink to this definition"></a></dt>
-<dd><p>Sequential layer containing the fused layers.</p>
+<dd><p>Sequential layer containing the fused layers. Calculated in the
+<a class="reference internal" href="#id0" title="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a> method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>nn.Sequential</p>
@@ -231,11 +240,9 @@ image modality.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.final_prediction">
 <span class="sig-name descname"><span class="pre">final_prediction</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.final_prediction" title="Permalink to this definition"></a></dt>
-<dd><dl class="simple">
-<dt>Sequential layer containing the final prediction layers. The final prediction layers</dt><dd><p>take in the number of</p>
-</dd>
-</dl>
-<p>features of the fused layers as input.</p>
+<dd><p>Sequential layer containing the final prediction layers. The final prediction layers
+take in the number of features of the fused layers as input.
+Calculated in the <a class="reference internal" href="#id0" title="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a> method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>nn.Sequential</p>
@@ -250,8 +257,25 @@ image modality.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers">
+<span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_maps_tabular_maps.html#ConcatImageMapsTabularMaps.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the fused layers.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_maps_tabular_maps.html#ConcatImageMapsTabularMaps.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_maps_tabular_maps.html#ConcatImageMapsTabularMaps.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the fused layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_maps_tabular_maps.html#ConcatImageMapsTabularMaps.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
 <dd><p>Forward pass of the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

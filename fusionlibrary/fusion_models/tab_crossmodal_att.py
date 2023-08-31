@@ -98,7 +98,7 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
 
         self.relu = nn.ReLU()
 
-        self.clindrops = [nn.Dropout(p=0.5), nn.Dropout(p=0.3), nn.Dropout(p=0.2)]
+        # self.clindrops = [nn.Dropout(p=0.5), nn.Dropout(p=0.3), nn.Dropout(p=0.2)]
 
         # self.set_final_pred_layers(200)
 

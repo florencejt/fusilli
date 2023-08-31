@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -152,13 +153,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_mod1_layers</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_fused_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
 
         <span class="c1"># self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features</span>
         <span class="c1"># self.set_fused_layers(self.fused_dim)</span>
         <span class="c1"># self.set_final_pred_layers()</span>
 
-<div class="viewcode-block" id="Tabular1Unimodal.get_fused_layers"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.get_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">get_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Tabular1Unimodal.calc_fused_layers"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">()</span></div>

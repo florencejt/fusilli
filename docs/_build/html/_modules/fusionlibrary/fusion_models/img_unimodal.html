@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -146,26 +147,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_img_layers</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_fused_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
 
         <span class="c1"># self.fused_dim = self.get_fused_dim()</span>
         <span class="c1"># # list(self.img_layers.values())[-1][0].out_channels</span>
         <span class="c1"># self.set_fused_layers(self.fused_dim)</span>
         <span class="c1"># self.set_final_pred_layers()</span>
 
-    <span class="k">def</span> <span class="nf">get_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># BUG this fused_dim isn&#39;t right if the model is modified</span>
-
+    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># get dummy conv output</span>
-        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">dummy_conv_output</span><span class="p">)</span>
         <span class="n">n_size</span> <span class="o">=</span> <span class="n">dummy_conv_output</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">n_size</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="n">n_size</span>
-
         <span class="c1"># self.fused_dim = list(self.img_layers.values())[-1][0].out_channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">()</span>
@@ -190,7 +186,6 @@
             <span class="n">x_img</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">x_img</span><span class="p">)</span>
 
         <span class="n">x_img</span> <span class="o">=</span> <span class="n">x_img</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">x_img</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x_img shape&quot;</span><span class="p">,</span> <span class="n">x_img</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
         <span class="n">out_fuse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fused_layers</span><span class="p">(</span><span class="n">x_img</span><span class="p">)</span>
 

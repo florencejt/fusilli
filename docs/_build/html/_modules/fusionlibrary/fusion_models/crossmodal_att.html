@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -99,12 +100,13 @@
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 <span class="kn">from</span> <span class="nn">fusionlibrary.fusion_models.base_pl_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
 <span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.autograd</span> <span class="kn">import</span> <span class="n">Variable</span>
 
 
 <div class="viewcode-block" id="CrossmodalMultiheadAttention"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention">[docs]</a><span class="k">class</span> <span class="nc">CrossmodalMultiheadAttention</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Crossmodal multi-head attention model. This model uses the self attention and cross modal attention</span>
-<span class="sd">    between the two modalities: tabular and image.</span>
+<span class="sd">    Crossmodal multi-head attention model. This model uses the self attention and cross modal</span>
+<span class="sd">    attention between the two modalities: tabular and image.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -116,6 +118,8 @@
 <span class="sd">        Type of fusion.</span>
 <span class="sd">    pred_type : str</span>
 <span class="sd">        Type of prediction to be performed.</span>
+<span class="sd">    attention_embed_dim : int</span>
+<span class="sd">        Number of features of the multihead attention layer.</span>
 <span class="sd">    mod1_layers : dict</span>
 <span class="sd">        Dictionary containing the layers of the first modality.</span>
 <span class="sd">    img_layers : dict</span>
@@ -123,17 +127,14 @@
 <span class="sd">    fused_layers : nn.Sequential</span>
 <span class="sd">        Sequential layer containing the fused layers.</span>
 <span class="sd">    attention : nn.MultiheadAttention</span>
-<span class="sd">        Multihead attention layer. Takes in 50 features as input.</span>
+<span class="sd">        Multihead attention layer. Takes in attention_embed_dim features as input.</span>
 <span class="sd">    img_dense : nn.Linear</span>
-<span class="sd">        Linear layer. Takes in 50 features as input. This is the output of the multihead attention layer.</span>
-<span class="sd">    to50 : nn.Linear</span>
-<span class="sd">        Linear layer. Takes in the number of features of the fused layers as input.</span>
+<span class="sd">        Linear layer. Takes in attention_embed_dim features as input. This is the output of</span>
+<span class="sd">        the multihead attention layer.</span>
 <span class="sd">    relu : nn.ReLU</span>
 <span class="sd">        ReLU activation function.</span>
-<span class="sd">    tab1drops : list</span>
-<span class="sd">        List containing the dropout layers for the tabular modality.</span>
 <span class="sd">    final_prediction : nn.Sequential</span>
-<span class="sd">        Sequential layer containing the final prediction layers. The final prediction layers take in 200 features.</span>
+<span class="sd">        Sequential layer containing the final prediction layers.</span>
 
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
@@ -171,22 +172,51 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">attention_embed_dim</span> <span class="o">=</span> <span class="mi">50</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">set_mod1_layers</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_img_layers</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_channels</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">attention</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MultiheadAttention</span><span class="p">(</span><span class="n">embed_dim</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">num_heads</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">img_dense</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">to50</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">tab1drops</span> <span class="o">=</span> <span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.3</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)]</span>
+<div class="viewcode-block" id="CrossmodalMultiheadAttention.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the fused layers.</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># get dummy conv output</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The number of layers in the two modalities must be the same.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">dummy_conv_output</span><span class="p">)</span>
+        <span class="n">image_output_size</span> <span class="o">=</span> <span class="n">dummy_conv_output</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="n">image_output_size</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">attention</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MultiheadAttention</span><span class="p">(</span>
+            <span class="n">embed_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">attention_embed_dim</span><span class="p">,</span> <span class="n">num_heads</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">img_dense</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attention_embed_dim</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">img_to_embed_dim</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attention_embed_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tab_to_embed_dim</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attention_embed_dim</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attention_embed_dim</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CrossmodalMultiheadAttention.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -210,11 +240,11 @@
             <span class="n">x_img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="p">[</span><span class="n">k</span><span class="p">](</span><span class="n">x_img</span><span class="p">)</span>
 
         <span class="n">out_img</span> <span class="o">=</span> <span class="n">x_img</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">x_img</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">out_img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to50</span><span class="p">(</span><span class="n">out_img</span><span class="p">)</span>
+        <span class="n">out_img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_to_embed_dim</span><span class="p">(</span><span class="n">out_img</span><span class="p">)</span>
         <span class="n">out_img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">out_img</span><span class="p">)</span>
 
         <span class="n">out_tab1</span> <span class="o">=</span> <span class="n">x_tab1</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">x_tab1</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">out_tab1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to50</span><span class="p">(</span><span class="n">out_tab1</span><span class="p">)</span>
+        <span class="n">out_tab1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_to_embed_dim</span><span class="p">(</span><span class="n">out_tab1</span><span class="p">)</span>
 
         <span class="c1"># self attention</span>
         <span class="n">img_att</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attention</span><span class="p">(</span><span class="n">out_img</span><span class="p">,</span> <span class="n">out_img</span><span class="p">,</span> <span class="n">out_img</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>

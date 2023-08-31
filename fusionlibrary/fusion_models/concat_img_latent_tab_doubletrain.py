@@ -25,31 +25,32 @@ class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
     Attributes
     ----------
     method_name : str
-        Name of the method.
+        Name of the method. (Concatenating the latent img space and tabular data)
     modality_type : str
-        Type of modality.
+        Type of modality. (tab_img)
     fusion_type : str
-        Type of fusion.
+        Type of fusion. (subspace)
     pred_type : str
         Type of prediction to be performed.
     subspace_method : class
-        Class containing the method to train the latent image space.
-    new_encdim : int
-        Dimension of the latent image space once we shrink it down.
+        Class containing the method to train the latent image space. Default is
+            :func:`img_latent_subspace_method`.
+    latent_dim : int
+        Dimension of the latent image space once we encode it down. Taken from the
+            subspace_method class and inferred from the dimensions of the input data to the model.
     enc_img_layer : nn.Linear
         Linear layer to reduce the dimension of the latent image space.
+        Calculated with :meth:`~ConcatImgLatentTabDoubleTrain.calc_fused_layers()`.
     fused_dim : int
         Dimension of the fused layers.
+        Calculated with :meth:`~ConcatImgLatentTabDoubleTrain.calc_fused_layers()`.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers.
+        Calculated with :meth:`~ConcatImgLatentTabDoubleTrain.calc_fused_layers()`.
     final_prediction : nn.Sequential
         Sequential layer containing the final prediction layers. The final prediction layers
             take in the number of features of the fused layers as input.
-
-    Methods
-    -------
-    forward(x)
-        Forward pass of the model.
+            Calculated with :meth:`~ConcatImgLatentTabDoubleTrain.calc_fused_layers()`.
 
     """
 
@@ -73,15 +74,16 @@ class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
 
         self.calc_fused_layers()
 
-        # self.latent_dim = self.subspace_method.autoencoder.latent_dim
-
-        # self.enc_img_layer = nn.Linear(self.mod2_dim, self.latent_dim)
-
-        # self.fused_dim = self.mod1_dim + new_encdim
-        # self.set_fused_layers(self.fused_dim)
-        # self.set_final_pred_layers()
-
     def calc_fused_layers(self):
+        """
+        Calculate the fused layers. If layer sizes are modified, this function will be called again to adjust the
+        fused layers.
+
+        Returns
+        -------
+        None
+        """
+
         self.latent_dim = self.data_dims[1]
 
         self.enc_img_layer = nn.Linear(self.latent_dim, self.latent_dim)
@@ -140,6 +142,16 @@ class ImgLatentSpace(pl.LightningModule):
         Sequential layer containing the encoder layers.
     decoder : nn.Sequential
         Sequential layer containing the decoder layers.
+    latent_dim: int
+        Dimension of the latent image space once we encode it down. Default is 64.
+    new_encoder : nn.Sequential
+        Sequential layer containing the encoder layers and the linear layer to reduce the dimension of the latent
+            image space.
+        Calculated with :meth:`~ImgLatentSpace.calc_fused_layers()`.
+    new_decoder : nn.Sequential
+        Sequential layer containing the decoder layers and the linear layer to increase the dimension of the latent
+            image space.
+        Calculated with :meth:`~ImgLatentSpace.calc_fused_layers()`.
 
     Methods
     -------
@@ -166,37 +178,27 @@ class ImgLatentSpace(pl.LightningModule):
 
         self.data_dims = data_dims
         self.img_dims = data_dims[2]
-        self.latent_dim = (
-            82  # modifiable, but you need to also change the encoder and decoder
-        )
+        self.latent_dim = 64
 
         if len(self.img_dims) == 2:  # 2D images
             self.encoder = nn.Sequential(
-                nn.Conv2d(1, 32, kernel_size=3, padding=1),  # 100x100x1 -> 100x100x32
+                nn.Conv2d(1, 32, kernel_size=3, padding=1),
                 nn.ReLU(),
-                nn.MaxPool2d(kernel_size=2, stride=2),  # 100x100x32 -> 50x50x32
-                nn.Conv2d(32, 64, kernel_size=3, padding=1),  # 50x50x32 -> 50x50x64
+                nn.MaxPool2d(kernel_size=2, stride=2),
+                nn.Conv2d(32, 64, kernel_size=3, padding=1),
                 nn.ReLU(),
-                nn.MaxPool2d(kernel_size=2, stride=2),  # 50x50x64 -> 25x25x64
-                nn.Conv2d(64, 128, kernel_size=3, padding=1),  # 25x25x64 -> 25x25x128
+                nn.MaxPool2d(kernel_size=2, stride=2),
+                nn.Conv2d(64, 128, kernel_size=3, padding=1),
                 nn.ReLU(),
-                nn.MaxPool2d(kernel_size=2, stride=2),  # 25x25x128 -> 12x12x128
+                nn.MaxPool2d(kernel_size=2, stride=2),
             )
 
             self.decoder = nn.Sequential(
-                nn.ConvTranspose2d(
-                    128, 64, kernel_size=2, stride=2
-                ),  # 12x12x128 -> 25x25x64
+                nn.ConvTranspose2d(128, 64, kernel_size=2, stride=2),
                 nn.ReLU(),
-                nn.ConvTranspose2d(
-                    64, 32, kernel_size=2, stride=2
-                ),  # 25x25x64 -> 50x50x32
+                nn.ConvTranspose2d(64, 32, kernel_size=2, stride=2),
                 nn.ReLU(),
-                nn.ConvTranspose2d(
-                    32, 1, kernel_size=2, stride=2
-                ),  # 50x50x32 -> 100x100x1
-                nn.Sigmoid(),  # Output is scaled between 0 and 1
-                nn.Upsample(size=self.img_dims, mode="bilinear", align_corners=False),
+                nn.ConvTranspose2d(32, 1, kernel_size=2, stride=2),
             )
 
         elif len(self.img_dims) == 3:
@@ -207,8 +209,6 @@ class ImgLatentSpace(pl.LightningModule):
                 nn.ReLU(),
                 nn.Conv3d(32, self.latent_dim, kernel_size=3, stride=1),
                 nn.ReLU(),
-                # nn.Conv3d(128, 256, kernel_size=3, stride=1),
-                # nn.ReLU(),
             )
 
             self.decoder = nn.Sequential(
@@ -219,8 +219,6 @@ class ImgLatentSpace(pl.LightningModule):
                 nn.ConvTranspose3d(32, 16, kernel_size=3, stride=1),
                 nn.ReLU(),
                 nn.ConvTranspose3d(16, 1, kernel_size=3, stride=1),
-                nn.Sigmoid(),
-                nn.Upsample(size=self.img_dims, mode="trilinear", align_corners=False),
             )
         else:
             raise ValueError("Invalid image dimensions.")
@@ -228,9 +226,16 @@ class ImgLatentSpace(pl.LightningModule):
         self.calc_fused_layers()
 
     def calc_fused_layers(self):
-        # changed the latent space size? this has to run
+        """
+        Calculate the fused layers. If layer sizes are modified, this function will be called again to adjust the
+        fused layers.
 
-        self.flatten = nn.Flatten()
+        Returns
+        -------
+        None
+        """
+
+        # self.flatten = nn.Flatten()
 
         # size of final encoder output
         dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
@@ -238,22 +243,31 @@ class ImgLatentSpace(pl.LightningModule):
         n_size = dummy_conv_output.data.view(1, -1).size(1)
 
         # make linear layer to reduce to latent dim
-        self.linear_to_lat_dim = nn.Linear(n_size, self.latent_dim)
+        # self.linear_to_lat_dim = nn.Linear(n_size, self.latent_dim)
 
         # add extra layers to encoder
         self.new_encoder = copy.deepcopy(self.encoder)
-        self.new_encoder.append(self.flatten)
-        self.new_encoder.append(self.linear_to_lat_dim)
+        self.new_encoder.append(nn.Flatten())
+        self.new_encoder.append(nn.Linear(n_size, self.latent_dim))
 
         # add extra layer to decoder to get right shape for first decoding layer
         self.new_decoder = copy.deepcopy(self.decoder)
-        self.linear_to_decoder = nn.Linear(
-            self.latent_dim, self.new_decoder[0].in_channels
-        )
+        # self.linear_to_decoder = nn.Linear(
+        #     self.latent_dim, self.new_decoder[0].in_channels
+        # )
         # TODO make this work for 3d images too
-        self.unflatten = nn.Unflatten(1, (self.new_decoder[0].in_channels, 1, 1))
-        self.new_decoder.insert(0, self.linear_to_decoder)
-        self.new_decoder.insert(1, self.unflatten)
+        # self.unflatten = nn.Unflatten(1, (self.new_decoder[0].in_channels, 1, 1))
+        self.new_decoder.insert(
+            0, nn.Linear(self.latent_dim, self.new_decoder[0].in_channels)
+        )
+        self.new_decoder.insert(
+            1, nn.Unflatten(1, (self.new_decoder[0].in_channels, 1, 1))
+        )
+
+        self.new_decoder.append(nn.Sigmoid()),  # Output is scaled between 0 and 1
+        self.new_decoder.append(
+            nn.Upsample(size=self.img_dims, mode="bilinear", align_corners=False)
+        )
 
     def forward(self, x):
         """
@@ -388,7 +402,6 @@ class concat_img_latent_tab_subspace_method:
         self.trainer = init_trainer(
             None, max_epochs=3
         )  # TODO change back to big number
-        # self.latent_dim = 64
         self.autoencoder = ImgLatentSpace(self.datamodule.data_dims)
 
     def train(self, train_dataset, val_dataset):

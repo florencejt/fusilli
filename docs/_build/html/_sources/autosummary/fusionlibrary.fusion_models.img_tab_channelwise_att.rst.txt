@@ -1,4 +1,4 @@
-fusionlibrary.fusion\_models.img\_tab\_channelwise\_att
+﻿fusionlibrary.fusion\_models.img\_tab\_channelwise\_att
 =======================================================
 
 .. automodule:: fusionlibrary.fusion_models.img_tab_channelwise_att
@@ -19,6 +19,7 @@ fusionlibrary.fusion\_models.img\_tab\_channelwise\_att
    
       ImageChannelWiseMultiAttention
       ParentFusionModel
+      Variable
    
    
 

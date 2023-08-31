@@ -54,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -69,16 +70,17 @@
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.modality_type"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.modality_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fusion_type"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.fusion_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.pred_type"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.pred_type</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.img_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.img_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.fused_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.final_prediction"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.final_prediction</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.custom_loss"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.custom_loss</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_size"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.latent_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_dim"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.latent_dim</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.encoder"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.encoder</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.decoder"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.decoder</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fc1"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.fc1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.new_encoder"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.new_encoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.new_decoder"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.new_decoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_dim"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.calc_fused_layers()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.forward"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.forward()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.forward()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -146,6 +148,9 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentFusionModel</span></code>(pred_type, data_dims, params)</p></td>
 <td><p>Parent class for all fusion models.</p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Variable</span></code></p></td>
+<td><p></p></td>
+</tr>
 </tbody>
 </table>
 <dl class="py class">
@@ -157,7 +162,7 @@ function: MSE + BCE.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.method_name">
 <span class="sig-name descname"><span class="pre">method_name</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.method_name" title="Permalink to this definition"></a></dt>
-<dd><p>Name of the method.</p>
+<dd><p>Name of the method. (Concatenating image latent space with tabular data, trained altogether)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -168,7 +173,7 @@ function: MSE + BCE.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.modality_type">
 <span class="sig-name descname"><span class="pre">modality_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.modality_type" title="Permalink to this definition"></a></dt>
-<dd><p>Type of modality.</p>
+<dd><p>Type of modality. (tab_img)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -179,7 +184,7 @@ function: MSE + BCE.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fusion_type">
 <span class="sig-name descname"><span class="pre">fusion_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fusion_type" title="Permalink to this definition"></a></dt>
-<dd><p>Type of fusion.</p>
+<dd><p>Type of fusion. (subspace)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -190,7 +195,7 @@ function: MSE + BCE.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.pred_type">
 <span class="sig-name descname"><span class="pre">pred_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.pred_type" title="Permalink to this definition"></a></dt>
-<dd><p>Type of prediction to be performed.</p>
+<dd><p>Type of prediction to be performed. Binary, regression or multiclass.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -199,20 +204,9 @@ function: MSE + BCE.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.img_layers">
-<span class="sig-name descname"><span class="pre">img_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.img_layers" title="Permalink to this definition"></a></dt>
-<dd><p>Dictionary containing the layers of the image data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_layers">
 <span class="sig-name descname"><span class="pre">fused_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_layers" title="Permalink to this definition"></a></dt>
-<dd><p>Sequential layer containing the fused layers.</p>
+<dd><p>Sequential layer containing the fused layers defined with <a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.calc_fused_layers" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.calc_fused_layers"><code class="xref py py-func docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>nn.Sequential</p>
@@ -237,7 +231,7 @@ function: MSE + BCE.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.custom_loss">
 <span class="sig-name descname"><span class="pre">custom_loss</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.custom_loss" title="Permalink to this definition"></a></dt>
-<dd><p>Additional loss function to be used for training the model.</p>
+<dd><p>Additional loss function to be used for training the model. Default is MSELoss.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>nn.Module</p>
@@ -246,9 +240,9 @@ function: MSE + BCE.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_size">
-<span class="sig-name descname"><span class="pre">latent_size</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_size" title="Permalink to this definition"></a></dt>
-<dd><p>Size of the latent space.</p>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_dim">
+<span class="sig-name descname"><span class="pre">latent_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Size of the latent space. Default is 256.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -259,7 +253,20 @@ function: MSE + BCE.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.encoder">
 <span class="sig-name descname"><span class="pre">encoder</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.encoder" title="Permalink to this definition"></a></dt>
-<dd><p>Sequential layer containing the encoder layers.</p>
+<dd><p>Sequential layer containing the encoder layers. Default for 2D image is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>nn.Sequential</p>
@@ -270,7 +277,16 @@ function: MSE + BCE.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.decoder">
 <span class="sig-name descname"><span class="pre">decoder</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.decoder" title="Permalink to this definition"></a></dt>
-<dd><p>Sequential layer containing the decoder layers.</p>
+<dd><p>Sequential layer containing the decoder layers. Default for 2D image is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">ConvTranspose2d</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">ConvTranspose2d</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">ConvTranspose2d</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>nn.Sequential</p>
@@ -279,12 +295,48 @@ function: MSE + BCE.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fc1">
-<span class="sig-name descname"><span class="pre">fc1</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fc1" title="Permalink to this definition"></a></dt>
-<dd><p>Linear layer to be used for the latent space.</p>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.new_encoder">
+<span class="sig-name descname"><span class="pre">new_encoder</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.new_encoder" title="Permalink to this definition"></a></dt>
+<dd><p>Sequential layer containing the encoder layers and the additional layers defined with
+<a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.calc_fused_layers" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.calc_fused_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>nn.Linear</p>
+<dd class="field-odd"><p>nn.Sequential</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.new_decoder">
+<span class="sig-name descname"><span class="pre">new_decoder</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.new_decoder" title="Permalink to this definition"></a></dt>
+<dd><p>Sequential layer containing the decoder layers and the additional layers defined with
+<a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.calc_fused_layers" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.calc_fused_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nn.Sequential</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_dim">
+<span class="sig-name descname"><span class="pre">fused_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Size of the fused layers: latent dimension size + tabular data dimension size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.calc_fused_layers">
+<span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubleloss.html#ConcatImgLatentTabDoubleLoss.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.calc_fused_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the fused layers. If layer sizes are modified, this function will be called again to adjust the
+fused layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -292,12 +344,6 @@ function: MSE + BCE.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubleloss.html#ConcatImgLatentTabDoubleLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.forward" title="Permalink to this definition"></a></dt>
-<dd><p>Forward pass of the model.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubleloss.html#ConcatImgLatentTabDoubleLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
 <dd><p>Forward pass of the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

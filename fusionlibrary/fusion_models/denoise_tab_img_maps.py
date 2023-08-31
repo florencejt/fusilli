@@ -364,21 +364,18 @@ class ImgUnimodalDAE(pl.LightningModule):
         self.data_dims = data_dims
         self.img_dim = data_dims[2]
         self.multiclass_dim = multiclass_dims
+        self.pred_type = pred_type
 
         # get the img layers from ParentFusionModel
         ParentFusionModel.set_img_layers(self)
-        self.num_layers = len(self.img_layers)
+        self.calc_fused_layers()
+        # self.num_layers = len(self.img_layers)
 
-        self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
+        # self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
 
-        # linear layer to get it to 1280
-        # self.linear = nn.Linear(self.fused_dim, 1280)
+        # ParentFusionModel.set_fused_layers(self, fused_dim=self.fused_dim)
 
-        ParentFusionModel.set_fused_layers(self, fused_dim=self.fused_dim)
-
-        # getting pred type from datamodule
-        self.pred_type = pred_type
-        ParentFusionModel.set_final_pred_layers(self)
+        # ParentFusionModel.set_final_pred_layers(self)
 
         self.output_activation_functions = {
             "binary": torch.round,
@@ -402,6 +399,15 @@ class ImgUnimodalDAE(pl.LightningModule):
                 BaseModel.safe_squeeze(self, y).long(),
             )
             self.activation = lambda x: torch.argmax(nn.Softmax(dim=-1)(x), dim=-1)
+
+    def calc_fused_layers(self):
+        self.num_layers = len(self.img_layers)
+
+        self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
+
+        ParentFusionModel.set_fused_layers(self, fused_dim=self.fused_dim)
+
+        ParentFusionModel.set_final_pred_layers(self)
 
     def forward(self, x):
         """

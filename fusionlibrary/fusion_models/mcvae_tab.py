@@ -30,7 +30,7 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
         Type of fusion.
     subspace_method : class
         Class of the subspace method.
-    mod1_layers : dict
+    latent_space_layers : dict
         Dictionary containing the layers of the 1st type of tabular data.
         Here the first type of tabular data is the joint latent space created
             in the mcvae_subspace_method class.
@@ -105,6 +105,12 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
         """
         Calculates the fused layers of the model.
         """
+
+        # make sure the first layer takes in the latent dimension
+        self.latent_space_layers[0] = nn.Linear(
+            self.data_dims[0][1], self.latent_space_layers[0].out_features
+        )
+
         self.fused_dim = list(self.latent_space_layers.values())[-1][0].out_features
         self.set_fused_layers(self.fused_dim)
         self.set_final_pred_layers()
@@ -197,6 +203,8 @@ class mcvae_subspace_method:
     ----------
     datamodule : datamodule object
         Datamodule object containing the data.
+    num_latent_dims : int
+        Number of latent dimensions.
 
     Methods
     -------

@@ -54,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -149,6 +150,9 @@
 <dd><p>Bases: <a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <dl class="simple">
 <dt>This class implements a model that fuses the two types of tabular data using a</dt><dd><p>channel-wise multiplication approach.</p>
+</dd>
+<dt>If the two types of tabular data have different feature dimensions at each layer, the model will</dt><dd><p>use a linear layer to make the dimensions the same. This is done to ensure that the
+channel-wise multiplication can be performed.</p>
 </dd>
 </dl>
 <p>Inspired by the work of Duanmu et al. (2020) [1]: here we use two types of tabular data as

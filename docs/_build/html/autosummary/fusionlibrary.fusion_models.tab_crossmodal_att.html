@@ -54,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -91,6 +92,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.relu"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.relu</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.clindrops"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.clindrops</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.forward"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.calc_fused_layers()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.forward()</span></code></a></li>
 </ul>
 </li>
@@ -303,6 +305,12 @@ Journal of the American Medical Informatics Association, 29(12),
 2014–2022. <a class="reference external" href="https://doi.org/10.1093/jamia/ocac168">https://doi.org/10.1093/jamia/ocac168</a></p>
 <p>Accompanying code: (our model is inspired by the work of Golovanevsky et al. (2021) [1])
 <a class="reference external" href="https://github.com/rsinghlab/MADDi/blob/main/training/train_all_modalities.py">https://github.com/rsinghlab/MADDi/blob/main/training/train_all_modalities.py</a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.calc_fused_layers">
+<span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tab_crossmodal_att.html#TabularCrossmodalMultiheadAttention.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.calc_fused_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the fused layers.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="id0">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tab_crossmodal_att.html#TabularCrossmodalMultiheadAttention.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>

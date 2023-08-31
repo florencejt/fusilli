@@ -54,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -71,13 +72,13 @@
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fusion_type"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.fusion_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.pred_type"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.pred_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.subspace_method"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.subspace_method</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.new_encdim"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.new_encdim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.latent_dim"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.latent_dim</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.enc_img_layer"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.enc_img_layer</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fused_dim"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.fused_dim</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.fused_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.final_prediction"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.calc_fused_layers()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.forward"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.forward()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.forward()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace</span></code></a><ul>
@@ -85,26 +86,30 @@
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.img_dims"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.img_dims</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.encoder"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.encoder</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.decoder"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.decoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.latent_dim"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.latent_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.new_encoder"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.new_encoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.new_decoder"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.new_decoder</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.forward"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.forward()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.training_step"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.training_step()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.validation_step"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.validation_step()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.configure_optimizers"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.configure_optimizers()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.encode_image"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.encode_image()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.configure_optimizers()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.encode_image()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.forward()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.training_step()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.validation_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.configure_optimizers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.encode_image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.training_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.validation_step()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method"><code class="docutils literal notranslate"><span class="pre">img_latent_subspace_method</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.datamodule"><code class="docutils literal notranslate"><span class="pre">img_latent_subspace_method.datamodule</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.trainer"><code class="docutils literal notranslate"><span class="pre">img_latent_subspace_method.trainer</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.autoencoder"><code class="docutils literal notranslate"><span class="pre">img_latent_subspace_method.autoencoder</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.train"><code class="docutils literal notranslate"><span class="pre">img_latent_subspace_method.train()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.convert_to_latent"><code class="docutils literal notranslate"><span class="pre">img_latent_subspace_method.convert_to_latent()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id6"><code class="docutils literal notranslate"><span class="pre">img_latent_subspace_method.convert_to_latent()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id7"><code class="docutils literal notranslate"><span class="pre">img_latent_subspace_method.train()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method"><code class="docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.datamodule"><code class="docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method.datamodule</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.trainer"><code class="docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method.trainer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.autoencoder"><code class="docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method.autoencoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.train"><code class="docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method.train()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.convert_to_latent"><code class="docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method.convert_to_latent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method.convert_to_latent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6"><code class="docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method.train()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -190,7 +195,10 @@ img_latent_subspace_method class.</p>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentFusionModel</span></code>(pred_type, data_dims, params)</p></td>
 <td><p>Parent class for all fusion models.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method"><code class="xref py py-obj docutils literal notranslate"><span class="pre">img_latent_subspace_method</span></code></a>(datamodule)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Variable</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method"><code class="xref py py-obj docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method</span></code></a>(datamodule)</p></td>
 <td><p>Class containing the method to train the latent image space and to convert the image data to the latent image space.</p></td>
 </tr>
 </tbody>
@@ -205,7 +213,7 @@ img_latent_subspace_method class.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.method_name">
 <span class="sig-name descname"><span class="pre">method_name</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.method_name" title="Permalink to this definition"></a></dt>
-<dd><p>Name of the method.</p>
+<dd><p>Name of the method. (Concatenating the latent img space and tabular data)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -216,7 +224,7 @@ img_latent_subspace_method class.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.modality_type">
 <span class="sig-name descname"><span class="pre">modality_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.modality_type" title="Permalink to this definition"></a></dt>
-<dd><p>Type of modality.</p>
+<dd><p>Type of modality. (tab_img)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -227,7 +235,7 @@ img_latent_subspace_method class.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fusion_type">
 <span class="sig-name descname"><span class="pre">fusion_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fusion_type" title="Permalink to this definition"></a></dt>
-<dd><p>Type of fusion.</p>
+<dd><p>Type of fusion. (subspace)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -249,7 +257,10 @@ img_latent_subspace_method class.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.subspace_method">
 <span class="sig-name descname"><span class="pre">subspace_method</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.subspace_method" title="Permalink to this definition"></a></dt>
-<dd><p>Class containing the method to train the latent image space.</p>
+<dd><dl class="simple">
+<dt>Class containing the method to train the latent image space. Default is</dt><dd><p><code class="xref py py-func docutils literal notranslate"><span class="pre">img_latent_subspace_method()</span></code>.</p>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>class</p>
@@ -258,9 +269,12 @@ img_latent_subspace_method class.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.new_encdim">
-<span class="sig-name descname"><span class="pre">new_encdim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.new_encdim" title="Permalink to this definition"></a></dt>
-<dd><p>Dimension of the latent image space once we shrink it down.</p>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.latent_dim">
+<span class="sig-name descname"><span class="pre">latent_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.latent_dim" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Dimension of the latent image space once we encode it down. Taken from the</dt><dd><p>subspace_method class and inferred from the dimensions of the input data to the model.</p>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -271,7 +285,8 @@ img_latent_subspace_method class.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.enc_img_layer">
 <span class="sig-name descname"><span class="pre">enc_img_layer</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.enc_img_layer" title="Permalink to this definition"></a></dt>
-<dd><p>Linear layer to reduce the dimension of the latent image space.</p>
+<dd><p>Linear layer to reduce the dimension of the latent image space.
+Calculated with <a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.calc_fused_layers" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.calc_fused_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>nn.Linear</p>
@@ -282,7 +297,8 @@ img_latent_subspace_method class.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fused_dim">
 <span class="sig-name descname"><span class="pre">fused_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fused_dim" title="Permalink to this definition"></a></dt>
-<dd><p>Dimension of the fused layers.</p>
+<dd><p>Dimension of the fused layers.
+Calculated with <a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.calc_fused_layers" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.calc_fused_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -293,7 +309,8 @@ img_latent_subspace_method class.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fused_layers">
 <span class="sig-name descname"><span class="pre">fused_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fused_layers" title="Permalink to this definition"></a></dt>
-<dd><p>Sequential layer containing the fused layers.</p>
+<dd><p>Sequential layer containing the fused layers.
+Calculated with <a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.calc_fused_layers" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.calc_fused_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>nn.Sequential</p>
@@ -305,7 +322,8 @@ img_latent_subspace_method class.</p>
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.final_prediction">
 <span class="sig-name descname"><span class="pre">final_prediction</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.final_prediction" title="Permalink to this definition"></a></dt>
 <dd><dl class="simple">
-<dt>Sequential layer containing the final prediction layers. The final prediction layers</dt><dd><p>take in the number of features of the fused layers as input.</p>
+<dt>Sequential layer containing the final prediction layers. The final prediction layers</dt><dd><p>take in the number of features of the fused layers as input.
+Calculated with <a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.calc_fused_layers" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.calc_fused_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a>.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -316,14 +334,20 @@ img_latent_subspace_method class.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ConcatImgLatentTabDoubleTrain.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.forward" title="Permalink to this definition"></a></dt>
-<dd><p>Forward pass of the model.</p>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.calc_fused_layers">
+<span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ConcatImgLatentTabDoubleTrain.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.calc_fused_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the fused layers. If layer sizes are modified, this function will be called again to adjust the
+fused layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ConcatImgLatentTabDoubleTrain.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ConcatImgLatentTabDoubleTrain.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.forward" title="Permalink to this definition"></a></dt>
 <dd><p>Forward pass of the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -389,6 +413,47 @@ img_latent_subspace_method class.</p>
 </dl>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.latent_dim">
+<span class="sig-name descname"><span class="pre">latent_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.latent_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Dimension of the latent image space once we encode it down. Default is 64.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.new_encoder">
+<span class="sig-name descname"><span class="pre">new_encoder</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.new_encoder" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Sequential layer containing the encoder layers and the linear layer to reduce the dimension of the latent</dt><dd><p>image space.</p>
+</dd>
+</dl>
+<p>Calculated with <a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.calc_fused_layers" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.calc_fused_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nn.Sequential</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.new_decoder">
+<span class="sig-name descname"><span class="pre">new_decoder</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.new_decoder" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Sequential layer containing the decoder layers and the linear layer to increase the dimension of the latent</dt><dd><p>image space.</p>
+</dd>
+</dl>
+<p>Calculated with <a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.calc_fused_layers" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.calc_fused_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nn.Sequential</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ImgLatentSpace.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.forward" title="Permalink to this definition"></a></dt>
@@ -420,8 +485,20 @@ img_latent_subspace_method class.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">configure_optimizers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ImgLatentSpace.configure_optimizers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.calc_fused_layers">
+<span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ImgLatentSpace.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.calc_fused_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the fused layers. If layer sizes are modified, this function will be called again to adjust the
+fused layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">configure_optimizers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ImgLatentSpace.configure_optimizers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
 <dd><p>Configure the optimizers of the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -434,8 +511,8 @@ img_latent_subspace_method class.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">encode_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ImgLatentSpace.encode_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">encode_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ImgLatentSpace.encode_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
 <dd><p>Encode the image data. Used when the model is trained to get latent image space.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -451,8 +528,8 @@ img_latent_subspace_method class.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ImgLatentSpace.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ImgLatentSpace.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition"></a></dt>
 <dd><p>Forward pass of the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -468,8 +545,8 @@ img_latent_subspace_method class.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">training_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ImgLatentSpace.training_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">training_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ImgLatentSpace.training_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Permalink to this definition"></a></dt>
 <dd><p>Training step of the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -488,8 +565,8 @@ img_latent_subspace_method class.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id5">
-<span class="sig-name descname"><span class="pre">validation_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ImgLatentSpace.validation_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">validation_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#ImgLatentSpace.validation_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Permalink to this definition"></a></dt>
 <dd><p>Validation step of the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -510,14 +587,14 @@ img_latent_subspace_method class.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.</span></span><span class="sig-name descname"><span class="pre">img_latent_subspace_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datamodule</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#img_latent_subspace_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.</span></span><span class="sig-name descname"><span class="pre">concat_img_latent_tab_subspace_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datamodule</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#concat_img_latent_tab_subspace_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class containing the method to train the latent image space and to convert the image data
 to the latent image space.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.datamodule">
-<span class="sig-name descname"><span class="pre">datamodule</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.datamodule" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.datamodule">
+<span class="sig-name descname"><span class="pre">datamodule</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.datamodule" title="Permalink to this definition"></a></dt>
 <dd><p>Data module containing the data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -527,8 +604,8 @@ to the latent image space.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.trainer">
-<span class="sig-name descname"><span class="pre">trainer</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.trainer" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.trainer">
+<span class="sig-name descname"><span class="pre">trainer</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.trainer" title="Permalink to this definition"></a></dt>
 <dd><p>Lightning trainer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -538,8 +615,8 @@ to the latent image space.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.autoencoder">
-<span class="sig-name descname"><span class="pre">autoencoder</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.autoencoder" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.autoencoder">
+<span class="sig-name descname"><span class="pre">autoencoder</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.autoencoder" title="Permalink to this definition"></a></dt>
 <dd><p>Autoencoder to train the latent image space.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -549,20 +626,20 @@ to the latent image space.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.train">
-<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#img_latent_subspace_method.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.train" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#concat_img_latent_tab_subspace_method.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.train" title="Permalink to this definition"></a></dt>
 <dd><p>Train the latent image space.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.convert_to_latent">
-<span class="sig-name descname"><span class="pre">convert_to_latent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#img_latent_subspace_method.convert_to_latent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.img_latent_subspace_method.convert_to_latent" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.convert_to_latent">
+<span class="sig-name descname"><span class="pre">convert_to_latent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#concat_img_latent_tab_subspace_method.convert_to_latent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.convert_to_latent" title="Permalink to this definition"></a></dt>
 <dd><p>Convert the image data to the latent image space.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id6">
-<span class="sig-name descname"><span class="pre">convert_to_latent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#img_latent_subspace_method.convert_to_latent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id6" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">convert_to_latent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#concat_img_latent_tab_subspace_method.convert_to_latent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Permalink to this definition"></a></dt>
 <dd><p>Convert the image data to the latent image space.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -580,8 +657,8 @@ to the latent image space.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id7">
-<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#img_latent_subspace_method.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id7" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_latent_tab_doubletrain.html#concat_img_latent_tab_subspace_method.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id6" title="Permalink to this definition"></a></dt>
 <dd><p>Train the latent image space.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

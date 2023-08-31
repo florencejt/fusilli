@@ -11,7 +11,7 @@
       <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
-    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+    <link rel="shortcut icon" href="../../_static/pink_pasta_logo.png"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -36,7 +36,7 @@
           
           <a href="../../index.html" class="icon icon-home">
             fusionlibrary
-              <img src="../../_static/computergif.gif" class="logo" alt="Logo"/>
+              <img src="../../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -48,9 +48,10 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">FuseIt: an introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -107,22 +108,26 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    method_name : str</span>
-<span class="sd">        Name of the method.</span>
+<span class="sd">        Name of the method. (Concatenating tabular data)</span>
 <span class="sd">    modality_type : str</span>
-<span class="sd">        Type of modality.</span>
+<span class="sd">        Type of modality. (both_tab)</span>
 <span class="sd">    fusion_type : str</span>
-<span class="sd">        Type of fusion.</span>
+<span class="sd">        Type of fusion. (operation)</span>
 <span class="sd">    pred_type : str</span>
 <span class="sd">        Type of prediction to be performed.</span>
 <span class="sd">    mod1_layers : dict</span>
-<span class="sd">        Dictionary containing the layers of the first modality.</span>
+<span class="sd">        Dictionary containing the layers of the first modality. Calculated in the</span>
+<span class="sd">        :meth:`~ParentFusionModel.set_mod1_layers` method.</span>
 <span class="sd">    mod2_layers : dict</span>
-<span class="sd">        Dictionary containing the layers of the second modality.</span>
+<span class="sd">        Dictionary containing the layers of the second modality. Calculated in the</span>
+<span class="sd">        :meth:`~ParentFusionModel.set_mod2_layers` method.</span>
 <span class="sd">    fused_layers : nn.Sequential</span>
-<span class="sd">        Sequential layer containing the fused layers.</span>
+<span class="sd">        Sequential layer containing the fused layers. Calculated in the</span>
+<span class="sd">        :meth:`~ParentFusionModel.set_fused_layers` method.</span>
 <span class="sd">    final_prediction : nn.Sequential</span>
 <span class="sd">        Sequential layer containing the final prediction layers. The final prediction layers</span>
-<span class="sd">        take in the number of</span>
+<span class="sd">        take in the number of features of the fused layers as input.</span>
+<span class="sd">        Calculated in the :meth:`~ParentFusionModel.set_final_pred_layers` method.</span>
 
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>

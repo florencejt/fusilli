@@ -52,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -95,9 +96,55 @@
 <span id="train-functions-module"></span><h1>train_functions module<a class="headerlink" href="#module-train_functions" title="Permalink to this heading"></a></h1>
 <p>Contains the train_and_test function: trains and tests a model and, if k_fold trained, a fold.</p>
 <dl class="py function">
+<dt class="sig sig-object py" id="train_functions.get_nested_attr">
+<span class="sig-prename descclassname"><span class="pre">train_functions.</span></span><span class="sig-name descname"><span class="pre">get_nested_attr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/train_functions.html#get_nested_attr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#train_functions.get_nested_attr" title="Permalink to this definition"></a></dt>
+<dd><p>Get a nested attribute from an object using dot-separated path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>object</em>) – The object to retrieve the nested attribute from.</p></li>
+<li><p><strong>attr_path</strong> (<em>str</em>) – Dot-separated path to the nested attribute.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The nested attribute if found, otherwise None.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="train_functions.modify_model_architecture">
 <span class="sig-prename descclassname"><span class="pre">train_functions.</span></span><span class="sig-name descname"><span class="pre">modify_model_architecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">architecture_modification</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/train_functions.html#modify_model_architecture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#train_functions.modify_model_architecture" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Modify the architecture of a deep learning model based on the provided configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>nn.Module</em>) – The original deep learning model.</p></li>
+<li><p><strong>architecture_modification</strong> (<em>dict</em>) – A dictionary containing architecture modifications.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The modified deep learning model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nn.Module</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="train_functions.reset_fused_layers">
+<span class="sig-prename descclassname"><span class="pre">train_functions.</span></span><span class="sig-name descname"><span class="pre">reset_fused_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/train_functions.html#reset_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#train_functions.reset_fused_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Reset fused layers of a model if the reset method is available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<em>nn.Module</em>) – The model to reset fused layers for.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="train_functions.store_trained_model">

@@ -106,8 +106,6 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
                 nn.ConvTranspose2d(
                     32, 1, kernel_size=2, stride=2
                 ),  # 50x50x32 -> 100x100x1
-                nn.Sigmoid(),  # Output is scaled between 0 and 1
-                nn.Upsample(size=self.img_dims, mode="bilinear", align_corners=False),
             )
 
         elif len(self.img_dims) == 3:
@@ -157,13 +155,20 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
 
         # add extra layer to decoder to get right shape for first decoding layer
         self.new_decoder = copy.deepcopy(self.decoder)
+
         self.linear_to_decoder = nn.Linear(
             self.latent_dim, self.new_decoder[0].in_channels
         )
         # TODO make this work for 3d images too
         self.unflatten = nn.Unflatten(1, (self.new_decoder[0].in_channels, 1, 1))
+
         self.new_decoder.insert(0, self.linear_to_decoder)
         self.new_decoder.insert(1, self.unflatten)
+
+        self.new_decoder.append(nn.Sigmoid()),  # Output is scaled between 0 and 1
+        self.new_decoder.append(
+            nn.Upsample(size=self.img_dims, mode="bilinear", align_corners=False)
+        )
 
         self.fused_dim = self.latent_dim + self.data_dims[0]
         self.set_fused_layers(self.fused_dim)
@@ -199,6 +204,7 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         # latent_space = nn.ReLU()(self.fc1(encoded_img))
 
         # decoder
+        print(self.new_decoder)
         reconstructed_image = self.new_decoder(encoded_img)
         # for i, layer in enumerate(self.dec_layers.values()):
         #     decoder_input = layer(decoder_input)

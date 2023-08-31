@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modifying the fusion models &mdash; fusionlibrary  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/florencestheme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/pink_pasta_logo.png"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorials and Examples Gallery" href="auto_examples/index.html" />
+    <link rel="prev" title="Fusion Model Explanations" href="fusion_model_explanations.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            fusionlibrary
+              <img src="_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Fusilli: an introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Modifying the fusion models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-can-be-modified">What can be modified?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-pass-into-get-data-and-training-as-a-dictionary">How to pass into get_data and training as a dictionary:</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.train_functions.html">fusionlibrary.train_functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.eval_functions.Plotter.html">fusionlibrary.eval_functions.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.utils.pl_utils.html">fusionlibrary.utils.pl_utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fusionlibrary</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Modifying the fusion models</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modifying_models.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="modifying-the-fusion-models">
+<h1>Modifying the fusion models<a class="headerlink" href="#modifying-the-fusion-models" title="Permalink to this heading"></a></h1>
+<ul class="simple">
+<li><p>You can modify the fusion models by passing in a dictionary of the attributes you want to modify into the <cite>get_data</cite> and <cite>training</cite> functions.</p></li>
+<li><p>The attributes that can be modified are listed below with some guidance on how they can be changed.</p></li>
+<li><p>You can modify the layers in various fusion models or attributes such as custom loss function or latent dimension.</p></li>
+<li><p>There’s an example in the examples section showing modification of the fusion models.</p></li>
+</ul>
+<section id="what-can-be-modified">
+<h2>What can be modified?<a class="headerlink" href="#what-can-be-modified" title="Permalink to this heading"></a></h2>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Modifiable attributes of the fusion models</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head stub"><p>Method</p></th>
+<th class="head"><p>Attribute</p></th>
+<th class="head"><p>Guidance</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><th class="stub"><p>all</p></th>
+<td><p><code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Changes <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> for all fusion models that have that attribute.</p></li>
+<li><p>Modification overridden if <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> is modified for a specific model.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"></th>
+<td><p><code class="docutils literal notranslate"><span class="pre">mod2_layers</span></code></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Changes <code class="docutils literal notranslate"><span class="pre">mod2_layers</span></code> for all fusion models that have that attribute.</p></li>
+<li><p>Modification overridden if <code class="docutils literal notranslate"><span class="pre">mod2_layers</span></code> is modified for a specific model.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"></th>
+<td><p><code class="docutils literal notranslate"><span class="pre">img_layers</span></code></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Changes <code class="docutils literal notranslate"><span class="pre">img_layers</span></code> for all fusion models that have that attribute.</p></li>
+<li><p>Modification overridden if <code class="docutils literal notranslate"><span class="pre">img_layers</span></code> is modified for a specific model.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_dim" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_dim"><code class="xref py py-attr docutils literal notranslate"><span class="pre">latent_dim</span></code></a></p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.encoder" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.encoder"><code class="xref py py-attr docutils literal notranslate"><span class="pre">encoder</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.decoder" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.decoder"><code class="xref py py-attr docutils literal notranslate"><span class="pre">decoder</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
+</tr>
+<tr class="row-even"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.custom_loss" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.custom_loss"><code class="xref py py-attr docutils literal notranslate"><span class="pre">custom_loss</span></code></a></p></td>
+<td><p>Loss function e.g. <code class="docutils literal notranslate"><span class="pre">nn.MSELoss</span></code></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method"><code class="xref py py-class docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method</span></code></a></p></th>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">autoencoder.latent_dim</span></code></p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><th class="stub"></th>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">autoencoder.encoder</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"></th>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">autoencoder.decoder</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_data.html#fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData" title="fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_data.html#fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.img_layers" title="fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.img_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">img_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">img_layers</span></code> made to “all”</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps" title="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.mod1_layers" title="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> made to “all”</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.img_layers" title="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.img_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">img_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">img_layers</span></code> made to “all”</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_tabular_data.html#fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData" title="fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularData</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_tabular_data.html#fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData.mod1_layers" title="fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> made to “all”</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_tabular_data.html#fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData.mod2_layers" title="fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData.mod2_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod2_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod2_layers</span></code> made to “all”</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_tabular_feature_maps.html#fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps" title="fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_tabular_feature_maps.html#fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.mod1_layers" title="fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> made to “all”</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_tabular_feature_maps.html#fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.mod2_layers" title="fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.mod2_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod2_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod2_layers</span></code> made to “all”</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention" title="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention"><code class="xref py py-class docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.attention_embed_dim" title="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.attention_embed_dim"><code class="xref py py-attr docutils literal notranslate"><span class="pre">attention_embed_dim</span></code></a></p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.mod1_layers" title="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> made to “all”</p></li>
+<li><p>The total number of layers in <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> must be equal to total number of layers in <code class="docutils literal notranslate"><span class="pre">img_layers</span></code>.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.img_layers" title="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.img_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">img_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">img_layers</span></code> made to “all”</p></li>
+<li><p>The total number of layers in <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> must be equal to total number of layers in <code class="docutils literal notranslate"><span class="pre">img_layers</span></code>.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps" title="fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps"><code class="xref py py-class docutils literal notranslate"><span class="pre">DAETabImgMaps</span></code></a></p></th>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">fusion_layers</span></code></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
+<li><p>The first layer’s input features should be the number of tabular features, but if not then this is corrected in <code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method" title="fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method"><code class="xref py py-class docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method</span></code></a></p></th>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">autoencoder.latent_dim</span></code></p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><th class="stub"></th>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">autoencoder.upsampler</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"></th>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">autoencoder.downsampler</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
+</tr>
+<tr class="row-even"><th class="stub"></th>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">img_layers</span></code></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">img_layers</span></code> made to “all”</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN" title="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeCorrGNN</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.graph_conv_layers" title="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.graph_conv_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">graph_conv_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code> of <code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.GCNConv</span></code> Layers.</p></li>
+<li><p>The first layer’s input features should be the number of the second tabular modality’s features, but if not then this is corrected.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.dropout_prob" title="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.dropout_prob"><code class="xref py py-attr docutils literal notranslate"><span class="pre">dropout_prob</span></code></a></p></td>
+<td><p>Float between (not including) 0 and 1.</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker" title="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeCorrGraphMaker</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.threshold" title="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.threshold"><code class="xref py py-attr docutils literal notranslate"><span class="pre">threshold</span></code></a></p></td>
+<td><p>Float between (not including) 0 and 1.</p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention" title="fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.mod1_layers" title="fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> made to “all”</p></li>
+<li><p>Must have same number of layers as <a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.img_layers" title="fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.img_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">img_layers</span></code></a></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.img_layers" title="fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.img_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">img_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> made to “all”</p></li>
+<li><p>Must have same number of layers as <a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.mod1_layers" title="fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></a></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_decision.html#fusionlibrary.fusion_models.img_tab_decision.ImageDecision" title="fusionlibrary.fusion_models.img_tab_decision.ImageDecision"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageDecision</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_decision.html#fusionlibrary.fusion_models.img_tab_decision.ImageDecision.mod1_layers" title="fusionlibrary.fusion_models.img_tab_decision.ImageDecision.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> made to “all”</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_decision.html#fusionlibrary.fusion_models.img_tab_decision.ImageDecision.img_layers" title="fusionlibrary.fusion_models.img_tab_decision.ImageDecision.img_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">img_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">img_layers</span></code> made to “all”</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_unimodal.html#fusionlibrary.fusion_models.img_unimodal.ImgUnimodal" title="fusionlibrary.fusion_models.img_unimodal.ImgUnimodal"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImgUnimodal</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_unimodal.html#fusionlibrary.fusion_models.img_unimodal.ImgUnimodal.img_layers" title="fusionlibrary.fusion_models.img_unimodal.ImgUnimodal.img_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">img_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">img_layers</span></code> made to “all”</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab" title="fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab"><code class="xref py py-class docutils literal notranslate"><span class="pre">MCVAE_tab</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.latent_space_layers" title="fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.latent_space_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">latent_space_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Input channels of first layer should be the latent space size but this is also ensured in <a class="reference internal" href="autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.calc_fused_layers" title="fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.calc_fused_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method" title="fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcvae_subspace_method</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method.num_latent_dims" title="fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method.num_latent_dims"><code class="xref py py-attr docutils literal notranslate"><span class="pre">num_latent_dims</span></code></a></p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tab_crossmodal_att.html#fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention" title="fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention</span></code></a></p></th>
+<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">attention_embed_dim</span></code></p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tab_crossmodal_att.html#fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.mod1_layers" title="fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> made to “all”</p></li>
+<li><p>Must have same number of layers as <a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tab_crossmodal_att.html#fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.mod2_layers" title="fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.mod2_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod2_layers</span></code></a></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tab_crossmodal_att.html#fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.mod2_layers" title="fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.mod2_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod2_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod2_layers</span></code> made to “all”</p></li>
+<li><p>Must have same number of layers as <a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tab_crossmodal_att.html#fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.mod1_layers" title="fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.mod1_layers</span></code></a></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tabular1_unimodal.html#fusionlibrary.fusion_models.tabular1_unimodal.Tabular1Unimodal" title="fusionlibrary.fusion_models.tabular1_unimodal.Tabular1Unimodal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tabular1Unimodal</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tabular1_unimodal.html#fusionlibrary.fusion_models.tabular1_unimodal.Tabular1Unimodal.mod1_layers" title="fusionlibrary.fusion_models.tabular1_unimodal.Tabular1Unimodal.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> made to “all”</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tabular2_unimodal.html#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal" title="fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tabular2Unimodal</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tabular2_unimodal.html#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.mod2_layers" title="fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.mod2_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod2_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod2_layers</span></code> made to “all”</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tabular_channelwise_att.html#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention" title="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tabular_channelwise_att.html#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.mod1_layers" title="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> made to “all”</p></li>
+<li><p>Must have same number of layers as <code class="xref py py-attr docutils literal notranslate"><span class="pre">mod2_layers</span></code></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tabular_channelwise_att.html#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.mod2_layers" title="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.mod2_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod2_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> made to “all”</p></li>
+<li><p>Must have same number of layers as <code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tabular_decision.html#fusionlibrary.fusion_models.tabular_decision.TabularDecision" title="fusionlibrary.fusion_models.tabular_decision.TabularDecision"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularDecision</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tabular_decision.html#fusionlibrary.fusion_models.tabular_decision.TabularDecision.mod1_layers" title="fusionlibrary.fusion_models.tabular_decision.TabularDecision.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod1_layers</span></code> made to “all”</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tabular_decision.html#fusionlibrary.fusion_models.tabular_decision.TabularDecision.mod2_layers" title="fusionlibrary.fusion_models.tabular_decision.TabularDecision.mod2_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod2_layers</span></code></a></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod2_layers</span></code> made to “all”</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-to-pass-into-get-data-and-training-as-a-dictionary">
+<h2>How to pass into get_data and training as a dictionary:<a class="headerlink" href="#how-to-pass-into-get-data-and-training-as-a-dictionary" title="Permalink to this heading"></a></h2>
+<p>How to construct the dictionary:</p>
+<ul class="simple">
+<li><p>First keys must be the methods in the table above</p></li>
+<li><p>Second keys must be the attributes in the table above (e.g. autoencoder.latent_dim rather than just latent_dim)</p></li>
+<li><p>Value is the value you want to change the attribute to</p></li>
+</ul>
+<p>Here’s an example of a dictionary which is modifying all of the modifiable attributes of the fusion models:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">layer_modifications</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;all&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;mod1_layers&quot;</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleDict</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;layer 1&quot;</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;layer 2&quot;</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">66</span><span class="p">),</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;layer 3&quot;</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">66</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+                <span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">),</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fusion_model_explanations.html" class="btn btn-neutral float-left" title="Fusion Model Explanations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="auto_examples/index.html" class="btn btn-neutral float-right" title="Tutorials and Examples Gallery" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Florence J Townend.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

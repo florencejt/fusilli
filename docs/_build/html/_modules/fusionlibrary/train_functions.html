@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -104,46 +105,143 @@
 <span class="kn">import</span> <span class="nn">wandb</span>
 
 
-<span class="k">def</span> <span class="nf">modify_model_architecture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">architecture_modification</span><span class="p">):</span>
-    <span class="n">changed</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">for</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="n">architecture_modification</span><span class="p">:</span>
-        <span class="c1"># ~~~~~~ modifying all fusion models ~~~~~~</span>
+<div class="viewcode-block" id="modify_model_architecture"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.modify_model_architecture">[docs]</a><span class="k">def</span> <span class="nf">modify_model_architecture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">architecture_modification</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Modify the architecture of a deep learning model based on the provided configuration.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (nn.Module): The original deep learning model.</span>
+<span class="sd">        architecture_modification (dict): A dictionary containing architecture modifications.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        nn.Module: The modified deep learning model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">layer_groups</span> <span class="ow">in</span> <span class="n">architecture_modification</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># Modify layers for all specified models</span>
         <span class="k">if</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">layer_group</span> <span class="ow">in</span> <span class="n">architecture_modification</span><span class="p">[</span><span class="n">model_name</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">layer_group</span><span class="p">,</span> <span class="n">modification</span> <span class="ow">in</span> <span class="n">layer_groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_group</span><span class="p">):</span>
-                    <span class="nb">setattr</span><span class="p">(</span>
-                        <span class="n">model</span><span class="p">,</span>
-                        <span class="n">layer_group</span><span class="p">,</span>
-                        <span class="n">architecture_modification</span><span class="p">[</span><span class="n">model_name</span><span class="p">][</span><span class="n">layer_group</span><span class="p">],</span>
-                    <span class="p">)</span>
-                    <span class="c1"># RESET FUSED LAYERS</span>
-                    <span class="k">if</span> <span class="p">(</span>
-                        <span class="n">layer_group</span> <span class="o">!=</span> <span class="s2">&quot;fused_layers&quot;</span>
-                    <span class="p">):</span>  <span class="c1"># don&#39;t reset fused layers if we&#39;re modifying fused layers anyway</span>
-                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;get_fused_layers&quot;</span><span class="p">):</span>
-                            <span class="n">model</span><span class="o">.</span><span class="n">get_fused_layers</span><span class="p">()</span>  <span class="c1"># reset fused layers with new fused_dim from new architecture</span>
-                    <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_group</span><span class="p">,</span> <span class="n">modification</span><span class="p">)</span>
+                    <span class="c1"># if layer_group != &quot;fused_layers&quot;:</span>
+                    <span class="c1">#     # if we;re on the last modification</span>
+                    <span class="c1">#     if layer_group == list(layer_groups.keys())[-1]:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Changed&quot;</span><span class="p">,</span> <span class="n">layer_group</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
+            <span class="n">reset_fused_layers</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 
-        <span class="c1"># ~~~~~~ modifying specific fusion models ~~~~~~</span>
+        <span class="c1"># Modify layers for a specific model class</span>
         <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">layer_group</span> <span class="ow">in</span> <span class="n">architecture_modification</span><span class="p">[</span><span class="n">model_name</span><span class="p">]:</span>
-                <span class="c1"># if we need to access a layer within a layer group</span>
-                <span class="n">split_layer_group</span> <span class="o">=</span> <span class="n">layer_group</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
-                <span class="n">get_attr_1</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">split_layer_group</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="k">for</span> <span class="n">layer_layer</span> <span class="ow">in</span> <span class="n">split_layer_group</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">get_attr_1</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">get_attr_1</span><span class="p">,</span> <span class="n">layer_layer</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">layer_group</span><span class="p">,</span> <span class="n">modification</span> <span class="ow">in</span> <span class="n">layer_groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">nested_attr</span> <span class="o">=</span> <span class="n">get_nested_attr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_group</span><span class="p">)</span>
 
-                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">get_attr_1</span><span class="p">,</span> <span class="n">split_layer_group</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
-                    <span class="nb">setattr</span><span class="p">(</span>
-                        <span class="n">get_attr_1</span><span class="p">,</span>
-                        <span class="n">split_layer_group</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                        <span class="n">architecture_modification</span><span class="p">[</span><span class="n">model_name</span><span class="p">][</span><span class="n">layer_group</span><span class="p">],</span>
-                    <span class="p">)</span>
-                    <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">changed</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NOTHING CHANGED IN THIS MODEL FOR TESTING&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">nested_attr</span><span class="p">,</span> <span class="n">layer_group</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">nested_attr</span><span class="p">,</span> <span class="n">layer_group</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">modification</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Changed&quot;</span><span class="p">,</span> <span class="n">layer_group</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
+                    <span class="c1"># if layer_group != &quot;fused_layers&quot;:</span>
+                    <span class="c1">#     # if we;re on the last modification</span>
+                    <span class="c1">#     if layer_group == list(layer_groups.keys())[-1]:</span>
+                <span class="n">reset_fused_layers</span><span class="p">(</span><span class="n">nested_attr</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">model</span>
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+<div class="viewcode-block" id="get_nested_attr"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.get_nested_attr">[docs]</a><span class="k">def</span> <span class="nf">get_nested_attr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr_path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a nested attribute from an object using dot-separated path.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        obj (object): The object to retrieve the nested attribute from.</span>
+<span class="sd">        attr_path (str): Dot-separated path to the nested attribute.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        object: The nested attribute if found, otherwise None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">attributes</span> <span class="o">=</span> <span class="n">attr_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">attributes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># if we&#39;re looking for a nested attribute</span>
+        <span class="n">attr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attributes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">attributes</span><span class="p">)):</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">attributes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">attr</span> <span class="o">=</span> <span class="n">obj</span>
+
+    <span class="k">return</span> <span class="n">attr</span></div>
+    <span class="c1"># if len(attributes) == 1:</span>
+    <span class="c1">#     print(getattr(obj, attr_path, None))</span>
+    <span class="c1">#     return getattr(obj, attr_path, None)</span>
+    <span class="c1"># else:</span>
+    <span class="c1">#     for attr in attributes:</span>
+    <span class="c1">#         print(&quot;attr&quot;, attr)</span>
+    <span class="c1">#         obj = getattr(obj, attr, None)</span>
+    <span class="c1">#         print(&quot;obj&quot;, obj)</span>
+    <span class="c1">#         if obj is None:</span>
+    <span class="c1">#             return None</span>
+    <span class="c1">#     return obj</span>
+
+
+<div class="viewcode-block" id="reset_fused_layers"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.reset_fused_layers">[docs]</a><span class="k">def</span> <span class="nf">reset_fused_layers</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reset fused layers of a model if the reset method is available.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        obj (nn.Module): The model to reset fused layers for.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;calc_fused_layers&quot;</span><span class="p">):</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
+
+
+<span class="c1"># Example usage</span>
+<span class="c1"># modified_model = modify_model_architecture(original_model, architecture_modification)</span>
+
+
+<span class="c1"># def modify_model_architecture(model, architecture_modification):</span>
+<span class="c1">#     for model_name in architecture_modification:</span>
+<span class="c1">#         # ~~~~~~ modifying all fusion models ~~~~~~</span>
+<span class="c1">#         if model_name == &quot;all&quot;:</span>
+<span class="c1">#             for i, layer_group in enumerate(architecture_modification[model_name]):</span>
+<span class="c1">#                 if hasattr(model, layer_group):</span>
+<span class="c1">#                     setattr(</span>
+<span class="c1">#                         model,</span>
+<span class="c1">#                         layer_group,</span>
+<span class="c1">#                         architecture_modification[model_name][layer_group],</span>
+<span class="c1">#                     )</span>
+<span class="c1">#                     # RESET FUSED LAYERS</span>
+<span class="c1">#                     if (layer_group != &quot;fused_layers&quot;) and (</span>
+<span class="c1">#                         i == len(architecture_modification[model_name]) - 1</span>
+<span class="c1">#                     ):  # don&#39;t reset fused layers if we&#39;re modifying fused layers anyway</span>
+<span class="c1">#                         if hasattr(model, &quot;calc_fused_layers&quot;):</span>
+<span class="c1">#                             model.calc_fused_layers()  # reset fused layers with new fused_dim from new architecture</span>
+
+<span class="c1">#         # ~~~~~~ modifying specific fusion models ~~~~~~</span>
+<span class="c1">#         if model_name == model.__class__.__name__:</span>
+<span class="c1">#             for i, layer_group in enumerate(architecture_modification[model_name]):</span>
+<span class="c1">#                 # if we need to access a layer within a layer group</span>
+<span class="c1">#                 split_layer_group = layer_group.split(&quot;.&quot;)</span>
+
+<span class="c1">#                 if len(split_layer_group) &gt; 1:</span>
+<span class="c1">#                     get_attr_1 = getattr(model, split_layer_group[0])</span>
+<span class="c1">#                     for layer_layer in split_layer_group[1:-1]:</span>
+<span class="c1">#                         get_attr_1 = getattr(get_attr_1, layer_layer)</span>
+<span class="c1">#                 else:</span>
+<span class="c1">#                     get_attr_1 = model</span>
+
+<span class="c1">#                 if hasattr(get_attr_1, split_layer_group[-1]):</span>
+<span class="c1">#                     setattr(</span>
+<span class="c1">#                         get_attr_1,</span>
+<span class="c1">#                         split_layer_group[-1],</span>
+<span class="c1">#                         architecture_modification[model_name][layer_group],</span>
+<span class="c1">#                     )</span>
+
+<span class="c1">#                 # RESET FUSED LAYERS</span>
+<span class="c1">#                 if (layer_group != &quot;fused_layers&quot;) and (</span>
+<span class="c1">#                     i == len(architecture_modification[model_name]) - 1</span>
+<span class="c1">#                 ):  # don&#39;t reset fused layers if we&#39;re modifying fused layers anyway</span>
+<span class="c1">#                     if hasattr(get_attr_1, &quot;calc_fused_layers&quot;):</span>
+<span class="c1">#                         get_attr_1.calc_fused_layers()  # reset fused layers with new fused_dim from new architecture</span>
+
+<span class="c1">#     # if not changed:</span>
+<span class="c1">#     #     raise ValueError(&quot;NOTHING CHANGED IN THIS MODEL FOR TESTING&quot;)</span>
+
+<span class="c1">#     return model</span>
 
 
 <div class="viewcode-block" id="train_and_test"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.train_and_test">[docs]</a><span class="k">def</span> <span class="nf">train_and_test</span><span class="p">(</span>
@@ -236,7 +334,6 @@
     <span class="c1"># TODO add in bit to let user choose structure of model</span>
     <span class="k">if</span> <span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">model</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">modify_model_architecture</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_mods</span><span class="p">)</span>
-
     <span class="c1"># if architecture_modification is not None:</span>
     <span class="c1">#    for layer_group in architecture_modification:</span>
     <span class="c1">#        if layer_group exists in model:</span>

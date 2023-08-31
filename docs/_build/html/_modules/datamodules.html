@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -544,7 +545,6 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if subspace method is specified</span>
             <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
             <span class="c1"># TODO this is where to modify subspace layers</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># if subspace method in layer_mods</span>
@@ -703,6 +703,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dims</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;multiclass_dims&quot;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dims</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="o">=</span> <span class="n">layer_mods</span>
 
 <div class="viewcode-block" id="KFoldDataModule.prepare_data"><a class="viewcode-back" href="../source/datamodules.html#datamodules.KFoldDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -767,6 +768,13 @@
             <span class="k">for</span> <span class="n">fold</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">folds</span><span class="p">:</span>
                 <span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">fold</span>
                 <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="c1"># if subspace method in layer_mods</span>
+                    <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">modify_model_architecture</span><span class="p">(</span>
+                        <span class="n">subspace_method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span>
+                    <span class="p">)</span>
+
                 <span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
                     <span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span>
                 <span class="p">)</span>
@@ -932,6 +940,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;test_size&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span> <span class="o">=</span> <span class="n">graph_creation_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="o">=</span> <span class="n">layer_mods</span>
 
 <div class="viewcode-block" id="GraphDataModule.prepare_data"><a class="viewcode-back" href="../source/datamodules.html#datamodules.GraphDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -961,7 +970,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">test_idxs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span><span class="o">.</span><span class="n">indices</span>
 
         <span class="c1"># get the graph data structure</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span></div>
+        <span class="n">graph_maker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># if subspace method in layer_mods</span>
+            <span class="n">graph_maker</span> <span class="o">=</span> <span class="n">modify_model_architecture</span><span class="p">(</span><span class="n">graph_maker</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span> <span class="o">=</span> <span class="n">graph_maker</span><span class="o">.</span><span class="n">make_graph</span><span class="p">()</span></div>
+        <span class="c1"># self.graph_data = self.graph_creation_method(self.dataset)</span>
 
         <span class="c1"># plot and save the graph</span>
         <span class="c1"># TODO move to the soon-to-be-made plotting module? or just remove</span>
@@ -1054,7 +1069,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_folds</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;num_k&quot;</span><span class="p">]</span>  <span class="c1"># total number of folds</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span> <span class="o">=</span> <span class="n">image_downsample_size</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;tabular1&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span>
@@ -1074,6 +1089,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span> <span class="o">=</span> <span class="n">graph_creation_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="o">=</span> <span class="n">layer_mods</span>
 
 <div class="viewcode-block" id="KFoldGraphDataModule.prepare_data"><a class="viewcode-back" href="../source/datamodules.html#datamodules.KFoldGraphDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1113,7 +1129,12 @@
             <span class="n">test_idxs</span> <span class="o">=</span> <span class="n">test_dataset</span><span class="o">.</span><span class="n">indices</span>  <span class="c1"># get test node idxs from kfold_split()</span>
 
             <span class="c1"># get the graph data structure</span>
-            <span class="n">graph_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
+            <span class="n">graph_maker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># if subspace method in layer_mods</span>
+                <span class="n">graph_maker</span> <span class="o">=</span> <span class="n">modify_model_architecture</span><span class="p">(</span><span class="n">graph_maker</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span><span class="p">)</span>
+
+            <span class="n">graph_data</span> <span class="o">=</span> <span class="n">graph_maker</span><span class="o">.</span><span class="n">make_graph</span><span class="p">()</span>
 
             <span class="c1"># plot and save the graph?</span>
             <span class="c1"># TODO remove?</span>

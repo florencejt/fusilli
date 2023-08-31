@@ -11,7 +11,7 @@
       <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
-    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+    <link rel="shortcut icon" href="../../_static/pink_pasta_logo.png"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -36,7 +36,7 @@
           
           <a href="../../index.html" class="icon icon-home">
             fusionlibrary
-              <img src="../../_static/computergif.gif" class="logo" alt="Logo"/>
+              <img src="../../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -48,9 +48,10 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">FuseIt: an introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -98,6 +99,7 @@
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 <span class="kn">from</span> <span class="nn">fusionlibrary.fusion_models.base_pl_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
 <span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.autograd</span> <span class="kn">import</span> <span class="n">Variable</span>
 
 
 <div class="viewcode-block" id="ConcatTabularFeatureMaps"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps">[docs]</a><span class="k">class</span> <span class="nc">ConcatTabularFeatureMaps</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -107,27 +109,33 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    method_name : str</span>
-<span class="sd">        Name of the method.</span>
+<span class="sd">        Name of the method. (Concatenating tabular feature maps)</span>
 <span class="sd">    modality_type : str</span>
-<span class="sd">        Type of modality.</span>
+<span class="sd">        Type of modality. (both_tab)</span>
 <span class="sd">    fusion_type : str</span>
-<span class="sd">        Type of fusion.</span>
+<span class="sd">        Type of fusion. (operation)</span>
 <span class="sd">    pred_type : str</span>
 <span class="sd">        Type of prediction to be performed.</span>
 <span class="sd">    mod1_layers : dict</span>
-<span class="sd">        Dictionary containing the layers of the first modality.</span>
+<span class="sd">        Dictionary containing the layers of the first modality. Calculated in the</span>
+<span class="sd">        :meth:`~ParentFusionModel.set_mod1_layers` method.</span>
 <span class="sd">    mod2_layers : dict</span>
-<span class="sd">        Dictionary containing the layers of the second modality.</span>
+<span class="sd">        Dictionary containing the layers of the second modality. Calculated in the</span>
+<span class="sd">        :meth:`~ParentFusionModel.set_mod2_layers` method.</span>
 <span class="sd">    fused_layers : nn.Sequential</span>
-<span class="sd">        Sequential layer containing the fused layers.</span>
+<span class="sd">        Sequential layer containing the fused layers. Calculated in the</span>
+<span class="sd">        :meth:`~ConcatTabularFeatureMaps.calc_fused_layers` method.</span>
 <span class="sd">    final_prediction : nn.Sequential</span>
 <span class="sd">        Sequential layer containing the final prediction layers. The final prediction layers</span>
-<span class="sd">        take in the number of features of the fused layers as input.</span>
+<span class="sd">        take in the number of features of the fused layers as input. Calculated in the</span>
+<span class="sd">        :meth:`~ConcatTabularFeatureMaps.calc_fused_layers` method.</span>
 
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
 <span class="sd">    forward(x)</span>
 <span class="sd">        Forward pass of the model.</span>
+<span class="sd">    calc_fused_layers()</span>
+<span class="sd">        Calculate the fused layers.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;Concatenating tabular feature maps&quot;</span>
@@ -151,13 +159,22 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_mod1_layers</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_mod2_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
 
+<div class="viewcode-block" id="ConcatTabularFeatureMaps.calc_fused_layers"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the fused layers.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="p">(</span>
             <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
             <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod2_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ConcatTabularFeatureMaps.forward"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

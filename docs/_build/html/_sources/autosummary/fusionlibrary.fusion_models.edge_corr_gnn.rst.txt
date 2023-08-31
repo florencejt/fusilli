@@ -1,4 +1,4 @@
-fusionlibrary.fusion\_models.edge\_corr\_gnn
+﻿fusionlibrary.fusion\_models.edge\_corr\_gnn
 ============================================
 
 .. automodule:: fusionlibrary.fusion_models.edge_corr_gnn
@@ -8,12 +8,6 @@ fusionlibrary.fusion\_models.edge\_corr\_gnn
    
 
    
-   
-   .. rubric:: Functions
-
-   .. autosummary::
-   
-      edgecorr_graph_maker
    
    
 
@@ -25,6 +19,7 @@ fusionlibrary.fusion\_models.edge\_corr\_gnn
    
       Data
       EdgeCorrGNN
+      EdgeCorrGraphMaker
       GCNConv
       ParentFusionModel
    

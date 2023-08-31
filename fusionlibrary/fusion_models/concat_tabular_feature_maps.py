@@ -15,27 +15,33 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
     Attributes
     ----------
     method_name : str
-        Name of the method.
+        Name of the method. (Concatenating tabular feature maps)
     modality_type : str
-        Type of modality.
+        Type of modality. (both_tab)
     fusion_type : str
-        Type of fusion.
+        Type of fusion. (operation)
     pred_type : str
         Type of prediction to be performed.
     mod1_layers : dict
-        Dictionary containing the layers of the first modality.
+        Dictionary containing the layers of the first modality. Calculated in the
+        :meth:`~ParentFusionModel.set_mod1_layers` method.
     mod2_layers : dict
-        Dictionary containing the layers of the second modality.
+        Dictionary containing the layers of the second modality. Calculated in the
+        :meth:`~ParentFusionModel.set_mod2_layers` method.
     fused_layers : nn.Sequential
-        Sequential layer containing the fused layers.
+        Sequential layer containing the fused layers. Calculated in the
+        :meth:`~ConcatTabularFeatureMaps.calc_fused_layers` method.
     final_prediction : nn.Sequential
         Sequential layer containing the final prediction layers. The final prediction layers
-        take in the number of features of the fused layers as input.
+        take in the number of features of the fused layers as input. Calculated in the
+        :meth:`~ConcatTabularFeatureMaps.calc_fused_layers` method.
 
     Methods
     -------
     forward(x)
         Forward pass of the model.
+    calc_fused_layers()
+        Calculate the fused layers.
     """
 
     method_name = "Concatenating tabular feature maps"
@@ -61,14 +67,14 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
         self.set_mod2_layers()
         self.calc_fused_layers()
 
-        # self.fused_dim = (
-        #     list(self.mod1_layers.values())[-1][0].out_features
-        #     + list(self.mod2_layers.values())[-1][0].out_features
-        # )
-        # self.set_fused_layers(self.fused_dim)
-        # self.set_final_pred_layers()
-
     def calc_fused_layers(self):
+        """
+        Calculate the fused layers.
+
+        Returns
+        -------
+        None
+        """
         self.fused_dim = (
             list(self.mod1_layers.values())[-1][0].out_features
             + list(self.mod2_layers.values())[-1][0].out_features

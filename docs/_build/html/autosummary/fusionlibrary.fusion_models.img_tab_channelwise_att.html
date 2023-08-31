@@ -54,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -82,6 +83,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.fused_layers"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.fused_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.final_prediction"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.final_prediction</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.forward"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.calc_fused_layers()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.forward()</span></code></a></li>
 </ul>
 </li>
@@ -141,6 +143,9 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentFusionModel</span></code>(pred_type, data_dims, params)</p></td>
 <td><p>Parent class for all fusion models.</p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Variable</span></code></p></td>
+<td><p></p></td>
+</tr>
 </tbody>
 </table>
 <dl class="py class">
@@ -148,6 +153,9 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fusionlibrary.fusion_models.img_tab_channelwise_att.</span></span><span class="sig-name descname"><span class="pre">ImageChannelWiseMultiAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/img_tab_channelwise_att.html#ImageChannelWiseMultiAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Channel-wise multiplication net with image and tabular</p>
+<p>If the tabular layers and the image layers have different feature maps dimensions at each
+layer, the model will use a linear layer to make the tabular dimensions equal to the image
+layer dimensions. This is done to ensure that the channel-wise multiplication can be performed.</p>
 <p>Inspired by the work of Duanmu et al. (2020) [1]., we use channel-wise multiplication to combine
 tabular data and image data.</p>
 <dl class="py attribute">
@@ -251,6 +259,12 @@ Springer International Publishing. <a class="reference external" href="https://d
 <p>Accompanying code: (our model is inspired by the work of Duanmu et al. (2020) [1])
 <a class="reference external" href="https://github.com/HongyiDuanmu26/Prediction-of-pCR-with-Integrative-Deep-Learning/">https://github.com/HongyiDuanmu26/Prediction-of-pCR-with-Integrative-Deep-Learning/</a>
 blob/main/CustomNet.py</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.calc_fused_layers">
+<span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/img_tab_channelwise_att.html#ImageChannelWiseMultiAttention.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.calc_fused_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the fused layers.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="id0">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/img_tab_channelwise_att.html#ImageChannelWiseMultiAttention.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>

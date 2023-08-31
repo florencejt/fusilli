@@ -17,36 +17,60 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
     Attributes
     ----------
     method_name : str
-        Name of the method.
+        Name of the method. (Concatenating image latent space with tabular data, trained altogether)
     modality_type : str
-        Type of modality.
+        Type of modality. (tab_img)
     fusion_type : str
-        Type of fusion.
+        Type of fusion. (subspace)
     pred_type : str
-        Type of prediction to be performed.
-    img_layers : dict
-        Dictionary containing the layers of the image data.
+        Type of prediction to be performed. Binary, regression or multiclass.
     fused_layers : nn.Sequential
-        Sequential layer containing the fused layers.
+        Sequential layer containing the fused layers defined with :func:`calc_fused_layers()`.
     final_prediction : nn.Sequential
         Sequential layer containing the final prediction layers. The final prediction layers
             take in the number of features of the fused layers as input.
     custom_loss : nn.Module
-        Additional loss function to be used for training the model.
+        Additional loss function to be used for training the model. Default is MSELoss.
     latent_dim : int
-        Size of the latent space.
+        Size of the latent space. Default is 256.
     encoder : nn.Sequential
-        Sequential layer containing the encoder layers.
+        Sequential layer containing the encoder layers. Default for 2D image is:
+
+        .. code-block:: python
+
+            nn.Sequential(
+                nn.Conv2d(1, 32, kernel_size=3, padding=1),
+                nn.ReLU(),
+                nn.MaxPool2d(kernel_size=2, stride=2),
+                nn.Conv2d(32, 64, kernel_size=3, padding=1),
+                nn.ReLU(),
+                nn.MaxPool2d(kernel_size=2, stride=2),
+                nn.Conv2d(64, 128, kernel_size=3, padding=1),
+                nn.ReLU(),
+                nn.MaxPool2d(kernel_size=2, stride=2),
+            )
+
     decoder : nn.Sequential
-        Sequential layer containing the decoder layers.
-    fc1 : nn.Linear
-        Linear layer to be used for the latent space.
+        Sequential layer containing the decoder layers. Default for 2D image is:
 
-    Methods
-    -------
-    forward(x)
-        Forward pass of the model.
+        .. code-block:: python
 
+            nn.Sequential(
+                nn.ConvTranspose2d(128, 64, kernel_size=2, stride=2),
+                nn.ReLU(),
+                nn.ConvTranspose2d(64, 32, kernel_size=2, stride=2),
+                nn.ReLU(),
+                nn.ConvTranspose2d(32, 1, kernel_size=2, stride=2),
+            )
+
+    new_encoder : nn.Sequential
+        Sequential layer containing the encoder layers and the additional layers defined with
+        :meth:`~ConcatImgLatentTabDoubleLoss.calc_fused_layers()`.
+    new_decoder : nn.Sequential
+        Sequential layer containing the decoder layers and the additional layers defined with
+        :meth:`~ConcatImgLatentTabDoubleLoss.calc_fused_layers()`.
+    fused_dim : int
+        Size of the fused layers: latent dimension size + tabular data dimension size.
     """
 
     method_name = (
@@ -72,14 +96,7 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         self.custom_loss = nn.MSELoss()
         self.img_dims = data_dims[-1]
 
-        # self.set_img_layers()
         self.latent_dim = 256  # You can adjust the latent space size
-
-        # self.fused_dim = (
-        #     self.mod1_dim + list(self.img_layers.values())[-1][0].out_channels
-        # )
-        # self.set_fused_layers(self.fused_dim)
-        # self.set_final_pred_layers()
 
         if len(self.img_dims) == 2:  # 2D images
             self.encoder = nn.Sequential(
@@ -106,8 +123,6 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
                 nn.ConvTranspose2d(
                     32, 1, kernel_size=2, stride=2
                 ),  # 50x50x32 -> 100x100x1
-                nn.Sigmoid(),  # Output is scaled between 0 and 1
-                nn.Upsample(size=self.img_dims, mode="bilinear", align_corners=False),
             )
 
         elif len(self.img_dims) == 3:
@@ -118,20 +133,14 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
                 nn.ReLU(),
                 nn.Conv3d(32, self.latent_dim, kernel_size=3, stride=1),
                 nn.ReLU(),
-                # nn.Conv3d(128, 256, kernel_size=3, stride=1),
-                # nn.ReLU(),
             )
 
             self.decoder = nn.Sequential(
-                # nn.ConvTranspose3d(256, 128, kernel_size=3, stride=1, output_padding=1),
-                # nn.ReLU(),
                 nn.ConvTranspose3d(self.latent_dim, 32, kernel_size=3, stride=1),
                 nn.ReLU(),
                 nn.ConvTranspose3d(32, 16, kernel_size=3, stride=1),
                 nn.ReLU(),
                 nn.ConvTranspose3d(16, 1, kernel_size=3, stride=1),
-                nn.Sigmoid(),
-                nn.Upsample(size=self.img_dims, mode="trilinear", align_corners=False),
             )
         else:
             raise ValueError("Invalid image dimensions.")
@@ -139,8 +148,16 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         self.calc_fused_layers()
 
     def calc_fused_layers(self):
+        """
+        Calculate the fused layers. If layer sizes are modified, this function will be called again to adjust the
+        fused layers.
+
+        Returns
+        -------
+        None
+        """
         # get dummy conv output
-        self.flatten = nn.Flatten()
+        # self.flatten = nn.Flatten()
 
         # size of final encoder output
         dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
@@ -148,22 +165,33 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         n_size = dummy_conv_output.data.view(1, -1).size(1)
 
         # make linear layer to reduce to latent dim
-        self.linear_to_lat_dim = nn.Linear(n_size, self.latent_dim)
+        # self.linear_to_lat_dim = nn.Linear(n_size, self.latent_dim)
 
         # add extra layers to encoder
         self.new_encoder = copy.deepcopy(self.encoder)
-        self.new_encoder.append(self.flatten)
-        self.new_encoder.append(self.linear_to_lat_dim)
+        self.new_encoder.append(nn.Flatten())
+        self.new_encoder.append(nn.Linear(n_size, self.latent_dim))
 
         # add extra layer to decoder to get right shape for first decoding layer
         self.new_decoder = copy.deepcopy(self.decoder)
-        self.linear_to_decoder = nn.Linear(
-            self.latent_dim, self.new_decoder[0].in_channels
-        )
+
+        # self.linear_to_decoder = nn.Linear(
+        #     self.latent_dim, self.new_decoder[0].in_channels
+        # )
         # TODO make this work for 3d images too
-        self.unflatten = nn.Unflatten(1, (self.new_decoder[0].in_channels, 1, 1))
-        self.new_decoder.insert(0, self.linear_to_decoder)
-        self.new_decoder.insert(1, self.unflatten)
+        # self.unflatten = nn.Unflatten(1, (self.new_decoder[0].in_channels, 1, 1))
+
+        self.new_decoder.insert(
+            0, nn.Linear(self.latent_dim, self.new_decoder[0].in_channels)
+        )
+        self.new_decoder.insert(
+            1, nn.Unflatten(1, (self.new_decoder[0].in_channels, 1, 1))
+        )
+
+        self.new_decoder.append(nn.Sigmoid()),  # Output is scaled between 0 and 1
+        self.new_decoder.append(
+            nn.Upsample(size=self.img_dims, mode="bilinear", align_corners=False)
+        )
 
         self.fused_dim = self.latent_dim + self.data_dims[0]
         self.set_fused_layers(self.fused_dim)
@@ -189,20 +217,12 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
 
         # encoder
         encoded_img = self.new_encoder(x_img)
-        # for i, layer in enumerate(self.enc_layers.values()):
-        #     x_img = layer(x_img)
 
         # latent space
         latent_space = encoded_img
 
-        # encoded_img = encoded_img.view(encoded_img.size(0), -1)  # Flatten
-        # latent_space = nn.ReLU()(self.fc1(encoded_img))
-
         # decoder
         reconstructed_image = self.new_decoder(encoded_img)
-        # for i, layer in enumerate(self.dec_layers.values()):
-        #     decoder_input = layer(decoder_input)
-
         reconstructed_image = torch.sigmoid(reconstructed_image)
 
         # concatenate latent space with tabular data

@@ -54,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -77,16 +78,22 @@
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.modality_type"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.modality_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.fusion_type"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.fusion_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.graph_maker"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.graph_maker</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv1"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.conv1</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv2"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.conv2</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv3"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.conv3</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv4"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.conv4</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.graph_conv_layers"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.graph_conv_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.dropout_prob"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.dropout_prob</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.final_prediction"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.final_prediction</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.forward"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.forward()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.forward()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.edgecorr_graph_maker"><code class="docutils literal notranslate"><span class="pre">edgecorr_graph_maker()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGraphMaker</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.dataset"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGraphMaker.dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.threshold"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGraphMaker.threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.make_graph"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGraphMaker.make_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGraphMaker.make_graph()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.img_tab_channelwise_att.html">fusionlibrary.fusion_models.img_tab_channelwise_att</a></li>
@@ -135,14 +142,6 @@
   <section id="module-fusionlibrary.fusion_models.edge_corr_gnn">
 <span id="fusionlibrary-fusion-models-edge-corr-gnn"></span><h1>fusionlibrary.fusion_models.edge_corr_gnn<a class="headerlink" href="#module-fusionlibrary.fusion_models.edge_corr_gnn" title="Permalink to this heading"></a></h1>
 <p>Edge correlation GNN model.</p>
-<p class="rubric">Functions</p>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.edgecorr_graph_maker" title="fusionlibrary.fusion_models.edge_corr_gnn.edgecorr_graph_maker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edgecorr_graph_maker</span></code></a>(dataset)</p></td>
-<td><p>Creates the graph data structure for the edge correlation GNN model.</p></td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
@@ -152,10 +151,13 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN" title="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EdgeCorrGNN</span></code></a>(pred_type, data_dims, params)</p></td>
 <td><p>Graph neural network with the edge weighting as the first tabular modality correlations and the node features as the second tabular modality features.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">GCNConv</span></code>(in_channels, out_channels[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker" title="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EdgeCorrGraphMaker</span></code></a>(dataset)</p></td>
+<td><p>Creates the graph data structure for the edge correlation GNN model.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">GCNConv</span></code>(in_channels, out_channels[, ...])</p></td>
 <td><p>The graph convolutional operator from the <a class="reference external" href="https://arxiv.org/abs/1609.02907">&quot;Semi-supervised Classification with Graph Convolutional Networks&quot;</a> paper</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentFusionModel</span></code>(pred_type, data_dims, params)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentFusionModel</span></code>(pred_type, data_dims, params)</p></td>
 <td><p>Parent class for all fusion models.</p></td>
 </tr>
 </tbody>
@@ -211,46 +213,23 @@ the node features as the second tabular modality features.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv1">
-<span class="sig-name descname"><span class="pre">conv1</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv1" title="Permalink to this definition"></a></dt>
-<dd><p>Graph convolutional layer. The first layer takes in the number of features of the
-second tabular modality as input.</p>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.graph_conv_layers">
+<span class="sig-name descname"><span class="pre">graph_conv_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.graph_conv_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Sequential layer containing the graph convolutional layers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>GCNConv</p>
+<dd class="field-odd"><p>nn.Sequential</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv2">
-<span class="sig-name descname"><span class="pre">conv2</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv2" title="Permalink to this definition"></a></dt>
-<dd><p>Graph convolutional layer. The second layer takes in 64 features as input.</p>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.dropout_prob">
+<span class="sig-name descname"><span class="pre">dropout_prob</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.dropout_prob" title="Permalink to this definition"></a></dt>
+<dd><p>Dropout probability. Default: 0.5</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>GCNConv</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv3">
-<span class="sig-name descname"><span class="pre">conv3</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv3" title="Permalink to this definition"></a></dt>
-<dd><p>Graph convolutional layer. The third layer takes in 128 features as input.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>GCNConv</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv4">
-<span class="sig-name descname"><span class="pre">conv4</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.conv4" title="Permalink to this definition"></a></dt>
-<dd><p>Graph convolutional layer. The fourth layer takes in 256 features as input.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>GCNConv</p>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -274,8 +253,25 @@ take in 256 features.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.calc_fused_layers">
+<span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/edge_corr_gnn.html#EdgeCorrGNN.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.calc_fused_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the fused layers.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/edge_corr_gnn.html#EdgeCorrGNN.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/edge_corr_gnn.html#EdgeCorrGNN.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the number of features after the fusion layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/edge_corr_gnn.html#EdgeCorrGNN.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
 <dd><p>Forward pass of the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -292,21 +288,53 @@ take in 256 features.</p>
 
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.edge_corr_gnn.edgecorr_graph_maker">
-<span class="sig-prename descclassname"><span class="pre">fusionlibrary.fusion_models.edge_corr_gnn.</span></span><span class="sig-name descname"><span class="pre">edgecorr_graph_maker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/edge_corr_gnn.html#edgecorr_graph_maker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.edge_corr_gnn.edgecorr_graph_maker" title="Permalink to this definition"></a></dt>
-<dd><p>Creates the graph data structure for the edge correlation GNN model.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fusionlibrary.fusion_models.edge_corr_gnn.</span></span><span class="sig-name descname"><span class="pre">EdgeCorrGraphMaker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/edge_corr_gnn.html#EdgeCorrGraphMaker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Creates the graph data structure for the edge correlation GNN model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.dataset">
+<span class="sig-name descname"><span class="pre">dataset</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Dataset containing the tabular data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>dataset</strong> (<em>torch.utils.data.Dataset</em>) – Dataset containing the tabular data.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>data</strong> – Graph data structure containing the tabular data.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>torch_geometric.data.Data</p>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.utils.data.Dataset</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.threshold">
+<span class="sig-name descname"><span class="pre">threshold</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.threshold" title="Permalink to this definition"></a></dt>
+<dd><p>How correlated the nodes need to be to be connected. Default: 0.8</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.make_graph">
+<span class="sig-name descname"><span class="pre">make_graph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/edge_corr_gnn.html#EdgeCorrGraphMaker.make_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.make_graph" title="Permalink to this definition"></a></dt>
+<dd><p>Creates the graph data structure.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">make_graph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/edge_corr_gnn.html#EdgeCorrGraphMaker.make_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition"></a></dt>
+<dd><p>Creates the graph data structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> – Graph data structure containing the tabular data.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch_geometric.data.Data</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
