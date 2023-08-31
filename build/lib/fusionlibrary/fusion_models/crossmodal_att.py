@@ -103,6 +103,12 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
 
     def calc_fused_layers(self):
         # get dummy conv output
+
+        if len(self.mod1_layers) != len(self.img_layers):
+            raise ValueError(
+                "The number of layers in the two modalities must be the same."
+            )
+
         dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
         for layer in self.img_layers.values():
             dummy_conv_output = layer(dummy_conv_output)

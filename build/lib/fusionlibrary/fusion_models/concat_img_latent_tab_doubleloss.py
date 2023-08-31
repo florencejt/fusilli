@@ -144,9 +144,6 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
 
         # size of final encoder output
         dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
-        print("NEW CALC FUSED LAYER CALL")
-        print("ENCODER", self.encoder)
-        print("DECODER", self.decoder)
         dummy_conv_output = self.encoder(dummy_conv_output)
         n_size = dummy_conv_output.data.view(1, -1).size(1)
 

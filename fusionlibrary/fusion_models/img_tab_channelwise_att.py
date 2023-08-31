@@ -11,8 +11,14 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
     """
     Channel-wise multiplication net with image and tabular
 
+    If the tabular layers and the image layers have different feature maps dimensions at each
+    layer, the model will use a linear layer to make the tabular dimensions equal to the image
+    layer dimensions. This is done to ensure that the channel-wise multiplication can be performed.
+
     Inspired by the work of Duanmu et al. (2020) [1]., we use channel-wise multiplication to combine
     tabular data and image data.
+
+
 
     Attributes
     ----------
@@ -89,6 +95,13 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         Calculate the fused layers.
         """
         # get dummy conv output
+
+        # if number of imaging layers does not equal number of tabular layers, return error
+        if len(self.mod1_layers) != len(self.img_layers):
+            raise ValueError(
+                "The number of layers in the two modalities must be the same."
+            )
+
         dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
         for layer in self.img_layers.values():
             dummy_conv_output = layer(dummy_conv_output)
@@ -119,10 +132,19 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
             x_tab1 = layer(x_tab1)
             x_img = self.img_layers[k](x_img)
 
-            if len(x_img.shape) == 5:
-                x_img = x_img * x_tab1[:, :, None, None, None]
-            elif len(x_img.shape) == 4:
-                x_img = x_img * x_tab1[:, :, None, None]
+            # layer to get the feature maps to be the same size if they have been modified to not be
+            if x_tab1.shape[1] != x_img.shape[1]:
+                new_x_tab1 = nn.Linear(x_tab1.shape[1], x_img.shape[1])(x_tab1)
+                if len(x_img.shape) == 5:
+                    x_img = x_img * new_x_tab1[:, :, None, None, None]
+                elif len(x_img.shape) == 4:
+                    x_img = x_img * new_x_tab1[:, :, None, None]
+
+            else:
+                if len(x_img.shape) == 5:
+                    x_img = x_img * x_tab1[:, :, None, None, None]
+                elif len(x_img.shape) == 4:
+                    x_img = x_img * x_tab1[:, :, None, None]
 
         out_fuse = x_img.view(x_img.size(0), -1)
 

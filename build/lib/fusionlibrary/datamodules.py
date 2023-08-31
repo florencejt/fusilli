@@ -609,6 +609,7 @@ class KFoldDataModule(pl.LightningDataModule):
             self.multiclass_dims = params["multiclass_dims"]
         else:
             self.multiclass_dims = None
+        self.layer_mods = layer_mods
 
     def prepare_data(self):
         """
@@ -673,6 +674,13 @@ class KFoldDataModule(pl.LightningDataModule):
             for fold in self.folds:
                 train_dataset, test_dataset = fold
                 subspace_method = self.subspace_method(self)
+
+                if self.layer_mods is not None:
+                    # if subspace method in layer_mods
+                    subspace_method = modify_model_architecture(
+                        subspace_method, self.layer_mods
+                    )
+
                 train_latents, train_labels = subspace_method.train(
                     train_dataset, test_dataset
                 )
@@ -838,6 +846,7 @@ class GraphDataModule:
         self.test_size = params["test_size"]
         self.graph_creation_method = graph_creation_method
         self.params = params
+        self.layer_mods = layer_mods
 
     def prepare_data(self):
         """
@@ -867,7 +876,13 @@ class GraphDataModule:
         self.test_idxs = self.test_dataset.indices
 
         # get the graph data structure
-        self.graph_data = self.graph_creation_method(self.dataset)
+        graph_maker = self.graph_creation_method(self.dataset)
+        if self.layer_mods is not None:
+            # if subspace method in layer_mods
+            graph_maker = modify_model_architecture(graph_maker, self.layer_mods)
+
+        self.graph_data = graph_maker.make_graph()
+        # self.graph_data = self.graph_creation_method(self.dataset)
 
         # plot and save the graph
         # TODO move to the soon-to-be-made plotting module? or just remove
@@ -960,7 +975,7 @@ class KFoldGraphDataModule:
         super().__init__()
         self.num_folds = params["num_k"]  # total number of folds
         self.image_downsample_size = image_downsample_size
-
+        self.sources = sources
         self.modality_methods = {
             "tabular1": LoadDatasets(
                 self.sources, self.image_downsample_size
@@ -980,6 +995,7 @@ class KFoldGraphDataModule:
         self.batch_size = batch_size
         self.graph_creation_method = graph_creation_method
         self.params = params
+        self.layer_mods = layer_mods
 
     def prepare_data(self):
         """
@@ -1019,7 +1035,12 @@ class KFoldGraphDataModule:
             test_idxs = test_dataset.indices  # get test node idxs from kfold_split()
 
             # get the graph data structure
-            graph_data = self.graph_creation_method(self.dataset)
+            graph_maker = self.graph_creation_method(self.dataset)
+            if self.layer_mods is not None:
+                # if subspace method in layer_mods
+                graph_maker = modify_model_architecture(graph_maker, self.layer_mods)
+
+            graph_data = graph_maker.make_graph()
 
             # plot and save the graph?
             # TODO remove?

@@ -106,6 +106,11 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
         """
         Calculate the fused layers.
         """
+        # if mod1 and mod2 have a different number of layers, return error
+        if len(self.mod1_layers) != len(self.mod2_layers):
+            raise ValueError(
+                "The number of layers in the two modalities must be the same."
+            )
 
         self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
 

@@ -97,7 +97,9 @@ class ImageDecision(ParentFusionModel, nn.Module):
 
         for i, (k, layer) in enumerate(self.mod1_layers.items()):
             x_tab1 = layer(x_tab1)
-            x_img = self.img_layers[k](x_img)
+
+        for i, (k, layer) in enumerate(self.img_layers.items()):
+            x_img = layer(x_img)
 
         x_img = x_img.view(x_img.size(0), -1)
 

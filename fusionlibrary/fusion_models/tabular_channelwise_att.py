@@ -12,6 +12,10 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
     This class implements a model that fuses the two types of tabular data using a
       channel-wise multiplication approach.
 
+    If the two types of tabular data have different feature dimensions at each layer, the model will
+      use a linear layer to make the dimensions the same. This is done to ensure that the
+      channel-wise multiplication can be performed.
+
     Inspired by the work of Duanmu et al. (2020) [1]: here we use two types of tabular data as
     the multi-modal data instead of image and non-image like in the paper.
 
@@ -88,7 +92,13 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         # self.set_final_pred_layers()
 
     def calc_fused_layers(self):
-        self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
+        # if mod1 and mod2 have a different number of layers, return error
+        if len(self.mod1_layers) != len(self.mod2_layers):
+            raise ValueError(
+                "The number of layers in the two modalities must be the same."
+            )
+
+        self.fused_dim = list(self.mod2_layers.values())[-1][0].out_features
         self.set_fused_layers(self.fused_dim)
         self.set_final_pred_layers()
 
@@ -113,7 +123,13 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
             x_tab1 = layer(x_tab1)
             x_tab2 = self.mod2_layers[k](x_tab2)
 
-            x_tab2 = x_tab2 * x_tab1
+            # layer to get the feature maps to be the same size if they have been modified to not be
+            if x_tab1.shape[1] != x_tab2.shape[1]:
+                # layer to make tab1 output the same size as tab2
+                new_x_tab1 = nn.Linear(x_tab1.shape[1], x_tab2.shape[1])(x_tab1)
+                x_tab2 = x_tab2 * new_x_tab1
+            else:
+                x_tab2 = x_tab2 * x_tab1
 
         out_fuse = x_tab2
 

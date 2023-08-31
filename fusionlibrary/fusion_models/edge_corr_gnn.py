@@ -66,14 +66,30 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
 
         self.pred_type = pred_type
 
-        self.graph_maker = edgecorr_graph_maker
+        self.graph_maker = EdgeCorrGraphMaker
 
-        self.conv1 = GCNConv(self.mod2_dim, 64)
-        self.conv2 = GCNConv(64, 128)
-        self.conv3 = GCNConv(128, 256)
-        self.conv4 = GCNConv(256, 256)
+        self.graph_conv_layers = nn.Sequential(
+            GCNConv(self.mod2_dim, 64),
+            GCNConv(64, 128),
+            GCNConv(128, 256),
+            GCNConv(256, 256),
+        )
 
-        self.set_final_pred_layers(256)
+        self.dropout_prob = 0.5
+
+        self.calc_fused_layers()
+
+    def calc_fused_layers(self):
+        """
+        Calculates the number of features after the fusion layer.
+        """
+        # make sure the first layer takes in the number of features of the second tabular modality
+        self.graph_conv_layers[0] = GCNConv(
+            self.mod2_dim, self.graph_conv_layers[0].out_channels
+        )
+
+        self.fused_dim = self.graph_conv_layers[-1].out_channels
+        self.set_final_pred_layers(self.fused_dim)
 
     def forward(self, x):
         """
@@ -91,16 +107,10 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
         """
         x_n, edge_index, edge_attr = x
 
-        x_n = self.conv1(x_n, edge_index, edge_attr)
-        x_n = x_n.relu()
-        x_n = F.dropout(x_n, p=0.5, training=self.training)
-        x_n = self.conv2(x_n, edge_index, edge_attr)
-        x_n = x_n.relu()
-        x_n = F.dropout(x_n, p=0.5, training=self.training)
-        x_n = self.conv3(x_n, edge_index, edge_attr)
-        x_n = x_n.relu()
-        x_n = F.dropout(x_n, p=0.5, training=self.training)
-        x_n = self.conv4(x_n, edge_index, edge_attr)
+        for layer in self.graph_conv_layers:
+            x_n = layer(x_n, edge_index, edge_attr)
+            x_n = x_n.relu()
+            x_n = F.dropout(x_n, p=self.dropout_prob, training=self.training)
 
         out = self.final_prediction(x_n)
 
@@ -109,42 +119,74 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
         ]
 
 
-def edgecorr_graph_maker(dataset):
-    """
-    Creates the graph data structure for the edge correlation GNN model.
+class EdgeCorrGraphMaker:
+    def __init__(self, dataset):
+        self.dataset = dataset
 
-    Parameters
-    ----------
-    dataset : torch.utils.data.Dataset
-        Dataset containing the tabular data.
+        self.threshold = 0.8  # how correlated the nodes need to be to be connected
 
-    Returns
-    -------
-    data : torch_geometric.data.Data
-        Graph data structure containing the tabular data.
-    """
-    tab1 = dataset[:][0]
-    tab2 = dataset[:][1]
-    labels = dataset[:][2]
+    def make_graph(self):
+        tab1 = self.dataset[:][0]
+        tab2 = self.dataset[:][1]
+        labels = self.dataset[:][2]
 
-    num_nodes = tab1.shape[0]
+        num_nodes = tab1.shape[0]
 
-    # correlation matrix between nodes' tab1 features
-    corr_matrix = torch.corrcoef(tab1) - torch.eye(num_nodes)
+        # correlation matrix between nodes' tab1 features
+        corr_matrix = torch.corrcoef(tab1) - torch.eye(num_nodes)
 
-    threshold = 0.8  # how correlated the nodes need to be to be connected
+        edge_indices = np.where(np.abs(corr_matrix) >= self.threshold)
+        edge_indices = np.stack(edge_indices, axis=0)
 
-    edge_indices = np.where(np.abs(corr_matrix) >= threshold)
-    edge_indices = np.stack(edge_indices, axis=0)
+        # print("Number of edges: ", edge_indices.shape[1])
 
-    # print("Number of edges: ", edge_indices.shape[1])
+        x = tab2
+        edge_index = torch.tensor(edge_indices, dtype=torch.long)
+        edge_attr = (
+            corr_matrix[edge_indices[0], edge_indices[1]] + 1
+        )  # add 1 to make all edge_attr positive
 
-    x = tab2
-    edge_index = torch.tensor(edge_indices, dtype=torch.long)
-    edge_attr = (
-        corr_matrix[edge_indices[0], edge_indices[1]] + 1
-    )  # add 1 to make all edge_attr positive
+        data = Data(x=x, edge_index=edge_index, edge_attr=edge_attr, y=labels)
 
-    data = Data(x=x, edge_index=edge_index, edge_attr=edge_attr, y=labels)
+        return data
 
-    return data
+
+# def edgecorr_graph_maker(dataset):
+#     """
+#     Creates the graph data structure for the edge correlation GNN model.
+
+#     Parameters
+#     ----------
+#     dataset : torch.utils.data.Dataset
+#         Dataset containing the tabular data.
+
+#     Returns
+#     -------
+#     data : torch_geometric.data.Data
+#         Graph data structure containing the tabular data.
+#     """
+#     tab1 = dataset[:][0]
+#     tab2 = dataset[:][1]
+#     labels = dataset[:][2]
+
+#     num_nodes = tab1.shape[0]
+
+#     # correlation matrix between nodes' tab1 features
+#     corr_matrix = torch.corrcoef(tab1) - torch.eye(num_nodes)
+
+#     threshold = 0.8  # how correlated the nodes need to be to be connected
+
+#     edge_indices = np.where(np.abs(corr_matrix) >= threshold)
+#     edge_indices = np.stack(edge_indices, axis=0)
+
+#     # print("Number of edges: ", edge_indices.shape[1])
+
+#     x = tab2
+#     edge_index = torch.tensor(edge_indices, dtype=torch.long)
+#     edge_attr = (
+#         corr_matrix[edge_indices[0], edge_indices[1]] + 1
+#     )  # add 1 to make all edge_attr positive
+
+#     data = Data(x=x, edge_index=edge_index, edge_attr=edge_attr, y=labels)
+
+#     return data

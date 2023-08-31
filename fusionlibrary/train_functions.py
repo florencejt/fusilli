@@ -12,58 +12,142 @@ import wandb
 
 
 def modify_model_architecture(model, architecture_modification):
-    changed = False
-    for model_name in architecture_modification:
-        # ~~~~~~ modifying all fusion models ~~~~~~
+    """
+    Modify the architecture of a deep learning model based on the provided configuration.
+
+    Args:
+        model (nn.Module): The original deep learning model.
+        architecture_modification (dict): A dictionary containing architecture modifications.
+
+    Returns:
+        nn.Module: The modified deep learning model.
+    """
+    for model_name, layer_groups in architecture_modification.items():
+        # Modify layers for all specified models
         if model_name == "all":
-            for i, layer_group in enumerate(architecture_modification[model_name]):
+            for layer_group, modification in layer_groups.items():
                 if hasattr(model, layer_group):
-                    setattr(
-                        model,
-                        layer_group,
-                        architecture_modification[model_name][layer_group],
-                    )
-                    # RESET FUSED LAYERS
-                    if (layer_group != "fused_layers") and (
-                        i == len(architecture_modification[model_name]) - 1
-                    ):  # don't reset fused layers if we're modifying fused layers anyway
-                        if hasattr(model, "calc_fused_layers"):
-                            model.calc_fused_layers()  # reset fused layers with new fused_dim from new architecture
-                    changed = True
+                    setattr(model, layer_group, modification)
+                    # if layer_group != "fused_layers":
+                    #     # if we;re on the last modification
+                    #     if layer_group == list(layer_groups.keys())[-1]:
+                    print("Changed", layer_group, "in", model_name)
+            reset_fused_layers(model)
 
-        # ~~~~~~ modifying specific fusion models ~~~~~~
-        if model_name == model.__class__.__name__:
-            for i, layer_group in enumerate(architecture_modification[model_name]):
-                # if we need to access a layer within a layer group
-                split_layer_group = layer_group.split(".")
+        # Modify layers for a specific model class
+        elif model_name == model.__class__.__name__:
+            for layer_group, modification in layer_groups.items():
+                nested_attr = get_nested_attr(model, layer_group)
 
-                if len(split_layer_group) > 1:
-                    get_attr_1 = getattr(model, split_layer_group[0])
-                    for layer_layer in split_layer_group[1:-1]:
-                        get_attr_1 = getattr(get_attr_1, layer_layer)
-                else:
-                    get_attr_1 = model
-
-                if hasattr(get_attr_1, split_layer_group[-1]):
-                    setattr(
-                        get_attr_1,
-                        split_layer_group[-1],
-                        architecture_modification[model_name][layer_group],
-                    )
-                    changed = True
-
-                # RESET FUSED LAYERS
-                if (layer_group != "fused_layers") and (
-                    i == len(architecture_modification[model_name]) - 1
-                ):  # don't reset fused layers if we're modifying fused layers anyway
-                    print("resetting fused layers", layer_group, "on", get_attr_1)
-                    if hasattr(get_attr_1, "calc_fused_layers"):
-                        get_attr_1.calc_fused_layers()  # reset fused layers with new fused_dim from new architecture
-
-    # if not changed:
-    #     raise ValueError("NOTHING CHANGED IN THIS MODEL FOR TESTING")
+                if hasattr(nested_attr, layer_group.split(".")[-1]):
+                    setattr(nested_attr, layer_group.split(".")[-1], modification)
+                    print("Changed", layer_group.split(".")[-1], "in", model_name)
+                    # if layer_group != "fused_layers":
+                    #     # if we;re on the last modification
+                    #     if layer_group == list(layer_groups.keys())[-1]:
+                reset_fused_layers(nested_attr)
 
     return model
+
+
+def get_nested_attr(obj, attr_path):
+    """
+    Get a nested attribute from an object using dot-separated path.
+
+    Args:
+        obj (object): The object to retrieve the nested attribute from.
+        attr_path (str): Dot-separated path to the nested attribute.
+
+    Returns:
+        object: The nested attribute if found, otherwise None.
+    """
+    attributes = attr_path.split(".")
+
+    if len(attributes) > 1:  # if we're looking for a nested attribute
+        attr = getattr(obj, attributes[0])
+        for i in range(1, len(attributes)):
+            attr = getattr(attr, attributes[i])
+    else:
+        attr = obj
+
+    return attr
+    # if len(attributes) == 1:
+    #     print(getattr(obj, attr_path, None))
+    #     return getattr(obj, attr_path, None)
+    # else:
+    #     for attr in attributes:
+    #         print("attr", attr)
+    #         obj = getattr(obj, attr, None)
+    #         print("obj", obj)
+    #         if obj is None:
+    #             return None
+    #     return obj
+
+
+def reset_fused_layers(obj):
+    """
+    Reset fused layers of a model if the reset method is available.
+
+    Args:
+        obj (nn.Module): The model to reset fused layers for.
+    """
+    if hasattr(obj, "calc_fused_layers"):
+        obj.calc_fused_layers()
+
+
+# Example usage
+# modified_model = modify_model_architecture(original_model, architecture_modification)
+
+
+# def modify_model_architecture(model, architecture_modification):
+#     for model_name in architecture_modification:
+#         # ~~~~~~ modifying all fusion models ~~~~~~
+#         if model_name == "all":
+#             for i, layer_group in enumerate(architecture_modification[model_name]):
+#                 if hasattr(model, layer_group):
+#                     setattr(
+#                         model,
+#                         layer_group,
+#                         architecture_modification[model_name][layer_group],
+#                     )
+#                     # RESET FUSED LAYERS
+#                     if (layer_group != "fused_layers") and (
+#                         i == len(architecture_modification[model_name]) - 1
+#                     ):  # don't reset fused layers if we're modifying fused layers anyway
+#                         if hasattr(model, "calc_fused_layers"):
+#                             model.calc_fused_layers()  # reset fused layers with new fused_dim from new architecture
+
+#         # ~~~~~~ modifying specific fusion models ~~~~~~
+#         if model_name == model.__class__.__name__:
+#             for i, layer_group in enumerate(architecture_modification[model_name]):
+#                 # if we need to access a layer within a layer group
+#                 split_layer_group = layer_group.split(".")
+
+#                 if len(split_layer_group) > 1:
+#                     get_attr_1 = getattr(model, split_layer_group[0])
+#                     for layer_layer in split_layer_group[1:-1]:
+#                         get_attr_1 = getattr(get_attr_1, layer_layer)
+#                 else:
+#                     get_attr_1 = model
+
+#                 if hasattr(get_attr_1, split_layer_group[-1]):
+#                     setattr(
+#                         get_attr_1,
+#                         split_layer_group[-1],
+#                         architecture_modification[model_name][layer_group],
+#                     )
+
+#                 # RESET FUSED LAYERS
+#                 if (layer_group != "fused_layers") and (
+#                     i == len(architecture_modification[model_name]) - 1
+#                 ):  # don't reset fused layers if we're modifying fused layers anyway
+#                     if hasattr(get_attr_1, "calc_fused_layers"):
+#                         get_attr_1.calc_fused_layers()  # reset fused layers with new fused_dim from new architecture
+
+#     # if not changed:
+#     #     raise ValueError("NOTHING CHANGED IN THIS MODEL FOR TESTING")
+
+#     return model
 
 
 def train_and_test(
@@ -153,12 +237,9 @@ def train_and_test(
         )
     )
 
-    print("dm.data_dims", dm.data_dims)
-
     # TODO add in bit to let user choose structure of model
     if layer_mods is not None:
         model.model = modify_model_architecture(model.model, layer_mods)
-
     # if architecture_modification is not None:
     #    for layer_group in architecture_modification:
     #        if layer_group exists in model:

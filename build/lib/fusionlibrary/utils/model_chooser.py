@@ -37,18 +37,18 @@ fusion_model_dict = [
     #     "name": "TabularCrossmodalMultiheadAttention",
     #     "path": "fusion_models.tab_crossmodal_att",
     # },
-    # {"name": "TabularDecision", "path": "fusion_models.tabular_decision"},
-    # {"name": "ImageDecision", "path": "fusion_models.img_tab_decision"},
-    # {"name": "MCVAE_tab", "path": "fusion_models.mcvae_tab"},
-    # {
-    #     "name": "ConcatImgLatentTabDoubleTrain",
-    #     "path": "fusion_models.concat_img_latent_tab_doubletrain",
-    # },
-    # {
-    #     "name": "ConcatImgLatentTabDoubleLoss",
-    #     "path": "fusion_models.concat_img_latent_tab_doubleloss",
-    # },
-    # {"name": "EdgeCorrGNN", "path": "fusion_models.edge_corr_gnn"},
+    {"name": "TabularDecision", "path": "fusion_models.tabular_decision"},
+    {"name": "ImageDecision", "path": "fusion_models.img_tab_decision"},
+    {"name": "MCVAE_tab", "path": "fusion_models.mcvae_tab"},
+    {
+        "name": "ConcatImgLatentTabDoubleTrain",
+        "path": "fusion_models.concat_img_latent_tab_doubletrain",
+    },
+    {
+        "name": "ConcatImgLatentTabDoubleLoss",
+        "path": "fusion_models.concat_img_latent_tab_doubleloss",
+    },
+    {"name": "EdgeCorrGNN", "path": "fusion_models.edge_corr_gnn"},
     {"name": "DAETabImgMaps", "path": "fusion_models.denoise_tab_img_maps"},
 ]
 

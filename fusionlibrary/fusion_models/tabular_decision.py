@@ -86,7 +86,9 @@ class TabularDecision(ParentFusionModel, nn.Module):
 
         for i, (k, layer) in enumerate(self.mod1_layers.items()):
             x_tab1 = layer(x_tab1)
-            x_tab2 = self.mod2_layers[k](x_tab2)
+
+        for i, (k, layer) in enumerate(self.mod2_layers.items()):
+            x_tab2 = layer(x_tab2)
 
         # predictions for each method
         pred_tab1 = self.final_prediction_tab1(x_tab1)
