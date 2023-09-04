@@ -112,14 +112,8 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    method_name : str</span>
-<span class="sd">        Name of the method.</span>
-<span class="sd">    modality_type : str</span>
-<span class="sd">        Type of modality.</span>
-<span class="sd">    fusion_type : str</span>
-<span class="sd">        Type of fusion.</span>
 <span class="sd">    graph_maker : function</span>
-<span class="sd">        Function that creates the graph data structure.</span>
+<span class="sd">        Function that creates the graph data structure: :class:`~.EdgeCorrGraphMaker`</span>
 <span class="sd">    graph_conv_layers : nn.Sequential</span>
 <span class="sd">        Sequential layer containing the graph convolutional layers.</span>
 <span class="sd">    dropout_prob : float</span>
@@ -127,21 +121,16 @@
 <span class="sd">    final_prediction : nn.Sequential</span>
 <span class="sd">        Sequential layer containing the final prediction layers. The final prediction layers</span>
 <span class="sd">        take in 256 features.</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    forward(x)</span>
-<span class="sd">        Forward pass of the model.</span>
-<span class="sd">    calc_fused_layers()</span>
-<span class="sd">        Calculate the fused layers.</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># str: Name of the method.</span>
     <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;Edge Correlation GNN&quot;</span>
+    <span class="c1"># str: Type of modality.</span>
     <span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;both_tab&quot;</span>
+    <span class="c1"># str: Type of fusion.</span>
     <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;graph&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="EdgeCorrGNN.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -168,7 +157,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">dropout_prob</span> <span class="o">=</span> <span class="mf">0.5</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="EdgeCorrGNN.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -224,14 +213,9 @@
 <span class="sd">        Dataset containing the tabular data.</span>
 <span class="sd">    threshold : float</span>
 <span class="sd">        How correlated the nodes need to be to be connected. Default: 0.8</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    make_graph()</span>
-<span class="sd">        Creates the graph data structure.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
+<div class="viewcode-block" id="EdgeCorrGraphMaker.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -240,7 +224,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.8</span>  <span class="c1"># how correlated the nodes need to be to be connected</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.8</span>  <span class="c1"># how correlated the nodes need to be to be connected</span></div>
 
 <div class="viewcode-block" id="EdgeCorrGraphMaker.make_graph"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.make_graph">[docs]</a>    <span class="k">def</span> <span class="nf">make_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -274,47 +258,6 @@
         <span class="n">data</span> <span class="o">=</span> <span class="n">Data</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="o">=</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_attr</span><span class="o">=</span><span class="n">edge_attr</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">data</span></div></div>
-
-
-<span class="c1"># def edgecorr_graph_maker(dataset):</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     Creates the graph data structure for the edge correlation GNN model.</span>
-
-<span class="c1">#     Parameters</span>
-<span class="c1">#     ----------</span>
-<span class="c1">#     dataset : torch.utils.data.Dataset</span>
-<span class="c1">#         Dataset containing the tabular data.</span>
-
-<span class="c1">#     Returns</span>
-<span class="c1">#     -------</span>
-<span class="c1">#     data : torch_geometric.data.Data</span>
-<span class="c1">#         Graph data structure containing the tabular data.</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     tab1 = dataset[:][0]</span>
-<span class="c1">#     tab2 = dataset[:][1]</span>
-<span class="c1">#     labels = dataset[:][2]</span>
-
-<span class="c1">#     num_nodes = tab1.shape[0]</span>
-
-<span class="c1">#     # correlation matrix between nodes&#39; tab1 features</span>
-<span class="c1">#     corr_matrix = torch.corrcoef(tab1) - torch.eye(num_nodes)</span>
-
-<span class="c1">#     threshold = 0.8  # how correlated the nodes need to be to be connected</span>
-
-<span class="c1">#     edge_indices = np.where(np.abs(corr_matrix) &gt;= threshold)</span>
-<span class="c1">#     edge_indices = np.stack(edge_indices, axis=0)</span>
-
-<span class="c1">#     # print(&quot;Number of edges: &quot;, edge_indices.shape[1])</span>
-
-<span class="c1">#     x = tab2</span>
-<span class="c1">#     edge_index = torch.tensor(edge_indices, dtype=torch.long)</span>
-<span class="c1">#     edge_attr = (</span>
-<span class="c1">#         corr_matrix[edge_indices[0], edge_indices[1]] + 1</span>
-<span class="c1">#     )  # add 1 to make all edge_attr positive</span>
-
-<span class="c1">#     data = Data(x=x, edge_index=edge_index, edge_attr=edge_attr, y=labels)</span>
-
-<span class="c1">#     return data</span>
 </pre></div>
 
            </div>

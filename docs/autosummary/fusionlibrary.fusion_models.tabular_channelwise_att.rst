@@ -17,7 +17,6 @@ fusionlibrary.fusion\_models.tabular\_channelwise\_att
 
    .. autosummary::
    
-      ParentFusionModel
       TabularChannelWiseMultiAttention
    
    

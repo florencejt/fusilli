@@ -13,7 +13,9 @@
 /* Side bar background */
 .wy-nav-side {
     background: #EFFFE9;
+    background-color: #EFFFE9;
 }
+
 
 /* inline code style */
 code.literal {
@@ -64,4 +66,64 @@ a:active {
 
 .wy-menu>.caption>span.caption-text {
     color: #990092;
+}
+
+.wy-menu-vertical li.current a {
+    color: #990092;
+    border-right: 3px solid #cdf8be;
+    background-color: #cdf8be;
+}
+
+.wy-menu-vertical li ul li a {
+    color: #EFFFE9;
+}
+
+.wy-menu-vertical li.toctree-l2 button.toctree-expand {
+    color: rgb(60, 168, 52);
+}
+
+.wy-menu-vertical li.current>a button.toctree-expand,
+.wy-menu-vertical li.on a button.toctree-expand {
+    color: rgb(60, 168, 52);
+}
+
+.wy-menu-vertical li.current>a button.toctree-expand:hover,
+.wy-menu-vertical li.on a button.toctree-expand:hover {
+    color: rgb(60, 168, 52);
+}
+
+.wy-menu-vertical li.toctree-l2.current li.toctree-l3>a {
+    background: #cdf8be;
+    overflow-x: hidden;
+}
+
+.wy-menu-vertical li.toctree-l3.current li.toctree-l4>a {
+    background: #cdf8be;
+    display: inline-block;
+}
+
+html.writer-html4 .rst-content dl:not(.docutils)>dt,
+html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple)>dt {
+    display: table;
+    margin: 6px 0;
+    font-size: 90%;
+    line-height: normal;
+    background: #fae7f8;
+    color: #db55c3;
+    border-top: 3px solid #e737ac;
+    border-top-width: 3px;
+    border-top-style: solid;
+    border-top-color: #e737ac;
+    padding: 6px;
+    position: relative;
+}
+
+.wy-nav-content {
+    max-width: 1200px !important;
+}
+
+.wy-side-scroll {
+    width: 100%;
+    overflow-x: auto;
+    display: inline-block;
 }

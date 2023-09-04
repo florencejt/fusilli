@@ -101,19 +101,16 @@
 
 
 <div class="viewcode-block" id="Tabular2Unimodal"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.tabular2_unimodal.html#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal">[docs]</a><span class="k">class</span> <span class="nc">Tabular2Unimodal</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Tabular2 uni-modal model.</span>
+
 <span class="sd">    This class implements a uni-modal model using only the 2nd type of tabular data.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    method_name : str</span>
-<span class="sd">        Name of the method.</span>
-<span class="sd">    modality_type : str</span>
-<span class="sd">        Type of modality.</span>
-<span class="sd">    fusion_type : str</span>
-<span class="sd">        Type of fusion.</span>
 <span class="sd">    mod2_layers : dict</span>
 <span class="sd">        Dictionary containing the layers of the 2nd type of tabular data.</span>
+<span class="sd">    fused_dim : int</span>
+<span class="sd">        Dimension of the fused layer.</span>
 <span class="sd">    fused_layers : nn.Sequential</span>
 <span class="sd">        Sequential layer containing the fused layers.</span>
 <span class="sd">    final_prediction : nn.Sequential</span>
@@ -121,17 +118,16 @@
 <span class="sd">    fused_dim : int</span>
 <span class="sd">        Dimension of the fused layer.</span>
 
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    forward(x)</span>
-<span class="sd">        Forward pass of the model.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># str: Name of the method.</span>
     <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;Tabular2 uni-modal&quot;</span>
+    <span class="c1"># str: Modality type.</span>
     <span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;tabular2&quot;</span>
+    <span class="c1"># str: Fusion type.</span>
     <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;Uni-modal&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="Tabular2Unimodal.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.tabular2_unimodal.html#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -142,10 +138,6 @@
 <span class="sd">        params : dict</span>
 <span class="sd">            Dictionary containing the parameters of the model.</span>
 
-<span class="sd">        Raises</span>
-<span class="sd">        ------</span>
-<span class="sd">        ValueError</span>
-<span class="sd">            If the prediction type is not valid.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ParentFusionModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
@@ -153,12 +145,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_mod2_layers</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Tabular2Unimodal.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.tabular2_unimodal.html#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the fused layers.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod2_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Tabular2Unimodal.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.tabular2_unimodal.html#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

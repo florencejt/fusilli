@@ -110,12 +110,6 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    method_name : str</span>
-<span class="sd">        Name of the method. (Concatenating tabular data with image feature maps)</span>
-<span class="sd">    modality_type : str</span>
-<span class="sd">        Type of modality. (tab_img)</span>
-<span class="sd">    fusion_type : str</span>
-<span class="sd">        Type of fusion. (operation)</span>
 <span class="sd">    pred_type : str</span>
 <span class="sd">        Type of prediction to be performed.</span>
 <span class="sd">    img_layers : dict</span>
@@ -125,25 +119,21 @@
 <span class="sd">        :meth:`~ConcatImageMapsTabularData.calc_fused_layers` method.</span>
 <span class="sd">    final_prediction : nn.Sequential</span>
 <span class="sd">        Sequential layer containing the final prediction layers. The final prediction layers</span>
-<span class="sd">          take in the number of features of the fused layers as input.</span>
+<span class="sd">        take in the number of features of the fused layers as input.</span>
 <span class="sd">        Calculated in the :meth:`~ConcatImageMapsTabularData.calc_fused_layers` method.</span>
 <span class="sd">    fused_dim : int</span>
 <span class="sd">        Number of features of the fused layers. Calculated in the</span>
 <span class="sd">        :meth:`~ConcatImageMapsTabularData.calc_fused_layers` method.</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    forward(x)</span>
-<span class="sd">        Forward pass of the model.</span>
-<span class="sd">    calc_fused_layers()</span>
-<span class="sd">        Calculate the fused layers.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1">#: str: Name of the method.</span>
     <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;Concatenating tabular data with image feature maps&quot;</span>
+    <span class="c1">#: str: Type of modality.</span>
     <span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;tab_img&quot;</span>
+    <span class="c1">#: str: Type of fusion.</span>
     <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;operation&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="ConcatImageMapsTabularData.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_data.html#fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -159,7 +149,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_img_layers</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ConcatImageMapsTabularData.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_data.html#fusionlibrary.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

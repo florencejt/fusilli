@@ -14,22 +14,26 @@ class ConcatTabularData(ParentFusionModel, nn.Module):
     Attributes
     ----------
     method_name : str
-        Name of the method.
+        Name of the method. (Concatenating tabular data)
     modality_type : str
-        Type of modality.
+        Type of modality. (both_tab)
     fusion_type : str
-        Type of fusion.
+        Type of fusion. (operation)
     pred_type : str
         Type of prediction to be performed.
     mod1_layers : dict
-        Dictionary containing the layers of the first modality.
+        Dictionary containing the layers of the first modality. Calculated in the
+        :meth:`~ParentFusionModel.set_mod1_layers` method.
     mod2_layers : dict
-        Dictionary containing the layers of the second modality.
+        Dictionary containing the layers of the second modality. Calculated in the
+        :meth:`~ParentFusionModel.set_mod2_layers` method.
     fused_layers : nn.Sequential
-        Sequential layer containing the fused layers.
+        Sequential layer containing the fused layers. Calculated in the
+        :meth:`~ParentFusionModel.set_fused_layers` method.
     final_prediction : nn.Sequential
         Sequential layer containing the final prediction layers. The final prediction layers
-        take in the number of
+        take in the number of features of the fused layers as input.
+        Calculated in the :meth:`~ParentFusionModel.set_final_pred_layers` method.
 
     Methods
     -------

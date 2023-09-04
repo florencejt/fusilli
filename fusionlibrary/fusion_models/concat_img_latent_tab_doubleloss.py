@@ -16,19 +16,13 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
 
     Attributes
     ----------
-    method_name : str
-        Name of the method. (Concatenating image latent space with tabular data, trained altogether)
-    modality_type : str
-        Type of modality. (tab_img)
-    fusion_type : str
-        Type of fusion. (subspace)
     pred_type : str
         Type of prediction to be performed. Binary, regression or multiclass.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers defined with :func:`calc_fused_layers()`.
     final_prediction : nn.Sequential
         Sequential layer containing the final prediction layers. The final prediction layers
-            take in the number of features of the fused layers as input.
+        take in the number of features of the fused layers as input.
     custom_loss : nn.Module
         Additional loss function to be used for training the model. Default is MSELoss.
     latent_dim : int
@@ -73,10 +67,13 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         Size of the fused layers: latent dimension size + tabular data dimension size.
     """
 
+    # str: Name of the method.
     method_name = (
         "Concatenating image latent space with tabular data, trained altogether"
     )
+    # str: Type of modality.
     modality_type = "tab_img"
+    # str: Type of fusion.
     fusion_type = "subspace"
 
     def __init__(self, pred_type, data_dims, params):
@@ -94,11 +91,11 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
 
         self.pred_type = pred_type
         self.custom_loss = nn.MSELoss()
-        self.img_dims = data_dims[-1]
+        self.img_dim = data_dims[-1]
 
         self.latent_dim = 256  # You can adjust the latent space size
 
-        if len(self.img_dims) == 2:  # 2D images
+        if len(self.img_dim) == 2:  # 2D images
             self.encoder = nn.Sequential(
                 nn.Conv2d(1, 32, kernel_size=3, padding=1),  # 100x100x1 -> 100x100x32
                 nn.ReLU(),
@@ -125,7 +122,7 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
                 ),  # 50x50x32 -> 100x100x1
             )
 
-        elif len(self.img_dims) == 3:
+        elif len(self.img_dim) == 3:
             self.encoder = nn.Sequential(
                 nn.Conv3d(1, 16, kernel_size=3, stride=1),
                 nn.ReLU(),
@@ -156,8 +153,6 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         -------
         None
         """
-        # get dummy conv output
-        # self.flatten = nn.Flatten()
 
         # size of final encoder output
         dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
@@ -190,7 +185,7 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
 
         self.new_decoder.append(nn.Sigmoid()),  # Output is scaled between 0 and 1
         self.new_decoder.append(
-            nn.Upsample(size=self.img_dims, mode="bilinear", align_corners=False)
+            nn.Upsample(size=self.img_dim, mode="bilinear", align_corners=False)
         )
 
         self.fused_dim = self.latent_dim + self.data_dims[0]

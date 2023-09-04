@@ -114,45 +114,41 @@
 <span class="sd">    The MCVAE creates a joint latent space of the two types of tabular data based off a joint</span>
 <span class="sd">    latent prior and joint decoding.</span>
 
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    method_name : str</span>
-<span class="sd">        Name of the method.</span>
-<span class="sd">    modality_type : str</span>
-<span class="sd">        Type of modality.</span>
-<span class="sd">    fusion_type : str</span>
-<span class="sd">        Type of fusion.</span>
-<span class="sd">    subspace_method : class</span>
-<span class="sd">        Class of the subspace method.</span>
-<span class="sd">    latent_space_layers : dict</span>
-<span class="sd">        Dictionary containing the layers of the 1st type of tabular data.</span>
-<span class="sd">        Here the first type of tabular data is the joint latent space created</span>
-<span class="sd">            in the mcvae_subspace_method class.</span>
-<span class="sd">    fused_layers : nn.Sequential</span>
-<span class="sd">        Sequential layer containing the fused layers.</span>
-<span class="sd">    final_prediction : nn.Sequential</span>
-<span class="sd">        Sequential layer containing the final prediction layers.</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    forward(x)</span>
-<span class="sd">        Forward pass of the model.</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
+
 <span class="sd">    Antelmi, L., Ayache, N., Robert, P., &amp; Lorenzi, M. (2019). Sparse Multi-Channel Variational</span>
 <span class="sd">        Autoencoder for the Joint Analysis of Heterogeneous Data. Proceedings of the 36th</span>
 <span class="sd">        International Conference on Machine Learning, 302–311.</span>
 <span class="sd">        https://proceedings.mlr.press/v97/antelmi19a.html</span>
 
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    subspace_method : class</span>
+<span class="sd">        Class of the subspace method: :class:`~.MCVAESubspaceMethod`</span>
+<span class="sd">    latent_space_layers : dict</span>
+<span class="sd">        Dictionary containing the layers of the 1st type of tabular data.</span>
+<span class="sd">        Here the first type of tabular data is the joint latent space created</span>
+<span class="sd">        in the mcvae_subspace_method class.</span>
+<span class="sd">    fused_dim : int</span>
+<span class="sd">        Number of features of the fused layers. This is the flattened output size of the</span>
+<span class="sd">        latent space layers.</span>
+<span class="sd">    fused_layers : nn.Sequential</span>
+<span class="sd">        Sequential layer containing the fused layers.</span>
+<span class="sd">    final_prediction : nn.Sequential</span>
+<span class="sd">        Sequential layer containing the final prediction layers.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># str: Name of the method.</span>
     <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;MCVAE Tabular&quot;</span>
+    <span class="c1"># str: Type of modality.</span>
     <span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;both_tab&quot;</span>
+    <span class="c1"># str: Type of fusion.</span>
     <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;subspace&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAE_tab.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -166,7 +162,7 @@
         <span class="n">ParentFusionModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="n">mcvae_subspace_method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="n">MCVAESubspaceMethod</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">latent_space_layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleDict</span><span class="p">(</span>
             <span class="p">{</span>
@@ -193,16 +189,20 @@
             <span class="p">}</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="MCVAE_tab.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the fused layers of the model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># make sure the first layer takes in the latent dimension</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">latent_space_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_space_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">latent_space_layers</span><span class="p">[</span><span class="s2">&quot;layer 1&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_space_layers</span><span class="p">[</span><span class="s2">&quot;layer 1&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_space_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
@@ -289,7 +289,7 @@
     <span class="k">return</span> <span class="n">i</span></div>
 
 
-<div class="viewcode-block" id="mcvae_subspace_method"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method">[docs]</a><span class="k">class</span> <span class="nc">mcvae_subspace_method</span><span class="p">:</span>
+<div class="viewcode-block" id="MCVAESubspaceMethod"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod">[docs]</a><span class="k">class</span> <span class="nc">MCVAESubspaceMethod</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class for creating the MCVAE (multi-channel variational autoencoder) joint latent space.</span>
 
@@ -299,18 +299,12 @@
 <span class="sd">        Datamodule object containing the data.</span>
 <span class="sd">    num_latent_dims : int</span>
 <span class="sd">        Number of latent dimensions.</span>
+<span class="sd">    fit_model : Mcvae object</span>
+<span class="sd">        Mcvae object containing the fitted model.</span>
 
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    get_latents(dataset)</span>
-<span class="sd">        Gets the mean latents of the dataset.</span>
-<span class="sd">    train(train_dataset, val_dataset=None)</span>
-<span class="sd">        Trains the model.</span>
-<span class="sd">    convert_to_latent(test_dataset)</span>
-<span class="sd">        Converts the test dataset to the latent space.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAESubspaceMethod.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -318,9 +312,9 @@
 <span class="sd">            Datamodule object containing the data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span> <span class="o">=</span> <span class="n">datamodule</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_latent_dims</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_latent_dims</span> <span class="o">=</span> <span class="mi">10</span></div>
 
-<div class="viewcode-block" id="mcvae_subspace_method.get_latents"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method.get_latents">[docs]</a>    <span class="k">def</span> <span class="nf">get_latents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAESubspaceMethod.get_latents"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.get_latents">[docs]</a>    <span class="k">def</span> <span class="nf">get_latents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the latent representations of the multimodal dataset.</span>
 <span class="sd">        The two latent spaces are averaged to form the joint latent space.</span>
@@ -355,7 +349,7 @@
 
         <span class="k">return</span> <span class="n">mean_latents</span></div>
 
-<div class="viewcode-block" id="mcvae_subspace_method.train"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAESubspaceMethod.train"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Trains the model.</span>
 
@@ -408,7 +402,7 @@
 
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">mean_latents</span><span class="p">),</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="mcvae_subspace_method.convert_to_latent"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.mcvae_subspace_method.convert_to_latent">[docs]</a>    <span class="k">def</span> <span class="nf">convert_to_latent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAESubspaceMethod.convert_to_latent"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.convert_to_latent">[docs]</a>    <span class="k">def</span> <span class="nf">convert_to_latent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts the test dataset to the latent space.</span>
 

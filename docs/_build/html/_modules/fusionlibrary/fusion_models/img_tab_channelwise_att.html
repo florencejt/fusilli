@@ -112,31 +112,6 @@
 <span class="sd">    Inspired by the work of Duanmu et al. (2020) [1]., we use channel-wise multiplication to combine</span>
 <span class="sd">    tabular data and image data.</span>
 
-
-
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    method_name : str</span>
-<span class="sd">        Name of the method.</span>
-<span class="sd">    modality_type : str</span>
-<span class="sd">        Type of modality.</span>
-<span class="sd">    fusion_type : str</span>
-<span class="sd">        Type of fusion.</span>
-<span class="sd">    mod1_layers : dict</span>
-<span class="sd">        Dictionary containing the layers of the 1st type of tabular data.</span>
-<span class="sd">    img_layers : dict</span>
-<span class="sd">        Dictionary containing the layers of the image data.</span>
-<span class="sd">    fused_layers : nn.Sequential</span>
-<span class="sd">        Sequential layer containing the fused layers.</span>
-<span class="sd">    final_prediction : nn.Sequential</span>
-<span class="sd">        Sequential layer containing the final prediction layers.</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    forward(x)</span>
-<span class="sd">        Forward pass of the model.</span>
-
-
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 
@@ -155,13 +130,30 @@
 <span class="sd">    https://github.com/HongyiDuanmu26/Prediction-of-pCR-with-Integrative-Deep-Learning/</span>
 <span class="sd">    blob/main/CustomNet.py</span>
 
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mod1_layers : dict</span>
+<span class="sd">        Dictionary containing the layers of the 1st type of tabular data.</span>
+<span class="sd">    img_layers : dict</span>
+<span class="sd">        Dictionary containing the layers of the image data.</span>
+<span class="sd">    fused_dim : int</span>
+<span class="sd">        Number of features of the fused layers. This is the flattened output size of the</span>
+<span class="sd">        image layers.</span>
+<span class="sd">    fused_layers : nn.Sequential</span>
+<span class="sd">        Sequential layer containing the fused layers.</span>
+<span class="sd">    final_prediction : nn.Sequential</span>
+<span class="sd">        Sequential layer containing the final prediction layers.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># str: Name of the method.</span>
     <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;Channel-wise multiplication net (image)&quot;</span>
+    <span class="c1"># str: Type of modality.</span>
     <span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;tab_img&quot;</span>
+    <span class="c1"># str: Type of fusion.</span>
     <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;attention&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageChannelWiseMultiAttention.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -178,15 +170,15 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_mod1_layers</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_img_layers</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
-
-        <span class="c1"># self.fused_dim = list(self.img_layers.values())[-1][0].out_channels</span>
-        <span class="c1"># self.set_fused_layers(self.fused_dim)</span>
-        <span class="c1"># self.set_final_pred_layers()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ImageChannelWiseMultiAttention.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the fused layers.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># get dummy conv output</span>
 

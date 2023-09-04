@@ -16,30 +16,25 @@ class ImageDecision(ParentFusionModel, nn.Module):
 
     Attributes
     ----------
-    fusion_type : str
-        Type of fusion to be performed.
-    modality_type : str
-        Type of modalities used.
-    method_name : str
-        Name of the method.
     mod1_layers : dict
         Dictionary containing the layers of the 1st type of tabular data.
     img_layers : dict
         Dictionary containing the layers of the image data.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers.
-    final_prediction : nn.Sequential
-        Sequential layer containing the final prediction layers.
+    final_prediction_tab1 : nn.Sequential
+        Sequential layer containing the final prediction layers for the first tabular data.
+    final_prediction_img : nn.Sequential
+        Sequential layer containing the final prediction layers for the image data.
 
-    Methods
-    -------
-    forward(x)
-        Forward pass of the model.
     """
 
-    fusion_type = "decision"
-    modality_type = "tab_img"
+    # str: Name of the method.
     method_name = "Image decision fusion"
+    # str: Type of modality.
+    modality_type = "tab_img"
+    # str: Type of fusion.
+    fusion_type = "decision"
 
     def __init__(self, pred_type, data_dims, params):
         """
@@ -61,10 +56,17 @@ class ImageDecision(ParentFusionModel, nn.Module):
         self.calc_fused_layers()
 
     def calc_fused_layers(self):
+        """
+        Calculates the fusion layers.
+
+        Returns
+        -------
+        None
+        """
         # ~~ Tabular data ~~
 
-        self.tab_fused_dim = list(self.mod1_layers.values())[-1][0].out_features
-        self.set_final_pred_layers(self.tab_fused_dim)
+        tab_fused_dim = list(self.mod1_layers.values())[-1][0].out_features
+        self.set_final_pred_layers(tab_fused_dim)
         self.final_prediction_tab1 = self.final_prediction
 
         # ~~ Image data ~~
@@ -73,9 +75,7 @@ class ImageDecision(ParentFusionModel, nn.Module):
         for layer in self.img_layers.values():
             dummy_conv_output = layer(dummy_conv_output)
         img_fusion_size = dummy_conv_output.data.view(1, -1).size(1)
-
-        self.img_fused_dim = img_fusion_size
-        self.set_final_pred_layers(self.img_fused_dim)
+        self.set_final_pred_layers(img_fusion_size)
         self.final_prediction_img = self.final_prediction
 
     def forward(self, x):

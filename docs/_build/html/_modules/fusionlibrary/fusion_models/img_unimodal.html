@@ -108,30 +108,25 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    method_name : str</span>
-<span class="sd">        Name of the method.</span>
-<span class="sd">    modality_type : str</span>
-<span class="sd">        Type of modality.</span>
-<span class="sd">    fusion_type : str</span>
-<span class="sd">        Type of fusion.</span>
 <span class="sd">    img_layers : dict</span>
 <span class="sd">        Dictionary containing the layers of the image data.</span>
+<span class="sd">    fused_dim : int</span>
+<span class="sd">        Number of features of the fused layers. This is the flattened output size of the</span>
+<span class="sd">        image layers.</span>
 <span class="sd">    fused_layers : nn.Sequential</span>
 <span class="sd">        Sequential layer containing the fused layers.</span>
 <span class="sd">    final_prediction : nn.Sequential</span>
 <span class="sd">        Sequential layer containing the final prediction layers.</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    forward(x)</span>
-<span class="sd">        Forward pass of the model.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># str: Name of the method.</span>
     <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;Image unimodal&quot;</span>
+    <span class="c1"># str: Type of modality.</span>
     <span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;img&quot;</span>
+    <span class="c1"># str: Type of fusion.</span>
     <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;Uni-modal&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="ImgUnimodal.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.img_unimodal.html#fusionlibrary.fusion_models.img_unimodal.ImgUnimodal.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -147,14 +142,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_img_layers</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
-        <span class="c1"># self.fused_dim = self.get_fused_dim()</span>
-        <span class="c1"># # list(self.img_layers.values())[-1][0].out_channels</span>
-        <span class="c1"># self.set_fused_layers(self.fused_dim)</span>
-        <span class="c1"># self.set_final_pred_layers()</span>
+<div class="viewcode-block" id="ImgUnimodal.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.img_unimodal.html#fusionlibrary.fusion_models.img_unimodal.ImgUnimodal.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the fused layers.</span>
 
-    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># get dummy conv output</span>
         <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
@@ -162,9 +159,8 @@
         <span class="n">n_size</span> <span class="o">=</span> <span class="n">dummy_conv_output</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="n">n_size</span>
-        <span class="c1"># self.fused_dim = list(self.img_layers.values())[-1][0].out_channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ImgUnimodal.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.img_unimodal.html#fusionlibrary.fusion_models.img_unimodal.ImgUnimodal.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

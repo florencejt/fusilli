@@ -65,12 +65,12 @@
 <li class="toctree-l1"><a class="reference internal" href="fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">fusionlibrary.train_functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.get_nested_attr"><code class="docutils literal notranslate"><span class="pre">get_nested_attr()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.modify_model_architecture"><code class="docutils literal notranslate"><span class="pre">modify_model_architecture()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.get_nested_attr"><code class="docutils literal notranslate"><span class="pre">get_nested_attr()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.reset_fused_layers"><code class="docutils literal notranslate"><span class="pre">reset_fused_layers()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.train_and_test"><code class="docutils literal notranslate"><span class="pre">train_and_test()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.store_trained_model"><code class="docutils literal notranslate"><span class="pre">store_trained_model()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.train_and_save_models"><code class="docutils literal notranslate"><span class="pre">train_and_save_models()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.train_and_test"><code class="docutils literal notranslate"><span class="pre">train_and_test()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="fusionlibrary.eval_functions.Plotter.html">fusionlibrary.eval_functions.Plotter</a></li>
@@ -108,14 +108,8 @@
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_final_val_metrics</span></code>(trainer)</p></td>
-<td><p>Get the final validation metrics from the trainer object.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.get_nested_attr" title="fusionlibrary.train_functions.get_nested_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_nested_attr</span></code></a>(obj, attr_path)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.get_nested_attr" title="fusionlibrary.train_functions.get_nested_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_nested_attr</span></code></a>(obj, attr_path)</p></td>
 <td><p>Get a nested attribute from an object using dot-separated path.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_trainer</span></code>(logger[, max_epochs])</p></td>
-<td><p>Initialize the pytorch lightning trainer object.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.modify_model_architecture" title="fusionlibrary.train_functions.modify_model_architecture"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modify_model_architecture</span></code></a>(model, ...)</p></td>
 <td><p>Modify the architecture of a deep learning model based on the provided configuration.</p></td>
@@ -123,51 +117,20 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.reset_fused_layers" title="fusionlibrary.train_functions.reset_fused_layers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_fused_layers</span></code></a>(obj)</p></td>
 <td><p>Reset fused layers of a model if the reset method is available.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_logger</span></code>(params, fold, init_model[, ...])</p></td>
-<td><p>Set the logger for the current run.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.store_trained_model" title="fusionlibrary.train_functions.store_trained_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">store_trained_model</span></code></a>(trained_model, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.store_trained_model" title="fusionlibrary.train_functions.store_trained_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">store_trained_model</span></code></a>(trained_model, ...)</p></td>
 <td><p>Stores the trained model to a dictionary. If model type is already in dictionary (e.g. if it's a kfold model), append the model to     the list of models.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.train_and_save_models" title="fusionlibrary.train_functions.train_and_save_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_and_save_models</span></code></a>(trained_models_dict, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.train_and_save_models" title="fusionlibrary.train_functions.train_and_save_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_and_save_models</span></code></a>(trained_models_dict, ...)</p></td>
 <td><p>Trains/tests the model and saves the trained model to a dictionary for further analysis.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.train_and_test" title="fusionlibrary.train_functions.train_and_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_and_test</span></code></a>(dm, params, k, fusion_model, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.train_and_test" title="fusionlibrary.train_functions.train_and_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_and_test</span></code></a>(dm, params, k, fusion_model, ...)</p></td>
 <td><p>Trains and tests a model and, if k_fold trained, a fold.</p></td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Classes</p>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseModel</span></code>(model)</p></td>
-<td><p>Base model for all fusion models</p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py function">
-<dt class="sig sig-object py" id="fusionlibrary.train_functions.get_nested_attr">
-<span class="sig-prename descclassname"><span class="pre">fusionlibrary.train_functions.</span></span><span class="sig-name descname"><span class="pre">get_nested_attr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#get_nested_attr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.get_nested_attr" title="Permalink to this definition"></a></dt>
-<dd><p>Get a nested attribute from an object using dot-separated path.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>obj</strong> (<em>object</em>) – The object to retrieve the nested attribute from.</p></li>
-<li><p><strong>attr_path</strong> (<em>str</em>) – Dot-separated path to the nested attribute.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The nested attribute if found, otherwise None.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>object</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="fusionlibrary.train_functions.modify_model_architecture">
-<span class="sig-prename descclassname"><span class="pre">fusionlibrary.train_functions.</span></span><span class="sig-name descname"><span class="pre">modify_model_architecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">architecture_modification</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#modify_model_architecture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.modify_model_architecture" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">modify_model_architecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">architecture_modification</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#modify_model_architecture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.modify_model_architecture" title="Permalink to this definition"></a></dt>
 <dd><p>Modify the architecture of a deep learning model based on the provided configuration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -186,8 +149,28 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fusionlibrary.train_functions.get_nested_attr">
+<span class="sig-name descname"><span class="pre">get_nested_attr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#get_nested_attr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.get_nested_attr" title="Permalink to this definition"></a></dt>
+<dd><p>Get a nested attribute from an object using dot-separated path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>object</em>) – The object to retrieve the nested attribute from.</p></li>
+<li><p><strong>attr_path</strong> (<em>str</em>) – Dot-separated path to the nested attribute.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The nested attribute if found, otherwise None.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fusionlibrary.train_functions.reset_fused_layers">
-<span class="sig-prename descclassname"><span class="pre">fusionlibrary.train_functions.</span></span><span class="sig-name descname"><span class="pre">reset_fused_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#reset_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.reset_fused_layers" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">reset_fused_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#reset_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.reset_fused_layers" title="Permalink to this definition"></a></dt>
 <dd><p>Reset fused layers of a model if the reset method is available.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -197,49 +180,8 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fusionlibrary.train_functions.store_trained_model">
-<span class="sig-prename descclassname"><span class="pre">fusionlibrary.train_functions.</span></span><span class="sig-name descname"><span class="pre">store_trained_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trained_models_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#store_trained_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.store_trained_model" title="Permalink to this definition"></a></dt>
-<dd><p>Stores the trained model to a dictionary.
-If model type is already in dictionary (e.g. if it’s a kfold model), append the model to</p>
-<blockquote>
-<div><p>the list of models.</p>
-</div></blockquote>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fusionlibrary.train_functions.train_and_save_models">
-<span class="sig-prename descclassname"><span class="pre">fusionlibrary.train_functions.</span></span><span class="sig-name descname"><span class="pre">train_and_save_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_models_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#train_and_save_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.train_and_save_models" title="Permalink to this definition"></a></dt>
-<dd><p>Trains/tests the model and saves the trained model to a dictionary for further analysis.
-If the training type is kfold, it will train and test the model for each fold and store the
-trained models in a list under the model type key.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>trained_models_dicts</strong> (<em>dict</em>) – Dictionary of trained models.</p></li>
-<li><p><strong>data_module</strong> (<em>pytorch lightning data module</em>) – Data module.</p></li>
-<li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
-<li><p><strong>fusion_model</strong> (<em>class</em>) – Fusion model class.</p></li>
-<li><p><strong>init_model</strong> (<em>class</em>) – Init model class (initialized empty for method details).</p></li>
-<li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – <dl class="simple">
-<dt>Dictionary of extra log strings. Extra string to add to the run name during logging.</dt><dd><p>e.g. if you’re running the same model with different hyperparameters, you can add
-the hyperparameters.
-Input format {“name”: “value”}. In the run name, the extra string will be added
-as “name_value”. And a tag will be added as “name_value”.</p>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>layer_mods</strong> (<em>dict</em>) – Dictionary of layer modifications. Used to modify the architecture of the model.
-Input format {“model”: {“layer_group”: “modification”}, …}.
-e.g. {“TabularCrossmodalAttention”: {“mod1_layers”: new mod 1 layers nn.ModuleDict}}
-Default None.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="fusionlibrary.train_functions.train_and_test">
-<span class="sig-prename descclassname"><span class="pre">fusionlibrary.train_functions.</span></span><span class="sig-name descname"><span class="pre">train_and_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#train_and_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.train_and_test" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">train_and_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#train_and_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.train_and_test" title="Permalink to this definition"></a></dt>
 <dd><p>Trains and tests a model and, if k_fold trained, a fold.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -275,6 +217,47 @@ Default None.</p></li>
 <li><p><strong>val_preds</strong> (<em>list</em>) – List of validation predicted values.</p></li>
 </ul>
 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fusionlibrary.train_functions.store_trained_model">
+<span class="sig-name descname"><span class="pre">store_trained_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trained_models_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#store_trained_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.store_trained_model" title="Permalink to this definition"></a></dt>
+<dd><p>Stores the trained model to a dictionary.
+If model type is already in dictionary (e.g. if it’s a kfold model), append the model to</p>
+<blockquote>
+<div><p>the list of models.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fusionlibrary.train_functions.train_and_save_models">
+<span class="sig-name descname"><span class="pre">train_and_save_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_models_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#train_and_save_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.train_and_save_models" title="Permalink to this definition"></a></dt>
+<dd><p>Trains/tests the model and saves the trained model to a dictionary for further analysis.
+If the training type is kfold, it will train and test the model for each fold and store the
+trained models in a list under the model type key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trained_models_dicts</strong> (<em>dict</em>) – Dictionary of trained models.</p></li>
+<li><p><strong>data_module</strong> (<em>pytorch lightning data module</em>) – Data module.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
+<li><p><strong>fusion_model</strong> (<em>class</em>) – Fusion model class.</p></li>
+<li><p><strong>init_model</strong> (<em>class</em>) – Init model class (initialized empty for method details).</p></li>
+<li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – <dl class="simple">
+<dt>Dictionary of extra log strings. Extra string to add to the run name during logging.</dt><dd><p>e.g. if you’re running the same model with different hyperparameters, you can add
+the hyperparameters.
+Input format {“name”: “value”}. In the run name, the extra string will be added
+as “name_value”. And a tag will be added as “name_value”.</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>layer_mods</strong> (<em>dict</em>) – Dictionary of layer modifications. Used to modify the architecture of the model.
+Input format {“model”: {“layer_group”: “modification”}, …}.
+e.g. {“TabularCrossmodalAttention”: {“mod1_layers”: new mod 1 layers nn.ModuleDict}}
+Default None.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

@@ -15,7 +15,6 @@
    
       downsample_img_batch
       get_data_module
-      modify_model_architecture
    
    
 
@@ -27,13 +26,9 @@
    
       CustomDataModule
       CustomDataset
-      DataLoader
-      Dataset
       GraphDataModule
-      KFold
       KFoldDataModule
       KFoldGraphDataModule
-      LightningNodeData
       LoadDatasets
    
    

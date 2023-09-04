@@ -17,7 +17,6 @@ fusionlibrary.fusion\_models.tabular\_decision
 
    .. autosummary::
    
-      ParentFusionModel
       TabularDecision
    
    

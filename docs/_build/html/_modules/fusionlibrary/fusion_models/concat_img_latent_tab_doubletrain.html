@@ -118,20 +118,14 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    method_name : str</span>
-<span class="sd">        Name of the method. (Concatenating the latent img space and tabular data)</span>
-<span class="sd">    modality_type : str</span>
-<span class="sd">        Type of modality. (tab_img)</span>
-<span class="sd">    fusion_type : str</span>
-<span class="sd">        Type of fusion. (subspace)</span>
 <span class="sd">    pred_type : str</span>
 <span class="sd">        Type of prediction to be performed.</span>
 <span class="sd">    subspace_method : class</span>
-<span class="sd">        Class containing the method to train the latent image space. Default is</span>
-<span class="sd">            :func:`img_latent_subspace_method`.</span>
+<span class="sd">        Class containing the method to train the latent image space.</span>
+<span class="sd">        Default is :func:`img_latent_subspace_method`.</span>
 <span class="sd">    latent_dim : int</span>
 <span class="sd">        Dimension of the latent image space once we encode it down. Taken from the</span>
-<span class="sd">            subspace_method class and inferred from the dimensions of the input data to the model.</span>
+<span class="sd">        subspace_method class and inferred from the dimensions of the input data to the model.</span>
 <span class="sd">    enc_img_layer : nn.Linear</span>
 <span class="sd">        Linear layer to reduce the dimension of the latent image space.</span>
 <span class="sd">        Calculated with :meth:`~ConcatImgLatentTabDoubleTrain.calc_fused_layers()`.</span>
@@ -143,16 +137,19 @@
 <span class="sd">        Calculated with :meth:`~ConcatImgLatentTabDoubleTrain.calc_fused_layers()`.</span>
 <span class="sd">    final_prediction : nn.Sequential</span>
 <span class="sd">        Sequential layer containing the final prediction layers. The final prediction layers</span>
-<span class="sd">            take in the number of features of the fused layers as input.</span>
-<span class="sd">            Calculated with :meth:`~ConcatImgLatentTabDoubleTrain.calc_fused_layers()`.</span>
+<span class="sd">        take in the number of features of the fused layers as input.</span>
+<span class="sd">        Calculated with :meth:`~ConcatImgLatentTabDoubleTrain.calc_fused_layers()`.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># str: Name of the method.</span>
     <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;Concatenating latent img space and tabular data training separately&quot;</span>
+    <span class="c1"># str: Type of modality.</span>
     <span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;tab_img&quot;</span>
+    <span class="c1"># str: Type of fusion.</span>
     <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;subspace&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="ConcatImgLatentTabDoubleTrain.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -166,19 +163,19 @@
         <span class="n">ParentFusionModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="n">concat_img_latent_tab_subspace_method</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ConcatImgLatentTabDoubleTrain.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate the fused layers. If layer sizes are modified, this function will be called again to adjust the</span>
-<span class="sd">        fused layers.</span>
+<span class="sd">        Calculate the fused layers. If layer sizes are modified, this function will be called again</span>
+<span class="sd">        to adjust the fused layers.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod2_dim</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">enc_img_layer</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span><span class="p">)</span>
 
@@ -230,38 +227,25 @@
 <span class="sd">    ----------</span>
 <span class="sd">    data_dims : dict</span>
 <span class="sd">        Dictionary containing the dimensions of the data.</span>
-<span class="sd">    img_dims : tuple</span>
+<span class="sd">    img_dim : tuple</span>
 <span class="sd">        Dimensions of the image data.</span>
+<span class="sd">    latent_dim: int</span>
+<span class="sd">        Dimension of the latent image space once we encode it down. Default is 64.</span>
 <span class="sd">    encoder : nn.Sequential</span>
 <span class="sd">        Sequential layer containing the encoder layers.</span>
 <span class="sd">    decoder : nn.Sequential</span>
 <span class="sd">        Sequential layer containing the decoder layers.</span>
-<span class="sd">    latent_dim: int</span>
-<span class="sd">        Dimension of the latent image space once we encode it down. Default is 64.</span>
 <span class="sd">    new_encoder : nn.Sequential</span>
-<span class="sd">        Sequential layer containing the encoder layers and the linear layer to reduce the dimension of the latent</span>
-<span class="sd">            image space.</span>
+<span class="sd">        Sequential layer containing the encoder layers and the linear layer to reduce the dimension</span>
+<span class="sd">        of the latent image space.</span>
 <span class="sd">        Calculated with :meth:`~ImgLatentSpace.calc_fused_layers()`.</span>
 <span class="sd">    new_decoder : nn.Sequential</span>
-<span class="sd">        Sequential layer containing the decoder layers and the linear layer to increase the dimension of the latent</span>
-<span class="sd">            image space.</span>
+<span class="sd">        Sequential layer containing the decoder layers and the linear layer to increase the</span>
+<span class="sd">        dimension of the latent image space.</span>
 <span class="sd">        Calculated with :meth:`~ImgLatentSpace.calc_fused_layers()`.</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    forward(x)</span>
-<span class="sd">        Forward pass of the model.</span>
-<span class="sd">    training_step(batch, batch_idx)</span>
-<span class="sd">        Training step of the model.</span>
-<span class="sd">    validation_step(batch, batch_idx)</span>
-<span class="sd">        Validation step of the model.</span>
-<span class="sd">    configure_optimizers()</span>
-<span class="sd">        Configure the optimizers of the model.</span>
-<span class="sd">    encode_image(x)</span>
-<span class="sd">        Encode the image data. Used when the model is trained to get latent image space.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">):</span>
+<div class="viewcode-block" id="ImgLatentSpace.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -271,10 +255,10 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">ImgLatentSpace</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">img_dims</span> <span class="o">=</span> <span class="n">data_dims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span> <span class="o">=</span> <span class="n">data_dims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span> <span class="o">=</span> <span class="mi">64</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dims</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># 2D images</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># 2D images</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
                 <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
                 <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
@@ -295,7 +279,7 @@
                 <span class="n">nn</span><span class="o">.</span><span class="n">ConvTranspose2d</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dims</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
                 <span class="n">nn</span><span class="o">.</span><span class="n">Conv3d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
                 <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
@@ -317,7 +301,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid image dimensions.&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ImgLatentSpace.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -329,15 +313,10 @@
 <span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># self.flatten = nn.Flatten()</span>
-
         <span class="c1"># size of final encoder output</span>
-        <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+        <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">)))</span>
         <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">dummy_conv_output</span><span class="p">)</span>
         <span class="n">n_size</span> <span class="o">=</span> <span class="n">dummy_conv_output</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-        <span class="c1"># make linear layer to reduce to latent dim</span>
-        <span class="c1"># self.linear_to_lat_dim = nn.Linear(n_size, self.latent_dim)</span>
 
         <span class="c1"># add extra layers to encoder</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">new_encoder</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">)</span>
@@ -346,11 +325,8 @@
 
         <span class="c1"># add extra layer to decoder to get right shape for first decoding layer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">)</span>
-        <span class="c1"># self.linear_to_decoder = nn.Linear(</span>
-        <span class="c1">#     self.latent_dim, self.new_decoder[0].in_channels</span>
-        <span class="c1"># )</span>
+
         <span class="c1"># TODO make this work for 3d images too</span>
-        <span class="c1"># self.unflatten = nn.Unflatten(1, (self.new_decoder[0].in_channels, 1, 1))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
             <span class="mi">0</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">in_channels</span><span class="p">)</span>
         <span class="p">)</span>
@@ -360,7 +336,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">()),</span>  <span class="c1"># Output is scaled between 0 and 1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">nn</span><span class="o">.</span><span class="n">Upsample</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dims</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;bilinear&quot;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Upsample</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;bilinear&quot;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ImgLatentSpace.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
@@ -426,7 +402,6 @@
 <span class="sd">            Loss of the model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">images</span> <span class="o">=</span> <span class="n">batch</span>
-        <span class="c1"># images, _ = batch</span>
 
         <span class="c1"># Forward pass</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
@@ -476,16 +451,9 @@
 <span class="sd">        Lightning trainer.</span>
 <span class="sd">    autoencoder : ImgLatentSpace</span>
 <span class="sd">        Autoencoder to train the latent image space.</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    train(train_dataset, val_dataset)</span>
-<span class="sd">        Train the latent image space.</span>
-<span class="sd">    convert_to_latent(test_dataset)</span>
-<span class="sd">        Convert the image data to the latent image space.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">):</span>
+<div class="viewcode-block" id="concat_img_latent_tab_subspace_method.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -496,7 +464,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span>
             <span class="kc">None</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">3</span>
         <span class="p">)</span>  <span class="c1"># TODO change back to big number</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span> <span class="o">=</span> <span class="n">ImgLatentSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span> <span class="o">=</span> <span class="n">ImgLatentSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="concat_img_latent_tab_subspace_method.train"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

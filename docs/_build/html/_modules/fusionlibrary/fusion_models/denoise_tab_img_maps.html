@@ -116,30 +116,23 @@
 <span class="sd">    ----------</span>
 <span class="sd">    pred_type : str</span>
 <span class="sd">        Type of prediction.</span>
-<span class="sd">    data_dims : list</span>
-<span class="sd">        List containing the dimensions of the data.</span>
-<span class="sd">    params : dict</span>
-<span class="sd">        Dictionary containing the parameters.</span>
-<span class="sd">    subspace_method : denoising_autoencoder_subspace_method</span>
-<span class="sd">        Subspace method.</span>
-<span class="sd">    fused_layers : nn.Sequential</span>
-<span class="sd">        Fused layers.</span>
+<span class="sd">    subspace_method : class</span>
+<span class="sd">        Subspace method:</span>
+<span class="sd">        :class:`~fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method`.</span>
+<span class="sd">    fusion_layers : nn.Sequential</span>
+<span class="sd">        Fusion layers combining the intermediate image maps and the tabular latent subspace.</span>
 <span class="sd">    final_prediction : nn.Sequential</span>
 <span class="sd">        Final prediction layers.</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    forward(x)</span>
-<span class="sd">        Forward pass.</span>
-
-
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># str: Name of the method.</span>
     <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;Denoising tabular autoencoder with image maps&quot;</span>
+    <span class="c1"># str: Type of modality.</span>
     <span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;tab_img&quot;</span>
+    <span class="c1"># str: Type of fusion.</span>
     <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;subspace&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="DAETabImgMaps.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialise the model.</span>
 
@@ -165,14 +158,21 @@
             <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DAETabImgMaps.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the fused layers.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DAETabImgMaps.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -204,34 +204,19 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data_dims : list</span>
-<span class="sd">        List containing the dimensions of the data.</span>
 <span class="sd">    tab_dims : int</span>
-<span class="sd">        Dimension of the tabular data.</span>
+<span class="sd">        Dimension of the input tabular data.</span>
 <span class="sd">    subspace_lat_dims : int</span>
-<span class="sd">        Dimension of the latent subspace.</span>
+<span class="sd">        Dimension of the latent subspace (should be larger than tab_dims for a DAE).</span>
 <span class="sd">    upsampler : nn.Sequential</span>
 <span class="sd">        Upsampling layers.</span>
 <span class="sd">    downsampler : nn.Sequential</span>
 <span class="sd">        Downsampling layers.</span>
-<span class="sd">    loss : nn.MSELoss</span>
-<span class="sd">        Loss function.</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    forward(x)</span>
-<span class="sd">        Forward pass.</span>
-<span class="sd">    training_step(batch, batch_idx)</span>
-<span class="sd">        Training step.</span>
-<span class="sd">    validation_step(batch, batch_idx)</span>
-<span class="sd">        Validation step.</span>
-<span class="sd">    configure_optimizers()</span>
-<span class="sd">        Configure the optimizers of the model.</span>
-<span class="sd">    denoise(x)</span>
-<span class="sd">        Denoise the data to create the latent subspace.</span>
+<span class="sd">    loss : nn function</span>
+<span class="sd">        Loss function. In this case, it&#39;s the mean squared error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">):</span>
+<div class="viewcode-block" id="DenoisingAutoencoder.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialise the model.</span>
 
@@ -243,7 +228,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tab_dims</span> <span class="o">=</span> <span class="n">data_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span> <span class="o">=</span> <span class="mi">28</span> <span class="o">*</span> <span class="mi">28</span>
 
@@ -267,9 +251,17 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DenoisingAutoencoder.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the fused layers.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="c1"># this will change the upsampler and downsampler to be consistent with a modified latent dimension</span>
         <span class="c1"># you can also just change the upsampler and downsampler directly</span>
 
@@ -283,7 +275,7 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">downsampler</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>  <span class="c1"># -2 because of the relu</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">downsampler</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">in_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dims</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="DenoisingAutoencoder.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -299,8 +291,9 @@
 <span class="sd">        list</span>
 <span class="sd">            List containing the output.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># drop out 0.2 of the tabular data to 0</span>
 
+        <span class="c1"># drop out 0.2 of the tabular data to 0</span>
+        <span class="c1"># simulates missing data</span>
         <span class="n">x_dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
 
         <span class="c1"># upsample</span>
@@ -408,16 +401,17 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data_dims : list</span>
-<span class="sd">        List containing the dimensions of the data.</span>
 <span class="sd">    img_dim : int</span>
-<span class="sd">        Dimension of the image data.</span>
+<span class="sd">        Dimension of the input image data.</span>
+<span class="sd">    multiclass_dim : int</span>
+<span class="sd">        Number of classes for multiclass classification.</span>
 <span class="sd">    img_layers : nn.ModuleDict</span>
 <span class="sd">        Image layers.</span>
 <span class="sd">    num_layers : int</span>
-<span class="sd">        Number of layers.</span>
+<span class="sd">        Number of image layers.</span>
 <span class="sd">    fused_dim : int</span>
 <span class="sd">        Dimension of the fused layers.</span>
+<span class="sd">        Final dimension of the image data after image layers.</span>
 <span class="sd">    pred_type : str</span>
 <span class="sd">        Type of prediction.</span>
 <span class="sd">    loss : function</span>
@@ -426,23 +420,14 @@
 <span class="sd">        Fused layers.</span>
 <span class="sd">    final_prediction : nn.Sequential</span>
 <span class="sd">        Final prediction layers.</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    forward(x)</span>
-<span class="sd">        Forward pass.</span>
-<span class="sd">    training_step(batch, batch_idx)</span>
-<span class="sd">        Training step.</span>
-<span class="sd">    validation_step(batch, batch_idx)</span>
-<span class="sd">        Validation step.</span>
-<span class="sd">    configure_optimizers()</span>
-<span class="sd">        Configure the optimizers of the model.</span>
-<span class="sd">    get_intermediate_featuremaps(x)</span>
-<span class="sd">        Get the intermediate feature maps to concatenate with the tabular latent subspace.</span>
+<span class="sd">    loss : function</span>
+<span class="sd">        Loss function. Depends on the prediction type.</span>
+<span class="sd">    activation : function</span>
+<span class="sd">        Activation function. Depends on the prediction type.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">multiclass_dims</span><span class="p">):</span>
+<div class="viewcode-block" id="ImgUnimodalDAE.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">multiclass_dims</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialise the model.</span>
 
@@ -452,10 +437,11 @@
 <span class="sd">            List containing the dimensions of the data.</span>
 <span class="sd">        pred_type : str</span>
 <span class="sd">            Type of prediction.</span>
+<span class="sd">        multiclass_dims : int</span>
+<span class="sd">            Number of classes for multiclass classification.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span> <span class="o">=</span> <span class="n">data_dims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dim</span> <span class="o">=</span> <span class="n">multiclass_dims</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
@@ -463,19 +449,12 @@
         <span class="c1"># get the img layers from ParentFusionModel</span>
         <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_img_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span>
-        <span class="c1"># self.num_layers = len(self.img_layers)</span>
 
-        <span class="c1"># self.fused_dim = list(self.img_layers.values())[-1][0].out_channels</span>
-
-        <span class="c1"># ParentFusionModel.set_fused_layers(self, fused_dim=self.fused_dim)</span>
-
-        <span class="c1"># ParentFusionModel.set_final_pred_layers(self)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_activation_functions</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;binary&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">round</span><span class="p">,</span>
-            <span class="s2">&quot;multiclass&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">x</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span>
-            <span class="s2">&quot;regression&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
-        <span class="p">}</span>
+        <span class="c1"># self.output_activation_functions = {</span>
+        <span class="c1">#     &quot;binary&quot;: torch.round,</span>
+        <span class="c1">#     &quot;multiclass&quot;: lambda x: torch.argmax(nn.Softmax(dim=-1)(x), dim=-1),</span>
+        <span class="c1">#     &quot;regression&quot;: lambda x: x,</span>
+        <span class="c1"># }</span>
 
         <span class="c1"># what loss function?</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">==</span> <span class="s2">&quot;regression&quot;</span><span class="p">:</span>
@@ -492,16 +471,23 @@
                 <span class="n">BaseModel</span><span class="o">.</span><span class="n">safe_squeeze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logits</span><span class="p">),</span>
                 <span class="n">BaseModel</span><span class="o">.</span><span class="n">safe_squeeze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">long</span><span class="p">(),</span>
             <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">x</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">x</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImgUnimodalDAE.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the fused layers.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_channels</span>
 
         <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fused_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
 
-        <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ImgUnimodalDAE.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -653,19 +639,12 @@
 <span class="sd">    img_unimodal_trainer : pl.Trainer</span>
 <span class="sd">        Trainer for the image unimodal network.</span>
 <span class="sd">    autoencoder : DenoisingAutoencoder</span>
-<span class="sd">        Denoising autoencoder.</span>
+<span class="sd">        Tabular denoising autoencoder.</span>
 <span class="sd">    img_unimodal : ImgUnimodalDAE</span>
 <span class="sd">        Image unimodal network.</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    train(train_dataset, val_dataset)</span>
-<span class="sd">        Train the latent image space.</span>
-<span class="sd">    convert_to_latent(test_dataset)</span>
-<span class="sd">        Convert the image data to the latent image space.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">):</span>
+<div class="viewcode-block" id="denoising_autoencoder_subspace_method.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -682,7 +661,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">pred_type</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">multiclass_dims</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="denoising_autoencoder_subspace_method.train"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

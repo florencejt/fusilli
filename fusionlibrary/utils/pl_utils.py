@@ -29,8 +29,8 @@ def set_logger(params, fold, init_model, extra_log_string_dict=None):
         logger (object): Pytorch lightning logger object.
     """
     method_name = init_model.model.__class__.__name__
-    modality_type = init_model.modality_type
-    fusion_type = init_model.fusion_type
+    modality_type = init_model.model.modality_type
+    fusion_type = init_model.model.fusion_type
 
     if extra_log_string_dict is not None:
         extra_name_string = ""

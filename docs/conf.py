@@ -11,9 +11,9 @@ import sys
 import warnings
 
 sys.path.insert(0, os.path.abspath("../fusionlibrary"))
-sys.path.insert(0, os.path.abspath("../../"))
-sys.path.insert(0, os.path.abspath(".."))
-sys.path.insert(0, os.path.abspath("."))
+# sys.path.insert(0, os.path.abspath("../../"))
+# sys.path.insert(0, os.path.abspath(".."))
+# sys.path.insert(0, os.path.abspath("."))
 
 warnings.filterwarnings("ignore", ".*does not have many workers.*")
 warnings.filterwarnings("ignore", ".*MPS available but not used.*")
@@ -42,6 +42,7 @@ extensions = [
     "sphinx_rtd_theme",  # for readthedocs theme
 ]
 
+
 # intersphinx_mapping = {
 #     "numpy": ("https://docs.scipy.org/doc/numpy", None),
 #     "python": ("https://docs.python.org/3", None),
@@ -64,9 +65,12 @@ autodoc_default_options = {
     "members": True,
     "inherited-members": False,
     "show-inheritance": True,
+    "member-order": "bysource",
 }
 autosummary_generate = True
-autosummary_imported_members = True
+autosummary_imported_members = False
+add_module_names = False
+
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -85,5 +89,12 @@ sphinx_gallery_conf = {
 }
 
 
+def skip(app, what, name, obj, would_skip, options):
+    if name == "__init__":
+        return False
+    return would_skip
+
+
 def setup(app):
     app.add_css_file("florencestheme.css")
+    app.connect("autodoc-skip-member", skip)

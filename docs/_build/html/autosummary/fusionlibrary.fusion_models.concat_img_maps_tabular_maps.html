@@ -69,18 +69,15 @@
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_maps_tabular_data.html">fusionlibrary.fusion_models.concat_img_maps_tabular_data</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">fusionlibrary.fusion_models.concat_img_maps_tabular_maps</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.method_name"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.method_name</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.modality_type"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.modality_type</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fusion_type"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.fusion_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.pred_type"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.pred_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.mod1_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.mod1_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.img_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.img_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fused_dim"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.fused_dim</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.fused_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.final_prediction"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.final_prediction</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.forward"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.__init__"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.__init__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.calc_fused_layers()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.calc_fused_layers()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.forward"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.forward()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -143,53 +140,14 @@ image modality.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps" title="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps</span></code></a>(pred_type, ...)</p></td>
 <td><p>Concatenating the feature maps of the first tabular modalities and the feature maps of the image modality.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentFusionModel</span></code>(pred_type, data_dims, params)</p></td>
-<td><p>Parent class for all fusion models.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Variable</span></code></p></td>
-<td><p></p></td>
-</tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fusionlibrary.fusion_models.concat_img_maps_tabular_maps.</span></span><span class="sig-name descname"><span class="pre">ConcatImageMapsTabularMaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_maps_tabular_maps.html#ConcatImageMapsTabularMaps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConcatImageMapsTabularMaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_maps_tabular_maps.html#ConcatImageMapsTabularMaps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Concatenating the feature maps of the first tabular modalities and the feature maps of the
 image modality.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.method_name">
-<span class="sig-name descname"><span class="pre">method_name</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.method_name" title="Permalink to this definition"></a></dt>
-<dd><p>Name of the method. (Concatenating tabular data with image feature maps)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.modality_type">
-<span class="sig-name descname"><span class="pre">modality_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.modality_type" title="Permalink to this definition"></a></dt>
-<dd><p>Type of modality. (tab_img)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fusion_type">
-<span class="sig-name descname"><span class="pre">fusion_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fusion_type" title="Permalink to this definition"></a></dt>
-<dd><p>Type of fusion. (operation)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.pred_type">
 <span class="sig-name descname"><span class="pre">pred_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.pred_type" title="Permalink to this definition"></a></dt>
@@ -226,10 +184,22 @@ Calculated in the <code class="xref py py-meth docutils literal notranslate"><sp
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fused_dim">
+<span class="sig-name descname"><span class="pre">fused_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fused_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Number of features of the fused layers. In this method, it’s the size of the tabular layers
+output plus the size of the (flattened) image layers output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fused_layers">
 <span class="sig-name descname"><span class="pre">fused_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fused_layers" title="Permalink to this definition"></a></dt>
 <dd><p>Sequential layer containing the fused layers. Calculated in the
-<a class="reference internal" href="#id0" title="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a> method.</p>
+<a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers" title="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a> method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>nn.Sequential</p>
@@ -242,7 +212,7 @@ Calculated in the <code class="xref py py-meth docutils literal notranslate"><sp
 <span class="sig-name descname"><span class="pre">final_prediction</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.final_prediction" title="Permalink to this definition"></a></dt>
 <dd><p>Sequential layer containing the final prediction layers. The final prediction layers
 take in the number of features of the fused layers as input.
-Calculated in the <a class="reference internal" href="#id0" title="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a> method.</p>
+Calculated in the <a class="reference internal" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers" title="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code></a> method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>nn.Sequential</p>
@@ -251,20 +221,22 @@ Calculated in the <a class="reference internal" href="#id0" title="fusionlibrary
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_maps_tabular_maps.html#ConcatImageMapsTabularMaps.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.forward" title="Permalink to this definition"></a></dt>
-<dd><p>Forward pass of the model.</p>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_maps_tabular_maps.html#ConcatImageMapsTabularMaps.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.__init__" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred_type</strong> (<em>str</em>) – Type of prediction to be performed.</p></li>
+<li><p><strong>data_dims</strong> (<em>dict</em>) – Dictionary containing the dimensions of the data.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Dictionary containing the parameters of the model.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers">
 <span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_maps_tabular_maps.html#ConcatImageMapsTabularMaps.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the fused layers.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_maps_tabular_maps.html#ConcatImageMapsTabularMaps.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the fused layers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -274,8 +246,8 @@ Calculated in the <a class="reference internal" href="#id0" title="fusionlibrary
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_maps_tabular_maps.html#ConcatImageMapsTabularMaps.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/concat_img_maps_tabular_maps.html#ConcatImageMapsTabularMaps.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.forward" title="Permalink to this definition"></a></dt>
 <dd><p>Forward pass of the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

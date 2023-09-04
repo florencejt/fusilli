@@ -17,25 +17,32 @@ class ConcatImageMapsTabularData(ParentFusionModel, nn.Module):
     Attributes
     ----------
     method_name : str
-        Name of the method.
+        Name of the method. (Concatenating tabular data with image feature maps)
     modality_type : str
-        Type of modality.
+        Type of modality. (tab_img)
     fusion_type : str
-        Type of fusion.
+        Type of fusion. (operation)
     pred_type : str
         Type of prediction to be performed.
     img_layers : dict
         Dictionary containing the layers of the image data.
     fused_layers : nn.Sequential
-        Sequential layer containing the fused layers.
+        Sequential layer containing the fused layers. Calculated in the
+        :meth:`~ConcatImageMapsTabularData.calc_fused_layers` method.
     final_prediction : nn.Sequential
         Sequential layer containing the final prediction layers. The final prediction layers
           take in the number of features of the fused layers as input.
+        Calculated in the :meth:`~ConcatImageMapsTabularData.calc_fused_layers` method.
+    fused_dim : int
+        Number of features of the fused layers. Calculated in the
+        :meth:`~ConcatImageMapsTabularData.calc_fused_layers` method.
 
     Methods
     -------
     forward(x)
         Forward pass of the model.
+    calc_fused_layers()
+        Calculate the fused layers.
     """
 
     method_name = "Concatenating tabular data with image feature maps"
@@ -60,13 +67,14 @@ class ConcatImageMapsTabularData(ParentFusionModel, nn.Module):
         self.set_img_layers()
         self.calc_fused_layers()
 
-        # self.fused_dim = (
-        #     self.mod1_dim + list(self.img_layers.values())[-1][0].out_channels
-        # )
-        # self.set_fused_layers(self.fused_dim)
-        # self.set_final_pred_layers()
-
     def calc_fused_layers(self):
+        """
+        Calculate the fused layers.
+
+        Returns
+        -------
+        None
+        """
         # get flattened image output dim
         dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
         for layer in self.img_layers.values():

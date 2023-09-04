@@ -26,15 +26,10 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
         Type of fusion.
     graph_maker : function
         Function that creates the graph data structure.
-    conv1 : GCNConv
-        Graph convolutional layer. The first layer takes in the number of features of the
-        second tabular modality as input.
-    conv2 : GCNConv
-        Graph convolutional layer. The second layer takes in 64 features as input.
-    conv3 : GCNConv
-        Graph convolutional layer. The third layer takes in 128 features as input.
-    conv4 : GCNConv
-        Graph convolutional layer. The fourth layer takes in 256 features as input.
+    graph_conv_layers : nn.Sequential
+        Sequential layer containing the graph convolutional layers.
+    dropout_prob : float
+        Dropout probability. Default: 0.5
     final_prediction : nn.Sequential
         Sequential layer containing the final prediction layers. The final prediction layers
         take in 256 features.
@@ -43,6 +38,8 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
     -------
     forward(x)
         Forward pass of the model.
+    calc_fused_layers()
+        Calculate the fused layers.
 
     """
 
@@ -82,6 +79,10 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
     def calc_fused_layers(self):
         """
         Calculates the number of features after the fusion layer.
+
+        Returns
+        -------
+        None
         """
         # make sure the first layer takes in the number of features of the second tabular modality
         self.graph_conv_layers[0] = GCNConv(
@@ -120,12 +121,42 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
 
 
 class EdgeCorrGraphMaker:
+    """
+    Creates the graph data structure for the edge correlation GNN model.
+
+    Attributes
+    ----------
+    dataset : torch.utils.data.Dataset
+        Dataset containing the tabular data.
+    threshold : float
+        How correlated the nodes need to be to be connected. Default: 0.8
+
+    Methods
+    -------
+    make_graph()
+        Creates the graph data structure.
+    """
+
     def __init__(self, dataset):
+        """
+        Parameters
+        ----------
+        dataset : torch.utils.data.Dataset
+            Dataset containing the tabular data.
+        """
         self.dataset = dataset
 
         self.threshold = 0.8  # how correlated the nodes need to be to be connected
 
     def make_graph(self):
+        """
+        Creates the graph data structure.
+
+        Returns
+        -------
+        data : torch_geometric.data.Data
+            Graph data structure containing the tabular data.
+        """
         tab1 = self.dataset[:][0]
         tab2 = self.dataset[:][1]
         labels = self.dataset[:][2]

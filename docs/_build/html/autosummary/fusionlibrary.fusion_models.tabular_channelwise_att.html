@@ -82,15 +82,14 @@
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.tabular2_unimodal.html">fusionlibrary.fusion_models.tabular2_unimodal</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">fusionlibrary.fusion_models.tabular_channelwise_att</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.method_name"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.method_name</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.modality_type"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.modality_type</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.fusion_type"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.fusion_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.mod1_layers"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.mod1_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.mod2_layers"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.mod2_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.fused_dim"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.fused_dim</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.fused_layers"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.fused_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.final_prediction"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.__init__"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.calc_fused_layers()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.forward"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.forward()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.forward()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -136,60 +135,37 @@
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentFusionModel</span></code>(pred_type, data_dims, params)</p></td>
-<td><p>Parent class for all fusion models.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention" title="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention</span></code></a>(pred_type, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention" title="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention</span></code></a>(pred_type, ...)</p></td>
 <td><p>This class implements a model that fuses the two types of tabular data using a</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fusionlibrary.fusion_models.tabular_channelwise_att.</span></span><span class="sig-name descname"><span class="pre">TabularChannelWiseMultiAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tabular_channelwise_att.html#TabularChannelWiseMultiAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TabularChannelWiseMultiAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tabular_channelwise_att.html#TabularChannelWiseMultiAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <dl class="simple">
 <dt>This class implements a model that fuses the two types of tabular data using a</dt><dd><p>channel-wise multiplication approach.</p>
 </dd>
-<dt>If the two types of tabular data have different feature dimensions at each layer, the model will</dt><dd><p>use a linear layer to make the dimensions the same. This is done to ensure that the
-channel-wise multiplication can be performed.</p>
-</dd>
 </dl>
+<p>If the two types of tabular data have different feature dimensions at each layer, the model will
+use a linear layer to make the dimensions the same. This is done to ensure that the
+channel-wise multiplication can be performed.</p>
 <p>Inspired by the work of Duanmu et al. (2020) [1]: here we use two types of tabular data as
 the multi-modal data instead of image and non-image like in the paper.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.method_name">
-<span class="sig-name descname"><span class="pre">method_name</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.method_name" title="Permalink to this definition"></a></dt>
-<dd><p>Name of the method.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.modality_type">
-<span class="sig-name descname"><span class="pre">modality_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.modality_type" title="Permalink to this definition"></a></dt>
-<dd><p>Type of modality.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.fusion_type">
-<span class="sig-name descname"><span class="pre">fusion_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.fusion_type" title="Permalink to this definition"></a></dt>
-<dd><p>Type of fusion.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
+<p class="rubric">References</p>
+<p>Duanmu, H., Huang, P. B., Brahmavar, S., Lin, S., Ren, T., Kong, J., Wang, F.,
+&amp; Duong, T. Q. (2020).
+Prediction of Pathological Complete Response to Neoadjuvant Chemotherapy in Breast
+Cancer Using Deep
+Learning with Integrative Imaging, Molecular and Demographic Data. In A. L. Martel,
+P. Abolmaesumi,
+D. Stoyanov, D. Mateus, M. A. Zuluaga, S. K. Zhou, D. Racoceanu, &amp; L. Joskowicz (Eds.),
+Medical Image Computing and Computer Assisted Intervention – MICCAI 2020 (pp. 242–252).
+Springer International Publishing. <a class="reference external" href="https://doi.org/10.1007/978-3-030-59713-9_24">https://doi.org/10.1007/978-3-030-59713-9_24</a></p>
+<p>Accompanying code: (our model is inspired by the work of Duanmu et al. (2020) [1])
+<a class="reference external" href="https://github.com/HongyiDuanmu26/Prediction-of-pCR-with-Integrative-Deep-Learning/">https://github.com/HongyiDuanmu26/Prediction-of-pCR-with-Integrative-Deep-Learning/</a>
+blob/main/CustomNet.py</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.mod1_layers">
 <span class="sig-name descname"><span class="pre">mod1_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.mod1_layers" title="Permalink to this definition"></a></dt>
@@ -208,6 +184,18 @@ the multi-modal data instead of image and non-image like in the paper.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.fused_dim">
+<span class="sig-name descname"><span class="pre">fused_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.fused_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Number of features of the fused layers. This is the output size of the
+2nd type of tabular data’s layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -235,31 +223,36 @@ the multi-modal data instead of image and non-image like in the paper.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tabular_channelwise_att.html#TabularChannelWiseMultiAttention.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.forward" title="Permalink to this definition"></a></dt>
-<dd><p>Forward pass of the model.</p>
-</dd></dl>
-
-<p class="rubric">References</p>
-<dl class="simple">
-<dt>Duanmu, H., Huang, P. B., Brahmavar, S., Lin, S., Ren, T., Kong, J., Wang, F.,</dt><dd><p>&amp; Duong, T. Q. (2020).</p>
-</dd>
-<dt>Prediction of Pathological Complete Response to Neoadjuvant Chemotherapy in Breast</dt><dd><p>Cancer Using Deep</p>
-</dd>
-<dt>Learning with Integrative Imaging, Molecular and Demographic Data. In A. L. Martel,</dt><dd><ol class="upperalpha simple" start="16">
-<li><p>Abolmaesumi,</p></li>
-</ol>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tabular_channelwise_att.html#TabularChannelWiseMultiAttention.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.__init__" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred_type</strong> (<em>str</em>) – Type of prediction to be performed.</p></li>
+<li><p><strong>data_dims</strong> (<em>dict</em>) – Dictionary containing the dimensions of the data.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Dictionary containing the parameters of the model.</p></li>
+</ul>
 </dd>
 </dl>
-<p>D. Stoyanov, D. Mateus, M. A. Zuluaga, S. K. Zhou, D. Racoceanu, &amp; L. Joskowicz (Eds.),
-Medical Image Computing and Computer Assisted Intervention – MICCAI 2020 (pp. 242–252).
-Springer International Publishing. <a class="reference external" href="https://doi.org/10.1007/978-3-030-59713-9_24">https://doi.org/10.1007/978-3-030-59713-9_24</a></p>
-<p>Accompanying code: (our model is inspired by the work of Duanmu et al. (2020) [1])
-<a class="reference external" href="https://github.com/HongyiDuanmu26/Prediction-of-pCR-with-Integrative-Deep-Learning/">https://github.com/HongyiDuanmu26/Prediction-of-pCR-with-Integrative-Deep-Learning/</a>
-blob/main/CustomNet.py</p>
+</dd></dl>
+
 <dl class="py method">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tabular_channelwise_att.html#TabularChannelWiseMultiAttention.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.calc_fused_layers">
+<span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tabular_channelwise_att.html#TabularChannelWiseMultiAttention.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.calc_fused_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the fusion layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the number of layers in the two modalities is different.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tabular_channelwise_att.html#TabularChannelWiseMultiAttention.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.forward" title="Permalink to this definition"></a></dt>
 <dd><p>Forward pass of the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

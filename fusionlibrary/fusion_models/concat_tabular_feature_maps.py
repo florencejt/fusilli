@@ -14,12 +14,6 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
 
     Attributes
     ----------
-    method_name : str
-        Name of the method. (Concatenating tabular feature maps)
-    modality_type : str
-        Type of modality. (both_tab)
-    fusion_type : str
-        Type of fusion. (operation)
     pred_type : str
         Type of prediction to be performed.
     mod1_layers : dict
@@ -28,6 +22,9 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
     mod2_layers : dict
         Dictionary containing the layers of the second modality. Calculated in the
         :meth:`~ParentFusionModel.set_mod2_layers` method.
+    fused_dim : int
+        Number of features of the fused layers. In this method, it's the size of the tabular 1
+        layers output plus the size of the tabular 2 layers output.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers. Calculated in the
         :meth:`~ConcatTabularFeatureMaps.calc_fused_layers` method.
@@ -35,17 +32,13 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
         Sequential layer containing the final prediction layers. The final prediction layers
         take in the number of features of the fused layers as input. Calculated in the
         :meth:`~ConcatTabularFeatureMaps.calc_fused_layers` method.
-
-    Methods
-    -------
-    forward(x)
-        Forward pass of the model.
-    calc_fused_layers()
-        Calculate the fused layers.
     """
 
+    # str: Name of the method.
     method_name = "Concatenating tabular feature maps"
+    # str: Type of modality.
     modality_type = "both_tab"
+    # str: Type of fusion.
     fusion_type = "operation"
 
     def __init__(self, pred_type, data_dims, params):

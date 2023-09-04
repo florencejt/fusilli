@@ -18,14 +18,8 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
 
     Attributes
     ----------
-    method_name : str
-        Name of the method.
-    modality_type : str
-        Type of modality.
-    fusion_type : str
-        Type of fusion.
     graph_maker : function
-        Function that creates the graph data structure.
+        Function that creates the graph data structure: :class:`~.EdgeCorrGraphMaker`
     graph_conv_layers : nn.Sequential
         Sequential layer containing the graph convolutional layers.
     dropout_prob : float
@@ -33,18 +27,13 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
     final_prediction : nn.Sequential
         Sequential layer containing the final prediction layers. The final prediction layers
         take in 256 features.
-
-    Methods
-    -------
-    forward(x)
-        Forward pass of the model.
-    calc_fused_layers()
-        Calculate the fused layers.
-
     """
 
+    # str: Name of the method.
     method_name = "Edge Correlation GNN"
+    # str: Type of modality.
     modality_type = "both_tab"
+    # str: Type of fusion.
     fusion_type = "graph"
 
     def __init__(self, pred_type, data_dims, params):
@@ -130,11 +119,6 @@ class EdgeCorrGraphMaker:
         Dataset containing the tabular data.
     threshold : float
         How correlated the nodes need to be to be connected. Default: 0.8
-
-    Methods
-    -------
-    make_graph()
-        Creates the graph data structure.
     """
 
     def __init__(self, dataset):
@@ -180,44 +164,3 @@ class EdgeCorrGraphMaker:
         data = Data(x=x, edge_index=edge_index, edge_attr=edge_attr, y=labels)
 
         return data
-
-
-# def edgecorr_graph_maker(dataset):
-#     """
-#     Creates the graph data structure for the edge correlation GNN model.
-
-#     Parameters
-#     ----------
-#     dataset : torch.utils.data.Dataset
-#         Dataset containing the tabular data.
-
-#     Returns
-#     -------
-#     data : torch_geometric.data.Data
-#         Graph data structure containing the tabular data.
-#     """
-#     tab1 = dataset[:][0]
-#     tab2 = dataset[:][1]
-#     labels = dataset[:][2]
-
-#     num_nodes = tab1.shape[0]
-
-#     # correlation matrix between nodes' tab1 features
-#     corr_matrix = torch.corrcoef(tab1) - torch.eye(num_nodes)
-
-#     threshold = 0.8  # how correlated the nodes need to be to be connected
-
-#     edge_indices = np.where(np.abs(corr_matrix) >= threshold)
-#     edge_indices = np.stack(edge_indices, axis=0)
-
-#     # print("Number of edges: ", edge_indices.shape[1])
-
-#     x = tab2
-#     edge_index = torch.tensor(edge_indices, dtype=torch.long)
-#     edge_attr = (
-#         corr_matrix[edge_indices[0], edge_indices[1]] + 1
-#     )  # add 1 to make all edge_attr positive
-
-#     data = Data(x=x, edge_index=edge_index, edge_attr=edge_attr, y=labels)
-
-#     return data

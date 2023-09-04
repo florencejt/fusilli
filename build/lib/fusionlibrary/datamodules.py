@@ -371,6 +371,14 @@ class CustomDataModule(pl.LightningDataModule):
             Batch size (default 8).
         subspace_method : class
             Subspace method class (default None) (only for subspace methods).
+        image_downsample_size : tuple
+            Size to downsample the images to (height, width, depth) or (height, width) for 2D
+            images.
+            None if not downsampling. (default None)
+        layer_mods : dict
+            Dictionary of layer modifications to make to the subspace method.
+            (default None)
+
 
         Raises
         ------
@@ -408,8 +416,7 @@ class CustomDataModule(pl.LightningDataModule):
         else:
             self.multiclass_dims = None
         self.subspace_method = subspace_method
-        if layer_mods is not None:
-            self.layer_mods = layer_mods
+        self.layer_mods = layer_mods
         # if self.subspace_method is not None:
         #     self.num_latent_dims = self.subspace_method.num_latent_dims
 
@@ -1113,22 +1120,22 @@ def get_data_module(
         params["img_source"],
     ]
 
-    if init_model.fusion_type == "graph":
+    if init_model.model.fusion_type == "graph":
         if params["kfold_flag"]:
             dmg = KFoldGraphDataModule(
                 params,
-                init_model.modality_type,
+                init_model.model.modality_type,
                 sources=data_sources,
-                graph_creation_method=init_model.graph_maker,
+                graph_creation_method=init_model.model.graph_maker,
                 image_downsample_size=image_downsample_size,
                 layer_mods=layer_mods,
             )
         else:
             dmg = GraphDataModule(
                 params,
-                init_model.modality_type,
+                init_model.model.modality_type,
                 sources=data_sources,
-                graph_creation_method=init_model.graph_maker,
+                graph_creation_method=init_model.model.graph_maker,
                 image_downsample_size=image_downsample_size,
                 layer_mods=layer_mods,
             )
@@ -1152,9 +1159,9 @@ def get_data_module(
 
         dm = datamodule_func(
             params,
-            init_model.modality_type,
+            init_model.model.modality_type,
             sources=data_sources,
-            subspace_method=init_model.subspace_method,
+            subspace_method=init_model.model.subspace_method,
             batch_size=batch_size,
             image_downsample_size=image_downsample_size,
             layer_mods=layer_mods,

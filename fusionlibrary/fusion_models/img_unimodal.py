@@ -14,27 +14,22 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
 
     Attributes
     ----------
-    method_name : str
-        Name of the method.
-    modality_type : str
-        Type of modality.
-    fusion_type : str
-        Type of fusion.
     img_layers : dict
         Dictionary containing the layers of the image data.
+    fused_dim : int
+        Number of features of the fused layers. This is the flattened output size of the
+        image layers.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers.
     final_prediction : nn.Sequential
         Sequential layer containing the final prediction layers.
-
-    Methods
-    -------
-    forward(x)
-        Forward pass of the model.
     """
 
+    # str: Name of the method.
     method_name = "Image unimodal"
+    # str: Type of modality.
     modality_type = "img"
+    # str: Type of fusion.
     fusion_type = "Uni-modal"
 
     def __init__(self, pred_type, data_dims, params):
@@ -55,12 +50,14 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
         self.set_img_layers()
         self.calc_fused_layers()
 
-        # self.fused_dim = self.get_fused_dim()
-        # # list(self.img_layers.values())[-1][0].out_channels
-        # self.set_fused_layers(self.fused_dim)
-        # self.set_final_pred_layers()
-
     def calc_fused_layers(self):
+        """
+        Calculates the fused layers.
+
+        Returns
+        -------
+        None
+        """
         # get dummy conv output
         dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
         for layer in self.img_layers.values():
@@ -68,7 +65,6 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
         n_size = dummy_conv_output.data.view(1, -1).size(1)
 
         self.fused_dim = n_size
-        # self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
         self.set_fused_layers(self.fused_dim)
         self.set_final_pred_layers()
 

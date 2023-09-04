@@ -17,7 +17,6 @@ fusionlibrary.fusion\_models.tabular2\_unimodal
 
    .. autosummary::
    
-      ParentFusionModel
       Tabular2Unimodal
    
    

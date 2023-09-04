@@ -18,7 +18,6 @@ fusionlibrary.fusion\_models.concat\_tabular\_data
    .. autosummary::
    
       ConcatTabularData
-      ParentFusionModel
    
    
 

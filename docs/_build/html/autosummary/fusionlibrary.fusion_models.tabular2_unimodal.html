@@ -81,15 +81,14 @@
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.tabular1_unimodal.html">fusionlibrary.fusion_models.tabular1_unimodal</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">fusionlibrary.fusion_models.tabular2_unimodal</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.method_name"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.method_name</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.modality_type"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.modality_type</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.fusion_type"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.fusion_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.mod2_layers"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.mod2_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.fused_dim"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.fused_dim</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.fused_layers"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.fused_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.final_prediction"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.final_prediction</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.fused_dim"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.__init__"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.calc_fused_layers()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.forward"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.forward()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.forward()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -136,52 +135,17 @@
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentFusionModel</span></code>(pred_type, data_dims, params)</p></td>
-<td><p>Parent class for all fusion models.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal" title="fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tabular2Unimodal</span></code></a>(pred_type, data_dims, params)</p></td>
-<td><p>This class implements a uni-modal model using only the 2nd type of tabular data.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal" title="fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tabular2Unimodal</span></code></a>(pred_type, data_dims, params)</p></td>
+<td><p>Tabular2 uni-modal model.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fusionlibrary.fusion_models.tabular2_unimodal.</span></span><span class="sig-name descname"><span class="pre">Tabular2Unimodal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tabular2_unimodal.html#Tabular2Unimodal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Tabular2Unimodal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tabular2_unimodal.html#Tabular2Unimodal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Tabular2 uni-modal model.</p>
 <p>This class implements a uni-modal model using only the 2nd type of tabular data.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.method_name">
-<span class="sig-name descname"><span class="pre">method_name</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.method_name" title="Permalink to this definition"></a></dt>
-<dd><p>Name of the method.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.modality_type">
-<span class="sig-name descname"><span class="pre">modality_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.modality_type" title="Permalink to this definition"></a></dt>
-<dd><p>Type of modality.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.fusion_type">
-<span class="sig-name descname"><span class="pre">fusion_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.fusion_type" title="Permalink to this definition"></a></dt>
-<dd><p>Type of fusion.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.mod2_layers">
 <span class="sig-name descname"><span class="pre">mod2_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.mod2_layers" title="Permalink to this definition"></a></dt>
@@ -189,6 +153,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.fused_dim">
+<span class="sig-name descname"><span class="pre">fused_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.fused_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Dimension of the fused layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -216,8 +191,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.fused_dim">
-<span class="sig-name descname"><span class="pre">fused_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.fused_dim" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">fused_dim</span></span><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
 <dd><p>Dimension of the fused layer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -227,14 +202,33 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tabular2_unimodal.html#Tabular2Unimodal.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.forward" title="Permalink to this definition"></a></dt>
-<dd><p>Forward pass of the model.</p>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tabular2_unimodal.html#Tabular2Unimodal.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.__init__" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred_type</strong> (<em>str</em>) – Type of prediction to be performed.</p></li>
+<li><p><strong>data_dims</strong> (<em>dict</em>) – Dictionary containing the dimensions of the data.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Dictionary containing the parameters of the model.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tabular2_unimodal.html#Tabular2Unimodal.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.calc_fused_layers">
+<span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tabular2_unimodal.html#Tabular2Unimodal.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.calc_fused_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the fused layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tabular2_unimodal.html#Tabular2Unimodal.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.tabular2_unimodal.Tabular2Unimodal.forward" title="Permalink to this definition"></a></dt>
 <dd><p>Forward pass of the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

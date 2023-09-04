@@ -25,13 +25,7 @@
 
    .. autosummary::
    
-      EarlyStopping
       LitProgressBar
-      TQDMProgressBar
-      TensorBoardLogger
-      Trainer
-      WandbLogger
-      tqdm
    
    
 

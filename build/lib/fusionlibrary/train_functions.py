@@ -71,17 +71,6 @@ def get_nested_attr(obj, attr_path):
         attr = obj
 
     return attr
-    # if len(attributes) == 1:
-    #     print(getattr(obj, attr_path, None))
-    #     return getattr(obj, attr_path, None)
-    # else:
-    #     for attr in attributes:
-    #         print("attr", attr)
-    #         obj = getattr(obj, attr, None)
-    #         print("obj", obj)
-    #         if obj is None:
-    #             return None
-    #     return obj
 
 
 def reset_fused_layers(obj):
@@ -93,61 +82,6 @@ def reset_fused_layers(obj):
     """
     if hasattr(obj, "calc_fused_layers"):
         obj.calc_fused_layers()
-
-
-# Example usage
-# modified_model = modify_model_architecture(original_model, architecture_modification)
-
-
-# def modify_model_architecture(model, architecture_modification):
-#     for model_name in architecture_modification:
-#         # ~~~~~~ modifying all fusion models ~~~~~~
-#         if model_name == "all":
-#             for i, layer_group in enumerate(architecture_modification[model_name]):
-#                 if hasattr(model, layer_group):
-#                     setattr(
-#                         model,
-#                         layer_group,
-#                         architecture_modification[model_name][layer_group],
-#                     )
-#                     # RESET FUSED LAYERS
-#                     if (layer_group != "fused_layers") and (
-#                         i == len(architecture_modification[model_name]) - 1
-#                     ):  # don't reset fused layers if we're modifying fused layers anyway
-#                         if hasattr(model, "calc_fused_layers"):
-#                             model.calc_fused_layers()  # reset fused layers with new fused_dim from new architecture
-
-#         # ~~~~~~ modifying specific fusion models ~~~~~~
-#         if model_name == model.__class__.__name__:
-#             for i, layer_group in enumerate(architecture_modification[model_name]):
-#                 # if we need to access a layer within a layer group
-#                 split_layer_group = layer_group.split(".")
-
-#                 if len(split_layer_group) > 1:
-#                     get_attr_1 = getattr(model, split_layer_group[0])
-#                     for layer_layer in split_layer_group[1:-1]:
-#                         get_attr_1 = getattr(get_attr_1, layer_layer)
-#                 else:
-#                     get_attr_1 = model
-
-#                 if hasattr(get_attr_1, split_layer_group[-1]):
-#                     setattr(
-#                         get_attr_1,
-#                         split_layer_group[-1],
-#                         architecture_modification[model_name][layer_group],
-#                     )
-
-#                 # RESET FUSED LAYERS
-#                 if (layer_group != "fused_layers") and (
-#                     i == len(architecture_modification[model_name]) - 1
-#                 ):  # don't reset fused layers if we're modifying fused layers anyway
-#                     if hasattr(get_attr_1, "calc_fused_layers"):
-#                         get_attr_1.calc_fused_layers()  # reset fused layers with new fused_dim from new architecture
-
-#     # if not changed:
-#     #     raise ValueError("NOTHING CHANGED IN THIS MODEL FOR TESTING")
-
-#     return model
 
 
 def train_and_test(
@@ -227,7 +161,8 @@ def train_and_test(
 
     trainer = init_trainer(logger, max_epochs=3)  # init trainer
 
-    model = BaseModel(
+    # initialise model with pytorch lightning framework, hence pl_model
+    pl_model = BaseModel(
         fusion_model(
             pred_type=params[
                 "pred_type"
@@ -237,38 +172,31 @@ def train_and_test(
         )
     )
 
-    # TODO add in bit to let user choose structure of model
     if layer_mods is not None:
-        model.model = modify_model_architecture(model.model, layer_mods)
-    # if architecture_modification is not None:
-    #    for layer_group in architecture_modification:
-    #        if layer_group exists in model:
-    #            modify layer_group
-    #       else:
-    #            print(f"Layer group {layer_group} does not exist in model")
+        pl_model.model = modify_model_architecture(pl_model.model, layer_mods)
 
     # graph-methods use masks to select train and val nodes rather than train and val dataloaders
     # train and val dataloaders are still used for graph but they're identical
-    if model.fusion_type == "graph":
-        model.train_mask = dm.input_train_nodes
-        model.val_mask = dm.input_test_nodes
+    if pl_model.model.fusion_type == "graph":
+        pl_model.train_mask = dm.input_train_nodes
+        pl_model.val_mask = dm.input_test_nodes
 
     # fit model
     trainer.fit(
-        model,
+        pl_model,
         train_dataloaders=train_dataloader,
         val_dataloaders=val_dataloader,
     )
 
     # test model
-    trainer.validate(model, val_dataloader)
+    trainer.validate(pl_model, val_dataloader)
 
     metric_1, metric_2 = get_final_val_metrics(trainer)
 
-    model.metric1 = metric_1
-    model.metric2 = metric_2
+    pl_model.metric1 = metric_1
+    pl_model.metric2 = metric_2
 
-    return model
+    return pl_model
 
 
 def store_trained_model(trained_model, trained_models_dict):

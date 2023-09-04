@@ -17,7 +17,6 @@ fusionlibrary.fusion\_models.tab\_crossmodal\_att
 
    .. autosummary::
    
-      ParentFusionModel
       TabularCrossmodalMultiheadAttention
    
    

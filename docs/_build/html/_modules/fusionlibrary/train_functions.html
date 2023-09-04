@@ -165,17 +165,6 @@
         <span class="n">attr</span> <span class="o">=</span> <span class="n">obj</span>
 
     <span class="k">return</span> <span class="n">attr</span></div>
-    <span class="c1"># if len(attributes) == 1:</span>
-    <span class="c1">#     print(getattr(obj, attr_path, None))</span>
-    <span class="c1">#     return getattr(obj, attr_path, None)</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     for attr in attributes:</span>
-    <span class="c1">#         print(&quot;attr&quot;, attr)</span>
-    <span class="c1">#         obj = getattr(obj, attr, None)</span>
-    <span class="c1">#         print(&quot;obj&quot;, obj)</span>
-    <span class="c1">#         if obj is None:</span>
-    <span class="c1">#             return None</span>
-    <span class="c1">#     return obj</span>
 
 
 <div class="viewcode-block" id="reset_fused_layers"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.reset_fused_layers">[docs]</a><span class="k">def</span> <span class="nf">reset_fused_layers</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
@@ -187,61 +176,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;calc_fused_layers&quot;</span><span class="p">):</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
-
-
-<span class="c1"># Example usage</span>
-<span class="c1"># modified_model = modify_model_architecture(original_model, architecture_modification)</span>
-
-
-<span class="c1"># def modify_model_architecture(model, architecture_modification):</span>
-<span class="c1">#     for model_name in architecture_modification:</span>
-<span class="c1">#         # ~~~~~~ modifying all fusion models ~~~~~~</span>
-<span class="c1">#         if model_name == &quot;all&quot;:</span>
-<span class="c1">#             for i, layer_group in enumerate(architecture_modification[model_name]):</span>
-<span class="c1">#                 if hasattr(model, layer_group):</span>
-<span class="c1">#                     setattr(</span>
-<span class="c1">#                         model,</span>
-<span class="c1">#                         layer_group,</span>
-<span class="c1">#                         architecture_modification[model_name][layer_group],</span>
-<span class="c1">#                     )</span>
-<span class="c1">#                     # RESET FUSED LAYERS</span>
-<span class="c1">#                     if (layer_group != &quot;fused_layers&quot;) and (</span>
-<span class="c1">#                         i == len(architecture_modification[model_name]) - 1</span>
-<span class="c1">#                     ):  # don&#39;t reset fused layers if we&#39;re modifying fused layers anyway</span>
-<span class="c1">#                         if hasattr(model, &quot;calc_fused_layers&quot;):</span>
-<span class="c1">#                             model.calc_fused_layers()  # reset fused layers with new fused_dim from new architecture</span>
-
-<span class="c1">#         # ~~~~~~ modifying specific fusion models ~~~~~~</span>
-<span class="c1">#         if model_name == model.__class__.__name__:</span>
-<span class="c1">#             for i, layer_group in enumerate(architecture_modification[model_name]):</span>
-<span class="c1">#                 # if we need to access a layer within a layer group</span>
-<span class="c1">#                 split_layer_group = layer_group.split(&quot;.&quot;)</span>
-
-<span class="c1">#                 if len(split_layer_group) &gt; 1:</span>
-<span class="c1">#                     get_attr_1 = getattr(model, split_layer_group[0])</span>
-<span class="c1">#                     for layer_layer in split_layer_group[1:-1]:</span>
-<span class="c1">#                         get_attr_1 = getattr(get_attr_1, layer_layer)</span>
-<span class="c1">#                 else:</span>
-<span class="c1">#                     get_attr_1 = model</span>
-
-<span class="c1">#                 if hasattr(get_attr_1, split_layer_group[-1]):</span>
-<span class="c1">#                     setattr(</span>
-<span class="c1">#                         get_attr_1,</span>
-<span class="c1">#                         split_layer_group[-1],</span>
-<span class="c1">#                         architecture_modification[model_name][layer_group],</span>
-<span class="c1">#                     )</span>
-
-<span class="c1">#                 # RESET FUSED LAYERS</span>
-<span class="c1">#                 if (layer_group != &quot;fused_layers&quot;) and (</span>
-<span class="c1">#                     i == len(architecture_modification[model_name]) - 1</span>
-<span class="c1">#                 ):  # don&#39;t reset fused layers if we&#39;re modifying fused layers anyway</span>
-<span class="c1">#                     if hasattr(get_attr_1, &quot;calc_fused_layers&quot;):</span>
-<span class="c1">#                         get_attr_1.calc_fused_layers()  # reset fused layers with new fused_dim from new architecture</span>
-
-<span class="c1">#     # if not changed:</span>
-<span class="c1">#     #     raise ValueError(&quot;NOTHING CHANGED IN THIS MODEL FOR TESTING&quot;)</span>
-
-<span class="c1">#     return model</span>
 
 
 <div class="viewcode-block" id="train_and_test"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.train_and_test">[docs]</a><span class="k">def</span> <span class="nf">train_and_test</span><span class="p">(</span>
@@ -321,7 +255,8 @@
 
     <span class="n">trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># init trainer</span>
 
-    <span class="n">model</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="p">(</span>
+    <span class="c1"># initialise model with pytorch lightning framework, hence pl_model</span>
+    <span class="n">pl_model</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="p">(</span>
         <span class="n">fusion_model</span><span class="p">(</span>
             <span class="n">pred_type</span><span class="o">=</span><span class="n">params</span><span class="p">[</span>
                 <span class="s2">&quot;pred_type&quot;</span>
@@ -331,38 +266,31 @@
         <span class="p">)</span>
     <span class="p">)</span>
 
-    <span class="c1"># TODO add in bit to let user choose structure of model</span>
     <span class="k">if</span> <span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">model</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">modify_model_architecture</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_mods</span><span class="p">)</span>
-    <span class="c1"># if architecture_modification is not None:</span>
-    <span class="c1">#    for layer_group in architecture_modification:</span>
-    <span class="c1">#        if layer_group exists in model:</span>
-    <span class="c1">#            modify layer_group</span>
-    <span class="c1">#       else:</span>
-    <span class="c1">#            print(f&quot;Layer group {layer_group} does not exist in model&quot;)</span>
+        <span class="n">pl_model</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">modify_model_architecture</span><span class="p">(</span><span class="n">pl_model</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_mods</span><span class="p">)</span>
 
     <span class="c1"># graph-methods use masks to select train and val nodes rather than train and val dataloaders</span>
     <span class="c1"># train and val dataloaders are still used for graph but they&#39;re identical</span>
-    <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">fusion_type</span> <span class="o">==</span> <span class="s2">&quot;graph&quot;</span><span class="p">:</span>
-        <span class="n">model</span><span class="o">.</span><span class="n">train_mask</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">input_train_nodes</span>
-        <span class="n">model</span><span class="o">.</span><span class="n">val_mask</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">input_test_nodes</span>
+    <span class="k">if</span> <span class="n">pl_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fusion_type</span> <span class="o">==</span> <span class="s2">&quot;graph&quot;</span><span class="p">:</span>
+        <span class="n">pl_model</span><span class="o">.</span><span class="n">train_mask</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">input_train_nodes</span>
+        <span class="n">pl_model</span><span class="o">.</span><span class="n">val_mask</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">input_test_nodes</span>
 
     <span class="c1"># fit model</span>
     <span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
-        <span class="n">model</span><span class="p">,</span>
+        <span class="n">pl_model</span><span class="p">,</span>
         <span class="n">train_dataloaders</span><span class="o">=</span><span class="n">train_dataloader</span><span class="p">,</span>
         <span class="n">val_dataloaders</span><span class="o">=</span><span class="n">val_dataloader</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="c1"># test model</span>
-    <span class="n">trainer</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">val_dataloader</span><span class="p">)</span>
+    <span class="n">trainer</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">pl_model</span><span class="p">,</span> <span class="n">val_dataloader</span><span class="p">)</span>
 
     <span class="n">metric_1</span><span class="p">,</span> <span class="n">metric_2</span> <span class="o">=</span> <span class="n">get_final_val_metrics</span><span class="p">(</span><span class="n">trainer</span><span class="p">)</span>
 
-    <span class="n">model</span><span class="o">.</span><span class="n">metric1</span> <span class="o">=</span> <span class="n">metric_1</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">metric2</span> <span class="o">=</span> <span class="n">metric_2</span>
+    <span class="n">pl_model</span><span class="o">.</span><span class="n">metric1</span> <span class="o">=</span> <span class="n">metric_1</span>
+    <span class="n">pl_model</span><span class="o">.</span><span class="n">metric2</span> <span class="o">=</span> <span class="n">metric_2</span>
 
-    <span class="k">return</span> <span class="n">model</span></div>
+    <span class="k">return</span> <span class="n">pl_model</span></div>
 
 
 <div class="viewcode-block" id="store_trained_model"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.store_trained_model">[docs]</a><span class="k">def</span> <span class="nf">store_trained_model</span><span class="p">(</span><span class="n">trained_model</span><span class="p">,</span> <span class="n">trained_models_dict</span><span class="p">):</span>

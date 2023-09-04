@@ -2,25 +2,11 @@
 Base lightning module for all fusion models and parent class for all fusion models.
 """
 
-import os
-
-import matplotlib.pyplot as plt
 import pytorch_lightning as pl
-import pytorch_lightning.loggers as pl_loggers
 import torch
 import torchmetrics as tm
-import wandb
 from torch import nn
 from torch.nn import functional as F
-from torch.utils.data import DataLoader, random_split
-
-# from fusionlibrary.eval_functions import (
-#     confusion_matrix_plot,
-#     k_fold_confusion_matrix,
-#     k_fold_reals_vs_preds,
-#     reals_vs_preds,
-#     visualise_graphspace,
-# )
 
 
 class BaseModel(pl.LightningModule):
@@ -63,23 +49,6 @@ class BaseModel(pl.LightningModule):
         Dictionary of evaluation plots.
     kfold_plots : dict
         Dictionary of k-fold plots.
-
-    Methods
-    -------
-    safe_squeeze(tensor)
-        Squeeze tensor if it is not 1D.
-    get_data_from_batch(batch, train=True)
-        Get data from batch.
-    get_model_outputs(x)
-        Get model outputs.
-    get_model_outputs_and_loss(x, y, train=True)
-        Get model outputs and loss.
-    training_step(batch, batch_idx)
-        Training step.
-    validation_step(batch, batch_idx)
-        Validation step.
-    configure_optimizers()
-        Configure optimizers.
     """
 
     def __init__(self, model):
@@ -95,27 +64,24 @@ class BaseModel(pl.LightningModule):
         """
         super().__init__()
         self.model = model
-        self.pred_type = model.pred_type
-        if self.pred_type == "multiclass":
+        # self.pred_type = model.pred_type
+        if self.model.pred_type == "multiclass":
             self.multiclass_dim = model.multiclass_dim
         else:
             self.multiclass_dim = 3  # default value so metrics dict can be built
 
-        self.fusion_type = model.fusion_type
-        self.kfold_flag = model.kfold_flag
-        self.modality_type = model.modality_type
-        self.method_name = model.method_name
-        if hasattr(model, "subspace_method"):
-            self.subspace_method = model.subspace_method
-        else:
-            self.subspace_method = None
+        if not hasattr(model, "subspace_method"):
+            #     pass
+            #     # self.subspace_method = model.subspace_method
+            # else:
+            self.model.subspace_method = None
 
-        if hasattr(model, "graph_maker"):
-            self.graph_maker = model.graph_maker
+        # if hasattr(model, "graph_maker"):
+        #     self.graph_maker = model.graph_maker
         # else:
         #     self.graph_maker = None # <-- don't know if this is necessary yet
 
-        self.params = model.params
+        # self.params = model.params
 
         if hasattr(model, "train_mask") is False:
             self.train_mask = None
@@ -170,8 +136,8 @@ class BaseModel(pl.LightningModule):
                 {"metric": tm.MeanAbsoluteError(), "name": "MAE"},
             ],
         }
-        if self.pred_type not in self.metrics:
-            raise ValueError(f"Unsupported pred_type: {self.pred_type}")
+        if self.model.pred_type not in self.metrics:
+            raise ValueError(f"Unsupported pred_type: {self.model.pred_type}")
 
         # self.eval_plots = {
         #     "regression": [reals_vs_preds],
@@ -186,7 +152,7 @@ class BaseModel(pl.LightningModule):
         # }
 
         self.metric_names_list = [
-            metric["name"] for metric in self.metrics[self.pred_type]
+            metric["name"] for metric in self.metrics[self.model.pred_type]
         ]
 
         # storing the final validation reals and preds
@@ -236,7 +202,7 @@ class BaseModel(pl.LightningModule):
         y : tensor
             Labels.
         """
-        if self.fusion_type == "graph":
+        if self.model.fusion_type == "graph":
             x = (batch.x, batch.edge_index, batch.edge_attr)
             y = batch.y
         else:
@@ -305,7 +271,7 @@ class BaseModel(pl.LightningModule):
         # print("logits\n", logits, end="\n\n")
         # print("y\n", y, end="\n\n")
 
-        end_output = self.output_activation_functions[self.pred_type](logits)
+        end_output = self.output_activation_functions[self.model.pred_type](logits)
         # print("end_output\n", end_output, end="\n\n")
 
         # if we're doing graph-based fusion and train/test doesn't work the same as normal
@@ -319,7 +285,7 @@ class BaseModel(pl.LightningModule):
                 y = y[self.val_mask]
                 end_output = end_output[self.val_mask]
 
-        loss = self.loss_functions[self.pred_type](logits, y)
+        loss = self.loss_functions[self.model.pred_type](logits, y)
 
         if reconstructions != [] and self.model.custom_loss is not None:
             added_loss = self.model.custom_loss(
@@ -365,7 +331,7 @@ class BaseModel(pl.LightningModule):
             batch_size=x[0].shape[0],
         )
 
-        for metric in self.metrics[self.pred_type]:
+        for metric in self.metrics[self.model.pred_type]:
             if "auroc" in metric["name"]:
                 predicted = logits
             else:
@@ -474,7 +440,7 @@ class BaseModel(pl.LightningModule):
         except:
             pass
 
-        for i, metric in enumerate(self.metrics[self.pred_type]):
+        for i, metric in enumerate(self.metrics[self.model.pred_type]):
             if "auroc" in metric["name"]:
                 predicted = self.val_logits
             else:
@@ -566,7 +532,7 @@ class ParentFusionModel:
         self.params = params
         if self.pred_type == "multiclass":
             self.multiclass_dim = params["multiclass_dims"]
-        self.kfold_flag = params["kfold_flag"]
+        # self.kfold_flag = params["kfold_flag"]
         # self.subspace_method = None
 
     def set_final_pred_layers(self, input_dim=64):

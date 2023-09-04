@@ -86,6 +86,7 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
 
         self.set_mod1_layers()
         self.set_mod2_layers()
+        self.calc_fused_layers()
 
         # self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
         # self.set_fused_layers(self.fused_dim)

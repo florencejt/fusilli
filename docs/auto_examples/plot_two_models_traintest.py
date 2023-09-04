@@ -1,6 +1,6 @@
 """
 Regression: comparing two tabular models trained on simulated data
-==================================================================
+====================================================================
 
 This script shows how to train two fusion models on a regression task with train/test protocol and multimodal tabular data.
 
@@ -29,7 +29,7 @@ from fusionlibrary.utils.model_chooser import get_models
 
 # %%
 # 1. Import fusion models
-# --------------------
+# ------------------------
 # Here we import the fusion models to be compared. The models are imported using the
 # :func:`~fusionlibrary.utils.model_chooser.get_models` function, which takes a dictionary of conditions
 # as an input. The conditions are the attributes of the models, e.g. the class name, the modality type, etc.
@@ -58,7 +58,7 @@ for index, row in imported_models.iterrows():
 
 # %%
 # 2. Set the training parameters
-# -------------------
+# --------------------------------
 # Here we define the parameters for training and testing the models. The parameters are stored in a dictionary and passed to most
 # of the methods in this library.
 # For training and testing, the necessary parameters are:
@@ -80,7 +80,7 @@ params = {
 
 # %%
 # 3. Generating simulated data
-# -------------------------
+# --------------------------------
 # Here we generate simulated data for the two tabular modalities for this example.
 # This function also simulated image data which we aren't using here.
 
@@ -94,7 +94,7 @@ params = generate_sklearn_simulated_data(
 
 # %%
 # 4. Training the first fusion model
-# -------------------------------
+# ----------------------------------
 # Here we train the first fusion model. We're using the ``train_and_save_models`` function to train and test the models.
 # This function takes the following inputs:
 #
@@ -151,7 +151,7 @@ all_trained_models[fusion_model.__name__] = single_model_dict[fusion_model.__nam
 
 # %%
 # 5. Plotting the results of the first model
-# ---------------------------------------
+# --------------------------------------------
 # We're using the :class:`~fusionlibrary.eval_functions.Plotter` class to plot the results of the first model. This class takes the dictionary of trained models and the parameters as inputs. It returns a dictionary of figures.
 # If there is one model in the dictionary (i.e. only one unique key), then it plots the figures for analysing the results of a single model.
 
@@ -161,7 +161,7 @@ plotter.show_all(single_model_figures_dict)
 
 # %% [markdown]
 # 6. Training the second fusion model
-# -------------------------------
+# -------------------------------------
 # Here we train the second fusion model: TabularChannelWiseMultiAttention. We're using the same steps as before, but this time we're using the second model in the ``fusion_models`` list.
 
 
@@ -200,7 +200,7 @@ all_trained_models[fusion_model.__name__] = single_model_dict[fusion_model.__nam
 
 # %%
 # 7. Plotting the results of the second model
-# ----------------------------------------
+# ----------------------------------------------
 
 plotter = Plotter(single_model_dict, params)
 single_model_figures_dict = plotter.plot_all()
@@ -208,7 +208,7 @@ plotter.show_all(single_model_figures_dict)
 
 # %%
 # 8. Comparing the results of the two models
-# ---------------------------------------
+# ---------------------------------------------
 # Now we're going to compare the results of the two models. We're using the same steps as when we used Plotter before, but this time we're using the ``all_trained_models`` dictionary which contains both models.
 
 comparison_plotter = Plotter(all_trained_models, params)
@@ -217,7 +217,7 @@ comparison_plotter.show_all(comparison_plot_dict)
 
 # %%
 # 9. Saving the metrics of the two models
-# ------------------------------------
+# -----------------------------------------
 # We can also get the metrics of the two models into a Pandas DataFrame using the :func:`~fusionlibrary.eval_functions.Plotter.get_performance_df` function.
 performances_df = comparison_plotter.get_performance_df()
 performances_df

@@ -72,21 +72,21 @@
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_tabular_feature_maps.html">fusionlibrary.fusion_models.concat_tabular_feature_maps</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">fusionlibrary.fusion_models.crossmodal_att</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.method_name"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.method_name</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.modality_type"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.modality_type</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.fusion_type"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.fusion_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.pred_type"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.pred_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.attention_embed_dim"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.attention_embed_dim</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.mod1_layers"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.mod1_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.img_layers"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.img_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.fused_dim"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.fused_dim</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.fused_layers"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.fused_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.attention"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.attention</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.img_dense"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.img_dense</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.img_to_embed_dim"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.img_to_embed_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.tab_to_embed_dim"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.tab_to_embed_dim</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.relu"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.relu</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.final_prediction"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.final_prediction</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.forward"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.__init__"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.__init__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.calc_fused_layers()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.forward"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.forward()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -146,53 +146,20 @@ between the two modalities: tabular and image.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention" title="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention</span></code></a>(pred_type, ...)</p></td>
 <td><p>Crossmodal multi-head attention model.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentFusionModel</span></code>(pred_type, data_dims, params)</p></td>
-<td><p>Parent class for all fusion models.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Variable</span></code></p></td>
-<td><p></p></td>
-</tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fusionlibrary.fusion_models.crossmodal_att.</span></span><span class="sig-name descname"><span class="pre">CrossmodalMultiheadAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/crossmodal_att.html#CrossmodalMultiheadAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CrossmodalMultiheadAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/crossmodal_att.html#CrossmodalMultiheadAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Crossmodal multi-head attention model. This model uses the self attention and cross modal
 attention between the two modalities: tabular and image.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.method_name">
-<span class="sig-name descname"><span class="pre">method_name</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.method_name" title="Permalink to this definition"></a></dt>
-<dd><p>Name of the method.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.modality_type">
-<span class="sig-name descname"><span class="pre">modality_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.modality_type" title="Permalink to this definition"></a></dt>
-<dd><p>Type of modality.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.fusion_type">
-<span class="sig-name descname"><span class="pre">fusion_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.fusion_type" title="Permalink to this definition"></a></dt>
-<dd><p>Type of fusion.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
+<p class="rubric">References</p>
+<p>Golovanevsky, M., Eickhoff, C., &amp; Singh, R. (2022). Multimodal attention-based
+deep learning for Alzheimer’s disease diagnosis.
+Journal of the American Medical Informatics Association, 29(12),
+2014–2022. <a class="reference external" href="https://doi.org/10.1093/jamia/ocac168">https://doi.org/10.1093/jamia/ocac168</a></p>
+<p><a class="reference external" href="https://github.com/rsinghlab/MADDi/blob/main/training/train_all_modalities.py">https://github.com/rsinghlab/MADDi/blob/main/training/train_all_modalities.py</a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.pred_type">
 <span class="sig-name descname"><span class="pre">pred_type</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.pred_type" title="Permalink to this definition"></a></dt>
@@ -238,6 +205,18 @@ attention between the two modalities: tabular and image.</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.fused_dim">
+<span class="sig-name descname"><span class="pre">fused_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.fused_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Number of features of the fused layers. This is the flattened output size of the
+image layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.fused_layers">
 <span class="sig-name descname"><span class="pre">fused_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.fused_layers" title="Permalink to this definition"></a></dt>
 <dd><p>Sequential layer containing the fused layers.</p>
@@ -272,6 +251,30 @@ the multihead attention layer.</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.img_to_embed_dim">
+<span class="sig-name descname"><span class="pre">img_to_embed_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.img_to_embed_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Linear layer. Takes in fused_dim features as input. This is the input of the
+multihead attention layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nn.Linear</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.tab_to_embed_dim">
+<span class="sig-name descname"><span class="pre">tab_to_embed_dim</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.tab_to_embed_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Linear layer. Takes in fused_dim features as input. This is the input of the
+multihead attention layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nn.Linear</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.relu">
 <span class="sig-name descname"><span class="pre">relu</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.relu" title="Permalink to this definition"></a></dt>
 <dd><p>ReLU activation function.</p>
@@ -294,17 +297,19 @@ the multihead attention layer.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/crossmodal_att.html#CrossmodalMultiheadAttention.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.forward" title="Permalink to this definition"></a></dt>
-<dd><p>Forward pass of the model.</p>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/crossmodal_att.html#CrossmodalMultiheadAttention.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.__init__" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred_type</strong> (<em>str</em>) – Type of prediction to be performed.</p></li>
+<li><p><strong>data_dims</strong> (<em>dict</em>) – Dictionary containing the dimensions of the data.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Dictionary containing the parameters of the model.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
-<p class="rubric">References</p>
-<p>Golovanevsky, M., Eickhoff, C., &amp; Singh, R. (2022). Multimodal attention-based
-deep learning for Alzheimer’s disease diagnosis.
-Journal of the American Medical Informatics Association, 29(12),
-2014–2022. <a class="reference external" href="https://doi.org/10.1093/jamia/ocac168">https://doi.org/10.1093/jamia/ocac168</a></p>
-<p><a class="reference external" href="https://github.com/rsinghlab/MADDi/blob/main/training/train_all_modalities.py">https://github.com/rsinghlab/MADDi/blob/main/training/train_all_modalities.py</a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.calc_fused_layers">
 <span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/crossmodal_att.html#CrossmodalMultiheadAttention.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.calc_fused_layers" title="Permalink to this definition"></a></dt>
@@ -317,8 +322,8 @@ Journal of the American Medical Informatics Association, 29(12),
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/crossmodal_att.html#CrossmodalMultiheadAttention.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/crossmodal_att.html#CrossmodalMultiheadAttention.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.forward" title="Permalink to this definition"></a></dt>
 <dd><p>Forward pass of the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
