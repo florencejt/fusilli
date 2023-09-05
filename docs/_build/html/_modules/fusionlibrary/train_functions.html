@@ -105,6 +105,11 @@
 <span class="kn">import</span> <span class="nn">wandb</span>
 
 
+<div class="viewcode-block" id="init_dummy_model"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.init_dummy_model">[docs]</a><span class="k">def</span> <span class="nf">init_dummy_model</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Initialise dummy model&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
 <div class="viewcode-block" id="modify_model_architecture"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.modify_model_architecture">[docs]</a><span class="k">def</span> <span class="nf">modify_model_architecture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">architecture_modification</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Modify the architecture of a deep learning model based on the provided configuration.</span>
@@ -183,7 +188,7 @@
     <span class="n">params</span><span class="p">,</span>
     <span class="n">k</span><span class="p">,</span>
     <span class="n">fusion_model</span><span class="p">,</span>
-    <span class="n">init_model</span><span class="p">,</span>
+    <span class="c1"># init_model,</span>
     <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
@@ -251,7 +256,7 @@
         <span class="n">val_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">val_dataloader</span><span class="p">()</span>
         <span class="c1"># plot_file_suffix = f&quot;_{method_name}_rep_{rep_n}&quot;</span>
 
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">init_model</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="p">)</span>  <span class="c1"># set logger</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="p">)</span>  <span class="c1"># set logger</span>
 
     <span class="n">trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># init trainer</span>
 
@@ -323,7 +328,7 @@
     <span class="n">data_module</span><span class="p">,</span>
     <span class="n">params</span><span class="p">,</span>
     <span class="n">fusion_model</span><span class="p">,</span>
-    <span class="n">init_model</span><span class="p">,</span>
+    <span class="c1"># init_model,</span>
     <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
@@ -364,7 +369,7 @@
                 <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
                 <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
                 <span class="n">fusion_model</span><span class="o">=</span><span class="n">fusion_model</span><span class="p">,</span>
-                <span class="n">init_model</span><span class="o">=</span><span class="n">init_model</span><span class="p">,</span>
+                <span class="c1"># init_model=init_model,</span>
                 <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span><span class="p">,</span>
                 <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
             <span class="p">)</span>
@@ -381,7 +386,7 @@
             <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
             <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">fusion_model</span><span class="o">=</span><span class="n">fusion_model</span><span class="p">,</span>
-            <span class="n">init_model</span><span class="o">=</span><span class="n">init_model</span><span class="p">,</span>
+            <span class="c1"># init_model=init_model,</span>
             <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span><span class="p">,</span>
             <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
         <span class="p">)</span>

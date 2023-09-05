@@ -58,22 +58,15 @@ fusion_model = TabularCrossmodalMultiheadAttention
 
 single_model_dict = {}
 
-# initialise model
-init_model = BaseModel(
-    fusion_model(params["pred_type"], data_dims=[10, 10, [100, 100]], params=params)
-)
-
-
-print("method_name:", init_model.method_name)
-print("modality_type:", init_model.modality_type)
-print("fusion_type:", init_model.fusion_type)
-print("metric_name_list:", init_model.metric_names_list)
+print("method_name:", fusion_model.method_name)
+print("modality_type:", fusion_model.modality_type)
+print("fusion_type:", fusion_model.fusion_type)
 
 # %%
 # 5. Train and test the model
 # ----------------------------
 dm = get_data_module(
-    init_model=init_model, params=params, batch_size=params["batch_size"]
+    fusion_model=fusion_model, params=params, batch_size=params["batch_size"]
 )
 
 # train and test
@@ -82,7 +75,6 @@ single_model_dict = train_and_save_models(
     data_module=dm,
     params=params,
     fusion_model=fusion_model,
-    init_model=init_model,
 )
 
 # %%

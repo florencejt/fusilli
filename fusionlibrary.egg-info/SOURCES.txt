@@ -70,3 +70,7 @@ fusionlibrary/utils/mcvae/src/mcvae/models/vae.py
 fusionlibrary/utils/mcvae/src/mcvae/os/__init__.py
 fusionlibrary/utils/mcvae/src/mcvae/plot/__init__.py
 fusionlibrary/utils/mcvae/src/mcvae/utilities/__init__.py
+tests/test_datamodules.py
+tests/test_eval_functions.py
+tests/test_train_functions.py
+tests/test_utils.py

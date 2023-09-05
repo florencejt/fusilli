@@ -1184,7 +1184,7 @@
 
 
 <div class="viewcode-block" id="get_data_module"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusionlibrary.datamodules.get_data_module">[docs]</a><span class="k">def</span> <span class="nf">get_data_module</span><span class="p">(</span>
-    <span class="n">init_model</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span>
+    <span class="n">fusion_model</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gets the data module for the specified modality and fusion type.</span>
@@ -1214,22 +1214,25 @@
         <span class="n">params</span><span class="p">[</span><span class="s2">&quot;img_source&quot;</span><span class="p">],</span>
     <span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">init_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fusion_type</span> <span class="o">==</span> <span class="s2">&quot;graph&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fusion_model</span><span class="p">,</span> <span class="s2">&quot;subspace_method&quot;</span><span class="p">):</span>
+        <span class="n">fusion_model</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">fusion_model</span><span class="o">.</span><span class="n">fusion_type</span> <span class="o">==</span> <span class="s2">&quot;graph&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
             <span class="n">dmg</span> <span class="o">=</span> <span class="n">KFoldGraphDataModule</span><span class="p">(</span>
                 <span class="n">params</span><span class="p">,</span>
-                <span class="n">init_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">modality_type</span><span class="p">,</span>
+                <span class="n">fusion_model</span><span class="o">.</span><span class="n">modality_type</span><span class="p">,</span>
                 <span class="n">sources</span><span class="o">=</span><span class="n">data_sources</span><span class="p">,</span>
-                <span class="n">graph_creation_method</span><span class="o">=</span><span class="n">init_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">graph_maker</span><span class="p">,</span>
+                <span class="n">graph_creation_method</span><span class="o">=</span><span class="n">fusion_model</span><span class="o">.</span><span class="n">graph_maker</span><span class="p">,</span>
                 <span class="n">image_downsample_size</span><span class="o">=</span><span class="n">image_downsample_size</span><span class="p">,</span>
                 <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">dmg</span> <span class="o">=</span> <span class="n">GraphDataModule</span><span class="p">(</span>
                 <span class="n">params</span><span class="p">,</span>
-                <span class="n">init_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">modality_type</span><span class="p">,</span>
+                <span class="n">fusion_model</span><span class="o">.</span><span class="n">modality_type</span><span class="p">,</span>
                 <span class="n">sources</span><span class="o">=</span><span class="n">data_sources</span><span class="p">,</span>
-                <span class="n">graph_creation_method</span><span class="o">=</span><span class="n">init_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">graph_maker</span><span class="p">,</span>
+                <span class="n">graph_creation_method</span><span class="o">=</span><span class="n">fusion_model</span><span class="o">.</span><span class="n">graph_maker</span><span class="p">,</span>
                 <span class="n">image_downsample_size</span><span class="o">=</span><span class="n">image_downsample_size</span><span class="p">,</span>
                 <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
             <span class="p">)</span>
@@ -1253,9 +1256,9 @@
 
         <span class="n">dm</span> <span class="o">=</span> <span class="n">datamodule_func</span><span class="p">(</span>
             <span class="n">params</span><span class="p">,</span>
-            <span class="n">init_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">modality_type</span><span class="p">,</span>
+            <span class="n">fusion_model</span><span class="o">.</span><span class="n">modality_type</span><span class="p">,</span>
             <span class="n">sources</span><span class="o">=</span><span class="n">data_sources</span><span class="p">,</span>
-            <span class="n">subspace_method</span><span class="o">=</span><span class="n">init_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">,</span>
+            <span class="n">subspace_method</span><span class="o">=</span><span class="n">fusion_model</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">,</span>
             <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
             <span class="n">image_downsample_size</span><span class="o">=</span><span class="n">image_downsample_size</span><span class="p">,</span>
             <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>

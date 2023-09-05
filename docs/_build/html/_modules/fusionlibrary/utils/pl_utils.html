@@ -105,7 +105,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 
 
-<div class="viewcode-block" id="set_logger"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.pl_utils.html#fusionlibrary.utils.pl_utils.set_logger">[docs]</a><span class="k">def</span> <span class="nf">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">init_model</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="set_logger"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.pl_utils.html#fusionlibrary.utils.pl_utils.set_logger">[docs]</a><span class="k">def</span> <span class="nf">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set the logger for the current run. If params[&quot;log&quot;] is True, then the logger is set to</span>
 <span class="sd">    WandbLogger, otherwise it is set to None.</span>
@@ -113,7 +113,7 @@
 <span class="sd">    Args:</span>
 <span class="sd">        params (dict): Dictionary of parameters.</span>
 <span class="sd">        fold (int): Fold number.</span>
-<span class="sd">        init_model (object): Initialized model object.</span>
+<span class="sd">        fusion_model (class): Fusion model class.</span>
 <span class="sd">        extra_string_dict (dict): Extra string to add to the run name. e.g. if you&#39;re running</span>
 <span class="sd">            the same model with different hyperparameters, you can add the hyperparameters.</span>
 <span class="sd">            Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
@@ -122,9 +122,9 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        logger (object): Pytorch lightning logger object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">method_name</span> <span class="o">=</span> <span class="n">init_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
-    <span class="n">modality_type</span> <span class="o">=</span> <span class="n">init_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">modality_type</span>
-    <span class="n">fusion_type</span> <span class="o">=</span> <span class="n">init_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fusion_type</span>
+    <span class="n">method_name</span> <span class="o">=</span> <span class="n">fusion_model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="n">modality_type</span> <span class="o">=</span> <span class="n">fusion_model</span><span class="o">.</span><span class="n">modality_type</span>
+    <span class="n">fusion_type</span> <span class="o">=</span> <span class="n">fusion_model</span><span class="o">.</span><span class="n">fusion_type</span>
 
     <span class="k">if</span> <span class="n">extra_log_string_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">extra_name_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -225,28 +225,6 @@
     <span class="n">metric2</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">callback_metrics</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric_names</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">_val&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">metric1</span><span class="p">,</span> <span class="n">metric2</span></div>
-
-
-<span class="c1"># def get_model_info(init_model):</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     Get the model information from the initialized model object.</span>
-
-<span class="c1">#     Args:</span>
-<span class="c1">#         init_model (object): Initialized model object.</span>
-
-<span class="c1">#     Returns:</span>
-<span class="c1">#         modality_type (str): Modality type.</span>
-<span class="c1">#         fusion_type (str): Fusion type.</span>
-<span class="c1">#         metric_name_list (list): List of metric names.</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     modality_type = init_model.modality_type</span>
-<span class="c1">#     fusion_type = init_model.fusion_type</span>
-<span class="c1">#     # metric_1_name = init_model.metrics[init_model.pred_type][0][&quot;name&quot;]</span>
-<span class="c1">#     # metric_2_name = init_model.metrics[init_model.pred_type][1][&quot;name&quot;]</span>
-<span class="c1">#     # metric_name_list = [metric_1_name, metric_2_name]</span>
-
-<span class="c1">#     return modality_type, fusion_type</span>
-<span class="c1">#     # , metric_name_list</span>
 </pre></div>
 
            </div>

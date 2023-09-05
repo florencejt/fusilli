@@ -11,6 +11,11 @@ from fusionlibrary.utils.pl_utils import (
 import wandb
 
 
+def init_dummy_model():
+    """Initialise dummy model"""
+    pass
+
+
 def modify_model_architecture(model, architecture_modification):
     """
     Modify the architecture of a deep learning model based on the provided configuration.
@@ -89,7 +94,7 @@ def train_and_test(
     params,
     k,
     fusion_model,
-    init_model,
+    # init_model,
     extra_log_string_dict=None,
     layer_mods=None,
 ):
@@ -157,7 +162,7 @@ def train_and_test(
         val_dataloader = dm.val_dataloader()
         # plot_file_suffix = f"_{method_name}_rep_{rep_n}"
 
-    logger = set_logger(params, k, init_model, extra_log_string_dict)  # set logger
+    logger = set_logger(params, k, fusion_model, extra_log_string_dict)  # set logger
 
     trainer = init_trainer(logger, max_epochs=3)  # init trainer
 
@@ -229,7 +234,7 @@ def train_and_save_models(
     data_module,
     params,
     fusion_model,
-    init_model,
+    # init_model,
     extra_log_string_dict=None,
     layer_mods=None,
 ):
@@ -270,7 +275,7 @@ def train_and_save_models(
                 params=params,
                 k=k,
                 fusion_model=fusion_model,
-                init_model=init_model,
+                # init_model=init_model,
                 extra_log_string_dict=extra_log_string_dict,
                 layer_mods=layer_mods,
             )
@@ -287,7 +292,7 @@ def train_and_save_models(
             params=params,
             k=None,
             fusion_model=fusion_model,
-            init_model=init_model,
+            # init_model=init_model,
             extra_log_string_dict=extra_log_string_dict,
             layer_mods=layer_mods,
         )

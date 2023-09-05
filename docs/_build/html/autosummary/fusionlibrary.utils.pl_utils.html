@@ -114,7 +114,7 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.utils.pl_utils.init_trainer" title="fusionlibrary.utils.pl_utils.init_trainer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_trainer</span></code></a>(logger[, max_epochs])</p></td>
 <td><p>Initialize the pytorch lightning trainer object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.utils.pl_utils.set_logger" title="fusionlibrary.utils.pl_utils.set_logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_logger</span></code></a>(params, fold, init_model[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.utils.pl_utils.set_logger" title="fusionlibrary.utils.pl_utils.set_logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_logger</span></code></a>(params, fold, fusion_model[, ...])</p></td>
 <td><p>Set the logger for the current run.</p></td>
 </tr>
 </tbody>
@@ -129,7 +129,7 @@
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="fusionlibrary.utils.pl_utils.set_logger">
-<span class="sig-name descname"><span class="pre">set_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/utils/pl_utils.html#set_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.utils.pl_utils.set_logger" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/utils/pl_utils.html#set_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.utils.pl_utils.set_logger" title="Permalink to this definition"></a></dt>
 <dd><p>Set the logger for the current run. If params[“log”] is True, then the logger is set to
 WandbLogger, otherwise it is set to None.</p>
 <dl class="field-list simple">
@@ -137,7 +137,7 @@ WandbLogger, otherwise it is set to None.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
 <li><p><strong>fold</strong> (<em>int</em>) – Fold number.</p></li>
-<li><p><strong>init_model</strong> (<em>object</em>) – Initialized model object.</p></li>
+<li><p><strong>fusion_model</strong> (<em>class</em>) – Fusion model class.</p></li>
 <li><p><strong>extra_string_dict</strong> (<em>dict</em>) – Extra string to add to the run name. e.g. if you’re running
 the same model with different hyperparameters, you can add the hyperparameters.
 Input format {“name”: “value”}. In the run name, the extra string will be added

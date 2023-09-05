@@ -121,20 +121,12 @@ all_trained_models = {}  # create dictionary to store trained models
 fusion_model = fusion_models[0]
 single_model_dict = {}
 
-# Initialise model
-init_model = BaseModel(
-    fusion_model(
-        params["pred_type"], data_dims=[10, 10, [100, 100, 100]], params=params
-    )
-)
-
-print("Method name:", init_model.method_name)
-print("Modality type:", init_model.modality_type)
-print("Fusion type:", init_model.fusion_type)
-print("Metrics:", init_model.metric_names_list)
+print("Method name:", fusion_model.method_name)
+print("Modality type:", fusion_model.modality_type)
+print("Fusion type:", fusion_model.fusion_type)
 
 # Create the data module
-dm = get_data_module(init_model=init_model, params=params)
+dm = get_data_module(fusion_model=fusion_model, params=params)
 
 # Train and test
 single_model_dict = train_and_save_models(
@@ -142,7 +134,6 @@ single_model_dict = train_and_save_models(
     data_module=dm,
     params=params,
     fusion_model=fusion_model,
-    init_model=init_model,
 )
 
 # Add trained model to dictionary
@@ -170,20 +161,13 @@ plotter.show_all(single_model_figures_dict)
 fusion_model = fusion_models[1]
 single_model_dict = {}
 
-# Initialise model
-init_model = BaseModel(
-    fusion_model(
-        params["pred_type"], data_dims=[10, 10, [100, 100, 100]], params=params
-    )
-)
 
-print("Method name:", init_model.method_name)
-print("Modality type:", init_model.modality_type)
-print("Fusion type:", init_model.fusion_type)
-print("Metrics:", init_model.metric_names_list)
+print("Method name:", fusion_model.method_name)
+print("Modality type:", fusion_model.modality_type)
+print("Fusion type:", fusion_model.fusion_type)
 
 # Create the data module
-dm = get_data_module(init_model=init_model, params=params)
+dm = get_data_module(fusion_model=fusion_model, params=params)
 
 # Train and test
 trained_models = train_and_save_models(
@@ -191,7 +175,6 @@ trained_models = train_and_save_models(
     data_module=dm,
     params=params,
     fusion_model=fusion_model,
-    init_model=init_model,
 )
 
 # Add trained model to dictionary

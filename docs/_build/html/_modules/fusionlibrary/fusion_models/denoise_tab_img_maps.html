@@ -106,96 +106,96 @@
 <span class="kn">from</span> <span class="nn">fusionlibrary.fusion_models.base_pl_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 
 
-<div class="viewcode-block" id="DAETabImgMaps"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps">[docs]</a><span class="k">class</span> <span class="nc">DAETabImgMaps</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Using a denoising autoencoder to upsample tabular data, then concatenating with feature maps</span>
-<span class="sd">    from final 3 conv layers of image data.</span>
-<span class="sd">    From Yan et al 2021: Richer fusion network for breast cancer classification on multimodal data.</span>
+<span class="c1"># class DAETabImgMaps(ParentFusionModel, nn.Module):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Using a denoising autoencoder to upsample tabular data, then concatenating with feature maps</span>
+<span class="c1">#     from final 3 conv layers of image data.</span>
+<span class="c1">#     From Yan et al 2021: Richer fusion network for breast cancer classification on multimodal data.</span>
 
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    pred_type : str</span>
-<span class="sd">        Type of prediction.</span>
-<span class="sd">    subspace_method : class</span>
-<span class="sd">        Subspace method:</span>
-<span class="sd">        :class:`~fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method`.</span>
-<span class="sd">    fusion_layers : nn.Sequential</span>
-<span class="sd">        Fusion layers combining the intermediate image maps and the tabular latent subspace.</span>
-<span class="sd">    final_prediction : nn.Sequential</span>
-<span class="sd">        Final prediction layers.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="c1">#     Attributes</span>
+<span class="c1">#     ----------</span>
+<span class="c1">#     pred_type : str</span>
+<span class="c1">#         Type of prediction.</span>
+<span class="c1">#     subspace_method : class</span>
+<span class="c1">#         Subspace method:</span>
+<span class="c1">#         :class:`~fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method`.</span>
+<span class="c1">#     fusion_layers : nn.Sequential</span>
+<span class="c1">#         Fusion layers combining the intermediate image maps and the tabular latent subspace.</span>
+<span class="c1">#     final_prediction : nn.Sequential</span>
+<span class="c1">#         Final prediction layers.</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
 
-    <span class="c1"># str: Name of the method.</span>
-    <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;Denoising tabular autoencoder with image maps&quot;</span>
-    <span class="c1"># str: Type of modality.</span>
-    <span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;tab_img&quot;</span>
-    <span class="c1"># str: Type of fusion.</span>
-    <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;subspace&quot;</span>
+<span class="c1">#     # str: Name of the method.</span>
+<span class="c1">#     method_name = &quot;Denoising tabular autoencoder with image maps&quot;</span>
+<span class="c1">#     # str: Type of modality.</span>
+<span class="c1">#     modality_type = &quot;tab_img&quot;</span>
+<span class="c1">#     # str: Type of fusion.</span>
+<span class="c1">#     fusion_type = &quot;subspace&quot;</span>
 
-<div class="viewcode-block" id="DAETabImgMaps.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialise the model.</span>
+<span class="c1">#     def __init__(self, pred_type, data_dims, params):</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         Initialise the model.</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        pred_type : str</span>
-<span class="sd">            Type of prediction.</span>
-<span class="sd">        data_dims : list</span>
-<span class="sd">            List containing the dimensions of the data.</span>
-<span class="sd">        params : dict</span>
-<span class="sd">            Dictionary containing the parameters.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="c1">#         Parameters</span>
+<span class="c1">#         ----------</span>
+<span class="c1">#         pred_type : str</span>
+<span class="c1">#             Type of prediction.</span>
+<span class="c1">#         data_dims : list</span>
+<span class="c1">#             List containing the dimensions of the data.</span>
+<span class="c1">#         params : dict</span>
+<span class="c1">#             Dictionary containing the parameters.</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
 
-        <span class="n">ParentFusionModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="n">denoising_autoencoder_subspace_method</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
+<span class="c1">#         ParentFusionModel.__init__(self, pred_type, data_dims, params)</span>
+<span class="c1">#         self.subspace_method = denoising_autoencoder_subspace_method</span>
+<span class="c1">#         self.pred_type = pred_type</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
-            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">500</span><span class="p">),</span>
-            <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
-            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
-            <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
-            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
-        <span class="p">)</span>
+<span class="c1">#         self.fusion_layers = nn.Sequential(</span>
+<span class="c1">#             nn.Linear(self.mod1_dim, 500),</span>
+<span class="c1">#             nn.ReLU(),</span>
+<span class="c1">#             nn.Linear(500, 100),</span>
+<span class="c1">#             nn.ReLU(),</span>
+<span class="c1">#             nn.Linear(100, 64),</span>
+<span class="c1">#         )</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
+<span class="c1">#         self.calc_fused_layers()</span>
 
-<div class="viewcode-block" id="DAETabImgMaps.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate the fused layers.</span>
+<span class="c1">#     def calc_fused_layers(self):</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         Calculate the fused layers.</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
-        <span class="p">)</span>
+<span class="c1">#         Returns</span>
+<span class="c1">#         -------</span>
+<span class="c1">#         None</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         self.fusion_layers[0] = nn.Linear(</span>
+<span class="c1">#             self.mod1_dim, self.fusion_layers[0].out_features</span>
+<span class="c1">#         )</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span><span class="p">)</span></div>
+<span class="c1">#         self.set_final_pred_layers(self.fusion_layers[-1].out_features)</span>
 
-<div class="viewcode-block" id="DAETabImgMaps.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Forward pass.</span>
+<span class="c1">#     def forward(self, x):</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         Forward pass.</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        x : torch.Tensor</span>
-<span class="sd">            Input data.</span>
+<span class="c1">#         Parameters</span>
+<span class="c1">#         ----------</span>
+<span class="c1">#         x : torch.Tensor</span>
+<span class="c1">#             Input data.</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        list</span>
-<span class="sd">            List containing the output.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="c1">#         Returns</span>
+<span class="c1">#         -------</span>
+<span class="c1">#         list</span>
+<span class="c1">#             List containing the output.</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
 
-        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="c1">#         x = self.fusion_layers(x)</span>
 
-        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_prediction</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="c1">#         out = self.final_prediction(x)</span>
 
-        <span class="k">return</span> <span class="p">[</span>
-            <span class="n">out</span><span class="p">,</span>
-        <span class="p">]</span></div></div>
+<span class="c1">#         return [</span>
+<span class="c1">#             out,</span>
+<span class="c1">#         ]</span>
 
 
 <div class="viewcode-block" id="DenoisingAutoencoder"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder">[docs]</a><span class="k">class</span> <span class="nc">DenoisingAutoencoder</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
@@ -779,6 +779,99 @@
             <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">label_val</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">]),</span>
             <span class="p">[</span><span class="n">val_latent_image_space</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
         <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="DAETabImgMaps"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps">[docs]</a><span class="k">class</span> <span class="nc">DAETabImgMaps</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Using a denoising autoencoder to upsample tabular data, then concatenating with feature maps</span>
+<span class="sd">    from final 3 conv layers of image data.</span>
+<span class="sd">    From Yan et al 2021: Richer fusion network for breast cancer classification on multimodal data.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pred_type : str</span>
+<span class="sd">        Type of prediction.</span>
+<span class="sd">    subspace_method : class</span>
+<span class="sd">        Subspace method:</span>
+<span class="sd">        :class:`~fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method`.</span>
+<span class="sd">    fusion_layers : nn.Sequential</span>
+<span class="sd">        Fusion layers combining the intermediate image maps and the tabular latent subspace.</span>
+<span class="sd">    final_prediction : nn.Sequential</span>
+<span class="sd">        Final prediction layers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># str: Name of the method.</span>
+    <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;Denoising tabular autoencoder with image maps&quot;</span>
+    <span class="c1"># str: Type of modality.</span>
+    <span class="n">modality_type</span> <span class="o">=</span> <span class="s2">&quot;tab_img&quot;</span>
+    <span class="c1"># str: Type of fusion.</span>
+    <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;subspace&quot;</span>
+    <span class="c1"># class: Subspace method.</span>
+    <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">denoising_autoencoder_subspace_method</span>
+
+<div class="viewcode-block" id="DAETabImgMaps.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialise the model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pred_type : str</span>
+<span class="sd">            Type of prediction.</span>
+<span class="sd">        data_dims : list</span>
+<span class="sd">            List containing the dimensions of the data.</span>
+<span class="sd">        params : dict</span>
+<span class="sd">            Dictionary containing the parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">ParentFusionModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod1_dim</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DAETabImgMaps.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the fused layers.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mod1_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DAETabImgMaps.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Forward pass.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : torch.Tensor</span>
+<span class="sd">            Input data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            List containing the output.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_prediction</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">out</span><span class="p">,</span>
+        <span class="p">]</span></div></div>
 </pre></div>
 
            </div>

@@ -1090,15 +1090,15 @@ class KFoldGraphDataModule:
 
 
 def get_data_module(
-    init_model, params, batch_size=8, image_downsample_size=None, layer_mods=None
+    fusion_model, params, batch_size=8, image_downsample_size=None, layer_mods=None
 ):
     """
     Gets the data module for the specified modality and fusion type.
 
     Parameters
     ----------
-    init_model : class
-        Initialised model class.
+    fusion_model : class
+        Fusion model class.
     params : dict
         Dictionary of parameters.
     batch_size : int
@@ -1120,22 +1120,25 @@ def get_data_module(
         params["img_source"],
     ]
 
-    if init_model.model.fusion_type == "graph":
+    if not hasattr(fusion_model, "subspace_method"):
+        fusion_model.subspace_method = None
+
+    if fusion_model.fusion_type == "graph":
         if params["kfold_flag"]:
             dmg = KFoldGraphDataModule(
                 params,
-                init_model.model.modality_type,
+                fusion_model.modality_type,
                 sources=data_sources,
-                graph_creation_method=init_model.model.graph_maker,
+                graph_creation_method=fusion_model.graph_maker,
                 image_downsample_size=image_downsample_size,
                 layer_mods=layer_mods,
             )
         else:
             dmg = GraphDataModule(
                 params,
-                init_model.model.modality_type,
+                fusion_model.modality_type,
                 sources=data_sources,
-                graph_creation_method=init_model.model.graph_maker,
+                graph_creation_method=fusion_model.graph_maker,
                 image_downsample_size=image_downsample_size,
                 layer_mods=layer_mods,
             )
@@ -1159,9 +1162,9 @@ def get_data_module(
 
         dm = datamodule_func(
             params,
-            init_model.model.modality_type,
+            fusion_model.modality_type,
             sources=data_sources,
-            subspace_method=init_model.model.subspace_method,
+            subspace_method=fusion_model.subspace_method,
             batch_size=batch_size,
             image_downsample_size=image_downsample_size,
             layer_mods=layer_mods,

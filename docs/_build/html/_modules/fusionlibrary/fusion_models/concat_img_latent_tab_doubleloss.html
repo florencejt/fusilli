@@ -220,13 +220,18 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
                 <span class="n">nn</span><span class="o">.</span><span class="n">Conv3d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
                 <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">MaxPool3d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
                 <span class="n">nn</span><span class="o">.</span><span class="n">Conv3d</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
                 <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">MaxPool3d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
                 <span class="n">nn</span><span class="o">.</span><span class="n">Conv3d</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
                 <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">MaxPool3d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
             <span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                <span class="c1"># nn.ConvTranspose3d(256, 128, kernel_size=3, stride=1, output_padding=1),</span>
+                <span class="c1"># nn.ReLU(),</span>
                 <span class="n">nn</span><span class="o">.</span><span class="n">ConvTranspose3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
                 <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
                 <span class="n">nn</span><span class="o">.</span><span class="n">ConvTranspose3d</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
@@ -249,7 +254,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># size of final encoder output</span>
-        <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+        <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">)))</span>
         <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">dummy_conv_output</span><span class="p">)</span>
         <span class="n">n_size</span> <span class="o">=</span> <span class="n">dummy_conv_output</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
@@ -264,25 +269,36 @@
         <span class="c1"># add extra layer to decoder to get right shape for first decoding layer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">)</span>
 
-        <span class="c1"># self.linear_to_decoder = nn.Linear(</span>
-        <span class="c1">#     self.latent_dim, self.new_decoder[0].in_channels</span>
-        <span class="c1"># )</span>
-        <span class="c1"># TODO make this work for 3d images too</span>
-        <span class="c1"># self.unflatten = nn.Unflatten(1, (self.new_decoder[0].in_channels, 1, 1))</span>
+        <span class="n">first_decoder_layer_inchannels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">in_channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span><span class="p">,</span> <span class="n">first_decoder_layer_inchannels</span><span class="p">)</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
-            <span class="mi">0</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">in_channels</span><span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
-            <span class="mi">1</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Unflatten</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">in_channels</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+                <span class="mi">1</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Unflatten</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">first_decoder_layer_inchannels</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+                <span class="mi">1</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Unflatten</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">first_decoder_layer_inchannels</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">()),</span>  <span class="c1"># Output is scaled between 0 and 1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">nn</span><span class="o">.</span><span class="n">Upsample</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;bilinear&quot;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">Upsample</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;trilinear&quot;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_decoder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">Upsample</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;bilinear&quot;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="c1"># # release memory</span>
+        <span class="c1"># self.encoder = None</span>
+        <span class="c1"># self.decoder = None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod1_dim</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">()</span></div>
 

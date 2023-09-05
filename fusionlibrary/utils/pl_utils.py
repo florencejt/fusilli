@@ -11,7 +11,7 @@ from pytorch_lightning.callbacks import TQDMProgressBar
 import os
 
 
-def set_logger(params, fold, init_model, extra_log_string_dict=None):
+def set_logger(params, fold, fusion_model, extra_log_string_dict=None):
     """
     Set the logger for the current run. If params["log"] is True, then the logger is set to
     WandbLogger, otherwise it is set to None.
@@ -19,7 +19,7 @@ def set_logger(params, fold, init_model, extra_log_string_dict=None):
     Args:
         params (dict): Dictionary of parameters.
         fold (int): Fold number.
-        init_model (object): Initialized model object.
+        fusion_model (class): Fusion model class.
         extra_string_dict (dict): Extra string to add to the run name. e.g. if you're running
             the same model with different hyperparameters, you can add the hyperparameters.
             Input format {"name": "value"}. In the run name, the extra string will be added
@@ -28,9 +28,9 @@ def set_logger(params, fold, init_model, extra_log_string_dict=None):
     Returns:
         logger (object): Pytorch lightning logger object.
     """
-    method_name = init_model.model.__class__.__name__
-    modality_type = init_model.model.modality_type
-    fusion_type = init_model.model.fusion_type
+    method_name = fusion_model.__class__.__name__
+    modality_type = fusion_model.modality_type
+    fusion_type = fusion_model.fusion_type
 
     if extra_log_string_dict is not None:
         extra_name_string = ""
@@ -131,25 +131,3 @@ def get_final_val_metrics(trainer):
     metric2 = trainer.callback_metrics[f"{metric_names[1]}_val"].item()
 
     return metric1, metric2
-
-
-# def get_model_info(init_model):
-#     """
-#     Get the model information from the initialized model object.
-
-#     Args:
-#         init_model (object): Initialized model object.
-
-#     Returns:
-#         modality_type (str): Modality type.
-#         fusion_type (str): Fusion type.
-#         metric_name_list (list): List of metric names.
-#     """
-#     modality_type = init_model.modality_type
-#     fusion_type = init_model.fusion_type
-#     # metric_1_name = init_model.metrics[init_model.pred_type][0]["name"]
-#     # metric_2_name = init_model.metrics[init_model.pred_type][1]["name"]
-#     # metric_name_list = [metric_1_name, metric_2_name]
-
-#     return modality_type, fusion_type
-#     # , metric_name_list
