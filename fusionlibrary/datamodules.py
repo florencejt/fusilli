@@ -232,6 +232,20 @@ class LoadDatasets:
             img_downsample_dims  # can choose own image size here
         )
 
+        # read in the csv files and raise errors if they don't have the right columns
+        # or if the index column is not named "study_id"
+        tab1_df = pd.read_csv(self.tabular1_source)
+        tab2_df = pd.read_csv(self.tabular2_source)
+
+        if "study_id" not in tab1_df.columns:
+            raise ValueError("The CSV must have an index column named 'study_id'.")
+        if "pred_label" not in tab1_df.columns:
+            raise ValueError("The CSV must have a label column named 'pred_label'.")
+        if "study_id" not in tab2_df.columns:
+            raise ValueError("The CSV must have an index column named 'study_id'.")
+        if "pred_label" not in tab2_df.columns:
+            raise ValueError("The CSV must have a label column named 'pred_label'.")
+
     def load_tabular1(self):
         """
         Loads the tabular1-only dataset
@@ -246,12 +260,14 @@ class LoadDatasets:
 
         """
         tab_df = pd.read_csv(self.tabular1_source)
+
         tab_df.set_index("study_id", inplace=True)
 
         pred_features = torch.Tensor(tab_df.drop(columns=["pred_label"]).values)
         pred_label = tab_df[["pred_label"]]
 
         self.dataset = CustomDataset(pred_features, pred_label)
+
         mod1_dim = pred_features.shape[1]
 
         return self.dataset, [mod1_dim, None, None]
@@ -270,6 +286,7 @@ class LoadDatasets:
         """
 
         tab_df = pd.read_csv(self.tabular2_source)
+
         tab_df.set_index("study_id", inplace=True)
 
         pred_features = torch.Tensor(tab_df.drop(columns=["pred_label"]).values)
@@ -298,13 +315,14 @@ class LoadDatasets:
 
         # get the labels from the tabular1 dataset
         label_df = pd.read_csv(self.tabular1_source)
+
         label_df.set_index("study_id", inplace=True)
 
         pred_label = label_df[["pred_label"]]
 
         self.dataset = CustomDataset(all_scans_ds, pred_label)
 
-        img_dim = list(all_scans_ds.shape[1:])
+        img_dim = list(all_scans_ds.shape[2:])  # not including batch size or channels
 
         return self.dataset, [None, None, img_dim]
 
@@ -320,8 +338,12 @@ class LoadDatasets:
             i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has
             32 features), and no image
         """
-        tab1_df = pd.read_csv(self.tabular1_source).set_index("study_id")
-        tab2_df = pd.read_csv(self.tabular2_source).set_index("study_id")
+
+        tab1_df = pd.read_csv(self.tabular1_source)
+        tab2_df = pd.read_csv(self.tabular2_source)
+
+        tab1_df.set_index("study_id", inplace=True)
+        tab2_df.set_index("study_id", inplace=True)
 
         tab1_pred_features = torch.Tensor(tab1_df.drop(columns=["pred_label"]).values)
         tab2_pred_features = torch.Tensor(tab2_df.drop(columns=["pred_label"]).values)
@@ -349,7 +371,10 @@ class LoadDatasets:
             32 features), and no image
         """
 
-        tab1_df = pd.read_csv(self.tabular1_source).set_index("study_id")
+        tab1_df = pd.read_csv(self.tabular1_source)
+
+        tab1_df.set_index("study_id", inplace=True)
+
         tab1_features = torch.Tensor(tab1_df.drop(columns=["pred_label"]).values)
         label_df = tab1_df[["pred_label"]]
 
@@ -358,7 +383,7 @@ class LoadDatasets:
 
         self.dataset = CustomDataset([tab1_features, imgs], label_df)
         mod1_dim = tab1_features.shape[1]
-        img_dim = list(imgs.shape[1:])
+        img_dim = list(imgs.shape[2:])  # not including batch size or channels
 
         return self.dataset, [mod1_dim, None, img_dim]
 
