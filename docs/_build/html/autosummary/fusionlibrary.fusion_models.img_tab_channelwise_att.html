@@ -77,6 +77,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.mod1_layers"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.mod1_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.img_layers"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.img_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.match_dim_layers"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.match_dim_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.fused_dim"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.fused_dim</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.fused_layers"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.fused_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.final_prediction"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.final_prediction</span></code></a></li>
@@ -186,6 +187,19 @@ blob/main/CustomNet.py</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.match_dim_layers">
+<span class="sig-name descname"><span class="pre">match_dim_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.match_dim_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Module dictionary containing the linear layers to make the dimensions of the two types of
+data the same. This is done to ensure that the channel-wise multiplication can be performed.
+This doesn’t change the mod1_layers or img_layers, it just makes the outputs multipliable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nn.ModuleDict</p>
 </dd>
 </dl>
 </dd></dl>

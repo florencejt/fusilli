@@ -20,42 +20,38 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
     The MCVAE creates a joint latent space of the two types of tabular data based off a joint
     latent prior and joint decoding.
 
-    Attributes
-    ----------
-    method_name : str
-        Name of the method.
-    modality_type : str
-        Type of modality.
-    fusion_type : str
-        Type of fusion.
-    subspace_method : class
-        Class of the subspace method.
-    latent_space_layers : dict
-        Dictionary containing the layers of the 1st type of tabular data.
-        Here the first type of tabular data is the joint latent space created
-            in the mcvae_subspace_method class.
-    fused_layers : nn.Sequential
-        Sequential layer containing the fused layers.
-    final_prediction : nn.Sequential
-        Sequential layer containing the final prediction layers.
-
-    Methods
-    -------
-    forward(x)
-        Forward pass of the model.
 
     References
     ----------
+
     Antelmi, L., Ayache, N., Robert, P., & Lorenzi, M. (2019). Sparse Multi-Channel Variational
         Autoencoder for the Joint Analysis of Heterogeneous Data. Proceedings of the 36th
         International Conference on Machine Learning, 302–311.
         https://proceedings.mlr.press/v97/antelmi19a.html
 
+    Attributes
+    ----------
+    subspace_method : class
+        Class of the subspace method: :class:`~.MCVAESubspaceMethod`
+    latent_space_layers : dict
+        Dictionary containing the layers of the 1st type of tabular data.
+        Here the first type of tabular data is the joint latent space created
+        in the mcvae_subspace_method class.
+    fused_dim : int
+        Number of features of the fused layers. This is the flattened output size of the
+        latent space layers.
+    fused_layers : nn.Sequential
+        Sequential layer containing the fused layers.
+    final_prediction : nn.Sequential
+        Sequential layer containing the final prediction layers.
 
     """
 
+    # str: Name of the method.
     method_name = "MCVAE Tabular"
+    # str: Type of modality.
     modality_type = "both_tab"
+    # str: Type of fusion.
     fusion_type = "subspace"
 
     def __init__(self, pred_type, data_dims, params):
@@ -72,7 +68,7 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
 
         self.pred_type = pred_type
-        self.subspace_method = mcvae_subspace_method
+        self.subspace_method = MCVAESubspaceMethod
 
         self.latent_space_layers = nn.ModuleDict(
             {
@@ -104,6 +100,10 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
     def calc_fused_layers(self):
         """
         Calculates the fused layers of the model.
+
+        Returns
+        -------
+        None
         """
 
         # make sure the first layer takes in the latent dimension
@@ -195,7 +195,7 @@ def mcvae_early_stopping_tol(patience, tolerance, loss_logs, verbose=False):
     return i
 
 
-class mcvae_subspace_method:
+class MCVAESubspaceMethod:
     """
     Class for creating the MCVAE (multi-channel variational autoencoder) joint latent space.
 
@@ -205,15 +205,9 @@ class mcvae_subspace_method:
         Datamodule object containing the data.
     num_latent_dims : int
         Number of latent dimensions.
+    fit_model : Mcvae object
+        Mcvae object containing the fitted model.
 
-    Methods
-    -------
-    get_latents(dataset)
-        Gets the mean latents of the dataset.
-    train(train_dataset, val_dataset=None)
-        Trains the model.
-    convert_to_latent(test_dataset)
-        Converts the test dataset to the latent space.
     """
 
     def __init__(self, datamodule):

@@ -42,11 +42,6 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
             Dictionary containing the dimensions of the data.
         params : dict
             Dictionary containing the parameters of the model.
-
-        Raises
-        ------
-        ValueError
-            If the prediction type is not valid.
         """
 
         ParentFusionModel.__init__(self, pred_type, data_dims, params)

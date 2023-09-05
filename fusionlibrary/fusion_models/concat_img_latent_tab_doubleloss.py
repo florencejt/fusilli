@@ -126,13 +126,18 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
             self.encoder = nn.Sequential(
                 nn.Conv3d(1, 16, kernel_size=3, stride=1),
                 nn.ReLU(),
+                nn.MaxPool3d(kernel_size=2, stride=2),
                 nn.Conv3d(16, 32, kernel_size=3, stride=1),
                 nn.ReLU(),
+                nn.MaxPool3d(kernel_size=2, stride=2),
                 nn.Conv3d(32, self.latent_dim, kernel_size=3, stride=1),
                 nn.ReLU(),
+                nn.MaxPool3d(kernel_size=2, stride=2),
             )
 
             self.decoder = nn.Sequential(
+                # nn.ConvTranspose3d(256, 128, kernel_size=3, stride=1, output_padding=1),
+                # nn.ReLU(),
                 nn.ConvTranspose3d(self.latent_dim, 32, kernel_size=3, stride=1),
                 nn.ReLU(),
                 nn.ConvTranspose3d(32, 16, kernel_size=3, stride=1),
@@ -155,7 +160,7 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         """
 
         # size of final encoder output
-        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
+        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
         dummy_conv_output = self.encoder(dummy_conv_output)
         n_size = dummy_conv_output.data.view(1, -1).size(1)
 
@@ -170,25 +175,36 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         # add extra layer to decoder to get right shape for first decoding layer
         self.new_decoder = copy.deepcopy(self.decoder)
 
-        # self.linear_to_decoder = nn.Linear(
-        #     self.latent_dim, self.new_decoder[0].in_channels
-        # )
-        # TODO make this work for 3d images too
-        # self.unflatten = nn.Unflatten(1, (self.new_decoder[0].in_channels, 1, 1))
+        first_decoder_layer_inchannels = self.new_decoder[0].in_channels
+        self.new_decoder.insert(
+            0, nn.Linear(self.latent_dim, first_decoder_layer_inchannels)
+        )
 
-        self.new_decoder.insert(
-            0, nn.Linear(self.latent_dim, self.new_decoder[0].in_channels)
-        )
-        self.new_decoder.insert(
-            1, nn.Unflatten(1, (self.new_decoder[0].in_channels, 1, 1))
-        )
+        if len(self.img_dim) == 3:
+            self.new_decoder.insert(
+                1, nn.Unflatten(1, (first_decoder_layer_inchannels, 1, 1, 1))
+            )
+        elif len(self.img_dim) == 2:
+            self.new_decoder.insert(
+                1, nn.Unflatten(1, (first_decoder_layer_inchannels, 1, 1))
+            )
 
         self.new_decoder.append(nn.Sigmoid()),  # Output is scaled between 0 and 1
-        self.new_decoder.append(
-            nn.Upsample(size=self.img_dim, mode="bilinear", align_corners=False)
-        )
 
-        self.fused_dim = self.latent_dim + self.data_dims[0]
+        if len(self.img_dim) == 3:
+            self.new_decoder.append(
+                nn.Upsample(size=self.img_dim, mode="trilinear", align_corners=False)
+            )
+        elif len(self.img_dim) == 2:
+            self.new_decoder.append(
+                nn.Upsample(size=self.img_dim, mode="bilinear", align_corners=False)
+            )
+
+        # # release memory
+        # self.encoder = None
+        # self.decoder = None
+
+        self.fused_dim = self.latent_dim + self.mod1_dim
         self.set_fused_layers(self.fused_dim)
         self.set_final_pred_layers()
 

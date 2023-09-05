@@ -14,29 +14,24 @@ class TabularDecision(ParentFusionModel, nn.Module):
 
     Attributes
     ----------
-    fusion_type : str
-        Type of fusion to be performed.
-    modality_type : str
-        Type of modality to be fused.
-    method_name : str
-        Name of the method.
     mod1_layers : dict
         Dictionary containing the layers of the 1st type of tabular data.
     mod2_layers : dict
         Dictionary containing the layers of the 2nd type of tabular data.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers.
-    final_prediction : nn.Sequential
-        Sequential layer containing the final prediction layers.
+    final_prediction_tab1 : nn.Sequential
+        Sequential layer containing the final prediction layers for the first tabular data.
+    final_prediction_tab2 : nn.Sequential
+        Sequential layer containing the final prediction layers for the second tabular data.
 
-    Methods
-    -------
-    forward(x)
-        Forward pass of the model.
     """
 
+    # str: Name of the method.
     method_name = "Tabular decision"
+    # str: Type of modality.
     modality_type = "both_tab"
+    # str: Type of fusion.
     fusion_type = "operation"
 
     def __init__(self, pred_type, data_dims, params):
@@ -60,12 +55,19 @@ class TabularDecision(ParentFusionModel, nn.Module):
         self.calc_fused_layers()
 
     def calc_fused_layers(self):
-        self.tab1_fused_dim = list(self.mod1_layers.values())[-1][0].out_features
-        self.set_final_pred_layers(self.tab1_fused_dim)
+        """
+        Calculates the fusion layers.
+
+        Returns
+        -------
+        None
+        """
+        tab1_fused_dim = list(self.mod1_layers.values())[-1][0].out_features
+        self.set_final_pred_layers(tab1_fused_dim)
         self.final_prediction_tab1 = self.final_prediction
 
-        self.tab2_fused_dim = list(self.mod2_layers.values())[-1][0].out_features
-        self.set_final_pred_layers(self.tab2_fused_dim)
+        tab2_fused_dim = list(self.mod2_layers.values())[-1][0].out_features
+        self.set_final_pred_layers(tab2_fused_dim)
         self.final_prediction_tab2 = self.final_prediction
 
     def forward(self, x):

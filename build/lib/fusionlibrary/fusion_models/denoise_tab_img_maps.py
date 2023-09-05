@@ -22,27 +22,20 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
     ----------
     pred_type : str
         Type of prediction.
-    data_dims : list
-        List containing the dimensions of the data.
-    params : dict
-        Dictionary containing the parameters.
-    subspace_method : denoising_autoencoder_subspace_method
-        Subspace method.
-    fused_layers : nn.Sequential
-        Fused layers.
+    subspace_method : class
+        Subspace method:
+        :class:`~fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method`.
+    fusion_layers : nn.Sequential
+        Fusion layers combining the intermediate image maps and the tabular latent subspace.
     final_prediction : nn.Sequential
         Final prediction layers.
-
-    Methods
-    -------
-    forward(x)
-        Forward pass.
-
-
     """
 
+    # str: Name of the method.
     method_name = "Denoising tabular autoencoder with image maps"
+    # str: Type of modality.
     modality_type = "tab_img"
+    # str: Type of fusion.
     fusion_type = "subspace"
 
     def __init__(self, pred_type, data_dims, params):
@@ -64,7 +57,7 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         self.pred_type = pred_type
 
         self.fusion_layers = nn.Sequential(
-            nn.Linear(self.data_dims[0], 500),
+            nn.Linear(self.mod1_dim, 500),
             nn.ReLU(),
             nn.Linear(500, 100),
             nn.ReLU(),
@@ -74,8 +67,15 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         self.calc_fused_layers()
 
     def calc_fused_layers(self):
+        """
+        Calculate the fused layers.
+
+        Returns
+        -------
+        None
+        """
         self.fusion_layers[0] = nn.Linear(
-            self.data_dims[0], self.fusion_layers[0].out_features
+            self.mod1_dim, self.fusion_layers[0].out_features
         )
 
         self.set_final_pred_layers(self.fusion_layers[-1].out_features)
@@ -110,31 +110,16 @@ class DenoisingAutoencoder(pl.LightningModule):
 
     Attributes
     ----------
-    data_dims : list
-        List containing the dimensions of the data.
     tab_dims : int
-        Dimension of the tabular data.
+        Dimension of the input tabular data.
     subspace_lat_dims : int
-        Dimension of the latent subspace.
+        Dimension of the latent subspace (should be larger than tab_dims for a DAE).
     upsampler : nn.Sequential
         Upsampling layers.
     downsampler : nn.Sequential
         Downsampling layers.
-    loss : nn.MSELoss
-        Loss function.
-
-    Methods
-    -------
-    forward(x)
-        Forward pass.
-    training_step(batch, batch_idx)
-        Training step.
-    validation_step(batch, batch_idx)
-        Validation step.
-    configure_optimizers()
-        Configure the optimizers of the model.
-    denoise(x)
-        Denoise the data to create the latent subspace.
+    loss : nn function
+        Loss function. In this case, it's the mean squared error.
     """
 
     def __init__(self, data_dims):
@@ -149,7 +134,6 @@ class DenoisingAutoencoder(pl.LightningModule):
         """
         super().__init__()
 
-        self.data_dims = data_dims
         self.tab_dims = data_dims[0]
         self.latent_dim = 28 * 28
 
@@ -176,6 +160,14 @@ class DenoisingAutoencoder(pl.LightningModule):
         self.loss = nn.MSELoss()
 
     def calc_fused_layers(self):
+        """
+        Calculate the fused layers.
+
+        Returns
+        -------
+        None
+        """
+
         # this will change the upsampler and downsampler to be consistent with a modified latent dimension
         # you can also just change the upsampler and downsampler directly
 
@@ -205,8 +197,9 @@ class DenoisingAutoencoder(pl.LightningModule):
         list
             List containing the output.
         """
-        # drop out 0.2 of the tabular data to 0
 
+        # drop out 0.2 of the tabular data to 0
+        # simulates missing data
         x_dropout = nn.Dropout(0.2)(x)
 
         # upsample
@@ -314,16 +307,17 @@ class ImgUnimodalDAE(pl.LightningModule):
 
     Attributes
     ----------
-    data_dims : list
-        List containing the dimensions of the data.
     img_dim : int
-        Dimension of the image data.
+        Dimension of the input image data.
+    multiclass_dim : int
+        Number of classes for multiclass classification.
     img_layers : nn.ModuleDict
         Image layers.
     num_layers : int
-        Number of layers.
+        Number of image layers.
     fused_dim : int
         Dimension of the fused layers.
+        Final dimension of the image data after image layers.
     pred_type : str
         Type of prediction.
     loss : function
@@ -332,19 +326,10 @@ class ImgUnimodalDAE(pl.LightningModule):
         Fused layers.
     final_prediction : nn.Sequential
         Final prediction layers.
-
-    Methods
-    -------
-    forward(x)
-        Forward pass.
-    training_step(batch, batch_idx)
-        Training step.
-    validation_step(batch, batch_idx)
-        Validation step.
-    configure_optimizers()
-        Configure the optimizers of the model.
-    get_intermediate_featuremaps(x)
-        Get the intermediate feature maps to concatenate with the tabular latent subspace.
+    loss : function
+        Loss function. Depends on the prediction type.
+    activation : function
+        Activation function. Depends on the prediction type.
 
     """
 
@@ -358,10 +343,11 @@ class ImgUnimodalDAE(pl.LightningModule):
             List containing the dimensions of the data.
         pred_type : str
             Type of prediction.
+        multiclass_dims : int
+            Number of classes for multiclass classification.
         """
         super().__init__()
 
-        self.data_dims = data_dims
         self.img_dim = data_dims[2]
         self.multiclass_dim = multiclass_dims
         self.pred_type = pred_type
@@ -369,19 +355,12 @@ class ImgUnimodalDAE(pl.LightningModule):
         # get the img layers from ParentFusionModel
         ParentFusionModel.set_img_layers(self)
         self.calc_fused_layers()
-        # self.num_layers = len(self.img_layers)
 
-        # self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
-
-        # ParentFusionModel.set_fused_layers(self, fused_dim=self.fused_dim)
-
-        # ParentFusionModel.set_final_pred_layers(self)
-
-        self.output_activation_functions = {
-            "binary": torch.round,
-            "multiclass": lambda x: torch.argmax(nn.Softmax(dim=-1)(x), dim=-1),
-            "regression": lambda x: x,
-        }
+        # self.output_activation_functions = {
+        #     "binary": torch.round,
+        #     "multiclass": lambda x: torch.argmax(nn.Softmax(dim=-1)(x), dim=-1),
+        #     "regression": lambda x: x,
+        # }
 
         # what loss function?
         if self.pred_type == "regression":
@@ -401,6 +380,13 @@ class ImgUnimodalDAE(pl.LightningModule):
             self.activation = lambda x: torch.argmax(nn.Softmax(dim=-1)(x), dim=-1)
 
     def calc_fused_layers(self):
+        """
+        Calculate the fused layers.
+
+        Returns
+        -------
+        None
+        """
         self.num_layers = len(self.img_layers)
 
         self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
@@ -559,16 +545,9 @@ class denoising_autoencoder_subspace_method:
     img_unimodal_trainer : pl.Trainer
         Trainer for the image unimodal network.
     autoencoder : DenoisingAutoencoder
-        Denoising autoencoder.
+        Tabular denoising autoencoder.
     img_unimodal : ImgUnimodalDAE
         Image unimodal network.
-
-    Methods
-    -------
-    train(train_dataset, val_dataset)
-        Train the latent image space.
-    convert_to_latent(test_dataset)
-        Convert the image data to the latent image space.
     """
 
     def __init__(self, datamodule):

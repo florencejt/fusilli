@@ -189,10 +189,13 @@ class ImgLatentSpace(pl.LightningModule):
             self.encoder = nn.Sequential(
                 nn.Conv3d(1, 16, kernel_size=3, stride=1),
                 nn.ReLU(),
+                nn.MaxPool3d(kernel_size=2, stride=2),
                 nn.Conv3d(16, 32, kernel_size=3, stride=1),
                 nn.ReLU(),
+                nn.MaxPool3d(kernel_size=2, stride=2),
                 nn.Conv3d(32, self.latent_dim, kernel_size=3, stride=1),
                 nn.ReLU(),
+                nn.MaxPool3d(kernel_size=2, stride=2),
             )
 
             self.decoder = nn.Sequential(
@@ -232,18 +235,34 @@ class ImgLatentSpace(pl.LightningModule):
         # add extra layer to decoder to get right shape for first decoding layer
         self.new_decoder = copy.deepcopy(self.decoder)
 
-        # TODO make this work for 3d images too
+        first_decoder_layer_inchannels = self.new_decoder[0].in_channels
         self.new_decoder.insert(
-            0, nn.Linear(self.latent_dim, self.new_decoder[0].in_channels)
-        )
-        self.new_decoder.insert(
-            1, nn.Unflatten(1, (self.new_decoder[0].in_channels, 1, 1))
+            0, nn.Linear(self.latent_dim, first_decoder_layer_inchannels)
         )
 
+        if len(self.img_dim) == 3:
+            self.new_decoder.insert(
+                1, nn.Unflatten(1, (first_decoder_layer_inchannels, 1, 1, 1))
+            )
+        elif len(self.img_dim) == 2:
+            self.new_decoder.insert(
+                1, nn.Unflatten(1, (first_decoder_layer_inchannels, 1, 1))
+            )
+
         self.new_decoder.append(nn.Sigmoid()),  # Output is scaled between 0 and 1
-        self.new_decoder.append(
-            nn.Upsample(size=self.img_dim, mode="bilinear", align_corners=False)
-        )
+
+        if len(self.img_dim) == 3:
+            self.new_decoder.append(
+                nn.Upsample(size=self.img_dim, mode="trilinear", align_corners=False)
+            )
+        elif len(self.img_dim) == 2:
+            self.new_decoder.append(
+                nn.Upsample(size=self.img_dim, mode="bilinear", align_corners=False)
+            )
+
+        # # release memory
+        # self.encoder = None
+        # self.decoder = None
 
     def forward(self, x):
         """

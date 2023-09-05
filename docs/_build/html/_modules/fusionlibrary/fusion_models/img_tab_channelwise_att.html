@@ -137,6 +137,10 @@
 <span class="sd">        Dictionary containing the layers of the 1st type of tabular data.</span>
 <span class="sd">    img_layers : dict</span>
 <span class="sd">        Dictionary containing the layers of the image data.</span>
+<span class="sd">    match_dim_layers : nn.ModuleDict</span>
+<span class="sd">        Module dictionary containing the linear layers to make the dimensions of the two types of</span>
+<span class="sd">        data the same. This is done to ensure that the channel-wise multiplication can be performed.</span>
+<span class="sd">        This doesn&#39;t change the mod1_layers or img_layers, it just makes the outputs multipliable.</span>
 <span class="sd">    fused_dim : int</span>
 <span class="sd">        Number of features of the fused layers. This is the flattened output size of the</span>
 <span class="sd">        image layers.</span>
@@ -188,10 +192,26 @@
                 <span class="s2">&quot;The number of layers in the two modalities must be the same.&quot;</span>
             <span class="p">)</span>
 
-        <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+        <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">)))</span>
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">dummy_conv_output</span><span class="p">)</span>
         <span class="n">flattened_img_output_size</span> <span class="o">=</span> <span class="n">dummy_conv_output</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">match_dim_layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleDict</span><span class="p">()</span>
+
+        <span class="c1"># Iterate through your ModuleDict keys</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">layer_mod1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">layer_mod2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+            <span class="n">layer_mod1_out</span> <span class="o">=</span> <span class="n">layer_mod1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
+            <span class="n">layer_mod2_out</span> <span class="o">=</span> <span class="n">layer_mod2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_channels</span>
+
+            <span class="c1"># Check if the output sizes are different and create linear layer if needed</span>
+            <span class="k">if</span> <span class="n">layer_mod1_out</span> <span class="o">!=</span> <span class="n">layer_mod2_out</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">match_dim_layers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">layer_mod1_out</span><span class="p">,</span> <span class="n">layer_mod2_out</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">match_dim_layers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Identity</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="n">flattened_img_output_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
@@ -220,7 +240,7 @@
 
             <span class="c1"># layer to get the feature maps to be the same size if they have been modified to not be</span>
             <span class="k">if</span> <span class="n">x_tab1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x_img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="n">new_x_tab1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">x_tab1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x_img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])(</span><span class="n">x_tab1</span><span class="p">)</span>
+                <span class="n">new_x_tab1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">match_dim_layers</span><span class="p">[</span><span class="n">k</span><span class="p">](</span><span class="n">x_tab1</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_img</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
                     <span class="n">x_img</span> <span class="o">=</span> <span class="n">x_img</span> <span class="o">*</span> <span class="n">new_x_tab1</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
                 <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_img</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>

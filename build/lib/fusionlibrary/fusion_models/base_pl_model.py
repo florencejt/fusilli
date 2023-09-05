@@ -10,45 +10,57 @@ from torch.nn import functional as F
 
 
 class BaseModel(pl.LightningModule):
-    """
-    Base model for all fusion models
+    """Base pytorch lightning model for all fusion models.
+
+    This class takes the specific fusion model as an input and provides the training and validation
+    steps.
+    The loss functions/metrics/activation function options are defined here and chosen based on the
+    prediction type
+    chosen by the user.
 
     Attributes
     ----------
     model : class
         Fusion model class.
-    pred_type : str
-        Type of prediction to be made. Options: binary, multiclass, regression.
     multiclass_dim : int
-        Number of classes for multiclass prediction.
-    fusion_type : str
-        Type of fusion to be used. Options: early, late, graph.
-    kfold_flag : bool
-        Whether to use k-fold cross validation.
-    modality_type : str
-        Type of modality fusion to be used. Options: operation, subspace, graph, tensor, attention, Uni-modal
-    method_name : str
-        Name of the method.
-    subspace_method : str
-        Subspace method to be used - specific to the subspace fusion method
-    graph_maker : str
-        Graph maker to be used - specific to the graph fusion method
-    params : dict
-        Dictionary of parameters.
+        Number of classes for multiclass prediction. Default is 3 for making the metrics dictionary.
     train_mask : tensor
-        Mask for training data - used for the graph fusion methods
+        Mask for training data, used for the graph fusion methods instead of train/val split.
+        Indicates which nodes are training nodes.
     val_mask : tensor
-        Mask for validation data - used for the graph fusion methods
+        Mask for validation data - used for the graph fusion methods instead of train/val split.
+        Indicates which nodes are validation nodes.
     loss_functions : dict
-        Dictionary of loss functions.
+        Dictionary of loss functions, one for each prediction type.
     output_activation_functions : dict
-        Dictionary of output activation functions.
+        Dictionary of output activation functions, one for each prediction type.
     metrics : dict
-        Dictionary of metrics.
-    eval_plots : dict
-        Dictionary of evaluation plots.
-    kfold_plots : dict
-        Dictionary of k-fold plots.
+        Dictionary of metrics, two for each prediction type.
+    batch_val_reals : list
+        List of validation reals for each batch. Stored for later concatenation with rest of
+        batches and access by Plotter class for plotting.
+    batch_val_preds : list
+        List of validation preds for each batch. Stored for later concatenation with rest of
+        batches and access by Plotter class for plotting.
+    batch_val_logits : list
+        List of validation logits for each batch. Stored for later concatenation with rest of
+        batches and access by Plotter class for plotting.
+    batch_train_reals : list
+        List of training reals for each batch. Stored for later concatenation with rest of batches
+        and access by Plotter class for plotting.
+    batch_train_preds : list
+        List of training preds for each batch. Stored for later concatenation with rest of batches
+        and access by Plotter class for plotting.
+    val_reals : tensor
+        Concatenated validation reals for all batches. Accessed by Plotter class for plotting.
+    val_preds : tensor
+        Concatenated validation preds for all batches. Accessed by Plotter class for plotting.
+    val_logits : tensor
+        Concatenated validation logits for all batches. Accessed by Plotter class for plotting.
+    train_reals : tensor
+        Concatenated training reals for all batches. Accessed by Plotter class for plotting.
+    train_preds : tensor
+        Concatenated training preds for all batches. Accessed by Plotter class for plotting.
     """
 
     def __init__(self, model):
@@ -71,17 +83,7 @@ class BaseModel(pl.LightningModule):
             self.multiclass_dim = 3  # default value so metrics dict can be built
 
         if not hasattr(model, "subspace_method"):
-            #     pass
-            #     # self.subspace_method = model.subspace_method
-            # else:
             self.model.subspace_method = None
-
-        # if hasattr(model, "graph_maker"):
-        #     self.graph_maker = model.graph_maker
-        # else:
-        #     self.graph_maker = None # <-- don't know if this is necessary yet
-
-        # self.params = model.params
 
         if hasattr(model, "train_mask") is False:
             self.train_mask = None
@@ -138,18 +140,6 @@ class BaseModel(pl.LightningModule):
         }
         if self.model.pred_type not in self.metrics:
             raise ValueError(f"Unsupported pred_type: {self.model.pred_type}")
-
-        # self.eval_plots = {
-        #     "regression": [reals_vs_preds],
-        #     "binary": [confusion_matrix_plot],
-        #     "multiclass": [confusion_matrix_plot],
-        # }
-
-        # self.kfold_plots = {
-        #     "regression": k_fold_reals_vs_preds,
-        #     "binary": k_fold_confusion_matrix,
-        #     "multiclass": k_fold_confusion_matrix,
-        # }
 
         self.metric_names_list = [
             metric["name"] for metric in self.metrics[self.model.pred_type]
@@ -233,11 +223,11 @@ class BaseModel(pl.LightningModule):
         logits : tensor
             Logits.
         reconstructions : tensor
-            Reconstructions (returned if the model has a custom loss function such as a subspace
-                method)
+            Reconstructions (returned if the model has a custom loss function such as a subspace method)
 
-        note:
-        if you get an error here, check that the forward output is [out,] or [out, reconstructions]
+        Note
+        ----
+        if you get an error here, check that the forward output in fusion model is [out,] or [out, reconstructions]
         """
         model_outputs = self.model(x)
 
@@ -268,11 +258,7 @@ class BaseModel(pl.LightningModule):
         """
         logits, reconstructions = self.get_model_outputs(x)
 
-        # print("logits\n", logits, end="\n\n")
-        # print("y\n", y, end="\n\n")
-
         end_output = self.output_activation_functions[self.model.pred_type](logits)
-        # print("end_output\n", end_output, end="\n\n")
 
         # if we're doing graph-based fusion and train/test doesn't work the same as normal
         if hasattr(self, "train_mask"):
@@ -294,11 +280,6 @@ class BaseModel(pl.LightningModule):
             loss += added_loss
 
         return loss, end_output, logits
-
-    # def on_train_start(self):
-    #     # Clear the stored validation values at the beginning of training
-    #     self.val_reals = []
-    #     self.val_preds = []
 
     def training_step(self, batch, batch_idx):
         """
@@ -393,34 +374,11 @@ class BaseModel(pl.LightningModule):
             batch_size=x[0].shape[0],
         )
 
-        # for i, metric in enumerate(self.metrics[self.pred_type]):
-        #     if "auroc" in metric["name"]:
-        #         predicted = logits
-        #     else:
-        #         predicted = end_output
-
-        #     val_step_acc = metric["metric"].to(self.device)(
-        #         self.safe_squeeze(predicted), self.safe_squeeze(y[self.val_mask])
-        #     )
-
-        #     # print("what's used to calc the end metric:")
-        #     # print("preds:", self.safe_squeeze(predicted))
-        #     # print("reals:", self.safe_squeeze(y[self.val_mask]))
-        #     # print("reals without mask:", self.safe_squeeze(y))
-
-        #     self.log(
-        #         metric["name"] + "_val",
-        #         val_step_acc,
-        #         logger=True,
-        #         on_epoch=True,
-        #     )
-
         # Store real and predicted values for later access
 
         self.batch_val_reals.append(self.safe_squeeze(y[self.val_mask]).detach())
         self.batch_val_preds.append(self.safe_squeeze(end_output).detach())
         self.batch_val_logits.append(self.safe_squeeze(logits).detach())
-        # print(self.safe_squeeze(logits).detach().shape)
 
     def validation_epoch_end(self, outputs):
         """
@@ -482,8 +440,6 @@ class ParentFusionModel:
     ----------
     pred_type : str
         Type of prediction to be made. Options: binary, multiclass, regression.
-    data_dims : list
-        List of data dimensions.
     mod1_dim : int
         Dimension of modality 1.
     mod2_dim : int
@@ -497,19 +453,16 @@ class ParentFusionModel:
         Number of classes for multiclass prediction.
     kfold_flag : bool
         Whether to use k-fold cross validation.
-
-    Methods
-    -------
-    set_final_pred_layers(input_dim=64)
-        Set final prediction layers.
-    set_mod1_layers()
-        Set layers for modality 1.
-    set_mod2_layers()
-        Set layers for modality 2.
-    set_img_layers()
-        Set layers for image modality.
-    set_fused_layers(fused_dim)
-        Set layers for fused modality.
+    final_prediction: nn.Sequential
+        Final prediction layers.
+    mod1_layers : nn.ModuleDict
+        Modality 1 layers.
+    mod2_layers : nn.ModuleDict
+        Modality 2 layers.
+    img_layers : nn.ModuleDict
+        Image layers.
+    fused_layers : nn.Sequential
+        Fused layers.
     """
 
     def __init__(self, pred_type, data_dims, params):
@@ -525,19 +478,16 @@ class ParentFusionModel:
         """
         super().__init__()
         self.pred_type = pred_type
-        self.data_dims = data_dims
-        self.mod1_dim = self.data_dims[0]
-        self.mod2_dim = self.data_dims[1]
-        self.img_dim = self.data_dims[2]
+        self.mod1_dim = data_dims[0]
+        self.mod2_dim = data_dims[1]
+        self.img_dim = data_dims[2]
         self.params = params
         if self.pred_type == "multiclass":
             self.multiclass_dim = params["multiclass_dims"]
-        # self.kfold_flag = params["kfold_flag"]
-        # self.subspace_method = None
 
     def set_final_pred_layers(self, input_dim=64):
         """
-        Set final prediction layers.
+        Sets final prediction layers.
 
         Parameters
         ----------
@@ -555,7 +505,6 @@ class ParentFusionModel:
         elif self.pred_type == "multiclass":
             self.final_prediction = nn.Sequential(
                 nn.Linear(input_dim, self.multiclass_dim)
-                # , nn.Softmax(dim=-1)
             )
 
         elif self.pred_type == "regression":
@@ -563,7 +512,7 @@ class ParentFusionModel:
 
     def set_mod1_layers(self):
         """
-        Set layers for modality 1
+        Sets layers for modality 1
 
         Parameters
         ----------
@@ -600,7 +549,7 @@ class ParentFusionModel:
 
     def set_mod2_layers(self):
         """
-        Set layers for modality 2
+        Sets layers for modality 2
 
         Parameters
         ----------
@@ -637,8 +586,8 @@ class ParentFusionModel:
 
     def set_img_layers(self):
         """
-        Set layers for image modality. If using 2D images, then the layers will use Conv2D layers. If using 3D images,
-        then the layers will use Conv3D layers.
+        Sets layers for image modality. If using 2D images, then the layers will use Conv2D layers.
+        If using 3D images, then the layers will use Conv3D layers.
 
         Parameters
         ----------
@@ -722,8 +671,8 @@ class ParentFusionModel:
         ----------
         fused_dim : int
             Dimension of fused modality: how many features are there after fusion?
-                e.g. if we have 2 modalities with 64 features each, and the fusion method
-                    was concatenation, the fused_dim would be 128
+            e.g. if we have 2 modalities with 64 features each, and the fusion method
+            was concatenation, the fused_dim would be 128
 
         Returns
         -------

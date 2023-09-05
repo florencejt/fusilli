@@ -8,45 +8,13 @@ import torch
 
 
 class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
-    """
+    """Tabular Crossmodal multi-head attention model.
 
     This class implements a model that fuses the two types of tabular data using a
-        cross-modal multi-head attention approach.
+    cross-modal multi-head attention approach.
 
     Inspired by the work of Golovanevsky et al. (2021) [1]: here we use two types of tabular data as
     the multi-modal data instead of 3 types in the paper.
-
-    Attributes
-    ----------
-    method_name : str
-        Name of the method.
-    modality_type : str
-        Type of modality.
-    fusion_type : str
-        Type of fusion.
-    mod1_layers : dict
-        Dictionary containing the layers of the 1st type of tabular data.
-    mod2_layers : dict
-        Dictionary containing the layers of the 2nd type of tabular data.
-    fused_layers : nn.Sequential
-        Sequential layer containing the fused layers.
-    final_prediction : nn.Sequential
-        Sequential layer containing the final prediction layers.
-    fused_dim : int
-        Dimension of the fused layer.
-    attention : nn.MultiheadAttention
-        Multi-head attention layer.
-    to50 : nn.Linear
-        Linear layer to reduce the dimension of the data to 50.
-    relu : nn.ReLU
-        ReLU activation function.
-    clindrops : list
-        List containing the dropout layers.
-
-    Methods
-    -------
-    forward(x)
-        Forward pass of the model.
 
     References
     ----------
@@ -58,27 +26,44 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
     Accompanying code: (our model is inspired by the work of Golovanevsky et al. (2021) [1])
     https://github.com/rsinghlab/MADDi/blob/main/training/train_all_modalities.py
 
+    Attributes
+    ----------
+    pred_type : str
+        Type of prediction to be performed.
+    attention_embed_dim : int
+        Number of features of the multihead attention layer.
+    mod1_layers : dict
+        Dictionary containing the layers of the first modality.
+    mod2_layers : dict
+        Dictionary containing the layers of the second modality.
+    fused_dim : int
+        Number of features of the fused layers. This is the flattened output size of the
+        first tabular modality's layers.
+    fused_layers : nn.Sequential
+        Sequential layer containing the fused layers.
+    attention : nn.MultiheadAttention
+        Multihead attention layer. Takes in attention_embed_dim features as input.
+    tab1_to_embed_dim : nn.Linear
+        Linear layer. Takes in fused_dim features as input. This is the input of the
+        multihead attention layer.
+    tab2_to_embed_dim : nn.Linear
+        Linear layer. Takes in fused_dim features as input. This is the input of the
+        multihead attention layer.
+    relu : nn.ReLU
+        ReLU activation function.
+    final_prediction : nn.Sequential
+        Sequential layer containing the final prediction layers.
+
     """
 
+    # str: Name of the method.
     method_name = "Tabular Crossmodal multi-head attention"
+    # str: Type of modality.
     modality_type = "both_tab"
+    # str: Type of fusion.
     fusion_type = "attention"
 
     def __init__(self, pred_type, data_dims, params):
-        """_summary_
-
-        _extended_summary_
-
-        Parameters
-        ----------
-        pred_type : _type_
-            _description_
-        data_dims : _type_
-            _description_
-        params : _type_
-            _description_
-        """
-
         """
         Parameters
         ----------
@@ -89,10 +74,6 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
         params : dict
             Dictionary containing the parameters of the model.
 
-        Raises
-        ------
-        ValueError
-            If the prediction type is not valid.
         """
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
 
@@ -108,6 +89,16 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
     def calc_fused_layers(self):
         """
         Calculate the fused layers.
+
+        Returns
+        -------
+        None
+
+        Raises
+        ------
+        ValueError
+            If the number of layers in the two modalities is not the same.
+
         """
         # if mod1 and mod2 have a different number of layers, return error
         if len(self.mod1_layers) != len(self.mod2_layers):
@@ -132,21 +123,6 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
         self.set_final_pred_layers(self.attention_embed_dim * 4)
 
     def forward(self, x):
-        """_summary_
-
-        _extended_summary_
-
-        Parameters
-        ----------
-        x : _type_
-            _description_
-
-        Returns
-        -------
-        _type_
-            _description_
-        """
-
         """
         Forward pass of the model.
 

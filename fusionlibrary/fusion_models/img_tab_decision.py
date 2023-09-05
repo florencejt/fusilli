@@ -71,7 +71,7 @@ class ImageDecision(ParentFusionModel, nn.Module):
 
         # ~~ Image data ~~
 
-        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
+        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
         for layer in self.img_layers.values():
             dummy_conv_output = layer(dummy_conv_output)
         img_fusion_size = dummy_conv_output.data.view(1, -1).size(1)

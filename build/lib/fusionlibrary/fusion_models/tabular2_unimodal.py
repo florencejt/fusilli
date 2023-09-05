@@ -7,19 +7,16 @@ from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 
 
 class Tabular2Unimodal(ParentFusionModel, nn.Module):
-    """
+    """Tabular2 uni-modal model.
+
     This class implements a uni-modal model using only the 2nd type of tabular data.
 
     Attributes
     ----------
-    method_name : str
-        Name of the method.
-    modality_type : str
-        Type of modality.
-    fusion_type : str
-        Type of fusion.
     mod2_layers : dict
         Dictionary containing the layers of the 2nd type of tabular data.
+    fused_dim : int
+        Dimension of the fused layer.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers.
     final_prediction : nn.Sequential
@@ -27,14 +24,13 @@ class Tabular2Unimodal(ParentFusionModel, nn.Module):
     fused_dim : int
         Dimension of the fused layer.
 
-    Methods
-    -------
-    forward(x)
-        Forward pass of the model.
     """
 
+    # str: Name of the method.
     method_name = "Tabular2 uni-modal"
+    # str: Modality type.
     modality_type = "tabular2"
+    # str: Fusion type.
     fusion_type = "Uni-modal"
 
     def __init__(self, pred_type, data_dims, params):
@@ -48,10 +44,6 @@ class Tabular2Unimodal(ParentFusionModel, nn.Module):
         params : dict
             Dictionary containing the parameters of the model.
 
-        Raises
-        ------
-        ValueError
-            If the prediction type is not valid.
 
         """
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
@@ -62,6 +54,13 @@ class Tabular2Unimodal(ParentFusionModel, nn.Module):
         self.calc_fused_layers()
 
     def calc_fused_layers(self):
+        """
+        Calculates the fused layers.
+
+        Returns
+        -------
+        None
+        """
         self.fused_dim = list(self.mod2_layers.values())[-1][0].out_features
         self.set_fused_layers(self.fused_dim)
         self.set_final_pred_layers()

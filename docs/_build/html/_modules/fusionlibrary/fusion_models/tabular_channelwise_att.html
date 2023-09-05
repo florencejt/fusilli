@@ -101,10 +101,10 @@
 
 
 <div class="viewcode-block" id="TabularChannelWiseMultiAttention"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.tabular_channelwise_att.html#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention">[docs]</a><span class="k">class</span> <span class="nc">TabularChannelWiseMultiAttention</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Channel-wise multiplication fusion model for tabular data.</span>
 
 <span class="sd">    This class implements a model that fuses the two types of tabular data using a</span>
-<span class="sd">      channel-wise multiplication approach.</span>
+<span class="sd">    channel-wise multiplication approach.</span>
 
 <span class="sd">    If the two types of tabular data have different feature dimensions at each layer, the model will</span>
 <span class="sd">    use a linear layer to make the dimensions the same. This is done to ensure that the</span>
@@ -137,6 +137,11 @@
 <span class="sd">      Dictionary containing the layers of the 1st type of tabular data.</span>
 <span class="sd">    mod2_layers : dict</span>
 <span class="sd">      Dictionary containing the layers of the 2nd type of tabular data.</span>
+<span class="sd">    match_dim_layers : nn.ModuleDict</span>
+<span class="sd">      Module dictionary containing the linear layers to make the dimensions of the two types of</span>
+<span class="sd">      tabular data the same. This is done to ensure that the channel-wise multiplication can be</span>
+<span class="sd">      performed. This doesn&#39;t change the mod1_layers or mod2_layers, it just makes the outputs</span>
+<span class="sd">      multipliable.</span>
 <span class="sd">    fused_dim : int</span>
 <span class="sd">      Number of features of the fused layers. This is the output size of the</span>
 <span class="sd">      2nd type of tabular data&#39;s layers.</span>
@@ -192,24 +197,21 @@
                 <span class="s2">&quot;The number of layers in the two modalities must be the same.&quot;</span>
             <span class="p">)</span>
 
-        <span class="c1"># TODO sort this out</span>
-        <span class="c1"># # calculating whether we need linear layers to convert the dimensions of the two modalities</span>
-        <span class="c1"># self.linear_layers = nn.ModuleDict()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">match_dim_layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleDict</span><span class="p">()</span>
 
-        <span class="c1"># # Iterate through your ModuleDict keys</span>
-        <span class="c1"># for key in self.mod1_layers.keys():</span>
-        <span class="c1">#     layer1 = self.mod1_layers[key]</span>
-        <span class="c1">#     layer2 = self.mod2_layers[key]</span>
+        <span class="c1"># Iterate through your ModuleDict keys</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">layer_mod1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">layer_mod2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod2_layers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
-        <span class="c1">#     # Apply the layers to x_tab1 and x_tab2</span>
-        <span class="c1">#     x_tab1 = layer1(x_tab1)</span>
-        <span class="c1">#     x_tab2 = layer2(x_tab2)</span>
+            <span class="n">layer_mod1_out</span> <span class="o">=</span> <span class="n">layer_mod1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
+            <span class="n">layer_mod2_out</span> <span class="o">=</span> <span class="n">layer_mod2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
 
-        <span class="c1">#     # Check if the output sizes are different and create linear layer if needed</span>
-        <span class="c1">#     if x_tab1.shape[1] != x_tab2.shape[1]:</span>
-        <span class="c1">#         self.linear_layers[key] = nn.Linear(x_tab1.shape[1], x_tab2.shape[1])</span>
-        <span class="c1">#     else:</span>
-        <span class="c1">#         self.linear_layers[key] = nn.Identity()</span>
+            <span class="c1"># Check if the output sizes are different and create linear layer if needed</span>
+            <span class="k">if</span> <span class="n">layer_mod1_out</span> <span class="o">!=</span> <span class="n">layer_mod2_out</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">match_dim_layers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">layer_mod1_out</span><span class="p">,</span> <span class="n">layer_mod2_out</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">match_dim_layers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Identity</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod2_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
@@ -239,7 +241,7 @@
             <span class="c1"># layer to get the feature maps to be the same size if they have been modified to not be</span>
             <span class="k">if</span> <span class="n">x_tab1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x_tab2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
                 <span class="c1"># layer to make tab1 output the same size as tab2</span>
-                <span class="n">new_x_tab1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">x_tab1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x_tab2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])(</span><span class="n">x_tab1</span><span class="p">)</span>
+                <span class="n">new_x_tab1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">match_dim_layers</span><span class="p">[</span><span class="n">k</span><span class="p">](</span><span class="n">x_tab1</span><span class="p">)</span>
                 <span class="n">x_tab2</span> <span class="o">=</span> <span class="n">x_tab2</span> <span class="o">*</span> <span class="n">new_x_tab1</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">x_tab2</span> <span class="o">=</span> <span class="n">x_tab2</span> <span class="o">*</span> <span class="n">x_tab1</span>

@@ -57,7 +57,7 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         self.pred_type = pred_type
 
         self.fusion_layers = nn.Sequential(
-            nn.Linear(self.data_dims[0], 500),
+            nn.Linear(self.mod1_dim, 500),
             nn.ReLU(),
             nn.Linear(500, 100),
             nn.ReLU(),
@@ -75,7 +75,7 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         None
         """
         self.fusion_layers[0] = nn.Linear(
-            self.data_dims[0], self.fusion_layers[0].out_features
+            self.mod1_dim, self.fusion_layers[0].out_features
         )
 
         self.set_final_pred_layers(self.fusion_layers[-1].out_features)

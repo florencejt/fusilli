@@ -43,6 +43,10 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         Dictionary containing the layers of the 1st type of tabular data.
     img_layers : dict
         Dictionary containing the layers of the image data.
+    match_dim_layers : nn.ModuleDict
+        Module dictionary containing the linear layers to make the dimensions of the two types of
+        data the same. This is done to ensure that the channel-wise multiplication can be performed.
+        This doesn't change the mod1_layers or img_layers, it just makes the outputs multipliable.
     fused_dim : int
         Number of features of the fused layers. This is the flattened output size of the
         image layers.
@@ -94,10 +98,26 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
                 "The number of layers in the two modalities must be the same."
             )
 
-        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
+        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
         for layer in self.img_layers.values():
             dummy_conv_output = layer(dummy_conv_output)
         flattened_img_output_size = dummy_conv_output.data.view(1, -1).size(1)
+
+        self.match_dim_layers = nn.ModuleDict()
+
+        # Iterate through your ModuleDict keys
+        for key in self.mod1_layers.keys():
+            layer_mod1 = self.mod1_layers[key]
+            layer_mod2 = self.img_layers[key]
+
+            layer_mod1_out = layer_mod1[0].out_features
+            layer_mod2_out = layer_mod2[0].out_channels
+
+            # Check if the output sizes are different and create linear layer if needed
+            if layer_mod1_out != layer_mod2_out:
+                self.match_dim_layers[key] = nn.Linear(layer_mod1_out, layer_mod2_out)
+            else:
+                self.match_dim_layers[key] = nn.Identity()
 
         self.fused_dim = flattened_img_output_size
         self.set_fused_layers(self.fused_dim)
@@ -126,7 +146,7 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
 
             # layer to get the feature maps to be the same size if they have been modified to not be
             if x_tab1.shape[1] != x_img.shape[1]:
-                new_x_tab1 = nn.Linear(x_tab1.shape[1], x_img.shape[1])(x_tab1)
+                new_x_tab1 = self.match_dim_layers[k](x_tab1)
                 if len(x_img.shape) == 5:
                     x_img = x_img * new_x_tab1[:, :, None, None, None]
                 elif len(x_img.shape) == 4:

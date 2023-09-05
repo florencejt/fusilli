@@ -7,49 +7,27 @@ from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 
 
 class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
-    """
+    """Channel-wise multiplication fusion model for tabular data.
 
     This class implements a model that fuses the two types of tabular data using a
-      channel-wise multiplication approach.
+    channel-wise multiplication approach.
 
     If the two types of tabular data have different feature dimensions at each layer, the model will
-      use a linear layer to make the dimensions the same. This is done to ensure that the
-      channel-wise multiplication can be performed.
+    use a linear layer to make the dimensions the same. This is done to ensure that the
+    channel-wise multiplication can be performed.
 
     Inspired by the work of Duanmu et al. (2020) [1]: here we use two types of tabular data as
     the multi-modal data instead of image and non-image like in the paper.
 
-
-    Attributes
-    ----------
-    method_name : str
-      Name of the method.
-    modality_type : str
-      Type of modality.
-    fusion_type : str
-      Type of fusion.
-    mod1_layers : dict
-      Dictionary containing the layers of the 1st type of tabular data.
-    mod2_layers : dict
-      Dictionary containing the layers of the 2nd type of tabular data.
-    fused_layers : nn.Sequential
-      Sequential layer containing the fused layers.
-    final_prediction : nn.Sequential
-      Sequential layer containing the final prediction layers.
-
-    Methods
-    -------
-    forward(x)
-      Forward pass of the model.
-
     References
     ----------
+
     Duanmu, H., Huang, P. B., Brahmavar, S., Lin, S., Ren, T., Kong, J., Wang, F.,
-      & Duong, T. Q. (2020).
+    & Duong, T. Q. (2020).
     Prediction of Pathological Complete Response to Neoadjuvant Chemotherapy in Breast
-      Cancer Using Deep
+    Cancer Using Deep
     Learning with Integrative Imaging, Molecular and Demographic Data. In A. L. Martel,
-      P. Abolmaesumi,
+    P. Abolmaesumi,
     D. Stoyanov, D. Mateus, M. A. Zuluaga, S. K. Zhou, D. Racoceanu, & L. Joskowicz (Eds.),
     Medical Image Computing and Computer Assisted Intervention – MICCAI 2020 (pp. 242–252).
     Springer International Publishing. https://doi.org/10.1007/978-3-030-59713-9_24
@@ -58,10 +36,33 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
     https://github.com/HongyiDuanmu26/Prediction-of-pCR-with-Integrative-Deep-Learning/
     blob/main/CustomNet.py
 
+
+    Attributes
+    ----------
+    mod1_layers : dict
+      Dictionary containing the layers of the 1st type of tabular data.
+    mod2_layers : dict
+      Dictionary containing the layers of the 2nd type of tabular data.
+    match_dim_layers : nn.ModuleDict
+      Module dictionary containing the linear layers to make the dimensions of the two types of
+      tabular data the same. This is done to ensure that the channel-wise multiplication can be
+      performed. This doesn't change the mod1_layers or mod2_layers, it just makes the outputs
+      multipliable.
+    fused_dim : int
+      Number of features of the fused layers. This is the output size of the
+      2nd type of tabular data's layers.
+    fused_layers : nn.Sequential
+      Sequential layer containing the fused layers.
+    final_prediction : nn.Sequential
+      Sequential layer containing the final prediction layers.
+
     """
 
+    # str: Name of the method.
     method_name = "Channel-wise multiplication net (tabular)"
+    # str: Type of modality.
     modality_type = "both_tab"
+    # str: Type of fusion.
     fusion_type = "attention"
 
     def __init__(self, pred_type, data_dims, params):
@@ -74,11 +75,6 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
           Dictionary containing the dimensions of the data.
         params : dict
           Dictionary containing the parameters of the model.
-
-        Raises
-        ------
-        ValueError
-          If the prediction type is not valid.
         """
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
 
@@ -88,16 +84,40 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         self.set_mod2_layers()
         self.calc_fused_layers()
 
-        # self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
-        # self.set_fused_layers(self.fused_dim)
-        # self.set_final_pred_layers()
-
     def calc_fused_layers(self):
+        """
+        Calculates the fusion layers.
+
+        Returns
+        -------
+        None
+
+        Raises
+        ------
+        ValueError
+          If the number of layers in the two modalities is different.
+        """
         # if mod1 and mod2 have a different number of layers, return error
         if len(self.mod1_layers) != len(self.mod2_layers):
             raise ValueError(
                 "The number of layers in the two modalities must be the same."
             )
+
+        self.match_dim_layers = nn.ModuleDict()
+
+        # Iterate through your ModuleDict keys
+        for key in self.mod1_layers.keys():
+            layer_mod1 = self.mod1_layers[key]
+            layer_mod2 = self.mod2_layers[key]
+
+            layer_mod1_out = layer_mod1[0].out_features
+            layer_mod2_out = layer_mod2[0].out_features
+
+            # Check if the output sizes are different and create linear layer if needed
+            if layer_mod1_out != layer_mod2_out:
+                self.match_dim_layers[key] = nn.Linear(layer_mod1_out, layer_mod2_out)
+            else:
+                self.match_dim_layers[key] = nn.Identity()
 
         self.fused_dim = list(self.mod2_layers.values())[-1][0].out_features
         self.set_fused_layers(self.fused_dim)
@@ -127,7 +147,7 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
             # layer to get the feature maps to be the same size if they have been modified to not be
             if x_tab1.shape[1] != x_tab2.shape[1]:
                 # layer to make tab1 output the same size as tab2
-                new_x_tab1 = nn.Linear(x_tab1.shape[1], x_tab2.shape[1])(x_tab1)
+                new_x_tab1 = self.match_dim_layers[k](x_tab1)
                 x_tab2 = x_tab2 * new_x_tab1
             else:
                 x_tab2 = x_tab2 * x_tab1

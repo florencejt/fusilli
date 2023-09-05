@@ -14,39 +14,6 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
     Crossmodal multi-head attention model. This model uses the self attention and cross modal
     attention between the two modalities: tabular and image.
 
-    Attributes
-    ----------
-    method_name : str
-        Name of the method.
-    modality_type : str
-        Type of modality.
-    fusion_type : str
-        Type of fusion.
-    pred_type : str
-        Type of prediction to be performed.
-    attention_embed_dim : int
-        Number of features of the multihead attention layer.
-    mod1_layers : dict
-        Dictionary containing the layers of the first modality.
-    img_layers : dict
-        Dictionary containing the layers of the image data.
-    fused_layers : nn.Sequential
-        Sequential layer containing the fused layers.
-    attention : nn.MultiheadAttention
-        Multihead attention layer. Takes in attention_embed_dim features as input.
-    img_dense : nn.Linear
-        Linear layer. Takes in attention_embed_dim features as input. This is the output of
-        the multihead attention layer.
-    relu : nn.ReLU
-        ReLU activation function.
-    final_prediction : nn.Sequential
-        Sequential layer containing the final prediction layers.
-
-    Methods
-    -------
-    forward(x)
-        Forward pass of the model.
-
     References
     ----------
 
@@ -57,10 +24,44 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
 
     https://github.com/rsinghlab/MADDi/blob/main/training/train_all_modalities.py
 
+    Attributes
+    ----------
+    pred_type : str
+        Type of prediction to be performed.
+    attention_embed_dim : int
+        Number of features of the multihead attention layer.
+    mod1_layers : dict
+        Dictionary containing the layers of the first modality.
+    img_layers : dict
+        Dictionary containing the layers of the image data.
+    fused_dim : int
+        Number of features of the fused layers. This is the flattened output size of the
+        image layers.
+    fused_layers : nn.Sequential
+        Sequential layer containing the fused layers.
+    attention : nn.MultiheadAttention
+        Multihead attention layer. Takes in attention_embed_dim features as input.
+    img_dense : nn.Linear
+        Linear layer. Takes in attention_embed_dim features as input. This is the output of
+        the multihead attention layer.
+    img_to_embed_dim : nn.Linear
+        Linear layer. Takes in fused_dim features as input. This is the input of the
+        multihead attention layer.
+    tab_to_embed_dim : nn.Linear
+        Linear layer. Takes in fused_dim features as input. This is the input of the
+        multihead attention layer.
+    relu : nn.ReLU
+        ReLU activation function.
+    final_prediction : nn.Sequential
+        Sequential layer containing the final prediction layers.
+
     """
 
+    # str: Name of the method.
     method_name = "Crossmodal multi-head attention"
+    # str: Type of modality.
     modality_type = "tab_img"
+    # str: Type of fusion.
     fusion_type = "attention"
 
     def __init__(self, pred_type, data_dims, params):
@@ -101,7 +102,7 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
                 "The number of layers in the two modalities must be the same."
             )
 
-        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.data_dims[-1])))
+        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
         for layer in self.img_layers.values():
             dummy_conv_output = layer(dummy_conv_output)
         image_output_size = dummy_conv_output.data.view(1, -1).size(1)

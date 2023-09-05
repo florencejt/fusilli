@@ -84,6 +84,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.mod1_layers"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.mod1_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.mod2_layers"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.mod2_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.match_dim_layers"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.match_dim_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.fused_dim"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.fused_dim</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.fused_layers"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.fused_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.final_prediction"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.final_prediction</span></code></a></li>
@@ -136,7 +137,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention" title="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention</span></code></a>(pred_type, ...)</p></td>
-<td><p>This class implements a model that fuses the two types of tabular data using a</p></td>
+<td><p>Channel-wise multiplication fusion model for tabular data.</p></td>
 </tr>
 </tbody>
 </table>
@@ -144,10 +145,9 @@
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TabularChannelWiseMultiAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/tabular_channelwise_att.html#TabularChannelWiseMultiAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
-<dl class="simple">
-<dt>This class implements a model that fuses the two types of tabular data using a</dt><dd><p>channel-wise multiplication approach.</p>
-</dd>
-</dl>
+<p>Channel-wise multiplication fusion model for tabular data.</p>
+<p>This class implements a model that fuses the two types of tabular data using a
+channel-wise multiplication approach.</p>
 <p>If the two types of tabular data have different feature dimensions at each layer, the model will
 use a linear layer to make the dimensions the same. This is done to ensure that the
 channel-wise multiplication can be performed.</p>
@@ -184,6 +184,20 @@ blob/main/CustomNet.py</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.match_dim_layers">
+<span class="sig-name descname"><span class="pre">match_dim_layers</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.match_dim_layers" title="Permalink to this definition"></a></dt>
+<dd><p>Module dictionary containing the linear layers to make the dimensions of the two types of
+tabular data the same. This is done to ensure that the channel-wise multiplication can be
+performed. This doesn’t change the mod1_layers or mod2_layers, it just makes the outputs
+multipliable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nn.ModuleDict</p>
 </dd>
 </dl>
 </dd></dl>
