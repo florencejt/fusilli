@@ -24,9 +24,8 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
     Duanmu, H., Huang, P. B., Brahmavar, S., Lin, S., Ren, T., Kong, J.,
     Wang, F., & Duong, T. Q. (2020).
     Prediction of Pathological Complete Response to Neoadjuvant Chemotherapy in Breast
-    Cancer Using Deep
-    Learning with Integrative Imaging, Molecular and Demographic Data. In A.
-      L. Martel, P. Abolmaesumi,
+    Cancer Using Deep Learning with Integrative Imaging, Molecular and Demographic Data. In A.
+    L. Martel, P. Abolmaesumi,
     D. Stoyanov, D. Mateus, M. A. Zuluaga, S. K. Zhou, D. Racoceanu, & L. Joskowicz (Eds.),
     Medical Image Computing and Computer Assisted Intervention – MICCAI 2020
     (pp. 242–252).

@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
@@ -304,15 +305,18 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MCVAESubspaceMethod.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAESubspaceMethod.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">5000</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        datamodule : datamodule object</span>
 <span class="sd">            Datamodule object containing the data.</span>
+<span class="sd">        max_epochs : int, optional</span>
+<span class="sd">            Maximum number of epochs, by default 5000</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span> <span class="o">=</span> <span class="n">datamodule</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_latent_dims</span> <span class="o">=</span> <span class="mi">10</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_latent_dims</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span> <span class="o">=</span> <span class="n">max_epochs</span></div>
 
 <div class="viewcode-block" id="MCVAESubspaceMethod.get_latents"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.get_latents">[docs]</a>    <span class="k">def</span> <span class="nf">get_latents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -384,7 +388,7 @@
         <span class="n">mcvae_fit</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">mcvae_fit</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
 
         <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="kc">None</span><span class="p">):</span>
-            <span class="n">mcvae_fit</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">epochs</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">mcvae_training_data</span><span class="p">)</span>
+            <span class="n">mcvae_fit</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">mcvae_training_data</span><span class="p">)</span>
             <span class="n">ideal_epoch</span> <span class="o">=</span> <span class="n">mcvae_early_stopping_tol</span><span class="p">(</span>
                 <span class="n">tolerance</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">patience</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">loss_logs</span><span class="o">=</span><span class="n">mcvae_fit</span><span class="o">.</span><span class="n">loss</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span>
             <span class="p">)</span>

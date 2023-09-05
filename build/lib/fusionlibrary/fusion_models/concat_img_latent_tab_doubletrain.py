@@ -269,17 +269,17 @@ class concat_img_latent_tab_subspace_method:
         Autoencoder to train the latent image space.
     """
 
-    def __init__(self, datamodule):
+    def __init__(self, datamodule, max_epochs=1000):
         """
         Parameters
         ----------
         datamodule : pl.LightningDataModule
             Data module containing the data.
+        max_epochs : int
+            Maximum number of epochs to train the latent image space.
         """
         self.datamodule = datamodule
-        self.trainer = init_trainer(
-            None, max_epochs=3
-        )  # TODO change back to big number
+        self.trainer = init_trainer(None, max_epochs=max_epochs)
         self.autoencoder = ImgLatentSpace(self.datamodule.data_dims)
 
     def train(self, train_dataset, val_dataset):

@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
@@ -103,11 +104,6 @@
     <span class="n">set_logger</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">import</span> <span class="nn">wandb</span>
-
-
-<div class="viewcode-block" id="init_dummy_model"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.init_dummy_model">[docs]</a><span class="k">def</span> <span class="nf">init_dummy_model</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Initialise dummy model&quot;&quot;&quot;</span>
-    <span class="k">pass</span></div>
 
 
 <div class="viewcode-block" id="modify_model_architecture"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.modify_model_architecture">[docs]</a><span class="k">def</span> <span class="nf">modify_model_architecture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">architecture_modification</span><span class="p">):</span>
@@ -188,9 +184,9 @@
     <span class="n">params</span><span class="p">,</span>
     <span class="n">k</span><span class="p">,</span>
     <span class="n">fusion_model</span><span class="p">,</span>
-    <span class="c1"># init_model,</span>
     <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Trains and tests a model and, if k_fold trained, a fold.</span>
@@ -205,8 +201,6 @@
 <span class="sd">        Fold number.</span>
 <span class="sd">    fusion_model : class</span>
 <span class="sd">        Fusion model class.</span>
-<span class="sd">    init_model : class</span>
-<span class="sd">        Init model class (initialized empty for method details).</span>
 <span class="sd">    metric_name_list : list</span>
 <span class="sd">        List of metric names.</span>
 <span class="sd">    method_name : str</span>
@@ -222,6 +216,8 @@
 <span class="sd">        Input format {&quot;model&quot;: {&quot;layer_group&quot;: &quot;modification&quot;}, ...}.</span>
 <span class="sd">        e.g. {&quot;TabularCrossmodalAttention&quot;: {&quot;mod1_layers&quot;: new mod 1 layers nn.ModuleDict}}</span>
 <span class="sd">        Default None.</span>
+<span class="sd">    max_epochs : int</span>
+<span class="sd">        Maximum number of epochs. Default 1000.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -258,7 +254,7 @@
 
     <span class="n">logger</span> <span class="o">=</span> <span class="n">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="p">)</span>  <span class="c1"># set logger</span>
 
-    <span class="n">trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># init trainer</span>
+    <span class="n">trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">)</span>  <span class="c1"># init trainer</span>
 
     <span class="c1"># initialise model with pytorch lightning framework, hence pl_model</span>
     <span class="n">pl_model</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="p">(</span>
@@ -302,7 +298,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Stores the trained model to a dictionary.</span>
 <span class="sd">    If model type is already in dictionary (e.g. if it&#39;s a kfold model), append the model to</span>
-<span class="sd">        the list of models.</span>
+<span class="sd">    the list of models.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">classname</span> <span class="o">=</span> <span class="n">trained_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
@@ -324,13 +320,12 @@
 
 
 <div class="viewcode-block" id="train_and_save_models"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.train_and_save_models">[docs]</a><span class="k">def</span> <span class="nf">train_and_save_models</span><span class="p">(</span>
-    <span class="n">trained_models_dict</span><span class="p">,</span>
     <span class="n">data_module</span><span class="p">,</span>
     <span class="n">params</span><span class="p">,</span>
     <span class="n">fusion_model</span><span class="p">,</span>
-    <span class="c1"># init_model,</span>
     <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Trains/tests the model and saves the trained model to a dictionary for further analysis.</span>
@@ -347,21 +342,24 @@
 <span class="sd">        Dictionary of parameters.</span>
 <span class="sd">    fusion_model : class</span>
 <span class="sd">        Fusion model class.</span>
-<span class="sd">    init_model : class</span>
-<span class="sd">        Init model class (initialized empty for method details).</span>
 <span class="sd">    extra_log_string_dict : dict</span>
 <span class="sd">        Dictionary of extra log strings. Extra string to add to the run name during logging.</span>
-<span class="sd">            e.g. if you&#39;re running the same model with different hyperparameters, you can add</span>
-<span class="sd">            the hyperparameters.</span>
-<span class="sd">            Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
-<span class="sd">            as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
+<span class="sd">        e.g. if you&#39;re running the same model with different hyperparameters, you can add</span>
+<span class="sd">        the hyperparameters.</span>
+<span class="sd">        Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
+<span class="sd">        as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
 <span class="sd">    layer_mods : dict</span>
 <span class="sd">        Dictionary of layer modifications. Used to modify the architecture of the model.</span>
 <span class="sd">        Input format {&quot;model&quot;: {&quot;layer_group&quot;: &quot;modification&quot;}, ...}.</span>
 <span class="sd">        e.g. {&quot;TabularCrossmodalAttention&quot;: {&quot;mod1_layers&quot;: new mod 1 layers nn.ModuleDict}}</span>
 <span class="sd">        Default None.</span>
+<span class="sd">    max_epochs : int</span>
+<span class="sd">        Maximum number of epochs. Default 1000.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">trained_models_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
     <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;num_k&quot;</span><span class="p">]):</span>
             <span class="n">trained_model</span> <span class="o">=</span> <span class="n">train_and_test</span><span class="p">(</span>
@@ -369,9 +367,9 @@
                 <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
                 <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
                 <span class="n">fusion_model</span><span class="o">=</span><span class="n">fusion_model</span><span class="p">,</span>
-                <span class="c1"># init_model=init_model,</span>
                 <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span><span class="p">,</span>
                 <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
+                <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">trained_models_dict</span> <span class="o">=</span> <span class="n">store_trained_model</span><span class="p">(</span>
                 <span class="n">trained_model</span><span class="p">,</span> <span class="n">trained_models_dict</span>
@@ -386,9 +384,9 @@
             <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
             <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">fusion_model</span><span class="o">=</span><span class="n">fusion_model</span><span class="p">,</span>
-            <span class="c1"># init_model=init_model,</span>
             <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span><span class="p">,</span>
             <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
+            <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">trained_models_dict</span> <span class="o">=</span> <span class="n">store_trained_model</span><span class="p">(</span><span class="n">trained_model</span><span class="p">,</span> <span class="n">trained_models_dict</span><span class="p">)</span>
 

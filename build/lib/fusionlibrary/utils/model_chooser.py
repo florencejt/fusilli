@@ -82,48 +82,47 @@ def model_importer(fusion_model_dict):
 
 
 def get_models(conditions_dict, fusion_model_dict=fusion_model_dict):
-    """
+    """Filters the models based on the conditions specified by the user.
 
     Parameters
     ----------
     conditions_dict : dict
         Dictionary containing the conditions to filter the models.
         Structure: {feature1: condition, feature2: condition, ...}
-            or {feature1: [condition1, condition2, ...], feature2: [condition1, ...], ...}
+        or {feature1: [condition1, condition2, ...], feature2: [condition1, ...], ...}
 
-            Accepted features and accepted conditions:
+        Accepted features and accepted conditions:
 
-            - "fusion_type": "Uni-modal", "operation", "attention", "subspace", "graph", or "all"
-            - "modality_type": "tabular1", "tabular2", "img", "both_tab", "tab_img", or "all"
-            - "method_name": any method name currently implemented (e.g. "Tabular decision"), or "all"
-            - "class_name": any model name currently implemented (e.g. "TabularDecision"), or "all"
+        - "fusion_type": "Uni-modal", "operation", "attention", "subspace", "graph", or "all"
+        - "modality_type": "tabular1", "tabular2", "img", "both_tab", "tab_img", or "all"
+        - "method_name": any method name currently implemented (e.g. "Tabular decision"), or "all"
+        - "class_name": any model name currently implemented (e.g. "TabularDecision"), or "all"
 
-            Example: To get all the models that are uni-modal and attention-based, the dictionary would be:
+        Example: To get all the models that are uni-modal and attention-based, the dictionary would be:
 
-            .. code-block:: python
+        .. code-block:: python
 
-                conditions_dict = {
-                    "fusion_type": ["Uni-modal", "operation"],
-                    "modality_type": "all",
-                    }
-
+            conditions_dict = {
+                "fusion_type": ["Uni-modal", "operation"],
+                "modality_type": "all",
+                }
 
     fusion_model_dict : list
-        List of dictionaries containing the fusion models' names and paths. Default is
-            fusion_model_dict. Defined inside fusionlibrary.utils.model_chooser.py.
-
+        List of dictionaries containing the fusion models' names and paths. Default is fusion_model_dict.
 
 
     Returns
     -------
     filtered_models : pd.DataFrame
         Dataframe containing the filtered models.
+
         Column names:
-            - "method_name": name of the model (e.g. "Tabular decision")
-            - "fusion_type": type of fusion (e.g. "operation")
-            - "modality_type": type of modality (e.g. "both_tab")
-            - "class_name": name of the class (e.g. "TabularDecision")
-            - "method_path": path to the method's py file (e.g. "fusionlibrary.fusion_models.tabular_decision")
+
+        - "method_name": name of the model (e.g. "Tabular decision")
+        - "fusion_type": type of fusion (e.g. "operation")
+        - "modality_type": type of modality (e.g. "both_tab")
+        - "class_name": name of the class (e.g. "TabularDecision")
+        - "method_path": path to the method's py file (e.g. "fusionlibrary.fusion_models.tabular_decision")
 
     """
 

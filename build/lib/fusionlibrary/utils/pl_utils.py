@@ -78,7 +78,7 @@ class LitProgressBar(TQDMProgressBar):
         return bar
 
 
-def init_trainer(logger, max_epochs=10000):
+def init_trainer(logger, max_epochs=1000):
     """
     Initialize the pytorch lightning trainer object.
 

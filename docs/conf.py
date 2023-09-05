@@ -10,6 +10,7 @@ import os
 import sys
 import warnings
 
+
 sys.path.insert(0, os.path.abspath("../fusionlibrary"))
 # sys.path.insert(0, os.path.abspath("../../"))
 # sys.path.insert(0, os.path.abspath(".."))
@@ -80,12 +81,21 @@ html_static_path = ["_static"]
 html_logo = "pink_pasta_logo.png"
 html_favicon = "pink_pasta_logo.png"
 
+from sphinx_gallery.sorting import ExplicitOrder
+
 sphinx_gallery_conf = {
     "doc_module": "fusionlibrary",
     "examples_dirs": "examples",  # path to your example scripts
     "gallery_dirs": "auto_examples",  # path to where to save gallery generated output
     "ignore_pattern": "__init__.py",
     "run_stale_examples": False,
+    "subsection_order": ExplicitOrder(
+        [
+            "examples/training_and_testing",
+            "examples/customising_behaviour",
+            "examples/creating_your_own_fusion_model",
+        ]
+    ),
 }
 
 

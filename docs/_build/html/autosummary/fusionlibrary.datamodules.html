@@ -54,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
@@ -115,19 +116,13 @@
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.KFoldDataModule.modality_type"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.modality_type</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.KFoldDataModule.batch_size"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.batch_size</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.KFoldDataModule.subspace_method"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.subspace_method</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.KFoldDataModule.__init__"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.__init__()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.KFoldDataModule.prepare_data"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.prepare_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.KFoldDataModule.kfold_split"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.kfold_split()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.KFoldDataModule.setup"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.setup()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.KFoldDataModule.train_dataloader"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.train_dataloader()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.KFoldDataModule.val_dataloader"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.val_dataloader()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.KFoldDataModule.train_eval_dataloader"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.train_eval_dataloader()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.KFoldDataModule.__init__"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id10"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.prepare_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id11"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.kfold_split()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id12"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.setup()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id13"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.train_dataloader()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id14"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.val_dataloader()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id15"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.train_eval_dataloader()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.datamodules.GraphDataModule"><code class="docutils literal notranslate"><span class="pre">GraphDataModule</span></code></a><ul>
@@ -139,9 +134,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.GraphDataModule.setup"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.setup()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.GraphDataModule.get_lightning_module"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.get_lightning_module()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.GraphDataModule.__init__"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id16"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.prepare_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id17"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.setup()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id18"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.get_lightning_module()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.prepare_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.setup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.get_lightning_module()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.datamodules.KFoldGraphDataModule"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule</span></code></a><ul>
@@ -155,10 +150,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.KFoldGraphDataModule.setup"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.setup()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.KFoldGraphDataModule.get_lightning_module"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.get_lightning_module()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.datamodules.KFoldGraphDataModule.__init__"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id19"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.prepare_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id20"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.kfold_split()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id21"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.setup()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id22"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.get_lightning_module()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.prepare_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.kfold_split()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id15"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.setup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id16"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.get_lightning_module()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.datamodules.get_data_module"><code class="docutils literal notranslate"><span class="pre">get_data_module()</span></code></a></li>
@@ -500,7 +495,7 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fusionlibrary.datamodules.CustomDataModule">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CustomDataModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modality_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#CustomDataModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.CustomDataModule" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CustomDataModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modality_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#CustomDataModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.CustomDataModule" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">LightningDataModule</span></code></p>
 <p>Custom pytorch lightning datamodule class for the different modalities.</p>
 <dl class="py attribute">
@@ -579,7 +574,7 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fusionlibrary.datamodules.CustomDataModule.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modality_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#CustomDataModule.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.CustomDataModule.__init__" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modality_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#CustomDataModule.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.CustomDataModule.__init__" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -593,6 +588,7 @@ images.
 None if not downsampling. (default None)</p></li>
 <li><p><strong>layer_mods</strong> (<em>dict</em>) – Dictionary of layer modifications to make to the subspace method.
 (default None)</p></li>
+<li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs to train subspace methods for. (default 1000)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -682,7 +678,7 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fusionlibrary.datamodules.KFoldDataModule">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KFoldDataModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modality_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KFoldDataModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modality_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">LightningDataModule</span></code></p>
 <p>Custom pytorch lightning datamodule class for the different modalities with k-fold cross
 validation</p>
@@ -742,44 +738,8 @@ validation</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fusionlibrary.datamodules.KFoldDataModule.prepare_data">
-<span class="sig-name descname"><span class="pre">prepare_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.prepare_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule.prepare_data" title="Permalink to this definition"></a></dt>
-<dd><p>Loads the data with LoadDatasets class.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fusionlibrary.datamodules.KFoldDataModule.kfold_split">
-<span class="sig-name descname"><span class="pre">kfold_split</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.kfold_split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule.kfold_split" title="Permalink to this definition"></a></dt>
-<dd><p>Splits the dataset into k folds.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fusionlibrary.datamodules.KFoldDataModule.setup">
-<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule.setup" title="Permalink to this definition"></a></dt>
-<dd><p>Splits the data into train and test sets, and runs the subspace method if specified.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fusionlibrary.datamodules.KFoldDataModule.train_dataloader">
-<span class="sig-name descname"><span class="pre">train_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.train_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule.train_dataloader" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the dataloader for training.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fusionlibrary.datamodules.KFoldDataModule.val_dataloader">
-<span class="sig-name descname"><span class="pre">val_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.val_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule.val_dataloader" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the dataloader for validation.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fusionlibrary.datamodules.KFoldDataModule.train_eval_dataloader">
-<span class="sig-name descname"><span class="pre">train_eval_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.train_eval_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule.train_eval_dataloader" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the dataloader for evaluation.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fusionlibrary.datamodules.KFoldDataModule.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modality_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule.__init__" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modality_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule.__init__" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -788,6 +748,9 @@ validation</p>
 <li><p><strong>sources</strong> (<em>list</em>) – List of source csv files.</p></li>
 <li><p><strong>batch_size</strong> (<em>int</em>) – Batch size (default 8).</p></li>
 <li><p><strong>subspace_method</strong> (<em>class</em>) – Subspace method class (default None) (only for subspace methods).</p></li>
+<li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs to train subspace methods for. (default 1000)</p></li>
+<li><p><strong>image_downsample_size</strong> (<em>tuple</em>) – Size to downsample the images to (height, width, depth) or (height, width) for 2D
+images.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -798,8 +761,8 @@ validation</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id10">
-<span class="sig-name descname"><span class="pre">prepare_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.prepare_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id10" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.datamodules.KFoldDataModule.prepare_data">
+<span class="sig-name descname"><span class="pre">prepare_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.prepare_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule.prepare_data" title="Permalink to this definition"></a></dt>
 <dd><p>Loads the data with LoadDatasets class</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -816,8 +779,8 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id11">
-<span class="sig-name descname"><span class="pre">kfold_split</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.kfold_split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id11" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.datamodules.KFoldDataModule.kfold_split">
+<span class="sig-name descname"><span class="pre">kfold_split</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.kfold_split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule.kfold_split" title="Permalink to this definition"></a></dt>
 <dd><p>Splits the dataset into k folds</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -830,8 +793,8 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id12">
-<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id12" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.datamodules.KFoldDataModule.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule.setup" title="Permalink to this definition"></a></dt>
 <dd><p>Splits the data into train and test sets, and runs the subspace method if specified</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -846,8 +809,8 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id13">
-<span class="sig-name descname"><span class="pre">train_dataloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fold_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.train_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id13" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.datamodules.KFoldDataModule.train_dataloader">
+<span class="sig-name descname"><span class="pre">train_dataloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fold_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.train_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule.train_dataloader" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the dataloader for training.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -863,8 +826,8 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id14">
-<span class="sig-name descname"><span class="pre">val_dataloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fold_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.val_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id14" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.datamodules.KFoldDataModule.val_dataloader">
+<span class="sig-name descname"><span class="pre">val_dataloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fold_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.val_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule.val_dataloader" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the dataloader for validation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -880,8 +843,8 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id15">
-<span class="sig-name descname"><span class="pre">train_eval_dataloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fold_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.train_eval_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id15" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusionlibrary.datamodules.KFoldDataModule.train_eval_dataloader">
+<span class="sig-name descname"><span class="pre">train_eval_dataloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fold_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldDataModule.train_eval_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.KFoldDataModule.train_eval_dataloader" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the dataloader for evaluation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -988,8 +951,8 @@ the graph data structure into a pytorch dataloader.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id16">
-<span class="sig-name descname"><span class="pre">prepare_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#GraphDataModule.prepare_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id16" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">prepare_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#GraphDataModule.prepare_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id10" title="Permalink to this definition"></a></dt>
 <dd><p>Loads the data with LoadDatasets class</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1006,14 +969,14 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id17">
-<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#GraphDataModule.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id17" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#GraphDataModule.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id11" title="Permalink to this definition"></a></dt>
 <dd><p>Gets random train and test indices, and gets the graph data structure.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id18">
-<span class="sig-name descname"><span class="pre">get_lightning_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#GraphDataModule.get_lightning_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id18" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">get_lightning_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#GraphDataModule.get_lightning_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id12" title="Permalink to this definition"></a></dt>
 <dd><p>Gets the lightning module using the pytorch geometric lightning module for converting
 the graph data structure into a pytorch dataloader.</p>
 <dl class="field-list simple">
@@ -1135,26 +1098,26 @@ the graph data structure into a pytorch dataloader.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id19">
-<span class="sig-name descname"><span class="pre">prepare_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldGraphDataModule.prepare_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id19" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">prepare_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldGraphDataModule.prepare_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id13" title="Permalink to this definition"></a></dt>
 <dd><p>Loads the data with LoadDatasets class</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id20">
-<span class="sig-name descname"><span class="pre">kfold_split</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldGraphDataModule.kfold_split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id20" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">kfold_split</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldGraphDataModule.kfold_split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id14" title="Permalink to this definition"></a></dt>
 <dd><p>Splits the dataset into k folds</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id21">
-<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldGraphDataModule.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id21" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldGraphDataModule.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id15" title="Permalink to this definition"></a></dt>
 <dd><p>Gets random train and test indices, and gets the graph data structure.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id22">
-<span class="sig-name descname"><span class="pre">get_lightning_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldGraphDataModule.get_lightning_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id22" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">get_lightning_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#KFoldGraphDataModule.get_lightning_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id16" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the lightning module using the pytorch geometric lightning module for converting
 the graph data structure into a pytorch dataloader.</p>
 <dl class="field-list simple">
@@ -1171,12 +1134,12 @@ the graph data structure into a pytorch dataloader.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fusionlibrary.datamodules.get_data_module">
-<span class="sig-name descname"><span class="pre">get_data_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#get_data_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.get_data_module" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_data_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/datamodules.html#get_data_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.datamodules.get_data_module" title="Permalink to this definition"></a></dt>
 <dd><p>Gets the data module for the specified modality and fusion type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>init_model</strong> (<em>class</em>) – Initialised model class.</p></li>
+<li><p><strong>fusion_model</strong> (<em>class</em>) – Fusion model class.</p></li>
 <li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
 <li><p><strong>batch_size</strong> (<em>int</em>) – Batch size (default 8).</p></li>
 <li><p><strong>image_downsample_size</strong> (<em>list</em>) – List of image dimensions to downsample to (default None).</p></li>

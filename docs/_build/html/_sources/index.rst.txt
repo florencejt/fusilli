@@ -18,6 +18,7 @@ This library provides a way to compare different fusion methods for your multimo
    introduction
    getting_started
    fusion_model_explanations
+   user_guide
    modifying_models
 
 

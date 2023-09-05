@@ -210,15 +210,18 @@ class MCVAESubspaceMethod:
 
     """
 
-    def __init__(self, datamodule):
+    def __init__(self, datamodule, max_epochs=5000):
         """
         Parameters
         ----------
         datamodule : datamodule object
             Datamodule object containing the data.
+        max_epochs : int, optional
+            Maximum number of epochs, by default 5000
         """
         self.datamodule = datamodule
         self.num_latent_dims = 10
+        self.max_epochs = max_epochs
 
     def get_latents(self, dataset):
         """
@@ -290,7 +293,7 @@ class MCVAESubspaceMethod:
         mcvae_fit.optimizer = torch.optim.Adam(mcvae_fit.parameters(), lr=0.001)
 
         with contextlib.redirect_stdout(None):
-            mcvae_fit.optimize(epochs=5000, data=mcvae_training_data)
+            mcvae_fit.optimize(epochs=self.max_epochs, data=mcvae_training_data)
             ideal_epoch = mcvae_early_stopping_tol(
                 tolerance=3, patience=10, loss_logs=mcvae_fit.loss["total"]
             )

@@ -1,0 +1,78 @@
+
+
+.. _sphx_glr_auto_examples_training_and_testing:
+
+Training and testing
+----------------------
+
+These are examples of how to train and validate fusion models with Fusilli.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This script shows how to train one fusion models on a binary task with k-fold training protocol...">
+
+.. only:: html
+
+  .. image:: /auto_examples/training_and_testing/images/thumb/sphx_glr_plot_one_model_binary_kfold_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_training_and_testing_plot_one_model_binary_kfold.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Binary: training one kfold model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Welcome to the &quot;Comparing Multiple K-Fold Trained Fusion Models&quot; tutorial! In this tutorial, we...">
+
+.. only:: html
+
+  .. image:: /auto_examples/training_and_testing/images/thumb/sphx_glr_plot_model_comparison_loop_kfold_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_training_and_testing_plot_model_comparison_loop_kfold.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Comparing Multiple K-Fold Trained Fusion Models</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This script shows how to train two fusion models on a regression task with train/test protocol ...">
+
+.. only:: html
+
+  .. image:: /auto_examples/training_and_testing/images/thumb/sphx_glr_plot_two_models_traintest_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_training_and_testing_plot_two_models_traintest.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Regression: comparing two tabular models trained on simulated data</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/training_and_testing/plot_one_model_binary_kfold
+   /auto_examples/training_and_testing/plot_model_comparison_loop_kfold
+   /auto_examples/training_and_testing/plot_two_models_traintest
+

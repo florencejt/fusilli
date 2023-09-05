@@ -11,11 +11,6 @@ from fusionlibrary.utils.pl_utils import (
 import wandb
 
 
-def init_dummy_model():
-    """Initialise dummy model"""
-    pass
-
-
 def modify_model_architecture(model, architecture_modification):
     """
     Modify the architecture of a deep learning model based on the provided configuration.
@@ -94,9 +89,9 @@ def train_and_test(
     params,
     k,
     fusion_model,
-    # init_model,
     extra_log_string_dict=None,
     layer_mods=None,
+    max_epochs=1000,
 ):
     """
     Trains and tests a model and, if k_fold trained, a fold.
@@ -111,8 +106,6 @@ def train_and_test(
         Fold number.
     fusion_model : class
         Fusion model class.
-    init_model : class
-        Init model class (initialized empty for method details).
     metric_name_list : list
         List of metric names.
     method_name : str
@@ -128,6 +121,8 @@ def train_and_test(
         Input format {"model": {"layer_group": "modification"}, ...}.
         e.g. {"TabularCrossmodalAttention": {"mod1_layers": new mod 1 layers nn.ModuleDict}}
         Default None.
+    max_epochs : int
+        Maximum number of epochs. Default 1000.
 
     Returns
     -------
@@ -164,7 +159,7 @@ def train_and_test(
 
     logger = set_logger(params, k, fusion_model, extra_log_string_dict)  # set logger
 
-    trainer = init_trainer(logger, max_epochs=3)  # init trainer
+    trainer = init_trainer(logger, max_epochs=max_epochs)  # init trainer
 
     # initialise model with pytorch lightning framework, hence pl_model
     pl_model = BaseModel(
@@ -208,7 +203,7 @@ def store_trained_model(trained_model, trained_models_dict):
     """
     Stores the trained model to a dictionary.
     If model type is already in dictionary (e.g. if it's a kfold model), append the model to
-        the list of models.
+    the list of models.
     """
 
     classname = trained_model.model.__class__.__name__
@@ -230,13 +225,12 @@ def store_trained_model(trained_model, trained_models_dict):
 
 
 def train_and_save_models(
-    trained_models_dict,
     data_module,
     params,
     fusion_model,
-    # init_model,
     extra_log_string_dict=None,
     layer_mods=None,
+    max_epochs=1000,
 ):
     """
     Trains/tests the model and saves the trained model to a dictionary for further analysis.
@@ -245,29 +239,36 @@ def train_and_save_models(
 
     Parameters
     ----------
-    trained_models_dicts : dict
-        Dictionary of trained models.
     data_module : pytorch lightning data module
         Data module.
     params : dict
         Dictionary of parameters.
     fusion_model : class
         Fusion model class.
-    init_model : class
-        Init model class (initialized empty for method details).
     extra_log_string_dict : dict
         Dictionary of extra log strings. Extra string to add to the run name during logging.
-            e.g. if you're running the same model with different hyperparameters, you can add
-            the hyperparameters.
-            Input format {"name": "value"}. In the run name, the extra string will be added
-            as "name_value". And a tag will be added as "name_value".
+        e.g. if you're running the same model with different hyperparameters, you can add
+        the hyperparameters.
+        Input format {"name": "value"}. In the run name, the extra string will be added
+        as "name_value". And a tag will be added as "name_value".
     layer_mods : dict
         Dictionary of layer modifications. Used to modify the architecture of the model.
         Input format {"model": {"layer_group": "modification"}, ...}.
         e.g. {"TabularCrossmodalAttention": {"mod1_layers": new mod 1 layers nn.ModuleDict}}
         Default None.
+    max_epochs : int
+        Maximum number of epochs. Default 1000.
+
+    Returns
+    -------
+    trained_models_dict : dict
+        Dictionary of trained model (key is model name, value is either single trained model for
+        train/test training or a list of trained models for k-fold training).
 
     """
+
+    trained_models_dict = {}
+
     if params["kfold_flag"]:
         for k in range(params["num_k"]):
             trained_model = train_and_test(
@@ -275,9 +276,9 @@ def train_and_save_models(
                 params=params,
                 k=k,
                 fusion_model=fusion_model,
-                # init_model=init_model,
                 extra_log_string_dict=extra_log_string_dict,
                 layer_mods=layer_mods,
+                max_epochs=max_epochs,
             )
             trained_models_dict = store_trained_model(
                 trained_model, trained_models_dict
@@ -292,9 +293,9 @@ def train_and_save_models(
             params=params,
             k=None,
             fusion_model=fusion_model,
-            # init_model=init_model,
             extra_log_string_dict=extra_log_string_dict,
             layer_mods=layer_mods,
+            max_epochs=max_epochs,
         )
         trained_models_dict = store_trained_model(trained_model, trained_models_dict)
 

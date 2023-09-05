@@ -24,23 +24,69 @@ def downsample_img_batch(imgs, output_size):
     Parameters
     ----------
     imgs : array-like
-        Batch of images.
+        Batch of images. Shape (batch_size, channels, height, width) or (batch_size, channels,
+        height, width, depth) for 3D images.
+
     output_size : tuple
-        Size to downsample the images to (height, width).
+        Size to downsample the images to (channels, height, width) or (channels, height, width, depth) for 3D images.
         If None, no downsampling is performed
+
+
 
     Returns
     -------
     downsampled_img : array-like
         Downsampled image.
     """
-    if output_size is None:
-        return imgs
-    else:
-        imgs = torch.unsqueeze(imgs, dim=0)
-        downsampled_img = F.interpolate(imgs, size=output_size, mode="nearest")
 
-        return torch.squeeze(downsampled_img)
+    if output_size is None:  # if no downsampling
+        return imgs
+
+    # if number of output_size dims is equal to number of image dims - 2
+    # (i.e. if output_size is (64, 64) and image is (16, 3, 128, 128))
+    # or output_size is (64, 64, 64) and image is (16, 3, 128, 128, 128))
+    # if len(output_size) == imgs.dim() - 2:
+    #     raise ValueError(
+    #         f"output_size must have {imgs.dim() - 2} dimensions, not {len(output_size)}.\
+    #             Make sure to include the channel dimension so output_size looks like\
+    #                 (channels, height, width) or (channels, height, width, depth)."
+    #     )
+
+    # # if output_size has a negative value
+    # if any([i < 0 for i in output_size]):
+    #     raise ValueError(
+    #         f"output_size must not have negative values, but got {output_size}."
+    #     )
+
+    # # if output_size has more than 4 dimensions
+    # if len(output_size) > 4:
+    #     raise ValueError(
+    #         f"output_size must have 3 or 4 dimensions, not {len(output_size)}."
+    #     )
+
+    # # if output_size has more than 3 dimensions and image is 2D
+    # if len(output_size) > 3 and imgs.dim() == 4:
+    #     raise ValueError(
+    #         f"output_size must have 3 dimensions, not {len(output_size)} because img_dims indicates a 2D image."
+    #     )
+
+    # # if output_size has more than 4 dimensions and image is 3D
+    # if len(output_size) > 4 and imgs.dim() == 5:
+    #     raise ValueError(
+    #         f"output_size must have 4 dimensions, not {len(output_size)} because img_dims indicates a 3D image."
+    #     )
+
+    print("imgs shape", imgs.shape)
+    print("output size", output_size)
+    print("imgs dim", imgs.dim())
+    print("output size dim", len(output_size))
+
+    # imgs = torch.unsqueeze(imgs, dim=0)
+
+    downsampled_img = F.interpolate(imgs, size=output_size, mode="nearest")
+
+    print("downsampled img shape", downsampled_img.shape)
+    return torch.squeeze(downsampled_img)
 
 
 class CustomDataset(Dataset):
@@ -356,6 +402,7 @@ class CustomDataModule(pl.LightningDataModule):
         subspace_method=None,
         image_downsample_size=None,
         layer_mods=None,
+        max_epochs=1000,
     ):
         """
         Parameters
@@ -378,6 +425,8 @@ class CustomDataModule(pl.LightningDataModule):
         layer_mods : dict
             Dictionary of layer modifications to make to the subspace method.
             (default None)
+        max_epochs : int
+            Maximum number of epochs to train subspace methods for. (default 1000)
 
 
         Raises
@@ -417,6 +466,7 @@ class CustomDataModule(pl.LightningDataModule):
             self.multiclass_dims = None
         self.subspace_method = subspace_method
         self.layer_mods = layer_mods
+        self.max_epochs = max_epochs
         # if self.subspace_method is not None:
         #     self.num_latent_dims = self.subspace_method.num_latent_dims
 
@@ -457,7 +507,7 @@ class CustomDataModule(pl.LightningDataModule):
         )
 
         if self.subspace_method is not None:  # if subspace method is specified
-            subspace_method = self.subspace_method(self)
+            subspace_method = self.subspace_method(self, self.max_epochs)
             # TODO this is where to modify subspace layers
             if self.layer_mods is not None:
                 # if subspace method in layer_mods
@@ -536,21 +586,6 @@ class KFoldDataModule(pl.LightningDataModule):
         Batch size (default 8).
     subspace_method : class
         Subspace method class (default None) (only for subspace methods).
-
-    Methods
-    -------
-    prepare_data()
-        Loads the data with LoadDatasets class.
-    kfold_split()
-        Splits the dataset into k folds.
-    setup()
-        Splits the data into train and test sets, and runs the subspace method if specified.
-    train_dataloader()
-        Returns the dataloader for training.
-    val_dataloader()
-        Returns the dataloader for validation.
-    train_eval_dataloader()
-        Returns the dataloader for evaluation.
     """
 
     def __init__(
@@ -562,6 +597,7 @@ class KFoldDataModule(pl.LightningDataModule):
         subspace_method=None,
         image_downsample_size=None,
         layer_mods=None,
+        max_epochs=1000,
     ):
         """
         Parameters
@@ -577,6 +613,11 @@ class KFoldDataModule(pl.LightningDataModule):
             Batch size (default 8).
         subspace_method : class
             Subspace method class (default None) (only for subspace methods).
+        max_epochs : int
+            Maximum number of epochs to train subspace methods for. (default 1000)
+        image_downsample_size : tuple
+            Size to downsample the images to (height, width, depth) or (height, width) for 2D
+            images.
 
         Raises
         ------
@@ -617,6 +658,7 @@ class KFoldDataModule(pl.LightningDataModule):
         else:
             self.multiclass_dims = None
         self.layer_mods = layer_mods
+        self.max_epochs = max_epochs
 
     def prepare_data(self):
         """
@@ -680,7 +722,7 @@ class KFoldDataModule(pl.LightningDataModule):
             new_folds = []
             for fold in self.folds:
                 train_dataset, test_dataset = fold
-                subspace_method = self.subspace_method(self)
+                subspace_method = self.subspace_method(self, max_epochs=self.max_epochs)
 
                 if self.layer_mods is not None:
                     # if subspace method in layer_mods
@@ -1090,15 +1132,20 @@ class KFoldGraphDataModule:
 
 
 def get_data_module(
-    fusion_model, params, batch_size=8, image_downsample_size=None, layer_mods=None
+    fusion_model,
+    params,
+    batch_size=8,
+    image_downsample_size=None,
+    layer_mods=None,
+    max_epochs=1000,
 ):
     """
     Gets the data module for the specified modality and fusion type.
 
     Parameters
     ----------
-    init_model : class
-        Initialised model class.
+    fusion_model : class
+        Fusion model class.
     params : dict
         Dictionary of parameters.
     batch_size : int
@@ -1168,6 +1215,7 @@ def get_data_module(
             batch_size=batch_size,
             image_downsample_size=image_downsample_size,
             layer_mods=layer_mods,
+            max_epochs=max_epochs,
         )
         dm.prepare_data()
         dm.setup()

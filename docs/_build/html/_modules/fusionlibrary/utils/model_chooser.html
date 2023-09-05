@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
@@ -176,48 +177,47 @@
 
 
 <div class="viewcode-block" id="get_models"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.model_chooser.html#fusionlibrary.utils.model_chooser.get_models">[docs]</a><span class="k">def</span> <span class="nf">get_models</span><span class="p">(</span><span class="n">conditions_dict</span><span class="p">,</span> <span class="n">fusion_model_dict</span><span class="o">=</span><span class="n">fusion_model_dict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Filters the models based on the conditions specified by the user.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    conditions_dict : dict</span>
 <span class="sd">        Dictionary containing the conditions to filter the models.</span>
 <span class="sd">        Structure: {feature1: condition, feature2: condition, ...}</span>
-<span class="sd">            or {feature1: [condition1, condition2, ...], feature2: [condition1, ...], ...}</span>
+<span class="sd">        or {feature1: [condition1, condition2, ...], feature2: [condition1, ...], ...}</span>
 
-<span class="sd">            Accepted features and accepted conditions:</span>
+<span class="sd">        Accepted features and accepted conditions:</span>
 
-<span class="sd">            - &quot;fusion_type&quot;: &quot;Uni-modal&quot;, &quot;operation&quot;, &quot;attention&quot;, &quot;subspace&quot;, &quot;graph&quot;, or &quot;all&quot;</span>
-<span class="sd">            - &quot;modality_type&quot;: &quot;tabular1&quot;, &quot;tabular2&quot;, &quot;img&quot;, &quot;both_tab&quot;, &quot;tab_img&quot;, or &quot;all&quot;</span>
-<span class="sd">            - &quot;method_name&quot;: any method name currently implemented (e.g. &quot;Tabular decision&quot;), or &quot;all&quot;</span>
-<span class="sd">            - &quot;class_name&quot;: any model name currently implemented (e.g. &quot;TabularDecision&quot;), or &quot;all&quot;</span>
+<span class="sd">        - &quot;fusion_type&quot;: &quot;Uni-modal&quot;, &quot;operation&quot;, &quot;attention&quot;, &quot;subspace&quot;, &quot;graph&quot;, or &quot;all&quot;</span>
+<span class="sd">        - &quot;modality_type&quot;: &quot;tabular1&quot;, &quot;tabular2&quot;, &quot;img&quot;, &quot;both_tab&quot;, &quot;tab_img&quot;, or &quot;all&quot;</span>
+<span class="sd">        - &quot;method_name&quot;: any method name currently implemented (e.g. &quot;Tabular decision&quot;), or &quot;all&quot;</span>
+<span class="sd">        - &quot;class_name&quot;: any model name currently implemented (e.g. &quot;TabularDecision&quot;), or &quot;all&quot;</span>
 
-<span class="sd">            Example: To get all the models that are uni-modal and attention-based, the dictionary would be:</span>
+<span class="sd">        Example: To get all the models that are uni-modal and attention-based, the dictionary would be:</span>
 
-<span class="sd">            .. code-block:: python</span>
+<span class="sd">        .. code-block:: python</span>
 
-<span class="sd">                conditions_dict = {</span>
-<span class="sd">                    &quot;fusion_type&quot;: [&quot;Uni-modal&quot;, &quot;operation&quot;],</span>
-<span class="sd">                    &quot;modality_type&quot;: &quot;all&quot;,</span>
-<span class="sd">                    }</span>
-
+<span class="sd">            conditions_dict = {</span>
+<span class="sd">                &quot;fusion_type&quot;: [&quot;Uni-modal&quot;, &quot;operation&quot;],</span>
+<span class="sd">                &quot;modality_type&quot;: &quot;all&quot;,</span>
+<span class="sd">                }</span>
 
 <span class="sd">    fusion_model_dict : list</span>
-<span class="sd">        List of dictionaries containing the fusion models&#39; names and paths. Default is</span>
-<span class="sd">            fusion_model_dict. Defined inside fusionlibrary.utils.model_chooser.py.</span>
-
+<span class="sd">        List of dictionaries containing the fusion models&#39; names and paths. Default is fusion_model_dict.</span>
 
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    filtered_models : pd.DataFrame</span>
 <span class="sd">        Dataframe containing the filtered models.</span>
+
 <span class="sd">        Column names:</span>
-<span class="sd">            - &quot;method_name&quot;: name of the model (e.g. &quot;Tabular decision&quot;)</span>
-<span class="sd">            - &quot;fusion_type&quot;: type of fusion (e.g. &quot;operation&quot;)</span>
-<span class="sd">            - &quot;modality_type&quot;: type of modality (e.g. &quot;both_tab&quot;)</span>
-<span class="sd">            - &quot;class_name&quot;: name of the class (e.g. &quot;TabularDecision&quot;)</span>
-<span class="sd">            - &quot;method_path&quot;: path to the method&#39;s py file (e.g. &quot;fusionlibrary.fusion_models.tabular_decision&quot;)</span>
+
+<span class="sd">        - &quot;method_name&quot;: name of the model (e.g. &quot;Tabular decision&quot;)</span>
+<span class="sd">        - &quot;fusion_type&quot;: type of fusion (e.g. &quot;operation&quot;)</span>
+<span class="sd">        - &quot;modality_type&quot;: type of modality (e.g. &quot;both_tab&quot;)</span>
+<span class="sd">        - &quot;class_name&quot;: name of the class (e.g. &quot;TabularDecision&quot;)</span>
+<span class="sd">        - &quot;method_path&quot;: path to the method&#39;s py file (e.g. &quot;fusionlibrary.fusion_models.tabular_decision&quot;)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

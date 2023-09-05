@@ -181,11 +181,11 @@ def generate_sklearn_simulated_data(
 
     params[
         "tabular1_source"
-    ] = "../../fusionlibrary/utils/simulated_data/tabular1data.csv"
+    ] = "../../../fusionlibrary/utils/simulated_data/tabular1data.csv"
     params[
         "tabular2_source"
-    ] = "../../fusionlibrary/utils/simulated_data/tabular2data.csv"
-    params["img_source"] = "../../fusionlibrary/utils/simulated_data/imagedata.pt"
+    ] = "../../../fusionlibrary/utils/simulated_data/tabular2data.csv"
+    params["img_source"] = "../../../fusionlibrary/utils/simulated_data/imagedata.pt"
 
     if params["pred_type"] == "binary":
         # Creating a simulated feature matrix and output vector with 100 samples
