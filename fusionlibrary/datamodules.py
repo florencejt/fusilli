@@ -396,25 +396,37 @@ class CustomDataModule(pl.LightningDataModule):
     ----------
     sources : list
         List of source csv files.
+    image_downsample_size : tuple
+        Size to downsample the images to (height, width, depth) or (height, width) for 2D
+        images.
+    modality_methods : dict
+        Dictionary of methods for loading the different modalities.
     modality_type : str
         Type of modality (tabular1, tabular2, img, both_tab, tab_img).
     batch_size : int
         Batch size (default 8).
+    test_size : float
+        Fraction of data to use for testing (default 0.2).
+    pred_type : str
+        Prediction type (binary, multiclass, regression).
+    multiclass_dims : int
+        Number of classes for multiclass prediction (default None).
     subspace_method : class
         Subspace method class (default None) (only for subspace methods).
+    layer_mods : dict
+        Dictionary of layer modifications to make to the subspace method.
+        (default None)
+    max_epochs : int
+        Maximum number of epochs to train subspace methods for. (default 1000)
+    dataset : tensor
+        Tensor of predictive features.
+    data_dims : list
+        List of data dimensions [mod1_dim, mod2_dim, img_dim]
+    train_dataset : tensor
+        Tensor of predictive features for training.
+    test_dataset : tensor
+        Tensor of predictive features for testing.
 
-    Methods
-    -------
-    prepare_data()
-        Loads the data with LoadDatasets class.
-    setup()
-        Splits the data into train and test sets, and runs the subspace method if specified.
-    train_dataloader()
-        Returns the dataloader for training.
-    val_dataloader()
-        Returns the dataloader for validation.
-    train_eval_dataloader()
-        Returns the dataloader for evaluation.
     """
 
     def __init__(
@@ -491,8 +503,6 @@ class CustomDataModule(pl.LightningDataModule):
         self.subspace_method = subspace_method
         self.layer_mods = layer_mods
         self.max_epochs = max_epochs
-        # if self.subspace_method is not None:
-        #     self.num_latent_dims = self.subspace_method.num_latent_dims
 
     def prepare_data(self):
         """
@@ -523,8 +533,6 @@ class CustomDataModule(pl.LightningDataModule):
             Dataloader for training.
         val_dataloader : dataloader
             Dataloader for validation.
-        train_eval_dataloader : dataloader
-            Dataloader for evaluation.
         """
         [self.train_dataset, self.test_dataset] = torch.utils.data.random_split(
             self.dataset, [1 - self.test_size, self.test_size]
@@ -532,14 +540,12 @@ class CustomDataModule(pl.LightningDataModule):
 
         if self.subspace_method is not None:  # if subspace method is specified
             subspace_method = self.subspace_method(self, self.max_epochs)
-            # TODO this is where to modify subspace layers
+
             if self.layer_mods is not None:
                 # if subspace method in layer_mods
                 subspace_method = modify_model_architecture(
                     subspace_method, self.layer_mods
                 )
-                # if subspace_method.__class__.__name__ in self.layer_mods:
-                #     print("subspace method in layer mods")
 
             train_latents, train_labels = subspace_method.train(
                 self.train_dataset, self.test_dataset
@@ -579,19 +585,6 @@ class CustomDataModule(pl.LightningDataModule):
             self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=0
         )
 
-    def train_eval_dataloader(self):
-        """
-        Returns the dataloader for evaluation.
-
-        Returns
-        -------
-        dataloader : dataloader
-            Dataloader for evaluation.
-        """
-        return DataLoader(
-            self.train_dataset, batch_size=1, shuffle=False, num_workers=0
-        )
-
 
 class KFoldDataModule(pl.LightningDataModule):
     """
@@ -604,12 +597,36 @@ class KFoldDataModule(pl.LightningDataModule):
         Total number of folds.
     sources : list
         List of source csv files.
+    image_downsample_size : tuple
+        Size to downsample the images to (height, width, depth) or (height, width) for 2D
+        images.
+    modality_methods : dict
+        Dictionary of methods for loading the different modalities.
     modality_type : str
         Type of modality (tabular1, tabular2, img, both_tab, tab_img).
     batch_size : int
         Batch size (default 8).
+    test_size : float
+        Fraction of data to use for testing (default 0.2).
+    pred_type : str
+        Prediction type (binary, multiclass, regression).
+    multiclass_dims : int
+        Number of classes for multiclass prediction (default None).
     subspace_method : class
         Subspace method class (default None) (only for subspace methods).
+    layer_mods : dict
+        Dictionary of layer modifications to make to the subspace method.
+        (default None)
+    max_epochs : int
+        Maximum number of epochs to train subspace methods for. (default 1000)
+    dataset : tensor
+        Tensor of predictive features.
+    data_dims : list
+        List of data dimensions [mod1_dim, mod2_dim, img_dim]
+    train_dataset : tensor
+        Tensor of predictive features for training.
+    test_dataset : tensor
+        Tensor of predictive features for testing.
     """
 
     def __init__(
@@ -641,7 +658,9 @@ class KFoldDataModule(pl.LightningDataModule):
             Maximum number of epochs to train subspace methods for. (default 1000)
         image_downsample_size : tuple
             Size to downsample the images to (height, width, depth) or (height, width) for 2D
-            images.
+            images. None if not downsampling. (default None)
+        layer_mods : dict
+            Dictionary of layer modifications to make to the subspace method.
 
         Raises
         ------
@@ -736,8 +755,6 @@ class KFoldDataModule(pl.LightningDataModule):
             Dataloader for training.
         val_dataloader : dataloader
             Dataloader for validation.
-        train_eval_dataloader : dataloader
-            Dataloader for evaluation.
         """
         self.folds = self.kfold_split()  # get the k folds from kfold_split() function
 
@@ -814,26 +831,6 @@ class KFoldDataModule(pl.LightningDataModule):
             self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=0
         )
 
-    def train_eval_dataloader(self, fold_idx):
-        """
-        Returns the dataloader for evaluation.
-
-        Parameters
-        ----------
-        fold_idx : int
-            Index of the fold to use.
-
-        Returns
-        -------
-        dataloader : dataloader
-            Dataloader for evaluation.
-        """
-        self.train_dataset, self.test_dataset = self.folds[fold_idx]
-
-        return DataLoader(
-            self.train_dataset, batch_size=1, shuffle=False, num_workers=0
-        )
-
 
 class GraphDataModule:
     """
@@ -844,22 +841,35 @@ class GraphDataModule:
     ----------
     sources : list
         List of source csv files.
+    image_downsample_size : tuple
+        Size to downsample the images to (height, width, depth) or (height, width) for 2D
+        images.
+    modality_methods : dict
+        Dictionary of methods for loading the different modalities.
     modality_type : str
         Type of modality (tabular1, tabular2, img, both_tab, tab_img).
-    batch_size : int
-        Batch size (default 8) (although not used for graph methods).
+    test_size : float
+        Fraction of data to use for testing (default 0.2).
     graph_creation_method : class
         Graph creation method class.
-
-    Methods
-    -------
-    prepare_data()
-        Loads the data with LoadDatasets class.
-    setup()
-        Gets random train and test indices, and gets the graph data structure.
-    get_lightning_module()
-        Returns the lightning module using the pytorch geometric lightning module for converting
-        the graph data structure into a pytorch dataloader.
+    params : dict
+        Dictionary of parameters.
+    layer_mods : dict
+        Dictionary of layer modifications to make to the graph maker method.
+    dataset : tensor
+        Tensor of predictive features.
+    data_dims : list
+        List of data dimensions [mod1_dim, mod2_dim, img_dim]
+    train_dataset : tensor
+        Tensor of predictive features for training.
+    train_idxs : list
+        List of indices for training.
+    test_dataset : tensor
+        Tensor of predictive features for testing.
+    test_idxs : list
+        List of indices for testing.
+    graph_data : graph data structure
+        Graph data structure.
     """
 
     def __init__(
@@ -868,7 +878,6 @@ class GraphDataModule:
         modality_type,
         sources,
         graph_creation_method,
-        batch_size=None,
         image_downsample_size=None,
         layer_mods=None,
     ):
@@ -884,8 +893,11 @@ class GraphDataModule:
             List of source csv files.
         graph_creation_method : class
             Graph creation method class.
-        batch_size : int
-            Batch size (default 8) (although not used for graph methods).
+        image_downsample_size : tuple
+            Size to downsample the images to (height, width, depth) or (height, width) for 2D
+            images. None if not downsampling. (default None)
+        layer_mods : dict
+            Dictionary of layer modifications to make to the graph maker method.
 
         Raises
         ------
@@ -915,10 +927,8 @@ class GraphDataModule:
             ).load_tab_and_img,
         }
         self.modality_type = modality_type
-        self.batch_size = batch_size
         self.test_size = params["test_size"]
         self.graph_creation_method = graph_creation_method
-        self.params = params
         self.layer_mods = layer_mods
 
     def prepare_data(self):
@@ -940,6 +950,10 @@ class GraphDataModule:
     def setup(self):
         """
         Gets random train and test indices, and gets the graph data structure.
+
+        Returns
+        ------
+        None
         """
         # get random train and test idxs
         [self.train_dataset, self.test_dataset] = torch.utils.data.random_split(
@@ -992,27 +1006,25 @@ class KFoldGraphDataModule:
     ----------
     num_folds : int
         Total number of folds.
+    image_downsample_size : tuple
+        Size to downsample the images to (height, width, depth) or (height, width) for 2D
+        images.
     sources : list
         List of source csv files.
+    modality_methods : dict
+        Dictionary of methods for loading the different modalities.
     modality_type : str
         Type of modality (tabular1, tabular2, img, both_tab, tab_img).
-    batch_size : int
-        Batch size (default 8) (although not used for graph methods).
     graph_creation_method : class
         Graph creation method class.
-
-    Methods
-    -------
-    prepare_data()
-        Loads the data with LoadDatasets class.
-    kfold_split()
-        Splits the dataset into k folds.
-    setup()
-        Gets random train and test indices, and gets the graph data structure.
-    get_lightning_module()
-        Returns the lightning module using the pytorch geometric lightning module for converting
-        the graph data structure into a pytorch dataloader.
-
+    layer_mods : dict
+        Dictionary of layer modifications to make to the graph maker method.
+    dataset : tensor
+        Tensor of predictive features.
+    data_dims : list
+        List of data dimensions [mod1_dim, mod2_dim, img_dim]
+    folds : list
+        List of tuples of (graph_data, train_idxs, test_idxs)
     """
 
     def __init__(
@@ -1021,7 +1033,6 @@ class KFoldGraphDataModule:
         modality_type,
         sources,
         graph_creation_method,
-        batch_size=None,
         image_downsample_size=None,
         layer_mods=None,
     ):
@@ -1036,8 +1047,12 @@ class KFoldGraphDataModule:
             List of source csv files.
         graph_creation_method : class
             Graph creation method class.
-        batch_size : int
-            Batch size (default 8) (although not used for graph methods).
+        image_downsample_size : tuple
+            Size to downsample the images to (height, width, depth) or (height, width) for 2D
+            images. None if not downsampling. (default None)
+        layer_mods : dict
+            Dictionary of layer modifications to make to the graph maker method.
+
 
         Raises
         ------
@@ -1065,20 +1080,27 @@ class KFoldGraphDataModule:
             ).load_tab_and_img,
         }
         self.modality_type = modality_type
-        self.batch_size = batch_size
         self.graph_creation_method = graph_creation_method
-        self.params = params
         self.layer_mods = layer_mods
 
     def prepare_data(self):
         """
         Loads the data with LoadDatasets class
+
+        Returns
+        ------
+        None
         """
         self.dataset, self.data_dims = self.modality_methods[self.modality_type]()
 
     def kfold_split(self):
         """
         Splits the dataset into k folds
+
+        Returns
+        ------
+        folds : list
+            List of tuples of (graph_data, train_idxs, test_idxs)
         """
         # splits the dataset into k folds
         kf = KFold(n_splits=self.num_folds, shuffle=True)
@@ -1097,6 +1119,10 @@ class KFoldGraphDataModule:
     def setup(self):
         """
         Gets random train and test indices, and gets the graph data structure.
+
+        Returns
+        ------
+        None
         """
         self.folds = self.kfold_split()  # get the k folds from kfold_split() function
 

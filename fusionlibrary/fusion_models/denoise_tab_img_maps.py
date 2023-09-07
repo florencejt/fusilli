@@ -349,6 +349,7 @@ class ImgUnimodalDAE(pl.LightningModule):
         super().__init__()
 
         self.img_dim = data_dims[2]
+        print(self.img_dim)
         self.multiclass_dim = multiclass_dims
         self.pred_type = pred_type
 
@@ -410,7 +411,6 @@ class ImgUnimodalDAE(pl.LightningModule):
             List containing the output.
         """
         # feed image data through conv network
-        x = x.unsqueeze(dim=1)
 
         for i, layer in enumerate(self.img_layers.values()):
             x = layer(x)
@@ -452,6 +452,7 @@ class ImgUnimodalDAE(pl.LightningModule):
             logits.float().requires_grad_(True),
             y.float().requires_grad_(True),
         )
+        print("loss: ", loss)
 
         self.log("train_loss", loss, logger=False)
 
@@ -512,7 +513,6 @@ class ImgUnimodalDAE(pl.LightningModule):
             Intermediate feature maps.
         """
         feature_maps = []
-        x = x.unsqueeze(dim=1)
 
         for i, layer in enumerate(self.img_layers.values()):
             x = layer(x)
@@ -550,16 +550,18 @@ class denoising_autoencoder_subspace_method:
         Image unimodal network.
     """
 
-    def __init__(self, datamodule):
+    def __init__(self, datamodule, max_epochs=1000):
         """
         Parameters
         ----------
         datamodule : pl.LightningDataModule
             Data module containing the data.
+        max_epochs : int
+            Maximum number of epochs. Default is 1000.
         """
         self.datamodule = datamodule
-        self.dae_trainer = init_trainer(None, max_epochs=2)
-        self.img_unimodal_trainer = init_trainer(None, max_epochs=2)
+        self.dae_trainer = init_trainer(None, max_epochs=max_epochs)
+        self.img_unimodal_trainer = init_trainer(None, max_epochs=max_epochs)
 
         self.autoencoder = DenoisingAutoencoder(self.datamodule.data_dims)
 

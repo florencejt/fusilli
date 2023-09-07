@@ -334,8 +334,6 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    trained_models_dicts : dict</span>
-<span class="sd">        Dictionary of trained models.</span>
 <span class="sd">    data_module : pytorch lightning data module</span>
 <span class="sd">        Data module.</span>
 <span class="sd">    params : dict</span>
@@ -355,6 +353,12 @@
 <span class="sd">        Default None.</span>
 <span class="sd">    max_epochs : int</span>
 <span class="sd">        Maximum number of epochs. Default 1000.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    trained_models_dict : dict</span>
+<span class="sd">        Dictionary of trained model (key is model name, value is either single trained model for</span>
+<span class="sd">        train/test training or a list of trained models for k-fold training).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

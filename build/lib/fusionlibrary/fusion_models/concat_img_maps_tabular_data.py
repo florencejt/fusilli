@@ -90,7 +90,7 @@ class ConcatImageMapsTabularData(ParentFusionModel, nn.Module):
             List containing the output of the model.
         """
         x_tab1 = x[0].squeeze(dim=1)
-        x_img = x[1].unsqueeze(dim=1)
+        x_img = x[1]
 
         for layer in self.img_layers.values():
             x_img = layer(x_img)

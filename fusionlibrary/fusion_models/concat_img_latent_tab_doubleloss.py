@@ -224,7 +224,8 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
             [ [prediction], [reconstructed_image] ]
         """
         x_tab = x[0].squeeze(dim=1)
-        x_img = x[1].unsqueeze(dim=1)
+        x_img = x[1]
+        # .unsqueeze(dim=1)
 
         # encoder
         encoded_img = self.new_encoder(x_img)

@@ -102,7 +102,7 @@ class ConcatImageMapsTabularMaps(ParentFusionModel, nn.Module):
         """
 
         x_tab1 = x[0].squeeze(dim=1)
-        x_img = x[1].unsqueeze(dim=1)
+        x_img = x[1]
 
         for layer in self.mod1_layers.values():
             x_tab1 = layer(x_tab1)

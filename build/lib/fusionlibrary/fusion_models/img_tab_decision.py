@@ -93,7 +93,7 @@ class ImageDecision(ParentFusionModel, nn.Module):
             List containing the output of the model.
         """
         x_tab1 = x[0].squeeze(dim=1)
-        x_img = x[1].unsqueeze(dim=1)
+        x_img = x[1]
 
         for i, (k, layer) in enumerate(self.mod1_layers.items()):
             x_tab1 = layer(x_tab1)

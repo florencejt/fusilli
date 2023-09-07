@@ -82,7 +82,7 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
         out_pred : list
             List containing the predictions.
         """
-        x_img = x.unsqueeze(dim=1)
+        x_img = x
 
         for layer in self.img_layers.values():
             x_img = layer(x_img)
