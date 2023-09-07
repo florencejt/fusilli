@@ -555,6 +555,10 @@ class CustomDataModule(pl.LightningDataModule):
             )
 
             # make a new CustomDataset with the latent features
+            print(train_latents)
+            print(train_labels)
+            print(test_latents)
+            print(test_labels)
             self.train_dataset = CustomDataset(train_latents, train_labels)
             self.test_dataset = CustomDataset(test_latents, test_labels)
             self.data_dims = data_dims

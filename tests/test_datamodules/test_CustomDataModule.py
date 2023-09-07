@@ -4,7 +4,7 @@ from fusionlibrary.datamodules import CustomDataModule, LoadDatasets, CustomData
 import shutil
 import torch
 import pandas as pd
-import unittest.mock as mock
+from unittest.mock import patch, Mock
 
 
 @pytest.fixture(scope="module")
@@ -36,7 +36,7 @@ def create_test_files(tmp_path_factory):
     tabular2_data.to_csv(tabular2_csv, index=False)
 
     # Create a sample Torch file for image data
-    image_data_2d = torch.randn(10, 3, 32, 32)
+    image_data_2d = torch.randn(10, 1, 100, 100)
     image_torch_file_2d = tmp_dir / "image_data_2d.pt"
     torch.save(image_data_2d, image_torch_file_2d)
 
@@ -116,25 +116,40 @@ def test_val_dataloader(create_test_files):
     assert type(val_dataloader.sampler) is torch.utils.data.sampler.SequentialSampler
 
 
-@patch("torch.utils.data.DataLoader", MockedDataLoader)
+class MockSubspaceMethod:
+    def train(self, train_dataset, test_dataset):
+        # Simulate the behavior of the train method here
+        train_latents = torch.Tensor([[0.1, 0.2, 0.3]])
+        train_labels = pd.DataFrame([0.3], columns=["pred_label"])
+        return train_latents, train_labels
+
+    def convert_to_latent(self, test_dataset):
+        return (
+            torch.Tensor([[0.1, 0.2, 0.3]]),
+            pd.DataFrame([0.3], columns=["pred_label"]),
+            [3, None, None],
+        )
+
+
 def test_setup_calls_subspace_method(create_test_files):
-    with mock.patch(
-        "fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method"
+    tabular1_csv = create_test_files["tabular1_csv"]
+    tabular2_csv = create_test_files["tabular2_csv"]
+    image_torch_file_2d = create_test_files["image_torch_file_2d"]
+
+    params = {
+        "test_size": 0.2,
+        "pred_type": "binary",
+        "multiclass_dims": None,
+    }
+
+    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+    batch_size = 23
+    modality_type = "tab_img"
+
+    with patch(
+        "fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method",
+        return_value=MockSubspaceMethod(),
     ) as mock_subspace_method:
-        tabular1_csv = create_test_files["tabular1_csv"]
-        tabular2_csv = create_test_files["tabular2_csv"]
-        image_torch_file_2d = create_test_files["image_torch_file_2d"]
-
-        params = {
-            "test_size": 0.2,
-            "pred_type": "binary",
-            "multiclass_dims": None,
-        }
-
-        sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
-        batch_size = 23
-        modality_type = "tab_img"
-
         # Initialize the CustomDataModule
         datamodule = CustomDataModule(
             params,
@@ -146,6 +161,7 @@ def test_setup_calls_subspace_method(create_test_files):
         datamodule.prepare_data()
         datamodule.setup()
 
+        # Assert that the subspace_method class was called
         mock_subspace_method.assert_called_once_with(datamodule, datamodule.max_epochs)
 
 

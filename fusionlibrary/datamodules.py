@@ -555,6 +555,7 @@ class CustomDataModule(pl.LightningDataModule):
             )
 
             # make a new CustomDataset with the latent features
+
             self.train_dataset = CustomDataset(train_latents, train_labels)
             self.test_dataset = CustomDataset(test_latents, test_labels)
             self.data_dims = data_dims
@@ -1132,7 +1133,6 @@ class KFoldGraphDataModule:
 
             train_idxs = train_dataset.indices  # get train node idxs from kfold_split()
             test_idxs = test_dataset.indices  # get test node idxs from kfold_split()
-
             # get the graph data structure
             graph_maker = self.graph_creation_method(self.dataset)
             if self.layer_mods is not None:
