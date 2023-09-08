@@ -9,6 +9,7 @@ from fusionlibrary.utils.pl_utils import (
     set_logger,
 )
 import wandb
+import warnings
 
 
 def modify_model_architecture(model, architecture_modification):
@@ -28,10 +29,12 @@ def modify_model_architecture(model, architecture_modification):
             for layer_group, modification in layer_groups.items():
                 if hasattr(model, layer_group):
                     setattr(model, layer_group, modification)
-                    # if layer_group != "fused_layers":
-                    #     # if we;re on the last modification
-                    #     if layer_group == list(layer_groups.keys())[-1]:
                     print("Changed", layer_group, "in", model_name)
+                else:
+                    warnings.warn(
+                        f"Layer group {layer_group} not found in {model} when flagged with\
+                        {model_name}"
+                    )
             reset_fused_layers(model)
 
         # Modify layers for a specific model class
@@ -42,9 +45,11 @@ def modify_model_architecture(model, architecture_modification):
                 if hasattr(nested_attr, layer_group.split(".")[-1]):
                     setattr(nested_attr, layer_group.split(".")[-1], modification)
                     print("Changed", layer_group.split(".")[-1], "in", model_name)
-                    # if layer_group != "fused_layers":
-                    #     # if we;re on the last modification
-                    #     if layer_group == list(layer_groups.keys())[-1]:
+
+                else:
+                    raise ValueError(
+                        f"Layer group {layer_group} not found in {model_name}"
+                    )
                 reset_fused_layers(nested_attr)
 
     return model

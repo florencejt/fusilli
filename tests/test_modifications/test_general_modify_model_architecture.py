@@ -11,8 +11,11 @@ import torch.nn as nn
 class SampleModel(nn.Module):
     def __init__(self):
         super(SampleModel, self).__init__()
-        self.conv = nn.Conv2d(3, 64, kernel_size=3)
-        self.fc = nn.Linear(64, 10)
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=3)
+        self.conv2 = nn.Conv2d(64, 64, kernel_size=3)
+
+    def calc_fused_layers(self):
+        self.fc = nn.Linear(self.conv2.out_channels, 8)
 
 
 # Test case for modify_model_architecture
@@ -23,8 +26,8 @@ def test_modify_model_architecture():
     # Define architecture modifications
     architecture_modification = {
         "all": {
-            "conv": nn.Conv2d(3, 128, kernel_size=3),
-            "fc": nn.Linear(128, 10),
+            "conv1": nn.Conv2d(3, 128, kernel_size=3),
+            "conv2": nn.Conv2d(128, 128, kernel_size=3),
         }
     }
 
@@ -32,10 +35,63 @@ def test_modify_model_architecture():
     modified_model = modify_model_architecture(model, architecture_modification)
 
     # Check if the modifications are applied
-    assert isinstance(modified_model.conv, nn.Conv2d)
-    assert modified_model.conv.out_channels == 128
+    assert isinstance(modified_model.conv1, nn.Conv2d)
+    assert modified_model.conv1.out_channels == 128
+    assert isinstance(modified_model.conv2, nn.Conv2d)
+    assert modified_model.conv2.out_channels == 128
     assert isinstance(modified_model.fc, nn.Linear)
-    assert modified_model.fc.out_features == 10
+    assert modified_model.fc.out_features == 8
+
+
+def test_specific_modify_model_architecture():
+    model = SampleModel()
+
+    architecture_modification = {
+        "SampleModel": {
+            "conv1": nn.Conv2d(3, 128, kernel_size=3),
+            "conv2": nn.Conv2d(128, 128, kernel_size=3),
+        }
+    }
+
+    modified_model = modify_model_architecture(model, architecture_modification)
+
+    assert isinstance(modified_model.conv1, nn.Conv2d)
+    assert modified_model.conv1.out_channels == 128
+    assert isinstance(modified_model.conv2, nn.Conv2d)
+    assert modified_model.conv2.out_channels == 128
+    assert isinstance(modified_model.fc, nn.Linear)
+    assert modified_model.fc.in_features == 128
+    assert modified_model.fc.out_features == 8
+
+
+def test_specific_modify_model_nonexistent_attr():
+    model = SampleModel()
+
+    architecture_modification = {
+        "SampleModel": {
+            "conv1": nn.Conv2d(3, 128, kernel_size=3),
+            "conv3": nn.Conv2d(128, 128, kernel_size=3),
+        }
+    }
+
+    with pytest.raises(ValueError):
+        modify_model_architecture(model, architecture_modification)
+
+
+# Test case for modifying an attribute that doesn't exist
+def test_modify_model_architecture_nonexistent_attr():
+    model = SampleModel()
+
+    architecture_modification = {
+        "all": {
+            "conv1": nn.Conv2d(3, 128, kernel_size=3),
+            "conv2": nn.Conv2d(128, 128, kernel_size=3),
+            "conv3": nn.Conv2d(128, 128, kernel_size=3),
+        }
+    }
+
+    with pytest.warns(UserWarning):
+        modify_model_architecture(model, architecture_modification)
 
 
 # Test case for get_nested_attr
@@ -49,7 +105,7 @@ def test_get_nested_attr():
     obj = SampleObject()
 
     # Get a nested attribute using get_nested_attr
-    nested_attr = get_nested_attr(obj, "nested.conv")
+    nested_attr = get_nested_attr(obj, "nested.conv1")
 
     # Check if the nested attribute is correctly retrieved
     assert isinstance(nested_attr, nn.Conv2d)
@@ -63,10 +119,9 @@ def test_reset_fused_layers():
         def __init__(self):
             super(SampleModelWithFusedLayers, self).__init__()
             self.conv = nn.Conv2d(3, 64, kernel_size=3)
-            self.fc = nn.Linear(64, 10)
 
         def calc_fused_layers(self):
-            pass
+            self.fc = nn.Linear(self.conv.out_channels, 10)
 
     # Create a sample model with fused layers
     model = SampleModelWithFusedLayers()
