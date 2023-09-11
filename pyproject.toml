@@ -16,3 +16,10 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore:MPS available but not used*:UserWarning",
+    "ignore:Layer group*:UserWarning",
+]

@@ -14,6 +14,7 @@ from torch.utils.data import DataLoader, Dataset
 from torch_geometric.data.lightning import LightningNodeData
 from fusionlibrary.train_functions import modify_model_architecture
 
+
 # from fusionlibrary.eval_functions import plot_graph
 
 
@@ -544,7 +545,8 @@ class CustomDataModule(pl.LightningDataModule):
             if self.layer_mods is not None:
                 # if subspace method in layer_mods
                 subspace_method = modify_model_architecture(
-                    subspace_method, self.layer_mods
+                    subspace_method,
+                    self.layer_mods,
                 )
 
             train_latents, train_labels = subspace_method.train(
@@ -769,7 +771,8 @@ class KFoldDataModule(pl.LightningDataModule):
                 if self.layer_mods is not None:
                     # if subspace method in layer_mods
                     subspace_method = modify_model_architecture(
-                        subspace_method, self.layer_mods
+                        subspace_method,
+                        self.layer_mods,
                     )
 
                 train_latents, train_labels = subspace_method.train(
@@ -967,7 +970,10 @@ class GraphDataModule:
         graph_maker = self.graph_creation_method(self.dataset)
         if self.layer_mods is not None:
             # if subspace method in layer_mods
-            graph_maker = modify_model_architecture(graph_maker, self.layer_mods)
+            graph_maker = modify_model_architecture(
+                graph_maker,
+                self.layer_mods,
+            )
 
         self.graph_data = graph_maker.make_graph()
         # self.graph_data = self.graph_creation_method(self.dataset)
@@ -1137,7 +1143,10 @@ class KFoldGraphDataModule:
             graph_maker = self.graph_creation_method(self.dataset)
             if self.layer_mods is not None:
                 # if subspace method in layer_mods
-                graph_maker = modify_model_architecture(graph_maker, self.layer_mods)
+                graph_maker = modify_model_architecture(
+                    graph_maker,
+                    self.layer_mods,
+                )
 
             graph_data = graph_maker.make_graph()
 

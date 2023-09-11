@@ -4,16 +4,22 @@ trained separately from both the tabular data and the labels, using the
 img_latent_subspace_method class.
 """
 
-import torch.nn as nn
-from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
-import torch
-import pytorch_lightning as pl
-from fusionlibrary.utils.pl_utils import init_trainer
-from torch.utils.data import DataLoader, Dataset
-import pandas as pd
-import numpy as np
-from torch.autograd import Variable
 import copy
+
+import numpy as np
+import pandas as pd
+import pytorch_lightning as pl
+import torch
+import torch.nn as nn
+from torch.autograd import Variable
+from torch.utils.data import DataLoader, Dataset
+
+from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
+from fusionlibrary.utils.pl_utils import (
+    check_valid_modification_dtype,
+    check_valid_modification_img_dim,
+    init_trainer,
+)
 
 
 class ImgLatentSpace(pl.LightningModule):
@@ -112,6 +118,13 @@ class ImgLatentSpace(pl.LightningModule):
         -------
         None
         """
+
+        check_valid_modification_dtype(self.encoder, nn.Sequential, "encoder")
+        check_valid_modification_dtype(self.decoder, nn.Sequential, "decoder")
+        check_valid_modification_dtype(self.latent_dim, int, "latent dim")
+
+        check_valid_modification_img_dim(self.encoder, self.img_dim, "encoder")
+        check_valid_modification_img_dim(self.decoder, self.img_dim, "encoder")
 
         # size of final encoder output
         dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))

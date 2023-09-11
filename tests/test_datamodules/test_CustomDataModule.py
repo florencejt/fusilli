@@ -40,10 +40,16 @@ def create_test_files(tmp_path_factory):
     image_torch_file_2d = tmp_dir / "image_data_2d.pt"
     torch.save(image_data_2d, image_torch_file_2d)
 
+    # Create a sample Torch file for image data
+    image_data_3d = torch.randn(10, 1, 100, 100, 100)
+    image_torch_file_3d = tmp_dir / "image_data_3d.pt"
+    torch.save(image_data_3d, image_torch_file_3d)
+
     yield {
         "tabular1_csv": tabular1_csv,
         "tabular2_csv": tabular2_csv,
         "image_torch_file_2d": image_torch_file_2d,
+        "image_torch_file_3d": image_torch_file_3d,
     }
 
     # Clean up temporary files and directories

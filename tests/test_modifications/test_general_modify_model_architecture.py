@@ -108,8 +108,8 @@ def test_get_nested_attr():
     nested_attr = get_nested_attr(obj, "nested.conv1")
 
     # Check if the nested attribute is correctly retrieved
-    assert isinstance(nested_attr, nn.Conv2d)
-    assert nested_attr.out_channels == 64
+    assert isinstance(getattr(nested_attr, "conv1"), nn.Conv2d)
+    assert getattr(nested_attr, "conv1").out_channels == 64
 
 
 # Test case for reset_fused_layers
@@ -127,7 +127,7 @@ def test_reset_fused_layers():
     model = SampleModelWithFusedLayers()
 
     # Call reset_fused_layers
-    reset_fused_layers(model)
+    reset_fused_layers(model, "SampleModelWithFusedLayers")
 
     # Check if the reset method is called correctly
     assert True  # Add assertions related to the reset operation if needed

@@ -598,8 +598,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="n">subspace_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="o">=</span> <span class="n">layer_mods</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span> <span class="o">=</span> <span class="n">max_epochs</span></div>
-        <span class="c1"># if self.subspace_method is not None:</span>
-        <span class="c1">#     self.num_latent_dims = self.subspace_method.num_latent_dims</span>
 
 <div class="viewcode-block" id="CustomDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusionlibrary.datamodules.CustomDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -637,14 +635,12 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if subspace method is specified</span>
             <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">)</span>
-            <span class="c1"># TODO this is where to modify subspace layers</span>
+
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># if subspace method in layer_mods</span>
                 <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">modify_model_architecture</span><span class="p">(</span>
                     <span class="n">subspace_method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span>
                 <span class="p">)</span>
-                <span class="c1"># if subspace_method.__class__.__name__ in self.layer_mods:</span>
-                <span class="c1">#     print(&quot;subspace method in layer mods&quot;)</span>
 
             <span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">train_dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span>
@@ -654,6 +650,7 @@
             <span class="p">)</span>
 
             <span class="c1"># make a new CustomDataset with the latent features</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">train_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">test_latents</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span></div>
@@ -1231,7 +1228,6 @@
 
             <span class="n">train_idxs</span> <span class="o">=</span> <span class="n">train_dataset</span><span class="o">.</span><span class="n">indices</span>  <span class="c1"># get train node idxs from kfold_split()</span>
             <span class="n">test_idxs</span> <span class="o">=</span> <span class="n">test_dataset</span><span class="o">.</span><span class="n">indices</span>  <span class="c1"># get test node idxs from kfold_split()</span>
-
             <span class="c1"># get the graph data structure</span>
             <span class="n">graph_maker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

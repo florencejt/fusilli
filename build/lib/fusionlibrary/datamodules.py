@@ -14,6 +14,7 @@ from torch.utils.data import DataLoader, Dataset
 from torch_geometric.data.lightning import LightningNodeData
 from fusionlibrary.train_functions import modify_model_architecture
 
+
 # from fusionlibrary.eval_functions import plot_graph
 
 
@@ -544,7 +545,7 @@ class CustomDataModule(pl.LightningDataModule):
             if self.layer_mods is not None:
                 # if subspace method in layer_mods
                 subspace_method = modify_model_architecture(
-                    subspace_method, self.layer_mods
+                    subspace_method, self.layer_mods, "data"
                 )
 
             train_latents, train_labels = subspace_method.train(
@@ -555,10 +556,7 @@ class CustomDataModule(pl.LightningDataModule):
             )
 
             # make a new CustomDataset with the latent features
-            print(train_latents)
-            print(train_labels)
-            print(test_latents)
-            print(test_labels)
+
             self.train_dataset = CustomDataset(train_latents, train_labels)
             self.test_dataset = CustomDataset(test_latents, test_labels)
             self.data_dims = data_dims
@@ -772,7 +770,7 @@ class KFoldDataModule(pl.LightningDataModule):
                 if self.layer_mods is not None:
                     # if subspace method in layer_mods
                     subspace_method = modify_model_architecture(
-                        subspace_method, self.layer_mods
+                        subspace_method, self.layer_mods, "data"
                     )
 
                 train_latents, train_labels = subspace_method.train(
@@ -970,7 +968,9 @@ class GraphDataModule:
         graph_maker = self.graph_creation_method(self.dataset)
         if self.layer_mods is not None:
             # if subspace method in layer_mods
-            graph_maker = modify_model_architecture(graph_maker, self.layer_mods)
+            graph_maker = modify_model_architecture(
+                graph_maker, self.layer_mods, "data"
+            )
 
         self.graph_data = graph_maker.make_graph()
         # self.graph_data = self.graph_creation_method(self.dataset)
@@ -1136,12 +1136,13 @@ class KFoldGraphDataModule:
 
             train_idxs = train_dataset.indices  # get train node idxs from kfold_split()
             test_idxs = test_dataset.indices  # get test node idxs from kfold_split()
-
             # get the graph data structure
             graph_maker = self.graph_creation_method(self.dataset)
             if self.layer_mods is not None:
                 # if subspace method in layer_mods
-                graph_maker = modify_model_architecture(graph_maker, self.layer_mods)
+                graph_maker = modify_model_architecture(
+                    graph_maker, self.layer_mods, "data"
+                )
 
             graph_data = graph_maker.make_graph()
 

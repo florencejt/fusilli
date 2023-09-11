@@ -9,30 +9,42 @@ from fusionlibrary.utils.pl_utils import (
     set_logger,
 )
 import wandb
+import warnings
+import inspect
 
 
-def modify_model_architecture(model, architecture_modification):
+def modify_model_architecture(model, architecture_modification, mod_location):
     """
     Modify the architecture of a deep learning model based on the provided configuration.
 
     Args:
         model (nn.Module): The original deep learning model.
         architecture_modification (dict): A dictionary containing architecture modifications.
+            Input format {"model": {"layer_group": "modification"}, ...}.
+            e.g. {"TabularCrossmodalAttention": {"mod1_layers": new mod 1 layers nn.ModuleDict}}
+        mod_location (str): The type of modification to perform. Either "data" or "training".
+            Using "data" indicates that the modification is being performed in the datamodule setup:
+            e.g. for a subspace model trained before the main neural network, you might change the number
+            of latent dimensions during the data setup. Using "training" indicates that the modification
+            is being performed during training: e.g. the layers for an image CNN.
 
     Returns:
         nn.Module: The modified deep learning model.
     """
+
     for model_name, layer_groups in architecture_modification.items():
         # Modify layers for all specified models
         if model_name == "all":
             for layer_group, modification in layer_groups.items():
                 if hasattr(model, layer_group):
                     setattr(model, layer_group, modification)
-                    # if layer_group != "fused_layers":
-                    #     # if we;re on the last modification
-                    #     if layer_group == list(layer_groups.keys())[-1]:
                     print("Changed", layer_group, "in", model_name)
-            reset_fused_layers(model)
+                else:
+                    warnings.warn(
+                        f"Layer group {layer_group} not found in {model} when flagged with\
+                        {model_name}"
+                    )
+            reset_fused_layers(model, mod_location, model)
 
         # Modify layers for a specific model class
         elif model_name == model.__class__.__name__:
@@ -42,10 +54,14 @@ def modify_model_architecture(model, architecture_modification):
                 if hasattr(nested_attr, layer_group.split(".")[-1]):
                     setattr(nested_attr, layer_group.split(".")[-1], modification)
                     print("Changed", layer_group.split(".")[-1], "in", model_name)
-                    # if layer_group != "fused_layers":
-                    #     # if we;re on the last modification
-                    #     if layer_group == list(layer_groups.keys())[-1]:
-                reset_fused_layers(nested_attr)
+
+                else:
+                    raise ValueError(
+                        f"Layer group {layer_group} not found in {model_name}"
+                    )
+                # if we're on the last layer group, reset the fused layers
+                if layer_group == list(layer_groups.keys())[-1]:
+                    reset_fused_layers(nested_attr, mod_location, model)
 
     return model
 
@@ -65,23 +81,37 @@ def get_nested_attr(obj, attr_path):
 
     if len(attributes) > 1:  # if we're looking for a nested attribute
         attr = getattr(obj, attributes[0])
-        for i in range(1, len(attributes)):
+
+        # if the attribute is more than one . deep
+        for i in range(1, len(attributes) - 1):
             attr = getattr(attr, attributes[i])
+
     else:
         attr = obj
 
     return attr
 
 
-def reset_fused_layers(obj):
+def reset_fused_layers(obj, mod_location, model):
     """
     Reset fused layers of a model if the reset method is available.
 
     Args:
         obj (nn.Module): The model to reset fused layers for.
+        mod_location (str): The type of modification to perform. Either "datamodule" or "training".
+            Using "datamodule" indicates that the modification is being performed in the datamodule setup:
+            e.g. for a subspace model trained before the main neural network, you might change the number
+            of latent dimensions during the data setup. Using "training" indicates that the modification
+            is being performed during training: e.g. the layers for an image CNN.
+        model (nn.Module): The original deep learning model.
     """
     if hasattr(obj, "calc_fused_layers"):
         obj.calc_fused_layers()
+        print("Reset fused layers in", model.__class__.__name__)
+
+    if hasattr(model, "check_params"):
+        model.check_params()
+        print("Checked params in", model.__class__.__name__)
 
 
 def train_and_test(
@@ -173,7 +203,9 @@ def train_and_test(
     )
 
     if layer_mods is not None:
-        pl_model.model = modify_model_architecture(pl_model.model, layer_mods)
+        pl_model.model = modify_model_architecture(
+            pl_model.model, layer_mods, "training"
+        )
 
     # graph-methods use masks to select train and val nodes rather than train and val dataloaders
     # train and val dataloaders are still used for graph but they're identical

@@ -75,6 +75,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.utils.pl_utils.init_trainer"><code class="docutils literal notranslate"><span class="pre">init_trainer()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.utils.pl_utils.get_final_val_metrics"><code class="docutils literal notranslate"><span class="pre">get_final_val_metrics()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.utils.pl_utils.check_valid_modification_dtype"><code class="docutils literal notranslate"><span class="pre">check_valid_modification_dtype()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.utils.pl_utils.check_valid_modification_img_dim"><code class="docutils literal notranslate"><span class="pre">check_valid_modification_img_dim()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -109,6 +111,12 @@
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.utils.pl_utils.check_valid_modification_dtype" title="fusionlibrary.utils.pl_utils.check_valid_modification_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_valid_modification_dtype</span></code></a>(attribute, ...)</p></td>
+<td><p>Check if the modification is of the correct data type.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.utils.pl_utils.check_valid_modification_img_dim" title="fusionlibrary.utils.pl_utils.check_valid_modification_img_dim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_valid_modification_img_dim</span></code></a>(attribute, ...)</p></td>
+<td><p>Check if the modification img layers are the correct dimension.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.utils.pl_utils.get_final_val_metrics" title="fusionlibrary.utils.pl_utils.get_final_val_metrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_final_val_metrics</span></code></a>(trainer)</p></td>
 <td><p>Get the final validation metrics from the trainer object.</p></td>
 </tr>
@@ -203,6 +211,40 @@ metric2 (float): Final validation metric 2.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>metric1 (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fusionlibrary.utils.pl_utils.check_valid_modification_dtype">
+<span class="sig-name descname"><span class="pre">check_valid_modification_dtype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct_dtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/utils/pl_utils.html#check_valid_modification_dtype"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.utils.pl_utils.check_valid_modification_dtype" title="Permalink to this definition"></a></dt>
+<dd><p>Check if the modification is of the correct data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attribute</strong> (<em>object</em>) – Attribute to check.</p></li>
+<li><p><strong>correct_dtype</strong> (<em>object</em>) – Correct data type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the modification is not of the correct data type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fusionlibrary.utils.pl_utils.check_valid_modification_img_dim">
+<span class="sig-name descname"><span class="pre">check_valid_modification_img_dim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/utils/pl_utils.html#check_valid_modification_img_dim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.utils.pl_utils.check_valid_modification_img_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Check if the modification img layers are the correct dimension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attribute</strong> (<em>object</em>) – Attribute to check.</p></li>
+<li><p><strong>img_dim</strong> (<em>object</em>) – Correct img dimensions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the modification is not of the correct data type.</p>
 </dd>
 </dl>
 </dd></dl>

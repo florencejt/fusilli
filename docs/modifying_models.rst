@@ -168,8 +168,8 @@ What can be modified?
     - 
       *  ``nn.ModuleDict``
       * Input channels of first layer should be the latent space size but this is also ensured in :meth:`~.MCVAE_tab.calc_fused_layers`
-  * - :class:`.mcvae_subspace_method`
-    - :attr:`~.mcvae_subspace_method.num_latent_dims`
+  * - :class:`.MCVAESubspaceMethod`
+    - :attr:`~.MCVAESubspaceMethod.num_latent_dims`
     - int
   * - :class:`.TabularCrossmodalMultiheadAttention`
     - :attr:`~.TabularCrossmodalMultiheadAttention.attention_embed_dim`

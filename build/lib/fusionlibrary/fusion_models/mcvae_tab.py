@@ -10,137 +10,10 @@ from fusionlibrary.utils.mcvae.src.mcvae.models import Mcvae
 import contextlib
 import pandas as pd
 import numpy as np
-
-
-# class MCVAE_tab(ParentFusionModel, nn.Module):
-#     """
-#     This class implements a model that fuses the two types of tabular data using the MCVAE approach.
-#     MCVAE: multi-channel variational autoencoder.
-
-#     The MCVAE creates a joint latent space of the two types of tabular data based off a joint
-#     latent prior and joint decoding.
-
-
-#     References
-#     ----------
-
-#     Antelmi, L., Ayache, N., Robert, P., & Lorenzi, M. (2019). Sparse Multi-Channel Variational
-#         Autoencoder for the Joint Analysis of Heterogeneous Data. Proceedings of the 36th
-#         International Conference on Machine Learning, 302–311.
-#         https://proceedings.mlr.press/v97/antelmi19a.html
-
-#     Attributes
-#     ----------
-#     subspace_method : class
-#         Class of the subspace method: :class:`~.MCVAESubspaceMethod`
-#     latent_space_layers : dict
-#         Dictionary containing the layers of the 1st type of tabular data.
-#         Here the first type of tabular data is the joint latent space created
-#         in the mcvae_subspace_method class.
-#     fused_dim : int
-#         Number of features of the fused layers. This is the flattened output size of the
-#         latent space layers.
-#     fused_layers : nn.Sequential
-#         Sequential layer containing the fused layers.
-#     final_prediction : nn.Sequential
-#         Sequential layer containing the final prediction layers.
-
-#     """
-
-#     # str: Name of the method.
-#     method_name = "MCVAE Tabular"
-#     # str: Type of modality.
-#     modality_type = "both_tab"
-#     # str: Type of fusion.
-#     fusion_type = "subspace"
-
-#     def __init__(self, pred_type, data_dims, params):
-#         """
-#         Parameters
-#         ----------
-#         pred_type : str
-#             Type of prediction to be performed.
-#         data_dims : dict
-#             Dictionary containing the dimensions of the data.
-#         params : dict
-#             Dictionary containing the parameters of the model.
-#         """
-#         ParentFusionModel.__init__(self, pred_type, data_dims, params)
-
-#         self.pred_type = pred_type
-#         self.subspace_method = MCVAESubspaceMethod
-
-#         self.latent_space_layers = nn.ModuleDict(
-#             {
-#                 "layer 1": nn.Sequential(
-#                     nn.Linear(25, 32),
-#                     nn.ReLU(),
-#                 ),
-#                 "layer 2": nn.Sequential(
-#                     nn.Linear(32, 64),
-#                     nn.ReLU(),
-#                 ),
-#                 "layer 3": nn.Sequential(
-#                     nn.Linear(64, 128),
-#                     nn.ReLU(),
-#                 ),
-#                 "layer 4": nn.Sequential(
-#                     nn.Linear(128, 256),
-#                     nn.ReLU(),
-#                 ),
-#                 "layer 5": nn.Sequential(
-#                     nn.Linear(256, 256),
-#                     nn.ReLU(),
-#                 ),
-#             }
-#         )
-
-#         self.calc_fused_layers()
-
-#     def calc_fused_layers(self):
-#         """
-#         Calculates the fused layers of the model.
-
-#         Returns
-#         -------
-#         None
-#         """
-
-#         # make sure the first layer takes in the latent dimension
-#         self.latent_space_layers["layer 1"][0] = nn.Linear(
-#             self.data_dims[0], self.latent_space_layers["layer 1"][0].out_features
-#         )
-
-#         self.fused_dim = list(self.latent_space_layers.values())[-1][0].out_features
-#         self.set_fused_layers(self.fused_dim)
-#         self.set_final_pred_layers()
-
-#     def forward(self, x):
-#         """
-#         Forward pass of the model.
-
-#         Parameters
-#         ----------
-#         x : list
-#             List containing the two types of tabular data.
-
-#         Returns
-#         -------
-#         out_pred : list
-#             List containing the predictions.
-#         """
-#         x_latent = x
-
-#         for layer in self.latent_space_layers.values():
-#             x_latent = layer(x_latent)
-
-#         out_fuse = self.fused_layers(x_latent)
-
-#         out_pred = self.final_prediction(out_fuse)
-
-#         return [
-#             out_pred,
-#         ]
+from fusionlibrary.utils.pl_utils import (
+    check_valid_modification_dtype,
+    check_valid_modification_img_dim,
+)
 
 
 def mcvae_early_stopping_tol(patience, tolerance, loss_logs, verbose=False):
@@ -223,6 +96,17 @@ class MCVAESubspaceMethod:
         self.num_latent_dims = 10
         self.max_epochs = max_epochs
 
+    def check_params(self):
+        """
+        Checks the parameters of the model.
+
+        Returns
+        -------
+        None
+        """
+
+        check_valid_modification_dtype(self.num_latent_dims, int, "num_latent_dims")
+
     def get_latents(self, dataset):
         """
         Gets the latent representations of the multimodal dataset.
@@ -239,6 +123,7 @@ class MCVAESubspaceMethod:
             Array containing the mean latents of the dataset.
         """
         # getting mean latent space
+
         q = self.fit_model.encode(dataset)
 
         latent_vars_ch0 = q[0].loc.detach().cpu()
@@ -438,6 +323,10 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
         -------
         None
         """
+
+        check_valid_modification_dtype(
+            self.latent_space_layers, nn.ModuleDict, "latent_space_layers"
+        )
 
         # make sure the first layer takes in the latent dimension
         self.latent_space_layers["layer 1"][0] = nn.Linear(

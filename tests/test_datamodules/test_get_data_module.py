@@ -49,7 +49,7 @@ def test_get_data_module_custom(create_test_files):
     assert dm.test_size == params.get("test_size", 0.3)
 
 
-def test_get_data_module_custom(create_test_files):
+def test_get_k_fold_data_module_custom(create_test_files):
     tabular1_csv = create_test_files["tabular1_csv"]
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_2d = create_test_files["image_torch_file_2d"]

@@ -10,6 +10,7 @@ from fusionlibrary.utils.pl_utils import (
 )
 import wandb
 import warnings
+import inspect
 
 
 def modify_model_architecture(model, architecture_modification):
@@ -19,10 +20,13 @@ def modify_model_architecture(model, architecture_modification):
     Args:
         model (nn.Module): The original deep learning model.
         architecture_modification (dict): A dictionary containing architecture modifications.
+            Input format {"model": {"layer_group": "modification"}, ...}.
+            e.g. {"TabularCrossmodalAttention": {"mod1_layers": new mod 1 layers nn.ModuleDict}}
 
     Returns:
         nn.Module: The modified deep learning model.
     """
+
     for model_name, layer_groups in architecture_modification.items():
         # Modify layers for all specified models
         if model_name == "all":
@@ -35,7 +39,7 @@ def modify_model_architecture(model, architecture_modification):
                         f"Layer group {layer_group} not found in {model} when flagged with\
                         {model_name}"
                     )
-            reset_fused_layers(model)
+            reset_fused_layers(model, model)
 
         # Modify layers for a specific model class
         elif model_name == model.__class__.__name__:
@@ -50,7 +54,9 @@ def modify_model_architecture(model, architecture_modification):
                     raise ValueError(
                         f"Layer group {layer_group} not found in {model_name}"
                     )
-                reset_fused_layers(nested_attr)
+                # if we're on the last layer group, reset the fused layers
+                if layer_group == list(layer_groups.keys())[-1]:
+                    reset_fused_layers(nested_attr, model)
 
     return model
 
@@ -70,23 +76,32 @@ def get_nested_attr(obj, attr_path):
 
     if len(attributes) > 1:  # if we're looking for a nested attribute
         attr = getattr(obj, attributes[0])
-        for i in range(1, len(attributes)):
+
+        # if the attribute is more than one . deep
+        for i in range(1, len(attributes) - 1):
             attr = getattr(attr, attributes[i])
+
     else:
         attr = obj
 
     return attr
 
 
-def reset_fused_layers(obj):
+def reset_fused_layers(obj, model):
     """
     Reset fused layers of a model if the reset method is available.
 
     Args:
         obj (nn.Module): The model to reset fused layers for.
+        model (nn.Module): The original deep learning model.
     """
     if hasattr(obj, "calc_fused_layers"):
         obj.calc_fused_layers()
+        print("Reset fused layers in", model.__class__.__name__)
+
+    if hasattr(model, "check_params"):
+        model.check_params()
+        print("Checked params in", model.__class__.__name__)
 
 
 def train_and_test(

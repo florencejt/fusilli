@@ -104,6 +104,7 @@
     <span class="n">set_logger</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">import</span> <span class="nn">wandb</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 
 
 <div class="viewcode-block" id="modify_model_architecture"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.modify_model_architecture">[docs]</a><span class="k">def</span> <span class="nf">modify_model_architecture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">architecture_modification</span><span class="p">):</span>
@@ -123,10 +124,12 @@
             <span class="k">for</span> <span class="n">layer_group</span><span class="p">,</span> <span class="n">modification</span> <span class="ow">in</span> <span class="n">layer_groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_group</span><span class="p">):</span>
                     <span class="nb">setattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_group</span><span class="p">,</span> <span class="n">modification</span><span class="p">)</span>
-                    <span class="c1"># if layer_group != &quot;fused_layers&quot;:</span>
-                    <span class="c1">#     # if we;re on the last modification</span>
-                    <span class="c1">#     if layer_group == list(layer_groups.keys())[-1]:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Changed&quot;</span><span class="p">,</span> <span class="n">layer_group</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Layer group </span><span class="si">{</span><span class="n">layer_group</span><span class="si">}</span><span class="s2"> not found in </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2"> when flagged with</span><span class="se">\</span>
+<span class="s2">                        </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
             <span class="n">reset_fused_layers</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 
         <span class="c1"># Modify layers for a specific model class</span>
@@ -137,10 +140,14 @@
                 <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">nested_attr</span><span class="p">,</span> <span class="n">layer_group</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
                     <span class="nb">setattr</span><span class="p">(</span><span class="n">nested_attr</span><span class="p">,</span> <span class="n">layer_group</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">modification</span><span class="p">)</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Changed&quot;</span><span class="p">,</span> <span class="n">layer_group</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
-                    <span class="c1"># if layer_group != &quot;fused_layers&quot;:</span>
-                    <span class="c1">#     # if we;re on the last modification</span>
-                    <span class="c1">#     if layer_group == list(layer_groups.keys())[-1]:</span>
-                <span class="n">reset_fused_layers</span><span class="p">(</span><span class="n">nested_attr</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Layer group </span><span class="si">{</span><span class="n">layer_group</span><span class="si">}</span><span class="s2"> not found in </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+                <span class="c1"># if we&#39;re on the last layer group, reset the fused layers</span>
+                <span class="k">if</span> <span class="n">layer_group</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">layer_groups</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">reset_fused_layers</span><span class="p">(</span><span class="n">nested_attr</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">model</span></div>
 

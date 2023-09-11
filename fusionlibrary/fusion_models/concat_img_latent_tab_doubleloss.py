@@ -7,6 +7,10 @@ from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch
 from torch.autograd import Variable
 import copy
+from fusionlibrary.utils.pl_utils import (
+    check_valid_modification_dtype,
+    check_valid_modification_img_dim,
+)
 
 
 class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
@@ -159,6 +163,19 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         None
         """
 
+        check_valid_modification_dtype(self.encoder, nn.Sequential, "encoder")
+        check_valid_modification_dtype(self.decoder, nn.Sequential, "decoder")
+        check_valid_modification_dtype(self.latent_dim, int, "latent_dim")
+
+        if self.latent_dim < 1:
+            raise ValueError(
+                "Incorrect attribute range: The latent dimension must be greater than 0. The latent dimension is currently: ",
+                self.latent_dim,
+            )
+
+        check_valid_modification_img_dim(self.encoder, self.img_dim, "encoder")
+        check_valid_modification_img_dim(self.decoder, self.img_dim, "decoder")
+
         # size of final encoder output
         dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
         dummy_conv_output = self.encoder(dummy_conv_output)
@@ -199,10 +216,6 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
             self.new_decoder.append(
                 nn.Upsample(size=self.img_dim, mode="bilinear", align_corners=False)
             )
-
-        # # release memory
-        # self.encoder = None
-        # self.decoder = None
 
         self.fused_dim = self.latent_dim + self.mod1_dim
         self.set_fused_layers(self.fused_dim)

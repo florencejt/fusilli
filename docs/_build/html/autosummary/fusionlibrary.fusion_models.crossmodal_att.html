@@ -319,6 +319,13 @@ multihead attention layer.</p>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If the number of layers in the two modalities is different.</p></li>
+<li><p><strong>ValueError</strong> – If dtype of the layers is not nn.ModuleDict.</p></li>
+<li><p><strong>ValueError</strong> – If the image dimensions are not valid. (Conv2D used for 3D img and vice versa)</p></li>
+</ul>
+</dd>
 </dl>
 </dd></dl>
 

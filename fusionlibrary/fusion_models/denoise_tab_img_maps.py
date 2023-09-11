@@ -10,7 +10,10 @@ from torch.utils.data import DataLoader
 import pandas as pd
 from torch.nn import functional as F
 from fusionlibrary.fusion_models.base_pl_model import BaseModel
-
+from fusionlibrary.utils.pl_utils import (
+    check_valid_modification_dtype,
+    check_valid_modification_img_dim,
+)
 
 # class DAETabImgMaps(ParentFusionModel, nn.Module):
 #     """
@@ -170,6 +173,16 @@ class DenoisingAutoencoder(pl.LightningModule):
 
         # this will change the upsampler and downsampler to be consistent with a modified latent dimension
         # you can also just change the upsampler and downsampler directly
+
+        check_valid_modification_dtype(self.upsampler, nn.Sequential, "upsampler")
+        check_valid_modification_dtype(self.downsampler, nn.Sequential, "downsampler")
+        check_valid_modification_dtype(self.latent_dim, int, "latent_dim")
+
+        if self.latent_dim < 1:
+            raise ValueError(
+                "The latent dimension must be greater than 0. The latent dimension is currently: ",
+                self.latent_dim,
+            )
 
         self.upsampler[0] = nn.Linear(self.tab_dims, self.upsampler[0].out_features)
         self.upsampler[-2] = nn.Linear(
@@ -349,7 +362,6 @@ class ImgUnimodalDAE(pl.LightningModule):
         super().__init__()
 
         self.img_dim = data_dims[2]
-        print(self.img_dim)
         self.multiclass_dim = multiclass_dims
         self.pred_type = pred_type
 
@@ -388,6 +400,10 @@ class ImgUnimodalDAE(pl.LightningModule):
         -------
         None
         """
+
+        check_valid_modification_dtype(self.img_layers, nn.ModuleDict, "img_layers")
+        check_valid_modification_img_dim(self.img_layers, self.img_dim, "img_layers")
+
         self.num_layers = len(self.img_layers)
 
         self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
@@ -452,7 +468,6 @@ class ImgUnimodalDAE(pl.LightningModule):
             logits.float().requires_grad_(True),
             y.float().requires_grad_(True),
         )
-        print("loss: ", loss)
 
         self.log("train_loss", loss, logger=False)
 
@@ -752,6 +767,11 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         -------
         None
         """
+
+        check_valid_modification_dtype(
+            self.fusion_layers, nn.Sequential, "fusion_layers"
+        )
+
         self.fusion_layers[0] = nn.Linear(
             self.mod1_dim, self.fusion_layers[0].out_features
         )

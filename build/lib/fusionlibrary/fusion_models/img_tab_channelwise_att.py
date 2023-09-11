@@ -5,6 +5,10 @@ import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch
 from torch.autograd import Variable
+from fusionlibrary.utils.pl_utils import (
+    check_valid_modification_dtype,
+    check_valid_modification_img_dim,
+)
 
 
 class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
@@ -88,9 +92,21 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         Returns
         -------
         None
-        """
-        # get dummy conv output
 
+        Raises
+        ------
+        ValueError
+            If the number of layers in the two modalities is not the same.
+        ValueError
+            If dtype of the layers is not nn.ModuleDict.
+        ValueError
+            If the image dimensions are not valid. (Conv2D used for 3D img and vice versa)
+        """
+
+        check_valid_modification_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
+        check_valid_modification_dtype(self.img_layers, nn.ModuleDict, "img_layers")
+
+        check_valid_modification_img_dim(self.img_layers, self.img_dim, "img_layers")
         # if number of imaging layers does not equal number of tabular layers, return error
         if len(self.mod1_layers) != len(self.img_layers):
             raise ValueError(
