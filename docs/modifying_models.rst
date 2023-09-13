@@ -6,8 +6,44 @@ Modifying the fusion models
 - You can modify the layers in various fusion models or attributes such as custom loss function or latent dimension.
 - There's an example in the examples section showing modification of the fusion models.
 
-What can be modified?
-----------------------
+.. warning::
+  If you change the layers in the fusion models such as :attr:`mod1_layers` or :attr:`img_layers`, you may also need to change the attribute :attr:`fused_layers` where appropriate.
+  This is because the :attr:`fused_layers` attribute is used in the `forward` method of the fusion models to calculate the fused features and usually follows directly on
+  from the :attr:`mod1_layers` or :attr:`img_layers` attributes. For example, if you change the final layer in the :attr:`mod1_layers` attribute of the :class:`~.Tabular1Unimodal` model to 
+  output 100 features, you will also need to change the :attr:`fused_layers` attribute to have an input of 100 features. 
+
+  The :func:`~.check_model_validity.check_fused_layers` function rewrites the first layer of the fused_layers to be the models :attr:`fused_dim` attribute and is run 
+  in the model's :func:`calc_fused_layers` method. So if you change the :attr:`fused_dim` attribute to the correct number for the method as well as the other layers, 
+  then the model should run as expected.
+
+
+Modifiable attributes of the fusion models
+------------------------------------------
+
+
+:class:`.ConcatImgLatentTabDoubleLoss`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+.. list-table:: 
+  :widths: 40 60
+  :header-rows: 1
+  :stub-columns: 1
+
+  * - Attribute
+    - Guidance
+  * - :attr:`~.ConcatImgLatentTabDoubleLoss.latent_dim`
+    - int
+  * - :attr:`~.ConcatImgLatentTabDoubleLoss.encoder`
+    - ``nn.Sequential``
+  * - :attr:`~.ConcatImgLatentTabDoubleLoss.decoder`
+    - ``nn.Sequential``
+  * - :attr:`~.ConcatImgLatentTabDoubleLoss.custom_loss`
+    - Loss function e.g. ``nn.MSELoss``
+  * - :attr:`~.ConcatImgLatentTabDoubleLoss.fused_layers`
+    - ``nn.Sequential``
+
+
 
 .. list-table:: Modifiable attributes of the fusion models
   :widths: 20 20 60
@@ -47,6 +83,12 @@ What can be modified?
   * -
     - :attr:`~.ConcatImgLatentTabDoubleLoss.custom_loss`
     - Loss function e.g. ``nn.MSELoss``
+  * -
+    - :attr:`~.ConcatImgLatentTabDoubleLoss.fused_layers`
+    - ``nn.Sequential``
+  * - :class:`.ConcatImgLatentTabDoubleTrain`
+    - :attr:`~.ConcatImgLatentTabDoubleTrain.fused_layers`
+    - ``nn.Sequential``
   * - :class:`.concat_img_latent_tab_subspace_method`
     - :attr:`.autoencoder.latent_dim`
     - int
@@ -71,6 +113,9 @@ What can be modified?
     - 
       * ``nn.Sequential``
       * Overrides modification of ``img_layers`` made to "all"
+  * -
+    - :attr:`~.ConcatImageMapsTabularMaps.fused_layers`
+    - ``nn.Sequential``
   * - :class:`.ConcatTabularData`
     - :attr:`~.ConcatTabularData.mod1_layers`
     - 
@@ -81,6 +126,9 @@ What can be modified?
     -  
       * ``nn.Sequential``
       * Overrides modification of ``mod2_layers`` made to "all"
+  * -
+    - :attr:`~.ConcatTabularData.fused_layers`
+    - ``nn.Sequential``
   * - :class:`.ConcatTabularFeatureMaps`
     - :attr:`~.ConcatTabularFeatureMaps.mod1_layers`
     - 
@@ -91,6 +139,9 @@ What can be modified?
     - 
       * ``nn.Sequential``
       * Overrides modification of ``mod2_layers`` made to "all"
+  * -
+    - :attr:`~.ConcatTabularFeatureMaps.fused_layers`
+    - ``nn.Sequential``
   * - :class:`.CrossmodalMultiheadAttention`
     - :attr:`~.CrossmodalMultiheadAttention.attention_embed_dim`
     - int
@@ -158,6 +209,9 @@ What can be modified?
     - 
       * ``nn.ModuleDict``
       * Overrides modification of ``img_layers`` made to "all"
+  * -
+    - :attr:`~.ImageDecision.fusion_operation`
+    - Lambda function (such as mean, median, etc.)
   * - :class:`.ImgUnimodal`
     - :attr:`~.ImgUnimodal.img_layers`
     - 
@@ -218,6 +272,9 @@ What can be modified?
     - 
       * ``nn.ModuleDict``
       * Overrides modification of ``mod2_layers`` made to "all"
+  * -
+    - :attr:`~.TabularDecision.fusion_operation`
+    - Function (such as mean, median, etc.). Should act on the 1st dimension.
 
 
 
@@ -229,6 +286,14 @@ How to construct the dictionary:
 - First keys must be the methods in the table above
 - Second keys must be the attributes in the table above (e.g. autoencoder.latent_dim rather than just latent_dim)
 - Value is the value you want to change the attribute to
+
+.. note::
+  You don't need to pass the layer modifications in the 'all' key again under a specific method key if you want to modify the layers for all fusion models.
+  For example, if :attr:`mod1_layers` is modified under 'all', and that is how you want it to be for all fusion models, then you don't need to pass it again under a specific method key.
+  However, if you want :attr:`mod1_layers` to be modified equally for all fusion models except one, then you can pass the modifications in the 'all' key and then override the modifications 
+  for the specific fusion model.
+
+  I have included all possible modifiable attribute in each specific method in the example below for completeness.
 
 Here's an example of a dictionary which is modifying all of the modifiable attributes of the fusion models:
 

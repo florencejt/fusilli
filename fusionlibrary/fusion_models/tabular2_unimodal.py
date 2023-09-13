@@ -4,6 +4,7 @@ Tabular2 uni-modal model.
 
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
+from fusionlibrary.utils import check_model_validity
 
 
 class Tabular2Unimodal(ParentFusionModel, nn.Module):
@@ -51,6 +52,10 @@ class Tabular2Unimodal(ParentFusionModel, nn.Module):
         self.pred_type = pred_type
 
         self.set_mod2_layers()
+
+        self.fused_dim = list(self.mod2_layers.values())[-1][0].out_features
+        self.set_fused_layers(self.fused_dim)
+
         self.calc_fused_layers()
 
     def calc_fused_layers(self):
@@ -61,9 +66,14 @@ class Tabular2Unimodal(ParentFusionModel, nn.Module):
         -------
         None
         """
-        self.fused_dim = list(self.mod2_layers.values())[-1][0].out_features
-        self.set_fused_layers(self.fused_dim)
-        self.set_final_pred_layers()
+        check_model_validity.check_dtype(self.mod2_layers, nn.ModuleDict, "mod2_layers")
+
+        # check fused layers
+        self.fused_layers, out_dim = check_model_validity.check_fused_layers(
+            self.fused_layers, self.fused_dim
+        )
+
+        self.set_final_pred_layers(out_dim)
 
     def forward(self, x):
         """

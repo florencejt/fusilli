@@ -13,8 +13,6 @@
 
    .. autosummary::
    
-      check_valid_modification_dtype
-      check_valid_modification_img_dim
       get_final_val_metrics
       init_trainer
       set_logger

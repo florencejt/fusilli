@@ -6,6 +6,8 @@ import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch
 
+from fusionlibrary.utils import check_model_validity
+
 
 class ConcatTabularData(ParentFusionModel, nn.Module):
     """
@@ -51,8 +53,26 @@ class ConcatTabularData(ParentFusionModel, nn.Module):
         self.pred_type = pred_type
 
         self.fused_dim = self.mod1_dim + self.mod2_dim
+
         self.set_fused_layers(self.fused_dim)
-        self.set_final_pred_layers()
+
+        self.calc_fused_layers()
+
+    def calc_fused_layers(self):
+        """
+        Calculate the fused layers.
+
+        Returns
+        -------
+        None
+        """
+
+        # check fused layer
+        self.fused_layers, out_dim = check_model_validity.check_fused_layers(
+            self.fused_layers, self.fused_dim
+        )
+
+        self.set_final_pred_layers(out_dim)
 
     def forward(self, x):
         """

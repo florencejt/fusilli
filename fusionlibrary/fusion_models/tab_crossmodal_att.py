@@ -5,10 +5,7 @@ Crossmodal multi-head attention for tabular data.
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch
-from fusionlibrary.utils.pl_utils import (
-    check_valid_modification_dtype,
-    check_valid_modification_img_dim,
-)
+from fusionlibrary.utils import check_model_validity
 
 
 class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
@@ -107,8 +104,8 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
 
         """
         # if mod1 and mod2 have a different number of layers, return error
-        check_valid_modification_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
-        check_valid_modification_dtype(self.mod2_layers, nn.ModuleDict, "mod2_layers")
+        check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
+        check_model_validity.check_dtype(self.mod2_layers, nn.ModuleDict, "mod2_layers")
 
         if len(self.mod1_layers) != len(self.mod2_layers):
             raise ValueError(

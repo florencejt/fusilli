@@ -56,7 +56,10 @@
 <li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Modifying the fusion models</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#what-can-be-modified">What can be modified?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modifiable-attributes-of-the-fusion-models">Modifiable attributes of the fusion models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#concatimglatenttabdoubleloss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#how-to-pass-into-get-data-and-training-as-a-dictionary">How to pass into get_data and training as a dictionary:</a></li>
 </ul>
 </li>
@@ -107,8 +110,48 @@
 <li><p>You can modify the layers in various fusion models or attributes such as custom loss function or latent dimension.</p></li>
 <li><p>There’s an example in the examples section showing modification of the fusion models.</p></li>
 </ul>
-<section id="what-can-be-modified">
-<h2>What can be modified?<a class="headerlink" href="#what-can-be-modified" title="Permalink to this heading"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you change the layers in the fusion models such as <code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code> or <code class="xref py py-attr docutils literal notranslate"><span class="pre">img_layers</span></code>, you may also need to change the attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">fused_layers</span></code> where appropriate.
+This is because the <code class="xref py py-attr docutils literal notranslate"><span class="pre">fused_layers</span></code> attribute is used in the <cite>forward</cite> method of the fusion models to calculate the fused features and usually follows directly on
+from the <code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code> or <code class="xref py py-attr docutils literal notranslate"><span class="pre">img_layers</span></code> attributes. For example, if you change the final layer in the <code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code> attribute of the <a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tabular1_unimodal.html#fusionlibrary.fusion_models.tabular1_unimodal.Tabular1Unimodal" title="fusionlibrary.fusion_models.tabular1_unimodal.Tabular1Unimodal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tabular1Unimodal</span></code></a> model to
+output 100 features, you will also need to change the <code class="xref py py-attr docutils literal notranslate"><span class="pre">fused_layers</span></code> attribute to have an input of 100 features.</p>
+<p>The <code class="xref py py-func docutils literal notranslate"><span class="pre">check_fused_layers()</span></code> function rewrites the first layer of the fused_layers to be the models <code class="xref py py-attr docutils literal notranslate"><span class="pre">fused_dim</span></code> attribute and is run
+in the model’s <code class="xref py py-func docutils literal notranslate"><span class="pre">calc_fused_layers()</span></code> method. So if you change the <code class="xref py py-attr docutils literal notranslate"><span class="pre">fused_dim</span></code> attribute to the correct number for the method as well as the other layers,
+then the model should run as expected.</p>
+</div>
+<section id="modifiable-attributes-of-the-fusion-models">
+<h2>Modifiable attributes of the fusion models<a class="headerlink" href="#modifiable-attributes-of-the-fusion-models" title="Permalink to this heading"></a></h2>
+<section id="concatimglatenttabdoubleloss">
+<h3><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss</span></code></a><a class="headerlink" href="#concatimglatenttabdoubleloss" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head stub"><p>Attribute</p></th>
+<th class="head"><p>Guidance</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_dim" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_dim"><code class="xref py py-attr docutils literal notranslate"><span class="pre">latent_dim</span></code></a></p></th>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.encoder" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.encoder"><code class="xref py py-attr docutils literal notranslate"><span class="pre">encoder</span></code></a></p></th>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.decoder" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.decoder"><code class="xref py py-attr docutils literal notranslate"><span class="pre">decoder</span></code></a></p></th>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.custom_loss" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.custom_loss"><code class="xref py py-attr docutils literal notranslate"><span class="pre">custom_loss</span></code></a></p></th>
+<td><p>Loss function e.g. <code class="docutils literal notranslate"><span class="pre">nn.MSELoss</span></code></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_layers" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fused_layers</span></code></a></p></th>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
+</tr>
+</tbody>
+</table>
 <table class="docutils align-default" id="id1">
 <caption><span class="caption-text">Modifiable attributes of the fusion models</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
 <colgroup>
@@ -166,6 +209,14 @@
 <td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.custom_loss" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.custom_loss"><code class="xref py py-attr docutils literal notranslate"><span class="pre">custom_loss</span></code></a></p></td>
 <td><p>Loss function e.g. <code class="docutils literal notranslate"><span class="pre">nn.MSELoss</span></code></p></td>
 </tr>
+<tr class="row-odd"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_layers" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fused_layers</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fused_layers" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fused_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fused_layers</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
+</tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html#fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method" title="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method"><code class="xref py py-class docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method</span></code></a></p></th>
 <td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">autoencoder.latent_dim</span></code></p></td>
 <td><p>int</p></td>
@@ -202,7 +253,11 @@
 </ul>
 </td>
 </tr>
-<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_tabular_data.html#fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData" title="fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularData</span></code></a></p></th>
+<tr class="row-odd"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html#fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fused_layers" title="fusionlibrary.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fused_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fused_layers</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_tabular_data.html#fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData" title="fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularData</span></code></a></p></th>
 <td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></p></td>
 <td><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
@@ -210,13 +265,17 @@
 </ul>
 </td>
 </tr>
-<tr class="row-even"><th class="stub"></th>
+<tr class="row-odd"><th class="stub"></th>
 <td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod2_layers</span></code></p></td>
 <td><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
 <li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">mod2_layers</span></code> made to “all”</p></li>
 </ul>
 </td>
+</tr>
+<tr class="row-even"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_tabular_data.html#fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData.fused_layers" title="fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData.fused_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fused_layers</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_tabular_feature_maps.html#fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps" title="fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps</span></code></a></p></th>
 <td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_tabular_feature_maps.html#fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.mod1_layers" title="fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></a></p></td>
@@ -234,11 +293,15 @@
 </ul>
 </td>
 </tr>
-<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention" title="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention"><code class="xref py py-class docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention</span></code></a></p></th>
+<tr class="row-odd"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.concat_tabular_feature_maps.html#fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.fused_layers" title="fusionlibrary.fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.fused_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fused_layers</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention" title="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention"><code class="xref py py-class docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention</span></code></a></p></th>
 <td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.attention_embed_dim" title="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.attention_embed_dim"><code class="xref py py-attr docutils literal notranslate"><span class="pre">attention_embed_dim</span></code></a></p></td>
 <td><p>int</p></td>
 </tr>
-<tr class="row-even"><th class="stub"></th>
+<tr class="row-odd"><th class="stub"></th>
 <td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.mod1_layers" title="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></a></p></td>
 <td><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
@@ -247,7 +310,7 @@
 </ul>
 </td>
 </tr>
-<tr class="row-odd"><th class="stub"></th>
+<tr class="row-even"><th class="stub"></th>
 <td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.crossmodal_att.html#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.img_layers" title="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.img_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">img_layers</span></code></a></p></td>
 <td><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
@@ -256,7 +319,7 @@
 </ul>
 </td>
 </tr>
-<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps" title="fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps"><code class="xref py py-class docutils literal notranslate"><span class="pre">DAETabImgMaps</span></code></a></p></th>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps" title="fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps"><code class="xref py py-class docutils literal notranslate"><span class="pre">DAETabImgMaps</span></code></a></p></th>
 <td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps.fusion_layers" title="fusionlibrary.fusion_models.denoise_tab_img_maps.DAETabImgMaps.fusion_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fusion_layers</span></code></a></p></td>
 <td><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
@@ -264,19 +327,19 @@
 </ul>
 </td>
 </tr>
-<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method" title="fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method"><code class="xref py py-class docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method</span></code></a></p></th>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method" title="fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method"><code class="xref py py-class docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method</span></code></a></p></th>
 <td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">autoencoder.latent_dim</span></code></p></td>
 <td><p>int</p></td>
 </tr>
-<tr class="row-even"><th class="stub"></th>
+<tr class="row-odd"><th class="stub"></th>
 <td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">autoencoder.upsampler</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
 </tr>
-<tr class="row-odd"><th class="stub"></th>
+<tr class="row-even"><th class="stub"></th>
 <td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">autoencoder.downsampler</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
 </tr>
-<tr class="row-even"><th class="stub"></th>
+<tr class="row-odd"><th class="stub"></th>
 <td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">img_layers</span></code></p></td>
 <td><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
@@ -284,7 +347,7 @@
 </ul>
 </td>
 </tr>
-<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN" title="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeCorrGNN</span></code></a></p></th>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN" title="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeCorrGNN</span></code></a></p></th>
 <td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.graph_conv_layers" title="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.graph_conv_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">graph_conv_layers</span></code></a></p></td>
 <td><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code> of <code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.GCNConv</span></code> Layers.</p></li>
@@ -292,15 +355,15 @@
 </ul>
 </td>
 </tr>
-<tr class="row-even"><th class="stub"></th>
+<tr class="row-odd"><th class="stub"></th>
 <td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.dropout_prob" title="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.dropout_prob"><code class="xref py py-attr docutils literal notranslate"><span class="pre">dropout_prob</span></code></a></p></td>
 <td><p>Float between (not including) 0 and 1.</p></td>
 </tr>
-<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker" title="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeCorrGraphMaker</span></code></a></p></th>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker" title="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeCorrGraphMaker</span></code></a></p></th>
 <td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.threshold" title="fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.threshold"><code class="xref py py-attr docutils literal notranslate"><span class="pre">threshold</span></code></a></p></td>
 <td><p>Float between (not including) 0 and 1.</p></td>
 </tr>
-<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention" title="fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention</span></code></a></p></th>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention" title="fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention</span></code></a></p></th>
 <td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.mod1_layers" title="fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></a></p></td>
 <td><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
@@ -309,7 +372,7 @@
 </ul>
 </td>
 </tr>
-<tr class="row-odd"><th class="stub"></th>
+<tr class="row-even"><th class="stub"></th>
 <td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.img_layers" title="fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.img_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">img_layers</span></code></a></p></td>
 <td><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
@@ -318,7 +381,7 @@
 </ul>
 </td>
 </tr>
-<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_decision.html#fusionlibrary.fusion_models.img_tab_decision.ImageDecision" title="fusionlibrary.fusion_models.img_tab_decision.ImageDecision"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageDecision</span></code></a></p></th>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_decision.html#fusionlibrary.fusion_models.img_tab_decision.ImageDecision" title="fusionlibrary.fusion_models.img_tab_decision.ImageDecision"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageDecision</span></code></a></p></th>
 <td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_decision.html#fusionlibrary.fusion_models.img_tab_decision.ImageDecision.mod1_layers" title="fusionlibrary.fusion_models.img_tab_decision.ImageDecision.mod1_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code></a></p></td>
 <td><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
@@ -326,13 +389,17 @@
 </ul>
 </td>
 </tr>
-<tr class="row-odd"><th class="stub"></th>
+<tr class="row-even"><th class="stub"></th>
 <td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_decision.html#fusionlibrary.fusion_models.img_tab_decision.ImageDecision.img_layers" title="fusionlibrary.fusion_models.img_tab_decision.ImageDecision.img_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">img_layers</span></code></a></p></td>
 <td><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">nn.ModuleDict</span></code></p></li>
 <li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">img_layers</span></code> made to “all”</p></li>
 </ul>
 </td>
+</tr>
+<tr class="row-odd"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_tab_decision.html#fusionlibrary.fusion_models.img_tab_decision.ImageDecision.fusion_operation" title="fusionlibrary.fusion_models.img_tab_decision.ImageDecision.fusion_operation"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fusion_operation</span></code></a></p></td>
+<td><p>Lambda function (such as mean, median, etc.)</p></td>
 </tr>
 <tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_unimodal.html#fusionlibrary.fusion_models.img_unimodal.ImgUnimodal" title="fusionlibrary.fusion_models.img_unimodal.ImgUnimodal"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImgUnimodal</span></code></a></p></th>
 <td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.img_unimodal.html#fusionlibrary.fusion_models.img_unimodal.ImgUnimodal.img_layers" title="fusionlibrary.fusion_models.img_unimodal.ImgUnimodal.img_layers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">img_layers</span></code></a></p></td>
@@ -350,8 +417,8 @@
 </ul>
 </td>
 </tr>
-<tr class="row-even"><th class="stub"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">mcvae_subspace_method</span></code></p></th>
-<td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">num_latent_dims</span></code></p></td>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod" title="fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod"><code class="xref py py-class docutils literal notranslate"><span class="pre">MCVAESubspaceMethod</span></code></a></p></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.num_latent_dims" title="fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.num_latent_dims"><code class="xref py py-attr docutils literal notranslate"><span class="pre">num_latent_dims</span></code></a></p></td>
 <td><p>int</p></td>
 </tr>
 <tr class="row-odd"><th class="stub"><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tab_crossmodal_att.html#fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention" title="fusionlibrary.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention</span></code></a></p></th>
@@ -426,8 +493,13 @@
 </ul>
 </td>
 </tr>
+<tr class="row-even"><th class="stub"></th>
+<td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.tabular_decision.html#fusionlibrary.fusion_models.tabular_decision.TabularDecision.fusion_operation" title="fusionlibrary.fusion_models.tabular_decision.TabularDecision.fusion_operation"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fusion_operation</span></code></a></p></td>
+<td><p>Function (such as mean, median, etc.). Should act on the 1st dimension.</p></td>
+</tr>
 </tbody>
 </table>
+</section>
 </section>
 <section id="how-to-pass-into-get-data-and-training-as-a-dictionary">
 <h2>How to pass into get_data and training as a dictionary:<a class="headerlink" href="#how-to-pass-into-get-data-and-training-as-a-dictionary" title="Permalink to this heading"></a></h2>
@@ -437,6 +509,14 @@
 <li><p>Second keys must be the attributes in the table above (e.g. autoencoder.latent_dim rather than just latent_dim)</p></li>
 <li><p>Value is the value you want to change the attribute to</p></li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You don’t need to pass the layer modifications in the ‘all’ key again under a specific method key if you want to modify the layers for all fusion models.
+For example, if <code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code> is modified under ‘all’, and that is how you want it to be for all fusion models, then you don’t need to pass it again under a specific method key.
+However, if you want <code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code> to be modified equally for all fusion models except one, then you can pass the modifications in the ‘all’ key and then override the modifications
+for the specific fusion model.</p>
+<p>I have included all possible modifiable attribute in each specific method in the example below for completeness.</p>
+</div>
 <p>Here’s an example of a dictionary which is modifying all of the modifiable attributes of the fusion models:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">layer_modifications</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;all&quot;</span><span class="p">:</span> <span class="p">{</span>

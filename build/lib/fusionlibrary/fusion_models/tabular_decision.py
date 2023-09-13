@@ -6,6 +6,8 @@ import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch
 
+from fusionlibrary.utils import check_model_validity
+
 
 class TabularDecision(ParentFusionModel, nn.Module):
     """
@@ -24,6 +26,8 @@ class TabularDecision(ParentFusionModel, nn.Module):
         Sequential layer containing the final prediction layers for the first tabular data.
     final_prediction_tab2 : nn.Sequential
         Sequential layer containing the final prediction layers for the second tabular data.
+    fusion_operation : function
+        Function that performs the fusion operation. Default is torch.mean(torch.stack([x, y]), dim=0).
 
     """
 
@@ -50,6 +54,8 @@ class TabularDecision(ParentFusionModel, nn.Module):
 
         self.pred_type = pred_type
 
+        self.fusion_operation = lambda x, y: torch.mean(torch.stack([x, y]), dim=0)
+
         self.set_mod1_layers()
         self.set_mod2_layers()
         self.calc_fused_layers()
@@ -62,6 +68,13 @@ class TabularDecision(ParentFusionModel, nn.Module):
         -------
         None
         """
+
+        check_model_validity.check_var_is_function(
+            self.fusion_operation, "fusion_operation"
+        )
+        check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
+        check_model_validity.check_dtype(self.mod2_layers, nn.ModuleDict, "mod2_layers")
+
         tab1_fused_dim = list(self.mod1_layers.values())[-1][0].out_features
         self.set_final_pred_layers(tab1_fused_dim)
         self.final_prediction_tab1 = self.final_prediction
@@ -97,7 +110,8 @@ class TabularDecision(ParentFusionModel, nn.Module):
         pred_tab2 = self.final_prediction_tab2(x_tab2)
 
         # Combine predictions by averaging them together
-        out_fuse = torch.mean(torch.stack([pred_tab1, pred_tab2]), dim=0)
+        out_fuse = self.fusion_operation(pred_tab1, pred_tab2)
+        # out_fuse = torch.mean(torch.stack([pred_tab1, pred_tab2]), dim=0)
 
         return [
             out_fuse,

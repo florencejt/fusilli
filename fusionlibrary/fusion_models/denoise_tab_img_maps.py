@@ -10,10 +10,8 @@ from torch.utils.data import DataLoader
 import pandas as pd
 from torch.nn import functional as F
 from fusionlibrary.fusion_models.base_pl_model import BaseModel
-from fusionlibrary.utils.pl_utils import (
-    check_valid_modification_dtype,
-    check_valid_modification_img_dim,
-)
+
+from fusionlibrary.utils import check_model_validity
 
 # class DAETabImgMaps(ParentFusionModel, nn.Module):
 #     """
@@ -174,9 +172,9 @@ class DenoisingAutoencoder(pl.LightningModule):
         # this will change the upsampler and downsampler to be consistent with a modified latent dimension
         # you can also just change the upsampler and downsampler directly
 
-        check_valid_modification_dtype(self.upsampler, nn.Sequential, "upsampler")
-        check_valid_modification_dtype(self.downsampler, nn.Sequential, "downsampler")
-        check_valid_modification_dtype(self.latent_dim, int, "latent_dim")
+        check_model_validity.check_dtype(self.upsampler, nn.Sequential, "upsampler")
+        check_model_validity.check_dtype(self.downsampler, nn.Sequential, "downsampler")
+        check_model_validity.check_dtype(self.latent_dim, int, "latent_dim")
 
         if self.latent_dim < 1:
             raise ValueError(
@@ -367,15 +365,7 @@ class ImgUnimodalDAE(pl.LightningModule):
 
         # get the img layers from ParentFusionModel
         ParentFusionModel.set_img_layers(self)
-        self.calc_fused_layers()
 
-        # self.output_activation_functions = {
-        #     "binary": torch.round,
-        #     "multiclass": lambda x: torch.argmax(nn.Softmax(dim=-1)(x), dim=-1),
-        #     "regression": lambda x: x,
-        # }
-
-        # what loss function?
         if self.pred_type == "regression":
             self.loss = lambda logits, y: nn.MSELoss()(logits, y.unsqueeze(dim=1))
             self.activation = lambda x: x
@@ -392,6 +382,12 @@ class ImgUnimodalDAE(pl.LightningModule):
             )
             self.activation = lambda x: torch.argmax(nn.Softmax(dim=-1)(x), dim=-1)
 
+        self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
+
+        ParentFusionModel.set_fused_layers(self, fused_dim=self.fused_dim)
+
+        self.calc_fused_layers()
+
     def calc_fused_layers(self):
         """
         Calculate the fused layers.
@@ -401,16 +397,19 @@ class ImgUnimodalDAE(pl.LightningModule):
         None
         """
 
-        check_valid_modification_dtype(self.img_layers, nn.ModuleDict, "img_layers")
-        check_valid_modification_img_dim(self.img_layers, self.img_dim, "img_layers")
+        check_model_validity.check_dtype(self.img_layers, nn.ModuleDict, "img_layers")
+        check_model_validity.check_img_dim(self.img_layers, self.img_dim, "img_layers")
 
         self.num_layers = len(self.img_layers)
 
         self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
 
-        ParentFusionModel.set_fused_layers(self, fused_dim=self.fused_dim)
+        # check fused layers
+        self.fused_layers, out_dim = check_model_validity.check_fused_layers(
+            self.fused_layers, self.fused_dim
+        )
 
-        ParentFusionModel.set_final_pred_layers(self)
+        ParentFusionModel.set_final_pred_layers(self, out_dim)
 
     def forward(self, x):
         """
@@ -768,7 +767,7 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         None
         """
 
-        check_valid_modification_dtype(
+        check_model_validity.check_dtype(
             self.fusion_layers, nn.Sequential, "fusion_layers"
         )
 

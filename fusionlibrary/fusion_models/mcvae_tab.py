@@ -10,10 +10,8 @@ from fusionlibrary.utils.mcvae.src.mcvae.models import Mcvae
 import contextlib
 import pandas as pd
 import numpy as np
-from fusionlibrary.utils.pl_utils import (
-    check_valid_modification_dtype,
-    check_valid_modification_img_dim,
-)
+
+from fusionlibrary.utils import check_model_validity
 
 
 def mcvae_early_stopping_tol(patience, tolerance, loss_logs, verbose=False):
@@ -105,7 +103,7 @@ class MCVAESubspaceMethod:
         None
         """
 
-        check_valid_modification_dtype(self.num_latent_dims, int, "num_latent_dims")
+        check_model_validity.check_dtype(self.num_latent_dims, int, "num_latent_dims")
 
         if self.num_latent_dims < 0:
             raise ValueError(
@@ -318,7 +316,8 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
                 ),
             }
         )
-
+        self.fused_dim = list(self.latent_space_layers.values())[-1][0].out_features
+        self.set_fused_layers(self.fused_dim)
         self.calc_fused_layers()
 
     def calc_fused_layers(self):
@@ -330,7 +329,7 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
         None
         """
 
-        check_valid_modification_dtype(
+        check_model_validity.check_dtype(
             self.latent_space_layers, nn.ModuleDict, "latent_space_layers"
         )
 
@@ -339,9 +338,12 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
             self.mod1_dim, self.latent_space_layers["layer 1"][0].out_features
         )
 
-        self.fused_dim = list(self.latent_space_layers.values())[-1][0].out_features
-        self.set_fused_layers(self.fused_dim)
-        self.set_final_pred_layers()
+        # check fused layers
+        self.fused_layers, out_dim = check_model_validity.check_fused_layers(
+            self.fused_layers, self.fused_dim
+        )
+
+        self.set_final_pred_layers(out_dim)
 
     def forward(self, x):
         """

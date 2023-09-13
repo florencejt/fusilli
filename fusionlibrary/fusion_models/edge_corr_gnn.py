@@ -9,10 +9,7 @@ import numpy as np
 from torch_geometric.data import Data
 from torch_geometric.nn import GCNConv
 import torch.nn.functional as F
-from fusionlibrary.utils.pl_utils import (
-    check_valid_modification_dtype,
-    check_valid_modification_img_dim,
-)
+from fusionlibrary.utils import check_model_validity
 
 
 class EdgeCorrGraphMaker:
@@ -55,7 +52,7 @@ class EdgeCorrGraphMaker:
                 )
             )
 
-        check_valid_modification_dtype(self.threshold, float, "threshold")
+        check_model_validity.check_dtype(self.threshold, float, "threshold")
 
     def make_graph(self):
         """
@@ -164,10 +161,10 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
                 )
             )
 
-        check_valid_modification_dtype(
+        check_model_validity.check_dtype(
             self.graph_conv_layers, nn.Sequential, "graph_conv_layers"
         )
-        check_valid_modification_dtype(self.dropout_prob, float, "dropout_prob")
+        check_model_validity.check_dtype(self.dropout_prob, float, "dropout_prob")
 
         # make sure the first layer takes in the number of features of the second tabular modality
         self.graph_conv_layers[0] = GCNConv(

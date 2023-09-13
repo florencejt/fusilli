@@ -66,9 +66,6 @@
 <li class="toctree-l1"><a class="reference internal" href="fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">fusionlibrary.train_functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.modify_model_architecture"><code class="docutils literal notranslate"><span class="pre">modify_model_architecture()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.get_nested_attr"><code class="docutils literal notranslate"><span class="pre">get_nested_attr()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.reset_fused_layers"><code class="docutils literal notranslate"><span class="pre">reset_fused_layers()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.train_and_test"><code class="docutils literal notranslate"><span class="pre">train_and_test()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.store_trained_model"><code class="docutils literal notranslate"><span class="pre">store_trained_model()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.train_functions.train_and_save_models"><code class="docutils literal notranslate"><span class="pre">train_and_save_models()</span></code></a></li>
@@ -109,80 +106,20 @@
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.get_nested_attr" title="fusionlibrary.train_functions.get_nested_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_nested_attr</span></code></a>(obj, attr_path)</p></td>
-<td><p>Get a nested attribute from an object using dot-separated path.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.modify_model_architecture" title="fusionlibrary.train_functions.modify_model_architecture"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modify_model_architecture</span></code></a>(model, ...)</p></td>
-<td><p>Modify the architecture of a deep learning model based on the provided configuration.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.reset_fused_layers" title="fusionlibrary.train_functions.reset_fused_layers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_fused_layers</span></code></a>(obj)</p></td>
-<td><p>Reset fused layers of a model if the reset method is available.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.store_trained_model" title="fusionlibrary.train_functions.store_trained_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">store_trained_model</span></code></a>(trained_model, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.store_trained_model" title="fusionlibrary.train_functions.store_trained_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">store_trained_model</span></code></a>(trained_model, ...)</p></td>
 <td><p>Stores the trained model to a dictionary.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.train_and_save_models" title="fusionlibrary.train_functions.train_and_save_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_and_save_models</span></code></a>(data_module, params, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.train_and_save_models" title="fusionlibrary.train_functions.train_and_save_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_and_save_models</span></code></a>(data_module, params, ...)</p></td>
 <td><p>Trains/tests the model and saves the trained model to a dictionary for further analysis.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.train_and_test" title="fusionlibrary.train_functions.train_and_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_and_test</span></code></a>(dm, params, k, fusion_model)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.train_functions.train_and_test" title="fusionlibrary.train_functions.train_and_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_and_test</span></code></a>(dm, params, k, fusion_model)</p></td>
 <td><p>Trains and tests a model and, if k_fold trained, a fold.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
-<dt class="sig sig-object py" id="fusionlibrary.train_functions.modify_model_architecture">
-<span class="sig-name descname"><span class="pre">modify_model_architecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">architecture_modification</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#modify_model_architecture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.modify_model_architecture" title="Permalink to this definition"></a></dt>
-<dd><p>Modify the architecture of a deep learning model based on the provided configuration.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<em>nn.Module</em>) – The original deep learning model.</p></li>
-<li><p><strong>architecture_modification</strong> (<em>dict</em>) – A dictionary containing architecture modifications.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The modified deep learning model.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>nn.Module</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fusionlibrary.train_functions.get_nested_attr">
-<span class="sig-name descname"><span class="pre">get_nested_attr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#get_nested_attr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.get_nested_attr" title="Permalink to this definition"></a></dt>
-<dd><p>Get a nested attribute from an object using dot-separated path.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>obj</strong> (<em>object</em>) – The object to retrieve the nested attribute from.</p></li>
-<li><p><strong>attr_path</strong> (<em>str</em>) – Dot-separated path to the nested attribute.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The nested attribute if found, otherwise None.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>object</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fusionlibrary.train_functions.reset_fused_layers">
-<span class="sig-name descname"><span class="pre">reset_fused_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#reset_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.reset_fused_layers" title="Permalink to this definition"></a></dt>
-<dd><p>Reset fused layers of a model if the reset method is available.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>obj</strong> (<em>nn.Module</em>) – The model to reset fused layers for.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="fusionlibrary.train_functions.train_and_test">
-<span class="sig-name descname"><span class="pre">train_and_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#train_and_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.train_and_test" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">train_and_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_checkpointing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#train_and_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.train_and_test" title="Permalink to this definition"></a></dt>
 <dd><p>Trains and tests a model and, if k_fold trained, a fold.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -206,6 +143,7 @@ Input format {“model”: {“layer_group”: “modification”}, …}.
 e.g. {“TabularCrossmodalAttention”: {“mod1_layers”: new mod 1 layers nn.ModuleDict}}
 Default None.</p></li>
 <li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs. Default 1000.</p></li>
+<li><p><strong>enable_checkpointing</strong> (<em>bool</em>) – Whether to enable checkpointing. Default True.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -232,7 +170,7 @@ the list of models.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fusionlibrary.train_functions.train_and_save_models">
-<span class="sig-name descname"><span class="pre">train_and_save_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#train_and_save_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.train_and_save_models" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">train_and_save_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_checkpointing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/train_functions.html#train_and_save_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.train_functions.train_and_save_models" title="Permalink to this definition"></a></dt>
 <dd><p>Trains/tests the model and saves the trained model to a dictionary for further analysis.
 If the training type is kfold, it will train and test the model for each fold and store the
 trained models in a list under the model type key.</p>
@@ -252,6 +190,7 @@ Input format {“model”: {“layer_group”: “modification”}, …}.
 e.g. {“TabularCrossmodalAttention”: {“mod1_layers”: new mod 1 layers nn.ModuleDict}}
 Default None.</p></li>
 <li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs. Default 1000.</p></li>
+<li><p><strong>enable_checkpointing</strong> (<em>bool</em>) – Whether to enable checkpointing. Default True.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

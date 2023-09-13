@@ -11,97 +11,97 @@ from fusionlibrary.utils.pl_utils import (
 import wandb
 import warnings
 import inspect
+from fusionlibrary.utils import model_modifier
+
+# def modify_model_architecture(model, architecture_modification):
+#     """
+#     Modify the architecture of a deep learning model based on the provided configuration.
+
+#     Args:
+#         model (nn.Module): The original deep learning model.
+#         architecture_modification (dict): A dictionary containing architecture modifications.
+#             Input format {"model": {"layer_group": "modification"}, ...}.
+#             e.g. {"TabularCrossmodalAttention": {"mod1_layers": new mod 1 layers nn.ModuleDict}}
+
+#     Returns:
+#         nn.Module: The modified deep learning model.
+#     """
+
+#     for model_name, layer_groups in architecture_modification.items():
+#         # Modify layers for all specified models
+#         if model_name == "all":
+#             for layer_group, modification in layer_groups.items():
+#                 if hasattr(model, layer_group):
+#                     setattr(model, layer_group, modification)
+#                     print("Changed", layer_group, "in", model_name)
+#                 else:
+#                     warnings.warn(
+#                         f"Layer group {layer_group} not found in {model} when flagged with\
+#                         {model_name}"
+#                     )
+#             reset_fused_layers(model, model)
+
+#         # Modify layers for a specific model class
+#         elif model_name == model.__class__.__name__:
+#             for layer_group, modification in layer_groups.items():
+#                 nested_attr = get_nested_attr(model, layer_group)
+
+#                 if hasattr(nested_attr, layer_group.split(".")[-1]):
+#                     setattr(nested_attr, layer_group.split(".")[-1], modification)
+#                     print("Changed", layer_group.split(".")[-1], "in", model_name)
+
+#                 else:
+#                     raise ValueError(
+#                         f"Layer group {layer_group} not found in {model_name}"
+#                     )
+#                 # if we're on the last layer group, reset the fused layers
+#                 if layer_group == list(layer_groups.keys())[-1]:
+#                     reset_fused_layers(nested_attr, model)
+
+#     return model
 
 
-def modify_model_architecture(model, architecture_modification):
-    """
-    Modify the architecture of a deep learning model based on the provided configuration.
+# def get_nested_attr(obj, attr_path):
+#     """
+#     Get a nested attribute from an object using dot-separated path.
 
-    Args:
-        model (nn.Module): The original deep learning model.
-        architecture_modification (dict): A dictionary containing architecture modifications.
-            Input format {"model": {"layer_group": "modification"}, ...}.
-            e.g. {"TabularCrossmodalAttention": {"mod1_layers": new mod 1 layers nn.ModuleDict}}
+#     Args:
+#         obj (object): The object to retrieve the nested attribute from.
+#         attr_path (str): Dot-separated path to the nested attribute.
 
-    Returns:
-        nn.Module: The modified deep learning model.
-    """
+#     Returns:
+#         object: The nested attribute if found, otherwise None.
+#     """
+#     attributes = attr_path.split(".")
 
-    for model_name, layer_groups in architecture_modification.items():
-        # Modify layers for all specified models
-        if model_name == "all":
-            for layer_group, modification in layer_groups.items():
-                if hasattr(model, layer_group):
-                    setattr(model, layer_group, modification)
-                    print("Changed", layer_group, "in", model_name)
-                else:
-                    warnings.warn(
-                        f"Layer group {layer_group} not found in {model} when flagged with\
-                        {model_name}"
-                    )
-            reset_fused_layers(model, model)
+#     if len(attributes) > 1:  # if we're looking for a nested attribute
+#         attr = getattr(obj, attributes[0])
 
-        # Modify layers for a specific model class
-        elif model_name == model.__class__.__name__:
-            for layer_group, modification in layer_groups.items():
-                nested_attr = get_nested_attr(model, layer_group)
+#         # if the attribute is more than one . deep
+#         for i in range(1, len(attributes) - 1):
+#             attr = getattr(attr, attributes[i])
 
-                if hasattr(nested_attr, layer_group.split(".")[-1]):
-                    setattr(nested_attr, layer_group.split(".")[-1], modification)
-                    print("Changed", layer_group.split(".")[-1], "in", model_name)
+#     else:
+#         attr = obj
 
-                else:
-                    raise ValueError(
-                        f"Layer group {layer_group} not found in {model_name}"
-                    )
-                # if we're on the last layer group, reset the fused layers
-                if layer_group == list(layer_groups.keys())[-1]:
-                    reset_fused_layers(nested_attr, model)
-
-    return model
+#     return attr
 
 
-def get_nested_attr(obj, attr_path):
-    """
-    Get a nested attribute from an object using dot-separated path.
+# def reset_fused_layers(obj, model):
+#     """
+#     Reset fused layers of a model if the reset method is available.
 
-    Args:
-        obj (object): The object to retrieve the nested attribute from.
-        attr_path (str): Dot-separated path to the nested attribute.
+#     Args:
+#         obj (nn.Module): The model to reset fused layers for.
+#         model (nn.Module): The original deep learning model.
+#     """
+#     if hasattr(obj, "calc_fused_layers"):
+#         obj.calc_fused_layers()
+#         print("Reset fused layers in", model.__class__.__name__)
 
-    Returns:
-        object: The nested attribute if found, otherwise None.
-    """
-    attributes = attr_path.split(".")
-
-    if len(attributes) > 1:  # if we're looking for a nested attribute
-        attr = getattr(obj, attributes[0])
-
-        # if the attribute is more than one . deep
-        for i in range(1, len(attributes) - 1):
-            attr = getattr(attr, attributes[i])
-
-    else:
-        attr = obj
-
-    return attr
-
-
-def reset_fused_layers(obj, model):
-    """
-    Reset fused layers of a model if the reset method is available.
-
-    Args:
-        obj (nn.Module): The model to reset fused layers for.
-        model (nn.Module): The original deep learning model.
-    """
-    if hasattr(obj, "calc_fused_layers"):
-        obj.calc_fused_layers()
-        print("Reset fused layers in", model.__class__.__name__)
-
-    if hasattr(model, "check_params"):
-        model.check_params()
-        print("Checked params in", model.__class__.__name__)
+#     if hasattr(model, "check_params"):
+#         model.check_params()
+#         print("Checked params in", model.__class__.__name__)
 
 
 def train_and_test(
@@ -112,6 +112,7 @@ def train_and_test(
     extra_log_string_dict=None,
     layer_mods=None,
     max_epochs=1000,
+    enable_checkpointing=True,
 ):
     """
     Trains and tests a model and, if k_fold trained, a fold.
@@ -143,6 +144,8 @@ def train_and_test(
         Default None.
     max_epochs : int
         Maximum number of epochs. Default 1000.
+    enable_checkpointing : bool
+        Whether to enable checkpointing. Default True.
 
     Returns
     -------
@@ -179,7 +182,9 @@ def train_and_test(
 
     logger = set_logger(params, k, fusion_model, extra_log_string_dict)  # set logger
 
-    trainer = init_trainer(logger, max_epochs=max_epochs)  # init trainer
+    trainer = init_trainer(
+        logger, max_epochs=max_epochs, enable_checkpointing=enable_checkpointing
+    )  # init trainer
 
     # initialise model with pytorch lightning framework, hence pl_model
     pl_model = BaseModel(
@@ -193,7 +198,9 @@ def train_and_test(
     )
 
     if layer_mods is not None:
-        pl_model.model = modify_model_architecture(pl_model.model, layer_mods)
+        pl_model.model = model_modifier.modify_model_architecture(
+            pl_model.model, layer_mods
+        )
 
     # graph-methods use masks to select train and val nodes rather than train and val dataloaders
     # train and val dataloaders are still used for graph but they're identical
@@ -251,6 +258,7 @@ def train_and_save_models(
     extra_log_string_dict=None,
     layer_mods=None,
     max_epochs=1000,
+    enable_checkpointing=True,
 ):
     """
     Trains/tests the model and saves the trained model to a dictionary for further analysis.
@@ -278,6 +286,8 @@ def train_and_save_models(
         Default None.
     max_epochs : int
         Maximum number of epochs. Default 1000.
+    enable_checkpointing : bool
+        Whether to enable checkpointing. Default True.
 
     Returns
     -------
@@ -299,6 +309,7 @@ def train_and_save_models(
                 extra_log_string_dict=extra_log_string_dict,
                 layer_mods=layer_mods,
                 max_epochs=max_epochs,
+                enable_checkpointing=enable_checkpointing,
             )
             trained_models_dict = store_trained_model(
                 trained_model, trained_models_dict
@@ -316,6 +327,7 @@ def train_and_save_models(
             extra_log_string_dict=extra_log_string_dict,
             layer_mods=layer_mods,
             max_epochs=max_epochs,
+            enable_checkpointing=enable_checkpointing,
         )
         trained_models_dict = store_trained_model(trained_model, trained_models_dict)
 

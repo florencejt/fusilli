@@ -106,136 +106,7 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-
-<span class="c1"># class MCVAE_tab(ParentFusionModel, nn.Module):</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     This class implements a model that fuses the two types of tabular data using the MCVAE approach.</span>
-<span class="c1">#     MCVAE: multi-channel variational autoencoder.</span>
-
-<span class="c1">#     The MCVAE creates a joint latent space of the two types of tabular data based off a joint</span>
-<span class="c1">#     latent prior and joint decoding.</span>
-
-
-<span class="c1">#     References</span>
-<span class="c1">#     ----------</span>
-
-<span class="c1">#     Antelmi, L., Ayache, N., Robert, P., &amp; Lorenzi, M. (2019). Sparse Multi-Channel Variational</span>
-<span class="c1">#         Autoencoder for the Joint Analysis of Heterogeneous Data. Proceedings of the 36th</span>
-<span class="c1">#         International Conference on Machine Learning, 302–311.</span>
-<span class="c1">#         https://proceedings.mlr.press/v97/antelmi19a.html</span>
-
-<span class="c1">#     Attributes</span>
-<span class="c1">#     ----------</span>
-<span class="c1">#     subspace_method : class</span>
-<span class="c1">#         Class of the subspace method: :class:`~.MCVAESubspaceMethod`</span>
-<span class="c1">#     latent_space_layers : dict</span>
-<span class="c1">#         Dictionary containing the layers of the 1st type of tabular data.</span>
-<span class="c1">#         Here the first type of tabular data is the joint latent space created</span>
-<span class="c1">#         in the mcvae_subspace_method class.</span>
-<span class="c1">#     fused_dim : int</span>
-<span class="c1">#         Number of features of the fused layers. This is the flattened output size of the</span>
-<span class="c1">#         latent space layers.</span>
-<span class="c1">#     fused_layers : nn.Sequential</span>
-<span class="c1">#         Sequential layer containing the fused layers.</span>
-<span class="c1">#     final_prediction : nn.Sequential</span>
-<span class="c1">#         Sequential layer containing the final prediction layers.</span>
-
-<span class="c1">#     &quot;&quot;&quot;</span>
-
-<span class="c1">#     # str: Name of the method.</span>
-<span class="c1">#     method_name = &quot;MCVAE Tabular&quot;</span>
-<span class="c1">#     # str: Type of modality.</span>
-<span class="c1">#     modality_type = &quot;both_tab&quot;</span>
-<span class="c1">#     # str: Type of fusion.</span>
-<span class="c1">#     fusion_type = &quot;subspace&quot;</span>
-
-<span class="c1">#     def __init__(self, pred_type, data_dims, params):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Parameters</span>
-<span class="c1">#         ----------</span>
-<span class="c1">#         pred_type : str</span>
-<span class="c1">#             Type of prediction to be performed.</span>
-<span class="c1">#         data_dims : dict</span>
-<span class="c1">#             Dictionary containing the dimensions of the data.</span>
-<span class="c1">#         params : dict</span>
-<span class="c1">#             Dictionary containing the parameters of the model.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         ParentFusionModel.__init__(self, pred_type, data_dims, params)</span>
-
-<span class="c1">#         self.pred_type = pred_type</span>
-<span class="c1">#         self.subspace_method = MCVAESubspaceMethod</span>
-
-<span class="c1">#         self.latent_space_layers = nn.ModuleDict(</span>
-<span class="c1">#             {</span>
-<span class="c1">#                 &quot;layer 1&quot;: nn.Sequential(</span>
-<span class="c1">#                     nn.Linear(25, 32),</span>
-<span class="c1">#                     nn.ReLU(),</span>
-<span class="c1">#                 ),</span>
-<span class="c1">#                 &quot;layer 2&quot;: nn.Sequential(</span>
-<span class="c1">#                     nn.Linear(32, 64),</span>
-<span class="c1">#                     nn.ReLU(),</span>
-<span class="c1">#                 ),</span>
-<span class="c1">#                 &quot;layer 3&quot;: nn.Sequential(</span>
-<span class="c1">#                     nn.Linear(64, 128),</span>
-<span class="c1">#                     nn.ReLU(),</span>
-<span class="c1">#                 ),</span>
-<span class="c1">#                 &quot;layer 4&quot;: nn.Sequential(</span>
-<span class="c1">#                     nn.Linear(128, 256),</span>
-<span class="c1">#                     nn.ReLU(),</span>
-<span class="c1">#                 ),</span>
-<span class="c1">#                 &quot;layer 5&quot;: nn.Sequential(</span>
-<span class="c1">#                     nn.Linear(256, 256),</span>
-<span class="c1">#                     nn.ReLU(),</span>
-<span class="c1">#                 ),</span>
-<span class="c1">#             }</span>
-<span class="c1">#         )</span>
-
-<span class="c1">#         self.calc_fused_layers()</span>
-
-<span class="c1">#     def calc_fused_layers(self):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Calculates the fused layers of the model.</span>
-
-<span class="c1">#         Returns</span>
-<span class="c1">#         -------</span>
-<span class="c1">#         None</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-
-<span class="c1">#         # make sure the first layer takes in the latent dimension</span>
-<span class="c1">#         self.latent_space_layers[&quot;layer 1&quot;][0] = nn.Linear(</span>
-<span class="c1">#             self.data_dims[0], self.latent_space_layers[&quot;layer 1&quot;][0].out_features</span>
-<span class="c1">#         )</span>
-
-<span class="c1">#         self.fused_dim = list(self.latent_space_layers.values())[-1][0].out_features</span>
-<span class="c1">#         self.set_fused_layers(self.fused_dim)</span>
-<span class="c1">#         self.set_final_pred_layers()</span>
-
-<span class="c1">#     def forward(self, x):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Forward pass of the model.</span>
-
-<span class="c1">#         Parameters</span>
-<span class="c1">#         ----------</span>
-<span class="c1">#         x : list</span>
-<span class="c1">#             List containing the two types of tabular data.</span>
-
-<span class="c1">#         Returns</span>
-<span class="c1">#         -------</span>
-<span class="c1">#         out_pred : list</span>
-<span class="c1">#             List containing the predictions.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         x_latent = x</span>
-
-<span class="c1">#         for layer in self.latent_space_layers.values():</span>
-<span class="c1">#             x_latent = layer(x_latent)</span>
-
-<span class="c1">#         out_fuse = self.fused_layers(x_latent)</span>
-
-<span class="c1">#         out_pred = self.final_prediction(out_fuse)</span>
-
-<span class="c1">#         return [</span>
-<span class="c1">#             out_pred,</span>
-<span class="c1">#         ]</span>
+<span class="kn">from</span> <span class="nn">fusionlibrary.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
 
 
 <div class="viewcode-block" id="mcvae_early_stopping_tol"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.mcvae_early_stopping_tol">[docs]</a><span class="k">def</span> <span class="nf">mcvae_early_stopping_tol</span><span class="p">(</span><span class="n">patience</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">loss_logs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -318,6 +189,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_latent_dims</span> <span class="o">=</span> <span class="mi">10</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span> <span class="o">=</span> <span class="n">max_epochs</span></div>
 
+<div class="viewcode-block" id="MCVAESubspaceMethod.check_params"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.check_params">[docs]</a>    <span class="k">def</span> <span class="nf">check_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks the parameters of the model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_latent_dims</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;num_latent_dims&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_latent_dims</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Incorrect attribute range: The latent dimension must be greater than 0. The latent dimension is currently: &quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_latent_dims</span><span class="p">,</span>
+            <span class="p">)</span></div>
+
 <div class="viewcode-block" id="MCVAESubspaceMethod.get_latents"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.get_latents">[docs]</a>    <span class="k">def</span> <span class="nf">get_latents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the latent representations of the multimodal dataset.</span>
@@ -334,6 +222,7 @@
 <span class="sd">            Array containing the mean latents of the dataset.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># getting mean latent space</span>
+
         <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 
         <span class="n">latent_vars_ch0</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
@@ -522,7 +411,8 @@
                 <span class="p">),</span>
             <span class="p">}</span>
         <span class="p">)</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_space_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="MCVAE_tab.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -534,14 +424,21 @@
 <span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_dtype</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">latent_space_layers</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleDict</span><span class="p">,</span> <span class="s2">&quot;latent_space_layers&quot;</span>
+        <span class="p">)</span>
+
         <span class="c1"># make sure the first layer takes in the latent dimension</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">latent_space_layers</span><span class="p">[</span><span class="s2">&quot;layer 1&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mod1_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_space_layers</span><span class="p">[</span><span class="s2">&quot;layer 1&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_space_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">()</span></div>
+        <span class="c1"># check fused layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fused_layers</span><span class="p">,</span> <span class="n">out_dim</span> <span class="o">=</span> <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_fused_layers</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fused_layers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="n">out_dim</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MCVAE_tab.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

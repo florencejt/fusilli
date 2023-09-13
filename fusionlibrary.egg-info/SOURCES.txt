@@ -28,7 +28,9 @@ fusionlibrary/fusion_models/tabular1_unimodal.py
 fusionlibrary/fusion_models/tabular2_unimodal.py
 fusionlibrary/fusion_models/tabular_channelwise_att.py
 fusionlibrary/fusion_models/tabular_decision.py
+fusionlibrary/utils/check_model_validity.py
 fusionlibrary/utils/model_chooser.py
+fusionlibrary/utils/model_modifier.py
 fusionlibrary/utils/pl_utils.py
 fusionlibrary/utils/mcvae/setup.py
 fusionlibrary/utils/mcvae/build/lib/__init__.py

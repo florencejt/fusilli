@@ -174,13 +174,16 @@
         <span class="k">return</span> <span class="n">bar</span></div></div>
 
 
-<div class="viewcode-block" id="init_trainer"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.pl_utils.html#fusionlibrary.utils.pl_utils.init_trainer">[docs]</a><span class="k">def</span> <span class="nf">init_trainer</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<div class="viewcode-block" id="init_trainer"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.pl_utils.html#fusionlibrary.utils.pl_utils.init_trainer">[docs]</a><span class="k">def</span> <span class="nf">init_trainer</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize the pytorch lightning trainer object.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        logger (object): Pytorch lightning logger object.</span>
 <span class="sd">        max_epochs (int): Maximum number of epochs.</span>
+<span class="sd">        enable_checkpointing (bool): Whether to enable checkpointing. If True, then</span>
+<span class="sd">            checkpoints will be saved. We use False for the example notebooks in the</span>
+<span class="sd">            repository/documentation.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        trainer (object): Pytorch lightning trainer object.</span>
@@ -205,6 +208,7 @@
         <span class="n">log_every_n_steps</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="c1"># default_root_dir=run_dir,</span>
         <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+        <span class="n">enable_checkpointing</span><span class="o">=</span><span class="n">enable_checkpointing</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">trainer</span></div>
@@ -227,71 +231,6 @@
     <span class="n">metric2</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">callback_metrics</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric_names</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">_val&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">metric1</span><span class="p">,</span> <span class="n">metric2</span></div>
-
-
-<div class="viewcode-block" id="check_valid_modification_dtype"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.pl_utils.html#fusionlibrary.utils.pl_utils.check_valid_modification_dtype">[docs]</a><span class="k">def</span> <span class="nf">check_valid_modification_dtype</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">correct_dtype</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check if the modification is of the correct data type.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    attribute : object</span>
-<span class="sd">        Attribute to check.</span>
-<span class="sd">    correct_dtype : object</span>
-<span class="sd">        Correct data type.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    TypeError</span>
-<span class="sd">        If the modification is not of the correct data type.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">correct_dtype</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Incorrect data type for the modifications: Attribute </span><span class="si">{</span><span class="n">attribute</span><span class="si">}</span><span class="s2"> must be of</span><span class="se">\</span>
-<span class="s2">            type </span><span class="si">{</span><span class="n">correct_dtype</span><span class="si">}</span><span class="s2">, not dtype </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">attribute</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
-        <span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="check_valid_modification_img_dim"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.pl_utils.html#fusionlibrary.utils.pl_utils.check_valid_modification_img_dim">[docs]</a><span class="k">def</span> <span class="nf">check_valid_modification_img_dim</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">img_dim</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check if the modification img layers are the correct dimension.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    attribute : object</span>
-<span class="sd">        Attribute to check.</span>
-<span class="sd">    img_dim : object</span>
-<span class="sd">        Correct img dimensions.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    TypeError</span>
-<span class="sd">        If the modification is not of the correct data type.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleDict</span><span class="p">):</span>
-        <span class="n">has_conv3d_layer</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span>
-            <span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv3d</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">sequential_module</span> <span class="ow">in</span> <span class="n">attribute</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">sequential_module</span><span class="o">.</span><span class="n">children</span><span class="p">()</span>
-        <span class="p">)</span>
-        <span class="n">has_conv2d_layer</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span>
-            <span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">sequential_module</span> <span class="ow">in</span> <span class="n">attribute</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">sequential_module</span><span class="o">.</span><span class="n">children</span><span class="p">()</span>
-        <span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
-        <span class="n">has_conv3d_layer</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv3d</span><span class="p">)</span> <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">attribute</span><span class="p">)</span>
-        <span class="n">has_conv2d_layer</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">)</span> <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">attribute</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">has_conv2d_layer</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">img_dim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Incorrect conv layer type for the modifications: input image dimensions are </span><span class="si">{</span><span class="n">img_dim</span><span class="si">}</span><span class="s2"> and img layers have a Conv2D layer in them.&quot;</span>
-        <span class="p">)</span>
-    <span class="k">elif</span> <span class="n">has_conv3d_layer</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">img_dim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">attribute</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Incorrect conv layer type for the modifications: input image dimensions are </span><span class="si">{</span><span class="n">img_dim</span><span class="si">}</span><span class="s2"> and img layers have a Conv3D layer in them.&quot;</span>
-        <span class="p">)</span></div>
 </pre></div>
 
            </div>

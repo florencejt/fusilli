@@ -70,6 +70,7 @@ single_model_dict = train_and_save_models(
     data_module=dm,
     params=params,
     fusion_model=fusion_model,
+    enable_checkpointing=False,  # False for the example notebooks
 )
 
 # %%

@@ -8,6 +8,8 @@ from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch
 from torch.autograd import Variable
 
+from fusionlibrary.utils import check_model_validity
+
 
 class ImageDecision(ParentFusionModel, nn.Module):
     """
@@ -26,6 +28,15 @@ class ImageDecision(ParentFusionModel, nn.Module):
         Sequential layer containing the final prediction layers for the first tabular data.
     final_prediction_img : nn.Sequential
         Sequential layer containing the final prediction layers for the image data.
+    fusion_operation : function
+        Function that performs the fusion operation. Default is torch.mean(torch.stack([x, y]), dim=0).
+
+    .. warning::
+        `fusion_operation` should be done on the first dimension, i.e. the batch dimension.
+        For example, `lambda x: torch.mean(x, dim=1)`.
+        The predictions of the different modalities are stacked on the first dimension before
+        `fusion_operation`.
+
 
     """
 
@@ -51,6 +62,8 @@ class ImageDecision(ParentFusionModel, nn.Module):
 
         self.pred_type = pred_type
 
+        self.fusion_operation = lambda x: torch.mean(x, dim=1)
+
         self.set_img_layers()
         self.set_mod1_layers()
         self.calc_fused_layers()
@@ -63,6 +76,18 @@ class ImageDecision(ParentFusionModel, nn.Module):
         -------
         None
         """
+
+        # ~~ Checks ~~
+        print(self.fusion_operation)
+
+        check_model_validity.check_var_is_function(
+            self.fusion_operation, "fusion_operation"
+        )
+        check_model_validity.check_dtype(self.img_layers, nn.ModuleDict, "img_layers")
+        check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
+
+        check_model_validity.check_img_dim(self.img_layers, self.img_dim, "img_layers")
+
         # ~~ Tabular data ~~
 
         tab_fused_dim = list(self.mod1_layers.values())[-1][0].out_features
@@ -108,7 +133,13 @@ class ImageDecision(ParentFusionModel, nn.Module):
         pred_img = self.final_prediction_img(x_img)
 
         # Combine predictions by averaging them together
-        out_fuse = torch.mean(torch.stack([pred_tab1, pred_img]), dim=0)
+        print("pred_tab1", pred_tab1)
+        print("pred_img", pred_img)
+        fusion_input = torch.stack((pred_tab1, pred_img), dim=1)
+        print("fusion_input", fusion_input)
+        out_fuse = self.fusion_operation(fusion_input)
+        print("out_fuse", out_fuse)
+        # out_fuse = torch.mean(torch.stack([pred_tab1, pred_img]), dim=0)
 
         return [
             out_fuse,

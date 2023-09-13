@@ -11,7 +11,8 @@ from fusionlibrary.fusion_models.tab_crossmodal_att import (
 from fusionlibrary.fusion_models.tabular_channelwise_att import (
     TabularChannelWiseMultiAttention,
 )
-from fusionlibrary.train_functions import modify_model_architecture
+
+from fusionlibrary.utils import model_modifier
 
 correct_modifications = {  # Correct modifications
     "TabularChannelWiseMultiAttention": {
@@ -575,13 +576,16 @@ def test_correct_modify_model_architecture(model_name, model_fixture, request):
         original_model = model_fixture
 
         # Modify the model's architecture using the function
-        modified_model = modify_model_architecture(model_fixture, correct_modifications)
+        modified_model = model_modifier.modify_model_architecture(
+            model_fixture, correct_modifications
+        )
 
         # Ensure that the model architecture has been modified as expected
         for key, modification in correct_modifications.get(model_name, {}).items():
             assert getattr(modified_model, key) == modification
 
-        # Ensure that the final prediction layer has been modified as expected but the output dim has not
+        # Ensure that the final prediction layer has been modified as expected but the output dim
+        # has not
         assert (
             modified_model.final_prediction[-1].out_features
             == original_model.final_prediction[-1].out_features
@@ -602,7 +606,7 @@ def test_wrong_num_layers_modify_model_architecture(model_name, model_fixture, r
         ).items():
             individual_modification = {model_name: {key: modification}}
             with pytest.raises(ValueError):
-                modify_model_architecture(
+                model_modifier.modify_model_architecture(
                     request.getfixturevalue(model_fixture),
                     individual_modification,
                 ), "The number of layers in the two modalities must be the same."
@@ -617,7 +621,7 @@ def test_wrong_data_type_modify_model_architecture(model_name, model_fixture, re
         with pytest.raises(
             TypeError, match="Incorrect data type for the modifications"
         ):
-            modify_model_architecture(
+            model_modifier.modify_model_architecture(
                 request.getfixturevalue(model_fixture),
                 individual_modification,
             )
@@ -637,7 +641,7 @@ def test_wrong_img_dim_modify_model_architecture(model_name, model_fixture, requ
             individual_modification = {model_name: {key: modification}}
 
             with pytest.raises(TypeError, match="Incorrect conv layer type"):
-                modify_model_architecture(
+                model_modifier.modify_model_architecture(
                     request.getfixturevalue(model_fixture),
                     individual_modification,
                 )
@@ -652,7 +656,7 @@ def test_wrong_img_dim_modify_model_architecture(model_name, model_fixture, requ
             individual_modification = {model_name: {key: modification}}
 
             with pytest.raises(TypeError, match="Incorrect conv layer type"):
-                modify_model_architecture(
+                model_modifier.modify_model_architecture(
                     request.getfixturevalue(model_fixture),
                     wrong_img_dim_modifications_2D,
                 )

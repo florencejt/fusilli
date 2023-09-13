@@ -100,10 +100,7 @@
 <span class="kn">from</span> <span class="nn">fusionlibrary.fusion_models.base_pl_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch.autograd</span> <span class="kn">import</span> <span class="n">Variable</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.utils.pl_utils</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">check_valid_modification_dtype</span><span class="p">,</span>
-    <span class="n">check_valid_modification_img_dim</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">fusionlibrary.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
 
 
 <div class="viewcode-block" id="ImageChannelWiseMultiAttention"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention">[docs]</a><span class="k">class</span> <span class="nc">ImageChannelWiseMultiAttention</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -198,10 +195,10 @@
 <span class="sd">            If the image dimensions are not valid. (Conv2D used for 3D img and vice versa)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">check_valid_modification_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleDict</span><span class="p">)</span>
-        <span class="n">check_valid_modification_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleDict</span><span class="p">)</span>
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleDict</span><span class="p">,</span> <span class="s2">&quot;mod1_layers&quot;</span><span class="p">)</span>
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleDict</span><span class="p">,</span> <span class="s2">&quot;img_layers&quot;</span><span class="p">)</span>
 
-        <span class="n">check_valid_modification_img_dim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">)</span>
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_img_dim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">,</span> <span class="s2">&quot;img_layers&quot;</span><span class="p">)</span>
         <span class="c1"># if number of imaging layers does not equal number of tabular layers, return error</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>

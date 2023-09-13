@@ -1,9 +1,5 @@
 import pytest
-from fusionlibrary.train_functions import (
-    modify_model_architecture,
-    get_nested_attr,
-    reset_fused_layers,
-)
+from fusionlibrary.utils import model_modifier
 import torch.nn as nn
 
 
@@ -32,7 +28,9 @@ def test_modify_model_architecture():
     }
 
     # Modify the model's architecture
-    modified_model = modify_model_architecture(model, architecture_modification)
+    modified_model = model_modifier.modify_model_architecture(
+        model, architecture_modification
+    )
 
     # Check if the modifications are applied
     assert isinstance(modified_model.conv1, nn.Conv2d)
@@ -53,7 +51,9 @@ def test_specific_modify_model_architecture():
         }
     }
 
-    modified_model = modify_model_architecture(model, architecture_modification)
+    modified_model = model_modifier.modify_model_architecture(
+        model, architecture_modification
+    )
 
     assert isinstance(modified_model.conv1, nn.Conv2d)
     assert modified_model.conv1.out_channels == 128
@@ -75,7 +75,7 @@ def test_specific_modify_model_nonexistent_attr():
     }
 
     with pytest.raises(ValueError):
-        modify_model_architecture(model, architecture_modification)
+        model_modifier.modify_model_architecture(model, architecture_modification)
 
 
 # Test case for modifying an attribute that doesn't exist
@@ -91,7 +91,7 @@ def test_modify_model_architecture_nonexistent_attr():
     }
 
     with pytest.warns(UserWarning):
-        modify_model_architecture(model, architecture_modification)
+        model_modifier.modify_model_architecture(model, architecture_modification)
 
 
 # Test case for get_nested_attr
@@ -105,7 +105,7 @@ def test_get_nested_attr():
     obj = SampleObject()
 
     # Get a nested attribute using get_nested_attr
-    nested_attr = get_nested_attr(obj, "nested.conv1")
+    nested_attr = model_modifier.get_nested_attr(obj, "nested.conv1")
 
     # Check if the nested attribute is correctly retrieved
     assert isinstance(getattr(nested_attr, "conv1"), nn.Conv2d)
@@ -127,7 +127,7 @@ def test_reset_fused_layers():
     model = SampleModelWithFusedLayers()
 
     # Call reset_fused_layers
-    reset_fused_layers(model, "SampleModelWithFusedLayers")
+    model_modifier.reset_fused_layers(model, "SampleModelWithFusedLayers")
 
     # Check if the reset method is called correctly
     assert True  # Add assertions related to the reset operation if needed

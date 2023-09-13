@@ -104,104 +104,7 @@
 <span class="kn">from</span> <span class="nn">torch_geometric.data</span> <span class="kn">import</span> <span class="n">Data</span>
 <span class="kn">from</span> <span class="nn">torch_geometric.nn</span> <span class="kn">import</span> <span class="n">GCNConv</span>
 <span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
-
-
-<span class="c1"># class EdgeCorrGNN(ParentFusionModel, nn.Module):</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     Graph neural network with the edge weighting as the first tabular modality correlations and</span>
-<span class="c1">#     the node features as the second tabular modality features.</span>
-
-<span class="c1">#     Attributes</span>
-<span class="c1">#     ----------</span>
-<span class="c1">#     graph_maker : function</span>
-<span class="c1">#         Function that creates the graph data structure: :class:`~.EdgeCorrGraphMaker`</span>
-<span class="c1">#     graph_conv_layers : nn.Sequential</span>
-<span class="c1">#         Sequential layer containing the graph convolutional layers.</span>
-<span class="c1">#     dropout_prob : float</span>
-<span class="c1">#         Dropout probability. Default: 0.5</span>
-<span class="c1">#     final_prediction : nn.Sequential</span>
-<span class="c1">#         Sequential layer containing the final prediction layers. The final prediction layers</span>
-<span class="c1">#         take in 256 features.</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-
-<span class="c1">#     # str: Name of the method.</span>
-<span class="c1">#     method_name = &quot;Edge Correlation GNN&quot;</span>
-<span class="c1">#     # str: Type of modality.</span>
-<span class="c1">#     modality_type = &quot;both_tab&quot;</span>
-<span class="c1">#     # str: Type of fusion.</span>
-<span class="c1">#     fusion_type = &quot;graph&quot;</span>
-
-<span class="c1">#     def __init__(self, pred_type, data_dims, params):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Parameters</span>
-<span class="c1">#         ----------</span>
-<span class="c1">#         pred_type : str</span>
-<span class="c1">#             Type of prediction to be performed.</span>
-<span class="c1">#         data_dims : dict</span>
-<span class="c1">#             Dictionary containing the dimensions of the data.</span>
-<span class="c1">#         params : dict</span>
-<span class="c1">#             Dictionary containing the parameters of the model.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-
-<span class="c1">#         ParentFusionModel.__init__(self, pred_type, data_dims, params)</span>
-
-<span class="c1">#         self.pred_type = pred_type</span>
-
-<span class="c1">#         self.graph_maker = EdgeCorrGraphMaker</span>
-
-<span class="c1">#         self.graph_conv_layers = nn.Sequential(</span>
-<span class="c1">#             GCNConv(self.mod2_dim, 64),</span>
-<span class="c1">#             GCNConv(64, 128),</span>
-<span class="c1">#             GCNConv(128, 256),</span>
-<span class="c1">#             GCNConv(256, 256),</span>
-<span class="c1">#         )</span>
-
-<span class="c1">#         self.dropout_prob = 0.5</span>
-
-<span class="c1">#         self.calc_fused_layers()</span>
-
-<span class="c1">#     def calc_fused_layers(self):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Calculates the number of features after the fusion layer.</span>
-
-<span class="c1">#         Returns</span>
-<span class="c1">#         -------</span>
-<span class="c1">#         None</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         # make sure the first layer takes in the number of features of the second tabular modality</span>
-<span class="c1">#         self.graph_conv_layers[0] = GCNConv(</span>
-<span class="c1">#             self.mod2_dim, self.graph_conv_layers[0].out_channels</span>
-<span class="c1">#         )</span>
-
-<span class="c1">#         self.fused_dim = self.graph_conv_layers[-1].out_channels</span>
-<span class="c1">#         self.set_final_pred_layers(self.fused_dim)</span>
-
-<span class="c1">#     def forward(self, x):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Forward pass of the model.</span>
-
-<span class="c1">#         Parameters</span>
-<span class="c1">#         ----------</span>
-<span class="c1">#         x : torch.Tensor</span>
-<span class="c1">#             Tensor containing the tabular data.</span>
-
-<span class="c1">#         Returns</span>
-<span class="c1">#         -------</span>
-<span class="c1">#         list</span>
-<span class="c1">#             List containing the output of the model.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         x_n, edge_index, edge_attr = x</span>
-
-<span class="c1">#         for layer in self.graph_conv_layers:</span>
-<span class="c1">#             x_n = layer(x_n, edge_index, edge_attr)</span>
-<span class="c1">#             x_n = x_n.relu()</span>
-<span class="c1">#             x_n = F.dropout(x_n, p=self.dropout_prob, training=self.training)</span>
-
-<span class="c1">#         out = self.final_prediction(x_n)</span>
-
-<span class="c1">#         return [</span>
-<span class="c1">#             out,</span>
-<span class="c1">#         ]</span>
+<span class="kn">from</span> <span class="nn">fusionlibrary.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
 
 
 <div class="viewcode-block" id="EdgeCorrGraphMaker"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker">[docs]</a><span class="k">class</span> <span class="nc">EdgeCorrGraphMaker</span><span class="p">:</span>
@@ -226,6 +129,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.8</span>  <span class="c1"># how correlated the nodes need to be to be connected</span></div>
+
+<div class="viewcode-block" id="EdgeCorrGraphMaker.check_params"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.check_params">[docs]</a>    <span class="k">def</span> <span class="nf">check_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks the parameters of the model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="s2">&quot;Incorrect attribute range: The threshold must be between 0 and 1, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;inclusive. The threshold is currently: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;threshold&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EdgeCorrGraphMaker.make_graph"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.make_graph">[docs]</a>    <span class="k">def</span> <span class="nf">make_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -325,6 +247,20 @@
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout_prob</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout_prob</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="s2">&quot;Incorrect attribute range: The dropout probability must be between,&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot; 0 and 1, inclusive. The dropout probability is currently: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout_prob</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_dtype</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph_conv_layers</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">,</span> <span class="s2">&quot;graph_conv_layers&quot;</span>
+        <span class="p">)</span>
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout_prob</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;dropout_prob&quot;</span><span class="p">)</span>
+
         <span class="c1"># make sure the first layer takes in the number of features of the second tabular modality</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">graph_conv_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">GCNConv</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mod2_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_conv_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_channels</span>

@@ -7,10 +7,8 @@ import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch
 from torch.autograd import Variable
-from fusionlibrary.utils.pl_utils import (
-    check_valid_modification_dtype,
-    check_valid_modification_img_dim,
-)
+
+from fusionlibrary.utils import check_model_validity
 
 
 class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
@@ -108,10 +106,10 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
         ValueError
             If the image dimensions are not valid. (Conv2D used for 3D img and vice versa)
         """
-        check_valid_modification_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
-        check_valid_modification_dtype(self.img_layers, nn.ModuleDict, "img_layers")
+        check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
+        check_model_validity.check_dtype(self.img_layers, nn.ModuleDict, "img_layers")
 
-        check_valid_modification_img_dim(self.img_layers, self.img_dim, "img_layers")
+        check_model_validity.check_img_dim(self.img_layers, self.img_dim, "img_layers")
 
         if len(self.mod1_layers) != len(self.img_layers):
             raise ValueError(

@@ -101,6 +101,8 @@
 <span class="kn">from</span> <span class="nn">fusionlibrary.fusion_models.base_pl_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 
+<span class="kn">from</span> <span class="nn">fusionlibrary.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
+
 
 <div class="viewcode-block" id="TabularDecision"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.tabular_decision.html#fusionlibrary.fusion_models.tabular_decision.TabularDecision">[docs]</a><span class="k">class</span> <span class="nc">TabularDecision</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -119,6 +121,8 @@
 <span class="sd">        Sequential layer containing the final prediction layers for the first tabular data.</span>
 <span class="sd">    final_prediction_tab2 : nn.Sequential</span>
 <span class="sd">        Sequential layer containing the final prediction layers for the second tabular data.</span>
+<span class="sd">    fusion_operation : function</span>
+<span class="sd">        Function that performs the fusion operation. Default is torch.mean(torch.stack([x, y]), dim=0).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -145,6 +149,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">fusion_operation</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">set_mod1_layers</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_mod2_layers</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
@@ -157,6 +163,13 @@
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_var_is_function</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fusion_operation</span><span class="p">,</span> <span class="s2">&quot;fusion_operation&quot;</span>
+        <span class="p">)</span>
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleDict</span><span class="p">,</span> <span class="s2">&quot;mod1_layers&quot;</span><span class="p">)</span>
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod2_layers</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleDict</span><span class="p">,</span> <span class="s2">&quot;mod2_layers&quot;</span><span class="p">)</span>
+
         <span class="n">tab1_fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="n">tab1_fused_dim</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">final_prediction_tab1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_prediction</span>
@@ -192,7 +205,8 @@
         <span class="n">pred_tab2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_prediction_tab2</span><span class="p">(</span><span class="n">x_tab2</span><span class="p">)</span>
 
         <span class="c1"># Combine predictions by averaging them together</span>
-        <span class="n">out_fuse</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">pred_tab1</span><span class="p">,</span> <span class="n">pred_tab2</span><span class="p">]),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">out_fuse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion_operation</span><span class="p">(</span><span class="n">pred_tab1</span><span class="p">,</span> <span class="n">pred_tab2</span><span class="p">)</span>
+        <span class="c1"># out_fuse = torch.mean(torch.stack([pred_tab1, pred_tab2]), dim=0)</span>
 
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">out_fuse</span><span class="p">,</span>

@@ -7,10 +7,8 @@ import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch
 from torch.autograd import Variable
-from fusionlibrary.utils.pl_utils import (
-    check_valid_modification_dtype,
-    check_valid_modification_img_dim,
-)
+
+from fusionlibrary.utils import check_model_validity
 
 
 class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
@@ -41,8 +39,6 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
     fused_dim : int
         Number of features of the fused layers. This is the flattened output size of the
         image layers.
-    fused_layers : nn.Sequential
-        Sequential layer containing the fused layers.
     attention : nn.MultiheadAttention
         Multihead attention layer. Takes in attention_embed_dim features as input.
     img_dense : nn.Linear
@@ -91,6 +87,21 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
 
         self.relu = nn.ReLU()
 
+    def get_fused_dim(self):
+        """
+        Get the number of features of the fused layers.
+
+        Returns
+        -------
+        None
+        """
+        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
+        for layer in self.img_layers.values():
+            dummy_conv_output = layer(dummy_conv_output)
+        image_output_size = dummy_conv_output.data.view(1, -1).size(1)
+
+        self.fused_dim = image_output_size
+
     def calc_fused_layers(self):
         """
         Calculate the fused layers.
@@ -108,24 +119,17 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
         ValueError
             If the image dimensions are not valid. (Conv2D used for 3D img and vice versa)
         """
-        check_valid_modification_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
-        check_valid_modification_dtype(self.img_layers, nn.ModuleDict, "img_layers")
+        check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
+        check_model_validity.check_dtype(self.img_layers, nn.ModuleDict, "img_layers")
 
-        check_valid_modification_img_dim(self.img_layers, self.img_dim, "img_layers")
+        check_model_validity.check_img_dim(self.img_layers, self.img_dim, "img_layers")
 
         if len(self.mod1_layers) != len(self.img_layers):
             raise ValueError(
                 "The number of layers in the two modalities must be the same."
             )
 
-        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
-        for layer in self.img_layers.values():
-            dummy_conv_output = layer(dummy_conv_output)
-        image_output_size = dummy_conv_output.data.view(1, -1).size(1)
-
-        self.fused_dim = image_output_size
-
-        self.set_fused_layers(self.fused_dim)
+        self.get_fused_dim()
 
         self.attention = nn.MultiheadAttention(
             embed_dim=self.attention_embed_dim, num_heads=2

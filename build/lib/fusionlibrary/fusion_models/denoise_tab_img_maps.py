@@ -10,101 +10,8 @@ from torch.utils.data import DataLoader
 import pandas as pd
 from torch.nn import functional as F
 from fusionlibrary.fusion_models.base_pl_model import BaseModel
-from fusionlibrary.utils.pl_utils import (
-    check_valid_modification_dtype,
-    check_valid_modification_img_dim,
-)
 
-# class DAETabImgMaps(ParentFusionModel, nn.Module):
-#     """
-#     Using a denoising autoencoder to upsample tabular data, then concatenating with feature maps
-#     from final 3 conv layers of image data.
-#     From Yan et al 2021: Richer fusion network for breast cancer classification on multimodal data.
-
-#     Attributes
-#     ----------
-#     pred_type : str
-#         Type of prediction.
-#     subspace_method : class
-#         Subspace method:
-#         :class:`~fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method`.
-#     fusion_layers : nn.Sequential
-#         Fusion layers combining the intermediate image maps and the tabular latent subspace.
-#     final_prediction : nn.Sequential
-#         Final prediction layers.
-#     """
-
-#     # str: Name of the method.
-#     method_name = "Denoising tabular autoencoder with image maps"
-#     # str: Type of modality.
-#     modality_type = "tab_img"
-#     # str: Type of fusion.
-#     fusion_type = "subspace"
-
-#     def __init__(self, pred_type, data_dims, params):
-#         """
-#         Initialise the model.
-
-#         Parameters
-#         ----------
-#         pred_type : str
-#             Type of prediction.
-#         data_dims : list
-#             List containing the dimensions of the data.
-#         params : dict
-#             Dictionary containing the parameters.
-#         """
-
-#         ParentFusionModel.__init__(self, pred_type, data_dims, params)
-#         self.subspace_method = denoising_autoencoder_subspace_method
-#         self.pred_type = pred_type
-
-#         self.fusion_layers = nn.Sequential(
-#             nn.Linear(self.mod1_dim, 500),
-#             nn.ReLU(),
-#             nn.Linear(500, 100),
-#             nn.ReLU(),
-#             nn.Linear(100, 64),
-#         )
-
-#         self.calc_fused_layers()
-
-#     def calc_fused_layers(self):
-#         """
-#         Calculate the fused layers.
-
-#         Returns
-#         -------
-#         None
-#         """
-#         self.fusion_layers[0] = nn.Linear(
-#             self.mod1_dim, self.fusion_layers[0].out_features
-#         )
-
-#         self.set_final_pred_layers(self.fusion_layers[-1].out_features)
-
-#     def forward(self, x):
-#         """
-#         Forward pass.
-
-#         Parameters
-#         ----------
-#         x : torch.Tensor
-#             Input data.
-
-#         Returns
-#         -------
-#         list
-#             List containing the output.
-#         """
-
-#         x = self.fusion_layers(x)
-
-#         out = self.final_prediction(x)
-
-#         return [
-#             out,
-#         ]
+from fusionlibrary.utils import check_model_validity
 
 
 class DenoisingAutoencoder(pl.LightningModule):
@@ -174,9 +81,15 @@ class DenoisingAutoencoder(pl.LightningModule):
         # this will change the upsampler and downsampler to be consistent with a modified latent dimension
         # you can also just change the upsampler and downsampler directly
 
-        check_valid_modification_dtype(self.upsampler, nn.Sequential, "upsampler")
-        check_valid_modification_dtype(self.downsampler, nn.Sequential, "downsampler")
-        check_valid_modification_dtype(self.latent_dim, int, "latent_dim")
+        check_model_validity.check_dtype(self.upsampler, nn.Sequential, "upsampler")
+        check_model_validity.check_dtype(self.downsampler, nn.Sequential, "downsampler")
+        check_model_validity.check_dtype(self.latent_dim, int, "latent_dim")
+
+        if self.latent_dim < 1:
+            raise ValueError(
+                "The latent dimension must be greater than 0. The latent dimension is currently: ",
+                self.latent_dim,
+            )
 
         self.upsampler[0] = nn.Linear(self.tab_dims, self.upsampler[0].out_features)
         self.upsampler[-2] = nn.Linear(
@@ -386,6 +299,16 @@ class ImgUnimodalDAE(pl.LightningModule):
             )
             self.activation = lambda x: torch.argmax(nn.Softmax(dim=-1)(x), dim=-1)
 
+    def get_fused_dim(self):
+        """
+        Get the number of features of the fused layers.
+
+        Returns
+        -------
+        None
+        """
+        self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
+
     def calc_fused_layers(self):
         """
         Calculate the fused layers.
@@ -395,12 +318,12 @@ class ImgUnimodalDAE(pl.LightningModule):
         None
         """
 
-        check_valid_modification_dtype(self.img_layers, nn.ModuleDict, "img_layers")
-        check_valid_modification_img_dim(self.img_layers, self.img_dim, "img_layers")
+        check_model_validity.check_dtype(self.img_layers, nn.ModuleDict, "img_layers")
+        check_model_validity.check_img_dim(self.img_layers, self.img_dim, "img_layers")
 
         self.num_layers = len(self.img_layers)
 
-        self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
+        self.get_fused_dim()
 
         ParentFusionModel.set_fused_layers(self, fused_dim=self.fused_dim)
 
@@ -462,7 +385,6 @@ class ImgUnimodalDAE(pl.LightningModule):
             logits.float().requires_grad_(True),
             y.float().requires_grad_(True),
         )
-        print("loss: ", loss)
 
         self.log("train_loss", loss, logger=False)
 
@@ -763,7 +685,7 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         None
         """
 
-        check_valid_modification_dtype(
+        check_model_validity.check_dtype(
             self.fusion_layers, nn.Sequential, "fusion_layers"
         )
 

@@ -105,85 +105,98 @@
 <span class="p">)</span>
 <span class="kn">import</span> <span class="nn">wandb</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">from</span> <span class="nn">fusionlibrary.utils</span> <span class="kn">import</span> <span class="n">model_modifier</span>
+
+<span class="c1"># def modify_model_architecture(model, architecture_modification):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Modify the architecture of a deep learning model based on the provided configuration.</span>
+
+<span class="c1">#     Args:</span>
+<span class="c1">#         model (nn.Module): The original deep learning model.</span>
+<span class="c1">#         architecture_modification (dict): A dictionary containing architecture modifications.</span>
+<span class="c1">#             Input format {&quot;model&quot;: {&quot;layer_group&quot;: &quot;modification&quot;}, ...}.</span>
+<span class="c1">#             e.g. {&quot;TabularCrossmodalAttention&quot;: {&quot;mod1_layers&quot;: new mod 1 layers nn.ModuleDict}}</span>
+
+<span class="c1">#     Returns:</span>
+<span class="c1">#         nn.Module: The modified deep learning model.</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+
+<span class="c1">#     for model_name, layer_groups in architecture_modification.items():</span>
+<span class="c1">#         # Modify layers for all specified models</span>
+<span class="c1">#         if model_name == &quot;all&quot;:</span>
+<span class="c1">#             for layer_group, modification in layer_groups.items():</span>
+<span class="c1">#                 if hasattr(model, layer_group):</span>
+<span class="c1">#                     setattr(model, layer_group, modification)</span>
+<span class="c1">#                     print(&quot;Changed&quot;, layer_group, &quot;in&quot;, model_name)</span>
+<span class="c1">#                 else:</span>
+<span class="c1">#                     warnings.warn(</span>
+<span class="c1">#                         f&quot;Layer group {layer_group} not found in {model} when flagged with\</span>
+<span class="c1">#                         {model_name}&quot;</span>
+<span class="c1">#                     )</span>
+<span class="c1">#             reset_fused_layers(model, model)</span>
+
+<span class="c1">#         # Modify layers for a specific model class</span>
+<span class="c1">#         elif model_name == model.__class__.__name__:</span>
+<span class="c1">#             for layer_group, modification in layer_groups.items():</span>
+<span class="c1">#                 nested_attr = get_nested_attr(model, layer_group)</span>
+
+<span class="c1">#                 if hasattr(nested_attr, layer_group.split(&quot;.&quot;)[-1]):</span>
+<span class="c1">#                     setattr(nested_attr, layer_group.split(&quot;.&quot;)[-1], modification)</span>
+<span class="c1">#                     print(&quot;Changed&quot;, layer_group.split(&quot;.&quot;)[-1], &quot;in&quot;, model_name)</span>
+
+<span class="c1">#                 else:</span>
+<span class="c1">#                     raise ValueError(</span>
+<span class="c1">#                         f&quot;Layer group {layer_group} not found in {model_name}&quot;</span>
+<span class="c1">#                     )</span>
+<span class="c1">#                 # if we&#39;re on the last layer group, reset the fused layers</span>
+<span class="c1">#                 if layer_group == list(layer_groups.keys())[-1]:</span>
+<span class="c1">#                     reset_fused_layers(nested_attr, model)</span>
+
+<span class="c1">#     return model</span>
 
 
-<div class="viewcode-block" id="modify_model_architecture"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.modify_model_architecture">[docs]</a><span class="k">def</span> <span class="nf">modify_model_architecture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">architecture_modification</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Modify the architecture of a deep learning model based on the provided configuration.</span>
+<span class="c1"># def get_nested_attr(obj, attr_path):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Get a nested attribute from an object using dot-separated path.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        model (nn.Module): The original deep learning model.</span>
-<span class="sd">        architecture_modification (dict): A dictionary containing architecture modifications.</span>
+<span class="c1">#     Args:</span>
+<span class="c1">#         obj (object): The object to retrieve the nested attribute from.</span>
+<span class="c1">#         attr_path (str): Dot-separated path to the nested attribute.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        nn.Module: The modified deep learning model.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">layer_groups</span> <span class="ow">in</span> <span class="n">architecture_modification</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="c1"># Modify layers for all specified models</span>
-        <span class="k">if</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">layer_group</span><span class="p">,</span> <span class="n">modification</span> <span class="ow">in</span> <span class="n">layer_groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_group</span><span class="p">):</span>
-                    <span class="nb">setattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_group</span><span class="p">,</span> <span class="n">modification</span><span class="p">)</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Changed&quot;</span><span class="p">,</span> <span class="n">layer_group</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Layer group </span><span class="si">{</span><span class="n">layer_group</span><span class="si">}</span><span class="s2"> not found in </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2"> when flagged with</span><span class="se">\</span>
-<span class="s2">                        </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="p">)</span>
-            <span class="n">reset_fused_layers</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="c1">#     Returns:</span>
+<span class="c1">#         object: The nested attribute if found, otherwise None.</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     attributes = attr_path.split(&quot;.&quot;)</span>
 
-        <span class="c1"># Modify layers for a specific model class</span>
-        <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">layer_group</span><span class="p">,</span> <span class="n">modification</span> <span class="ow">in</span> <span class="n">layer_groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">nested_attr</span> <span class="o">=</span> <span class="n">get_nested_attr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_group</span><span class="p">)</span>
+<span class="c1">#     if len(attributes) &gt; 1:  # if we&#39;re looking for a nested attribute</span>
+<span class="c1">#         attr = getattr(obj, attributes[0])</span>
 
-                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">nested_attr</span><span class="p">,</span> <span class="n">layer_group</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
-                    <span class="nb">setattr</span><span class="p">(</span><span class="n">nested_attr</span><span class="p">,</span> <span class="n">layer_group</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">modification</span><span class="p">)</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Changed&quot;</span><span class="p">,</span> <span class="n">layer_group</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
+<span class="c1">#         # if the attribute is more than one . deep</span>
+<span class="c1">#         for i in range(1, len(attributes) - 1):</span>
+<span class="c1">#             attr = getattr(attr, attributes[i])</span>
 
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Layer group </span><span class="si">{</span><span class="n">layer_group</span><span class="si">}</span><span class="s2"> not found in </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="p">)</span>
-                <span class="c1"># if we&#39;re on the last layer group, reset the fused layers</span>
-                <span class="k">if</span> <span class="n">layer_group</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">layer_groups</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">reset_fused_layers</span><span class="p">(</span><span class="n">nested_attr</span><span class="p">)</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         attr = obj</span>
 
-    <span class="k">return</span> <span class="n">model</span></div>
+<span class="c1">#     return attr</span>
 
 
-<div class="viewcode-block" id="get_nested_attr"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.get_nested_attr">[docs]</a><span class="k">def</span> <span class="nf">get_nested_attr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr_path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get a nested attribute from an object using dot-separated path.</span>
+<span class="c1"># def reset_fused_layers(obj, model):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Reset fused layers of a model if the reset method is available.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        obj (object): The object to retrieve the nested attribute from.</span>
-<span class="sd">        attr_path (str): Dot-separated path to the nested attribute.</span>
+<span class="c1">#     Args:</span>
+<span class="c1">#         obj (nn.Module): The model to reset fused layers for.</span>
+<span class="c1">#         model (nn.Module): The original deep learning model.</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     if hasattr(obj, &quot;calc_fused_layers&quot;):</span>
+<span class="c1">#         obj.calc_fused_layers()</span>
+<span class="c1">#         print(&quot;Reset fused layers in&quot;, model.__class__.__name__)</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        object: The nested attribute if found, otherwise None.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">attributes</span> <span class="o">=</span> <span class="n">attr_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">attributes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># if we&#39;re looking for a nested attribute</span>
-        <span class="n">attr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attributes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">attributes</span><span class="p">)):</span>
-            <span class="n">attr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">attributes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">attr</span> <span class="o">=</span> <span class="n">obj</span>
-
-    <span class="k">return</span> <span class="n">attr</span></div>
-
-
-<div class="viewcode-block" id="reset_fused_layers"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.reset_fused_layers">[docs]</a><span class="k">def</span> <span class="nf">reset_fused_layers</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Reset fused layers of a model if the reset method is available.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        obj (nn.Module): The model to reset fused layers for.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;calc_fused_layers&quot;</span><span class="p">):</span>
-        <span class="n">obj</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
+<span class="c1">#     if hasattr(model, &quot;check_params&quot;):</span>
+<span class="c1">#         model.check_params()</span>
+<span class="c1">#         print(&quot;Checked params in&quot;, model.__class__.__name__)</span>
 
 
 <div class="viewcode-block" id="train_and_test"><a class="viewcode-back" href="../../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train_functions.train_and_test">[docs]</a><span class="k">def</span> <span class="nf">train_and_test</span><span class="p">(</span>
@@ -194,6 +207,7 @@
     <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Trains and tests a model and, if k_fold trained, a fold.</span>
@@ -225,6 +239,8 @@
 <span class="sd">        Default None.</span>
 <span class="sd">    max_epochs : int</span>
 <span class="sd">        Maximum number of epochs. Default 1000.</span>
+<span class="sd">    enable_checkpointing : bool</span>
+<span class="sd">        Whether to enable checkpointing. Default True.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -261,7 +277,9 @@
 
     <span class="n">logger</span> <span class="o">=</span> <span class="n">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="p">)</span>  <span class="c1"># set logger</span>
 
-    <span class="n">trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">)</span>  <span class="c1"># init trainer</span>
+    <span class="n">trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span>
+        <span class="n">logger</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span> <span class="n">enable_checkpointing</span><span class="o">=</span><span class="n">enable_checkpointing</span>
+    <span class="p">)</span>  <span class="c1"># init trainer</span>
 
     <span class="c1"># initialise model with pytorch lightning framework, hence pl_model</span>
     <span class="n">pl_model</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="p">(</span>
@@ -275,7 +293,9 @@
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">pl_model</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">modify_model_architecture</span><span class="p">(</span><span class="n">pl_model</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_mods</span><span class="p">)</span>
+        <span class="n">pl_model</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model_modifier</span><span class="o">.</span><span class="n">modify_model_architecture</span><span class="p">(</span>
+            <span class="n">pl_model</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_mods</span>
+        <span class="p">)</span>
 
     <span class="c1"># graph-methods use masks to select train and val nodes rather than train and val dataloaders</span>
     <span class="c1"># train and val dataloaders are still used for graph but they&#39;re identical</span>
@@ -333,6 +353,7 @@
     <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Trains/tests the model and saves the trained model to a dictionary for further analysis.</span>
@@ -360,6 +381,8 @@
 <span class="sd">        Default None.</span>
 <span class="sd">    max_epochs : int</span>
 <span class="sd">        Maximum number of epochs. Default 1000.</span>
+<span class="sd">    enable_checkpointing : bool</span>
+<span class="sd">        Whether to enable checkpointing. Default True.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -381,6 +404,7 @@
                 <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span><span class="p">,</span>
                 <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
                 <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
+                <span class="n">enable_checkpointing</span><span class="o">=</span><span class="n">enable_checkpointing</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">trained_models_dict</span> <span class="o">=</span> <span class="n">store_trained_model</span><span class="p">(</span>
                 <span class="n">trained_model</span><span class="p">,</span> <span class="n">trained_models_dict</span>
@@ -398,6 +422,7 @@
             <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span><span class="p">,</span>
             <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
             <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
+            <span class="n">enable_checkpointing</span><span class="o">=</span><span class="n">enable_checkpointing</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">trained_models_dict</span> <span class="o">=</span> <span class="n">store_trained_model</span><span class="p">(</span><span class="n">trained_model</span><span class="p">,</span> <span class="n">trained_models_dict</span><span class="p">)</span>
 

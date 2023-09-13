@@ -107,7 +107,8 @@
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">KFold</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">Dataset</span>
 <span class="kn">from</span> <span class="nn">torch_geometric.data.lightning</span> <span class="kn">import</span> <span class="n">LightningNodeData</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.train_functions</span> <span class="kn">import</span> <span class="n">modify_model_architecture</span>
+<span class="kn">from</span> <span class="nn">fusionlibrary.utils</span> <span class="kn">import</span> <span class="n">model_modifier</span>
+
 
 <span class="c1"># from fusionlibrary.eval_functions import plot_graph</span>
 
@@ -638,8 +639,9 @@
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># if subspace method in layer_mods</span>
-                <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">modify_model_architecture</span><span class="p">(</span>
-                    <span class="n">subspace_method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span>
+                <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">model_modifier</span><span class="o">.</span><span class="n">modify_model_architecture</span><span class="p">(</span>
+                    <span class="n">subspace_method</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span><span class="p">,</span>
                 <span class="p">)</span>
 
             <span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
@@ -863,8 +865,9 @@
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="c1"># if subspace method in layer_mods</span>
-                    <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">modify_model_architecture</span><span class="p">(</span>
-                        <span class="n">subspace_method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span>
+                    <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">model_modifier</span><span class="o">.</span><span class="n">modify_model_architecture</span><span class="p">(</span>
+                        <span class="n">subspace_method</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span><span class="p">,</span>
                     <span class="p">)</span>
 
                 <span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
@@ -1062,7 +1065,10 @@
         <span class="n">graph_maker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># if subspace method in layer_mods</span>
-            <span class="n">graph_maker</span> <span class="o">=</span> <span class="n">modify_model_architecture</span><span class="p">(</span><span class="n">graph_maker</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span><span class="p">)</span>
+            <span class="n">graph_maker</span> <span class="o">=</span> <span class="n">model_modifier</span><span class="o">.</span><span class="n">modify_model_architecture</span><span class="p">(</span>
+                <span class="n">graph_maker</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span> <span class="o">=</span> <span class="n">graph_maker</span><span class="o">.</span><span class="n">make_graph</span><span class="p">()</span></div>
         <span class="c1"># self.graph_data = self.graph_creation_method(self.dataset)</span>
@@ -1232,7 +1238,10 @@
             <span class="n">graph_maker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># if subspace method in layer_mods</span>
-                <span class="n">graph_maker</span> <span class="o">=</span> <span class="n">modify_model_architecture</span><span class="p">(</span><span class="n">graph_maker</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span><span class="p">)</span>
+                <span class="n">graph_maker</span> <span class="o">=</span> <span class="n">model_modifier</span><span class="o">.</span><span class="n">modify_model_architecture</span><span class="p">(</span>
+                    <span class="n">graph_maker</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span><span class="p">,</span>
+                <span class="p">)</span>
 
             <span class="n">graph_data</span> <span class="o">=</span> <span class="n">graph_maker</span><span class="o">.</span><span class="n">make_graph</span><span class="p">()</span>
 

@@ -132,6 +132,7 @@ model_1_dict = train_and_save_models(
     data_module=dm,
     params=params,
     fusion_model=fusion_model,
+    enable_checkpointing=False,  # False for the example notebooks
 )
 
 # Add trained model to dictionary
@@ -171,6 +172,7 @@ model_2_dict = train_and_save_models(
     data_module=dm,
     params=params,
     fusion_model=fusion_model,
+    enable_checkpointing=False,  # False for the example notebooks
 )
 
 # Add trained model to dictionary

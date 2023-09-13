@@ -1,7 +1,6 @@
 import pytest
 import torch.nn as nn
-from fusionlibrary.train_functions import modify_model_architecture, get_nested_attr
-
+from fusionlibrary.utils import model_modifier
 from fusionlibrary.fusion_models.denoise_tab_img_maps import (
     denoising_autoencoder_subspace_method,
     DAETabImgMaps,
@@ -67,6 +66,24 @@ correct_modifications_2D = {
     },
     "ConcatImgLatentTabDoubleLoss": {
         "latent_dim": 50,
+        "fused_layers": nn.Sequential(
+            nn.Linear(25, 150),
+            nn.ReLU(),
+            nn.Linear(150, 75),
+            nn.ReLU(),
+            nn.Linear(75, 50),
+            nn.ReLU(),
+        ),
+    },
+    "ConcatImgLatentTabDoubleTrain": {
+        "fused_layers": nn.Sequential(
+            nn.Linear(25, 150),
+            nn.ReLU(),
+            nn.Linear(150, 75),
+            nn.ReLU(),
+            nn.Linear(75, 50),
+            nn.ReLU(),
+        ),
     },
     "MCVAE_tab": {
         "latent_space_layers": nn.ModuleDict(
@@ -88,6 +105,14 @@ correct_modifications_2D = {
                     nn.ReLU(),
                 ),
             }
+        ),
+        "fused_layers": nn.Sequential(
+            nn.Linear(25, 150),
+            nn.ReLU(),
+            nn.Linear(150, 75),
+            nn.ReLU(),
+            nn.Linear(75, 50),
+            nn.ReLU(),
         ),
     },
     "DAETabImgMaps": {
@@ -135,6 +160,14 @@ correct_modifications_2D = {
                     nn.MaxPool2d((2, 2)),
                 ),
             }
+        ),
+        "img_unimodal.fused_layers": nn.Sequential(
+            nn.Linear(25, 150),
+            nn.ReLU(),
+            nn.Linear(150, 75),
+            nn.ReLU(),
+            nn.Linear(75, 50),
+            nn.ReLU(),
         ),
     },
     "concat_img_latent_tab_subspace_method": {
@@ -203,6 +236,14 @@ correct_modifications_3D = {
     },
     "ConcatImgLatentTabDoubleLoss": {
         "latent_dim": 50,
+        "fused_layers": nn.Sequential(
+            nn.Linear(25, 150),
+            nn.ReLU(),
+            nn.Linear(150, 75),
+            nn.ReLU(),
+            nn.Linear(75, 50),
+            nn.ReLU(),
+        ),
     },
     "MCVAE_tab": {
         "latent_space_layers": nn.ModuleDict(
@@ -224,6 +265,14 @@ correct_modifications_3D = {
                     nn.ReLU(),
                 ),
             }
+        ),
+        "fused_layers": nn.Sequential(
+            nn.Linear(25, 150),
+            nn.ReLU(),
+            nn.Linear(150, 75),
+            nn.ReLU(),
+            nn.Linear(75, 50),
+            nn.ReLU(),
         ),
     },
     "DAETabImgMaps": {
@@ -272,6 +321,14 @@ correct_modifications_3D = {
                 ),
             }
         ),
+        "img_unimodal.fused_layers": nn.Sequential(
+            nn.Linear(25, 150),
+            nn.ReLU(),
+            nn.Linear(150, 75),
+            nn.ReLU(),
+            nn.Linear(75, 50),
+            nn.ReLU(),
+        ),
     },
     "concat_img_latent_tab_subspace_method": {
         "autoencoder.latent_dim": 180,  # img unimodal autoencoder
@@ -294,6 +351,16 @@ correct_modifications_3D = {
             nn.ConvTranspose3d(15, 8, kernel_size=3, stride=1),
             nn.ReLU(),
             nn.ConvTranspose3d(8, 1, kernel_size=3, stride=1),
+        ),
+    },
+    "ConcatImgLatentTabDoubleTrain": {
+        "fused_layers": nn.Sequential(
+            nn.Linear(25, 150),
+            nn.ReLU(),
+            nn.Linear(150, 75),
+            nn.ReLU(),
+            nn.Linear(75, 50),
+            nn.ReLU(),
         ),
     },
 }
@@ -321,7 +388,19 @@ wrong_layer_type_modifications = {
             nn.MaxPool2d((2, 2)),
         ),
     },
-    "ConcatImgLatentTabDoubleLoss": {"latent_dim": 50.5},
+    "ConcatImgLatentTabDoubleLoss": {
+        "latent_dim": 50.5,
+        "fused_layers": nn.ModuleDict(
+            {
+                "layer1": nn.Linear(25, 150),
+                "relu1": nn.ReLU(),
+                "layer2": nn.Linear(150, 75),
+                "relu2": nn.ReLU(),
+                "layer3": nn.Linear(75, 50),
+                "relu3": nn.ReLU(),
+            }
+        ),
+    },
     "MCVAE_tab": {
         "latent_space_layers": nn.Sequential(
             nn.Linear(25, 32),
@@ -332,6 +411,16 @@ wrong_layer_type_modifications = {
             nn.ReLU(),
             nn.Linear(128, 310),
             nn.ReLU(),
+        ),
+        "fused_layers": nn.ModuleDict(
+            {
+                "layer1": nn.Linear(25, 150),
+                "relu1": nn.ReLU(),
+                "layer2": nn.Linear(150, 75),
+                "relu2": nn.ReLU(),
+                "layer3": nn.Linear(75, 50),
+                "relu3": nn.ReLU(),
+            }
         ),
     },
     "DAETabImgMaps": {
@@ -373,6 +462,16 @@ wrong_layer_type_modifications = {
             nn.ReLU(),
             nn.MaxPool3d((2, 2, 2)),
         ),
+        "img_unimodal.fused_layers": nn.ModuleDict(
+            {
+                "layer1": nn.Linear(25, 150),
+                "relu1": nn.ReLU(),
+                "layer2": nn.Linear(150, 75),
+                "relu2": nn.ReLU(),
+                "layer3": nn.Linear(75, 50),
+                "relu3": nn.ReLU(),
+            }
+        ),
     },
     "concat_img_latent_tab_subspace_method": {
         "autoencoder.latent_dim": 180.25,  # img unimodal autoencoder
@@ -411,6 +510,18 @@ wrong_layer_type_modifications = {
             }
         ),
     },
+    "ConcatImgLatentTabDoubleTrain": {
+        "fused_layers": nn.ModuleDict(
+            {
+                "layer1": nn.Linear(25, 150),
+                "relu1": nn.ReLU(),
+                "layer2": nn.Linear(150, 75),
+                "relu2": nn.ReLU(),
+                "layer3": nn.Linear(75, 50),
+                "relu3": nn.ReLU(),
+            }
+        ),
+    },
 }
 
 
@@ -431,12 +542,12 @@ def model_instance_ConcatImgLatentTabDoubleLoss():
     return ConcatImgLatentTabDoubleLoss(pred_type, data_dims, params)
 
 
-# @pytest.fixture
-# def model_instance_ConcatImgLatentTabDoubleLoss_3D():
-#     pred_type = "regression"
-#     data_dims = [10, None, [100, 100, 100]]
-#     params = {}
-#     return ConcatImgLatentTabDoubleLoss(pred_type, data_dims, params)
+@pytest.fixture
+def model_instance_ConcatImgLatentTabDoubleTrain():
+    pred_type = "regression"
+    data_dims = [10, 15, None]  # represents mod1 dim and img latent space dim
+    params = {}
+    return ConcatImgLatentTabDoubleTrain(pred_type, data_dims, params)
 
 
 @pytest.fixture
@@ -450,8 +561,8 @@ def model_instance_MCVAE_tab():
 model_instances_training = [
     ("DAETabImgMaps", "model_instance_DAETabImgMaps"),
     ("ConcatImgLatentTabDoubleLoss", "model_instance_ConcatImgLatentTabDoubleLoss"),
-    # ("ConcatImgLatentTabDoubleLoss", "model_instance_ConcatImgLatentTabDoubleLoss_3D"),
     ("MCVAE_tab", "model_instance_MCVAE_tab"),
+    ("ConcatImgLatentTabDoubleTrain", "model_instance_ConcatImgLatentTabDoubleTrain"),
 ]
 
 
@@ -466,7 +577,7 @@ def test_correct_modify_model_architecture_2D_training(
 
         original_model = model_fixture
 
-        modified_model = modify_model_architecture(
+        modified_model = model_modifier.modify_model_architecture(
             model_fixture,
             correct_modifications_2D,
         )
@@ -476,14 +587,15 @@ def test_correct_modify_model_architecture_2D_training(
         # Ensure that the model architecture has been modified as expected
         for key, modification in correct_modifications_2D.get(model_name, {}).items():
             attr_name = key.split(".")[-1]
-            nested_attr = get_nested_attr(modified_model, key)
+            nested_attr = model_modifier.get_nested_attr(modified_model, key)
 
             if hasattr(nested_attr, attr_name):
                 assert getattr(nested_attr, attr_name) == modification
             else:
                 assert nested_attr == modification
 
-        # Ensure that the final prediction layer has been modified as expected but the output dim has not
+        # Ensure that the final prediction layer has been modified as expected but the output dim
+        # has not
         if hasattr(original_model, "final_prediction"):
             assert (
                 modified_model.final_prediction[-1].out_features
@@ -502,7 +614,7 @@ def test_correct_modify_model_architecture_3D_training(
 
         original_model = model_fixture
 
-        modified_model = modify_model_architecture(
+        modified_model = model_modifier.modify_model_architecture(
             model_fixture,
             correct_modifications_3D,
         )
@@ -512,7 +624,7 @@ def test_correct_modify_model_architecture_3D_training(
         # Ensure that the model architecture has been modified as expected
         for key, modification in correct_modifications_3D.get(model_name, {}).items():
             attr_name = key.split(".")[-1]
-            nested_attr = get_nested_attr(modified_model, key)
+            nested_attr = model_modifier.get_nested_attr(modified_model, key)
 
             if hasattr(nested_attr, attr_name):
                 assert getattr(nested_attr, attr_name) == modification
@@ -540,7 +652,7 @@ def test_wrong_data_type_modify_model_architecture_training(
         with pytest.raises(
             TypeError, match="Incorrect data type for the modifications"
         ):
-            modify_model_architecture(
+            model_modifier.modify_model_architecture(
                 request.getfixturevalue(model_fixture),
                 individual_modification,
             )
@@ -558,7 +670,7 @@ def test_wrong_img_dim_2D_modify_model_architecture_training(
 
             # Modify the model's architecture using the function
             with pytest.raises(TypeError, match="Incorrect conv layer type"):
-                modify_model_architecture(
+                model_modifier.modify_model_architecture(
                     request.getfixturevalue(model_fixture),
                     individual_modification,
                 )
@@ -573,11 +685,10 @@ def test_wrong_img_dim_3D_modify_model_architecture_training(
         # using correct 3D modifications, which are incorrect for 2D images
         for key, modification in correct_modifications_2D.get(model_name, {}).items():
             individual_modification = {model_name: {key: modification}}
-            print(individual_modification)
 
             # Modify the model's architecture using the function
             with pytest.raises(TypeError, match="Incorrect conv layer type"):
-                modify_model_architecture(
+                model_modifier.modify_model_architecture(
                     request.getfixturevalue(model_fixture),
                     individual_modification,
                 )
@@ -733,7 +844,7 @@ def test_correct_modify_model_architecture_2D_data(model_name, model_fixture, re
 
         original_model = model_fixture
 
-        modified_model = modify_model_architecture(
+        modified_model = model_modifier.modify_model_architecture(
             model_fixture, correct_modifications_2D
         )
 
@@ -742,7 +853,7 @@ def test_correct_modify_model_architecture_2D_data(model_name, model_fixture, re
         # Ensure that the model architecture has been modified as expected
         for key, modification in correct_modifications_2D.get(model_name, {}).items():
             attr_name = key.split(".")[-1]
-            nested_attr = get_nested_attr(modified_model, key)
+            nested_attr = model_modifier.get_nested_attr(modified_model, key)
 
             if hasattr(nested_attr, attr_name):
                 assert getattr(nested_attr, attr_name) == modification
@@ -766,7 +877,7 @@ def test_correct_modify_model_architecture_3D_data(model_name, model_fixture, re
 
         original_model = model_fixture
 
-        modified_model = modify_model_architecture(
+        modified_model = model_modifier.modify_model_architecture(
             model_fixture, correct_modifications_3D
         )
 
@@ -775,7 +886,7 @@ def test_correct_modify_model_architecture_3D_data(model_name, model_fixture, re
         # Ensure that the model architecture has been modified as expected
         for key, modification in correct_modifications_3D.get(model_name, {}).items():
             attr_name = key.split(".")[-1]
-            nested_attr = get_nested_attr(modified_model, key)
+            nested_attr = model_modifier.get_nested_attr(modified_model, key)
 
             if hasattr(nested_attr, attr_name):
                 assert getattr(nested_attr, attr_name) == modification
@@ -802,7 +913,7 @@ def test_wrong_data_type_modify_model_architecture_data(
         with pytest.raises(
             TypeError, match="Incorrect data type for the modifications"
         ):
-            modify_model_architecture(
+            model_modifier.modify_model_architecture(
                 request.getfixturevalue(model_fixture),
                 individual_modification,
             )
@@ -828,7 +939,7 @@ def test_wrong_img_dim_2D_modify_model_architecture_data(
         if conv_layer_found:
             # Modify the model's architecture using the function
             with pytest.raises(TypeError, match="Incorrect conv layer type"):
-                modify_model_architecture(
+                model_modifier.modify_model_architecture(
                     request.getfixturevalue(model_fixture),
                     new_dict,
                 )
@@ -853,7 +964,7 @@ def test_wrong_img_dim_3D_modify_model_architecture_data(
         if conv_layer_found:
             # Modify the model's architecture using the function
             with pytest.raises(TypeError, match="Incorrect conv layer type"):
-                modify_model_architecture(
+                model_modifier.modify_model_architecture(
                     request.getfixturevalue(model_fixture),
-                    correct_modifications_2D,
+                    new_dict,
                 )

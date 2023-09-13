@@ -7,6 +7,8 @@ from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 import torch
 from torch.autograd import Variable
 
+from fusionlibrary.utils import check_model_validity
+
 
 class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
     """
@@ -58,6 +60,13 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
 
         self.set_mod1_layers()
         self.set_mod2_layers()
+
+        self.fused_dim = (
+            list(self.mod1_layers.values())[-1][0].out_features
+            + list(self.mod2_layers.values())[-1][0].out_features
+        )
+        self.set_fused_layers(self.fused_dim)
+
         self.calc_fused_layers()
 
     def calc_fused_layers(self):
@@ -68,12 +77,17 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
         -------
         None
         """
-        self.fused_dim = (
-            list(self.mod1_layers.values())[-1][0].out_features
-            + list(self.mod2_layers.values())[-1][0].out_features
+
+        # ~~ Checks ~~
+        check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
+        check_model_validity.check_dtype(self.mod2_layers, nn.ModuleDict, "mod2_layers")
+
+        self.fused_layers, out_dim = check_model_validity.check_fused_layers(
+            self.fused_layers, self.fused_dim
         )
-        self.set_fused_layers(self.fused_dim)
-        self.set_final_pred_layers()
+
+        # setting final prediction layers with final out features of fused layers
+        self.set_final_pred_layers(out_dim)
 
     def forward(self, x):
         """

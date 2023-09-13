@@ -79,13 +79,16 @@ class LitProgressBar(TQDMProgressBar):
         return bar
 
 
-def init_trainer(logger, max_epochs=1000):
+def init_trainer(logger, max_epochs=1000, enable_checkpointing=True):
     """
     Initialize the pytorch lightning trainer object.
 
     Args:
         logger (object): Pytorch lightning logger object.
         max_epochs (int): Maximum number of epochs.
+        enable_checkpointing (bool): Whether to enable checkpointing. If True, then
+            checkpoints will be saved. We use False for the example notebooks in the
+            repository/documentation.
 
     Returns:
         trainer (object): Pytorch lightning trainer object.
@@ -110,6 +113,7 @@ def init_trainer(logger, max_epochs=1000):
         log_every_n_steps=2,
         # default_root_dir=run_dir,
         logger=logger,
+        enable_checkpointing=enable_checkpointing,
     )
 
     return trainer
@@ -132,79 +136,3 @@ def get_final_val_metrics(trainer):
     metric2 = trainer.callback_metrics[f"{metric_names[1]}_val"].item()
 
     return metric1, metric2
-
-
-def check_valid_modification_dtype(attribute, correct_dtype, attribute_name):
-    """Check if the modification is of the correct data type.
-
-    Parameters
-    ----------
-    attribute : object
-        Attribute to check.
-    correct_dtype : object
-        Correct data type.
-
-    Raises
-    ------
-    TypeError
-        If the modification is not of the correct data type.
-
-    """
-    if not isinstance(
-        attribute,
-        correct_dtype,
-    ):
-        raise TypeError(
-            (
-                f"Incorrect data type for the modifications: Attribute {attribute_name}"
-                f" must be of type {correct_dtype.__name__}, not dtype {type(attribute).__name__}.",
-            )
-        )
-
-
-def check_valid_modification_img_dim(attribute, img_dim, attribute_name):
-    """Check if the modification img layers are the correct dimension.
-
-    Parameters
-    ----------
-    attribute : object
-        Attribute to check.
-    img_dim : object
-        Correct img dimensions.
-
-    Raises
-    ------
-    TypeError
-        If the modification is not of the correct data type.
-
-    """
-    if isinstance(attribute, nn.ModuleDict):
-        has_conv3d_layer = any(
-            isinstance(module, nn.Conv3d)
-            for _, sequential_module in attribute.items()
-            for module in sequential_module.children()
-        )
-        has_conv2d_layer = any(
-            isinstance(module, nn.Conv2d)
-            for _, sequential_module in attribute.items()
-            for module in sequential_module.children()
-        )
-    elif isinstance(attribute, nn.Sequential):
-        has_conv3d_layer = any(isinstance(module, nn.Conv3d) for module in attribute)
-        has_conv2d_layer = any(isinstance(module, nn.Conv2d) for module in attribute)
-
-    if has_conv2d_layer and len(img_dim) == 3:
-        raise TypeError(
-            (
-                f"Incorrect conv layer type for the modified {attribute_name}: input image "
-                f"dimensions are {img_dim} and img layers have a Conv2D layer in them."
-            )
-        )
-    elif has_conv3d_layer and len(img_dim) == 2:
-        print(attribute)
-        raise TypeError(
-            (
-                f"Incorrect conv layer type for the modified {attribute_name}:"
-                f"input image dimensions are {img_dim} and img layers have a Conv3D layer in them."
-            )
-        )

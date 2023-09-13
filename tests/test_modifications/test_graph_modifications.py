@@ -1,6 +1,6 @@
 import pytest
 import torch.nn as nn
-from fusionlibrary.train_functions import modify_model_architecture, get_nested_attr
+from fusionlibrary.utils import model_modifier
 from fusionlibrary.fusion_models.edge_corr_gnn import EdgeCorrGNN, EdgeCorrGraphMaker
 from tests.test_datamodules.test_CustomDataModule import create_test_files
 from fusionlibrary.datamodules import GraphDataModule
@@ -81,14 +81,16 @@ def test_correct_modification(model_name, model_fixture, request):
 
     original_model = model_fixture
 
-    modified_model = modify_model_architecture(model_fixture, correct_modifications)
+    modified_model = model_modifier.modify_model_architecture(
+        model_fixture, correct_modifications
+    )
 
     # check that the model has been modified
     assert modified_model is not None
 
     for key, modification in correct_modifications.get(model_name, {}).items():
         attr_name = key.split(".")[-1]
-        nested_attr = get_nested_attr(modified_model, key)
+        nested_attr = model_modifier.get_nested_attr(modified_model, key)
 
         if hasattr(nested_attr, attr_name):
             assert getattr(nested_attr, attr_name) == modification
@@ -113,7 +115,7 @@ def test_incorrect_data_types_modification(model_name, model_fixture, request):
         with pytest.raises(
             TypeError, match="Incorrect data type for the modifications"
         ):
-            modify_model_architecture(
+            model_modifier.modify_model_architecture(
                 request.getfixturevalue(model_fixture),
                 individual_modification,
             )
@@ -128,7 +130,7 @@ def test_incorrect_data_ranges_modification(model_name, model_fixture, request):
         individual_modification = {model_name: {key: modification}}
 
         with pytest.raises(ValueError, match="Incorrect attribute range:"):
-            modify_model_architecture(
+            model_modifier.modify_model_architecture(
                 request.getfixturevalue(model_fixture),
                 individual_modification,
             )

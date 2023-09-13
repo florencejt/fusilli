@@ -82,6 +82,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_decision.ImageDecision.fused_layers"><code class="docutils literal notranslate"><span class="pre">ImageDecision.fused_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_decision.ImageDecision.final_prediction_tab1"><code class="docutils literal notranslate"><span class="pre">ImageDecision.final_prediction_tab1</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_decision.ImageDecision.final_prediction_img"><code class="docutils literal notranslate"><span class="pre">ImageDecision.final_prediction_img</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_decision.ImageDecision.fusion_operation"><code class="docutils literal notranslate"><span class="pre">ImageDecision.fusion_operation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_decision.ImageDecision.__init__"><code class="docutils literal notranslate"><span class="pre">ImageDecision.__init__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_decision.ImageDecision.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ImageDecision.calc_fused_layers()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.img_tab_decision.ImageDecision.forward"><code class="docutils literal notranslate"><span class="pre">ImageDecision.forward()</span></code></a></li>
@@ -203,6 +204,26 @@ fusion approach.</p>
 <dd class="field-odd"><p>nn.Sequential</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.img_tab_decision.ImageDecision.fusion_operation">
+<span class="sig-name descname"><span class="pre">fusion_operation</span></span><a class="headerlink" href="#fusionlibrary.fusion_models.img_tab_decision.ImageDecision.fusion_operation" title="Permalink to this definition"></a></dt>
+<dd><p>Function that performs the fusion operation. Default is torch.mean(torch.stack([x, y]), dim=0).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">..</span> <span class="pre">warning::</span></span></dt>
+<dd><p><cite>fusion_operation</cite> should be done on the first dimension, i.e. the batch dimension.
+For example, <cite>lambda x: torch.mean(x, dim=1)</cite>.
+The predictions of the different modalities are stacked on the first dimension before
+<cite>fusion_operation</cite>.</p>
 </dd></dl>
 
 <dl class="py method">

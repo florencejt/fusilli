@@ -4,7 +4,7 @@ Channel-wise multiplication fusion model for tabular data.
 
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
-from fusionlibrary.utils.pl_utils import check_valid_modification_dtype
+from fusionlibrary.utils import check_model_validity
 
 
 class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
@@ -102,13 +102,13 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         """
         # if mod1 and mod2 have a different number of layers, return error
 
+        check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
+        check_model_validity.check_dtype(self.mod2_layers, nn.ModuleDict, "mod2_layers")
+
         if len(self.mod1_layers) != len(self.mod2_layers):
             raise ValueError(
                 "The number of layers in the two modalities must be the same."
             )
-
-        check_valid_modification_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
-        check_valid_modification_dtype(self.mod2_layers, nn.ModuleDict, "mod2_layers")
 
         self.match_dim_layers = nn.ModuleDict()
 

@@ -135,6 +135,7 @@ for i, fusion_model in enumerate(fusion_models):
         data_module=data_module,
         params=params,
         fusion_model=fusion_model,
+        enable_checkpointing=False,  # False for the example notebooks
     )
 
     # Save to all_trained_models
