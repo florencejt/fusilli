@@ -153,11 +153,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_img_layers</span><span class="p">()</span>
 
-        <span class="c1"># setting fused layers</span>
-        <span class="c1"># get flattened image output dim</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_fused_dim</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod1_dim</span> <span class="o">+</span> <span class="n">flattened_img_size</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
 

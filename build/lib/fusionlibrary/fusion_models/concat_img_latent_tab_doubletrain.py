@@ -15,7 +15,6 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader, Dataset
 
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
-
 from fusionlibrary.utils import check_model_validity
 from fusionlibrary.utils.pl_utils import init_trainer
 
@@ -123,6 +122,12 @@ class ImgLatentSpace(pl.LightningModule):
 
         check_model_validity.check_img_dim(self.encoder, self.img_dim, "encoder")
         check_model_validity.check_img_dim(self.decoder, self.img_dim, "encoder")
+
+        if self.latent_dim < 1:
+            raise ValueError(
+                "Incorrect attribute range: The latent dimension must be greater than 0. The latent dimension is currently: ",
+                self.latent_dim,
+            )
 
         # size of final encoder output
         dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
@@ -418,9 +423,22 @@ class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
             Dictionary containing the parameters of the model.
         """
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
-        # self.subspace_method = concat_img_latent_tab_subspace_method
+
+        self.get_fused_dim()
+        self.set_fused_layers(self.fused_dim)
 
         self.calc_fused_layers()
+
+    def get_fused_dim(self):
+        """
+        Get the number of features of the fused layers.
+
+        Returns
+        -------
+        None
+        """
+
+        self.fused_dim = self.mod1_dim + self.mod2_dim
 
     def calc_fused_layers(self):
         """
@@ -436,11 +454,13 @@ class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
 
         self.enc_img_layer = nn.Linear(self.latent_dim, self.latent_dim)
 
-        self.fused_dim = self.mod1_dim + self.latent_dim
+        # check fused_layer
+        self.get_fused_dim()
+        self.fused_layers, out_dim = check_model_validity.check_fused_layers(
+            self.fused_layers, self.fused_dim
+        )
 
-        self.set_fused_layers(self.fused_dim)
-
-        self.set_final_pred_layers()
+        self.set_final_pred_layers(out_dim)
 
     def forward(self, x):
         """

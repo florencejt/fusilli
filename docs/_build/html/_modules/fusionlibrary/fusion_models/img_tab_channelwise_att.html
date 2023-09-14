@@ -175,7 +175,25 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_mod1_layers</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_img_layers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_fused_dim</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ImageChannelWiseMultiAttention.get_fused_dim"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.get_fused_dim">[docs]</a>    <span class="k">def</span> <span class="nf">get_fused_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the number of features of the fused layers.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">dummy_conv_output</span><span class="p">)</span>
+        <span class="n">flattened_img_output_size</span> <span class="o">=</span> <span class="n">dummy_conv_output</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="n">flattened_img_output_size</span></div>
 
 <div class="viewcode-block" id="ImageChannelWiseMultiAttention.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -205,10 +223,13 @@
                 <span class="s2">&quot;The number of layers in the two modalities must be the same.&quot;</span>
             <span class="p">)</span>
 
-        <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">)))</span>
-        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">dummy_conv_output</span><span class="p">)</span>
-        <span class="n">flattened_img_output_size</span> <span class="o">=</span> <span class="n">dummy_conv_output</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_fused_dim</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fused_layers</span><span class="p">,</span> <span class="n">out_dim</span> <span class="o">=</span> <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_fused_layers</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fused_layers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="n">out_dim</span><span class="p">)</span>
+
+        <span class="c1"># Linear layer to make the dimensions of the two types of data the same</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">match_dim_layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleDict</span><span class="p">()</span>
 
@@ -224,11 +245,7 @@
             <span class="k">if</span> <span class="n">layer_mod1_out</span> <span class="o">!=</span> <span class="n">layer_mod2_out</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">match_dim_layers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">layer_mod1_out</span><span class="p">,</span> <span class="n">layer_mod2_out</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">match_dim_layers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Identity</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="n">flattened_img_output_size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">()</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">match_dim_layers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Identity</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ImageChannelWiseMultiAttention.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.img_tab_channelwise_att.html#fusionlibrary.fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

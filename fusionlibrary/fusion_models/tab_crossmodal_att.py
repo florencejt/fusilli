@@ -40,8 +40,6 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
     fused_dim : int
         Number of features of the fused layers. This is the flattened output size of the
         first tabular modality's layers.
-    fused_layers : nn.Sequential
-        Sequential layer containing the fused layers.
     attention : nn.MultiheadAttention
         Multihead attention layer. Takes in attention_embed_dim features as input.
     tab1_to_embed_dim : nn.Linear
@@ -114,7 +112,7 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
 
         self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
 
-        self.set_fused_layers(self.fused_dim)
+        # self.set_fused_layers(self.fused_dim)
 
         self.tab1_to_embed_dim = nn.Linear(self.fused_dim, self.attention_embed_dim)
         self.tab2_to_embed_dim = nn.Linear(

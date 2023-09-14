@@ -64,6 +64,15 @@ def check_img_dim(attribute, img_dim, attribute_name):
         has_conv3d_layer = any(isinstance(module, nn.Conv3d) for module in attribute)
         has_conv2d_layer = any(isinstance(module, nn.Conv2d) for module in attribute)
 
+    if has_conv2d_layer is None and has_conv3d_layer is None:
+        raise TypeError(
+            (
+                f"Incorrect conv layer type for the modified {attribute_name}: "
+                f"input image dimensions are {img_dim} and img layers have no Conv2D or Conv3D "
+                "layers in them."
+            )
+        )
+
     if has_conv2d_layer and len(img_dim) == 3:
         raise TypeError(
             (
@@ -75,7 +84,7 @@ def check_img_dim(attribute, img_dim, attribute_name):
         print(attribute)
         raise TypeError(
             (
-                f"Incorrect conv layer type for the modified {attribute_name}:"
+                f"Incorrect conv layer type for the modified {attribute_name}: "
                 f"input image dimensions are {img_dim} and img layers have a Conv3D layer in them."
             )
         )
@@ -137,7 +146,7 @@ def check_fused_layers(fused_layers, fused_dim):
         if isinstance(fused_layers[layer], nn.Linear):
             out_dim = fused_layers[layer].out_features
 
-    # Make sure first in_features is the fuses_dim
+    # Make sure first in_features is the fused_dim
     fused_layers[0] = nn.Linear(fused_dim, fused_layers[0].out_features)
 
     return fused_layers, out_dim

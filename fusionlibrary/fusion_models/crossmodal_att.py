@@ -39,8 +39,6 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
     fused_dim : int
         Number of features of the fused layers. This is the flattened output size of the
         image layers.
-    fused_layers : nn.Sequential
-        Sequential layer containing the fused layers.
     attention : nn.MultiheadAttention
         Multihead attention layer. Takes in attention_embed_dim features as input.
     img_dense : nn.Linear
@@ -89,6 +87,22 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
 
         self.relu = nn.ReLU()
 
+    def get_fused_dim(self):
+        """
+        Get the number of features of the fused layers.
+
+        Returns
+        -------
+        None
+        """
+
+        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
+        for layer in self.img_layers.values():
+            dummy_conv_output = layer(dummy_conv_output)
+        image_output_size = dummy_conv_output.data.view(1, -1).size(1)
+
+        self.fused_dim = image_output_size
+
     def calc_fused_layers(self):
         """
         Calculate the fused layers.
@@ -116,14 +130,7 @@ class CrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
                 "The number of layers in the two modalities must be the same."
             )
 
-        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
-        for layer in self.img_layers.values():
-            dummy_conv_output = layer(dummy_conv_output)
-        image_output_size = dummy_conv_output.data.view(1, -1).size(1)
-
-        self.fused_dim = image_output_size
-
-        self.set_fused_layers(self.fused_dim)
+        self.get_fused_dim()
 
         self.attention = nn.MultiheadAttention(
             embed_dim=self.attention_embed_dim, num_heads=2

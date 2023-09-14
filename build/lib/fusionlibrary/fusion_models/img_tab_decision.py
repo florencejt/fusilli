@@ -32,11 +32,10 @@ class ImageDecision(ParentFusionModel, nn.Module):
         Function that performs the fusion operation. Default is torch.mean(torch.stack([x, y]), dim=0).
 
     .. warning::
-        This is warning text. Use a warning for information the user must
-        understand to avoid negative consequences.
-
-        Warnings are formatted in the same way as notes. In the same way,
-        lines must be broken and indented under the warning tag.
+        `fusion_operation` should be done on the first dimension, i.e. the batch dimension.
+        For example, `lambda x: torch.mean(x, dim=1)`.
+        The predictions of the different modalities are stacked on the first dimension before
+        `fusion_operation`.
 
 
     """
@@ -77,8 +76,6 @@ class ImageDecision(ParentFusionModel, nn.Module):
         -------
         None
         """
-
-        # ~~ Checks ~~
 
         check_model_validity.check_var_is_function(
             self.fusion_operation, "fusion_operation"

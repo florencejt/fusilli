@@ -567,6 +567,12 @@ model_instances = [
 # Test the modify_model_architecture function
 @pytest.mark.parametrize("model_name, model_fixture", model_instances)
 def test_correct_modify_model_architecture(model_name, model_fixture, request):
+    # "modification" may have been modified (ironically) by the calc_fused_layers method
+    # in some of the models. This is to ensure that the input to the layers is consistent
+    # with either the input data dimensions or the output dimensions of the previous layer.
+
+    # This test is to ensure that the modification has been applied at all, not to
+    # check the modification itself is exactly what it was in the dictionary
     if model_fixture not in [
         "model_instance_ImageChannelWiseMultiAttention_3D",
         "model_instance_CrossmodalMultiheadAttention_3D",

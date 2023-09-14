@@ -60,7 +60,7 @@ correct_modifications_2D = {
             }
         ),
         "fused_layers": nn.Sequential(
-            nn.Linear(25, 150),
+            nn.Linear(30, 150),
             nn.ReLU(),
             nn.Linear(150, 75),
             nn.ReLU(),
@@ -86,7 +86,7 @@ correct_modifications_2D = {
             }
         ),
         "fused_layers": nn.Sequential(
-            nn.Linear(25, 150),
+            nn.Linear(80, 150),
             nn.ReLU(),
             nn.Linear(150, 75),
             nn.ReLU(),
@@ -142,6 +142,14 @@ correct_modifications_3D = {
                     nn.MaxPool3d((2, 2, 2)),
                 ),
             }
+        ),
+        "fused_layers": nn.Sequential(
+            nn.Linear(30, 150),
+            nn.ReLU(),
+            nn.Linear(150, 75),
+            nn.ReLU(),
+            nn.Linear(75, 50),
+            nn.ReLU(),
         ),
     }
 }
@@ -244,6 +252,12 @@ def test_correct_modify_model_architecture(model_name, model_fixture, request):
                 == modification.__code__.co_code
             )
         else:
+            # "modification" may have been modified (ironically) by the calc_fused_layers method
+            # in some of the models. This is to ensure that the input to the layers is consistent
+            # with either the input data dimensions or the output dimensions of the previous layer.
+
+            # This test is to ensure that the modification has been applied at all, not to
+            # check the modification itself is exactly what it was in the dictionary
             assert getattr(modified_model, key) == modification
 
     # Ensure that the final prediction layer has been modified as expected but the output dim
@@ -263,7 +277,7 @@ def test_wrong_data_type_modify_model_architecture_training(
     for key, modification in incorrect_dtype_modifications.get(model_name, {}).items():
         individual_modification = {model_name: {key: modification}}
         # Modify the model's architecture using the function
-        print(individual_modification)
+
         with pytest.raises(
             TypeError, match="Incorrect data type for the modifications"
         ):
@@ -283,7 +297,6 @@ def test_wrong_img_dim_2D_modify_model_architecture_data(
         # using correct 3D modifications, which are incorrect for 2D images
         listed_dict = correct_modifications_3D[model_name]
         new_dict = {model_name: listed_dict}
-        print(new_dict)
 
         # only test whether the error is raised if we are actually modifying the conv layers
         conv_layer_found = any(

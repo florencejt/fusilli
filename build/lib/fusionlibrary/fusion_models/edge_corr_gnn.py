@@ -131,8 +131,6 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
 
         self.pred_type = pred_type
 
-        # self.graph_maker = EdgeCorrGraphMaker
-
         self.graph_conv_layers = nn.Sequential(
             GCNConv(self.mod2_dim, 64),
             GCNConv(64, 128),

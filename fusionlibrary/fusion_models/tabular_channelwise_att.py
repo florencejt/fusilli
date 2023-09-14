@@ -83,7 +83,21 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
 
         self.set_mod1_layers()
         self.set_mod2_layers()
+
+        self.get_fused_dim()
+        self.set_fused_layers(self.fused_dim)
+
         self.calc_fused_layers()
+
+    def get_fused_dim(self):
+        """
+        Returns the number of features of the fused layers.
+
+        Returns
+        -------
+        None.
+        """
+        self.fused_dim = list(self.mod2_layers.values())[-1][0].out_features
 
     def calc_fused_layers(self):
         """
@@ -110,6 +124,13 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
                 "The number of layers in the two modalities must be the same."
             )
 
+        self.get_fused_dim()
+        self.fused_layers, out_dim = check_model_validity.check_fused_layers(
+            self.fused_layers, self.fused_dim
+        )
+        self.set_final_pred_layers(out_dim)
+
+        # create a dictionary of linear layers to make the dimensions of the two types of tabular data the same
         self.match_dim_layers = nn.ModuleDict()
 
         # Iterate through your ModuleDict keys
@@ -125,10 +146,6 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
                 self.match_dim_layers[key] = nn.Linear(layer_mod1_out, layer_mod2_out)
             else:
                 self.match_dim_layers[key] = nn.Identity()
-
-        self.fused_dim = list(self.mod2_layers.values())[-1][0].out_features
-        self.set_fused_layers(self.fused_dim)
-        self.set_final_pred_layers()
 
     def forward(self, x):
         """

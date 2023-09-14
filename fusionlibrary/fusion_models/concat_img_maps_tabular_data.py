@@ -58,11 +58,7 @@ class ConcatImageMapsTabularData(ParentFusionModel, nn.Module):
 
         self.set_img_layers()
 
-        # setting fused layers
-        # get flattened image output dim
         self.get_fused_dim()
-
-        self.fused_dim = self.mod1_dim + flattened_img_size
 
         self.set_fused_layers(self.fused_dim)
 

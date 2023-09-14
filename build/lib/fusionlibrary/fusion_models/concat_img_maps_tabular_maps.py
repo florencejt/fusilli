@@ -62,6 +62,20 @@ class ConcatImageMapsTabularMaps(ParentFusionModel, nn.Module):
         self.set_img_layers()
         self.set_mod1_layers()
 
+        self.get_fused_dim()
+
+        self.set_fused_layers(self.fused_dim)
+
+        self.calc_fused_layers()
+
+    def get_fused_dim(self):
+        """
+        Get the number of features of the fused layers.
+
+        Returns
+        -------
+        None
+        """
         # get flattened image output size
         dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
         for layer in self.img_layers.values():
@@ -72,10 +86,6 @@ class ConcatImageMapsTabularMaps(ParentFusionModel, nn.Module):
         tab_output_size = list(self.mod1_layers.values())[-1][0].out_features
 
         self.fused_dim = tab_output_size + flattened_img_size
-
-        self.set_fused_layers(self.fused_dim)
-
-        self.calc_fused_layers()
 
     def calc_fused_layers(self):
         """
@@ -90,12 +100,16 @@ class ConcatImageMapsTabularMaps(ParentFusionModel, nn.Module):
         check_model_validity.check_dtype(self.img_layers, nn.ModuleDict, "img_layers")
         check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
 
+        # check img dim
+        check_model_validity.check_img_dim(self.img_layers, self.img_dim, "img_layers")
+
         # check fused layer
+        self.get_fused_dim()
         self.fused_layers, out_dim = check_model_validity.check_fused_layers(
             self.fused_layers, self.fused_dim
         )
 
-        self.set_final_pred_layers()
+        self.set_final_pred_layers(out_dim)
 
     def forward(self, x):
         """

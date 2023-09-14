@@ -571,6 +571,13 @@ model_instances_training = [
 def test_correct_modify_model_architecture_2D_training(
     model_name, model_fixture, request
 ):
+    # "modification" may have been modified (ironically) by the calc_fused_layers method
+    # in some of the models. This is to ensure that the input to the layers is consistent
+    # with either the input data dimensions or the output dimensions of the previous layer.
+
+    # This test is to ensure that the modification has been applied at all, not to
+    # check the modification itself is exactly what it was in the dictionary
+
     # if 3D isnt in the model_instance string
     if "3D" not in model_fixture:
         model_fixture = request.getfixturevalue(model_fixture)
@@ -608,6 +615,13 @@ def test_correct_modify_model_architecture_2D_training(
 def test_correct_modify_model_architecture_3D_training(
     model_name, model_fixture, request
 ):
+    # "modification" may have been modified (ironically) by the calc_fused_layers method
+    # in some of the models. This is to ensure that the input to the layers is consistent
+    # with either the input data dimensions or the output dimensions of the previous layer.
+
+    # This test is to ensure that the modification has been applied at all, not to
+    # check the modification itself is exactly what it was in the dictionary
+
     # if 3D isnt in the model_instance string
     if "2D" not in model_fixture:
         model_fixture = request.getfixturevalue(model_fixture)

@@ -61,13 +61,24 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
         self.set_mod1_layers()
         self.set_mod2_layers()
 
+        self.get_fused_dim()
+        self.set_fused_layers(self.fused_dim)
+
+        self.calc_fused_layers()
+
+    def get_fused_dim(self):
+        """
+        Get the number of features of the fused layers.
+
+        Returns
+        -------
+        None
+        """
+
         self.fused_dim = (
             list(self.mod1_layers.values())[-1][0].out_features
             + list(self.mod2_layers.values())[-1][0].out_features
         )
-        self.set_fused_layers(self.fused_dim)
-
-        self.calc_fused_layers()
 
     def calc_fused_layers(self):
         """
@@ -82,6 +93,7 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
         check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
         check_model_validity.check_dtype(self.mod2_layers, nn.ModuleDict, "mod2_layers")
 
+        self.get_fused_dim()
         self.fused_layers, out_dim = check_model_validity.check_fused_layers(
             self.fused_layers, self.fused_dim
         )

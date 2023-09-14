@@ -21,6 +21,7 @@ This library provides a way to compare different fusion methods for your multimo
    user_guide
    modifying_models
 
+-----
 
 .. toctree::
    :maxdepth: 2
@@ -28,6 +29,7 @@ This library provides a way to compare different fusion methods for your multimo
 
    auto_examples/index
 
+-----
 
 🌸 API Reference 🌸
 -------------------

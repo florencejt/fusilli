@@ -80,7 +80,25 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
 
         self.set_mod1_layers()
         self.set_img_layers()
+        self.get_fused_dim()
+        self.set_fused_layers(self.fused_dim)
         self.calc_fused_layers()
+
+    def get_fused_dim(self):
+        """
+        Get the number of features of the fused layers.
+
+        Returns
+        -------
+        None
+        """
+
+        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
+        for layer in self.img_layers.values():
+            dummy_conv_output = layer(dummy_conv_output)
+        flattened_img_output_size = dummy_conv_output.data.view(1, -1).size(1)
+
+        self.fused_dim = flattened_img_output_size
 
     def calc_fused_layers(self):
         """
@@ -110,10 +128,13 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
                 "The number of layers in the two modalities must be the same."
             )
 
-        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
-        for layer in self.img_layers.values():
-            dummy_conv_output = layer(dummy_conv_output)
-        flattened_img_output_size = dummy_conv_output.data.view(1, -1).size(1)
+        self.get_fused_dim()
+        self.fused_layers, out_dim = check_model_validity.check_fused_layers(
+            self.fused_layers, self.fused_dim
+        )
+        self.set_final_pred_layers(out_dim)
+
+        # Linear layer to make the dimensions of the two types of data the same
 
         self.match_dim_layers = nn.ModuleDict()
 
@@ -130,10 +151,6 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
                 self.match_dim_layers[key] = nn.Linear(layer_mod1_out, layer_mod2_out)
             else:
                 self.match_dim_layers[key] = nn.Identity()
-
-        self.fused_dim = flattened_img_output_size
-        self.set_fused_layers(self.fused_dim)
-        self.set_final_pred_layers()
 
     def forward(self, x):
         """

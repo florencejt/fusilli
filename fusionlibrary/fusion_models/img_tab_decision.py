@@ -77,9 +77,6 @@ class ImageDecision(ParentFusionModel, nn.Module):
         None
         """
 
-        # ~~ Checks ~~
-        print(self.fusion_operation)
-
         check_model_validity.check_var_is_function(
             self.fusion_operation, "fusion_operation"
         )

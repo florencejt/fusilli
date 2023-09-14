@@ -4,6 +4,7 @@ Tabular1 uni-modal model.
 
 import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
+from fusionlibrary.utils import check_model_validity
 
 
 class Tabular1Unimodal(ParentFusionModel, nn.Module):
@@ -49,16 +50,39 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
         self.pred_type = pred_type
 
         self.set_mod1_layers()
+
+        self.get_fused_dim()
+        self.set_fused_layers(self.fused_dim)
+
         self.calc_fused_layers()
+
+    def get_fused_dim(self):
+        """Get the number of features of the fused layers.
+
+        Returns
+        -------
+        None
+        """
+
+        self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
 
     def calc_fused_layers(self):
         """Calculate the fused layers.
 
         If the mod1_layers are modified, this function will recalculate the fused layers.
         """
-        self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
-        self.set_fused_layers(self.fused_dim)
-        self.set_final_pred_layers()
+
+        check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
+
+        # check fused layers
+        print("1 calc_fused_layers", self.fused_layers)
+        self.get_fused_dim()
+        self.fused_layers, out_dim = check_model_validity.check_fused_layers(
+            self.fused_layers, self.fused_dim
+        )
+        print("2 calc_fused_layers", self.fused_layers)
+
+        self.set_final_pred_layers(out_dim)
 
     def forward(self, x):
         """
@@ -75,6 +99,9 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
             List containing the output of the model.
         """
         x_tab1 = x
+
+        print(x_tab1.shape)
+        print("mod1layers", self.mod1_layers)
 
         for layer in self.mod1_layers.values():
             x_tab1 = layer(x_tab1)

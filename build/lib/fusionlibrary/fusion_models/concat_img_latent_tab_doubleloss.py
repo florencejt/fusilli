@@ -148,7 +148,21 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         else:
             raise ValueError("Invalid image dimensions.")
 
+        self.get_fused_dim()
+        self.set_fused_layers(self.fused_dim)
+
         self.calc_fused_layers()
+
+    def get_fused_dim(self):
+        """
+        Get the number of features of the fused layers.
+
+        Returns
+        -------
+        None
+        """
+
+        self.fused_dim = self.latent_dim + self.mod1_dim
 
     def calc_fused_layers(self):
         """
@@ -164,6 +178,13 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         check_model_validity.check_dtype(self.decoder, nn.Sequential, "decoder")
         check_model_validity.check_dtype(self.latent_dim, int, "latent_dim")
 
+        self.get_fused_dim()
+
+        # check fused layers
+        self.fused_layers, out_dim = check_model_validity.check_fused_layers(
+            self.fused_layers, self.fused_dim
+        )
+
         if self.latent_dim < 1:
             raise ValueError(
                 "Incorrect attribute range: The latent dimension must be greater than 0. The latent dimension is currently: ",
@@ -177,9 +198,6 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
         dummy_conv_output = self.encoder(dummy_conv_output)
         n_size = dummy_conv_output.data.view(1, -1).size(1)
-
-        # make linear layer to reduce to latent dim
-        # self.linear_to_lat_dim = nn.Linear(n_size, self.latent_dim)
 
         # add extra layers to encoder
         self.new_encoder = copy.deepcopy(self.encoder)
@@ -214,9 +232,7 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
                 nn.Upsample(size=self.img_dim, mode="bilinear", align_corners=False)
             )
 
-        self.fused_dim = self.latent_dim + self.mod1_dim
-        self.set_fused_layers(self.fused_dim)
-        self.set_final_pred_layers()
+        self.set_final_pred_layers(out_dim)
 
     def forward(self, x):
         """

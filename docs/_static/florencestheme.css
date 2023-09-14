@@ -127,3 +127,17 @@ html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(
     overflow-x: auto;
     display: inline-block;
 }
+
+/* .wy-table-responsive {
+    background-color: #cdf8be;
+} */
+
+/*table.docutils {
+    background-color: #5eae41;
+}*/
+
+/* makes table header background purple */
+th {
+    color: white;
+    background: #ac47a5;
+}

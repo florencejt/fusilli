@@ -77,6 +77,12 @@ model_instances = [
 # test to see if its doing it correctly
 @pytest.mark.parametrize("model_name, model_fixture", model_instances)
 def test_correct_modification(model_name, model_fixture, request):
+    # "modification" may have been modified (ironically) by the calc_fused_layers method
+    # in some of the models. This is to ensure that the input to the layers is consistent
+    # with either the input data dimensions or the output dimensions of the previous layer.
+
+    # This test is to ensure that the modification has been applied at all, not to
+    # check the modification itself is exactly what it was in the dictionary
     model_fixture = request.getfixturevalue(model_fixture)
 
     original_model = model_fixture

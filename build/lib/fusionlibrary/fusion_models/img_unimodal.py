@@ -6,6 +6,7 @@ import torch.nn as nn
 from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
 from torch.autograd import Variable
 import torch
+from fusionlibrary.utils import check_model_validity
 
 
 class ImgUnimodal(ParentFusionModel, nn.Module):
@@ -48,7 +49,27 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
         self.pred_type = pred_type
 
         self.set_img_layers()
+
+        self.get_fused_dim()
+        self.set_fused_layers(self.fused_dim)
+
         self.calc_fused_layers()
+
+    def get_fused_dim(self):
+        """
+        Get the number of features of the fused layers.
+
+        Returns
+        -------
+        None
+        """
+
+        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
+        for layer in self.img_layers.values():
+            dummy_conv_output = layer(dummy_conv_output)
+        flattened_img_output_size = dummy_conv_output.data.view(1, -1).size(1)
+
+        self.fused_dim = flattened_img_output_size
 
     def calc_fused_layers(self):
         """
@@ -58,15 +79,16 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
         -------
         None
         """
-        # get dummy conv output
-        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
-        for layer in self.img_layers.values():
-            dummy_conv_output = layer(dummy_conv_output)
-        n_size = dummy_conv_output.data.view(1, -1).size(1)
+        # check fused layers
+        self.fused_layers, out_dim = check_model_validity.check_fused_layers(
+            self.fused_layers, self.fused_dim
+        )
 
-        self.fused_dim = n_size
-        self.set_fused_layers(self.fused_dim)
-        self.set_final_pred_layers()
+        # check img layers
+        check_model_validity.check_dtype(self.img_layers, nn.ModuleDict, "img_layers")
+        check_model_validity.check_img_dim(self.img_layers, self.img_dim, "img_layers")
+
+        self.set_final_pred_layers(out_dim)
 
     def forward(self, x):
         """

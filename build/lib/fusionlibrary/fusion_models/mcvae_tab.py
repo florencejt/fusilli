@@ -316,7 +316,8 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
                 ),
             }
         )
-
+        self.fused_dim = list(self.latent_space_layers.values())[-1][0].out_features
+        self.set_fused_layers(self.fused_dim)
         self.calc_fused_layers()
 
     def calc_fused_layers(self):
@@ -337,9 +338,13 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
             self.mod1_dim, self.latent_space_layers["layer 1"][0].out_features
         )
 
+        # check fused layers
         self.fused_dim = list(self.latent_space_layers.values())[-1][0].out_features
-        self.set_fused_layers(self.fused_dim)
-        self.set_final_pred_layers()
+        self.fused_layers, out_dim = check_model_validity.check_fused_layers(
+            self.fused_layers, self.fused_dim
+        )
+
+        self.set_final_pred_layers(out_dim)
 
     def forward(self, x):
         """

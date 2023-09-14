@@ -434,6 +434,7 @@
         <span class="p">)</span>
 
         <span class="c1"># check fused layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latent_space_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fused_layers</span><span class="p">,</span> <span class="n">out_dim</span> <span class="o">=</span> <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_fused_layers</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fused_layers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span>
         <span class="p">)</span>
