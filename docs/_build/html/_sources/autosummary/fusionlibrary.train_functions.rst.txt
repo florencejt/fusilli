@@ -1,7 +1,7 @@
 ﻿fusionlibrary.train\_functions
 ==============================
 
-.. automodule:: fusionlibrary.train_functions
+.. automodule:: fusionlibrary.train
 
    
    

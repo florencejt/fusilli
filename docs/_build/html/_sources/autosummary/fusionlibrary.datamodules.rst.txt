@@ -1,7 +1,7 @@
-﻿fusionlibrary.datamodules
+﻿fusionlibrary.data
 =========================
 
-.. automodule:: fusionlibrary.datamodules
+.. automodule:: fusionlibrary.data
 
    
    

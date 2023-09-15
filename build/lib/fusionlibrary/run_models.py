@@ -19,22 +19,22 @@ from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning.loggers import TensorBoardLogger, WandbLogger
 import torch_sparse
 
-from fusionlibrary.datamodules import (
+from fusionlibrary.data import (
     CustomDataModule,
     KFoldDataModule,
     GraphDataModule,
     KFoldGraphDataModule,
 )
-from fusionlibrary.eval_functions import (
+from fusionlibrary.eval import (
     compare_methods_boxplot,
     eval_one_rep_kfold,
     eval_replications,
 )
-from fusion_models.base_pl_model import BaseModel
+from fusion_models.base_model import BaseModel
 from mnd_data.mnd_preprocessing import get_mnd_data_ready
-from train_functions import train_and_test
+from train import train_and_test
 from utils.arguments import init_parser
-from utils.pl_utils import (
+from utils.training_utils import (
     get_final_val_metrics,
     init_trainer,
     set_logger,

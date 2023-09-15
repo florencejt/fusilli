@@ -1,7 +1,7 @@
 ﻿fusionlibrary.eval\_functions.Plotter
 =====================================
 
-.. currentmodule:: fusionlibrary.eval_functions
+.. currentmodule:: fusionlibrary.eval
 
 .. autoclass:: Plotter
 

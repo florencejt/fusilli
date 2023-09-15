@@ -66,7 +66,6 @@ autodoc_default_options = {
     "members": True,
     "inherited-members": False,
     "show-inheritance": True,
-    "member-order": "bysource",
 }
 autosummary_generate = True
 autosummary_imported_members = False

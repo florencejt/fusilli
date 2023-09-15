@@ -1,7 +1,7 @@
 ﻿fusionlibrary.utils.pl\_utils
 =============================
 
-.. automodule:: fusionlibrary.utils.pl_utils
+.. automodule:: fusionlibrary.utils.training_utils
 
    
    

@@ -51,9 +51,9 @@ import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
 
 from docs.examples import generate_sklearn_simulated_data
-from fusionlibrary.datamodules import get_data_module
-from fusionlibrary.eval_functions import Plotter
-from fusionlibrary.train_functions import train_and_save_models
+from fusionlibrary.data import get_data_module
+from fusionlibrary.eval import Plotter
+from fusionlibrary.train import train_and_save_models
 from fusionlibrary.utils.model_chooser import get_models
 
 
@@ -147,9 +147,9 @@ for i, fusion_model in enumerate(fusion_models):
 # -------------------------------------------------
 # In this section, we visualize the results of each individual model.
 #
-# If you want to save the figures rather than show them, you can use the :meth:`~.save_to_local' method of the :class:`~fusionlibrary.eval_functions.Plotter` class.
+# If you want to save the figures rather than show them, you can use the :meth:`~.save_to_local' method of the :class:`~fusionlibrary.eval.Plotter` class.
 # This will save the figures in a timestamped folder in the current working directory with the method name and plot type in the filename.
-# You can add an extra suffix to the filename by passing a string to the ``extra_string`` argument of the :meth:`~fusionlibrary.eval_functions.Plotter.save_to_local` method.
+# You can add an extra suffix to the filename by passing a string to the ``extra_string`` argument of the :meth:`~fusionlibrary.eval.Plotter.save_to_local` method.
 
 for model_dict in single_model_dicts:
     plotter = Plotter(model_dict, params)

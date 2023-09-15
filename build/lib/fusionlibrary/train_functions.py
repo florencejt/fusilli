@@ -2,8 +2,8 @@
 Contains the train_and_test function: trains and tests a model and, if k_fold trained, a fold.
 """
 
-from fusionlibrary.fusion_models.base_pl_model import BaseModel
-from fusionlibrary.utils.pl_utils import (
+from fusionlibrary.fusion_models.base_model import BaseModel
+from fusionlibrary.utils.training_utils import (
     get_final_val_metrics,
     init_trainer,
     set_logger,

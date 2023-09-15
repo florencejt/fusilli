@@ -1,7 +1,7 @@
 import pytest
 import torch.nn as nn
 
-# from fusionlibrary.train_functions import modify_model_architecture, get_nested_attr
+# from fusionlibrary.train import modify_model_architecture, get_nested_attr
 from fusionlibrary.utils import model_modifier
 
 from fusionlibrary.fusion_models.concat_img_maps_tabular_data import (
@@ -10,7 +10,9 @@ from fusionlibrary.fusion_models.concat_img_maps_tabular_data import (
 from fusionlibrary.fusion_models.concat_img_maps_tabular_maps import (
     ConcatImageMapsTabularMaps,
 )
-from fusionlibrary.fusion_models.concat_tabular_data import ConcatTabularData
+from fusionlibrary.fusion_models.concat_tabular_data import (
+    ConcatTabularData,
+)
 from fusionlibrary.fusion_models.concat_tabular_feature_maps import (
     ConcatTabularFeatureMaps,
 )

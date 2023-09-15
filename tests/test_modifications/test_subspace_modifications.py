@@ -17,8 +17,8 @@ from fusionlibrary.fusion_models.mcvae_tab import (
     MCVAE_tab,
 )
 
-from tests.test_datamodules.test_CustomDataModule import create_test_files
-from fusionlibrary.datamodules import CustomDataModule
+from tests.test_data.test_CustomDataModule import create_test_files
+from fusionlibrary.data import CustomDataModule
 import warnings
 
 

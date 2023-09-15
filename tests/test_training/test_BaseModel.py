@@ -3,7 +3,7 @@
 # import torch.nn as nn
 # import torchmetrics as tm
 # import torch.nn.functional as F
-# from fusionlibrary.fusion_models.base_pl_model import BaseModel
+# from fusionlibrary.fusion_models.base_model import BaseModel
 
 
 # # Sample Fusion Model for Testing

@@ -4,7 +4,7 @@ image modality.
 """
 
 import torch.nn as nn
-from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
+from fusionlibrary.fusion_models.base_model import ParentFusionModel
 import torch
 from torch.autograd import Variable
 from fusionlibrary.utils import check_model_validity

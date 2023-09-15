@@ -64,7 +64,7 @@
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html">fusionlibrary.fusion_models.base_pl_model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.base_model.html">fusionlibrary.fusion_models.base_model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html">fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html">fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_maps_tabular_data.html">fusionlibrary.fusion_models.concat_img_maps_tabular_data</a></li>
@@ -85,9 +85,9 @@
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.relu"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.relu</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.final_prediction"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.final_prediction</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.__init__"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.__init__()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.get_fused_dim"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.get_fused_dim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.calc_fused_layers()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.forward"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.get_fused_dim"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.get_fused_dim()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -105,11 +105,13 @@
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.tabular_decision.html">fusionlibrary.fusion_models.tabular_decision</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.train_functions.html">fusionlibrary.train_functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.eval_functions.Plotter.html">fusionlibrary.eval_functions.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.data.html">fusionlibrary.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.train.html">fusionlibrary.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.eval.Plotter.html">fusionlibrary.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.pl_utils.html">fusionlibrary.utils.pl_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.training_utils.html">fusionlibrary.utils.training_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.model_modifier.html">fusionlibrary.utils.model_modifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.check_model_validity.html">fusionlibrary.utils.check_model_validity</a></li>
 </ul>
 
         </div>
@@ -152,7 +154,7 @@ between the two modalities: tabular and image.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CrossmodalMultiheadAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/crossmodal_att.html#CrossmodalMultiheadAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Crossmodal multi-head attention model. This model uses the self attention and cross modal
 attention between the two modalities: tabular and image.</p>
 <p class="rubric">References</p>
@@ -301,17 +303,6 @@ multihead attention layer.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.get_fused_dim">
-<span class="sig-name descname"><span class="pre">get_fused_dim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/crossmodal_att.html#CrossmodalMultiheadAttention.get_fused_dim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.get_fused_dim" title="Permalink to this definition"></a></dt>
-<dd><p>Get the number of features of the fused layers.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.calc_fused_layers">
 <span class="sig-name descname"><span class="pre">calc_fused_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/crossmodal_att.html#CrossmodalMultiheadAttention.calc_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.calc_fused_layers" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the fused layers.</p>
@@ -342,6 +333,17 @@ multihead attention layer.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.get_fused_dim">
+<span class="sig-name descname"><span class="pre">get_fused_dim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/crossmodal_att.html#CrossmodalMultiheadAttention.get_fused_dim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.get_fused_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of features of the fused layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>

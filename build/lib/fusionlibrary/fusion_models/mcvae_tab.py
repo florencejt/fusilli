@@ -4,7 +4,7 @@ two types of tabular data.
 """
 
 import torch.nn as nn
-from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
+from fusionlibrary.fusion_models.base_model import ParentFusionModel
 import torch
 from fusionlibrary.utils.mcvae.src.mcvae.models import Mcvae
 import contextlib

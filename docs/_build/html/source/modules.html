@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fusionlibrary &mdash; fusionlibrary  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/florencestheme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/pink_pasta_logo.png"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            fusionlibrary
+              <img src="../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.data.html">fusionlibrary.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.train.html">fusionlibrary.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.eval.Plotter.html">fusionlibrary.eval.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.training_utils.html">fusionlibrary.utils.training_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.model_modifier.html">fusionlibrary.utils.model_modifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.check_model_validity.html">fusionlibrary.utils.check_model_validity</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fusionlibrary</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">fusionlibrary</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fusionlibrary">
+<h1>fusionlibrary<a class="headerlink" href="#fusionlibrary" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data.html">data module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data.html#data.CustomDataModule"><code class="docutils literal notranslate"><span class="pre">CustomDataModule</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.sources"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.sources</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.image_downsample_size"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.image_downsample_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.modality_methods"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.modality_methods</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.modality_type"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.modality_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.batch_size"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.batch_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.test_size"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.test_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.pred_type"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.pred_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.multiclass_dims"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.multiclass_dims</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.subspace_method"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.subspace_method</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.layer_mods"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.layer_mods</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.max_epochs"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.max_epochs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.dataset"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.dataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.data_dims"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.data_dims</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.train_dataset"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.train_dataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.test_dataset"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.test_dataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.__init__"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.prepare_data"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.prepare_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.setup"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.setup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.train_dataloader"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.train_dataloader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataModule.val_dataloader"><code class="docutils literal notranslate"><span class="pre">CustomDataModule.val_dataloader()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#data.CustomDataset"><code class="docutils literal notranslate"><span class="pre">CustomDataset</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataset.pred_features"><code class="docutils literal notranslate"><span class="pre">CustomDataset.pred_features</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataset.labels"><code class="docutils literal notranslate"><span class="pre">CustomDataset.labels</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataset.__len__"><code class="docutils literal notranslate"><span class="pre">CustomDataset.__len__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataset.__getitem__"><code class="docutils literal notranslate"><span class="pre">CustomDataset.__getitem__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataset.__init__"><code class="docutils literal notranslate"><span class="pre">CustomDataset.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#data.GraphDataModule"><code class="docutils literal notranslate"><span class="pre">GraphDataModule</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.sources"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.sources</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.image_downsample_size"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.image_downsample_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.modality_methods"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.modality_methods</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.modality_type"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.modality_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.test_size"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.test_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.graph_creation_method"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.graph_creation_method</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.params"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.params</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.layer_mods"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.layer_mods</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.dataset"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.dataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.data_dims"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.data_dims</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.train_dataset"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.train_dataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.train_idxs"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.train_idxs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.test_dataset"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.test_dataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.test_idxs"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.test_idxs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.graph_data"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.graph_data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.__init__"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.get_lightning_module"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.get_lightning_module()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.prepare_data"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.prepare_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.GraphDataModule.setup"><code class="docutils literal notranslate"><span class="pre">GraphDataModule.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#data.KFoldDataModule"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.num_folds"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.num_folds</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.sources"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.sources</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.image_downsample_size"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.image_downsample_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.modality_methods"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.modality_methods</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.modality_type"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.modality_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.batch_size"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.batch_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.test_size"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.test_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.pred_type"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.pred_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.multiclass_dims"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.multiclass_dims</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.subspace_method"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.subspace_method</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.layer_mods"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.layer_mods</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.max_epochs"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.max_epochs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.dataset"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.dataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.data_dims"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.data_dims</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.train_dataset"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.train_dataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.test_dataset"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.test_dataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.__init__"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.kfold_split"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.kfold_split()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.prepare_data"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.prepare_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.setup"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.setup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.train_dataloader"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.train_dataloader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldDataModule.val_dataloader"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.val_dataloader()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#data.KFoldGraphDataModule"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldGraphDataModule.num_folds"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.num_folds</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldGraphDataModule.image_downsample_size"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.image_downsample_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldGraphDataModule.sources"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.sources</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldGraphDataModule.modality_methods"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.modality_methods</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldGraphDataModule.modality_type"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.modality_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldGraphDataModule.graph_creation_method"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.graph_creation_method</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldGraphDataModule.layer_mods"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.layer_mods</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldGraphDataModule.dataset"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.dataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldGraphDataModule.data_dims"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.data_dims</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldGraphDataModule.folds"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.folds</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldGraphDataModule.__init__"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldGraphDataModule.get_lightning_module"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.get_lightning_module()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldGraphDataModule.kfold_split"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.kfold_split()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldGraphDataModule.prepare_data"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.prepare_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.KFoldGraphDataModule.setup"><code class="docutils literal notranslate"><span class="pre">KFoldGraphDataModule.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#data.LoadDatasets"><code class="docutils literal notranslate"><span class="pre">LoadDatasets</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.tabular1_source"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.tabular1_source</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.tabular2_source"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.tabular2_source</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.img_source"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.img_source</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.image_downsample_size"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.image_downsample_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.load_tabular1"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_tabular1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.load_tabular2"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_tabular2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.load_img"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_img()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.load_both_tabular"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_both_tabular()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.load_tab_and_img"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_tab_and_img()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.__init__"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#id0"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_both_tabular()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#id1"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_img()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#id2"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_tab_and_img()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#id3"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_tabular1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#id4"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_tabular2()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#data.downsample_img_batch"><code class="docutils literal notranslate"><span class="pre">downsample_img_batch()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#data.get_data_module"><code class="docutils literal notranslate"><span class="pre">get_data_module()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eval.html">eval module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eval.html#eval.Plotter"><code class="docutils literal notranslate"><span class="pre">Plotter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.trained_model_dict"><code class="docutils literal notranslate"><span class="pre">Plotter.trained_model_dict</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.model_names"><code class="docutils literal notranslate"><span class="pre">Plotter.model_names</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.params"><code class="docutils literal notranslate"><span class="pre">Plotter.params</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.pred_type"><code class="docutils literal notranslate"><span class="pre">Plotter.pred_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.metric1name"><code class="docutils literal notranslate"><span class="pre">Plotter.metric1name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.metric1func"><code class="docutils literal notranslate"><span class="pre">Plotter.metric1func</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.metric2name"><code class="docutils literal notranslate"><span class="pre">Plotter.metric2name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.metric2func"><code class="docutils literal notranslate"><span class="pre">Plotter.metric2func</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.__init__"><code class="docutils literal notranslate"><span class="pre">Plotter.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.compare_bar_chart"><code class="docutils literal notranslate"><span class="pre">Plotter.compare_bar_chart()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.compare_violin_plot"><code class="docutils literal notranslate"><span class="pre">Plotter.compare_violin_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.confusion_matrix_plotter"><code class="docutils literal notranslate"><span class="pre">Plotter.confusion_matrix_plotter()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.confusion_matrix_plotter_kfold"><code class="docutils literal notranslate"><span class="pre">Plotter.confusion_matrix_plotter_kfold()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.get_kfold_numbers"><code class="docutils literal notranslate"><span class="pre">Plotter.get_kfold_numbers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.get_performance_df"><code class="docutils literal notranslate"><span class="pre">Plotter.get_performance_df()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.get_train_test_numbers"><code class="docutils literal notranslate"><span class="pre">Plotter.get_train_test_numbers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.plot_all"><code class="docutils literal notranslate"><span class="pre">Plotter.plot_all()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.reals_vs_preds"><code class="docutils literal notranslate"><span class="pre">Plotter.reals_vs_preds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.reals_vs_preds_kfold"><code class="docutils literal notranslate"><span class="pre">Plotter.reals_vs_preds_kfold()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.save_to_local"><code class="docutils literal notranslate"><span class="pre">Plotter.save_to_local()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="eval.html#eval.Plotter.show_all"><code class="docutils literal notranslate"><span class="pre">Plotter.show_all()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fusion_models.html">fusion_models package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.base_model">fusion_models.base_model module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel"><code class="docutils literal notranslate"><span class="pre">BaseModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.model"><code class="docutils literal notranslate"><span class="pre">BaseModel.model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.multiclass_dim"><code class="docutils literal notranslate"><span class="pre">BaseModel.multiclass_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.train_mask"><code class="docutils literal notranslate"><span class="pre">BaseModel.train_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.val_mask"><code class="docutils literal notranslate"><span class="pre">BaseModel.val_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.loss_functions"><code class="docutils literal notranslate"><span class="pre">BaseModel.loss_functions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.output_activation_functions"><code class="docutils literal notranslate"><span class="pre">BaseModel.output_activation_functions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.metrics"><code class="docutils literal notranslate"><span class="pre">BaseModel.metrics</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.batch_val_reals"><code class="docutils literal notranslate"><span class="pre">BaseModel.batch_val_reals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.batch_val_preds"><code class="docutils literal notranslate"><span class="pre">BaseModel.batch_val_preds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.batch_val_logits"><code class="docutils literal notranslate"><span class="pre">BaseModel.batch_val_logits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.batch_train_reals"><code class="docutils literal notranslate"><span class="pre">BaseModel.batch_train_reals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.batch_train_preds"><code class="docutils literal notranslate"><span class="pre">BaseModel.batch_train_preds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.val_reals"><code class="docutils literal notranslate"><span class="pre">BaseModel.val_reals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.val_preds"><code class="docutils literal notranslate"><span class="pre">BaseModel.val_preds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.val_logits"><code class="docutils literal notranslate"><span class="pre">BaseModel.val_logits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.train_reals"><code class="docutils literal notranslate"><span class="pre">BaseModel.train_reals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.train_preds"><code class="docutils literal notranslate"><span class="pre">BaseModel.train_preds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.__init__"><code class="docutils literal notranslate"><span class="pre">BaseModel.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.configure_optimizers"><code class="docutils literal notranslate"><span class="pre">BaseModel.configure_optimizers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.get_data_from_batch"><code class="docutils literal notranslate"><span class="pre">BaseModel.get_data_from_batch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.get_model_outputs"><code class="docutils literal notranslate"><span class="pre">BaseModel.get_model_outputs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.get_model_outputs_and_loss"><code class="docutils literal notranslate"><span class="pre">BaseModel.get_model_outputs_and_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.safe_squeeze"><code class="docutils literal notranslate"><span class="pre">BaseModel.safe_squeeze()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.training"><code class="docutils literal notranslate"><span class="pre">BaseModel.training</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.training_step"><code class="docutils literal notranslate"><span class="pre">BaseModel.training_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.validation_epoch_end"><code class="docutils literal notranslate"><span class="pre">BaseModel.validation_epoch_end()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.BaseModel.validation_step"><code class="docutils literal notranslate"><span class="pre">BaseModel.validation_step()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.pred_type"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.pred_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.mod1_dim"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.mod1_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.mod2_dim"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.mod2_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.img_dim"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.img_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.params"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.params</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.multiclass_dim"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.multiclass_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.kfold_flag"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.kfold_flag</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.final_prediction"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.mod1_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.mod1_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.mod2_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.mod2_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.img_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.img_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.fused_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.__init__"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.set_final_pred_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.set_final_pred_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.set_fused_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.set_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.set_img_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.set_img_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.set_mod1_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.set_mod1_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.base_model.ParentFusionModel.set_mod2_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.set_mod2_layers()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.concat_img_latent_tab_doubleloss">fusion_models.concat_img_latent_tab_doubleloss module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.pred_type"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.pred_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.final_prediction"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.custom_loss"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.custom_loss</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.latent_dim"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.latent_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.encoder"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.encoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.decoder"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.decoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.new_encoder"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.new_encoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.new_decoder"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.new_decoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fused_dim"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.__init__"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.forward"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.fusion_type"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.get_fused_dim"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.get_fused_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.method_name"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.modality_type"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss.training"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.concat_img_latent_tab_doubletrain">fusion_models.concat_img_latent_tab_doubletrain module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.pred_type"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.pred_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.latent_dim"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.latent_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.enc_img_layer"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.enc_img_layer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fused_dim"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.final_prediction"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.__init__"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.forward"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.fusion_type"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.get_fused_dim"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.get_fused_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.method_name"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.modality_type"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.subspace_method"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.subspace_method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain.training"><code class="docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.data_dims"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.data_dims</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.img_dim"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.img_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.latent_dim"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.latent_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.encoder"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.encoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.decoder"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.decoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.new_encoder"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.new_encoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.new_decoder"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.new_decoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.__init__"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.configure_optimizers"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.configure_optimizers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.encode_image"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.encode_image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.forward"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.training"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.training</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.training_step"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.training_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace.validation_step"><code class="docutils literal notranslate"><span class="pre">ImgLatentSpace.validation_step()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method"><code class="docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.datamodule"><code class="docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method.datamodule</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.trainer"><code class="docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method.trainer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.autoencoder"><code class="docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method.autoencoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.__init__"><code class="docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.convert_to_latent"><code class="docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method.convert_to_latent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.train"><code class="docutils literal notranslate"><span class="pre">concat_img_latent_tab_subspace_method.train()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.concat_img_maps_tabular_data">fusion_models.concat_img_maps_tabular_data module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.pred_type"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData.pred_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.img_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData.img_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.final_prediction"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.fused_dim"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.__init__"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.forward"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.fusion_type"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.get_fused_dim"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData.get_fused_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.method_name"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.modality_type"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.training"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.concat_img_maps_tabular_maps">fusion_models.concat_img_maps_tabular_maps module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.pred_type"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.pred_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.mod1_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.mod1_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.img_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.img_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fused_dim"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.final_prediction"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.__init__"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.forward"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.fusion_type"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.get_fused_dim"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.get_fused_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.method_name"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.modality_type"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.training"><code class="docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.concat_tabular_data">fusion_models.concat_tabular_data module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData"><code class="docutils literal notranslate"><span class="pre">ConcatTabularData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.pred_type"><code class="docutils literal notranslate"><span class="pre">ConcatTabularData.pred_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.fused_dim"><code class="docutils literal notranslate"><span class="pre">ConcatTabularData.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatTabularData.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.final_prediction"><code class="docutils literal notranslate"><span class="pre">ConcatTabularData.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.__init__"><code class="docutils literal notranslate"><span class="pre">ConcatTabularData.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatTabularData.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.forward"><code class="docutils literal notranslate"><span class="pre">ConcatTabularData.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.fusion_type"><code class="docutils literal notranslate"><span class="pre">ConcatTabularData.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.get_fused_dim"><code class="docutils literal notranslate"><span class="pre">ConcatTabularData.get_fused_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.method_name"><code class="docutils literal notranslate"><span class="pre">ConcatTabularData.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.modality_type"><code class="docutils literal notranslate"><span class="pre">ConcatTabularData.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_data.ConcatTabularData.training"><code class="docutils literal notranslate"><span class="pre">ConcatTabularData.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.concat_tabular_feature_maps">fusion_models.concat_tabular_feature_maps module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps"><code class="docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.pred_type"><code class="docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps.pred_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.mod1_layers"><code class="docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps.mod1_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.mod2_layers"><code class="docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps.mod2_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.fused_dim"><code class="docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.final_prediction"><code class="docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.__init__"><code class="docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.forward"><code class="docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.fusion_type"><code class="docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.get_fused_dim"><code class="docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps.get_fused_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.method_name"><code class="docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.modality_type"><code class="docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.training"><code class="docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.crossmodal_att">fusion_models.crossmodal_att module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.pred_type"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.pred_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.attention_embed_dim"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.attention_embed_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.mod1_layers"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.mod1_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.img_layers"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.img_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.fused_dim"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.attention"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.attention</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.img_dense"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.img_dense</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.img_to_embed_dim"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.img_to_embed_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.tab_to_embed_dim"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.tab_to_embed_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.relu"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.relu</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.final_prediction"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.__init__"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.forward"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.fusion_type"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.get_fused_dim"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.get_fused_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.method_name"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.modality_type"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.training"><code class="docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.denoise_tab_img_maps">fusion_models.denoise_tab_img_maps module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DAETabImgMaps"><code class="docutils literal notranslate"><span class="pre">DAETabImgMaps</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DAETabImgMaps.pred_type"><code class="docutils literal notranslate"><span class="pre">DAETabImgMaps.pred_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DAETabImgMaps.subspace_method"><code class="docutils literal notranslate"><span class="pre">DAETabImgMaps.subspace_method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DAETabImgMaps.fusion_layers"><code class="docutils literal notranslate"><span class="pre">DAETabImgMaps.fusion_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DAETabImgMaps.final_prediction"><code class="docutils literal notranslate"><span class="pre">DAETabImgMaps.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DAETabImgMaps.__init__"><code class="docutils literal notranslate"><span class="pre">DAETabImgMaps.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DAETabImgMaps.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">DAETabImgMaps.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DAETabImgMaps.forward"><code class="docutils literal notranslate"><span class="pre">DAETabImgMaps.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DAETabImgMaps.fusion_type"><code class="docutils literal notranslate"><span class="pre">DAETabImgMaps.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DAETabImgMaps.method_name"><code class="docutils literal notranslate"><span class="pre">DAETabImgMaps.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DAETabImgMaps.modality_type"><code class="docutils literal notranslate"><span class="pre">DAETabImgMaps.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#id0"><code class="docutils literal notranslate"><span class="pre">DAETabImgMaps.subspace_method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DAETabImgMaps.training"><code class="docutils literal notranslate"><span class="pre">DAETabImgMaps.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DenoisingAutoencoder"><code class="docutils literal notranslate"><span class="pre">DenoisingAutoencoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.tab_dims"><code class="docutils literal notranslate"><span class="pre">DenoisingAutoencoder.tab_dims</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.subspace_lat_dims"><code class="docutils literal notranslate"><span class="pre">DenoisingAutoencoder.subspace_lat_dims</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.upsampler"><code class="docutils literal notranslate"><span class="pre">DenoisingAutoencoder.upsampler</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.downsampler"><code class="docutils literal notranslate"><span class="pre">DenoisingAutoencoder.downsampler</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.loss"><code class="docutils literal notranslate"><span class="pre">DenoisingAutoencoder.loss</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.__init__"><code class="docutils literal notranslate"><span class="pre">DenoisingAutoencoder.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">DenoisingAutoencoder.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.configure_optimizers"><code class="docutils literal notranslate"><span class="pre">DenoisingAutoencoder.configure_optimizers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.denoise"><code class="docutils literal notranslate"><span class="pre">DenoisingAutoencoder.denoise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.forward"><code class="docutils literal notranslate"><span class="pre">DenoisingAutoencoder.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.training"><code class="docutils literal notranslate"><span class="pre">DenoisingAutoencoder.training</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.training_step"><code class="docutils literal notranslate"><span class="pre">DenoisingAutoencoder.training_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.validation_step"><code class="docutils literal notranslate"><span class="pre">DenoisingAutoencoder.validation_step()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.img_dim"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.img_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.multiclass_dim"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.multiclass_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.img_layers"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.img_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.num_layers"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.num_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.fused_dim"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.pred_type"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.pred_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.loss"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.loss</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.fused_layers"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.final_prediction"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#id1"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.loss</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.activation"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.activation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.__init__"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.configure_optimizers"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.configure_optimizers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.forward"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.get_intermediate_featuremaps"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.get_intermediate_featuremaps()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.training"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.training</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.training_step"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.training_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.validation_step"><code class="docutils literal notranslate"><span class="pre">ImgUnimodalDAE.validation_step()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method"><code class="docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.datamodule"><code class="docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method.datamodule</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.dae_trainer"><code class="docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method.dae_trainer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.img_unimodal_trainer"><code class="docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method.img_unimodal_trainer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.autoencoder"><code class="docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method.autoencoder</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.img_unimodal"><code class="docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method.img_unimodal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.__init__"><code class="docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.convert_to_latent"><code class="docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method.convert_to_latent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.train"><code class="docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method.train()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.edge_corr_gnn">fusion_models.edge_corr_gnn module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.graph_maker"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.graph_maker</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.graph_conv_layers"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.graph_conv_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.dropout_prob"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.dropout_prob</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.final_prediction"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.__init__"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.forward"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.fusion_type"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#id2"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.graph_maker</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.method_name"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.modality_type"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.training"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGNN.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGraphMaker"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGraphMaker</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.dataset"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGraphMaker.dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.threshold"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGraphMaker.threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.__init__"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGraphMaker.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.check_params"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGraphMaker.check_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.make_graph"><code class="docutils literal notranslate"><span class="pre">EdgeCorrGraphMaker.make_graph()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.img_tab_channelwise_att">fusion_models.img_tab_channelwise_att module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.mod1_layers"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.mod1_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.img_layers"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.img_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.match_dim_layers"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.match_dim_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.fused_dim"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.fused_layers"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.final_prediction"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.__init__"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.forward"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.fusion_type"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.get_fused_dim"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.get_fused_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.method_name"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.modality_type"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.training"><code class="docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.img_tab_decision">fusion_models.img_tab_decision module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_decision.ImageDecision"><code class="docutils literal notranslate"><span class="pre">ImageDecision</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_decision.ImageDecision.mod1_layers"><code class="docutils literal notranslate"><span class="pre">ImageDecision.mod1_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_decision.ImageDecision.img_layers"><code class="docutils literal notranslate"><span class="pre">ImageDecision.img_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_decision.ImageDecision.fused_layers"><code class="docutils literal notranslate"><span class="pre">ImageDecision.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_decision.ImageDecision.final_prediction_tab1"><code class="docutils literal notranslate"><span class="pre">ImageDecision.final_prediction_tab1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_decision.ImageDecision.final_prediction_img"><code class="docutils literal notranslate"><span class="pre">ImageDecision.final_prediction_img</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_decision.ImageDecision.fusion_operation"><code class="docutils literal notranslate"><span class="pre">ImageDecision.fusion_operation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_decision.ImageDecision.__init__"><code class="docutils literal notranslate"><span class="pre">ImageDecision.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_decision.ImageDecision.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ImageDecision.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_decision.ImageDecision.forward"><code class="docutils literal notranslate"><span class="pre">ImageDecision.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_decision.ImageDecision.fusion_type"><code class="docutils literal notranslate"><span class="pre">ImageDecision.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_decision.ImageDecision.method_name"><code class="docutils literal notranslate"><span class="pre">ImageDecision.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_decision.ImageDecision.modality_type"><code class="docutils literal notranslate"><span class="pre">ImageDecision.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_tab_decision.ImageDecision.training"><code class="docutils literal notranslate"><span class="pre">ImageDecision.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.img_unimodal">fusion_models.img_unimodal module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.img_unimodal.ImgUnimodal"><code class="docutils literal notranslate"><span class="pre">ImgUnimodal</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.img_layers"><code class="docutils literal notranslate"><span class="pre">ImgUnimodal.img_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.fused_dim"><code class="docutils literal notranslate"><span class="pre">ImgUnimodal.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.fused_layers"><code class="docutils literal notranslate"><span class="pre">ImgUnimodal.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.final_prediction"><code class="docutils literal notranslate"><span class="pre">ImgUnimodal.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.__init__"><code class="docutils literal notranslate"><span class="pre">ImgUnimodal.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">ImgUnimodal.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.forward"><code class="docutils literal notranslate"><span class="pre">ImgUnimodal.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.fusion_type"><code class="docutils literal notranslate"><span class="pre">ImgUnimodal.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.get_fused_dim"><code class="docutils literal notranslate"><span class="pre">ImgUnimodal.get_fused_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.method_name"><code class="docutils literal notranslate"><span class="pre">ImgUnimodal.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.modality_type"><code class="docutils literal notranslate"><span class="pre">ImgUnimodal.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.training"><code class="docutils literal notranslate"><span class="pre">ImgUnimodal.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.mcvae_tab">fusion_models.mcvae_tab module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAESubspaceMethod"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAESubspaceMethod.datamodule"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.datamodule</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAESubspaceMethod.num_latent_dims"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.num_latent_dims</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAESubspaceMethod.fit_model"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.fit_model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAESubspaceMethod.__init__"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAESubspaceMethod.check_params"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.check_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAESubspaceMethod.convert_to_latent"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.convert_to_latent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAESubspaceMethod.get_latents"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.get_latents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAESubspaceMethod.train"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.train()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.subspace_method"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.subspace_method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.latent_space_layers"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.latent_space_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.fused_dim"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.fused_layers"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.final_prediction"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.__init__"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.forward"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.fusion_type"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.method_name"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.modality_type"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#id3"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.subspace_method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.training"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.training</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.mcvae_tab.mcvae_early_stopping_tol"><code class="docutils literal notranslate"><span class="pre">mcvae_early_stopping_tol()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.tab_crossmodal_att">fusion_models.tab_crossmodal_att module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.pred_type"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.pred_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.attention_embed_dim"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.attention_embed_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.mod1_layers"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.mod1_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.mod2_layers"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.mod2_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.fused_dim"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.attention"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.attention</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.tab1_to_embed_dim"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.tab1_to_embed_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.tab2_to_embed_dim"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.tab2_to_embed_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.relu"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.relu</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.final_prediction"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.__init__"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.forward"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.fusion_type"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.method_name"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.modality_type"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.training"><code class="docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.tabular1_unimodal">fusion_models.tabular1_unimodal module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal"><code class="docutils literal notranslate"><span class="pre">Tabular1Unimodal</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.mod1_layers"><code class="docutils literal notranslate"><span class="pre">Tabular1Unimodal.mod1_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.fused_layers"><code class="docutils literal notranslate"><span class="pre">Tabular1Unimodal.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.final_prediction"><code class="docutils literal notranslate"><span class="pre">Tabular1Unimodal.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.fused_dim"><code class="docutils literal notranslate"><span class="pre">Tabular1Unimodal.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.__init__"><code class="docutils literal notranslate"><span class="pre">Tabular1Unimodal.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">Tabular1Unimodal.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.forward"><code class="docutils literal notranslate"><span class="pre">Tabular1Unimodal.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.fusion_type"><code class="docutils literal notranslate"><span class="pre">Tabular1Unimodal.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.get_fused_dim"><code class="docutils literal notranslate"><span class="pre">Tabular1Unimodal.get_fused_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.method_name"><code class="docutils literal notranslate"><span class="pre">Tabular1Unimodal.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.modality_type"><code class="docutils literal notranslate"><span class="pre">Tabular1Unimodal.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular1_unimodal.Tabular1Unimodal.training"><code class="docutils literal notranslate"><span class="pre">Tabular1Unimodal.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.tabular2_unimodal">fusion_models.tabular2_unimodal module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.mod2_layers"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.mod2_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.fused_dim"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.fused_layers"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.final_prediction"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#id4"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.__init__"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.forward"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.fusion_type"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.get_fused_dim"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.get_fused_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.method_name"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.modality_type"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular2_unimodal.Tabular2Unimodal.training"><code class="docutils literal notranslate"><span class="pre">Tabular2Unimodal.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.tabular_channelwise_att">fusion_models.tabular_channelwise_att module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.mod1_layers"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.mod1_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.mod2_layers"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.mod2_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.match_dim_layers"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.match_dim_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.fused_dim"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.fused_dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.fused_layers"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.final_prediction"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.final_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.__init__"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.forward"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.fusion_type"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.get_fused_dim"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.get_fused_dim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.method_name"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.modality_type"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.training"><code class="docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models.tabular_decision">fusion_models.tabular_decision module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_decision.TabularDecision"><code class="docutils literal notranslate"><span class="pre">TabularDecision</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_decision.TabularDecision.mod1_layers"><code class="docutils literal notranslate"><span class="pre">TabularDecision.mod1_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_decision.TabularDecision.mod2_layers"><code class="docutils literal notranslate"><span class="pre">TabularDecision.mod2_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_decision.TabularDecision.fused_layers"><code class="docutils literal notranslate"><span class="pre">TabularDecision.fused_layers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_decision.TabularDecision.final_prediction_tab1"><code class="docutils literal notranslate"><span class="pre">TabularDecision.final_prediction_tab1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_decision.TabularDecision.final_prediction_tab2"><code class="docutils literal notranslate"><span class="pre">TabularDecision.final_prediction_tab2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_decision.TabularDecision.fusion_operation"><code class="docutils literal notranslate"><span class="pre">TabularDecision.fusion_operation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_decision.TabularDecision.__init__"><code class="docutils literal notranslate"><span class="pre">TabularDecision.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_decision.TabularDecision.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">TabularDecision.calc_fused_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_decision.TabularDecision.forward"><code class="docutils literal notranslate"><span class="pre">TabularDecision.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_decision.TabularDecision.fusion_type"><code class="docutils literal notranslate"><span class="pre">TabularDecision.fusion_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_decision.TabularDecision.method_name"><code class="docutils literal notranslate"><span class="pre">TabularDecision.method_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_decision.TabularDecision.modality_type"><code class="docutils literal notranslate"><span class="pre">TabularDecision.modality_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fusion_models.html#fusion_models.tabular_decision.TabularDecision.training"><code class="docutils literal notranslate"><span class="pre">TabularDecision.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fusion_models.html#module-fusion_models">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="train.html">train module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="train.html#train.store_trained_model"><code class="docutils literal notranslate"><span class="pre">store_trained_model()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="train.html#train.train_and_save_models"><code class="docutils literal notranslate"><span class="pre">train_and_save_models()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="train.html#train.train_and_test"><code class="docutils literal notranslate"><span class="pre">train_and_test()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Florence J Townend.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

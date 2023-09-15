@@ -14,9 +14,9 @@ import torch.nn as nn
 from torch.autograd import Variable
 from torch.utils.data import DataLoader, Dataset
 
-from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
+from fusionlibrary.fusion_models.base_model import ParentFusionModel
 from fusionlibrary.utils import check_model_validity
-from fusionlibrary.utils.pl_utils import init_trainer
+from fusionlibrary.utils.training_utils import init_trainer
 
 
 class ImgLatentSpace(pl.LightningModule):

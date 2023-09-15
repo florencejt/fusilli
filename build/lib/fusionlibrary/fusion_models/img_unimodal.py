@@ -3,7 +3,7 @@ Uni-modal model using only the image data.
 """
 
 import torch.nn as nn
-from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
+from fusionlibrary.fusion_models.base_model import ParentFusionModel
 from torch.autograd import Variable
 import torch
 from fusionlibrary.utils import check_model_validity

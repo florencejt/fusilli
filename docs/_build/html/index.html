@@ -63,11 +63,13 @@
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.train_functions.html">fusionlibrary.train_functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.eval_functions.Plotter.html">fusionlibrary.eval_functions.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.data.html">fusionlibrary.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.train.html">fusionlibrary.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.eval.Plotter.html">fusionlibrary.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.utils.pl_utils.html">fusionlibrary.utils.pl_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.utils.training_utils.html">fusionlibrary.utils.training_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.utils.model_modifier.html">fusionlibrary.utils.model_modifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.utils.check_model_validity.html">fusionlibrary.utils.check_model_validity</a></li>
 </ul>
 
         </div>
@@ -122,7 +124,11 @@ This library provides a way to compare different fusion methods for your multimo
 <li class="toctree-l2"><a class="reference internal" href="fusion_model_explanations.html#graph-based">Graph-based</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#input-data">Input data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#choosing-a-model">Choosing a model</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="modifying_models.html">Modifying the fusion models</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="modifying_models.html#modifiable-attributes-of-the-fusion-models">Modifiable attributes of the fusion models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="modifying_models.html#how-to-pass-into-get-data-and-training-as-a-dictionary">How to pass into get_data and training as a dictionary:</a></li>
@@ -151,20 +157,26 @@ This library provides a way to compare different fusion methods for your multimo
 <tr class="row-odd"><td><p><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.html#module-fusionlibrary.fusion_models" title="fusionlibrary.fusion_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fusionlibrary.fusion_models</span></code></a></p></td>
 <td><p>Fusion models: one py file per model</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="autosummary/fusionlibrary.datamodules.html#module-fusionlibrary.datamodules" title="fusionlibrary.datamodules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fusionlibrary.datamodules</span></code></a></p></td>
-<td><p>This file contains the datamodules for the different modalities and the different fusion methods.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="autosummary/fusionlibrary.datamodules.html#module-fusionlibrary.data" title="fusionlibrary.data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fusionlibrary.data</span></code></a></p></td>
+<td><p>This file contains the data for the different modalities and the different fusion methods.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="autosummary/fusionlibrary.train_functions.html#module-fusionlibrary.train_functions" title="fusionlibrary.train_functions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fusionlibrary.train_functions</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="autosummary/fusionlibrary.train_functions.html#module-fusionlibrary.train" title="fusionlibrary.train"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fusionlibrary.train</span></code></a></p></td>
 <td><p>Contains the train_and_test function: trains and tests a model and, if k_fold trained, a fold.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="autosummary/fusionlibrary.eval_functions.Plotter.html#fusionlibrary.eval_functions.Plotter" title="fusionlibrary.eval_functions.Plotter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fusionlibrary.eval_functions.Plotter</span></code></a>(...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="autosummary/fusionlibrary.eval_functions.Plotter.html#fusionlibrary.eval.Plotter" title="fusionlibrary.eval.Plotter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fusionlibrary.eval.Plotter</span></code></a>(...)</p></td>
 <td><p>Class for plotting the results of the models.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="autosummary/fusionlibrary.utils.model_chooser.html#module-fusionlibrary.utils.model_chooser" title="fusionlibrary.utils.model_chooser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fusionlibrary.utils.model_chooser</span></code></a></p></td>
 <td><p>Function/functions to help user choose model's to run</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="autosummary/fusionlibrary.utils.pl_utils.html#module-fusionlibrary.utils.pl_utils" title="fusionlibrary.utils.pl_utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fusionlibrary.utils.pl_utils</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="autosummary/fusionlibrary.utils.training_utils.html#module-fusionlibrary.utils.training_utils" title="fusionlibrary.utils.training_utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fusionlibrary.utils.training_utils</span></code></a></p></td>
 <td><p>Functions for initializing the pytorch lightning logger and trainer.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="autosummary/fusionlibrary.utils.model_modifier.html#module-fusionlibrary.utils.model_modifier" title="fusionlibrary.utils.model_modifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fusionlibrary.utils.model_modifier</span></code></a></p></td>
+<td><p>Functions for modifying aspects of the model (e.g.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="autosummary/fusionlibrary.utils.check_model_validity.html#module-fusionlibrary.utils.check_model_validity" title="fusionlibrary.utils.check_model_validity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fusionlibrary.utils.check_model_validity</span></code></a></p></td>
+<td><p>Check validity of model modifications.</p></td>
 </tr>
 </tbody>
 </table>

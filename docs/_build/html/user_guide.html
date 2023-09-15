@@ -54,7 +54,18 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">User guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">User guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#input-data">Input data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tabular">Tabular</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tabular-and-image">Tabular and Image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#choosing-a-model">Choosing a model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fusion-types">Fusion Types</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
@@ -64,11 +75,13 @@
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.train_functions.html">fusionlibrary.train_functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.eval_functions.Plotter.html">fusionlibrary.eval_functions.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.data.html">fusionlibrary.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.train.html">fusionlibrary.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.eval.Plotter.html">fusionlibrary.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.utils.pl_utils.html">fusionlibrary.utils.pl_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.utils.training_utils.html">fusionlibrary.utils.training_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.utils.model_modifier.html">fusionlibrary.utils.model_modifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusionlibrary.utils.check_model_validity.html">fusionlibrary.utils.check_model_validity</a></li>
 </ul>
 
         </div>
@@ -97,6 +110,84 @@
              
   <section id="user-guide">
 <h1>User guide<a class="headerlink" href="#user-guide" title="Permalink to this heading"></a></h1>
+<section id="input-data">
+<h2>Input data<a class="headerlink" href="#input-data" title="Permalink to this heading"></a></h2>
+<p>Guidance on what data can be used with this module</p>
+<section id="tabular">
+<h3>Tabular<a class="headerlink" href="#tabular" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Format:</dt><dd><ul>
+<li><p>Tabular 1: csv file, study_id as index column name, pred_label as label column name</p></li>
+<li><p>Tabular 1: csv file, study_id as index column name, pred_label as label column name</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">example</span> <span class="n">here</span>
+</pre></div>
+</div>
+</section>
+<section id="tabular-and-image">
+<h3>Tabular and Image<a class="headerlink" href="#tabular-and-image" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Format:</dt><dd><ul>
+<li><p>Tabular 1: csv file, study_id as index column name, pred_label as label column name</p></li>
+<li><dl class="simple">
+<dt>Image: pytorch pt file, items in same order as csv file.</dt><dd><ul>
+<li><p>when opening the pt file with <code class="docutils literal notranslate"><span class="pre">torch.load()</span></code>, the dimensions should be <em>put in dimensions here</em></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+<section id="choosing-a-model">
+<h2>Choosing a model<a class="headerlink" href="#choosing-a-model" title="Permalink to this heading"></a></h2>
+<section id="fusion-types">
+<h3>Fusion Types<a class="headerlink" href="#fusion-types" title="Permalink to this heading"></a></h3>
+<p>More info about the fusion types can be found on section <span class="xref std std-ref">fusion_model_explanations</span>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Fusion type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Uni-modal</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">operation</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">attention</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">subspace</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">graph</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tensor</span></code></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
 </section>
 
 

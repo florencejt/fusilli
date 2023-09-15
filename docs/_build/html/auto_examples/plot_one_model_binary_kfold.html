@@ -62,11 +62,13 @@
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.train_functions.html">fusionlibrary.train_functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.eval_functions.Plotter.html">fusionlibrary.eval_functions.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.data.html">fusionlibrary.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.train.html">fusionlibrary.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.eval.Plotter.html">fusionlibrary.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.pl_utils.html">fusionlibrary.utils.pl_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.training_utils.html">fusionlibrary.utils.training_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.model_modifier.html">fusionlibrary.utils.model_modifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.check_model_validity.html">fusionlibrary.utils.check_model_validity</a></li>
 </ul>
 
         </div>
@@ -112,9 +114,9 @@ to download the full example code</p>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">docs.examples</span> <span class="kn">import</span> <span class="n">generate_sklearn_simulated_data</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.datamodules</span> <span class="kn">import</span> <span class="n">get_data_module</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.eval_functions</span> <span class="kn">import</span> <span class="n">Plotter</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.fusion_models.base_pl_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span> <span class="nn">fusionlibrary.data</span> <span class="kn">import</span> <span class="n">get_data_module</span>
+<span class="kn">from</span> <span class="nn">fusionlibrary.eval</span> <span class="kn">import</span> <span class="n">Plotter</span>
+<span class="kn">from</span> <span class="nn">fusionlibrary.fusion_models.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 </pre></div>
 </div>
 <section id="import-model">
@@ -122,7 +124,7 @@ to download the full example code</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fusionlibrary.fusion_models.tab_crossmodal_att</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">TabularCrossmodalMultiheadAttention</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.train_functions</span> <span class="kn">import</span> <span class="n">train_and_save_models</span>
+<span class="kn">from</span> <span class="nn">fusionlibrary.train</span> <span class="kn">import</span> <span class="n">train_and_save_models</span>
 </pre></div>
 </div>
 </section>

@@ -40,11 +40,13 @@ This library provides a way to compare different fusion methods for your multimo
    :caption: 🌸 API Reference 🌸
 
    fusionlibrary.fusion_models
-   fusionlibrary.datamodules
-   fusionlibrary.train_functions
-   fusionlibrary.eval_functions.Plotter
+   fusionlibrary.data
+   fusionlibrary.train
+   fusionlibrary.eval.Plotter
    fusionlibrary.utils.model_chooser
-   fusionlibrary.utils.pl_utils
+   fusionlibrary.utils.training_utils
+   fusionlibrary.utils.model_modifier
+   fusionlibrary.utils.check_model_validity
 
 
 

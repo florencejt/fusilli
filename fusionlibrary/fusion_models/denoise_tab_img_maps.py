@@ -2,14 +2,14 @@
 Denoising autoencoder for tabular data concatenated with image feature maps
 """
 import torch.nn as nn
-from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
+from fusionlibrary.fusion_models.base_model import ParentFusionModel
 import torch
 import pytorch_lightning as pl
-from fusionlibrary.utils.pl_utils import init_trainer
+from fusionlibrary.utils.training_utils import init_trainer
 from torch.utils.data import DataLoader
 import pandas as pd
 from torch.nn import functional as F
-from fusionlibrary.fusion_models.base_pl_model import BaseModel
+from fusionlibrary.fusion_models.base_model import BaseModel
 
 from fusionlibrary.utils import check_model_validity
 

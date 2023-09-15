@@ -3,7 +3,7 @@ Tabular1 uni-modal model.
 """
 
 import torch.nn as nn
-from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
+from fusionlibrary.fusion_models.base_model import ParentFusionModel
 from fusionlibrary.utils import check_model_validity
 
 
@@ -74,13 +74,10 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
 
         check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
 
-        # check fused layers
-        # print("1 calc_fused_layers", self.fused_layers)
         self.get_fused_dim()
         self.fused_layers, out_dim = check_model_validity.check_fused_layers(
             self.fused_layers, self.fused_dim
         )
-        # print("2 calc_fused_layers", self.fused_layers)
 
         self.set_final_pred_layers(out_dim)
 

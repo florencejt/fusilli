@@ -3,7 +3,7 @@ Concatenating the feature maps of the two tabular modalities.
 """
 
 import torch.nn as nn
-from fusionlibrary.fusion_models.base_pl_model import ParentFusionModel
+from fusionlibrary.fusion_models.base_model import ParentFusionModel
 import torch
 from torch.autograd import Variable
 
@@ -134,3 +134,8 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
         return [
             out,
         ]
+
+
+"""
+
+"""

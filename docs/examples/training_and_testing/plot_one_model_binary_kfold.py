@@ -16,8 +16,8 @@ from tqdm.auto import tqdm
 
 # %%
 from docs.examples import generate_sklearn_simulated_data
-from fusionlibrary.datamodules import get_data_module
-from fusionlibrary.eval_functions import Plotter
+from fusionlibrary.data import get_data_module
+from fusionlibrary.eval import Plotter
 
 # %%
 # 1. Import model
@@ -25,7 +25,7 @@ from fusionlibrary.eval_functions import Plotter
 from fusionlibrary.fusion_models.tab_crossmodal_att import (
     TabularCrossmodalMultiheadAttention,
 )
-from fusionlibrary.train_functions import train_and_save_models
+from fusionlibrary.train import train_and_save_models
 
 # %%
 # 2. Set the training parameters

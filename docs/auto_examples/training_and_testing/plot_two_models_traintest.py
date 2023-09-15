@@ -20,10 +20,10 @@ import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
 
 from docs.examples import generate_sklearn_simulated_data
-from fusionlibrary.datamodules import get_data_module
-from fusionlibrary.eval_functions import Plotter
-from fusionlibrary.fusion_models.base_pl_model import BaseModel
-from fusionlibrary.train_functions import train_and_save_models
+from fusionlibrary.data import get_data_module
+from fusionlibrary.eval import Plotter
+from fusionlibrary.fusion_models.base_model import BaseModel
+from fusionlibrary.train import train_and_save_models
 from fusionlibrary.utils.model_chooser import get_models
 
 
@@ -114,8 +114,8 @@ all_trained_models = {}  # create dictionary to store trained models
 # 2. *Create a dictionary to store the trained model*: We're using the name of the model as the key. It may seem overkill to make a dictionary just to store one model, but we also use this when we do k-fold training to store the trained models from the different folds.
 # 3. *Initialise the model with dummy data*: This is so we can find out whether there are extra instructions for creating the datamodule (such as a method for creating a graph datamodule).
 # 4. *Print the attributes of the model*: To check it's been initialised correctly.
-# 5. *Create the datamodule*: This is done with the :func:`~fusionlibrary.datamodules.get_data_module` function. This function takes the initialised model and the parameters as inputs. It returns the datamodule.
-# 6. *Train and test the model*: This is done with the :func:`~fusionlibrary.train_functions.train_and_save_models` function. This function takes the trained_models_dict, the datamodule, the parameters, the fusion model, and the initialised model as inputs. It returns the trained_models_dict with the trained model added to it.
+# 5. *Create the datamodule*: This is done with the :func:`~fusionlibrary.data.get_data_module` function. This function takes the initialised model and the parameters as inputs. It returns the datamodule.
+# 6. *Train and test the model*: This is done with the :func:`~fusionlibrary.train.train_and_save_models` function. This function takes the trained_models_dict, the datamodule, the parameters, the fusion model, and the initialised model as inputs. It returns the trained_models_dict with the trained model added to it.
 # 7. *Add the trained model to the ``all_trained_models`` dictionary*: This is so we can compare the results of the two models later.
 
 fusion_model = fusion_models[0]
@@ -142,7 +142,7 @@ all_trained_models[fusion_model.__name__] = model_1_dict[fusion_model.__name__]
 # %%
 # 5. Plotting the results of the first model
 # --------------------------------------------
-# We're using the :class:`~fusionlibrary.eval_functions.Plotter` class to plot the results of the first model. This class takes the dictionary of trained models and the parameters as inputs. It returns a dictionary of figures.
+# We're using the :class:`~fusionlibrary.eval.Plotter` class to plot the results of the first model. This class takes the dictionary of trained models and the parameters as inputs. It returns a dictionary of figures.
 # If there is one model in the dictionary (i.e. only one unique key), then it plots the figures for analysing the results of a single model.
 
 plotter = Plotter(model_1_dict, params)
@@ -199,6 +199,6 @@ comparison_plotter.show_all(comparison_plot_dict)
 # %%
 # 9. Saving the metrics of the two models
 # -----------------------------------------
-# We can also get the metrics of the two models into a Pandas DataFrame using the :func:`~fusionlibrary.eval_functions.Plotter.get_performance_df` function.
+# We can also get the metrics of the two models into a Pandas DataFrame using the :func:`~fusionlibrary.eval.Plotter.get_performance_df` function.
 performances_df = comparison_plotter.get_performance_df()
 performances_df

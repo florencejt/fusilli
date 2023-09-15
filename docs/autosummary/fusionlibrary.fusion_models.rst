@@ -27,7 +27,7 @@
    :toctree:
    :recursive:
 
-   fusionlibrary.fusion_models.base_pl_model
+   fusionlibrary.fusion_models.base_model
    fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss
    fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain
    fusionlibrary.fusion_models.concat_img_maps_tabular_data

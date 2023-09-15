@@ -64,7 +64,7 @@
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html">fusionlibrary.fusion_models.base_pl_model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.base_model.html">fusionlibrary.fusion_models.base_model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss.html">fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain.html">fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.concat_img_maps_tabular_data.html">fusionlibrary.fusion_models.concat_img_maps_tabular_data</a></li>
@@ -78,16 +78,15 @@
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.img_tab_decision.html">fusionlibrary.fusion_models.img_tab_decision</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.img_unimodal.html">fusionlibrary.fusion_models.img_unimodal</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">fusionlibrary.fusion_models.mcvae_tab</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.mcvae_early_stopping_tol"><code class="docutils literal notranslate"><span class="pre">mcvae_early_stopping_tol()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.datamodule"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.datamodule</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.num_latent_dims"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.num_latent_dims</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.fit_model"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.fit_model</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.__init__"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.__init__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.check_params"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.check_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.convert_to_latent"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.convert_to_latent()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.get_latents"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.get_latents()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.train"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.train()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.convert_to_latent"><code class="docutils literal notranslate"><span class="pre">MCVAESubspaceMethod.convert_to_latent()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab</span></code></a><ul>
@@ -96,12 +95,13 @@
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.fused_dim"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.fused_dim</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.fused_layers"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.fused_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.final_prediction"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.final_prediction</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.subspace_method</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.__init__"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.__init__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.calc_fused_layers"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.calc_fused_layers()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.forward"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">MCVAE_tab.subspace_method</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.mcvae_early_stopping_tol"><code class="docutils literal notranslate"><span class="pre">mcvae_early_stopping_tol()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.tab_crossmodal_att.html">fusionlibrary.fusion_models.tab_crossmodal_att</a></li>
@@ -111,11 +111,13 @@
 <li class="toctree-l2"><a class="reference internal" href="fusionlibrary.fusion_models.tabular_decision.html">fusionlibrary.fusion_models.tabular_decision</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.datamodules.html">fusionlibrary.datamodules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.train_functions.html">fusionlibrary.train_functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.eval_functions.Plotter.html">fusionlibrary.eval_functions.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.data.html">fusionlibrary.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.train.html">fusionlibrary.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.eval.Plotter.html">fusionlibrary.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.pl_utils.html">fusionlibrary.utils.pl_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.training_utils.html">fusionlibrary.utils.training_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.model_modifier.html">fusionlibrary.utils.model_modifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.check_model_validity.html">fusionlibrary.utils.check_model_validity</a></li>
 </ul>
 
         </div>
@@ -166,28 +168,6 @@ two types of tabular data.</p>
 </tr>
 </tbody>
 </table>
-<dl class="py function">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.mcvae_tab.mcvae_early_stopping_tol">
-<span class="sig-name descname"><span class="pre">mcvae_early_stopping_tol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patience</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_logs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/mcvae_tab.html#mcvae_early_stopping_tol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.mcvae_tab.mcvae_early_stopping_tol" title="Permalink to this definition"></a></dt>
-<dd><p>Simple early stopping function for the MCVAE model’s training.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>patience</strong> (<em>int</em>) – Number of epochs to wait before stopping</p></li>
-<li><p><strong>tolerance</strong> (<em>int</em>) – Tolerance for loss</p></li>
-<li><p><strong>loss_logs</strong> (<em>list</em>) – List of loss logs</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to print out information</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>i</strong> – Epoch to stop at</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MCVAESubspaceMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datamodule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/mcvae_tab.html#MCVAESubspaceMethod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod" title="Permalink to this definition"></a></dt>
@@ -251,6 +231,25 @@ two types of tabular data.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.convert_to_latent">
+<span class="sig-name descname"><span class="pre">convert_to_latent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/mcvae_tab.html#MCVAESubspaceMethod.convert_to_latent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.convert_to_latent" title="Permalink to this definition"></a></dt>
+<dd><p>Converts the test dataset to the latent space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>test_dataset</strong> (<em>list</em>) – List containing the two types of tabular data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>test_mean_latents</strong> (<em>torch.Tensor</em>) – Tensor containing the mean latents of the dataset.</p></li>
+<li><p><strong>labels</strong> (<em>pd.DataFrame</em>) – Dataframe containing the labels of the dataset.</p></li>
+<li><p><strong>[self.num_latent_dims, None, None]</strong> (<em>list</em>) – List containing the dimensions of the data.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.get_latents">
 <span class="sig-name descname"><span class="pre">get_latents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/mcvae_tab.html#MCVAESubspaceMethod.get_latents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.get_latents" title="Permalink to this definition"></a></dt>
 <dd><p>Gets the latent representations of the multimodal dataset.
@@ -289,31 +288,12 @@ The two latent spaces are averaged to form the joint latent space.</p>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.convert_to_latent">
-<span class="sig-name descname"><span class="pre">convert_to_latent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/mcvae_tab.html#MCVAESubspaceMethod.convert_to_latent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.convert_to_latent" title="Permalink to this definition"></a></dt>
-<dd><p>Converts the test dataset to the latent space.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>test_dataset</strong> (<em>list</em>) – List containing the two types of tabular data.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>test_mean_latents</strong> (<em>torch.Tensor</em>) – Tensor containing the mean latents of the dataset.</p></li>
-<li><p><strong>labels</strong> (<em>pd.DataFrame</em>) – Dataframe containing the labels of the dataset.</p></li>
-<li><p><strong>[self.num_latent_dims, None, None]</strong> (<em>list</em>) – List containing the dimensions of the data.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MCVAE_tab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/mcvae_tab.html#MCVAE_tab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_pl_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_pl_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>This class implements a model that fuses the two types of tabular data using the MCVAE approach.
 MCVAE: multi-channel variational autoencoder.</p>
 <p>The MCVAE creates a joint latent space of the two types of tabular data based off a joint
@@ -383,12 +363,6 @@ latent space layers.</p>
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">subspace_method</span></span><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod" title="fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod"><code class="xref py py-class docutils literal notranslate"><span class="pre">MCVAESubspaceMethod</span></code></a></p>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/mcvae_tab.html#MCVAE_tab.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.__init__" title="Permalink to this definition"></a></dt>
@@ -431,6 +405,34 @@ latent space layers.</p>
 </dl>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">subspace_method</span></span><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod" title="fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod"><code class="xref py py-class docutils literal notranslate"><span class="pre">MCVAESubspaceMethod</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fusionlibrary.fusion_models.mcvae_tab.mcvae_early_stopping_tol">
+<span class="sig-name descname"><span class="pre">mcvae_early_stopping_tol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patience</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_logs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/fusion_models/mcvae_tab.html#mcvae_early_stopping_tol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.fusion_models.mcvae_tab.mcvae_early_stopping_tol" title="Permalink to this definition"></a></dt>
+<dd><p>Simple early stopping function for the MCVAE model’s training.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patience</strong> (<em>int</em>) – Number of epochs to wait before stopping</p></li>
+<li><p><strong>tolerance</strong> (<em>int</em>) – Tolerance for loss</p></li>
+<li><p><strong>loss_logs</strong> (<em>list</em>) – List of loss logs</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to print out information</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>i</strong> – Epoch to stop at</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
