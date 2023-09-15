@@ -4,6 +4,7 @@ Functions for modifying aspects of the model (e.g. changing layers, latent space
 
 import torch.nn as nn
 import warnings
+from copy import deepcopy
 
 # modifying model function
 
@@ -52,7 +53,6 @@ def modify_model_architecture(model, architecture_modification):
                 # if we're on the last layer group, reset the fused layers
                 if layer_group == list(layer_groups.keys())[-1]:
                     reset_fused_layers(nested_attr, model)
-
     return model
 
 

@@ -74,13 +74,10 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
 
         check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
 
-        # check fused layers
-        print("1 calc_fused_layers", self.fused_layers)
         self.get_fused_dim()
         self.fused_layers, out_dim = check_model_validity.check_fused_layers(
             self.fused_layers, self.fused_dim
         )
-        print("2 calc_fused_layers", self.fused_layers)
 
         self.set_final_pred_layers(out_dim)
 
@@ -99,9 +96,6 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
             List containing the output of the model.
         """
         x_tab1 = x
-
-        print(x_tab1.shape)
-        print("mod1layers", self.mod1_layers)
 
         for layer in self.mod1_layers.values():
             x_tab1 = layer(x_tab1)

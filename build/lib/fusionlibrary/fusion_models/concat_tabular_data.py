@@ -2,11 +2,12 @@
 Concatenating the two tabular modalities at the data-level (early fusion)
 """
 
-import torch.nn as nn
 from fusionlibrary.fusion_models.base_model import ParentFusionModel
-import torch
-
 from fusionlibrary.utils import check_model_validity
+
+
+import torch
+import torch.nn as nn
 
 
 class ConcatTabularData(ParentFusionModel, nn.Module):
