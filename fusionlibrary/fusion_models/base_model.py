@@ -2,7 +2,9 @@
 Base lightning module for all fusion models and parent class for all fusion models.
 """
 
+from typing import Any
 import pytorch_lightning as pl
+from pytorch_lightning.utilities.types import EVAL_DATALOADERS
 import torch
 import torchmetrics as tm
 from torch import nn
@@ -423,6 +425,16 @@ class BaseModel(pl.LightningModule):
         self.batch_train_reals = []
         self.batch_train_preds = []
         self.batch_train_logits = []
+
+    def predict_step(self, batch: Any, batch_idx: int, dataloader_idx: int = 0) -> Any:
+        x, y = self.get_data_from_batch(batch, train=False)
+
+        loss, end_output, logits = self.get_model_outputs_and_loss(x, y, train=False)
+
+        end_output = self.safe_squeeze(end_output).detach()
+        logits = self.safe_squeeze(logits).detach()
+
+        return end_output, logits
 
     def configure_optimizers(self):
         """

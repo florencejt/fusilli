@@ -13,6 +13,9 @@ import networkx as nx
 from sklearn.manifold import TSNE
 import pandas as pd
 import torch.nn as nn
+from torch.utils.data import ConcatDataset, DataLoader
+
+import fusionlibrary.data as data
 
 
 class Plotter:
@@ -944,6 +947,27 @@ class ParentPlotter:
 
     @classmethod
     def get_tt_data_from_model(self, model):
+        """
+        Get the data from a train/test model.
+
+        Parameters
+        ----------
+        model: nn.Module
+            The trained model.
+
+        Returns
+        -------
+        train_reals: torch.Tensor
+            The real values for the training set.
+        train_preds: torch.Tensor
+            The predicted values for the training set.
+        val_reals: torch.Tensor
+            The real values for the validation set.
+        val_preds: torch.Tensor
+            The predicted values for the validation set.
+        metric_values: dict
+            The values of the metrics for the model.
+        """
         print("getting train/test data from model")
 
         # not training the model
@@ -964,12 +988,168 @@ class ParentPlotter:
         return train_reals, train_preds, val_reals, val_preds, metric_values
 
     @classmethod
-    def get_new_kfold_data(self):
-        print("getting new kfold data")
+    def get_new_kfold_data(self, model_list, params, data_file_suffix):
+        """
+        Putting new data into each k-fold trained model: we don't need to split the new data into folds.
+        We just need to get the predictions for each fold and plot them.
+        """
+
+        train_reals = []
+        train_preds = []
+        val_reals = []
+        val_preds = []
+        val_logits = []
+
+        metric_names = [
+            model_list[0].metrics[model_list[0].model.pred_type][i]["name"]
+            for i in range(2)
+        ]
+
+        # dictionary to store the metrics for each fold
+        metrics_per_fold = {metric_names[0]: [], metric_names[1]: []}
+
+        params_copy = params.copy()
+        # Setting to False because we don't want to split the new data into folds
+        # We just want to know how our new data performs on each trained fold
+        params_copy["kfold_flag"] = False
+
+        # dm = data.get_data_module(
+        #     model_list[0].model, params_copy, optional_suffix=data_file_suffix
+        # )
+        # dataset = ConcatDataset([dm.train_dataset, dm.test_dataset])
+        # dataloader = DataLoader(dataset, batch_size=len(dataset))
+
+        # loop through the folds and get the predictions for each fold
+        for fold_model in model_list:
+            # eval the model
+
+            fold_model.eval()
+
+            dm = data.get_data_module(
+                fold_model.model, params_copy, optional_suffix=data_file_suffix
+            )
+            dataset = ConcatDataset([dm.train_dataset, dm.test_dataset])
+            dataloader = DataLoader(dataset, batch_size=len(dataset))
+
+            out = fold_model.trainer.predict(dataloaders=dataloader, ckpt_path="best")
+            print("Done!")
+
+            end_outputs = out[0][0]
+            logits = out[0][1]
+
+            fold_val_reals = torch.stack([item[-1] for item in dataset])
+            fold_val_preds = end_outputs.cpu()
+            fold_val_logits = logits.cpu()
+
+            train_reals.append(fold_model.train_reals.cpu())
+            train_preds.append(fold_model.train_preds.cpu())
+            val_reals.append(fold_val_reals)
+            val_preds.append(fold_val_preds)
+            val_logits.append(fold_val_logits)
+
+            # rerun the metrics
+            for metric in fold_model.metrics[fold_model.model.pred_type]:  # loop
+                if "auroc" in metric["name"]:
+                    predicted = fold_val_logits
+                else:
+                    predicted = fold_val_preds
+
+                val_step_acc = metric["metric"](
+                    fold_model.safe_squeeze(predicted),
+                    fold_model.safe_squeeze(fold_val_reals),
+                )
+
+                metrics_per_fold[metric["name"]].append(val_step_acc)
+
+        # concatenate the validation data points for the overall kfold performance
+        all_val_reals = torch.cat(val_reals, dim=-1)
+        all_val_preds = torch.cat(val_preds, dim=-1)
+        all_val_logits = torch.cat(val_logits, dim=0)
+
+        # get the overall kfold metrics
+        overall_kfold_metrics = {}
+
+        for metric in model_list[0].metrics[
+            model_list[0].model.pred_type
+        ]:  # loop through the metrics
+            if "auroc" in metric["name"]:
+                predicted = all_val_logits
+            else:
+                predicted = all_val_preds
+
+            val_step_acc = metric["metric"](
+                model_list[0].safe_squeeze(predicted),
+                model_list[0].safe_squeeze(all_val_reals),
+            )
+
+            overall_kfold_metrics[metric["name"]] = val_step_acc
+
+        return (
+            train_reals,
+            train_preds,
+            val_reals,
+            val_preds,
+            metrics_per_fold,
+            overall_kfold_metrics,
+        )
 
     @classmethod
-    def get_new_tt_data(self):
-        print("getting new train/test data")
+    def get_new_tt_data(self, model, params, data_file_suffix):
+        """
+        Get new data by running through trained model for a train/test model.
+
+        Parameters
+        ----------
+        model: nn.Module
+            The trained model.
+        sources: list
+            List of sources to get data from. [tabular1source csv, tabular2source csv, image csv]
+
+        Returns
+        -------
+        return train_reals, train_preds, val_reals, val_preds, metric_values
+        """
+
+        # eval the model
+        model.eval()
+
+        # get data module (potentially will need to be trained with a subspace method or graph-maker)
+        dm = data.get_data_module(model.model, params, optional_suffix=data_file_suffix)
+
+        # concatenating the train and test datasets because we want to get the predictions for all the data
+        dataset = ConcatDataset([dm.train_dataset, dm.test_dataset])
+        dataloader = DataLoader(dataset, batch_size=len(dataset))
+        out = model.trainer.predict(dataloaders=dataloader, ckpt_path="best")
+        end_outputs = out[0][0]
+        logits = out[0][1]
+
+        # get the train reals, train preds, val reals, val preds
+        # train reals will be the actual train reals that were used the train the model. the val reals will be the test reals
+        # passed into this function
+
+        train_reals = model.train_reals.cpu()
+        train_preds = model.train_preds.cpu()
+
+        val_reals = torch.stack([item[-1] for item in dataset])
+        val_preds = end_outputs.cpu()
+
+        # metrics
+        metric_values = {}
+
+        for metric in model.metrics[model.model.pred_type]:  # loop through the metrics
+            if "auroc" in metric["name"]:
+                predicted = logits.cpu()  # AUROC needs logits
+            else:
+                predicted = val_preds
+
+            metric_val = metric["metric"](
+                model.safe_squeeze(predicted),
+                model.safe_squeeze(val_reals),
+            )
+
+            metric_values[metric["name"]] = metric_val
+
+        return train_reals, train_preds, val_reals, val_preds, metric_values
 
 
 class RealsVsPreds(ParentPlotter):
@@ -985,13 +1165,71 @@ class RealsVsPreds(ParentPlotter):
         super().__init__()
 
     @classmethod
-    def from_new_data(self, model, X, y):
+    def from_new_data(self, model, params, data_file_suffix="_test"):
+        """
+
+        Parameters
+        ----------
+        data_file_suffix: str
+            Suffix for the data file e.g. _test means that the source files are
+            ``params["tabular1_source_test]``, ``params["tabular2_source_test]``,
+            ``params["img_source_test]``.
+            Change this to whatever suffix you have chosen for your new data files.
+        """
         # run X, y through the models and get the predictions
         # calculate metricS
 
-        self.get_new_kfold_data()
-        self.reals_vs_preds_kfold("calling reals_vs_preds_kfold from from_new_data")
-        print("from_new_data")
+        if isinstance(model, list):  # kfold model
+            if not model[0].model.params["kfold_flag"]:
+                raise ValueError(
+                    (
+                        "Argument 'model' is a list but kfold_flag is False. "
+                        "Please check the model and the function input."
+                    )
+                )
+
+            model_list = model
+
+            (
+                train_reals,
+                train_preds,
+                val_reals,
+                val_preds,
+                metrics_per_fold,
+                overall_kfold_metrics,
+            ) = self.get_new_kfold_data(model_list, params, data_file_suffix)
+
+            figure = self.reals_vs_preds_kfold(
+                model_list,
+                val_reals,
+                val_preds,
+                metrics_per_fold,
+                overall_kfold_metrics,
+            )
+
+        elif isinstance(model, nn.Module):  # train/test model
+            (
+                train_reals,
+                train_preds,
+                val_reals,
+                val_preds,
+                metric_values,
+            ) = self.get_new_tt_data(model, params, data_file_suffix)
+
+            # plot the figure
+            figure = self.reals_vs_preds_tt(
+                model, train_reals, train_preds, val_reals, val_preds, metric_values
+            )
+
+        else:
+            raise ValueError(
+                (
+                    "Argument 'model' is not a list or nn.Module. "
+                    "Please check the model and the function input."
+                )
+            )
+
+        return figure
 
     @classmethod
     def from_final_val_data(self, model):
@@ -1078,7 +1316,12 @@ class RealsVsPreds(ParentPlotter):
 
         ax0 = subplots[0].subplots(1, 1)
 
-        gs = gridspec.GridSpec(rows, cols)
+        gs = gridspec.GridSpec(
+            rows,
+            cols,
+            hspace=0.5,
+            wspace=0.7,
+        )
 
         for n in range(N):
             if n == 0:
@@ -1107,7 +1350,7 @@ class RealsVsPreds(ParentPlotter):
 
             # set title of plot to the metric for the current fold
             ax1.set_title(
-                f"Fold {n+1}: R2={float(metrics_per_fold[metric_names[0]][n]):.3f}"
+                f"Fold {n+1}: {metric_names[0]}={float(metrics_per_fold[metric_names[0]][n]):.3f}"
             )
 
         all_val_reals = torch.cat(val_reals, dim=-1)
@@ -1191,30 +1434,110 @@ class ConfusionMatrix(ParentPlotter):
         super().__init__()
 
     @classmethod
-    def from_new_data(self, model, X, y):
+    def from_new_data(self, model, params, data_file_suffix="_test"):
+        """
+
+        Parameters
+        ----------
+        data_file_suffix: str
+            Suffix for the data file e.g. _test means that the source files are
+            ``params["tabular1_source_test]``, ``params["tabular2_source_test]``,
+            ``params["img_source_test]``.
+            Change this to whatever suffix you have chosen for your new data files.
+        """
         # run X, y through the models and get the predictions
         # calculate metricS
 
-        self.get_new_kfold_data()
-        self.reals_vs_preds_kfold("calling reals_vs_preds_kfold from from_new_data")
-        print("from_new_data")
+        if isinstance(model, list):  # kfold model
+            if not model[0].model.params["kfold_flag"]:
+                raise ValueError(
+                    (
+                        "Argument 'model' is a list but kfold_flag is False. "
+                        "Please check the model and the function input."
+                    )
+                )
+
+            model_list = model
+
+            (
+                train_reals,
+                train_preds,
+                val_reals,
+                val_preds,
+                metrics_per_fold,
+                overall_kfold_metrics,
+            ) = self.get_new_kfold_data(model_list, params, data_file_suffix)
+
+            figure = self.confusion_matrix_kfold(
+                model_list,
+                val_reals,
+                val_preds,
+                metrics_per_fold,
+                overall_kfold_metrics,
+            )
+
+        elif isinstance(model, nn.Module):  # train/test model
+            (
+                train_reals,
+                train_preds,
+                val_reals,
+                val_preds,
+                metric_values,
+            ) = self.get_new_tt_data(model, params, data_file_suffix)
+
+            # plot the figure
+            figure = self.confusion_matrix_tt(
+                model, train_reals, train_preds, val_reals, val_preds, metric_values
+            )
+
+        else:
+            raise ValueError(
+                (
+                    "Argument 'model' is not a list or nn.Module. "
+                    "Please check the model and the function input."
+                )
+            )
+
+        return figure
 
     @classmethod
     def from_final_val_data(self, model):
         # get the predictions from the models (already saved in the model)
         # get the metrics from the models (already saved in the model)
 
-        self.model = model
-        print("model name", model.model.__class__.__name__)
-        print("pred_type", model.model.pred_type)
+        if isinstance(model, list):  # kfold model
+            if not model[0].model.params["kfold_flag"]:
+                raise ValueError(
+                    (
+                        "Argument 'model' is a list but kfold_flag is False. "
+                        "Please check the model and the function input."
+                    )
+                )
 
-        if model.model.params["kfold_flag"]:
-            self.get_kfold_data_from_model()
-            self.confusion_matrix_kfold(
-                "calling confusion_matrix_kfold from from_final_val_data"
+            model_list = (
+                model  # renaming for clarity that this is a list of trained models
             )
 
-        else:
+            (
+                train_reals,
+                train_preds,
+                val_reals,
+                val_preds,
+                metrics_per_fold,
+                overall_kfold_metrics,
+            ) = self.get_kfold_data_from_model(model_list)
+
+            figure = self.confusion_matrix_kfold(
+                model_list,
+                val_reals,
+                val_preds,
+                metrics_per_fold,
+                overall_kfold_metrics,
+            )
+
+        elif isinstance(model, nn.Module):  # train/test model
+            self.model = model
+
             (
                 train_reals,
                 train_preds,
@@ -1224,6 +1547,14 @@ class ConfusionMatrix(ParentPlotter):
             ) = self.get_tt_data_from_model()
 
             figure = self.confusion_matrix_tt(val_reals, val_preds, metric_values)
+
+        else:
+            raise ValueError(
+                (
+                    "Argument 'model' is not a list or nn.Module. "
+                    "Please check the model and the function input."
+                )
+            )
 
         return figure
 
@@ -1264,8 +1595,104 @@ class ConfusionMatrix(ParentPlotter):
         return fig
 
     @classmethod
-    def confusion_matrix_kfold(self, val_reals, val_preds, metric_values):
-        pass
+    def confusion_matrix_kfold(
+        self,
+        model_list,
+        val_reals,
+        val_preds,
+        metrics_per_fold,
+        overall_kfold_metrics,
+    ):
+        first_fold_model = model_list[0]
+        metric_names = list(metrics_per_fold.keys())
+        N = first_fold_model.model.params["num_k"]
+
+        cols = 3
+        rows = int(math.ceil(N / cols))
+
+        fig = plt.figure(constrained_layout=True, figsize=(15, 6))
+        subplots = fig.subfigures(1, 2)
+
+        ax0 = subplots[0].subplots(1, 1)
+
+        gs = gridspec.GridSpec(
+            rows,
+            cols,
+            hspace=0.5,
+            wspace=0.5,
+        )
+
+        for n in range(N):
+            if n == 0:
+                ax1 = subplots[1].add_subplot(gs[n])
+                ax_og = ax1
+            else:
+                ax1 = subplots[1].add_subplot(gs[n], sharey=ax_og, sharex=ax_og)
+
+            # get real and predicted values for the current fold
+            reals = val_reals[n]
+            preds = val_preds[n]
+
+            conf_matrix = confusion_matrix(y_true=reals, y_pred=preds.squeeze())
+            ax1.matshow(conf_matrix, cmap=plt.cm.RdPu, alpha=0.5)
+
+            for i in range(conf_matrix.shape[0]):
+                for j in range(conf_matrix.shape[1]):
+                    # Add the value of each cell to the plot
+                    ax1.text(
+                        x=j,
+                        y=i,
+                        s=conf_matrix[i, j],
+                        va="center",
+                        ha="center",
+                        size="large",
+                    )
+
+            ax1.set_xlabel("Predictions", fontsize=10)
+            ax1.set_ylabel("Actuals", fontsize=10)
+
+            ax1.set_title(
+                f"Fold {n+1}:\n{metric_names[0]}={float(metrics_per_fold[metric_names[0]][n]):.3f}"
+            )
+
+        # gs.tight_layout(fig)
+        all_val_reals = torch.cat(val_reals, dim=-1)
+        all_val_preds = torch.cat(val_preds, dim=-1)
+
+        # plot all real vs. predicted values
+        conf_matrix = confusion_matrix(
+            y_true=all_val_reals, y_pred=all_val_preds.squeeze()
+        )
+
+        # Plot the confusion matrix as a heatmap
+        ax0.matshow(conf_matrix, cmap=plt.cm.RdPu, alpha=0.3)
+
+        for i in range(conf_matrix.shape[0]):
+            for j in range(conf_matrix.shape[1]):
+                # Add the value of each cell to the plot
+                ax0.text(
+                    x=j,
+                    y=i,
+                    s=conf_matrix[i, j],
+                    va="center",
+                    ha="center",
+                    size="xx-large",
+                )
+
+        ax0.set_xlabel("Predictions", fontsize=18)
+        ax0.set_ylabel("Actuals", fontsize=18)
+
+        ax0.set_title(
+            (
+                f"{first_fold_model.model.method_name}: {metric_names[0]}"
+                f"={float(overall_kfold_metrics[metric_names[0]]):.3f}"
+            )
+        )
+
+        # Set the overall title for the entire figure
+        fig.suptitle(f"{first_fold_model.model.__class__.__name__}: confusion matrix")
+
+        return fig
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

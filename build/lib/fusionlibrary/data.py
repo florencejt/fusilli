@@ -1197,6 +1197,7 @@ def get_data_module(
     image_downsample_size=None,
     layer_mods=None,
     max_epochs=1000,
+    optional_suffix="",
 ):
     """
     Gets the data module for the specified modality and fusion type.
@@ -1213,6 +1214,8 @@ def get_data_module(
         List of image dimensions to downsample to (default None).
     layer_mods : dict
         Dictionary of layer modifications (default None).
+    optional_suffix : str
+        Optional suffix added to data source file names (default None).
 
     Returns
     -------
@@ -1221,9 +1224,9 @@ def get_data_module(
     """
 
     data_sources = [
-        params["tabular1_source"],
-        params["tabular2_source"],
-        params["img_source"],
+        params[f"tabular1_source{optional_suffix}"],
+        params[f"tabular2_source{optional_suffix}"],
+        params[f"img_source{optional_suffix}"],
     ]
 
     if not hasattr(fusion_model, "subspace_method"):
