@@ -427,6 +427,8 @@ class BaseModel(pl.LightningModule):
         self.batch_train_logits = []
 
     def predict_step(self, batch: Any, batch_idx: int, dataloader_idx: int = 0) -> Any:
+        self.model.eval()
+
         x, y = self.get_data_from_batch(batch, train=False)
 
         loss, end_output, logits = self.get_model_outputs_and_loss(x, y, train=False)

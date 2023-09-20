@@ -97,7 +97,7 @@ def init_trainer(logger, max_epochs=1000, enable_checkpointing=True):
     early_stop_callback = EarlyStopping(
         monitor="val_loss",
         min_delta=0.00,
-        patience=12,
+        patience=15,
         verbose=False,
         mode="min",
     )

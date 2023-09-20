@@ -133,7 +133,7 @@ def train_and_test(
     return pl_model
 
 
-def store_trained_model(trained_model, trained_models_dict):
+def store_trained_model(trained_model, best_checkpoint_pth, trained_models_dict):
     """
     Stores the trained model to a dictionary.
     If model type is already in dictionary (e.g. if it's a kfold model), append the model to
@@ -145,15 +145,15 @@ def store_trained_model(trained_model, trained_models_dict):
     if classname in trained_models_dict:
         # If the model is already in the dictionary, convert the existing value to a list
         if isinstance(trained_models_dict[classname], list):
-            trained_models_dict[classname].append(trained_model)
+            trained_models_dict[classname].append([trained_model, best_checkpoint_pth])
         else:
             trained_models_dict[classname] = [
                 trained_models_dict[classname],
-                trained_model,
+                [trained_model, best_checkpoint_pth],
             ]
     else:
         # If the model is not in the dictionary, add it as a new key-value pair
-        trained_models_dict[classname] = trained_model
+        trained_models_dict[classname] = [[trained_model, best_checkpoint_pth]]
 
     return trained_models_dict
 
@@ -219,9 +219,14 @@ def train_and_save_models(
                 enable_checkpointing=enable_checkpointing,
             )
 
+            # print("Trainer", trained_model.trainer)
+
             trained_models_dict = store_trained_model(
-                trained_model, trained_models_dict
+                trained_model,
+                trained_model.trainer.checkpoint_callback.best_model_path,
+                trained_models_dict,
             )
+            # print(trained_model.trainer.checkpoint_callback.best_model_path)
 
             if params["log"]:
                 wandb.finish()
@@ -237,7 +242,15 @@ def train_and_save_models(
             max_epochs=max_epochs,
             enable_checkpointing=enable_checkpointing,
         )
-        trained_models_dict = store_trained_model(trained_model, trained_models_dict)
+        print(
+            "Trained model:",
+            trained_model.state_dict()["model.final_prediction.0.weight"],
+        )
+        trained_models_dict = store_trained_model(
+            trained_model,
+            trained_model.trainer.checkpoint_callback.best_model_path,
+            trained_models_dict,
+        )
 
         if params["log"]:
             wandb.finish()

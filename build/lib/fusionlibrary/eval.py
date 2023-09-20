@@ -15,6 +15,8 @@ import pandas as pd
 import torch.nn as nn
 from torch.utils.data import ConcatDataset, DataLoader
 
+from fusionlibrary.fusion_models.base_model import BaseModel
+
 import fusionlibrary.data as data
 
 
@@ -893,7 +895,7 @@ class ParentPlotter:
         val_logits = []
 
         metric_names = [
-            model_list[0].metrics[model_list[0].model.pred_type][i]["name"]
+            model_list[0][0].metrics[model_list[0][0].model.pred_type][i]["name"]
             for i in range(2)
         ]
 
@@ -901,7 +903,8 @@ class ParentPlotter:
         metrics_per_fold = {metric_names[0]: [], metric_names[1]: []}
 
         # loop through the folds
-        for fold in model_list:
+        for fold in model_list:  # 0 is the model, 1 is the ckpt path
+            fold = fold[0]
             # get the data points
             train_reals.append(fold.train_reals.cpu())
             train_preds.append(fold.train_preds.cpu())
@@ -921,8 +924,8 @@ class ParentPlotter:
         # get the overall kfold metrics
         overall_kfold_metrics = {}
 
-        for metric in model_list[0].metrics[
-            model_list[0].model.pred_type
+        for metric in model_list[0][0].metrics[
+            model_list[0][0].model.pred_type
         ]:  # loop through the metrics
             if "auroc" in metric["name"]:
                 predicted = all_val_logits  # AUROC needs logits
@@ -930,8 +933,8 @@ class ParentPlotter:
                 predicted = all_val_preds
 
             val_step_acc = metric["metric"](
-                model_list[0].safe_squeeze(predicted),
-                model_list[0].safe_squeeze(all_val_reals),
+                model_list[0][0].safe_squeeze(predicted),
+                model_list[0][0].safe_squeeze(all_val_reals),
             )
 
             overall_kfold_metrics[metric["name"]] = val_step_acc
@@ -970,6 +973,8 @@ class ParentPlotter:
         """
         print("getting train/test data from model")
 
+        model = model[0][0]
+
         # not training the model
         model.eval()
 
@@ -1001,7 +1006,7 @@ class ParentPlotter:
         val_logits = []
 
         metric_names = [
-            model_list[0].metrics[model_list[0].model.pred_type][i]["name"]
+            model_list[0][0].metrics[model_list[0][0].model.pred_type][i]["name"]
             for i in range(2)
         ]
 
@@ -1013,50 +1018,67 @@ class ParentPlotter:
         # We just want to know how our new data performs on each trained fold
         params_copy["kfold_flag"] = False
 
-        # dm = data.get_data_module(
-        #     model_list[0].model, params_copy, optional_suffix=data_file_suffix
-        # )
-        # dataset = ConcatDataset([dm.train_dataset, dm.test_dataset])
-        # dataloader = DataLoader(dataset, batch_size=len(dataset))
-
         # loop through the folds and get the predictions for each fold
         for fold_model in model_list:
             # eval the model
 
-            fold_model.eval()
+            model = fold_model[0]
+            ckpt_path = fold_model[1]
+
+            model.eval()
 
             dm = data.get_data_module(
-                fold_model.model, params_copy, optional_suffix=data_file_suffix
+                model.model, params_copy, optional_suffix=data_file_suffix
             )
+
             dataset = ConcatDataset([dm.train_dataset, dm.test_dataset])
             dataloader = DataLoader(dataset, batch_size=len(dataset))
 
-            out = fold_model.trainer.predict(dataloaders=dataloader, ckpt_path="best")
-            print("Done!")
+            new_model = BaseModel.load_from_checkpoint(
+                ckpt_path,
+                model=model.model.__class__(
+                    pred_type=params[
+                        "pred_type"
+                    ],  # pred_type is a string (binary, regression, multiclass)
+                    data_dims=dm.data_dims,  # data_dims is a list of tuples
+                    params=params,  # params is a dict))
+                ),
+            )
 
-            end_outputs = out[0][0]
-            logits = out[0][1]
+            new_model.eval()
 
-            fold_val_reals = torch.stack([item[-1] for item in dataset])
-            fold_val_preds = end_outputs.cpu()
-            fold_val_logits = logits.cpu()
+            fold_val_preds = []
+            fold_val_logits = []
+            fold_val_reals = []
 
-            train_reals.append(fold_model.train_reals.cpu())
-            train_preds.append(fold_model.train_preds.cpu())
+            for batch in dataloader:
+                x, y = new_model.get_data_from_batch(batch)
+                out = new_model.get_model_outputs_and_loss(x, y)
+                loss, end_output, logits = out
+
+                fold_val_preds.append(end_output.cpu().detach())
+                fold_val_logits.append(logits.cpu().detach())
+                fold_val_reals.append(y.cpu().detach())
+
+            fold_val_reals = torch.cat(fold_val_reals, dim=-1)
+            fold_val_preds = torch.cat(fold_val_preds, dim=-1)
+            fold_val_logits = torch.cat(fold_val_logits, dim=0)
+
             val_reals.append(fold_val_reals)
             val_preds.append(fold_val_preds)
             val_logits.append(fold_val_logits)
+            train_reals.append(model.train_reals.cpu().detach())
+            train_preds.append(model.train_preds.cpu().detach())
 
-            # rerun the metrics
-            for metric in fold_model.metrics[fold_model.model.pred_type]:  # loop
+            for metric in model.metrics[model.model.pred_type]:  # loop
                 if "auroc" in metric["name"]:
                     predicted = fold_val_logits
                 else:
                     predicted = fold_val_preds
 
                 val_step_acc = metric["metric"](
-                    fold_model.safe_squeeze(predicted),
-                    fold_model.safe_squeeze(fold_val_reals),
+                    model.safe_squeeze(predicted),
+                    model.safe_squeeze(fold_val_reals),
                 )
 
                 metrics_per_fold[metric["name"]].append(val_step_acc)
@@ -1069,8 +1091,8 @@ class ParentPlotter:
         # get the overall kfold metrics
         overall_kfold_metrics = {}
 
-        for metric in model_list[0].metrics[
-            model_list[0].model.pred_type
+        for metric in model_list[0][0].metrics[
+            model_list[0][0].model.pred_type
         ]:  # loop through the metrics
             if "auroc" in metric["name"]:
                 predicted = all_val_logits
@@ -1078,8 +1100,8 @@ class ParentPlotter:
                 predicted = all_val_preds
 
             val_step_acc = metric["metric"](
-                model_list[0].safe_squeeze(predicted),
-                model_list[0].safe_squeeze(all_val_reals),
+                model_list[0][0].safe_squeeze(predicted),
+                model_list[0][0].safe_squeeze(all_val_reals),
             )
 
             overall_kfold_metrics[metric["name"]] = val_step_acc
@@ -1111,6 +1133,9 @@ class ParentPlotter:
         """
 
         # eval the model
+        ckpt_path = model[0][1]
+        model = model[0][0]
+
         model.eval()
 
         # get data module (potentially will need to be trained with a subspace method or graph-maker)
@@ -1119,32 +1144,71 @@ class ParentPlotter:
         # concatenating the train and test datasets because we want to get the predictions for all the data
         dataset = ConcatDataset([dm.train_dataset, dm.test_dataset])
         dataloader = DataLoader(dataset, batch_size=len(dataset))
-        out = model.trainer.predict(dataloaders=dataloader, ckpt_path="best")
-        end_outputs = out[0][0]
-        logits = out[0][1]
+
+        new_model = BaseModel.load_from_checkpoint(
+            ckpt_path,
+            model=model.model.__class__(
+                pred_type=params[
+                    "pred_type"
+                ],  # pred_type is a string (binary, regression, multiclass)
+                data_dims=dm.data_dims,  # data_dims is a list of tuples
+                params=params,  # params is a dict))
+            ),
+        )
+
+        new_model.eval()
+
+        print(new_model.state_dict()["model.final_prediction.0.weight"])
+
+        # get the predictions
+        end_outputs_list = []
+        logits_list = []
+        reals_list = []
+
+        for batch in dataloader:
+            x, y = new_model.get_data_from_batch(batch)
+            out = new_model.get_model_outputs_and_loss(x, y)
+            loss, end_output, logits = out
+
+            end_outputs_list.append(end_output.cpu().detach())
+            logits_list.append(logits.cpu().detach())
+            reals_list.append(y.cpu().detach())
 
         # get the train reals, train preds, val reals, val preds
-        # train reals will be the actual train reals that were used the train the model. the val reals will be the test reals
-        # passed into this function
-
         train_reals = model.train_reals.cpu()
         train_preds = model.train_preds.cpu()
+        val_preds = torch.cat(end_outputs_list, dim=-1)
+        val_reals = torch.cat(reals_list, dim=-1)
+        val_logits = torch.cat(logits_list, dim=0)
 
-        val_reals = torch.stack([item[-1] for item in dataset])
-        val_preds = end_outputs.cpu()
+        # out = model.trainer.predict(dataloaders=dataloader, ckpt_path=ckpt_path)
+        # end_outputs = out[0][0]
+        # logits = out[0][1]
+
+        # # get the train reals, train preds, val reals, val preds
+        # # train reals will be the actual train reals that were used the train the model. the val reals will be the test reals
+        # # passed into this function
+
+        # train_reals = model.train_reals.cpu()
+        # train_preds = model.train_preds.cpu()
+
+        # val_reals = torch.stack([item[-1] for item in dataset])
+        # val_preds = end_outputs.cpu()
 
         # metrics
         metric_values = {}
 
-        for metric in model.metrics[model.model.pred_type]:  # loop through the metrics
+        for metric in new_model.metrics[
+            new_model.model.pred_type
+        ]:  # loop through the metrics
             if "auroc" in metric["name"]:
-                predicted = logits.cpu()  # AUROC needs logits
+                predicted = val_logits  # AUROC needs logits
             else:
                 predicted = val_preds
 
             metric_val = metric["metric"](
-                model.safe_squeeze(predicted),
-                model.safe_squeeze(val_reals),
+                new_model.safe_squeeze(predicted),
+                new_model.safe_squeeze(val_reals),
             )
 
             metric_values[metric["name"]] = metric_val
@@ -1178,9 +1242,9 @@ class RealsVsPreds(ParentPlotter):
         """
         # run X, y through the models and get the predictions
         # calculate metricS
-
-        if isinstance(model, list):  # kfold model
-            if not model[0].model.params["kfold_flag"]:
+        if len(model) > 1:
+            # if isinstance(model, list):  # kfold model
+            if not model[0][0].model.params["kfold_flag"]:
                 raise ValueError(
                     (
                         "Argument 'model' is a list but kfold_flag is False. "
@@ -1207,7 +1271,18 @@ class RealsVsPreds(ParentPlotter):
                 overall_kfold_metrics,
             )
 
-        elif isinstance(model, nn.Module):  # train/test model
+            figure.suptitle("From new data")
+
+        elif len(model) == 1:
+            # isinstance(model, nn.Module):  # train/test model
+            if model[0][0].model.params["kfold_flag"]:
+                raise ValueError(
+                    (
+                        "Argument 'model' is a length-1 list but kfold_flag is True. "
+                        "Please check the model and the function input."
+                    )
+                )
+
             (
                 train_reals,
                 train_preds,
@@ -1220,6 +1295,8 @@ class RealsVsPreds(ParentPlotter):
             figure = self.reals_vs_preds_tt(
                 model, train_reals, train_preds, val_reals, val_preds, metric_values
             )
+
+            figure.suptitle("From new data")
 
         else:
             raise ValueError(
@@ -1236,11 +1313,12 @@ class RealsVsPreds(ParentPlotter):
         # get the predictions from the models (already saved in the model)
         # get the metrics from the models (already saved in the model)
 
-        if isinstance(model, list):  # kfold model
-            if not model[0].model.params["kfold_flag"]:
+        if len(model) > 1:  # kfold model (list of models and their checkpoints)
+            # if isinstance(model[0], list):  # kfold model
+            if not model[0][0].model.params["kfold_flag"]:
                 raise ValueError(
                     (
-                        "Argument 'model' is a list but kfold_flag is False. "
+                        "Argument 'model' is a list of length > 1 but kfold_flag is False. "
                         "Please check the model and the function input."
                     )
                 )
@@ -1266,11 +1344,18 @@ class RealsVsPreds(ParentPlotter):
                 overall_kfold_metrics,
             )
 
-        elif isinstance(model, nn.Module):  # train/test model
-            # self.model = model
-            print("model name", model.model.__class__.__name__)
-            print("pred_type", model.model.pred_type)
+            figure.suptitle("From final val data")
 
+        elif len(model) == 1:
+            # isinstance(model[0], nn.Module):  # train/test model
+
+            if model[0][0].model.params["kfold_flag"]:
+                raise ValueError(
+                    (
+                        "Argument 'model' is a list of one model+checkpoint but kfold_flag is True. "
+                        "Please check the model and the function input."
+                    )
+                )
             # get the data
             (
                 train_reals,
@@ -1284,6 +1369,8 @@ class RealsVsPreds(ParentPlotter):
             figure = self.reals_vs_preds_tt(
                 model, train_reals, train_preds, val_reals, val_preds, metric_values
             )
+
+            figure.suptitle("From final val data")
 
         else:
             raise ValueError(
@@ -1304,7 +1391,7 @@ class RealsVsPreds(ParentPlotter):
         metrics_per_fold,
         overall_kfold_metrics,
     ):
-        first_fold_model = model_list[0]
+        first_fold_model = model_list[0][0]
         metric_names = list(metrics_per_fold.keys())
         N = first_fold_model.model.params["num_k"]
 
@@ -1353,6 +1440,10 @@ class RealsVsPreds(ParentPlotter):
                 f"Fold {n+1}: {metric_names[0]}={float(metrics_per_fold[metric_names[0]][n]):.3f}"
             )
 
+            # set x and y labels
+            ax1.set_xlabel("Real Values")
+            ax1.set_ylabel("Predictions")
+
         all_val_reals = torch.cat(val_reals, dim=-1)
         all_val_preds = torch.cat(val_preds, dim=-1)
 
@@ -1376,6 +1467,10 @@ class RealsVsPreds(ParentPlotter):
             )
         )
 
+        # set x and y labels
+        ax0.set_xlabel("Real Values")
+        ax0.set_ylabel("Predictions")
+
         # Set the overall title for the entire figure
         fig.suptitle(
             f"{first_fold_model.model.__class__.__name__}: reals vs. predicteds"
@@ -1391,6 +1486,8 @@ class RealsVsPreds(ParentPlotter):
         # called from from_new_data or from_final_val_data
         # takes in data from either from_new_data or from_final_val_data
         # returns a list of figures or dict of figures
+
+        model = model[0][0]
 
         fig, ax = plt.subplots()
 
