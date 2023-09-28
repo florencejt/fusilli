@@ -1,24 +1,24 @@
 import pytest
 import torch.nn as nn
-from fusionlibrary.utils import model_modifier
-from fusionlibrary.fusion_models.denoise_tab_img_maps import (
+from fusilli.utils import model_modifier
+from fusilli.fusion_models.denoise_tab_img_maps import (
     denoising_autoencoder_subspace_method,
     DAETabImgMaps,
 )
-from fusionlibrary.fusion_models.concat_img_latent_tab_doubleloss import (
+from fusilli.fusion_models.concat_img_latent_tab_doubleloss import (
     ConcatImgLatentTabDoubleLoss,
 )
-from fusionlibrary.fusion_models.concat_img_latent_tab_doubletrain import (
+from fusilli.fusion_models.concat_img_latent_tab_doubletrain import (
     concat_img_latent_tab_subspace_method,
     ConcatImgLatentTabDoubleTrain,
 )
-from fusionlibrary.fusion_models.mcvae_tab import (
+from fusilli.fusion_models.mcvae_tab import (
     MCVAESubspaceMethod,
     MCVAE_tab,
 )
 
 from tests.test_data.test_CustomDataModule import create_test_files
-from fusionlibrary.data import CustomDataModule
+from fusilli.data import CustomDataModule
 import warnings
 
 

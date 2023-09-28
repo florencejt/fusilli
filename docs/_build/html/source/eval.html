@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>eval module &mdash; fusionlibrary  documentation</title>
+  <title>eval module &mdash; fusilli  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/florencestheme.css" type="text/css" />
@@ -36,7 +36,7 @@
           
           
           <a href="../index.html" class="icon icon-home">
-            fusionlibrary
+            fusilli
               <img src="../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
@@ -61,14 +61,14 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.data.html">fusionlibrary.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.train.html">fusionlibrary.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.eval.Plotter.html">fusionlibrary.eval.Plotter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.training_utils.html">fusionlibrary.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.model_modifier.html">fusionlibrary.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.check_model_validity.html">fusionlibrary.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
 </ul>
 
         </div>
@@ -77,7 +77,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">fusionlibrary</a>
+          <a href="../index.html">fusilli</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -98,6 +98,107 @@
   <section id="module-eval">
 <span id="eval-module"></span><h1>eval module<a class="headerlink" href="#module-eval" title="Permalink to this heading"></a></h1>
 <p>Functions for evaluating the performance of the models and plotting the results.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="eval.ConfusionMatrix">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConfusionMatrix</span></span><a class="reference internal" href="../_modules/eval.html#ConfusionMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ConfusionMatrix" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eval.ParentPlotter" title="eval.ParentPlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentPlotter</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ConfusionMatrix.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ConfusionMatrix.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ConfusionMatrix.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ConfusionMatrix.confusion_matrix_kfold">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">confusion_matrix_kfold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_reals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_per_fold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overall_kfold_metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ConfusionMatrix.confusion_matrix_kfold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ConfusionMatrix.confusion_matrix_kfold" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ConfusionMatrix.confusion_matrix_tt">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">confusion_matrix_tt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val_reals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ConfusionMatrix.confusion_matrix_tt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ConfusionMatrix.confusion_matrix_tt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ConfusionMatrix.from_final_val_data">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_final_val_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ConfusionMatrix.from_final_val_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ConfusionMatrix.from_final_val_data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ConfusionMatrix.from_new_data">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_new_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_file_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_test'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ConfusionMatrix.from_new_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ConfusionMatrix.from_new_data" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data_file_suffix</strong> (<em>str</em>) – Suffix for the data file e.g. _test means that the source files are
+<code class="docutils literal notranslate"><span class="pre">params[&quot;tabular1_source_test]</span></code>, <code class="docutils literal notranslate"><span class="pre">params[&quot;tabular2_source_test]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">params[&quot;img_source_test]</span></code>.
+Change this to whatever suffix you have chosen for your new data files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eval.ParentPlotter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ParentPlotter</span></span><a class="reference internal" href="../_modules/eval.html#ParentPlotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ParentPlotter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parent class for all plot classes.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ParentPlotter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ParentPlotter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ParentPlotter.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ParentPlotter.get_kfold_data_from_model">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_kfold_data_from_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ParentPlotter.get_kfold_data_from_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ParentPlotter.get_kfold_data_from_model" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ParentPlotter.get_new_kfold_data">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_new_kfold_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_file_suffix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ParentPlotter.get_new_kfold_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ParentPlotter.get_new_kfold_data" title="Permalink to this definition"></a></dt>
+<dd><p>Putting new data into each k-fold trained model: we don’t need to split the new data into folds.
+We just need to get the predictions for each fold and plot them.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ParentPlotter.get_new_tt_data">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_new_tt_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_file_suffix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ParentPlotter.get_new_tt_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ParentPlotter.get_new_tt_data" title="Permalink to this definition"></a></dt>
+<dd><p>Get new data by running through trained model for a train/test model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>nn.Module</em>) – The trained model.</p></li>
+<li><p><strong>sources</strong> (<em>list</em>) – List of sources to get data from. [tabular1source csv, tabular2source csv, image csv]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>return train_reals, train_preds, val_reals, val_preds, metric_values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ParentPlotter.get_tt_data_from_model">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_tt_data_from_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ParentPlotter.get_tt_data_from_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ParentPlotter.get_tt_data_from_model" title="Permalink to this definition"></a></dt>
+<dd><p>Get the data from a train/test model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model</strong> (<em>nn.Module</em>) – The trained model.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>train_reals</strong> (<em>torch.Tensor</em>) – The real values for the training set.</p></li>
+<li><p><strong>train_preds</strong> (<em>torch.Tensor</em>) – The predicted values for the training set.</p></li>
+<li><p><strong>val_reals</strong> (<em>torch.Tensor</em>) – The real values for the validation set.</p></li>
+<li><p><strong>val_preds</strong> (<em>torch.Tensor</em>) – The predicted values for the validation set.</p></li>
+<li><p><strong>metric_values</strong> (<em>dict</em>) – The values of the metrics for the model.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="eval.Plotter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Plotter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_model_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter" title="Permalink to this definition"></a></dt>
@@ -298,6 +399,49 @@ For kfold models.</p>
 <span class="sig-name descname"><span class="pre">show_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plots_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter.show_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter.show_all" title="Permalink to this definition"></a></dt>
 <dd><p>Show all plots in dictionary.</p>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eval.RealsVsPreds">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RealsVsPreds</span></span><a class="reference internal" href="../_modules/eval.html#RealsVsPreds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.RealsVsPreds" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eval.ParentPlotter" title="eval.ParentPlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentPlotter</span></code></a></p>
+<p>which_data: should be from_new_data or from_final_val_data
+model: fusion_model or list of models (for kfold)
+X: if from_new_data, then X is the new data
+y: if from_new_data, then y is the new data labels</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.RealsVsPreds.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#RealsVsPreds.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.RealsVsPreds.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.RealsVsPreds.from_final_val_data">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_final_val_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#RealsVsPreds.from_final_val_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.RealsVsPreds.from_final_val_data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.RealsVsPreds.from_new_data">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_new_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_file_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_test'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#RealsVsPreds.from_new_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.RealsVsPreds.from_new_data" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data_file_suffix</strong> (<em>str</em>) – Suffix for the data file e.g. _test means that the source files are
+<code class="docutils literal notranslate"><span class="pre">params[&quot;tabular1_source_test]</span></code>, <code class="docutils literal notranslate"><span class="pre">params[&quot;tabular2_source_test]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">params[&quot;img_source_test]</span></code>.
+Change this to whatever suffix you have chosen for your new data files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.RealsVsPreds.reals_vs_preds_kfold">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reals_vs_preds_kfold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_reals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_per_fold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overall_kfold_metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#RealsVsPreds.reals_vs_preds_kfold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.RealsVsPreds.reals_vs_preds_kfold" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.RealsVsPreds.reals_vs_preds_tt">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reals_vs_preds_tt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_reals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_reals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#RealsVsPreds.reals_vs_preds_tt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.RealsVsPreds.reals_vs_preds_tt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

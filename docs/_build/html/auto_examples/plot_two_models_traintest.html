@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Regression: comparing two tabular models trained on simulated data &mdash; fusionlibrary  documentation</title>
+  <title>Regression: comparing two tabular models trained on simulated data &mdash; fusilli  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/florencestheme.css" type="text/css" />
@@ -36,7 +36,7 @@
           
           
           <a href="../index.html" class="icon icon-home">
-            fusionlibrary
+            fusilli
               <img src="../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
@@ -61,14 +61,14 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.data.html">fusionlibrary.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.train.html">fusionlibrary.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.eval.Plotter.html">fusionlibrary.eval.Plotter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.training_utils.html">fusionlibrary.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.model_modifier.html">fusionlibrary.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.check_model_validity.html">fusionlibrary.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
 </ul>
 
         </div>
@@ -77,7 +77,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">fusionlibrary</a>
+          <a href="../index.html">fusilli</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -118,17 +118,17 @@ to download the full example code</p>
 <span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 <span class="kn">from</span> <span class="nn">docs.examples</span> <span class="kn">import</span> <span class="n">generate_sklearn_simulated_data</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.data</span> <span class="kn">import</span> <span class="n">get_data_module</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.eval</span> <span class="kn">import</span> <span class="n">Plotter</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.fusion_models.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.train</span> <span class="kn">import</span> <span class="n">train_and_save_models</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.utils.model_chooser</span> <span class="kn">import</span> <span class="n">get_models</span>
+<span class="kn">from</span> <span class="nn">fusilli.data</span> <span class="kn">import</span> <span class="n">get_data_module</span>
+<span class="kn">from</span> <span class="nn">fusilli.eval</span> <span class="kn">import</span> <span class="n">Plotter</span>
+<span class="kn">from</span> <span class="nn">fusilli.fusion_models.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span> <span class="nn">fusilli.train</span> <span class="kn">import</span> <span class="n">train_and_save_models</span>
+<span class="kn">from</span> <span class="nn">fusilli.utils.model_chooser</span> <span class="kn">import</span> <span class="n">get_models</span>
 </pre></div>
 </div>
 <section id="import-fusion-models">
 <h2>1. Import fusion models<a class="headerlink" href="#import-fusion-models" title="Permalink to this heading"></a></h2>
 <p>Here we import the fusion models to be compared. The models are imported using the
-<a class="reference internal" href="../autosummary/fusionlibrary.utils.model_chooser.html#fusionlibrary.utils.model_chooser.get_models" title="fusionlibrary.utils.model_chooser.get_models"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_models()</span></code></a> function, which takes a dictionary of conditions
+<a class="reference internal" href="../autosummary/fusilli.utils.model_chooser.html#fusilli.utils.model_chooser.get_models" title="fusilli.utils.model_chooser.get_models"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_models()</span></code></a> function, which takes a dictionary of conditions
 as an input. The conditions are the attributes of the models, e.g. the class name, the modality type, etc.</p>
 <p>The function returns a dataframe of the models that match the conditions. The dataframe contains the
 method name, the class name, the modality type, the fusion type, the path to the model, and the path to the
@@ -211,8 +211,8 @@ This function takes the following inputs:</p>
 <li><p><em>Create a dictionary to store the trained model</em>: We’re using the name of the model as the key. It may seem overkill to make a dictionary just to store one model, but we also use this when we do k-fold training to store the trained models from the different folds.</p></li>
 <li><p><em>Initialise the model with dummy data</em>: This is so we can find out whether there are extra instructions for creating the datamodule (such as a method for creating a graph datamodule).</p></li>
 <li><p><em>Print the attributes of the model</em>: To check it’s been initialised correctly.</p></li>
-<li><p><em>Create the datamodule</em>: This is done with the <a class="reference internal" href="../autosummary/fusionlibrary.datamodules.html#fusionlibrary.data.get_data_module" title="fusionlibrary.data.get_data_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_data_module()</span></code></a> function. This function takes the initialised model and the parameters as inputs. It returns the datamodule.</p></li>
-<li><p><em>Train and test the model</em>: This is done with the <a class="reference internal" href="../autosummary/fusionlibrary.train_functions.html#fusionlibrary.train.train_and_save_models" title="fusionlibrary.train.train_and_save_models"><code class="xref py py-func docutils literal notranslate"><span class="pre">train_and_save_models()</span></code></a> function. This function takes the trained_models_dict, the datamodule, the parameters, the fusion model, and the initialised model as inputs. It returns the trained_models_dict with the trained model added to it.</p></li>
+<li><p><em>Create the datamodule</em>: This is done with the <a class="reference internal" href="../autosummary/fusilli.data.html#fusilli.data.get_data_module" title="fusilli.data.get_data_module"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_data_module()</span></code></a> function. This function takes the initialised model and the parameters as inputs. It returns the datamodule.</p></li>
+<li><p><em>Train and test the model</em>: This is done with the <a class="reference internal" href="../autosummary/fusilli.train.html#fusilli.train.train_and_save_models" title="fusilli.train.train_and_save_models"><code class="xref py py-func docutils literal notranslate"><span class="pre">train_and_save_models()</span></code></a> function. This function takes the trained_models_dict, the datamodule, the parameters, the fusion model, and the initialised model as inputs. It returns the trained_models_dict with the trained model added to it.</p></li>
 <li><p><em>Add the trained model to the ``all_trained_models`` dictionary</em>: This is so we can compare the results of the two models later.</p></li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fusion_model</span> <span class="o">=</span> <span class="n">fusion_models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -606,7 +606,7 @@ Epoch 2: 100%|██████████| 63/63 [00:00&lt;00:00, 663.45it/s,
 </section>
 <section id="plotting-the-results-of-the-first-model">
 <h2>5. Plotting the results of the first model<a class="headerlink" href="#plotting-the-results-of-the-first-model" title="Permalink to this heading"></a></h2>
-<p>We’re using the <a class="reference internal" href="../autosummary/fusionlibrary.eval_functions.Plotter.html#fusionlibrary.eval.Plotter" title="fusionlibrary.eval.Plotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Plotter</span></code></a> class to plot the results of the first model. This class takes the dictionary of trained models and the parameters as inputs. It returns a dictionary of figures.
+<p>We’re using the <a class="reference internal" href="../autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter" title="fusilli.eval.Plotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Plotter</span></code></a> class to plot the results of the first model. This class takes the dictionary of trained models and the parameters as inputs. It returns a dictionary of figures.
 If there is one model in the dictionary (i.e. only one unique key), then it plots the figures for analysing the results of a single model.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plotter</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="n">single_model_dict</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 <span class="n">single_model_figures_dict</span> <span class="o">=</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_all</span><span class="p">()</span>
@@ -1042,7 +1042,7 @@ compare_tt_models
 </section>
 <section id="saving-the-metrics-of-the-two-models">
 <h2>9. Saving the metrics of the two models<a class="headerlink" href="#saving-the-metrics-of-the-two-models" title="Permalink to this heading"></a></h2>
-<p>We can also get the metrics of the two models into a Pandas DataFrame using the <a class="reference internal" href="../autosummary/fusionlibrary.eval_functions.Plotter.html#fusionlibrary.eval.Plotter.get_performance_df" title="fusionlibrary.eval.Plotter.get_performance_df"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_performance_df()</span></code></a> function.</p>
+<p>We can also get the metrics of the two models into a Pandas DataFrame using the <a class="reference internal" href="../autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.get_performance_df" title="fusilli.eval.Plotter.get_performance_df"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_performance_df()</span></code></a> function.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">performances_df</span> <span class="o">=</span> <span class="n">comparison_plotter</span><span class="o">.</span><span class="n">get_performance_df</span><span class="p">()</span>
 <span class="n">performances_df</span>
 </pre></div>

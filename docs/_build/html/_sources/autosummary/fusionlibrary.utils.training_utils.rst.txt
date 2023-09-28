@@ -1,7 +1,7 @@
-﻿fusionlibrary.utils.training\_utils
+﻿fusilli.utils.training\_utils
 ===================================
 
-.. automodule:: fusionlibrary.utils.training_utils
+.. automodule:: fusilli.utils.training_utils
 
    
    

@@ -1,0 +1,29 @@
+fusilli.fusion\_models.concat\_tabular\_data
+============================================
+
+.. automodule:: fusilli.fusion_models.concat_tabular_data
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ConcatTabularData
+   
+   
+
+   
+   
+   
+
+
+

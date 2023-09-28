@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fusionlibrary.fusion_models.mcvae_tab &mdash; fusionlibrary  documentation</title>
+  <title>fusilli.fusion_models.mcvae_tab &mdash; fusilli  documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/florencestheme.css" type="text/css" />
@@ -35,7 +35,7 @@
           
           
           <a href="../../../index.html" class="icon icon-home">
-            fusionlibrary
+            fusilli
               <img src="../../../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
@@ -60,14 +60,14 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.data.html">fusionlibrary.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.train.html">fusionlibrary.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.eval.Plotter.html">fusionlibrary.eval.Plotter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.training_utils.html">fusionlibrary.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.model_modifier.html">fusionlibrary.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.check_model_validity.html">fusionlibrary.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
 </ul>
 
         </div>
@@ -76,7 +76,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">fusionlibrary</a>
+          <a href="../../../index.html">fusilli</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -85,7 +85,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">fusionlibrary.fusion_models.mcvae_tab</li>
+      <li class="breadcrumb-item active">fusilli.fusion_models.mcvae_tab</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -94,24 +94,24 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for fusionlibrary.fusion_models.mcvae_tab</h1><div class="highlight"><pre>
+  <h1>Source code for fusilli.fusion_models.mcvae_tab</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This module implements the MCVAE (multi-channel variational autoencoder) model for fusing</span>
 <span class="sd">two types of tabular data.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.fusion_models.base_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
+<span class="kn">from</span> <span class="nn">fusilli.fusion_models.base_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
 <span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.utils.mcvae.src.mcvae.models</span> <span class="kn">import</span> <span class="n">Mcvae</span>
+<span class="kn">from</span> <span class="nn">fusilli.utils.mcvae.src.mcvae.models</span> <span class="kn">import</span> <span class="n">Mcvae</span>
 <span class="kn">import</span> <span class="nn">contextlib</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">fusionlibrary.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
+<span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
 
 
-<div class="viewcode-block" id="mcvae_early_stopping_tol"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.mcvae_early_stopping_tol">[docs]</a><span class="k">def</span> <span class="nf">mcvae_early_stopping_tol</span><span class="p">(</span><span class="n">patience</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">loss_logs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="mcvae_early_stopping_tol"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.mcvae_tab.html#fusilli.fusion_models.mcvae_tab.mcvae_early_stopping_tol">[docs]</a><span class="k">def</span> <span class="nf">mcvae_early_stopping_tol</span><span class="p">(</span><span class="n">patience</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">loss_logs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Simple early stopping function for the MCVAE model&#39;s training.</span>
 
@@ -163,7 +163,7 @@
     <span class="k">return</span> <span class="n">i</span></div>
 
 
-<div class="viewcode-block" id="MCVAESubspaceMethod"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod">[docs]</a><span class="k">class</span> <span class="nc">MCVAESubspaceMethod</span><span class="p">:</span>
+<div class="viewcode-block" id="MCVAESubspaceMethod"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.mcvae_tab.html#fusilli.fusion_models.mcvae_tab.MCVAESubspaceMethod">[docs]</a><span class="k">class</span> <span class="nc">MCVAESubspaceMethod</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class for creating the MCVAE (multi-channel variational autoencoder) joint latent space.</span>
 
@@ -178,7 +178,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MCVAESubspaceMethod.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">5000</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAESubspaceMethod.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.mcvae_tab.html#fusilli.fusion_models.mcvae_tab.MCVAESubspaceMethod.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">5000</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -191,7 +191,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_latent_dims</span> <span class="o">=</span> <span class="mi">10</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span> <span class="o">=</span> <span class="n">max_epochs</span></div>
 
-<div class="viewcode-block" id="MCVAESubspaceMethod.check_params"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.check_params">[docs]</a>    <span class="k">def</span> <span class="nf">check_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAESubspaceMethod.check_params"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.mcvae_tab.html#fusilli.fusion_models.mcvae_tab.MCVAESubspaceMethod.check_params">[docs]</a>    <span class="k">def</span> <span class="nf">check_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Checks the parameters of the model.</span>
 
@@ -208,7 +208,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">num_latent_dims</span><span class="p">,</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="MCVAESubspaceMethod.get_latents"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.get_latents">[docs]</a>    <span class="k">def</span> <span class="nf">get_latents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAESubspaceMethod.get_latents"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.mcvae_tab.html#fusilli.fusion_models.mcvae_tab.MCVAESubspaceMethod.get_latents">[docs]</a>    <span class="k">def</span> <span class="nf">get_latents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the latent representations of the multimodal dataset.</span>
 <span class="sd">        The two latent spaces are averaged to form the joint latent space.</span>
@@ -244,7 +244,7 @@
 
         <span class="k">return</span> <span class="n">mean_latents</span></div>
 
-<div class="viewcode-block" id="MCVAESubspaceMethod.train"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAESubspaceMethod.train"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.mcvae_tab.html#fusilli.fusion_models.mcvae_tab.MCVAESubspaceMethod.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Trains the model.</span>
 
@@ -297,7 +297,7 @@
 
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">mean_latents</span><span class="p">),</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="MCVAESubspaceMethod.convert_to_latent"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAESubspaceMethod.convert_to_latent">[docs]</a>    <span class="k">def</span> <span class="nf">convert_to_latent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAESubspaceMethod.convert_to_latent"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.mcvae_tab.html#fusilli.fusion_models.mcvae_tab.MCVAESubspaceMethod.convert_to_latent">[docs]</a>    <span class="k">def</span> <span class="nf">convert_to_latent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts the test dataset to the latent space.</span>
 
@@ -329,7 +329,7 @@
         <span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="MCVAE_tab"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab">[docs]</a><span class="k">class</span> <span class="nc">MCVAE_tab</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAE_tab"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.mcvae_tab.html#fusilli.fusion_models.mcvae_tab.MCVAE_tab">[docs]</a><span class="k">class</span> <span class="nc">MCVAE_tab</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class implements a model that fuses the two types of tabular data using the MCVAE approach.</span>
 <span class="sd">    MCVAE: multi-channel variational autoencoder.</span>
@@ -373,7 +373,7 @@
     <span class="c1"># class: Subspace method class.</span>
     <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">MCVAESubspaceMethod</span>
 
-<div class="viewcode-block" id="MCVAE_tab.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAE_tab.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.mcvae_tab.html#fusilli.fusion_models.mcvae_tab.MCVAE_tab.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -417,7 +417,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="MCVAE_tab.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAE_tab.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.mcvae_tab.html#fusilli.fusion_models.mcvae_tab.MCVAE_tab.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the fused layers of the model.</span>
 
@@ -443,7 +443,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="n">out_dim</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MCVAE_tab.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.mcvae_tab.html#fusionlibrary.fusion_models.mcvae_tab.MCVAE_tab.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAE_tab.forward"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.mcvae_tab.html#fusilli.fusion_models.mcvae_tab.MCVAE_tab.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward pass of the model.</span>
 

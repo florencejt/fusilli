@@ -1,7 +1,7 @@
-﻿fusionlibrary.eval.Plotter
+﻿fusilli.eval.Plotter
 ==========================
 
-.. currentmodule:: fusionlibrary.eval
+.. currentmodule:: fusilli.eval
 
 .. autoclass:: Plotter
 

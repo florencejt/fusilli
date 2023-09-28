@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fusionlibrary.utils.model_chooser &mdash; fusionlibrary  documentation</title>
+  <title>fusilli.utils.model_chooser &mdash; fusilli  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/florencestheme.css" type="text/css" />
@@ -24,9 +24,7 @@
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="fusionlibrary.utils.training_utils" href="fusionlibrary.utils.training_utils.html" />
-    <link rel="prev" title="fusionlibrary.eval.Plotter" href="fusionlibrary.eval.Plotter.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -38,7 +36,7 @@
           
           
           <a href="../index.html" class="icon icon-home">
-            fusionlibrary
+            fusilli
               <img src="../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
@@ -62,19 +60,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.data.html">fusionlibrary.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.train.html">fusionlibrary.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.eval.Plotter.html">fusionlibrary.eval.Plotter</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">fusionlibrary.utils.model_chooser</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.utils.model_chooser.get_models"><code class="docutils literal notranslate"><span class="pre">get_models()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#fusionlibrary.utils.model_chooser.model_importer"><code class="docutils literal notranslate"><span class="pre">model_importer()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.training_utils.html">fusionlibrary.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.model_modifier.html">fusionlibrary.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusionlibrary.utils.check_model_validity.html">fusionlibrary.utils.check_model_validity</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
 </ul>
 
         </div>
@@ -83,7 +77,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">fusionlibrary</a>
+          <a href="../index.html">fusilli</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -91,7 +85,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">fusionlibrary.utils.model_chooser</li>
+      <li class="breadcrumb-item active">fusilli.utils.model_chooser</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/autosummary/fusionlibrary.utils.model_chooser.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -101,23 +95,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-fusionlibrary.utils.model_chooser">
-<span id="fusionlibrary-utils-model-chooser"></span><h1>fusionlibrary.utils.model_chooser<a class="headerlink" href="#module-fusionlibrary.utils.model_chooser" title="Permalink to this heading"></a></h1>
+  <section id="module-fusilli.utils.model_chooser">
+<span id="fusilli-utils-model-chooser"></span><h1>fusilli.utils.model_chooser<a class="headerlink" href="#module-fusilli.utils.model_chooser" title="Permalink to this heading"></a></h1>
 <p>Function/functions to help user choose model’s to run</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fusionlibrary.utils.model_chooser.get_models" title="fusionlibrary.utils.model_chooser.get_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_models</span></code></a>(conditions_dict[, fusion_model_dict])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.utils.model_chooser.get_models" title="fusilli.utils.model_chooser.get_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_models</span></code></a>(conditions_dict[, fusion_model_dict])</p></td>
 <td><p>Filters the models based on the conditions specified by the user.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fusionlibrary.utils.model_chooser.model_importer" title="fusionlibrary.utils.model_chooser.model_importer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_importer</span></code></a>(fusion_model_dict)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.utils.model_chooser.model_importer" title="fusilli.utils.model_chooser.model_importer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_importer</span></code></a>(fusion_model_dict)</p></td>
 <td><p>Imports all the fusion models in the fusion_model_dict.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
-<dt class="sig sig-object py" id="fusionlibrary.utils.model_chooser.get_models">
-<span class="sig-name descname"><span class="pre">get_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conditions_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[{'name':</span> <span class="pre">'Tabular1Unimodal',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabular1_unimodal'},</span> <span class="pre">{'name':</span> <span class="pre">'Tabular2Unimodal',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabular2_unimodal'},</span> <span class="pre">{'name':</span> <span class="pre">'ImgUnimodal',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.img_unimodal'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatTabularFeatureMaps',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_tabular_feature_maps'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImageMapsTabularData',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_img_maps_tabular_data'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatTabularData',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_tabular_data'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImageMapsTabularMaps',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_img_maps_tabular_maps'},</span> <span class="pre">{'name':</span> <span class="pre">'TabularChannelWiseMultiAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabular_channelwise_att'},</span> <span class="pre">{'name':</span> <span class="pre">'ImageChannelWiseMultiAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.img_tab_channelwise_att'},</span> <span class="pre">{'name':</span> <span class="pre">'CrossmodalMultiheadAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.crossmodal_att'},</span> <span class="pre">{'name':</span> <span class="pre">'TabularCrossmodalMultiheadAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tab_crossmodal_att'},</span> <span class="pre">{'name':</span> <span class="pre">'TabularDecision',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabular_decision'},</span> <span class="pre">{'name':</span> <span class="pre">'ImageDecision',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.img_tab_decision'},</span> <span class="pre">{'name':</span> <span class="pre">'MCVAE_tab',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.mcvae_tab'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImgLatentTabDoubleTrain',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_img_latent_tab_doubletrain'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImgLatentTabDoubleLoss',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_img_latent_tab_doubleloss'},</span> <span class="pre">{'name':</span> <span class="pre">'EdgeCorrGNN',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.edge_corr_gnn'},</span> <span class="pre">{'name':</span> <span class="pre">'DAETabImgMaps',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.denoise_tab_img_maps'}]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/utils/model_chooser.html#get_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.utils.model_chooser.get_models" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusilli.utils.model_chooser.get_models">
+<span class="sig-name descname"><span class="pre">get_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conditions_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[{'name':</span> <span class="pre">'Tabular1Unimodal',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabular1_unimodal'},</span> <span class="pre">{'name':</span> <span class="pre">'Tabular2Unimodal',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabular2_unimodal'},</span> <span class="pre">{'name':</span> <span class="pre">'ImgUnimodal',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.img_unimodal'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatTabularFeatureMaps',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_tabular_feature_maps'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImageMapsTabularData',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_img_maps_tabular_data'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatTabularData',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_tabular_data'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImageMapsTabularMaps',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_img_maps_tabular_maps'},</span> <span class="pre">{'name':</span> <span class="pre">'TabularChannelWiseMultiAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabular_channelwise_att'},</span> <span class="pre">{'name':</span> <span class="pre">'ImageChannelWiseMultiAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.img_tab_channelwise_att'},</span> <span class="pre">{'name':</span> <span class="pre">'CrossmodalMultiheadAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.crossmodal_att'},</span> <span class="pre">{'name':</span> <span class="pre">'TabularCrossmodalMultiheadAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tab_crossmodal_att'},</span> <span class="pre">{'name':</span> <span class="pre">'TabularDecision',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabular_decision'},</span> <span class="pre">{'name':</span> <span class="pre">'ImageDecision',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.img_tab_decision'},</span> <span class="pre">{'name':</span> <span class="pre">'MCVAE_tab',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.mcvae_tab'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImgLatentTabDoubleTrain',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_img_latent_tab_doubletrain'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImgLatentTabDoubleLoss',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_img_latent_tab_doubleloss'},</span> <span class="pre">{'name':</span> <span class="pre">'EdgeCorrGNN',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.edge_corr_gnn'},</span> <span class="pre">{'name':</span> <span class="pre">'DAETabImgMaps',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.denoise_tab_img_maps'}]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/model_chooser.html#get_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.model_chooser.get_models" title="Permalink to this definition"></a></dt>
 <dd><p>Filters the models based on the conditions specified by the user.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -151,7 +145,7 @@ or {feature1: [condition1, condition2, …], feature2: [condition1, …], …}</
 <li><p>”fusion_type”: type of fusion (e.g. “operation”)</p></li>
 <li><p>”modality_type”: type of modality (e.g. “both_tab”)</p></li>
 <li><p>”class_name”: name of the class (e.g. “TabularDecision”)</p></li>
-<li><p>”method_path”: path to the method’s py file (e.g. “fusionlibrary.fusion_models.tabular_decision”)</p></li>
+<li><p>”method_path”: path to the method’s py file (e.g. “fusilli.fusion_models.tabular_decision”)</p></li>
 </ul>
 </p>
 </dd>
@@ -162,8 +156,8 @@ or {feature1: [condition1, condition2, …], feature2: [condition1, …], …}</
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fusionlibrary.utils.model_chooser.model_importer">
-<span class="sig-name descname"><span class="pre">model_importer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fusion_model_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusionlibrary/utils/model_chooser.html#model_importer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusionlibrary.utils.model_chooser.model_importer" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fusilli.utils.model_chooser.model_importer">
+<span class="sig-name descname"><span class="pre">model_importer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fusion_model_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/model_chooser.html#model_importer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.model_chooser.model_importer" title="Permalink to this definition"></a></dt>
 <dd><p>Imports all the fusion models in the fusion_model_dict.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -183,10 +177,7 @@ or {feature1: [condition1, condition2, …], feature2: [condition1, …], …}</
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="fusionlibrary.eval.Plotter.html" class="btn btn-neutral float-left" title="fusionlibrary.eval.Plotter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="fusionlibrary.utils.training_utils.html" class="btn btn-neutral float-right" title="fusionlibrary.utils.training_utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

@@ -16,17 +16,17 @@ from tqdm.auto import tqdm
 
 # %%
 from docs.examples import generate_sklearn_simulated_data
-from fusionlibrary.data import get_data_module
-from fusionlibrary.eval import Plotter
-from fusionlibrary.fusion_models.base_model import BaseModel
+from fusilli.data import get_data_module
+from fusilli.eval import Plotter
+from fusilli.fusion_models.base_model import BaseModel
 
 # %%
 # 1. Import model
 # --------------------
-from fusionlibrary.fusion_models.tab_crossmodal_att import (
+from fusilli.fusion_models.tab_crossmodal_att import (
     TabularCrossmodalMultiheadAttention,
 )
-from fusionlibrary.train import train_and_save_models
+from fusilli.train import train_and_save_models
 
 # %%
 # 2. Set the training parameters

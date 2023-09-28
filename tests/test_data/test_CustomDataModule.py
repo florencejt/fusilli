@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from fusionlibrary.data import CustomDataModule, LoadDatasets, CustomDataset
+from fusilli.data import CustomDataModule, LoadDatasets, CustomDataset
 import shutil
 import torch
 import pandas as pd
@@ -153,7 +153,7 @@ def test_setup_calls_subspace_method(create_test_files):
     modality_type = "tab_img"
 
     with patch(
-        "fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method",
+        "fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method",
         return_value=MockSubspaceMethod(),
     ) as mock_subspace_method:
         # Initialize the CustomDataModule

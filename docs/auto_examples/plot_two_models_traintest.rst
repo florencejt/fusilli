@@ -43,11 +43,11 @@ Key Features:
     from tqdm.auto import tqdm
 
     from docs.examples import generate_sklearn_simulated_data
-    from fusionlibrary.data import get_data_module
-    from fusionlibrary.eval import Plotter
-    from fusionlibrary.fusion_models.base_model import BaseModel
-    from fusionlibrary.train import train_and_save_models
-    from fusionlibrary.utils.model_chooser import get_models
+    from fusilli.data import get_data_module
+    from fusilli.eval import Plotter
+    from fusilli.fusion_models.base_model import BaseModel
+    from fusilli.train import train_and_save_models
+    from fusilli.utils.model_chooser import get_models
 
 
 
@@ -62,7 +62,7 @@ Key Features:
 1. Import fusion models
 ------------------------
 Here we import the fusion models to be compared. The models are imported using the
-:func:`~fusionlibrary.utils.model_chooser.get_models` function, which takes a dictionary of conditions
+:func:`~fusilli.utils.model_chooser.get_models` function, which takes a dictionary of conditions
 as an input. The conditions are the attributes of the models, e.g. the class name, the modality type, etc.
 
 The function returns a dataframe of the models that match the conditions. The dataframe contains the
@@ -204,8 +204,8 @@ To train the first model we need to:
 2. *Create a dictionary to store the trained model*: We're using the name of the model as the key. It may seem overkill to make a dictionary just to store one model, but we also use this when we do k-fold training to store the trained models from the different folds.
 3. *Initialise the model with dummy data*: This is so we can find out whether there are extra instructions for creating the datamodule (such as a method for creating a graph datamodule).
 4. *Print the attributes of the model*: To check it's been initialised correctly.
-5. *Create the datamodule*: This is done with the :func:`~fusionlibrary.data.get_data_module` function. This function takes the initialised model and the parameters as inputs. It returns the datamodule.
-6. *Train and test the model*: This is done with the :func:`~fusionlibrary.train.train_and_save_models` function. This function takes the trained_models_dict, the datamodule, the parameters, the fusion model, and the initialised model as inputs. It returns the trained_models_dict with the trained model added to it.
+5. *Create the datamodule*: This is done with the :func:`~fusilli.data.get_data_module` function. This function takes the initialised model and the parameters as inputs. It returns the datamodule.
+6. *Train and test the model*: This is done with the :func:`~fusilli.train.train_and_save_models` function. This function takes the trained_models_dict, the datamodule, the parameters, the fusion model, and the initialised model as inputs. It returns the trained_models_dict with the trained model added to it.
 7. *Add the trained model to the ``all_trained_models`` dictionary*: This is so we can compare the results of the two models later.
 
 .. GENERATED FROM PYTHON SOURCE LINES 120-143
@@ -615,7 +615,7 @@ To train the first model we need to:
 
 5. Plotting the results of the first model
 --------------------------------------------
-We're using the :class:`~fusionlibrary.eval.Plotter` class to plot the results of the first model. This class takes the dictionary of trained models and the parameters as inputs. It returns a dictionary of figures.
+We're using the :class:`~fusilli.eval.Plotter` class to plot the results of the first model. This class takes the dictionary of trained models and the parameters as inputs. It returns a dictionary of figures.
 If there is one model in the dictionary (i.e. only one unique key), then it plots the figures for analysing the results of a single model.
 
 .. GENERATED FROM PYTHON SOURCE LINES 148-153
@@ -1133,7 +1133,7 @@ Now we're going to compare the results of the two models. We're using the same s
 
 9. Saving the metrics of the two models
 -----------------------------------------
-We can also get the metrics of the two models into a Pandas DataFrame using the :func:`~fusionlibrary.eval.Plotter.get_performance_df` function.
+We can also get the metrics of the two models into a Pandas DataFrame using the :func:`~fusilli.eval.Plotter.get_performance_df` function.
 
 .. GENERATED FROM PYTHON SOURCE LINES 205-207
 

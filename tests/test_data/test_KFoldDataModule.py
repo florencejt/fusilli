@@ -1,6 +1,6 @@
 import pytest
 import torch
-from fusionlibrary.data import KFoldDataModule
+from fusilli.data import KFoldDataModule
 from .test_CustomDataModule import create_test_files, MockSubspaceMethod
 from unittest.mock import patch, Mock
 
@@ -90,7 +90,7 @@ def test_val_dataloader(create_kfold_data_module):
 
 def test_setup_calls_subspace_method(create_kfold_data_module):
     with patch(
-        "fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method",
+        "fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method",
         return_value=MockSubspaceMethod(),
     ) as mock_subspace_method:
         # Initialize the KfoldDataModule

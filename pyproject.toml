@@ -3,12 +3,12 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "fusionlibrary"
+name = "fusilli"
 version = "0.0.1"
 authors = [
   { name="Florence J Townend", email="f.j.townend@live.com" },
 ]
-description = "Multimodal package first try"
+description = "Comparing multi-modal data fusion methods. Don't be silly, use Fusilli!"
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [

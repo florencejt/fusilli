@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fusionlibrary.fusion_models.edge_corr_gnn &mdash; fusionlibrary  documentation</title>
+  <title>fusilli.fusion_models.edge_corr_gnn &mdash; fusilli  documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/florencestheme.css" type="text/css" />
@@ -35,7 +35,7 @@
           
           
           <a href="../../../index.html" class="icon icon-home">
-            fusionlibrary
+            fusilli
               <img src="../../../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
@@ -60,14 +60,14 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.data.html">fusionlibrary.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.train.html">fusionlibrary.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.eval.Plotter.html">fusionlibrary.eval.Plotter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.training_utils.html">fusionlibrary.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.model_modifier.html">fusionlibrary.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.check_model_validity.html">fusionlibrary.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
 </ul>
 
         </div>
@@ -76,7 +76,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">fusionlibrary</a>
+          <a href="../../../index.html">fusilli</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -85,7 +85,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">fusionlibrary.fusion_models.edge_corr_gnn</li>
+      <li class="breadcrumb-item active">fusilli.fusion_models.edge_corr_gnn</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -94,22 +94,22 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for fusionlibrary.fusion_models.edge_corr_gnn</h1><div class="highlight"><pre>
+  <h1>Source code for fusilli.fusion_models.edge_corr_gnn</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Edge correlation GNN model.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.fusion_models.base_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
+<span class="kn">from</span> <span class="nn">fusilli.fusion_models.base_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">torch_geometric.data</span> <span class="kn">import</span> <span class="n">Data</span>
 <span class="kn">from</span> <span class="nn">torch_geometric.nn</span> <span class="kn">import</span> <span class="n">GCNConv</span>
 <span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
+<span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
 
 
-<div class="viewcode-block" id="EdgeCorrGraphMaker"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker">[docs]</a><span class="k">class</span> <span class="nc">EdgeCorrGraphMaker</span><span class="p">:</span>
+<div class="viewcode-block" id="EdgeCorrGraphMaker"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.edge_corr_gnn.html#fusilli.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker">[docs]</a><span class="k">class</span> <span class="nc">EdgeCorrGraphMaker</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates the graph data structure for the edge correlation GNN model.</span>
 
@@ -121,7 +121,7 @@
 <span class="sd">        How correlated the nodes need to be to be connected. Default: 0.8</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EdgeCorrGraphMaker.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
+<div class="viewcode-block" id="EdgeCorrGraphMaker.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.edge_corr_gnn.html#fusilli.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -132,7 +132,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.8</span>  <span class="c1"># how correlated the nodes need to be to be connected</span></div>
 
-<div class="viewcode-block" id="EdgeCorrGraphMaker.check_params"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.check_params">[docs]</a>    <span class="k">def</span> <span class="nf">check_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EdgeCorrGraphMaker.check_params"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.edge_corr_gnn.html#fusilli.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.check_params">[docs]</a>    <span class="k">def</span> <span class="nf">check_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Checks the parameters of the model.</span>
 
@@ -151,7 +151,7 @@
 
         <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;threshold&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EdgeCorrGraphMaker.make_graph"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.make_graph">[docs]</a>    <span class="k">def</span> <span class="nf">make_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EdgeCorrGraphMaker.make_graph"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.edge_corr_gnn.html#fusilli.fusion_models.edge_corr_gnn.EdgeCorrGraphMaker.make_graph">[docs]</a>    <span class="k">def</span> <span class="nf">make_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates the graph data structure.</span>
 
@@ -185,7 +185,7 @@
         <span class="k">return</span> <span class="n">data</span></div></div>
 
 
-<div class="viewcode-block" id="EdgeCorrGNN"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN">[docs]</a><span class="k">class</span> <span class="nc">EdgeCorrGNN</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="EdgeCorrGNN"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.edge_corr_gnn.html#fusilli.fusion_models.edge_corr_gnn.EdgeCorrGNN">[docs]</a><span class="k">class</span> <span class="nc">EdgeCorrGNN</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Graph neural network with the edge weighting as the first tabular modality correlations and</span>
 <span class="sd">    the node features as the second tabular modality features.</span>
@@ -212,7 +212,7 @@
     <span class="c1"># class: Graph maker class.</span>
     <span class="n">graph_maker</span> <span class="o">=</span> <span class="n">EdgeCorrGraphMaker</span>
 
-<div class="viewcode-block" id="EdgeCorrGNN.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="EdgeCorrGNN.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.edge_corr_gnn.html#fusilli.fusion_models.edge_corr_gnn.EdgeCorrGNN.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -239,7 +239,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="EdgeCorrGNN.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EdgeCorrGNN.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.edge_corr_gnn.html#fusilli.fusion_models.edge_corr_gnn.EdgeCorrGNN.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the number of features after the fusion layer.</span>
 
@@ -269,7 +269,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_conv_layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">out_channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EdgeCorrGNN.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.edge_corr_gnn.html#fusionlibrary.fusion_models.edge_corr_gnn.EdgeCorrGNN.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="EdgeCorrGNN.forward"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.edge_corr_gnn.html#fusilli.fusion_models.edge_corr_gnn.EdgeCorrGNN.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward pass of the model.</span>
 

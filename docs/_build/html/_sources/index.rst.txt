@@ -1,4 +1,4 @@
-.. fusionlibrary documentation master file, created by
+.. fusilli documentation master file, created by
    sphinx-quickstart on Wed Aug 16 12:33:29 2023.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
@@ -39,14 +39,14 @@ This library provides a way to compare different fusion methods for your multimo
    :recursive:
    :caption: 🌸 API Reference 🌸
 
-   fusionlibrary.fusion_models
-   fusionlibrary.data
-   fusionlibrary.train
-   fusionlibrary.eval.Plotter
-   fusionlibrary.utils.model_chooser
-   fusionlibrary.utils.training_utils
-   fusionlibrary.utils.model_modifier
-   fusionlibrary.utils.check_model_validity
+   fusilli.fusion_models
+   fusilli.data
+   fusilli.train
+   fusilli.eval.Plotter
+   fusilli.utils.model_chooser
+   fusilli.utils.training_utils
+   fusilli.utils.model_modifier
+   fusilli.utils.check_model_validity
 
 
 

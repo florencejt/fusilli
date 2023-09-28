@@ -1,5 +1,5 @@
 import pytest
-from fusionlibrary.data import GraphDataModule
+from fusilli.data import GraphDataModule
 from .test_CustomDataModule import create_test_files
 from pytest import approx
 

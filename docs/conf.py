@@ -11,10 +11,10 @@ import sys
 import warnings
 
 
-sys.path.insert(0, os.path.abspath("../fusionlibrary"))
-# sys.path.insert(0, os.path.abspath("../../"))
-# sys.path.insert(0, os.path.abspath(".."))
-# sys.path.insert(0, os.path.abspath("."))
+sys.path.insert(0, os.path.abspath("../fusilli"))
+sys.path.insert(0, os.path.abspath("../../"))
+sys.path.insert(0, os.path.abspath(".."))
+sys.path.insert(0, os.path.abspath("."))
 
 warnings.filterwarnings("ignore", ".*does not have many workers.*")
 warnings.filterwarnings("ignore", ".*MPS available but not used.*")
@@ -23,7 +23,7 @@ warnings.filterwarnings(
 )
 
 
-project = "fusionlibrary"
+project = "fusilli"
 copyright = "2023, Florence J Townend"
 author = "Florence J Townend"
 
@@ -83,7 +83,7 @@ html_favicon = "pink_pasta_logo.png"
 from sphinx_gallery.sorting import ExplicitOrder
 
 sphinx_gallery_conf = {
-    "doc_module": "fusionlibrary",
+    "doc_module": "fusilli",
     "examples_dirs": "examples",  # path to your example scripts
     "gallery_dirs": "auto_examples",  # path to where to save gallery generated output
     "ignore_pattern": "__init__.py",

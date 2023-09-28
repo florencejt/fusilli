@@ -1,23 +1,23 @@
 import pytest
 import torch.nn as nn
 
-# from fusionlibrary.train import modify_model_architecture, get_nested_attr
-from fusionlibrary.utils import model_modifier
+# from fusilli.train import modify_model_architecture, get_nested_attr
+from fusilli.utils import model_modifier
 
-from fusionlibrary.fusion_models.concat_img_maps_tabular_data import (
+from fusilli.fusion_models.concat_img_maps_tabular_data import (
     ConcatImageMapsTabularData,
 )
-from fusionlibrary.fusion_models.concat_img_maps_tabular_maps import (
+from fusilli.fusion_models.concat_img_maps_tabular_maps import (
     ConcatImageMapsTabularMaps,
 )
-from fusionlibrary.fusion_models.concat_tabular_data import (
+from fusilli.fusion_models.concat_tabular_data import (
     ConcatTabularData,
 )
-from fusionlibrary.fusion_models.concat_tabular_feature_maps import (
+from fusilli.fusion_models.concat_tabular_feature_maps import (
     ConcatTabularFeatureMaps,
 )
-from fusionlibrary.fusion_models.img_tab_decision import ImageDecision
-from fusionlibrary.fusion_models.tabular_decision import TabularDecision
+from fusilli.fusion_models.img_tab_decision import ImageDecision
+from fusilli.fusion_models.tabular_decision import TabularDecision
 
 import torch
 

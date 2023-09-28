@@ -1,0 +1,31 @@
+fusilli.fusion\_models.concat\_img\_latent\_tab\_doubletrain
+============================================================
+
+.. automodule:: fusilli.fusion_models.concat_img_latent_tab_doubletrain
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ConcatImgLatentTabDoubleTrain
+      ImgLatentSpace
+      concat_img_latent_tab_subspace_method
+   
+   
+
+   
+   
+   
+
+
+

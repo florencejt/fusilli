@@ -1,4 +1,4 @@
-fusionlibrary
+fusilli
 =============
 
 .. toctree::

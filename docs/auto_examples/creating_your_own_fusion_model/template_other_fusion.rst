@@ -26,7 +26,7 @@ If you want to implement a graph-based or subspace-based fusion model, please re
 
 There are two ways to create your own fusion model:
 
-1. You can use the preset layers in the :class:`~fusionlibrary.fusion_models.base_model.ParentFusionModel` class. This is the easiest way to create your own fusion model. You can see an example of this in the :class:`~fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData` class.
+1. You can use the preset layers in the :class:`~fusilli.fusion_models.base_model.ParentFusionModel` class. This is the easiest way to create your own fusion model. You can see an example of this in the :class:`~fusilli.fusion_models.concat_tabular_data.ConcatTabularData` class.
 2. You can create your own layers. This is the most flexible way to create your own fusion model.
 
 The most important thing to remember is to output the final prediction as a list. This is because in subspace methods, the output is the label output and a reconstruction. This project's architecture is designed to be flexible enough to handle subspace methods too, hence the need for a list.
@@ -42,7 +42,7 @@ Have fun creating your own fusion model!
     import torch
 
     # importing the parent fusion model class
-    from fusionlibrary.fusion_models.base_model import ParentFusionModel
+    from fusilli.fusion_models.base_model import ParentFusionModel
 
 
     class TemplateFusionModel(ParentFusionModel, nn.Module):

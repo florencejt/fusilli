@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fusionlibrary.utils.training_utils &mdash; fusionlibrary  documentation</title>
+  <title>fusilli.utils.training_utils &mdash; fusilli  documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/florencestheme.css" type="text/css" />
@@ -35,7 +35,7 @@
           
           
           <a href="../../../index.html" class="icon icon-home">
-            fusionlibrary
+            fusilli
               <img src="../../../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
@@ -60,14 +60,14 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.data.html">fusionlibrary.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.train.html">fusionlibrary.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.eval.Plotter.html">fusionlibrary.eval.Plotter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.training_utils.html">fusionlibrary.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.model_modifier.html">fusionlibrary.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusionlibrary.utils.check_model_validity.html">fusionlibrary.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
 </ul>
 
         </div>
@@ -76,7 +76,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">fusionlibrary</a>
+          <a href="../../../index.html">fusilli</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -85,7 +85,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">fusionlibrary.utils.training_utils</li>
+      <li class="breadcrumb-item active">fusilli.utils.training_utils</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -94,7 +94,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for fusionlibrary.utils.training_utils</h1><div class="highlight"><pre>
+  <h1>Source code for fusilli.utils.training_utils</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Functions for initializing the pytorch lightning logger and trainer.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -109,7 +109,7 @@
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 
 
-<div class="viewcode-block" id="set_logger"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.training_utils.html#fusionlibrary.utils.training_utils.set_logger">[docs]</a><span class="k">def</span> <span class="nf">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="set_logger"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.set_logger">[docs]</a><span class="k">def</span> <span class="nf">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set the logger for the current run. If params[&quot;log&quot;] is True, then the logger is set to</span>
 <span class="sd">    WandbLogger, otherwise it is set to None.</span>
@@ -168,15 +168,15 @@
     <span class="k">return</span> <span class="n">logger</span></div>
 
 
-<div class="viewcode-block" id="LitProgressBar"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.training_utils.html#fusionlibrary.utils.training_utils.LitProgressBar">[docs]</a><span class="k">class</span> <span class="nc">LitProgressBar</span><span class="p">(</span><span class="n">TQDMProgressBar</span><span class="p">):</span>
-<div class="viewcode-block" id="LitProgressBar.init_validation_tqdm"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.training_utils.html#fusionlibrary.utils.training_utils.LitProgressBar.init_validation_tqdm">[docs]</a>    <span class="k">def</span> <span class="nf">init_validation_tqdm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LitProgressBar"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.LitProgressBar">[docs]</a><span class="k">class</span> <span class="nc">LitProgressBar</span><span class="p">(</span><span class="n">TQDMProgressBar</span><span class="p">):</span>
+<div class="viewcode-block" id="LitProgressBar.init_validation_tqdm"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.LitProgressBar.init_validation_tqdm">[docs]</a>    <span class="k">def</span> <span class="nf">init_validation_tqdm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">bar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span>
             <span class="n">disable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">bar</span></div></div>
 
 
-<div class="viewcode-block" id="init_trainer"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.training_utils.html#fusionlibrary.utils.training_utils.init_trainer">[docs]</a><span class="k">def</span> <span class="nf">init_trainer</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="init_trainer"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.init_trainer">[docs]</a><span class="k">def</span> <span class="nf">init_trainer</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize the pytorch lightning trainer object.</span>
 
@@ -216,7 +216,7 @@
     <span class="k">return</span> <span class="n">trainer</span></div>
 
 
-<div class="viewcode-block" id="get_final_val_metrics"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.training_utils.html#fusionlibrary.utils.training_utils.get_final_val_metrics">[docs]</a><span class="k">def</span> <span class="nf">get_final_val_metrics</span><span class="p">(</span><span class="n">trainer</span><span class="p">):</span>
+<div class="viewcode-block" id="get_final_val_metrics"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.get_final_val_metrics">[docs]</a><span class="k">def</span> <span class="nf">get_final_val_metrics</span><span class="p">(</span><span class="n">trainer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the final validation metrics from the trainer object.</span>
 

@@ -1,7 +1,7 @@
-﻿fusionlibrary.train
+﻿fusilli.train
 ===================
 
-.. automodule:: fusionlibrary.train
+.. automodule:: fusilli.train
 
    
    

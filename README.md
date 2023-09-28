@@ -1,4 +1,4 @@
-# MultiFuseKit: Multi-modal Data Fusion Toolkit
+# Fusilli
 ### Florence J Townend
 Email: [florence.townend.21@ucl.ac.uk](mailto:florence.townend.21@ucl.ac.uk) \
 Twitter: [@FlorenceTownend](https://twitter.com/FlorenceTownend)
@@ -53,9 +53,8 @@ The included methods are based on the review by Cui et al (2022). These methods 
 - Subspace-based fusion
 - Graph-based fusion
 
-![Types of fusion [1]](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/baa42f6b-9fcb-4255-a022-fb45bc6ed197/Screenshot_2023-08-10_at_15.56.15.png)
 
-Note: Add a table of the specific methods included in MultiFuseKit.
+Note: Add a table of the specific methods included in Fusilli.
 
 ### Authors and Acknowledgements
 

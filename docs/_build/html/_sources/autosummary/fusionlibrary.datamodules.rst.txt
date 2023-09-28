@@ -1,7 +1,7 @@
-﻿fusionlibrary.data
+﻿fusilli.data
 =========================
 
-.. automodule:: fusionlibrary.data
+.. automodule:: fusilli.data
 
    
    

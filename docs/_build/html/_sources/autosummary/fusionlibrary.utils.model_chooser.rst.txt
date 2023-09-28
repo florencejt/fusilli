@@ -1,7 +1,7 @@
-﻿fusionlibrary.utils.model\_chooser
+﻿fusilli.utils.model\_chooser
 ==================================
 
-.. automodule:: fusionlibrary.utils.model_chooser
+.. automodule:: fusilli.utils.model_chooser
 
    
    

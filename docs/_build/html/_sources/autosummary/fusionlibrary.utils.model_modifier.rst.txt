@@ -1,7 +1,7 @@
-﻿fusionlibrary.utils.model\_modifier
+﻿fusilli.utils.model\_modifier
 ===================================
 
-.. automodule:: fusionlibrary.utils.model_modifier
+.. automodule:: fusilli.utils.model_modifier
 
    
    

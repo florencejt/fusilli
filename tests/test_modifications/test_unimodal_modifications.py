@@ -1,9 +1,9 @@
 import pytest
 import torch.nn as nn
-from fusionlibrary.utils import model_modifier
-from fusionlibrary.fusion_models.img_unimodal import ImgUnimodal
-from fusionlibrary.fusion_models.tabular1_unimodal import Tabular1Unimodal
-from fusionlibrary.fusion_models.tabular2_unimodal import Tabular2Unimodal
+from fusilli.utils import model_modifier
+from fusilli.fusion_models.img_unimodal import ImgUnimodal
+from fusilli.fusion_models.tabular1_unimodal import Tabular1Unimodal
+from fusilli.fusion_models.tabular2_unimodal import Tabular2Unimodal
 
 
 @pytest.fixture

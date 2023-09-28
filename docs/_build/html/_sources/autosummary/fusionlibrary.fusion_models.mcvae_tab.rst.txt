@@ -1,7 +1,7 @@
-fusionlibrary.fusion\_models.mcvae\_tab
+fusilli.fusion\_models.mcvae\_tab
 =======================================
 
-.. automodule:: fusionlibrary.fusion_models.mcvae_tab
+.. automodule:: fusilli.fusion_models.mcvae_tab
 
    
    

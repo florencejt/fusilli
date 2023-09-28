@@ -3,7 +3,7 @@
 import pytest
 import torch.nn as nn
 
-from fusionlibrary.utils.check_model_validity import (
+from fusilli.utils.check_model_validity import (
     check_dtype,
     check_img_dim,
     check_var_is_function,

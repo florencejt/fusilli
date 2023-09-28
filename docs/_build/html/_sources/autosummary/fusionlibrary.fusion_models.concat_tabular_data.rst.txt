@@ -1,7 +1,7 @@
-fusionlibrary.fusion\_models.concat\_tabular\_data
+fusilli.fusion\_models.concat\_tabular\_data
 ==================================================
 
-.. automodule:: fusionlibrary.fusion_models.concat_tabular_data
+.. automodule:: fusilli.fusion_models.concat_tabular_data
 
    
    

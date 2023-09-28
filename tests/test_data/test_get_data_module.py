@@ -1,5 +1,5 @@
 import pytest
-from fusionlibrary.data import (
+from fusilli.data import (
     KFoldDataModule,
     CustomDataModule,
     GraphDataModule,

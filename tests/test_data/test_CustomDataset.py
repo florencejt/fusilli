@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import torch
-from fusionlibrary.data import CustomDataset  # Import your CustomDataset class
+from fusilli.data import CustomDataset  # Import your CustomDataset class
 
 
 # Test initialization with multimodal data (list of tensors)

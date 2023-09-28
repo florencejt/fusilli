@@ -1,18 +1,18 @@
 import pytest
 import torch.nn as nn
 
-from fusionlibrary.fusion_models.crossmodal_att import CrossmodalMultiheadAttention
-from fusionlibrary.fusion_models.img_tab_channelwise_att import (
+from fusilli.fusion_models.crossmodal_att import CrossmodalMultiheadAttention
+from fusilli.fusion_models.img_tab_channelwise_att import (
     ImageChannelWiseMultiAttention,
 )
-from fusionlibrary.fusion_models.tab_crossmodal_att import (
+from fusilli.fusion_models.tab_crossmodal_att import (
     TabularCrossmodalMultiheadAttention,
 )
-from fusionlibrary.fusion_models.tabular_channelwise_att import (
+from fusilli.fusion_models.tabular_channelwise_att import (
     TabularChannelWiseMultiAttention,
 )
 
-from fusionlibrary.utils import model_modifier
+from fusilli.utils import model_modifier
 
 correct_modifications = {  # Correct modifications
     "TabularChannelWiseMultiAttention": {

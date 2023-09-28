@@ -1,7 +1,7 @@
-fusionlibrary.fusion\_models.img\_tab\_channelwise\_att
+fusilli.fusion\_models.img\_tab\_channelwise\_att
 =======================================================
 
-.. automodule:: fusionlibrary.fusion_models.img_tab_channelwise_att
+.. automodule:: fusilli.fusion_models.img_tab_channelwise_att
 
    
    

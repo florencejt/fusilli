@@ -1,7 +1,7 @@
-fusionlibrary.fusion\_models.img\_unimodal
+fusilli.fusion\_models.img\_unimodal
 ==========================================
 
-.. automodule:: fusionlibrary.fusion_models.img_unimodal
+.. automodule:: fusilli.fusion_models.img_unimodal
 
    
    

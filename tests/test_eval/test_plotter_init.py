@@ -1,7 +1,7 @@
 import pytest
 
-from fusionlibrary.eval import Plotter
-from fusionlibrary.fusion_models.base_model import BaseModel
+from fusilli.eval import Plotter
+from fusilli.fusion_models.base_model import BaseModel
 import torch.nn as nn
 
 

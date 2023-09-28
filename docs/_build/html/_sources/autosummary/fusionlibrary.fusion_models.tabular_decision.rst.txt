@@ -1,7 +1,7 @@
-fusionlibrary.fusion\_models.tabular\_decision
+fusilli.fusion\_models.tabular\_decision
 ==============================================
 
-.. automodule:: fusionlibrary.fusion_models.tabular_decision
+.. automodule:: fusilli.fusion_models.tabular_decision
 
    
    

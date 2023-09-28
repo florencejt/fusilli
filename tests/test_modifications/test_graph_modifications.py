@@ -1,9 +1,9 @@
 import pytest
 import torch.nn as nn
-from fusionlibrary.utils import model_modifier
-from fusionlibrary.fusion_models.edge_corr_gnn import EdgeCorrGNN, EdgeCorrGraphMaker
+from fusilli.utils import model_modifier
+from fusilli.fusion_models.edge_corr_gnn import EdgeCorrGNN, EdgeCorrGraphMaker
 from tests.test_data.test_CustomDataModule import create_test_files
-from fusionlibrary.data import GraphDataModule
+from fusilli.data import GraphDataModule
 from torch_geometric.nn import GCNConv
 
 

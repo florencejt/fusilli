@@ -1,5 +1,5 @@
 import pytest
-from fusionlibrary.data import KFoldGraphDataModule
+from fusilli.data import KFoldGraphDataModule
 from .test_CustomDataModule import create_test_files
 import torch_geometric
 import numpy as np

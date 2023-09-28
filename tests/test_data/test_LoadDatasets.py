@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import torch
-from fusionlibrary.data import LoadDatasets, CustomDataset  # Import your classes
+from fusilli.data import LoadDatasets, CustomDataset  # Import your classes
 import shutil
 
 

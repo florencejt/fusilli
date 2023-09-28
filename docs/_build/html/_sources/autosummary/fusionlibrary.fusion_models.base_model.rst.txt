@@ -1,7 +1,7 @@
-fusionlibrary.fusion\_models.base\_model
+fusilli.fusion\_models.base\_model
 ========================================
 
-.. automodule:: fusionlibrary.fusion_models.base_model
+.. automodule:: fusilli.fusion_models.base_model
 
    
    

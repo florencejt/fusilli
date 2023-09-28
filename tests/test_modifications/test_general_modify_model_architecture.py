@@ -1,5 +1,5 @@
 import pytest
-from fusionlibrary.utils import model_modifier
+from fusilli.utils import model_modifier
 import torch.nn as nn
 
 

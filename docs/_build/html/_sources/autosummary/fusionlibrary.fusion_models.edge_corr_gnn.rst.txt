@@ -1,7 +1,7 @@
-fusionlibrary.fusion\_models.edge\_corr\_gnn
+fusilli.fusion\_models.edge\_corr\_gnn
 ============================================
 
-.. automodule:: fusionlibrary.fusion_models.edge_corr_gnn
+.. automodule:: fusilli.fusion_models.edge_corr_gnn
 
    
    

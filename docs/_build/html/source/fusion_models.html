@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fusion_models package &mdash; fusionlibrary  documentation</title>
+  <title>fusion_models package &mdash; fusilli  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/florencestheme.css" type="text/css" />
@@ -36,7 +36,7 @@
           
           
           <a href="../index.html" class="icon icon-home">
-            fusionlibrary
+            fusilli
               <img src="../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
@@ -61,14 +61,14 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.data.html">fusionlibrary.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.train.html">fusionlibrary.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.eval.Plotter.html">fusionlibrary.eval.Plotter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.training_utils.html">fusionlibrary.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.model_modifier.html">fusionlibrary.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.check_model_validity.html">fusionlibrary.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
 </ul>
 
         </div>
@@ -77,7 +77,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">fusionlibrary</a>
+          <a href="../index.html">fusilli</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -392,6 +392,44 @@ and access by Plotter class for plotting.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fusion_models.base_model.BaseModel.predict_step">
+<span class="sig-name descname"><span class="pre">predict_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataloader_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../_modules/fusion_models/base_model.html#BaseModel.predict_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.base_model.BaseModel.predict_step" title="Permalink to this definition"></a></dt>
+<dd><p>Step function called during <code class="xref py py-meth docutils literal notranslate"><span class="pre">predict()</span></code>. By default, it
+calls <code class="xref py py-meth docutils literal notranslate"><span class="pre">forward()</span></code>. Override to add any processing logic.</p>
+<p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">predict_step()</span></code> is used
+to scale inference on multi-devices.</p>
+<p>To prevent an OOM error, it is possible to use <code class="xref py py-class docutils literal notranslate"><span class="pre">BasePredictionWriter</span></code>
+callback to write the predictions to disk or database after each batch or on epoch end.</p>
+<p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">BasePredictionWriter</span></code> should be used while using a spawn
+based accelerator. This happens for <code class="docutils literal notranslate"><span class="pre">Trainer(strategy=&quot;ddp_spawn&quot;)</span></code>
+or training on 8 TPU cores with <code class="docutils literal notranslate"><span class="pre">Trainer(accelerator=&quot;tpu&quot;,</span> <span class="pre">devices=8)</span></code> as predictions won’t be returned.</p>
+<p>Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyModel</span><span class="p">(</span><span class="n">LightningModule</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">predict_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">dataloader_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+<span class="n">dm</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">MyModel</span><span class="p">()</span>
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;gpu&quot;</span><span class="p">,</span> <span class="n">devices</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dm</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> – Current batch.</p></li>
+<li><p><strong>batch_idx</strong> – Index of current batch.</p></li>
+<li><p><strong>dataloader_idx</strong> – Index of the current dataloader.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Predicted output</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fusion_models.base_model.BaseModel.safe_squeeze">
 <span class="sig-name descname"><span class="pre">safe_squeeze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/base_model.html#BaseModel.safe_squeeze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.base_model.BaseModel.safe_squeeze" title="Permalink to this definition"></a></dt>
 <dd><p>Squeeze tensor if it is not 1D.</p>
@@ -695,7 +733,7 @@ If using 3D images, then the layers will use Conv3D layers.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConcatImgLatentTabDoubleLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/concat_img_latent_tab_doubleloss.html#ConcatImgLatentTabDoubleLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Concatenating image latent space with tabular data, trained altogether with a custom loss
 function: MSE + BCE.</p>
 <dl class="py attribute">
@@ -919,7 +957,7 @@ img_latent_subspace_method class.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConcatImgLatentTabDoubleTrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/concat_img_latent_tab_doubletrain.html#ConcatImgLatentTabDoubleTrain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Concatenating the latent img space and tabular data. The latent image space is
 trained separately from both the tabular data and the labels, using the
 img_latent_subspace_method class.</p>
@@ -1382,7 +1420,7 @@ image modality.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConcatImageMapsTabularData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/concat_img_maps_tabular_data.html#ConcatImageMapsTabularData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Concatenating the input data of the first tabular modalities and the feature maps of the
 image modality.</p>
 <dl class="py attribute">
@@ -1545,7 +1583,7 @@ image modality.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConcatImageMapsTabularMaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/concat_img_maps_tabular_maps.html#ConcatImageMapsTabularMaps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Concatenating the feature maps of the first tabular modalities and the feature maps of the
 image modality.</p>
 <dl class="py attribute">
@@ -1702,7 +1740,7 @@ Calculated in the <a class="reference internal" href="#fusion_models.concat_img_
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.concat_tabular_data.ConcatTabularData">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConcatTabularData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/concat_tabular_data.html#ConcatTabularData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.concat_tabular_data.ConcatTabularData" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Concatenating the two tabular modalities at the data-level (early fusion)</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusion_models.concat_tabular_data.ConcatTabularData.pred_type">
@@ -1834,7 +1872,7 @@ Calculated in the <code class="xref py py-meth docutils literal notranslate"><sp
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConcatTabularFeatureMaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/concat_tabular_feature_maps.html#ConcatTabularFeatureMaps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Concatenating the feature maps of the two tabular modalities.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusion_models.concat_tabular_feature_maps.ConcatTabularFeatureMaps.pred_type">
@@ -1991,7 +2029,7 @@ between the two modalities: tabular and image.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.crossmodal_att.CrossmodalMultiheadAttention">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CrossmodalMultiheadAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/crossmodal_att.html#CrossmodalMultiheadAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.crossmodal_att.CrossmodalMultiheadAttention" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Crossmodal multi-head attention model. This model uses the self attention and cross modal
 attention between the two modalities: tabular and image.</p>
 <p class="rubric">References</p>
@@ -2214,7 +2252,7 @@ multihead attention layer.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.denoise_tab_img_maps.DAETabImgMaps">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DAETabImgMaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/denoise_tab_img_maps.html#DAETabImgMaps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.denoise_tab_img_maps.DAETabImgMaps" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Using a denoising autoencoder to upsample tabular data, then concatenating with feature maps
 from final 3 conv layers of image data.
 From Yan et al 2021: Richer fusion network for breast cancer classification on multimodal data.</p>
@@ -2233,7 +2271,7 @@ From Yan et al 2021: Richer fusion network for breast cancer classification on m
 <dt class="sig sig-object py" id="fusion_models.denoise_tab_img_maps.DAETabImgMaps.subspace_method">
 <span class="sig-name descname"><span class="pre">subspace_method</span></span><a class="headerlink" href="#fusion_models.denoise_tab_img_maps.DAETabImgMaps.subspace_method" title="Permalink to this definition"></a></dt>
 <dd><p>Subspace method:
-<a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.denoise_tab_img_maps.html#fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method" title="fusionlibrary.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method"><code class="xref py py-class docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method</span></code></a>.</p>
+<a class="reference internal" href="../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method" title="fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method"><code class="xref py py-class docutils literal notranslate"><span class="pre">denoising_autoencoder_subspace_method</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>class</p>
@@ -2883,7 +2921,7 @@ to the latent image space.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.edge_corr_gnn.EdgeCorrGNN">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EdgeCorrGNN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/edge_corr_gnn.html#EdgeCorrGNN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.edge_corr_gnn.EdgeCorrGNN" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Graph neural network with the edge weighting as the first tabular modality correlations and
 the node features as the second tabular modality features.</p>
 <dl class="py attribute">
@@ -3072,7 +3110,7 @@ take in 256 features.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ImageChannelWiseMultiAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/img_tab_channelwise_att.html#ImageChannelWiseMultiAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Channel-wise multiplication net with image and tabular</p>
 <p>If the tabular layers and the image layers have different feature maps dimensions at each
 layer, the model will use a linear layer to make the tabular dimensions equal to the image
@@ -3251,7 +3289,7 @@ fusion approach.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.img_tab_decision.ImageDecision">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ImageDecision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/img_tab_decision.html#ImageDecision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.img_tab_decision.ImageDecision" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <dl class="simple">
 <dt>This class implements a model that fuses the first tabular data and the image data using a decision fusion</dt><dd><p>approach.</p>
 </dd>
@@ -3402,7 +3440,7 @@ The predictions of the different modalities are stacked on the first dimension b
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.img_unimodal.ImgUnimodal">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ImgUnimodal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/img_unimodal.html#ImgUnimodal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.img_unimodal.ImgUnimodal" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>This class implements a uni-modal model using only the image data.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusion_models.img_unimodal.ImgUnimodal.img_layers">
@@ -3654,7 +3692,7 @@ The two latent spaces are averaged to form the joint latent space.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.mcvae_tab.MCVAE_tab">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MCVAE_tab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/mcvae_tab.html#MCVAE_tab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.mcvae_tab.MCVAE_tab" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>This class implements a model that fuses the two types of tabular data using the MCVAE approach.
 MCVAE: multi-channel variational autoencoder.</p>
 <p>The MCVAE creates a joint latent space of the two types of tabular data based off a joint
@@ -3823,7 +3861,7 @@ latent space layers.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TabularCrossmodalMultiheadAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/tab_crossmodal_att.html#TabularCrossmodalMultiheadAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Tabular Crossmodal multi-head attention model.</p>
 <p>This class implements a model that fuses the two types of tabular data using a
 cross-modal multi-head attention approach.</p>
@@ -4026,7 +4064,7 @@ multihead attention layer.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.tabular1_unimodal.Tabular1Unimodal">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Tabular1Unimodal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/tabular1_unimodal.html#Tabular1Unimodal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.tabular1_unimodal.Tabular1Unimodal" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Uni-modal model for tabular data.</p>
 <p>This class implements a uni-modal model using only the 1st type of tabular data.</p>
 <dl class="py attribute">
@@ -4169,7 +4207,7 @@ multihead attention layer.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.tabular2_unimodal.Tabular2Unimodal">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Tabular2Unimodal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/tabular2_unimodal.html#Tabular2Unimodal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.tabular2_unimodal.Tabular2Unimodal" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Tabular2 uni-modal model.</p>
 <p>This class implements a uni-modal model using only the 2nd type of tabular data.</p>
 <dl class="py attribute">
@@ -4309,7 +4347,7 @@ multihead attention layer.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TabularChannelWiseMultiAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/tabular_channelwise_att.html#TabularChannelWiseMultiAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Channel-wise multiplication fusion model for tabular data.</p>
 <p>This class implements a model that fuses the two types of tabular data using a
 channel-wise multiplication approach.</p>
@@ -4489,7 +4527,7 @@ multipliable.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fusion_models.tabular_decision.TabularDecision">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TabularDecision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusion_models/tabular_decision.html#TabularDecision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusion_models.tabular_decision.TabularDecision" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <dl class="simple">
 <dt>This class implements a model that fuses the two types of tabular data using a decision fusion</dt><dd><p>approach.</p>
 </dd>

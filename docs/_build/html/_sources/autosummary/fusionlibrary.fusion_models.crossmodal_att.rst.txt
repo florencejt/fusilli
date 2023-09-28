@@ -1,7 +1,7 @@
-fusionlibrary.fusion\_models.crossmodal\_att
+fusilli.fusion\_models.crossmodal\_att
 ============================================
 
-.. automodule:: fusionlibrary.fusion_models.crossmodal_att
+.. automodule:: fusilli.fusion_models.crossmodal_att
 
    
    

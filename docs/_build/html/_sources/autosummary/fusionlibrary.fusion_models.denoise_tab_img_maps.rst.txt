@@ -1,7 +1,7 @@
-fusionlibrary.fusion\_models.denoise\_tab\_img\_maps
+fusilli.fusion\_models.denoise\_tab\_img\_maps
 ====================================================
 
-.. automodule:: fusionlibrary.fusion_models.denoise_tab_img_maps
+.. automodule:: fusilli.fusion_models.denoise_tab_img_maps
 
    
    

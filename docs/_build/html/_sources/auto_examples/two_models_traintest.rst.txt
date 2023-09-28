@@ -31,11 +31,11 @@ This example shows how to train and test two fusion models on simulated data.
 
     # from example_helpers import generate_all_random_simulated_data, generate_sklearn_simulated_data
     from docs.source.examples import generate_sklearn_simulated_data
-    from fusionlibrary.data import get_data_module
-    from fusionlibrary.train import train_and_save_models
-    from fusionlibrary.utils.model_chooser import get_models
-    from fusionlibrary.fusion_models.base_model import BaseModel
-    from fusionlibrary.eval import Plotter
+    from fusilli.data import get_data_module
+    from fusilli.train import train_and_save_models
+    from fusilli.utils.model_chooser import get_models
+    from fusilli.fusion_models.base_model import BaseModel
+    from fusilli.eval import Plotter
     import os
     import torch
     from tqdm.auto import tqdm

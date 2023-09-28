@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>data &mdash; fusionlibrary  documentation</title>
+  <title>data &mdash; fusilli  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/florencestheme.css" type="text/css" />
@@ -35,7 +35,7 @@
           
           
           <a href="../index.html" class="icon icon-home">
-            fusionlibrary
+            fusilli
               <img src="../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
@@ -60,14 +60,14 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.data.html">fusionlibrary.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.train.html">fusionlibrary.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.eval.Plotter.html">fusionlibrary.eval.Plotter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.training_utils.html">fusionlibrary.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.model_modifier.html">fusionlibrary.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusionlibrary.utils.check_model_validity.html">fusionlibrary.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
 </ul>
 
         </div>
@@ -76,7 +76,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">fusionlibrary</a>
+          <a href="../index.html">fusilli</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -109,10 +109,10 @@
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">KFold</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">Dataset</span>
 <span class="kn">from</span> <span class="nn">torch_geometric.data.lightning</span> <span class="kn">import</span> <span class="n">LightningNodeData</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.utils</span> <span class="kn">import</span> <span class="n">model_modifier</span>
+<span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">model_modifier</span>
 
 
-<span class="c1"># from fusionlibrary.eval import plot_graph</span>
+<span class="c1"># from fusilli.eval import plot_graph</span>
 
 
 <div class="viewcode-block" id="downsample_img_batch"><a class="viewcode-back" href="../source/data.html#data.downsample_img_batch">[docs]</a><span class="k">def</span> <span class="nf">downsample_img_batch</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">output_size</span><span class="p">):</span>
@@ -1294,6 +1294,7 @@
     <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">optional_suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gets the data module for the specified modality and fusion type.</span>
@@ -1310,6 +1311,8 @@
 <span class="sd">        List of image dimensions to downsample to (default None).</span>
 <span class="sd">    layer_mods : dict</span>
 <span class="sd">        Dictionary of layer modifications (default None).</span>
+<span class="sd">    optional_suffix : str</span>
+<span class="sd">        Optional suffix added to data source file names (default None).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1318,9 +1321,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">data_sources</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;tabular1_source&quot;</span><span class="p">],</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;tabular2_source&quot;</span><span class="p">],</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;img_source&quot;</span><span class="p">],</span>
+        <span class="n">params</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;tabular1_source</span><span class="si">{</span><span class="n">optional_suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span>
+        <span class="n">params</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;tabular2_source</span><span class="si">{</span><span class="n">optional_suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span>
+        <span class="n">params</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;img_source</span><span class="si">{</span><span class="n">optional_suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span>
     <span class="p">]</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fusion_model</span><span class="p">,</span> <span class="s2">&quot;subspace_method&quot;</span><span class="p">):</span>

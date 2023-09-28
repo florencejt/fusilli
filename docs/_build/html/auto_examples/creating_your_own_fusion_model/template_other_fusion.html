@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>General fusion template &mdash; fusionlibrary  documentation</title>
+  <title>General fusion template &mdash; fusilli  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/florencestheme.css" type="text/css" />
@@ -25,7 +25,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="fusionlibrary.fusion_models" href="../../autosummary/fusionlibrary.fusion_models.html" />
+    <link rel="next" title="fusilli.fusion_models" href="../../autosummary/fusilli.fusion_models.html" />
     <link rel="prev" title="Graph fusion template" href="template_graph_fusion.html" /> 
 </head>
 
@@ -38,7 +38,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            fusionlibrary
+            fusilli
               <img src="../../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
@@ -78,14 +78,14 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusionlibrary.fusion_models.html">fusionlibrary.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusionlibrary.data.html">fusionlibrary.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusionlibrary.train.html">fusionlibrary.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusionlibrary.eval.Plotter.html">fusionlibrary.eval.Plotter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusionlibrary.utils.model_chooser.html">fusionlibrary.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusionlibrary.utils.training_utils.html">fusionlibrary.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusionlibrary.utils.model_modifier.html">fusionlibrary.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusionlibrary.utils.check_model_validity.html">fusionlibrary.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
 </ul>
 
         </div>
@@ -94,7 +94,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">fusionlibrary</a>
+          <a href="../../index.html">fusilli</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -125,7 +125,7 @@ to download the full example code</p>
 If you want to implement a graph-based or subspace-based fusion model, please refer to the other templates. They require additional functions to be implemented.</p>
 <p>There are two ways to create your own fusion model:</p>
 <ol class="arabic simple">
-<li><p>You can use the preset layers in the <a class="reference internal" href="../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusionlibrary.fusion_models.base_model.ParentFusionModel" title="fusionlibrary.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a> class. This is the easiest way to create your own fusion model. You can see an example of this in the <a class="reference internal" href="../../autosummary/fusionlibrary.fusion_models.concat_tabular_data.html#fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData" title="fusionlibrary.fusion_models.concat_tabular_data.ConcatTabularData"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularData</span></code></a> class.</p></li>
+<li><p>You can use the preset layers in the <a class="reference internal" href="../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a> class. This is the easiest way to create your own fusion model. You can see an example of this in the <a class="reference internal" href="../../autosummary/fusilli.fusion_models.concat_tabular_data.html#fusilli.fusion_models.concat_tabular_data.ConcatTabularData" title="fusilli.fusion_models.concat_tabular_data.ConcatTabularData"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularData</span></code></a> class.</p></li>
 <li><p>You can create your own layers. This is the most flexible way to create your own fusion model.</p></li>
 </ol>
 <p>The most important thing to remember is to output the final prediction as a list. This is because in subspace methods, the output is the label output and a reconstruction. This project’s architecture is designed to be flexible enough to handle subspace methods too, hence the need for a list.</p>
@@ -134,7 +134,7 @@ If you want to implement a graph-based or subspace-based fusion model, please re
 <span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="c1"># importing the parent fusion model class</span>
-<span class="kn">from</span> <span class="nn">fusionlibrary.fusion_models.base_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
+<span class="kn">from</span> <span class="nn">fusilli.fusion_models.base_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
 
 
 <span class="k">class</span> <span class="nc">TemplateFusionModel</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -302,7 +302,7 @@ If you want to implement a graph-based or subspace-based fusion model, please re
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="template_graph_fusion.html" class="btn btn-neutral float-left" title="Graph fusion template" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../../autosummary/fusionlibrary.fusion_models.html" class="btn btn-neutral float-right" title="fusionlibrary.fusion_models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../../autosummary/fusilli.fusion_models.html" class="btn btn-neutral float-right" title="fusilli.fusion_models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
