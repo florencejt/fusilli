@@ -44,7 +44,6 @@ def downsample_img_batch(imgs, output_size):
     if output_size is None:  # if no downsampling
         return imgs
 
-
     # if number of output_size dims is equal to number of image dims - 3
     # (i.e. if output_size is (64) and image is (16, 3, 128, 128))
     # or output_size is (64, 64) and image is (16, 3, 128, 128, 128))
@@ -403,8 +402,8 @@ class CustomDataModule(pl.LightningDataModule):
         images.
     modality_methods : dict
         Dictionary of methods for loading the different modalities.
-    modality_type : str
-        Type of modality (tabular1, tabular2, img, both_tab, tab_img).
+    fusion_model : str
+        fusion model class. e.g. "TabularCrossmodalAttention".
     batch_size : int
         Batch size (default 8).
     test_size : float
@@ -434,13 +433,14 @@ class CustomDataModule(pl.LightningDataModule):
     def __init__(
         self,
         params,
-        modality_type,
+        fusion_model,
         sources,
         batch_size,
         subspace_method=None,
         image_downsample_size=None,
         layer_mods=None,
         max_epochs=1000,
+        extra_log_string_dict=None,
     ):
         """
         Parameters
@@ -448,8 +448,8 @@ class CustomDataModule(pl.LightningDataModule):
 
         params : dict
             Dictionary of parameters.
-        modality_type : str
-            Type of modality (tabular1, tabular2, img, both_tab, tab_img).
+        fusion_model : str
+            Fusion model class. e.g. "TabularCrossmodalAttention".
         sources : list
             List of source csv files.
         batch_size : int
@@ -470,14 +470,14 @@ class CustomDataModule(pl.LightningDataModule):
         Raises
         ------
         ValueError
-            If modality_type is not one of the following: tabular1, tabular2, img, both_tab,
+            If fusion_model.modality_type is not one of the following: tabular1, tabular2, img, both_tab,
             tab_img.
         """
         super().__init__()
 
         self.sources = sources
         self.image_downsample_size = image_downsample_size
-
+        self.extra_log_string_dict = extra_log_string_dict
         self.modality_methods = {
             "tabular1": LoadDatasets(
                 self.sources, self.image_downsample_size
@@ -493,8 +493,9 @@ class CustomDataModule(pl.LightningDataModule):
                 self.sources, self.image_downsample_size
             ).load_tab_and_img,
         }
-
-        self.modality_type = modality_type
+        self.params = params
+        self.fusion_model = fusion_model
+        self.modality_type = self.fusion_model.modality_type
         self.batch_size = batch_size
         self.test_size = params["test_size"]
         self.pred_type = params["pred_type"]
@@ -614,8 +615,8 @@ class KFoldDataModule(pl.LightningDataModule):
         images.
     modality_methods : dict
         Dictionary of methods for loading the different modalities.
-    modality_type : str
-        Type of modality (tabular1, tabular2, img, both_tab, tab_img).
+    fusion_model : class
+        Fusion model class. e.g. "TabularCrossmodalAttention".
     batch_size : int
         Batch size (default 8).
     test_size : float
@@ -644,13 +645,14 @@ class KFoldDataModule(pl.LightningDataModule):
     def __init__(
         self,
         params,
-        modality_type,
+        fusion_model,
         sources,
         batch_size,
         subspace_method=None,
         image_downsample_size=None,
         layer_mods=None,
         max_epochs=1000,
+        extra_log_string_dict=None,
     ):
         """
         Parameters
@@ -658,8 +660,8 @@ class KFoldDataModule(pl.LightningDataModule):
 
         params : dict
             Dictionary of parameters.
-        modality_type : str
-            Type of modality (tabular1, tabular2, img, both_tab, tab_img).
+        fusion_model : class
+            Fusion model class. e.g. "TabularCrossmodalAttention".
         sources : list
             List of source csv files.
         batch_size : int
@@ -677,7 +679,7 @@ class KFoldDataModule(pl.LightningDataModule):
         Raises
         ------
         ValueError
-            If modality_type is not one of the following: tabular1, tabular2, img, both_tab,
+            If fusion_model.modality_type is not one of the following: tabular1, tabular2, img, both_tab,
             tab_img.
 
         """
@@ -686,7 +688,7 @@ class KFoldDataModule(pl.LightningDataModule):
         self.num_folds = params["num_k"]  # total number of folds
         self.sources = sources
         self.image_downsample_size = image_downsample_size
-
+        self.extra_log_string_dict = extra_log_string_dict
         self.modality_methods = {
             "tabular1": LoadDatasets(
                 self.sources, self.image_downsample_size
@@ -702,8 +704,10 @@ class KFoldDataModule(pl.LightningDataModule):
                 self.sources, self.image_downsample_size
             ).load_tab_and_img,
         }
+        self.params = params
         self.pred_type = params["pred_type"]
-        self.modality_type = modality_type
+        self.fusion_model = fusion_model
+        self.modality_type = self.fusion_model.modality_type
         self.batch_size = batch_size
         self.subspace_method = (
             subspace_method  # subspace method class (only for subspace methods)
@@ -860,8 +864,8 @@ class GraphDataModule:
         images.
     modality_methods : dict
         Dictionary of methods for loading the different modalities.
-    modality_type : str
-        Type of modality (tabular1, tabular2, img, both_tab, tab_img).
+    fusion_model : class
+        Fusion model class. e.g. "TabularCrossmodalAttention".
     test_size : float
         Fraction of data to use for testing (default 0.2).
     graph_creation_method : class
@@ -889,11 +893,12 @@ class GraphDataModule:
     def __init__(
         self,
         params,
-        modality_type,
+        fusion_model,
         sources,
         graph_creation_method,
         image_downsample_size=None,
         layer_mods=None,
+        extra_log_string_dict=None,
     ):
         """
         Parameters
@@ -901,8 +906,8 @@ class GraphDataModule:
 
         params : dict
             Dictionary of parameters.
-        modality_type : str
-            Type of modality (tabular1, tabular2, img, both_tab, tab_img).
+        fusion_model : class
+            Fusion model class. e.g. "TabularCrossmodalAttention".
         sources : list
             List of source csv files.
         graph_creation_method : class
@@ -916,7 +921,7 @@ class GraphDataModule:
         Raises
         ------
         ValueError
-            If modality_type is not one of the following: tabular1, tabular2, img, both_tab,
+            If fusion_model.modality_type is not one of the following: tabular1, tabular2, img, both_tab,
             tab_img.
         """
 
@@ -924,7 +929,8 @@ class GraphDataModule:
 
         self.sources = sources
         self.image_downsample_size = image_downsample_size
-
+        self.params = params
+        self.extra_log_string_dict = extra_log_string_dict
         self.modality_methods = {
             "tabular1": LoadDatasets(
                 self.sources, self.image_downsample_size
@@ -940,7 +946,8 @@ class GraphDataModule:
                 self.sources, self.image_downsample_size
             ).load_tab_and_img,
         }
-        self.modality_type = modality_type
+        self.fusion_model = fusion_model
+        self.modality_type = self.fusion_model.modality_type
         self.test_size = params["test_size"]
         self.graph_creation_method = graph_creation_method
         self.layer_mods = layer_mods
@@ -1030,8 +1037,8 @@ class KFoldGraphDataModule:
         List of source csv files.
     modality_methods : dict
         Dictionary of methods for loading the different modalities.
-    modality_type : str
-        Type of modality (tabular1, tabular2, img, both_tab, tab_img).
+    fusion_model : class
+        Fusion model class. e.g. "TabularCrossmodalAttention".
     graph_creation_method : class
         Graph creation method class.
     layer_mods : dict
@@ -1047,19 +1054,20 @@ class KFoldGraphDataModule:
     def __init__(
         self,
         params,
-        modality_type,
+        fusion_model,
         sources,
         graph_creation_method,
         image_downsample_size=None,
         layer_mods=None,
+        extra_log_string_dict=None,
     ):
         """
         Parameters
         ----------
         params : dict
             Dictionary of parameters.
-        modality_type : str
-            Type of modality (tabular1, tabular2, img, both_tab, tab_img).
+        fusion_model : class
+            Fusion model class. e.g. "TabularCrossmodalAttention".
         sources : list
             List of source csv files.
         graph_creation_method : class
@@ -1074,13 +1082,15 @@ class KFoldGraphDataModule:
         Raises
         ------
         ValueError
-            If modality_type is not one of the following: tabular1, tabular2, img, both_tab,
+            If fusion_model.modality_type is not one of the following: tabular1, tabular2, img, both_tab,
             tab_img.
         """
         super().__init__()
         self.num_folds = params["num_k"]  # total number of folds
         self.image_downsample_size = image_downsample_size
         self.sources = sources
+        self.params = params
+        self.extra_log_string_dict = extra_log_string_dict
         self.modality_methods = {
             "tabular1": LoadDatasets(
                 self.sources, self.image_downsample_size
@@ -1096,7 +1106,8 @@ class KFoldGraphDataModule:
                 self.sources, self.image_downsample_size
             ).load_tab_and_img,
         }
-        self.modality_type = modality_type
+        self.fusion_model = fusion_model
+        self.modality_type = self.fusion_model.modality_type
         self.graph_creation_method = graph_creation_method
         self.layer_mods = layer_mods
 
@@ -1209,6 +1220,7 @@ def get_data_module(
     max_epochs=1000,
     optional_suffix="",
     checkpoint_path=None,
+    extra_log_string_dict=None,
 ):
     """
     Gets the data module for the specified modality and fusion type.
@@ -1227,6 +1239,15 @@ def get_data_module(
         Dictionary of layer modifications (default None).
     optional_suffix : str
         Optional suffix added to data source file names (default None).
+    checkpoint_path : str
+        Path to call checkpoint file (default None will result in the default lightning format).
+    extra_log_string_dict : dict
+        Dictionary of extra strings to add to a subspace method checkpoint file name (default None).
+        e.g. if you're running the same model with different hyperparameters, you can add the hyperparameters.
+        Input format {"name": "value"}. In the run name, the extra string will be added
+        as "name_value". And a tag will be added as "name_value".
+        Default None.
+
 
     Returns
     -------
@@ -1247,20 +1268,22 @@ def get_data_module(
         if params["kfold_flag"]:
             dmg = KFoldGraphDataModule(
                 params,
-                fusion_model.modality_type,
+                fusion_model,
                 sources=data_sources,
                 graph_creation_method=fusion_model.graph_maker,
                 image_downsample_size=image_downsample_size,
                 layer_mods=layer_mods,
+                extra_log_string_dict=extra_log_string_dict,
             )
         else:
             dmg = GraphDataModule(
                 params,
-                fusion_model.modality_type,
+                fusion_model,
                 sources=data_sources,
                 graph_creation_method=fusion_model.graph_maker,
                 image_downsample_size=image_downsample_size,
                 layer_mods=layer_mods,
+                extra_log_string_dict=extra_log_string_dict,
             )
 
         dmg.prepare_data()
@@ -1282,13 +1305,14 @@ def get_data_module(
 
         dm = datamodule_func(
             params,
-            fusion_model.modality_type,
+            fusion_model,
             sources=data_sources,
             subspace_method=fusion_model.subspace_method,
             batch_size=batch_size,
             image_downsample_size=image_downsample_size,
             layer_mods=layer_mods,
             max_epochs=max_epochs,
+            extra_log_string_dict=extra_log_string_dict,
         )
         dm.prepare_data()
         dm.setup(checkpoint_path=checkpoint_path)

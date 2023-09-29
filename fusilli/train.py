@@ -7,6 +7,7 @@ from fusilli.utils.training_utils import (
     get_final_val_metrics,
     init_trainer,
     set_logger,
+    set_checkpoint_name,
 )
 import wandb
 import warnings
@@ -73,7 +74,12 @@ def train_and_test(
         List of validation predicted values.
     """
 
+    # define checkpoint filename
     if params["kfold_flag"]:
+        checkpoint_filename = set_checkpoint_name(
+            params, fusion_model, fold=k, extra_log_string_dict=extra_log_string_dict
+        )
+
         if fusion_model.fusion_type == "graph":
             # graph k-fold loader is different to normal k-fold loader
             dm = dm[k]
@@ -84,13 +90,23 @@ def train_and_test(
             val_dataloader = dm.val_dataloader(fold_idx=k)
 
     else:
+        checkpoint_filename = set_checkpoint_name(
+            params=params,
+            fusion_model=fusion_model,
+            extra_log_string_dict=extra_log_string_dict,
+        )
+
         train_dataloader = dm.train_dataloader()
         val_dataloader = dm.val_dataloader()
 
     logger = set_logger(params, k, fusion_model, extra_log_string_dict)  # set logger
 
     trainer = init_trainer(
-        logger, max_epochs=max_epochs, enable_checkpointing=enable_checkpointing
+        logger,
+        params=params,
+        max_epochs=max_epochs,
+        enable_checkpointing=enable_checkpointing,
+        checkpoint_filename=checkpoint_filename,
     )  # init trainer
 
     # initialise model with pytorch lightning framework, hence pl_model

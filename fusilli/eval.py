@@ -1124,7 +1124,9 @@ class ParentPlotter:
         )
 
     @classmethod
-    def get_new_tt_data(self, model, params, data_file_suffix):
+    def get_new_tt_data(
+        self, model, params, data_file_suffix, checkpoint_file_suffix=None
+    ):
         """
         Get new data by running through trained model for a train/test model.
 
@@ -1146,13 +1148,34 @@ class ParentPlotter:
 
         model.eval()
 
-        if (
-            model.model.subspace_method is not None
-            or model.model.graph_maker is not None
-        ):
+        if model.model.graph_maker is not None:
             raise ValueError(
-                "Model has a subspace method or graph maker. This is not supported yet for creating graphs from new data."
+                "Model has a graph maker. This is not supported yet for creating graphs from new data."
             )
+
+        subspace_ckpts = [
+            params["checkpoint_dir"]
+            + "/"
+            + model.model.__class__.__name__
+            + "_"
+            + model.model.subspace_method.subspace_models[0].__name__
+            + checkpoint_file_suffix
+            + ".ckpt",
+            params["checkpoint_dir"]
+            + "/"
+            + model.model.__class__.__name__
+            + "_"
+            + model.model.subspace_method.subspace_models[1].__name__
+            + checkpoint_file_suffix
+            + ".ckpt",
+        ]
+
+        print("subspace checkpoint paths:", subspace_ckpts)
+
+        # TODO make this agnostic to how many subspace models there are
+        # TODO pass these checkpoint paths into get_data_module and alter get_data_module to take in a list of checkpoint paths and just get the latents when that happens
+        # TODO make this work for kfold too
+        exit()
 
         # get data module (potentially will need to be trained with a subspace method or graph-maker)
         dm = data.get_data_module(model.model, params, optional_suffix=data_file_suffix)
@@ -1242,7 +1265,9 @@ class RealsVsPreds(ParentPlotter):
         super().__init__()
 
     @classmethod
-    def from_new_data(self, model, params, data_file_suffix="_test"):
+    def from_new_data(
+        self, model, params, data_file_suffix="_test", checkpoint_file_suffix=None
+    ):
         """
 
         Parameters
@@ -1302,7 +1327,9 @@ class RealsVsPreds(ParentPlotter):
                 val_reals,
                 val_preds,
                 metric_values,
-            ) = self.get_new_tt_data(model, params, data_file_suffix)
+            ) = self.get_new_tt_data(
+                model, params, data_file_suffix, checkpoint_file_suffix
+            )
 
             # plot the figure
             figure = self.reals_vs_preds_tt(
@@ -1558,8 +1585,8 @@ class ConfusionMatrix(ParentPlotter):
         # run X, y through the models and get the predictions
         # calculate metricS
 
-        if isinstance(model, list):  # kfold model
-            if not model[0].model.params["kfold_flag"]:
+        if len(model) > 1:  # kfold model
+            if not model[0][0].model.params["kfold_flag"]:
                 raise ValueError(
                     (
                         "Argument 'model' is a list but kfold_flag is False. "
@@ -1586,7 +1613,7 @@ class ConfusionMatrix(ParentPlotter):
                 overall_kfold_metrics,
             )
 
-        elif isinstance(model, nn.Module):  # train/test model
+        elif len(model) == 1:  # train/test model
             (
                 train_reals,
                 train_preds,
@@ -1615,8 +1642,8 @@ class ConfusionMatrix(ParentPlotter):
         # get the predictions from the models (already saved in the model)
         # get the metrics from the models (already saved in the model)
 
-        if isinstance(model, list):  # kfold model
-            if not model[0].model.params["kfold_flag"]:
+        if len(model) > 1:  # kfold model
+            if not model[0][0].model.params["kfold_flag"]:
                 raise ValueError(
                     (
                         "Argument 'model' is a list but kfold_flag is False. "
@@ -1645,7 +1672,7 @@ class ConfusionMatrix(ParentPlotter):
                 overall_kfold_metrics,
             )
 
-        elif isinstance(model, nn.Module):  # train/test model
+        elif len(model) == 1:  # train/test model
             self.model = model
 
             (
@@ -1654,7 +1681,7 @@ class ConfusionMatrix(ParentPlotter):
                 val_reals,
                 val_preds,
                 metric_values,
-            ) = self.get_tt_data_from_model()
+            ) = self.get_tt_data_from_model(model)
 
             figure = self.confusion_matrix_tt(val_reals, val_preds, metric_values)
 
@@ -1697,7 +1724,7 @@ class ConfusionMatrix(ParentPlotter):
         metric1_name = list(metric_values.keys())[0]
 
         plt.title(
-            f"{self.model.model.method_name} - Validation {metric1_name}: {float(metric_values[metric1_name]):.3f}"
+            f"{self.model[0][0].model.method_name} - Validation {metric1_name}: {float(metric_values[metric1_name]):.3f}"
         )
 
         plt.tight_layout()
@@ -1715,7 +1742,7 @@ class ConfusionMatrix(ParentPlotter):
     ):
         first_fold_model = model_list[0]
         metric_names = list(metrics_per_fold.keys())
-        N = first_fold_model.model.params["num_k"]
+        N = first_fold_model[0].model.params["num_k"]
 
         cols = 3
         rows = int(math.ceil(N / cols))
@@ -1794,13 +1821,15 @@ class ConfusionMatrix(ParentPlotter):
 
         ax0.set_title(
             (
-                f"{first_fold_model.model.method_name}: {metric_names[0]}"
+                f"{first_fold_model[0].model.method_name}: {metric_names[0]}"
                 f"={float(overall_kfold_metrics[metric_names[0]]):.3f}"
             )
         )
 
         # Set the overall title for the entire figure
-        fig.suptitle(f"{first_fold_model.model.__class__.__name__}: confusion matrix")
+        fig.suptitle(
+            f"{first_fold_model[0].model.__class__.__name__}: confusion matrix"
+        )
 
         return fig
 
