@@ -1098,6 +1098,7 @@ class GraphDataModule:
             input_pred_nodes=self.test_idxs,
             loader="full",
         )
+
         return lightning_module
 
 
@@ -1129,6 +1130,7 @@ class KFoldGraphDataModule:
         List of data dimensions [mod1_dim, mod2_dim, img_dim]
     folds : list
         List of tuples of (graph_data, train_idxs, test_idxs)
+
     """
 
     def __init__(
@@ -1157,6 +1159,8 @@ class KFoldGraphDataModule:
             images. None if not downsampling. (default None)
         layer_mods : dict
             Dictionary of layer modifications to make to the graph maker method.
+        extra_log_string_dict : dict
+            Dictionary of extra strings to add to the log.
 
 
         Raises
@@ -1376,8 +1380,10 @@ def get_data_module(
         if params["kfold_flag"]:
             for dm_instance in dm:
                 dm_instance.data_dims = dmg.data_dims
+                dm_instance.own_early_stopping_callback = own_early_stopping_callback
         else:
             dm.data_dims = dmg.data_dims
+            dm.own_early_stopping_callback = own_early_stopping_callback
 
     else:
         # another other than graph fusion

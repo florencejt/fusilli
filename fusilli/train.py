@@ -24,7 +24,6 @@ def train_and_test(
     layer_mods=None,
     max_epochs=1000,
     enable_checkpointing=True,
-    # own_early_stopping_callback=None,
 ):
     """
     Trains and tests a model and, if k_fold trained, a fold.
@@ -58,9 +57,6 @@ def train_and_test(
         Maximum number of epochs. Default 1000.
     enable_checkpointing : bool
         Whether to enable checkpointing. Default True.
-    own_early_stopping_callback : pytorch lightning callback
-        Early stopping callback object. Default None. If None, the default early stopping
-        will be used.
 
     Returns
     -------
@@ -199,7 +195,6 @@ def train_and_save_models(
     layer_mods=None,
     max_epochs=1000,
     enable_checkpointing=True,
-    # own_early_stopping_callback=None,
 ):
     """
     Trains/tests the model and saves the trained model to a dictionary for further analysis.
@@ -254,16 +249,12 @@ def train_and_save_models(
                 layer_mods=layer_mods,
                 max_epochs=max_epochs,
                 enable_checkpointing=enable_checkpointing,
-                # own_early_stopping_callback=dm.own_early_stopping_callback,
             )
-
-            # print("Trainer", trained_model.trainer)
 
             trained_models_dict = store_trained_model(
                 trained_model,
                 trained_models_dict,
             )
-            # print(trained_model.trainer.checkpoint_callback.best_model_path)
 
             if params["log"]:
                 wandb.finish()
@@ -278,7 +269,6 @@ def train_and_save_models(
             layer_mods=layer_mods,
             max_epochs=max_epochs,
             enable_checkpointing=enable_checkpointing,
-            # own_early_stopping_callback=own_early_stopping_callback,
         )
 
         trained_models_dict = store_trained_model(

@@ -253,8 +253,8 @@ def init_trainer(
     Returns:
         trainer (object): Pytorch lightning trainer object.
     """
+
     if own_early_stopping_callback is not None:
-        print("Using own early stopping callback.", own_early_stopping_callback)
         early_stop_callback = own_early_stopping_callback
     else:
         early_stop_callback = EarlyStopping(
@@ -276,19 +276,25 @@ def init_trainer(
         )
         callbacks_list.append(checkpoint_callback)
 
+    # check if accelerator and devices are in params given by user
+    accelerator = "cpu"  # default
+    devices = 1  # default
+    if "accelerator" in params.keys():
+        accelerator = params["accelerator"]
+    if "devices" in params.keys():
+        devices = params["devices"]
+
     trainer = Trainer(
         max_epochs=max_epochs,
         num_sanity_val_steps=0,
-        # accelerator="mps",
-        devices=1,
+        accelerator=accelerator,
+        devices=devices,
         callbacks=callbacks_list,
         log_every_n_steps=2,
         # default_root_dir=run_dir,
         logger=logger,
         enable_checkpointing=enable_checkpointing,
     )
-
-    print("Trainer early stopping", trainer.callbacks[0].patience)
 
     return trainer
 
