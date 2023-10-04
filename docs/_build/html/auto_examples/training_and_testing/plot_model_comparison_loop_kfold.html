@@ -81,7 +81,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
@@ -168,6 +167,12 @@ to download the full example code</p>
 <span class="kn">from</span> <span class="nn">fusilli.utils.model_chooser</span> <span class="kn">import</span> <span class="n">get_models</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/training_and_testing/plot_model_comparison_loop_kfold.py&quot;</span>, line <span class="m">55</span>, in <span class="n">&lt;module&gt;</span>
+    <span class="kn">from</span> <span class="nn">fusilli.eval</span> <span class="kn">import</span> <span class="n">Plotter</span>
+<span class="gr">ImportError</span>: <span class="n">cannot import name &#39;Plotter&#39; from &#39;fusilli.eval&#39; (/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/eval.py)</span>
+</pre></div>
+</div>
 <section id="import-fusion-models">
 <h2>1. Import fusion models<a class="headerlink" href="#import-fusion-models" title="Permalink to this heading"></a></h2>
 <p>Here we import the fusion models to be compared. The models are imported using the
@@ -191,14 +196,6 @@ model’s parent class. The paths are used to import the models with the <code c
     <span class="n">module_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;class_name&quot;</span><span class="p">])</span>
 
     <span class="n">fusion_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">module_class</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Imported methods:
-[&#39;Tabular1 uni-modal&#39; &#39;Tabular2 uni-modal&#39;
- &#39;Concatenating tabular feature maps&#39; &#39;Concatenating tabular data&#39;
- &#39;Channel-wise multiplication net (tabular)&#39;
- &#39;Tabular Crossmodal multi-head attention&#39; &#39;Tabular decision&#39;
- &#39;MCVAE Tabular&#39; &#39;Edge Correlation GNN&#39;]
 </pre></div>
 </div>
 </section>
@@ -255,21 +252,13 @@ We store the results of each model for later analysis.</p>
     <span class="n">single_model_dicts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">single_model_dict</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/training_and_testing/plot_model_comparison_loop_kfold.py&quot;</span>, line <span class="m">134</span>, in <span class="n">&lt;module&gt;</span>
-    <span class="n">single_model_dict</span> <span class="o">=</span> <span class="n">train_and_save_models</span><span class="p">(</span>
-  File <span class="nb">&quot;/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/train.py&quot;</span>, line <span class="m">226</span>, in <span class="n">train_and_save_models</span>
-    <span class="n">trained_model</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">checkpoint_callback</span><span class="o">.</span><span class="n">best_model_path</span><span class="p">,</span>
-<span class="gr">AttributeError</span>: <span class="n">&#39;NoneType&#39; object has no attribute &#39;best_model_path&#39;</span>
-</pre></div>
-</div>
 </section>
 <section id="plotting-the-results-of-the-individual-models">
 <h2>5. Plotting the results of the individual models<a class="headerlink" href="#plotting-the-results-of-the-individual-models" title="Permalink to this heading"></a></h2>
 <p>In this section, we visualize the results of each individual model.</p>
 <p>If you want to save the figures rather than show them, you can use the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Plotter()</span></code> class.
 This will save the figures in a timestamped folder in the current working directory with the method name and plot type in the filename.
-You can add an extra suffix to the filename by passing a string to the <code class="docutils literal notranslate"><span class="pre">extra_string</span></code> argument of the <a class="reference internal" href="../../autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.save_to_local" title="fusilli.eval.Plotter.save_to_local"><code class="xref py py-meth docutils literal notranslate"><span class="pre">save_to_local()</span></code></a> method.</p>
+You can add an extra suffix to the filename by passing a string to the <code class="docutils literal notranslate"><span class="pre">extra_string</span></code> argument of the <code class="xref py py-meth docutils literal notranslate"><span class="pre">save_to_local()</span></code> method.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">model_dict</span> <span class="ow">in</span> <span class="n">single_model_dicts</span><span class="p">:</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="n">model_dict</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
     <span class="n">single_model_figures_dict</span> <span class="o">=</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_all</span><span class="p">()</span>
@@ -293,7 +282,7 @@ You can add an extra suffix to the filename by passing a string to the <code cla
 <span class="n">performances_df</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.069 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.001 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-training-and-testing-plot-model-comparison-loop-kfold-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/f79519df1d510a92c31e8566c5838670/plot_model_comparison_loop_kfold.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_model_comparison_loop_kfold.py</span></code></a></p>

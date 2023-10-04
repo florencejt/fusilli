@@ -63,7 +63,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
@@ -108,7 +107,7 @@
 <span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 
 
-<div class="viewcode-block" id="BaseModel"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.BaseModel">[docs]</a><span class="k">class</span> <span class="nc">BaseModel</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseModel"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.BaseModel">[docs]</a><span class="k">class</span> <span class="nc">BaseModel</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Base pytorch lightning model for all fusion models.</span>
 
 <span class="sd">    This class takes the specific fusion model as an input and provides the training and validation</span>
@@ -162,7 +161,7 @@
 <span class="sd">        Concatenated training preds for all batches. Accessed by Plotter class for plotting.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="BaseModel.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.BaseModel.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseModel.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.BaseModel.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -252,7 +251,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_train_preds</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_train_logits</span> <span class="o">=</span> <span class="p">[]</span></div>
 
-<div class="viewcode-block" id="BaseModel.safe_squeeze"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.BaseModel.safe_squeeze">[docs]</a>    <span class="k">def</span> <span class="nf">safe_squeeze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensor</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseModel.safe_squeeze"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.BaseModel.safe_squeeze">[docs]</a>    <span class="k">def</span> <span class="nf">safe_squeeze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensor</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Squeeze tensor if it is not 1D.</span>
 
@@ -273,7 +272,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">tensor</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseModel.get_data_from_batch"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.BaseModel.get_data_from_batch">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_from_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseModel.get_data_from_batch"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.BaseModel.get_data_from_batch">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_from_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get data from batch.</span>
 
@@ -308,7 +307,7 @@
 
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></div>
 
-<div class="viewcode-block" id="BaseModel.get_model_outputs"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.BaseModel.get_model_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">get_model_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseModel.get_model_outputs"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.BaseModel.get_model_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">get_model_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get model outputs.</span>
 
@@ -335,7 +334,7 @@
 
         <span class="k">return</span> <span class="n">logits</span><span class="p">,</span> <span class="n">reconstructions</span></div>
 
-<div class="viewcode-block" id="BaseModel.get_model_outputs_and_loss"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.BaseModel.get_model_outputs_and_loss">[docs]</a>    <span class="k">def</span> <span class="nf">get_model_outputs_and_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseModel.get_model_outputs_and_loss"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.BaseModel.get_model_outputs_and_loss">[docs]</a>    <span class="k">def</span> <span class="nf">get_model_outputs_and_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get model outputs and loss.</span>
 
@@ -380,7 +379,7 @@
 
         <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">end_output</span><span class="p">,</span> <span class="n">logits</span></div>
 
-<div class="viewcode-block" id="BaseModel.training_step"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.BaseModel.training_step">[docs]</a>    <span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseModel.training_step"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.BaseModel.training_step">[docs]</a>    <span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Training step.</span>
 
@@ -444,7 +443,7 @@
 
         <span class="k">return</span> <span class="n">loss</span></div>
 
-<div class="viewcode-block" id="BaseModel.validation_step"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.BaseModel.validation_step">[docs]</a>    <span class="k">def</span> <span class="nf">validation_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseModel.validation_step"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.BaseModel.validation_step">[docs]</a>    <span class="k">def</span> <span class="nf">validation_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Validation step.</span>
 
@@ -479,7 +478,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_val_preds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">safe_squeeze</span><span class="p">(</span><span class="n">end_output</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_val_logits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">safe_squeeze</span><span class="p">(</span><span class="n">logits</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="BaseModel.validation_epoch_end"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.BaseModel.validation_epoch_end">[docs]</a>    <span class="k">def</span> <span class="nf">validation_epoch_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseModel.validation_epoch_end"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.BaseModel.validation_epoch_end">[docs]</a>    <span class="k">def</span> <span class="nf">validation_epoch_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the final validation epoch outputs and metrics.</span>
 <span class="sd">        When metrics are calculated at the validation step and logged on on_epoch=True,</span>
@@ -523,7 +522,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_train_preds</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_train_logits</span> <span class="o">=</span> <span class="p">[]</span></div>
 
-<div class="viewcode-block" id="BaseModel.predict_step"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.BaseModel.predict_step">[docs]</a>    <span class="k">def</span> <span class="nf">predict_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dataloader_idx</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseModel.predict_step"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.BaseModel.predict_step">[docs]</a>    <span class="k">def</span> <span class="nf">predict_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dataloader_idx</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data_from_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -535,7 +534,7 @@
 
         <span class="k">return</span> <span class="n">end_output</span><span class="p">,</span> <span class="n">logits</span></div>
 
-<div class="viewcode-block" id="BaseModel.configure_optimizers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.BaseModel.configure_optimizers">[docs]</a>    <span class="k">def</span> <span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseModel.configure_optimizers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.BaseModel.configure_optimizers">[docs]</a>    <span class="k">def</span> <span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Configure optimizers.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -543,7 +542,7 @@
         <span class="k">return</span> <span class="n">optimizer</span></div></div>
 
 
-<div class="viewcode-block" id="ParentFusionModel"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.ParentFusionModel">[docs]</a><span class="k">class</span> <span class="nc">ParentFusionModel</span><span class="p">:</span>
+<div class="viewcode-block" id="ParentFusionModel"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel">[docs]</a><span class="k">class</span> <span class="nc">ParentFusionModel</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parent class for all fusion models.</span>
 
@@ -576,7 +575,7 @@
 <span class="sd">        Fused layers.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ParentFusionModel.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.ParentFusionModel.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="ParentFusionModel.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -596,7 +595,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">==</span> <span class="s2">&quot;multiclass&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dim</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;multiclass_dims&quot;</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="ParentFusionModel.set_final_pred_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.ParentFusionModel.set_final_pred_layers">[docs]</a>    <span class="k">def</span> <span class="nf">set_final_pred_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">):</span>
+<div class="viewcode-block" id="ParentFusionModel.set_final_pred_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel.set_final_pred_layers">[docs]</a>    <span class="k">def</span> <span class="nf">set_final_pred_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets final prediction layers.</span>
 
@@ -621,7 +620,7 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">==</span> <span class="s2">&quot;regression&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">final_prediction</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="ParentFusionModel.set_mod1_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.ParentFusionModel.set_mod1_layers">[docs]</a>    <span class="k">def</span> <span class="nf">set_mod1_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ParentFusionModel.set_mod1_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel.set_mod1_layers">[docs]</a>    <span class="k">def</span> <span class="nf">set_mod1_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets layers for modality 1</span>
 
@@ -658,7 +657,7 @@
             <span class="p">}</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="ParentFusionModel.set_mod2_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.ParentFusionModel.set_mod2_layers">[docs]</a>    <span class="k">def</span> <span class="nf">set_mod2_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ParentFusionModel.set_mod2_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel.set_mod2_layers">[docs]</a>    <span class="k">def</span> <span class="nf">set_mod2_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets layers for modality 2</span>
 
@@ -695,7 +694,7 @@
             <span class="p">}</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="ParentFusionModel.set_img_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.ParentFusionModel.set_img_layers">[docs]</a>    <span class="k">def</span> <span class="nf">set_img_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ParentFusionModel.set_img_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel.set_img_layers">[docs]</a>    <span class="k">def</span> <span class="nf">set_img_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets layers for image modality. If using 2D images, then the layers will use Conv2D layers.</span>
 <span class="sd">        If using 3D images, then the layers will use Conv3D layers.</span>
@@ -774,7 +773,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Image dimensionality not supported&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ParentFusionModel.set_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.base_pl_model.html#fusilli.fusion_models.base_model.ParentFusionModel.set_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fused_dim</span><span class="p">):</span>
+<div class="viewcode-block" id="ParentFusionModel.set_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel.set_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fused_dim</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set layers for fused modality</span>
 

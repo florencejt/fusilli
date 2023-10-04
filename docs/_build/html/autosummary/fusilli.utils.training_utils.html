@@ -66,15 +66,18 @@
 <li class="toctree-l1"><a class="reference internal" href="fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">fusilli.utils.training_utils</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.LitProgressBar"><code class="docutils literal notranslate"><span class="pre">LitProgressBar</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.utils.training_utils.LitProgressBar.init_validation_tqdm"><code class="docutils literal notranslate"><span class="pre">LitProgressBar.init_validation_tqdm()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model"><code class="docutils literal notranslate"><span class="pre">get_checkpoint_filename_for_trained_fusion_model()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models"><code class="docutils literal notranslate"><span class="pre">get_checkpoint_filenames_for_subspace_models()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.get_file_suffix_from_dict"><code class="docutils literal notranslate"><span class="pre">get_file_suffix_from_dict()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.get_final_val_metrics"><code class="docutils literal notranslate"><span class="pre">get_final_val_metrics()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.init_trainer"><code class="docutils literal notranslate"><span class="pre">init_trainer()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.set_checkpoint_name"><code class="docutils literal notranslate"><span class="pre">set_checkpoint_name()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.set_logger"><code class="docutils literal notranslate"><span class="pre">set_logger()</span></code></a></li>
 </ul>
 </li>
@@ -112,11 +115,23 @@
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.get_final_val_metrics" title="fusilli.utils.training_utils.get_final_val_metrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_final_val_metrics</span></code></a>(trainer)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model" title="fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_checkpoint_filename_for_trained_fusion_model</span></code></a>(...)</p></td>
+<td><p>Get the checkpoint filename for the trained fusion model using the model object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models" title="fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_checkpoint_filenames_for_subspace_models</span></code></a>(...)</p></td>
+<td><p>Get the checkpoint filenames for the subspace models.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.get_file_suffix_from_dict" title="fusilli.utils.training_utils.get_file_suffix_from_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_file_suffix_from_dict</span></code></a>(extra_log_string_dict)</p></td>
+<td><p>Get the extra name string and tags from the extra_log_string_dict.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.get_final_val_metrics" title="fusilli.utils.training_utils.get_final_val_metrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_final_val_metrics</span></code></a>(trainer)</p></td>
 <td><p>Get the final validation metrics from the trainer object.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.init_trainer" title="fusilli.utils.training_utils.init_trainer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_trainer</span></code></a>(logger[, max_epochs, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.init_trainer" title="fusilli.utils.training_utils.init_trainer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_trainer</span></code></a>(logger, params[, max_epochs, ...])</p></td>
 <td><p>Initialize the pytorch lightning trainer object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.set_checkpoint_name" title="fusilli.utils.training_utils.set_checkpoint_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_checkpoint_name</span></code></a>(params, fusion_model[, ...])</p></td>
+<td><p>Set the checkpoint name for the current run of the main fusion model.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.set_logger" title="fusilli.utils.training_utils.set_logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_logger</span></code></a>(params, fold, fusion_model[, ...])</p></td>
 <td><p>Set the logger for the current run.</p></td>
@@ -144,6 +159,69 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model">
+<span class="sig-name descname"><span class="pre">get_checkpoint_filename_for_trained_fusion_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_file_suffix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#get_checkpoint_filename_for_trained_fusion_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model" title="Permalink to this definition"></a></dt>
+<dd><p>Get the checkpoint filename for the trained fusion model using the model object.
+Checkpoints should follow the naming convention:
+fusion_model_name_fold_k_{checkpoint_file_suffix} if fold is not None
+fusion_model_name_{checkpoint_file_suffix} if fold is None</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
+<li><p><strong>model</strong> (<em>object</em>) – BaseModel model object.</p></li>
+<li><p><strong>checkpoint_file_suffix</strong> (<em>str</em>) – Checkpoint file suffix.</p></li>
+<li><p><strong>fold</strong> (<em>int</em>) – Fold number. Default None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Checkpoint filename.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>checkpoint_filename (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models">
+<span class="sig-name descname"><span class="pre">get_checkpoint_filenames_for_subspace_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#get_checkpoint_filenames_for_subspace_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models" title="Permalink to this definition"></a></dt>
+<dd><p>Get the checkpoint filenames for the subspace models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>subspace_method</strong> (<em>class</em>) – Subspace method class. Called from the subspace method class with self.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of checkpoint filenames. One for each subspace model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>checkpoint_filenames (list)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fusilli.utils.training_utils.get_file_suffix_from_dict">
+<span class="sig-name descname"><span class="pre">get_file_suffix_from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#get_file_suffix_from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.get_file_suffix_from_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Get the extra name string and tags from the extra_log_string_dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – Extra string to add to the run name. e.g. if you’re running
+the same model with different hyperparameters, you can add the hyperparameters.
+Input format {“name”: “value”}. In the run name, the extra string will be added
+as “name_value”. And a tag will be added as “name_value”.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Extra name string to add to the some path name.
+extra_tags (list): List of extra tags to add to the logged run (wandb).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>extra_name_string (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fusilli.utils.training_utils.get_final_val_metrics">
 <span class="sig-name descname"><span class="pre">get_final_val_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#get_final_val_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.get_final_val_metrics" title="Permalink to this definition"></a></dt>
 <dd><p>Get the final validation metrics from the trainer object.</p>
@@ -166,12 +244,13 @@ metric2 (float): Final validation metric 2.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fusilli.utils.training_utils.init_trainer">
-<span class="sig-name descname"><span class="pre">init_trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_checkpointing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#init_trainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.init_trainer" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">init_trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_checkpointing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#init_trainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.init_trainer" title="Permalink to this definition"></a></dt>
 <dd><p>Initialize the pytorch lightning trainer object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>logger</strong> (<em>object</em>) – Pytorch lightning logger object.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
 <li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs.</p></li>
 <li><p><strong>enable_checkpointing</strong> (<em>bool</em>) – Whether to enable checkpointing. If True, then
 checkpoints will be saved. We use False for the example notebooks in the
@@ -183,6 +262,32 @@ repository/documentation.</p></li>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>trainer (object)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fusilli.utils.training_utils.set_checkpoint_name">
+<span class="sig-name descname"><span class="pre">set_checkpoint_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#set_checkpoint_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.set_checkpoint_name" title="Permalink to this definition"></a></dt>
+<dd><p>Set the checkpoint name for the current run of the main fusion model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
+<li><p><strong>fusion_model</strong> (<em>class</em>) – Fusion model class.</p></li>
+<li><p><strong>fold</strong> (<em>int</em>) – Fold number. Default None.</p></li>
+<li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – Extra string to add to the run name. e.g. if you’re running
+the same model with different hyperparameters, you can add the hyperparameters.
+Input format {“name”: “value”}. In the run name, the extra string will be added
+as “name_value”. And a tag will be added as “name_value”.
+Default None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Checkpoint filename.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>checkpoint_filename (str)</p>
 </dd>
 </dl>
 </dd></dl>

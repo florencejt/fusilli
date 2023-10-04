@@ -82,7 +82,14 @@ Now, let's walk through each of these steps in code and detail. Let's get starte
 
 
 
+.. rst-class:: sphx-glr-script-out
 
+.. code-block:: pytb
+
+    Traceback (most recent call last):
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/training_and_testing/plot_model_comparison_loop_kfold.py", line 55, in <module>
+        from fusilli.eval import Plotter
+    ImportError: cannot import name 'Plotter' from 'fusilli.eval' (/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/eval.py)
 
 
 
@@ -123,23 +130,6 @@ We're importing all the fusion models that use only tabular data for this exampl
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    Imported methods:
-    ['Tabular1 uni-modal' 'Tabular2 uni-modal'
-     'Concatenating tabular feature maps' 'Concatenating tabular data'
-     'Channel-wise multiplication net (tabular)'
-     'Tabular Crossmodal multi-head attention' 'Tabular decision'
-     'MCVAE Tabular' 'Edge Correlation GNN']
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 90-93
 
 2. Set the training parameters
@@ -162,12 +152,6 @@ In this section, we set the training parameters for our models. These parameters
 
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 105-109
 
 3. Generating simulated data
@@ -187,12 +171,6 @@ This function also simulated image data which we aren't using here.
         img_dims=(1, 100, 100),
         params=params,
     )
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 119-123
@@ -227,21 +205,6 @@ We store the results of each model for later analysis.
         # Save to all_trained_models
         all_trained_models[fusion_model.__name__] = single_model_dict[fusion_model.__name__]
         single_model_dicts.append(single_model_dict)
-
-
-
-.. rst-class:: sphx-glr-script-out
-
-.. code-block:: pytb
-
-    Traceback (most recent call last):
-      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/training_and_testing/plot_model_comparison_loop_kfold.py", line 134, in <module>
-        single_model_dict = train_and_save_models(
-      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/train.py", line 226, in train_and_save_models
-        trained_model.trainer.checkpoint_callback.best_model_path,
-    AttributeError: 'NoneType' object has no attribute 'best_model_path'
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 146-153
@@ -299,7 +262,7 @@ In this section, we compare the performance of all the trained models using a vi
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 4.069 seconds)
+   **Total running time of the script:** (0 minutes 0.001 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_and_testing_plot_model_comparison_loop_kfold.py:

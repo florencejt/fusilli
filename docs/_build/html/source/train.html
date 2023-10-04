@@ -64,7 +64,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
@@ -100,10 +99,24 @@
 <p>Contains the train_and_test function: trains and tests a model and, if k_fold trained, a fold.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="train.store_trained_model">
-<span class="sig-name descname"><span class="pre">store_trained_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_checkpoint_pth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trained_models_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/train.html#store_trained_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#train.store_trained_model" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">store_trained_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trained_models_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/train.html#store_trained_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#train.store_trained_model" title="Permalink to this definition"></a></dt>
 <dd><p>Stores the trained model to a dictionary.
 If model type is already in dictionary (e.g. if it’s a kfold model), append the model to
 the list of models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trained_model</strong> (<em>pytorch lightning model</em>) – Trained model.</p></li>
+<li><p><strong>trained_models_dict</strong> (<em>dict</em>) – Dictionary of trained models.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>trained_models_dict</strong> – Dictionary of trained models.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

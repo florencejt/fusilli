@@ -64,7 +64,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
@@ -138,6 +137,75 @@ Change this to whatever suffix you have chosen for your new data files.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="eval.ModelComparison">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ModelComparison</span></span><a class="reference internal" href="../_modules/eval.html#ModelComparison"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ModelComparison" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eval.ParentPlotter" title="eval.ParentPlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentPlotter</span></code></a></p>
+<p>Plotting class for comparing models.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ModelComparison.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ModelComparison.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ModelComparison.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ModelComparison.from_final_val_data">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_final_val_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kfold_flag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ModelComparison.from_final_val_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ModelComparison.from_final_val_data" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_list</strong> (<em>dict</em>) – Dictionary of models. Keys are the model names and values are [[model, ckpt_path]*num_k]</p></li>
+<li><p><strong>kfold_flag</strong> (<em>bool</em>) – Whether the models are kfold models or not.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ModelComparison.from_new_data">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_new_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ModelComparison.from_new_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ModelComparison.from_new_data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ModelComparison.get_performance_dataframe">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_performance_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comparing_models_metrics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overall_kfold_metrics_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kfold_flag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ModelComparison.get_performance_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ModelComparison.get_performance_dataframe" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ModelComparison.kfold_comparison_plot">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kfold_comparison_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comparing_models_metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ModelComparison.kfold_comparison_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ModelComparison.kfold_comparison_plot" title="Permalink to this definition"></a></dt>
+<dd><p>Plotting function for comparing models on kfold metrics. Produces a violin plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>comparing_models_metrics</strong> (<em>dict</em>) – Dictionary of metrics. Keys are the model names and values are dict {metric1name: metric_value, metric2name: metric_value}</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fig</strong> – Figure containing the violin plots.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eval.ModelComparison.train_test_comparison_plot">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">train_test_comparison_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comparing_models_metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ModelComparison.train_test_comparison_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ModelComparison.train_test_comparison_plot" title="Permalink to this definition"></a></dt>
+<dd><p>Plotting function for comparing models on train and test metrics. Produces a horizontal bar chart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>comparing_models_metrics</strong> (<em>dict</em>) – Dictionary of metrics. Keys are the model names and values are dict {metric1name: metric_value, metric2name: metric_value}</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fig</strong> – Figure containing the horizontal bar chart.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="eval.ParentPlotter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ParentPlotter</span></span><a class="reference internal" href="../_modules/eval.html#ParentPlotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ParentPlotter" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -154,20 +222,24 @@ Change this to whatever suffix you have chosen for your new data files.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="eval.ParentPlotter.get_new_kfold_data">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_new_kfold_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_file_suffix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ParentPlotter.get_new_kfold_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ParentPlotter.get_new_kfold_data" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_new_kfold_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_file_suffix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_file_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ParentPlotter.get_new_kfold_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ParentPlotter.get_new_kfold_data" title="Permalink to this definition"></a></dt>
 <dd><p>Putting new data into each k-fold trained model: we don’t need to split the new data into folds.
 We just need to get the predictions for each fold and plot them.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="eval.ParentPlotter.get_new_tt_data">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_new_tt_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_file_suffix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ParentPlotter.get_new_tt_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ParentPlotter.get_new_tt_data" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_new_tt_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_file_suffix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_file_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#ParentPlotter.get_new_tt_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.ParentPlotter.get_new_tt_data" title="Permalink to this definition"></a></dt>
 <dd><p>Get new data by running through trained model for a train/test model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<em>nn.Module</em>) – The trained model.</p></li>
 <li><p><strong>sources</strong> (<em>list</em>) – List of sources to get data from. [tabular1source csv, tabular2source csv, image csv]</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Additional parameters.</p></li>
+<li><p><strong>data_file_suffix</strong> (<em>str</em>) – Suffix that is on the new data csv and pt files. e.g. “_new_data” or “_test”</p></li>
+<li><p><strong>checkpoint_file_suffix</strong> (<em>str</em><em>, </em><em>optional</em>) – Suffix that is on the trained model checkpoint files. e.g. “_firsttry”. Added by the user.
+Default is None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -200,216 +272,22 @@ We just need to get the predictions for each fold and plot them.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="eval.Plotter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Plotter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_model_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Class for plotting the results of the models.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="eval.Plotter.trained_model_dict">
-<span class="sig-name descname"><span class="pre">trained_model_dict</span></span><a class="headerlink" href="#eval.Plotter.trained_model_dict" title="Permalink to this definition"></a></dt>
-<dd><p>Dictionary of trained models.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="eval.Plotter.model_names">
-<span class="sig-name descname"><span class="pre">model_names</span></span><a class="headerlink" href="#eval.Plotter.model_names" title="Permalink to this definition"></a></dt>
-<dd><p>List of model names.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="eval.Plotter.params">
-<span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#eval.Plotter.params" title="Permalink to this definition"></a></dt>
-<dd><p>Dictionary of parameters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="eval.Plotter.pred_type">
-<span class="sig-name descname"><span class="pre">pred_type</span></span><a class="headerlink" href="#eval.Plotter.pred_type" title="Permalink to this definition"></a></dt>
-<dd><p>Prediction type.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="eval.Plotter.metric1name">
-<span class="sig-name descname"><span class="pre">metric1name</span></span><a class="headerlink" href="#eval.Plotter.metric1name" title="Permalink to this definition"></a></dt>
-<dd><p>Name of metric 1.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="eval.Plotter.metric1func">
-<span class="sig-name descname"><span class="pre">metric1func</span></span><a class="headerlink" href="#eval.Plotter.metric1func" title="Permalink to this definition"></a></dt>
-<dd><p>Function for calculating metric 1.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="eval.Plotter.metric2name">
-<span class="sig-name descname"><span class="pre">metric2name</span></span><a class="headerlink" href="#eval.Plotter.metric2name" title="Permalink to this definition"></a></dt>
-<dd><p>Name of metric 2.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="eval.Plotter.metric2func">
-<span class="sig-name descname"><span class="pre">metric2func</span></span><a class="headerlink" href="#eval.Plotter.metric2func" title="Permalink to this definition"></a></dt>
-<dd><p>Function for calculating metric 2.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eval.Plotter.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_model_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter.__init__" title="Permalink to this definition"></a></dt>
-<dd><p>Initialize the Plotter instance.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>trained_model_dict</strong> (<em>dict</em>) – Dictionary of trained models.</p></li>
-<li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eval.Plotter.compare_bar_chart">
-<span class="sig-name descname"><span class="pre">compare_bar_chart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter.compare_bar_chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter.compare_bar_chart" title="Permalink to this definition"></a></dt>
-<dd><p>Plots a bar chart comparing the results of multiple train/test models.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eval.Plotter.compare_violin_plot">
-<span class="sig-name descname"><span class="pre">compare_violin_plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter.compare_violin_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter.compare_violin_plot" title="Permalink to this definition"></a></dt>
-<dd><p>Plots a violin plot comparing the results of multiple kfold models.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eval.Plotter.confusion_matrix_plotter">
-<span class="sig-name descname"><span class="pre">confusion_matrix_plotter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter.confusion_matrix_plotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter.confusion_matrix_plotter" title="Permalink to this definition"></a></dt>
-<dd><p>Plots the confusion matrix of a train/test model.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eval.Plotter.confusion_matrix_plotter_kfold">
-<span class="sig-name descname"><span class="pre">confusion_matrix_plotter_kfold</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter.confusion_matrix_plotter_kfold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter.confusion_matrix_plotter_kfold" title="Permalink to this definition"></a></dt>
-<dd><p>Plots the confusion matrix of a kfold model.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eval.Plotter.get_kfold_numbers">
-<span class="sig-name descname"><span class="pre">get_kfold_numbers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter.get_kfold_numbers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter.get_kfold_numbers" title="Permalink to this definition"></a></dt>
-<dd><p>Gets the lists of train_reals, train_preds, val_reals, val_preds for all folds and saves to self.
-Gets the altogether list of val_reals and val_preds over folds and saves to self.
-Gets metrics to put in the plot titles, adds to metrics list.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eval.Plotter.get_performance_df">
-<span class="sig-name descname"><span class="pre">get_performance_df</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter.get_performance_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter.get_performance_df" title="Permalink to this definition"></a></dt>
-<dd><p>Saves the performance metrics to a CSV file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>DataFrame containing the performance metrics.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>pandas.DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eval.Plotter.get_train_test_numbers">
-<span class="sig-name descname"><span class="pre">get_train_test_numbers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter.get_train_test_numbers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter.get_train_test_numbers" title="Permalink to this definition"></a></dt>
-<dd><p>Gets the lists of train_reals, train_preds, val_reals, val_preds and saves to self.
-Gets metrics to put in the plot titles, adds to metrics list.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eval.Plotter.plot_all">
-<span class="sig-name descname"><span class="pre">plot_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter.plot_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter.plot_all" title="Permalink to this definition"></a></dt>
-<dd><p>Plots all the results.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eval.Plotter.reals_vs_preds">
-<span class="sig-name descname"><span class="pre">reals_vs_preds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter.reals_vs_preds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter.reals_vs_preds" title="Permalink to this definition"></a></dt>
-<dd><p>Plots the real values against the predicted values for the training and validation sets.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eval.Plotter.reals_vs_preds_kfold">
-<span class="sig-name descname"><span class="pre">reals_vs_preds_kfold</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter.reals_vs_preds_kfold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter.reals_vs_preds_kfold" title="Permalink to this definition"></a></dt>
-<dd><p>Plots the real values against the predicted values for the training and validation sets.
-For kfold models.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eval.Plotter.save_to_local">
-<span class="sig-name descname"><span class="pre">save_to_local</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plots_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_string</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter.save_to_local"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter.save_to_local" title="Permalink to this definition"></a></dt>
-<dd><p>Save dictionary of plots to local directory.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eval.Plotter.show_all">
-<span class="sig-name descname"><span class="pre">show_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plots_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#Plotter.show_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.Plotter.show_all" title="Permalink to this definition"></a></dt>
-<dd><p>Show all plots in dictionary.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="eval.RealsVsPreds">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RealsVsPreds</span></span><a class="reference internal" href="../_modules/eval.html#RealsVsPreds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.RealsVsPreds" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#eval.ParentPlotter" title="eval.ParentPlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentPlotter</span></code></a></p>
-<p>which_data: should be from_new_data or from_final_val_data
-model: fusion_model or list of models (for kfold)
-X: if from_new_data, then X is the new data
-y: if from_new_data, then y is the new data labels</p>
+<p>Plots the real values vs the predicted values for a model.
+Pink dots are the training data, green dots are the validation data. The validation data is
+either new data if using from_new_data or the original validation data if using from_final_val_data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>which_data</strong> (<em>str</em>) – Either “from_new_data” or “from_final_val_data”.</p></li>
+<li><p><strong>model</strong> (<em>nn.Module</em>) – The trained model.</p></li>
+<li><p><strong>X</strong> (<em>torch.Tensor</em>) – The data to plot.</p></li>
+<li><p><strong>y</strong> (<em>torch.Tensor</em>) – The labels for the data.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="eval.RealsVsPreds.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#RealsVsPreds.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.RealsVsPreds.__init__" title="Permalink to this definition"></a></dt>
@@ -422,7 +300,7 @@ y: if from_new_data, then y is the new data labels</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="eval.RealsVsPreds.from_new_data">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_new_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_file_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_test'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#RealsVsPreds.from_new_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.RealsVsPreds.from_new_data" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_new_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_file_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_test'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_file_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/eval.html#RealsVsPreds.from_new_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#eval.RealsVsPreds.from_new_data" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data_file_suffix</strong> (<em>str</em>) – Suffix for the data file e.g. _test means that the source files are

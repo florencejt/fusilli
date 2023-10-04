@@ -63,7 +63,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
@@ -99,7 +98,9 @@
 <span class="sd">Base lightning module for all fusion models and parent class for all fusion models.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
 <span class="kn">import</span> <span class="nn">pytorch_lightning</span> <span class="k">as</span> <span class="nn">pl</span>
+<span class="kn">from</span> <span class="nn">pytorch_lightning.utilities.types</span> <span class="kn">import</span> <span class="n">EVAL_DATALOADERS</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torchmetrics</span> <span class="k">as</span> <span class="nn">tm</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
@@ -520,6 +521,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_train_reals</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_train_preds</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_train_logits</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="BaseModel.predict_step"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.base_model.BaseModel.predict_step">[docs]</a>    <span class="k">def</span> <span class="nf">predict_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dataloader_idx</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data_from_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">loss</span><span class="p">,</span> <span class="n">end_output</span><span class="p">,</span> <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_outputs_and_loss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">end_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">safe_squeeze</span><span class="p">(</span><span class="n">end_output</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">safe_squeeze</span><span class="p">(</span><span class="n">logits</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">end_output</span><span class="p">,</span> <span class="n">logits</span></div>
 
 <div class="viewcode-block" id="BaseModel.configure_optimizers"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.base_model.BaseModel.configure_optimizers">[docs]</a>    <span class="k">def</span> <span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

@@ -24,6 +24,7 @@ def train_and_test(
     layer_mods=None,
     max_epochs=1000,
     enable_checkpointing=True,
+    # own_early_stopping_callback=None,
 ):
     """
     Trains and tests a model and, if k_fold trained, a fold.
@@ -57,6 +58,9 @@ def train_and_test(
         Maximum number of epochs. Default 1000.
     enable_checkpointing : bool
         Whether to enable checkpointing. Default True.
+    own_early_stopping_callback : pytorch lightning callback
+        Early stopping callback object. Default None. If None, the default early stopping
+        will be used.
 
     Returns
     -------
@@ -107,6 +111,7 @@ def train_and_test(
         max_epochs=max_epochs,
         enable_checkpointing=enable_checkpointing,
         checkpoint_filename=checkpoint_filename,
+        own_early_stopping_callback=dm.own_early_stopping_callback,
     )  # init trainer
 
     # initialise model with pytorch lightning framework, hence pl_model
@@ -149,33 +154,39 @@ def train_and_test(
     return pl_model
 
 
-def store_trained_model(trained_model, best_checkpoint_pth, trained_models_dict):
+def store_trained_model(trained_model, trained_models_dict):
     """
     Stores the trained model to a dictionary.
     If model type is already in dictionary (e.g. if it's a kfold model), append the model to
     the list of models.
+
+    Parameters
+    ----------
+    trained_model : pytorch lightning model
+        Trained model.
+    trained_models_dict : dict
+        Dictionary of trained models.
+
+    Returns
+    -------
+    trained_models_dict : dict
+        Dictionary of trained models.
     """
 
     classname = trained_model.model.__class__.__name__
 
-    # print(trained_models_dict)
-    # key 1: trained_model, values: list of trained models
-    # key 2: checkpoint_path, value: list of best checkpoint path
-    # key 3: subspace_model, value: list of trained subspace models
-    # key 4: subspace_checkpoint_path, value: list of best checkpoint path for subspace model
-
     if classname in trained_models_dict:
         # If the model is already in the dictionary, convert the existing value to a list
         if isinstance(trained_models_dict[classname], list):
-            trained_models_dict[classname].append([trained_model, best_checkpoint_pth])
+            trained_models_dict[classname].append(trained_model)
         else:
             trained_models_dict[classname] = [
                 trained_models_dict[classname],
-                [trained_model, best_checkpoint_pth],
+                trained_model,
             ]
     else:
         # If the model is not in the dictionary, add it as a new key-value pair
-        trained_models_dict[classname] = [[trained_model, best_checkpoint_pth]]
+        trained_models_dict[classname] = [trained_model]
 
     return trained_models_dict
 
@@ -188,6 +199,7 @@ def train_and_save_models(
     layer_mods=None,
     max_epochs=1000,
     enable_checkpointing=True,
+    # own_early_stopping_callback=None,
 ):
     """
     Trains/tests the model and saves the trained model to a dictionary for further analysis.
@@ -217,6 +229,9 @@ def train_and_save_models(
         Maximum number of epochs. Default 1000.
     enable_checkpointing : bool
         Whether to enable checkpointing. Default True.
+    own_early_stopping_callback : pytorch lightning callback
+        Early stopping callback object. Default None. If None, the default early stopping
+        will be used.
 
     Returns
     -------
@@ -239,13 +254,13 @@ def train_and_save_models(
                 layer_mods=layer_mods,
                 max_epochs=max_epochs,
                 enable_checkpointing=enable_checkpointing,
+                # own_early_stopping_callback=dm.own_early_stopping_callback,
             )
 
             # print("Trainer", trained_model.trainer)
 
             trained_models_dict = store_trained_model(
                 trained_model,
-                trained_model.trainer.checkpoint_callback.best_model_path,
                 trained_models_dict,
             )
             # print(trained_model.trainer.checkpoint_callback.best_model_path)
@@ -263,15 +278,11 @@ def train_and_save_models(
             layer_mods=layer_mods,
             max_epochs=max_epochs,
             enable_checkpointing=enable_checkpointing,
+            # own_early_stopping_callback=own_early_stopping_callback,
         )
 
-        # print(
-        #     "Trained model:",
-        #     trained_model.state_dict()["model.final_prediction.0.weight"],
-        # )
         trained_models_dict = store_trained_model(
             trained_model,
-            trained_model.trainer.checkpoint_callback.best_model_path,
             trained_models_dict,
         )
 

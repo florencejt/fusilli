@@ -64,7 +64,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
@@ -606,7 +605,7 @@ Epoch 2: 100%|██████████| 63/63 [00:00&lt;00:00, 663.45it/s,
 </section>
 <section id="plotting-the-results-of-the-first-model">
 <h2>5. Plotting the results of the first model<a class="headerlink" href="#plotting-the-results-of-the-first-model" title="Permalink to this heading"></a></h2>
-<p>We’re using the <a class="reference internal" href="../autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter" title="fusilli.eval.Plotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Plotter</span></code></a> class to plot the results of the first model. This class takes the dictionary of trained models and the parameters as inputs. It returns a dictionary of figures.
+<p>We’re using the <code class="xref py py-class docutils literal notranslate"><span class="pre">Plotter</span></code> class to plot the results of the first model. This class takes the dictionary of trained models and the parameters as inputs. It returns a dictionary of figures.
 If there is one model in the dictionary (i.e. only one unique key), then it plots the figures for analysing the results of a single model.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plotter</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="n">single_model_dict</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 <span class="n">single_model_figures_dict</span> <span class="o">=</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_all</span><span class="p">()</span>
@@ -1042,7 +1041,7 @@ compare_tt_models
 </section>
 <section id="saving-the-metrics-of-the-two-models">
 <h2>9. Saving the metrics of the two models<a class="headerlink" href="#saving-the-metrics-of-the-two-models" title="Permalink to this heading"></a></h2>
-<p>We can also get the metrics of the two models into a Pandas DataFrame using the <a class="reference internal" href="../autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.get_performance_df" title="fusilli.eval.Plotter.get_performance_df"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_performance_df()</span></code></a> function.</p>
+<p>We can also get the metrics of the two models into a Pandas DataFrame using the <code class="xref py py-func docutils literal notranslate"><span class="pre">get_performance_df()</span></code> function.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">performances_df</span> <span class="o">=</span> <span class="n">comparison_plotter</span><span class="o">.</span><span class="n">get_performance_df</span><span class="p">()</span>
 <span class="n">performances_df</span>
 </pre></div>

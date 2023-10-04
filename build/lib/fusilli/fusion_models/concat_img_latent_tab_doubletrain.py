@@ -16,7 +16,10 @@ from torch.utils.data import DataLoader, Dataset
 
 from fusilli.fusion_models.base_model import ParentFusionModel
 from fusilli.utils import check_model_validity
-from fusilli.utils.training_utils import init_trainer
+from fusilli.utils.training_utils import (
+    get_checkpoint_filenames_for_subspace_models,
+    init_trainer,
+)
 
 
 class ImgLatentSpace(pl.LightningModule):
@@ -285,7 +288,9 @@ class concat_img_latent_tab_subspace_method:
         Autoencoder to train the latent image space.
     """
 
-    def __init__(self, datamodule, max_epochs=1000):
+    subspace_models = [ImgLatentSpace]
+
+    def __init__(self, datamodule, k=None, max_epochs=1000, checkpoint_path=None):
         """
         Parameters
         ----------
@@ -293,10 +298,28 @@ class concat_img_latent_tab_subspace_method:
             Data module containing the data.
         max_epochs : int
             Maximum number of epochs to train the latent image space.
+        checkpoint_path : list
+            List containing the path to the checkpoint of the latent image space.
         """
         self.datamodule = datamodule
-        self.trainer = init_trainer(None, max_epochs=max_epochs)
-        self.autoencoder = ImgLatentSpace(self.datamodule.data_dims)
+
+        checkpoint_filenames = get_checkpoint_filenames_for_subspace_models(self, k)
+
+        if checkpoint_path is not None:
+            self.autoencoder = self.subspace_models[0].load_from_checkpoint(
+                checkpoint_path[0],
+                data_dims=self.datamodule.data_dims,
+            )
+
+        else:
+            self.trainer = init_trainer(
+                None,
+                params=self.datamodule.params,
+                max_epochs=max_epochs,
+                checkpoint_filename=checkpoint_filenames[0],
+            )
+
+            self.autoencoder = ImgLatentSpace(self.datamodule.data_dims)
 
     def train(self, train_dataset, val_dataset):
         """

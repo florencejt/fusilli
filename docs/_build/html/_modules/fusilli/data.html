@@ -63,7 +63,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
@@ -115,7 +114,7 @@
 <span class="c1"># from fusilli.eval import plot_graph</span>
 
 
-<div class="viewcode-block" id="downsample_img_batch"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.downsample_img_batch">[docs]</a><span class="k">def</span> <span class="nf">downsample_img_batch</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">output_size</span><span class="p">):</span>
+<div class="viewcode-block" id="downsample_img_batch"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.downsample_img_batch">[docs]</a><span class="k">def</span> <span class="nf">downsample_img_batch</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">output_size</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Downsamples a batch of images to a specified size.</span>
 
@@ -186,7 +185,7 @@
     <span class="k">return</span> <span class="n">downsampled_img</span></div>
 
 
-<div class="viewcode-block" id="CustomDataset"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.CustomDataset">[docs]</a><span class="k">class</span> <span class="nc">CustomDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+<div class="viewcode-block" id="CustomDataset"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataset">[docs]</a><span class="k">class</span> <span class="nc">CustomDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom dataset class for multimodal data.</span>
 
@@ -207,7 +206,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="CustomDataset.__init__"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.CustomDataset.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_features</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+<div class="viewcode-block" id="CustomDataset.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataset.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_features</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -250,7 +249,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">float</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CustomDataset.__len__"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.CustomDataset.__len__">[docs]</a>    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CustomDataset.__len__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataset.__len__">[docs]</a>    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the length of the dataset.</span>
 
@@ -264,7 +263,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="CustomDataset.__getitem__"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.CustomDataset.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<div class="viewcode-block" id="CustomDataset.__getitem__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataset.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the item at the specified index.</span>
 
@@ -279,7 +278,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span></div></div>
 
 
-<div class="viewcode-block" id="LoadDatasets"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.LoadDatasets">[docs]</a><span class="k">class</span> <span class="nc">LoadDatasets</span><span class="p">:</span>
+<div class="viewcode-block" id="LoadDatasets"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets">[docs]</a><span class="k">class</span> <span class="nc">LoadDatasets</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class for loading the different datasets for the different modalities.</span>
 
@@ -308,7 +307,7 @@
 <span class="sd">        Loads the tabular1 and image multimodal dataset.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="LoadDatasets.__init__"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.LoadDatasets.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span> <span class="n">img_downsample_dims</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="LoadDatasets.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span> <span class="n">img_downsample_dims</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -344,7 +343,7 @@
         <span class="k">if</span> <span class="s2">&quot;pred_label&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tab2_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The CSV must have a label column named &#39;pred_label&#39;.&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LoadDatasets.load_tabular1"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.LoadDatasets.load_tabular1">[docs]</a>    <span class="k">def</span> <span class="nf">load_tabular1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LoadDatasets.load_tabular1"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.load_tabular1">[docs]</a>    <span class="k">def</span> <span class="nf">load_tabular1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the tabular1-only dataset</span>
 
@@ -370,7 +369,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="n">mod1_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="LoadDatasets.load_tabular2"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.LoadDatasets.load_tabular2">[docs]</a>    <span class="k">def</span> <span class="nf">load_tabular2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LoadDatasets.load_tabular2"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.load_tabular2">[docs]</a>    <span class="k">def</span> <span class="nf">load_tabular2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the tabular2-only dataset</span>
 
@@ -395,7 +394,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">mod2_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="LoadDatasets.load_img"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.LoadDatasets.load_img">[docs]</a>    <span class="k">def</span> <span class="nf">load_img</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LoadDatasets.load_img"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.load_img">[docs]</a>    <span class="k">def</span> <span class="nf">load_img</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the image-only dataset</span>
 
@@ -424,7 +423,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">img_dim</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="LoadDatasets.load_both_tabular"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.LoadDatasets.load_both_tabular">[docs]</a>    <span class="k">def</span> <span class="nf">load_both_tabular</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LoadDatasets.load_both_tabular"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.load_both_tabular">[docs]</a>    <span class="k">def</span> <span class="nf">load_both_tabular</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the tabular1 and tabular2 multimodal dataset</span>
 
@@ -456,7 +455,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="n">mod1_dim</span><span class="p">,</span> <span class="n">mod2_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="LoadDatasets.load_tab_and_img"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.LoadDatasets.load_tab_and_img">[docs]</a>    <span class="k">def</span> <span class="nf">load_tab_and_img</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LoadDatasets.load_tab_and_img"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.load_tab_and_img">[docs]</a>    <span class="k">def</span> <span class="nf">load_tab_and_img</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the tabular1 and image multimodal dataset.</span>
 
@@ -486,7 +485,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="n">mod1_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">img_dim</span><span class="p">]</span></div></div>
 
 
-<div class="viewcode-block" id="CustomDataModule"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.CustomDataModule">[docs]</a><span class="k">class</span> <span class="nc">CustomDataModule</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningDataModule</span><span class="p">):</span>
+<div class="viewcode-block" id="CustomDataModule"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataModule">[docs]</a><span class="k">class</span> <span class="nc">CustomDataModule</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningDataModule</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom pytorch lightning datamodule class for the different modalities.</span>
 
@@ -499,8 +498,8 @@
 <span class="sd">        images.</span>
 <span class="sd">    modality_methods : dict</span>
 <span class="sd">        Dictionary of methods for loading the different modalities.</span>
-<span class="sd">    modality_type : str</span>
-<span class="sd">        Type of modality (tabular1, tabular2, img, both_tab, tab_img).</span>
+<span class="sd">    fusion_model : str</span>
+<span class="sd">        fusion model class. e.g. &quot;TabularCrossmodalAttention&quot;.</span>
 <span class="sd">    batch_size : int</span>
 <span class="sd">        Batch size (default 8).</span>
 <span class="sd">    test_size : float</span>
@@ -527,16 +526,17 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="CustomDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.CustomDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="CustomDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">params</span><span class="p">,</span>
-        <span class="n">modality_type</span><span class="p">,</span>
+        <span class="n">fusion_model</span><span class="p">,</span>
         <span class="n">sources</span><span class="p">,</span>
         <span class="n">batch_size</span><span class="p">,</span>
         <span class="n">subspace_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -544,8 +544,8 @@
 
 <span class="sd">        params : dict</span>
 <span class="sd">            Dictionary of parameters.</span>
-<span class="sd">        modality_type : str</span>
-<span class="sd">            Type of modality (tabular1, tabular2, img, both_tab, tab_img).</span>
+<span class="sd">        fusion_model : str</span>
+<span class="sd">            Fusion model class. e.g. &quot;TabularCrossmodalAttention&quot;.</span>
 <span class="sd">        sources : list</span>
 <span class="sd">            List of source csv files.</span>
 <span class="sd">        batch_size : int</span>
@@ -566,14 +566,14 @@
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
-<span class="sd">            If modality_type is not one of the following: tabular1, tabular2, img, both_tab,</span>
+<span class="sd">            If fusion_model.modality_type is not one of the following: tabular1, tabular2, img, both_tab,</span>
 <span class="sd">            tab_img.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span> <span class="o">=</span> <span class="n">image_downsample_size</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">extra_log_string_dict</span> <span class="o">=</span> <span class="n">extra_log_string_dict</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;tabular1&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span>
@@ -589,8 +589,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span>
             <span class="p">)</span><span class="o">.</span><span class="n">load_tab_and_img</span><span class="p">,</span>
         <span class="p">}</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span> <span class="o">=</span> <span class="n">modality_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fusion_model</span> <span class="o">=</span> <span class="n">fusion_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion_model</span><span class="o">.</span><span class="n">modality_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;test_size&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;pred_type&quot;</span><span class="p">]</span>
@@ -602,7 +603,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="o">=</span> <span class="n">layer_mods</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span> <span class="o">=</span> <span class="n">max_epochs</span></div>
 
-<div class="viewcode-block" id="CustomDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.CustomDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CustomDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the data with LoadDatasets class</span>
 
@@ -619,8 +620,9 @@
         <span class="c1"># TODO add in some evaluation figures of the subspace methods</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span><span class="p">]()</span></div>
 
-<div class="viewcode-block" id="CustomDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.CustomDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span>
+<div class="viewcode-block" id="CustomDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
+        <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Splits the data into train and test sets, and runs the subspace method if specified</span>
@@ -637,29 +639,57 @@
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if subspace method is specified</span>
-            <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="c1"># if subspace method in layer_mods</span>
-                <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">model_modifier</span><span class="o">.</span><span class="n">modify_model_architecture</span><span class="p">(</span>
-                    <span class="n">subspace_method</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span><span class="p">,</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="c1"># if subspace method in layer_mods</span>
+                    <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">model_modifier</span><span class="o">.</span><span class="n">modify_model_architecture</span><span class="p">(</span>
+                        <span class="n">subspace_method</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                <span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">train_dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span>
                 <span class="p">)</span>
 
-            <span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">train_dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span>
-            <span class="p">)</span>
-            <span class="n">test_latents</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">,</span> <span class="n">data_dims</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">convert_to_latent</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span>
-            <span class="p">)</span>
+                <span class="p">(</span>
+                    <span class="n">test_latents</span><span class="p">,</span>
+                    <span class="n">test_labels</span><span class="p">,</span>
+                    <span class="n">data_dims</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">convert_to_latent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span><span class="p">)</span>
 
-            <span class="c1"># make a new CustomDataset with the latent features</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">train_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">test_latents</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">train_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">test_latents</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span></div>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># we have the checkpoint paths for the subspace models</span>
 
-<div class="viewcode-block" id="CustomDataModule.train_dataloader"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.CustomDataModule.train_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">train_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">,</span>
+                    <span class="n">max_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">,</span>
+                    <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">checkpoint_path</span><span class="o">=</span><span class="n">checkpoint_path</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="p">(</span>
+                    <span class="n">train_latents</span><span class="p">,</span>
+                    <span class="n">train_labels</span><span class="p">,</span>
+                    <span class="n">data_dims</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">convert_to_latent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_dataset</span><span class="p">)</span>
+
+                <span class="p">(</span>
+                    <span class="n">test_latents</span><span class="p">,</span>
+                    <span class="n">test_labels</span><span class="p">,</span>
+                    <span class="n">data_dims</span><span class="p">,</span>
+                <span class="p">)</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">convert_to_latent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">train_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">test_latents</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span></div>
+
+<div class="viewcode-block" id="CustomDataModule.train_dataloader"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataModule.train_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">train_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the dataloader for training.</span>
 
@@ -672,7 +702,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="CustomDataModule.val_dataloader"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.CustomDataModule.val_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">val_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CustomDataModule.val_dataloader"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataModule.val_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">val_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the dataloader for validation.</span>
 
@@ -686,7 +716,7 @@
         <span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="KFoldDataModule"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.KFoldDataModule">[docs]</a><span class="k">class</span> <span class="nc">KFoldDataModule</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningDataModule</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldDataModule"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule">[docs]</a><span class="k">class</span> <span class="nc">KFoldDataModule</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningDataModule</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom pytorch lightning datamodule class for the different modalities with k-fold cross</span>
 <span class="sd">    validation</span>
@@ -702,8 +732,8 @@
 <span class="sd">        images.</span>
 <span class="sd">    modality_methods : dict</span>
 <span class="sd">        Dictionary of methods for loading the different modalities.</span>
-<span class="sd">    modality_type : str</span>
-<span class="sd">        Type of modality (tabular1, tabular2, img, both_tab, tab_img).</span>
+<span class="sd">    fusion_model : class</span>
+<span class="sd">        Fusion model class. e.g. &quot;TabularCrossmodalAttention&quot;.</span>
 <span class="sd">    batch_size : int</span>
 <span class="sd">        Batch size (default 8).</span>
 <span class="sd">    test_size : float</span>
@@ -729,16 +759,17 @@
 <span class="sd">        Tensor of predictive features for testing.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="KFoldDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.KFoldDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="KFoldDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">params</span><span class="p">,</span>
-        <span class="n">modality_type</span><span class="p">,</span>
+        <span class="n">fusion_model</span><span class="p">,</span>
         <span class="n">sources</span><span class="p">,</span>
         <span class="n">batch_size</span><span class="p">,</span>
         <span class="n">subspace_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -746,8 +777,8 @@
 
 <span class="sd">        params : dict</span>
 <span class="sd">            Dictionary of parameters.</span>
-<span class="sd">        modality_type : str</span>
-<span class="sd">            Type of modality (tabular1, tabular2, img, both_tab, tab_img).</span>
+<span class="sd">        fusion_model : class</span>
+<span class="sd">            Fusion model class. e.g. &quot;TabularCrossmodalAttention&quot;.</span>
 <span class="sd">        sources : list</span>
 <span class="sd">            List of source csv files.</span>
 <span class="sd">        batch_size : int</span>
@@ -765,7 +796,7 @@
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
-<span class="sd">            If modality_type is not one of the following: tabular1, tabular2, img, both_tab,</span>
+<span class="sd">            If fusion_model.modality_type is not one of the following: tabular1, tabular2, img, both_tab,</span>
 <span class="sd">            tab_img.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -774,7 +805,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_folds</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;num_k&quot;</span><span class="p">]</span>  <span class="c1"># total number of folds</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span> <span class="o">=</span> <span class="n">image_downsample_size</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">extra_log_string_dict</span> <span class="o">=</span> <span class="n">extra_log_string_dict</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;tabular1&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span>
@@ -790,8 +821,10 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span>
             <span class="p">)</span><span class="o">.</span><span class="n">load_tab_and_img</span><span class="p">,</span>
         <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;pred_type&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span> <span class="o">=</span> <span class="n">modality_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fusion_model</span> <span class="o">=</span> <span class="n">fusion_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion_model</span><span class="o">.</span><span class="n">modality_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">subspace_method</span>  <span class="c1"># subspace method class (only for subspace methods)</span>
@@ -803,7 +836,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="o">=</span> <span class="n">layer_mods</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span> <span class="o">=</span> <span class="n">max_epochs</span></div>
 
-<div class="viewcode-block" id="KFoldDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.KFoldDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the data with LoadDatasets class</span>
 
@@ -819,7 +852,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span><span class="p">]()</span></div>
 
-<div class="viewcode-block" id="KFoldDataModule.kfold_split"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.KFoldDataModule.kfold_split">[docs]</a>    <span class="k">def</span> <span class="nf">kfold_split</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldDataModule.kfold_split"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.kfold_split">[docs]</a>    <span class="k">def</span> <span class="nf">kfold_split</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Splits the dataset into k folds</span>
 
@@ -843,8 +876,9 @@
 
         <span class="k">return</span> <span class="n">folds</span>  <span class="c1"># list of tuples of (train_dataset, test_dataset)</span></div>
 
-<div class="viewcode-block" id="KFoldDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.KFoldDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span>
+<div class="viewcode-block" id="KFoldDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
+        <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Splits the data into train and test sets, and runs the subspace method if specified</span>
@@ -860,39 +894,78 @@
 
         <span class="c1"># if subspace method is specified, run the subspace method on each fold</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">new_folds</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">fold</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">folds</span><span class="p">:</span>
-                <span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">fold</span>
-                <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">)</span>
-
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="c1"># if subspace method in layer_mods</span>
-                    <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">model_modifier</span><span class="o">.</span><span class="n">modify_model_architecture</span><span class="p">(</span>
-                        <span class="n">subspace_method</span><span class="p">,</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span><span class="p">,</span>
+            <span class="k">if</span> <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">new_folds</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">fold</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folds</span><span class="p">):</span>
+                    <span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">fold</span>
+                    <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span>
                     <span class="p">)</span>
 
-                <span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
-                    <span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="c1"># if subspace method in layer_mods</span>
+                        <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">model_modifier</span><span class="o">.</span><span class="n">modify_model_architecture</span><span class="p">(</span>
+                            <span class="n">subspace_method</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span><span class="p">,</span>
+                        <span class="p">)</span>
+
+                    <span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+                        <span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span>
+                    <span class="p">)</span>
+                    <span class="p">(</span>
+                        <span class="n">test_latents</span><span class="p">,</span>
+                        <span class="n">test_labels</span><span class="p">,</span>
+                        <span class="n">data_dims</span><span class="p">,</span>
+                    <span class="p">)</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">convert_to_latent</span><span class="p">(</span><span class="n">test_dataset</span><span class="p">)</span>
+
+                    <span class="c1"># make a new CustomDataset with the latent features</span>
+                    <span class="n">train_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">)</span>
+                    <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">test_latents</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span>
+
+                    <span class="n">new_folds</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">))</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">folds</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">new_folds</span>  <span class="c1"># update the folds with the new train and test datasets</span>
                 <span class="p">)</span>
-                <span class="p">(</span>
-                    <span class="n">test_latents</span><span class="p">,</span>
-                    <span class="n">test_labels</span><span class="p">,</span>
-                    <span class="n">data_dims</span><span class="p">,</span>
-                <span class="p">)</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">convert_to_latent</span><span class="p">(</span><span class="n">test_dataset</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span>  <span class="c1"># update the data dimensions</span>
 
-                <span class="c1"># make a new CustomDataset with the latent features</span>
-                <span class="n">train_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">)</span>
-                <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">test_latents</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_folds</span> <span class="o">=</span> <span class="p">[]</span>
 
-                <span class="n">new_folds</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">fold</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folds</span><span class="p">):</span>
+                    <span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">fold</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">folds</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">new_folds</span>  <span class="c1"># update the folds with the new train and test datasets</span>
-            <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span>  <span class="c1"># update the data dimensions</span></div>
+                    <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="p">,</span>
+                        <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+                        <span class="n">max_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">,</span>
+                        <span class="n">checkpoint_path</span><span class="o">=</span><span class="n">checkpoint_path</span><span class="p">,</span>
+                    <span class="p">)</span>
 
-<div class="viewcode-block" id="KFoldDataModule.train_dataloader"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.KFoldDataModule.train_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">train_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold_idx</span><span class="p">):</span>
+                    <span class="p">(</span>
+                        <span class="n">train_latents</span><span class="p">,</span>
+                        <span class="n">train_labels</span><span class="p">,</span>
+                        <span class="n">data_dims</span><span class="p">,</span>
+                    <span class="p">)</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">convert_to_latent</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">)</span>
+
+                    <span class="p">(</span>
+                        <span class="n">test_latents</span><span class="p">,</span>
+                        <span class="n">test_labels</span><span class="p">,</span>
+                        <span class="n">data_dims</span><span class="p">,</span>
+                    <span class="p">)</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">convert_to_latent</span><span class="p">(</span><span class="n">test_dataset</span><span class="p">)</span>
+
+                    <span class="c1"># make a new CustomDataset with the latent features</span>
+                    <span class="n">train_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">)</span>
+                    <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">test_latents</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span>
+
+                    <span class="n">new_folds</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">))</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">folds</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">new_folds</span>  <span class="c1"># update the folds with the new train and test datasets</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span>  <span class="c1"># update the data dimensions</span></div>
+
+<div class="viewcode-block" id="KFoldDataModule.train_dataloader"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.train_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">train_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold_idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the dataloader for training.</span>
 
@@ -912,7 +985,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="KFoldDataModule.val_dataloader"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.KFoldDataModule.val_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">val_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold_idx</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldDataModule.val_dataloader"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.val_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">val_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold_idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the dataloader for validation.</span>
 
@@ -933,7 +1006,7 @@
         <span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="GraphDataModule"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.GraphDataModule">[docs]</a><span class="k">class</span> <span class="nc">GraphDataModule</span><span class="p">:</span>
+<div class="viewcode-block" id="GraphDataModule"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.GraphDataModule">[docs]</a><span class="k">class</span> <span class="nc">GraphDataModule</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom pytorch lightning datamodule class for the different modalities with graph data</span>
 <span class="sd">    structure.</span>
@@ -947,8 +1020,8 @@
 <span class="sd">        images.</span>
 <span class="sd">    modality_methods : dict</span>
 <span class="sd">        Dictionary of methods for loading the different modalities.</span>
-<span class="sd">    modality_type : str</span>
-<span class="sd">        Type of modality (tabular1, tabular2, img, both_tab, tab_img).</span>
+<span class="sd">    fusion_model : class</span>
+<span class="sd">        Fusion model class. e.g. &quot;TabularCrossmodalAttention&quot;.</span>
 <span class="sd">    test_size : float</span>
 <span class="sd">        Fraction of data to use for testing (default 0.2).</span>
 <span class="sd">    graph_creation_method : class</span>
@@ -973,14 +1046,15 @@
 <span class="sd">        Graph data structure.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="GraphDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.GraphDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="GraphDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.GraphDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">params</span><span class="p">,</span>
-        <span class="n">modality_type</span><span class="p">,</span>
+        <span class="n">fusion_model</span><span class="p">,</span>
         <span class="n">sources</span><span class="p">,</span>
         <span class="n">graph_creation_method</span><span class="p">,</span>
         <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -988,8 +1062,8 @@
 
 <span class="sd">        params : dict</span>
 <span class="sd">            Dictionary of parameters.</span>
-<span class="sd">        modality_type : str</span>
-<span class="sd">            Type of modality (tabular1, tabular2, img, both_tab, tab_img).</span>
+<span class="sd">        fusion_model : class</span>
+<span class="sd">            Fusion model class. e.g. &quot;TabularCrossmodalAttention&quot;.</span>
 <span class="sd">        sources : list</span>
 <span class="sd">            List of source csv files.</span>
 <span class="sd">        graph_creation_method : class</span>
@@ -1003,7 +1077,7 @@
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
-<span class="sd">            If modality_type is not one of the following: tabular1, tabular2, img, both_tab,</span>
+<span class="sd">            If fusion_model.modality_type is not one of the following: tabular1, tabular2, img, both_tab,</span>
 <span class="sd">            tab_img.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1011,7 +1085,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span> <span class="o">=</span> <span class="n">image_downsample_size</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extra_log_string_dict</span> <span class="o">=</span> <span class="n">extra_log_string_dict</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;tabular1&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span>
@@ -1027,12 +1102,13 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span>
             <span class="p">)</span><span class="o">.</span><span class="n">load_tab_and_img</span><span class="p">,</span>
         <span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span> <span class="o">=</span> <span class="n">modality_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fusion_model</span> <span class="o">=</span> <span class="n">fusion_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion_model</span><span class="o">.</span><span class="n">modality_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;test_size&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span> <span class="o">=</span> <span class="n">graph_creation_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="o">=</span> <span class="n">layer_mods</span></div>
 
-<div class="viewcode-block" id="GraphDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.GraphDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GraphDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.GraphDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the data with LoadDatasets class</span>
 
@@ -1048,7 +1124,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span><span class="p">]()</span></div>
 
-<div class="viewcode-block" id="GraphDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.GraphDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GraphDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.GraphDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets random train and test indices, and gets the graph data structure.</span>
 
@@ -1079,7 +1155,7 @@
         <span class="c1"># TODO move to the soon-to-be-made plotting module? or just remove</span>
         <span class="c1"># plot_graph(self.graph_data, self.params)</span>
 
-<div class="viewcode-block" id="GraphDataModule.get_lightning_module"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.GraphDataModule.get_lightning_module">[docs]</a>    <span class="k">def</span> <span class="nf">get_lightning_module</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GraphDataModule.get_lightning_module"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.GraphDataModule.get_lightning_module">[docs]</a>    <span class="k">def</span> <span class="nf">get_lightning_module</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the lightning module using the pytorch geometric lightning module for converting</span>
 <span class="sd">        the graph data structure into a pytorch dataloader.</span>
@@ -1101,7 +1177,7 @@
         <span class="k">return</span> <span class="n">lightning_module</span></div></div>
 
 
-<div class="viewcode-block" id="KFoldGraphDataModule"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.KFoldGraphDataModule">[docs]</a><span class="k">class</span> <span class="nc">KFoldGraphDataModule</span><span class="p">:</span>
+<div class="viewcode-block" id="KFoldGraphDataModule"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule">[docs]</a><span class="k">class</span> <span class="nc">KFoldGraphDataModule</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom pytorch lightning datamodule class for the different modalities with graph data</span>
 <span class="sd">    structure and k-fold cross validation</span>
@@ -1117,8 +1193,8 @@
 <span class="sd">        List of source csv files.</span>
 <span class="sd">    modality_methods : dict</span>
 <span class="sd">        Dictionary of methods for loading the different modalities.</span>
-<span class="sd">    modality_type : str</span>
-<span class="sd">        Type of modality (tabular1, tabular2, img, both_tab, tab_img).</span>
+<span class="sd">    fusion_model : class</span>
+<span class="sd">        Fusion model class. e.g. &quot;TabularCrossmodalAttention&quot;.</span>
 <span class="sd">    graph_creation_method : class</span>
 <span class="sd">        Graph creation method class.</span>
 <span class="sd">    layer_mods : dict</span>
@@ -1131,22 +1207,23 @@
 <span class="sd">        List of tuples of (graph_data, train_idxs, test_idxs)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="KFoldGraphDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.KFoldGraphDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="KFoldGraphDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">params</span><span class="p">,</span>
-        <span class="n">modality_type</span><span class="p">,</span>
+        <span class="n">fusion_model</span><span class="p">,</span>
         <span class="n">sources</span><span class="p">,</span>
         <span class="n">graph_creation_method</span><span class="p">,</span>
         <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        params : dict</span>
 <span class="sd">            Dictionary of parameters.</span>
-<span class="sd">        modality_type : str</span>
-<span class="sd">            Type of modality (tabular1, tabular2, img, both_tab, tab_img).</span>
+<span class="sd">        fusion_model : class</span>
+<span class="sd">            Fusion model class. e.g. &quot;TabularCrossmodalAttention&quot;.</span>
 <span class="sd">        sources : list</span>
 <span class="sd">            List of source csv files.</span>
 <span class="sd">        graph_creation_method : class</span>
@@ -1161,13 +1238,15 @@
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
-<span class="sd">            If modality_type is not one of the following: tabular1, tabular2, img, both_tab,</span>
+<span class="sd">            If fusion_model.modality_type is not one of the following: tabular1, tabular2, img, both_tab,</span>
 <span class="sd">            tab_img.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_folds</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;num_k&quot;</span><span class="p">]</span>  <span class="c1"># total number of folds</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span> <span class="o">=</span> <span class="n">image_downsample_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extra_log_string_dict</span> <span class="o">=</span> <span class="n">extra_log_string_dict</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;tabular1&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span>
@@ -1183,11 +1262,12 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span>
             <span class="p">)</span><span class="o">.</span><span class="n">load_tab_and_img</span><span class="p">,</span>
         <span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span> <span class="o">=</span> <span class="n">modality_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fusion_model</span> <span class="o">=</span> <span class="n">fusion_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion_model</span><span class="o">.</span><span class="n">modality_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span> <span class="o">=</span> <span class="n">graph_creation_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="o">=</span> <span class="n">layer_mods</span></div>
 
-<div class="viewcode-block" id="KFoldGraphDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.KFoldGraphDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldGraphDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the data with LoadDatasets class</span>
 
@@ -1197,7 +1277,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span><span class="p">]()</span></div>
 
-<div class="viewcode-block" id="KFoldGraphDataModule.kfold_split"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.KFoldGraphDataModule.kfold_split">[docs]</a>    <span class="k">def</span> <span class="nf">kfold_split</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldGraphDataModule.kfold_split"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.kfold_split">[docs]</a>    <span class="k">def</span> <span class="nf">kfold_split</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Splits the dataset into k folds</span>
 
@@ -1220,7 +1300,7 @@
             <span class="p">)</span>  <span class="c1"># list of tuples of (train_dataset, test_dataset)</span>
         <span class="k">return</span> <span class="n">folds</span></div>
 
-<div class="viewcode-block" id="KFoldGraphDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.KFoldGraphDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldGraphDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets random train and test indices, and gets the graph data structure.</span>
 
@@ -1255,7 +1335,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">folds</span> <span class="o">=</span> <span class="n">new_folds</span>  <span class="c1"># list of tuples of (graph_data, train_idxs, test_idxs)</span></div>
 
-<div class="viewcode-block" id="KFoldGraphDataModule.get_lightning_module"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.KFoldGraphDataModule.get_lightning_module">[docs]</a>    <span class="k">def</span> <span class="nf">get_lightning_module</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldGraphDataModule.get_lightning_module"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.get_lightning_module">[docs]</a>    <span class="k">def</span> <span class="nf">get_lightning_module</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the lightning module using the pytorch geometric lightning module for converting</span>
 <span class="sd">        the graph data structure into a pytorch dataloader.</span>
@@ -1287,7 +1367,7 @@
         <span class="k">return</span> <span class="n">lightning_modules</span>  <span class="c1"># list of lightning modules for each fold</span></div></div>
 
 
-<div class="viewcode-block" id="get_data_module"><a class="viewcode-back" href="../../autosummary/fusionlibrary.datamodules.html#fusilli.data.get_data_module">[docs]</a><span class="k">def</span> <span class="nf">get_data_module</span><span class="p">(</span>
+<div class="viewcode-block" id="get_data_module"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.get_data_module">[docs]</a><span class="k">def</span> <span class="nf">get_data_module</span><span class="p">(</span>
     <span class="n">fusion_model</span><span class="p">,</span>
     <span class="n">params</span><span class="p">,</span>
     <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
@@ -1295,6 +1375,8 @@
     <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">optional_suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gets the data module for the specified modality and fusion type.</span>
@@ -1313,6 +1395,15 @@
 <span class="sd">        Dictionary of layer modifications (default None).</span>
 <span class="sd">    optional_suffix : str</span>
 <span class="sd">        Optional suffix added to data source file names (default None).</span>
+<span class="sd">    checkpoint_path : str</span>
+<span class="sd">        Path to call checkpoint file (default None will result in the default lightning format).</span>
+<span class="sd">    extra_log_string_dict : dict</span>
+<span class="sd">        Dictionary of extra strings to add to a subspace method checkpoint file name (default None).</span>
+<span class="sd">        e.g. if you&#39;re running the same model with different hyperparameters, you can add the hyperparameters.</span>
+<span class="sd">        Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
+<span class="sd">        as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
+<span class="sd">        Default None.</span>
+
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1333,20 +1424,22 @@
         <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
             <span class="n">dmg</span> <span class="o">=</span> <span class="n">KFoldGraphDataModule</span><span class="p">(</span>
                 <span class="n">params</span><span class="p">,</span>
-                <span class="n">fusion_model</span><span class="o">.</span><span class="n">modality_type</span><span class="p">,</span>
+                <span class="n">fusion_model</span><span class="p">,</span>
                 <span class="n">sources</span><span class="o">=</span><span class="n">data_sources</span><span class="p">,</span>
                 <span class="n">graph_creation_method</span><span class="o">=</span><span class="n">fusion_model</span><span class="o">.</span><span class="n">graph_maker</span><span class="p">,</span>
                 <span class="n">image_downsample_size</span><span class="o">=</span><span class="n">image_downsample_size</span><span class="p">,</span>
                 <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
+                <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">dmg</span> <span class="o">=</span> <span class="n">GraphDataModule</span><span class="p">(</span>
                 <span class="n">params</span><span class="p">,</span>
-                <span class="n">fusion_model</span><span class="o">.</span><span class="n">modality_type</span><span class="p">,</span>
+                <span class="n">fusion_model</span><span class="p">,</span>
                 <span class="n">sources</span><span class="o">=</span><span class="n">data_sources</span><span class="p">,</span>
                 <span class="n">graph_creation_method</span><span class="o">=</span><span class="n">fusion_model</span><span class="o">.</span><span class="n">graph_maker</span><span class="p">,</span>
                 <span class="n">image_downsample_size</span><span class="o">=</span><span class="n">image_downsample_size</span><span class="p">,</span>
                 <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
+                <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="n">dmg</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">()</span>
@@ -1368,16 +1461,17 @@
 
         <span class="n">dm</span> <span class="o">=</span> <span class="n">datamodule_func</span><span class="p">(</span>
             <span class="n">params</span><span class="p">,</span>
-            <span class="n">fusion_model</span><span class="o">.</span><span class="n">modality_type</span><span class="p">,</span>
+            <span class="n">fusion_model</span><span class="p">,</span>
             <span class="n">sources</span><span class="o">=</span><span class="n">data_sources</span><span class="p">,</span>
             <span class="n">subspace_method</span><span class="o">=</span><span class="n">fusion_model</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">,</span>
             <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
             <span class="n">image_downsample_size</span><span class="o">=</span><span class="n">image_downsample_size</span><span class="p">,</span>
             <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
             <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
+            <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">dm</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">()</span>
-        <span class="n">dm</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+        <span class="n">dm</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="o">=</span><span class="n">checkpoint_path</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">dm</span></div>
 </pre></div>

@@ -25,7 +25,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="fusilli.eval.Plotter" href="fusilli.eval.Plotter.html" />
+    <link rel="next" title="fusilli.utils.model_chooser" href="fusilli.utils.model_chooser.html" />
     <link rel="prev" title="fusilli.data" href="fusilli.data.html" /> 
 </head>
 
@@ -71,7 +71,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#fusilli.train.train_and_test"><code class="docutils literal notranslate"><span class="pre">train_and_test()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
@@ -121,10 +120,24 @@
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="fusilli.train.store_trained_model">
-<span class="sig-name descname"><span class="pre">store_trained_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_checkpoint_pth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trained_models_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/train.html#store_trained_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.train.store_trained_model" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">store_trained_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trained_models_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/train.html#store_trained_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.train.store_trained_model" title="Permalink to this definition"></a></dt>
 <dd><p>Stores the trained model to a dictionary.
 If model type is already in dictionary (e.g. if it’s a kfold model), append the model to
 the list of models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trained_model</strong> (<em>pytorch lightning model</em>) – Trained model.</p></li>
+<li><p><strong>trained_models_dict</strong> (<em>dict</em>) – Dictionary of trained models.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>trained_models_dict</strong> – Dictionary of trained models.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -212,7 +225,7 @@ Default None.</p></li>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="fusilli.data.html" class="btn btn-neutral float-left" title="fusilli.data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="fusilli.eval.Plotter.html" class="btn btn-neutral float-right" title="fusilli.eval.Plotter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="fusilli.utils.model_chooser.html" class="btn btn-neutral float-right" title="fusilli.utils.model_chooser" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

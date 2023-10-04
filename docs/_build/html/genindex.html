@@ -63,7 +63,6 @@
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
@@ -181,11 +180,11 @@
 </li>
         <li><a href="autosummary/fusilli.fusion_models.mcvae_tab.html#fusilli.fusion_models.mcvae_tab.MCVAESubspaceMethod.__init__">(MCVAESubspaceMethod method)</a>, <a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAESubspaceMethod.__init__">[1]</a>
 </li>
+        <li><a href="source/eval.html#eval.ModelComparison.__init__">(ModelComparison method)</a>
+</li>
         <li><a href="autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel.__init__">(ParentFusionModel method)</a>, <a href="source/fusion_models.html#fusion_models.base_model.ParentFusionModel.__init__">[1]</a>
 </li>
         <li><a href="source/eval.html#eval.ParentPlotter.__init__">(ParentPlotter method)</a>
-</li>
-        <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.__init__">(Plotter method)</a>, <a href="autosummary/fusilli.eval.Plotter.html#id0">[1]</a>, <a href="source/eval.html#eval.Plotter.__init__">[2]</a>
 </li>
         <li><a href="source/eval.html#eval.RealsVsPreds.__init__">(RealsVsPreds method)</a>
 </li>
@@ -326,10 +325,6 @@
       </ul></li>
       <li><a href="autosummary/fusilli.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_var_is_function">check_var_is_function() (in module fusilli.utils.check_model_validity)</a>
 </li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.compare_bar_chart">compare_bar_chart() (Plotter method)</a>, <a href="source/eval.html#eval.Plotter.compare_bar_chart">[1]</a>
-</li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.compare_violin_plot">compare_violin_plot() (Plotter method)</a>, <a href="source/eval.html#eval.Plotter.compare_violin_plot">[1]</a>
-</li>
       <li><a href="autosummary/fusilli.fusion_models.concat_img_latent_tab_doubletrain.html#fusilli.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method">concat_img_latent_tab_subspace_method (class in fusilli.fusion_models.concat_img_latent_tab_doubletrain)</a>
 
       <ul>
@@ -385,10 +380,6 @@
 </li>
       </ul></li>
       <li><a href="source/eval.html#eval.ConfusionMatrix.confusion_matrix_kfold">confusion_matrix_kfold() (ConfusionMatrix class method)</a>
-</li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.confusion_matrix_plotter">confusion_matrix_plotter() (Plotter method)</a>, <a href="source/eval.html#eval.Plotter.confusion_matrix_plotter">[1]</a>
-</li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.confusion_matrix_plotter_kfold">confusion_matrix_plotter_kfold() (Plotter method)</a>, <a href="source/eval.html#eval.Plotter.confusion_matrix_plotter_kfold">[1]</a>
 </li>
       <li><a href="source/eval.html#eval.ConfusionMatrix.confusion_matrix_tt">confusion_matrix_tt() (ConfusionMatrix class method)</a>
 </li>
@@ -649,12 +640,16 @@
       <li><a href="source/eval.html#eval.ConfusionMatrix.from_final_val_data">from_final_val_data() (ConfusionMatrix class method)</a>
 
       <ul>
+        <li><a href="source/eval.html#eval.ModelComparison.from_final_val_data">(ModelComparison class method)</a>
+</li>
         <li><a href="source/eval.html#eval.RealsVsPreds.from_final_val_data">(RealsVsPreds class method)</a>
 </li>
       </ul></li>
       <li><a href="source/eval.html#eval.ConfusionMatrix.from_new_data">from_new_data() (ConfusionMatrix class method)</a>
 
       <ul>
+        <li><a href="source/eval.html#eval.ModelComparison.from_new_data">(ModelComparison class method)</a>
+</li>
         <li><a href="source/eval.html#eval.RealsVsPreds.from_new_data">(RealsVsPreds class method)</a>
 </li>
       </ul></li>
@@ -780,8 +775,6 @@
         <li><a href="autosummary/fusilli.fusion_models.concat_tabular_data.html#module-fusilli.fusion_models.concat_tabular_data">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fusilli.fusion_models.concat_tabular_feature_maps
 
@@ -789,6 +782,8 @@
         <li><a href="autosummary/fusilli.fusion_models.concat_tabular_feature_maps.html#module-fusilli.fusion_models.concat_tabular_feature_maps">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fusilli.fusion_models.crossmodal_att
 
@@ -910,6 +905,16 @@
       </ul></li>
       <li><a href="autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.DAETabImgMaps.fusion_layers">fusion_layers (DAETabImgMaps attribute)</a>, <a href="source/fusion_models.html#fusion_models.denoise_tab_img_maps.DAETabImgMaps.fusion_layers">[1]</a>
 </li>
+      <li><a href="autosummary/fusilli.data.html#fusilli.data.CustomDataModule.fusion_model">fusion_model (CustomDataModule attribute)</a>, <a href="source/data.html#data.CustomDataModule.fusion_model">[1]</a>
+
+      <ul>
+        <li><a href="autosummary/fusilli.data.html#fusilli.data.GraphDataModule.fusion_model">(GraphDataModule attribute)</a>, <a href="source/data.html#data.GraphDataModule.fusion_model">[1]</a>
+</li>
+        <li><a href="autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.fusion_model">(KFoldDataModule attribute)</a>, <a href="source/data.html#data.KFoldDataModule.fusion_model">[1]</a>
+</li>
+        <li><a href="autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.fusion_model">(KFoldGraphDataModule attribute)</a>, <a href="source/data.html#data.KFoldGraphDataModule.fusion_model">[1]</a>
+</li>
+      </ul></li>
       <li>
     fusion_models
 
@@ -1100,6 +1105,10 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model">get_checkpoint_filename_for_trained_fusion_model() (in module fusilli.utils.training_utils)</a>
+</li>
+      <li><a href="autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models">get_checkpoint_filenames_for_subspace_models() (in module fusilli.utils.training_utils)</a>
+</li>
       <li><a href="autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.BaseModel.get_data_from_batch">get_data_from_batch() (BaseModel method)</a>, <a href="source/fusion_models.html#fusion_models.base_model.BaseModel.get_data_from_batch">[1]</a>
 </li>
       <li><a href="source/data.html#data.get_data_module">get_data_module() (in module data)</a>
@@ -1108,6 +1117,8 @@
         <li><a href="autosummary/fusilli.data.html#fusilli.data.get_data_module">(in module fusilli.data)</a>
 </li>
       </ul></li>
+      <li><a href="autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.get_file_suffix_from_dict">get_file_suffix_from_dict() (in module fusilli.utils.training_utils)</a>
+</li>
       <li><a href="autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.get_final_val_metrics">get_final_val_metrics() (in module fusilli.utils.training_utils)</a>
 </li>
       <li><a href="autosummary/fusilli.fusion_models.concat_img_maps_tabular_data.html#fusilli.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.get_fused_dim">get_fused_dim() (ConcatImageMapsTabularData method)</a>, <a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.get_fused_dim">[1]</a>
@@ -1136,14 +1147,12 @@
         <li><a href="autosummary/fusilli.fusion_models.tabular_channelwise_att.html#fusilli.fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.get_fused_dim">(TabularChannelWiseMultiAttention method)</a>, <a href="source/fusion_models.html#fusion_models.tabular_channelwise_att.TabularChannelWiseMultiAttention.get_fused_dim">[1]</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.get_intermediate_featuremaps">get_intermediate_featuremaps() (ImgUnimodalDAE method)</a>, <a href="source/fusion_models.html#fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.get_intermediate_featuremaps">[1]</a>
 </li>
       <li><a href="source/eval.html#eval.ParentPlotter.get_kfold_data_from_model">get_kfold_data_from_model() (ParentPlotter class method)</a>
 </li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.get_kfold_numbers">get_kfold_numbers() (Plotter method)</a>, <a href="source/eval.html#eval.Plotter.get_kfold_numbers">[1]</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autosummary/fusilli.fusion_models.mcvae_tab.html#fusilli.fusion_models.mcvae_tab.MCVAESubspaceMethod.get_latents">get_latents() (MCVAESubspaceMethod method)</a>, <a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAESubspaceMethod.get_latents">[1]</a>
 </li>
       <li><a href="autosummary/fusilli.data.html#fusilli.data.GraphDataModule.get_lightning_module">get_lightning_module() (GraphDataModule method)</a>, <a href="source/data.html#data.GraphDataModule.get_lightning_module">[1]</a>
@@ -1164,9 +1173,7 @@
 </li>
       <li><a href="source/eval.html#eval.ParentPlotter.get_new_tt_data">get_new_tt_data() (ParentPlotter class method)</a>
 </li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.get_performance_df">get_performance_df() (Plotter method)</a>, <a href="source/eval.html#eval.Plotter.get_performance_df">[1]</a>
-</li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.get_train_test_numbers">get_train_test_numbers() (Plotter method)</a>, <a href="source/eval.html#eval.Plotter.get_train_test_numbers">[1]</a>
+      <li><a href="source/eval.html#eval.ModelComparison.get_performance_dataframe">get_performance_dataframe() (ModelComparison class method)</a>
 </li>
       <li><a href="source/eval.html#eval.ParentPlotter.get_tt_data_from_model">get_tt_data_from_model() (ParentPlotter class method)</a>
 </li>
@@ -1284,6 +1291,8 @@
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/eval.html#eval.ModelComparison.kfold_comparison_plot">kfold_comparison_plot() (ModelComparison class method)</a>
+</li>
       <li><a href="autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel.kfold_flag">kfold_flag (ParentFusionModel attribute)</a>, <a href="source/fusion_models.html#fusion_models.base_model.ParentFusionModel.kfold_flag">[1]</a>
 </li>
       <li><a href="autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.kfold_split">kfold_split() (KFoldDataModule method)</a>, <a href="source/data.html#data.KFoldDataModule.kfold_split">[1]</a>
@@ -1438,14 +1447,6 @@
         <li><a href="source/fusion_models.html#fusion_models.tabular_decision.TabularDecision.method_name">(TabularDecision attribute)</a>
 </li>
       </ul></li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.metric1func">metric1func (Plotter attribute)</a>, <a href="source/eval.html#eval.Plotter.metric1func">[1]</a>
-</li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.metric1name">metric1name (Plotter attribute)</a>, <a href="source/eval.html#eval.Plotter.metric1name">[1]</a>
-</li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.metric2func">metric2func (Plotter attribute)</a>, <a href="source/eval.html#eval.Plotter.metric2func">[1]</a>
-</li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.metric2name">metric2name (Plotter attribute)</a>, <a href="source/eval.html#eval.Plotter.metric2name">[1]</a>
-</li>
       <li><a href="autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.BaseModel.metrics">metrics (BaseModel attribute)</a>, <a href="source/fusion_models.html#fusion_models.base_model.BaseModel.metrics">[1]</a>
 </li>
       <li><a href="autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel.mod1_dim">mod1_dim (ParentFusionModel attribute)</a>, <a href="source/fusion_models.html#fusion_models.base_model.ParentFusionModel.mod1_dim">[1]</a>
@@ -1513,23 +1514,15 @@
 </li>
         <li><a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.modality_type">(CrossmodalMultiheadAttention attribute)</a>
 </li>
-        <li><a href="autosummary/fusilli.data.html#fusilli.data.CustomDataModule.modality_type">(CustomDataModule attribute)</a>, <a href="source/data.html#data.CustomDataModule.modality_type">[1]</a>
-</li>
         <li><a href="source/fusion_models.html#fusion_models.denoise_tab_img_maps.DAETabImgMaps.modality_type">(DAETabImgMaps attribute)</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.edge_corr_gnn.EdgeCorrGNN.modality_type">(EdgeCorrGNN attribute)</a>
-</li>
-        <li><a href="autosummary/fusilli.data.html#fusilli.data.GraphDataModule.modality_type">(GraphDataModule attribute)</a>, <a href="source/data.html#data.GraphDataModule.modality_type">[1]</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.img_tab_channelwise_att.ImageChannelWiseMultiAttention.modality_type">(ImageChannelWiseMultiAttention attribute)</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.img_tab_decision.ImageDecision.modality_type">(ImageDecision attribute)</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.img_unimodal.ImgUnimodal.modality_type">(ImgUnimodal attribute)</a>
-</li>
-        <li><a href="autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.modality_type">(KFoldDataModule attribute)</a>, <a href="source/data.html#data.KFoldDataModule.modality_type">[1]</a>
-</li>
-        <li><a href="autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.modality_type">(KFoldGraphDataModule attribute)</a>, <a href="source/data.html#data.KFoldGraphDataModule.modality_type">[1]</a>
 </li>
         <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.modality_type">(MCVAE_tab attribute)</a>
 </li>
@@ -1550,7 +1543,7 @@
 </li>
       <li><a href="autosummary/fusilli.utils.model_chooser.html#fusilli.utils.model_chooser.model_importer">model_importer() (in module fusilli.utils.model_chooser)</a>
 </li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.model_names">model_names (Plotter attribute)</a>, <a href="source/eval.html#eval.Plotter.model_names">[1]</a>
+      <li><a href="source/eval.html#eval.ModelComparison">ModelComparison (class in eval)</a>
 </li>
       <li><a href="autosummary/fusilli.utils.model_modifier.html#fusilli.utils.model_modifier.modify_model_architecture">modify_model_architecture() (in module fusilli.utils.model_modifier)</a>
 </li>
@@ -1720,8 +1713,6 @@
       <ul>
         <li><a href="autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel.params">(ParentFusionModel attribute)</a>, <a href="source/fusion_models.html#fusion_models.base_model.ParentFusionModel.params">[1]</a>
 </li>
-        <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.params">(Plotter attribute)</a>, <a href="source/eval.html#eval.Plotter.params">[1]</a>
-</li>
       </ul></li>
       <li><a href="autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel">ParentFusionModel (class in fusilli.fusion_models.base_model)</a>
 
@@ -1731,14 +1722,6 @@
       </ul></li>
       <li><a href="source/eval.html#eval.ParentPlotter">ParentPlotter (class in eval)</a>
 </li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.plot_all">plot_all() (Plotter method)</a>, <a href="source/eval.html#eval.Plotter.plot_all">[1]</a>
-</li>
-      <li><a href="source/eval.html#eval.Plotter">Plotter (class in eval)</a>
-
-      <ul>
-        <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter">(class in fusilli.eval)</a>
-</li>
-      </ul></li>
       <li><a href="autosummary/fusilli.data.html#fusilli.data.CustomDataset.pred_features">pred_features (CustomDataset attribute)</a>, <a href="source/data.html#data.CustomDataset.pred_features">[1]</a>
 </li>
       <li><a href="autosummary/fusilli.fusion_models.concat_img_maps_tabular_data.html#fusilli.fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.pred_type">pred_type (ConcatImageMapsTabularData attribute)</a>, <a href="source/fusion_models.html#fusion_models.concat_img_maps_tabular_data.ConcatImageMapsTabularData.pred_type">[1]</a>
@@ -1766,8 +1749,6 @@
 </li>
         <li><a href="autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel.pred_type">(ParentFusionModel attribute)</a>, <a href="source/fusion_models.html#fusion_models.base_model.ParentFusionModel.pred_type">[1]</a>
 </li>
-        <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.pred_type">(Plotter attribute)</a>, <a href="source/eval.html#eval.Plotter.pred_type">[1]</a>
-</li>
         <li><a href="autosummary/fusilli.fusion_models.tab_crossmodal_att.html#fusilli.fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.pred_type">(TabularCrossmodalMultiheadAttention attribute)</a>, <a href="source/fusion_models.html#fusion_models.tab_crossmodal_att.TabularCrossmodalMultiheadAttention.pred_type">[1]</a>
 </li>
       </ul></li>
@@ -1791,20 +1772,14 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.reals_vs_preds">reals_vs_preds() (Plotter method)</a>, <a href="source/eval.html#eval.Plotter.reals_vs_preds">[1]</a>
+      <li><a href="source/eval.html#eval.RealsVsPreds.reals_vs_preds_kfold">reals_vs_preds_kfold() (RealsVsPreds class method)</a>
 </li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.reals_vs_preds_kfold">reals_vs_preds_kfold() (Plotter method)</a>, <a href="source/eval.html#eval.Plotter.reals_vs_preds_kfold">[1]</a>
-
-      <ul>
-        <li><a href="source/eval.html#eval.RealsVsPreds.reals_vs_preds_kfold">(RealsVsPreds class method)</a>
-</li>
-      </ul></li>
       <li><a href="source/eval.html#eval.RealsVsPreds.reals_vs_preds_tt">reals_vs_preds_tt() (RealsVsPreds class method)</a>
+</li>
+      <li><a href="source/eval.html#eval.RealsVsPreds">RealsVsPreds (class in eval)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/eval.html#eval.RealsVsPreds">RealsVsPreds (class in eval)</a>
-</li>
       <li><a href="autosummary/fusilli.fusion_models.crossmodal_att.html#fusilli.fusion_models.crossmodal_att.CrossmodalMultiheadAttention.relu">relu (CrossmodalMultiheadAttention attribute)</a>, <a href="source/fusion_models.html#fusion_models.crossmodal_att.CrossmodalMultiheadAttention.relu">[1]</a>
 
       <ul>
@@ -1821,7 +1796,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.BaseModel.safe_squeeze">safe_squeeze() (BaseModel method)</a>, <a href="source/fusion_models.html#fusion_models.base_model.BaseModel.safe_squeeze">[1]</a>
 </li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.save_to_local">save_to_local() (Plotter method)</a>, <a href="source/eval.html#eval.Plotter.save_to_local">[1]</a>
+      <li><a href="autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.set_checkpoint_name">set_checkpoint_name() (in module fusilli.utils.training_utils)</a>
 </li>
       <li><a href="autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel.set_final_pred_layers">set_final_pred_layers() (ParentFusionModel method)</a>, <a href="source/fusion_models.html#fusion_models.base_model.ParentFusionModel.set_final_pred_layers">[1]</a>
 </li>
@@ -1845,10 +1820,6 @@
         <li><a href="autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.setup">(KFoldGraphDataModule method)</a>, <a href="source/data.html#data.KFoldGraphDataModule.setup">[1]</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.show_all">show_all() (Plotter method)</a>, <a href="source/eval.html#eval.Plotter.show_all">[1]</a>
-</li>
       <li><a href="autosummary/fusilli.data.html#fusilli.data.CustomDataModule.sources">sources (CustomDataModule attribute)</a>, <a href="source/data.html#data.CustomDataModule.sources">[1]</a>
 
       <ul>
@@ -1859,6 +1830,8 @@
         <li><a href="autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.sources">(KFoldGraphDataModule attribute)</a>, <a href="source/data.html#data.KFoldGraphDataModule.sources">[1]</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autosummary/fusilli.train.html#fusilli.train.store_trained_model">store_trained_model() (in module fusilli.train)</a>
 
       <ul>
@@ -1877,6 +1850,14 @@
         <li><a href="autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.subspace_method">(KFoldDataModule attribute)</a>, <a href="source/data.html#data.KFoldDataModule.subspace_method">[1]</a>
 </li>
         <li><a href="autosummary/fusilli.fusion_models.mcvae_tab.html#fusilli.fusion_models.mcvae_tab.MCVAE_tab.subspace_method">(MCVAE_tab attribute)</a>, <a href="autosummary/fusilli.fusion_models.mcvae_tab.html#id0">[1]</a>, <a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAE_tab.subspace_method">[2]</a>, <a href="source/fusion_models.html#id3">[3]</a>
+</li>
+      </ul></li>
+      <li><a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.subspace_models">subspace_models (concat_img_latent_tab_subspace_method attribute)</a>
+
+      <ul>
+        <li><a href="source/fusion_models.html#fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.subspace_models">(denoising_autoencoder_subspace_method attribute)</a>
+</li>
+        <li><a href="source/fusion_models.html#fusion_models.mcvae_tab.MCVAESubspaceMethod.subspace_models">(MCVAESubspaceMethod attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1998,7 +1979,7 @@
 </li>
       <li><a href="autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.BaseModel.train_reals">train_reals (BaseModel attribute)</a>, <a href="source/fusion_models.html#fusion_models.base_model.BaseModel.train_reals">[1]</a>
 </li>
-      <li><a href="autosummary/fusilli.eval.Plotter.html#fusilli.eval.Plotter.trained_model_dict">trained_model_dict (Plotter attribute)</a>, <a href="source/eval.html#eval.Plotter.trained_model_dict">[1]</a>
+      <li><a href="source/eval.html#eval.ModelComparison.train_test_comparison_plot">train_test_comparison_plot() (ModelComparison class method)</a>
 </li>
       <li><a href="autosummary/fusilli.fusion_models.concat_img_latent_tab_doubletrain.html#fusilli.fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.trainer">trainer (concat_img_latent_tab_subspace_method attribute)</a>, <a href="source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.trainer">[1]</a>
 </li>

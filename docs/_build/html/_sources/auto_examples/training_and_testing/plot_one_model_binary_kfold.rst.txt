@@ -66,13 +66,14 @@ Key Features:
 
 
 
-
-
 .. rst-class:: sphx-glr-script-out
 
- .. code-block:: none
+.. code-block:: pytb
 
-    /Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/training_and_testing
+    Traceback (most recent call last):
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/training_and_testing/plot_one_model_binary_kfold.py", line 26, in <module>
+        from fusilli.eval import Plotter
+    ImportError: cannot import name 'Plotter' from 'fusilli.eval' (/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/eval.py)
 
 
 
@@ -90,12 +91,6 @@ Key Features:
         TabularCrossmodalMultiheadAttention,
     )
     from fusilli.train import train_and_save_models
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 37-39
@@ -117,12 +112,6 @@ Key Features:
     }
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 49-51
 
 3. Generate simulated data
@@ -141,12 +130,6 @@ Key Features:
     )
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 60-61
 
 4. Initialise model
@@ -160,20 +143,6 @@ Key Features:
     print("method_name:", fusion_model.method_name)
     print("modality_type:", fusion_model.modality_type)
     print("fusion_type:", fusion_model.fusion_type)
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    method_name: Tabular Crossmodal multi-head attention
-    modality_type: both_tab
-    fusion_type: attention
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 68-70
@@ -198,21 +167,6 @@ Key Features:
     )
 
 
-
-.. rst-class:: sphx-glr-script-out
-
-.. code-block:: pytb
-
-    Traceback (most recent call last):
-      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/training_and_testing/plot_one_model_binary_kfold.py", line 75, in <module>
-        single_model_dict = train_and_save_models(
-      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/train.py", line 226, in train_and_save_models
-        trained_model.trainer.checkpoint_callback.best_model_path,
-    AttributeError: 'NoneType' object has no attribute 'best_model_path'
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 83-85
 
 6. Plot the results
@@ -229,7 +183,7 @@ Key Features:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.039 seconds)
+   **Total running time of the script:** (0 minutes 0.082 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_and_testing_plot_one_model_binary_kfold.py:

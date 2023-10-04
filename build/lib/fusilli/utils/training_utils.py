@@ -63,16 +63,6 @@ def set_logger(params, fold, fusion_model, extra_log_string_dict=None):
 
     extra_name_string, extra_tags = get_file_suffix_from_dict(extra_log_string_dict)
 
-    # if extra_log_string_dict is not None:
-    #     extra_name_string = ""
-    #     extra_tags = []
-    #     for key, value in extra_log_string_dict.items():
-    #         extra_name_string += f"_{key}_{str(value)}"
-    #         extra_tags.append(f"{key}_{str(value)}")
-    # else:
-    #     extra_name_string = ""
-    #     extra_tags = []
-
     if params["kfold_flag"]:
         name = f"{method_name}_fold_{fold}{extra_name_string}"
         tags = [modality_type, fusion_type, f"fold_{str(fold)}"] + extra_tags
@@ -125,15 +115,107 @@ def set_checkpoint_name(params, fusion_model, fold=None, extra_log_string_dict=N
             fusion_model.__name__
             + "_fold_"
             + str(fold)
-            + "_{epoch:02d}"
             + extra_name_string
+            + "_{epoch:02d}"
         )
     else:
         checkpoint_filename = (
-            str(fusion_model.__name__) + "_{epoch:02d}" + extra_name_string
+            str(fusion_model.__name__) + extra_name_string + "_{epoch:02d}"
         )
 
     return checkpoint_filename
+
+
+def get_checkpoint_filenames_for_subspace_models(subspace_method, k=None):
+    """
+    Get the checkpoint filenames for the subspace models.
+
+    Args:
+        subspace_method (class): Subspace method class. Called from the subspace method class with self.
+
+    Returns:
+        checkpoint_filenames (list): List of checkpoint filenames. One for each subspace model.
+    """
+
+    if hasattr(subspace_method.datamodule.fusion_model, "__name__"):
+        big_fusion_model_name = subspace_method.datamodule.fusion_model.__name__
+    else:
+        big_fusion_model_name = (
+            subspace_method.datamodule.fusion_model.__class__.__name__
+        )
+
+    log_string, _ = get_file_suffix_from_dict(
+        subspace_method.datamodule.extra_log_string_dict
+    )
+
+    checkpoint_filenames = []
+    for subspace_model in subspace_method.subspace_models:
+        if k is not None:
+            checkpoint_filenames.append(
+                big_fusion_model_name
+                + "_"
+                + subspace_model.__name__
+                + "_fold_"
+                + str(k)
+                + log_string,
+            )
+        else:
+            checkpoint_filenames.append(
+                big_fusion_model_name + "_" + subspace_model.__name__ + log_string,
+            )
+
+    return checkpoint_filenames
+
+
+def get_checkpoint_filename_for_trained_fusion_model(
+    params, model, checkpoint_file_suffix, fold=None
+):
+    """Get the checkpoint filename for the trained fusion model using the model object.
+    Checkpoints should follow the naming convention:
+    fusion_model_name_fold_k_{checkpoint_file_suffix} if fold is not None
+    fusion_model_name_{checkpoint_file_suffix} if fold is None
+
+    Args:
+        params (dict): Dictionary of parameters.
+        model (object): BaseModel model object.
+        checkpoint_file_suffix (str): Checkpoint file suffix.
+        fold (int): Fold number. Default None.
+
+    Returns:
+        checkpoint_filename (str): Checkpoint filename.
+
+    """
+    if fold is None:
+        ckpt_path_beginning = model.model.__class__.__name__ + checkpoint_file_suffix
+    else:
+        ckpt_path_beginning = (
+            model.model.__class__.__name__
+            + "_fold_"
+            + str(fold)
+            + checkpoint_file_suffix
+        )
+
+    result = [
+        filename
+        for filename in os.listdir(params["checkpoint_dir"])
+        if filename.startswith(ckpt_path_beginning)
+    ]
+
+    if len(result) == 0:
+        raise ValueError(
+            f"Could not find checkpoint file with name {ckpt_path_beginning} in {params['checkpoint_dir']}."
+        )
+    elif len(result) > 1:
+        raise ValueError(
+            f"Found multiple checkpoint files with name {ckpt_path_beginning} in {params['checkpoint_dir']}."
+        )
+    else:
+        checkpoint_filename = result[0]
+        checkpoint_filename = os.path.join(
+            params["checkpoint_dir"], checkpoint_filename
+        )
+
+        return checkpoint_filename
 
 
 class LitProgressBar(TQDMProgressBar):
@@ -145,7 +227,12 @@ class LitProgressBar(TQDMProgressBar):
 
 
 def init_trainer(
-    logger, params, max_epochs=1000, enable_checkpointing=True, checkpoint_filename=None
+    logger,
+    params,
+    max_epochs=1000,
+    enable_checkpointing=True,
+    checkpoint_filename=None,
+    own_early_stopping_callback=None,
 ):
     """
     Initialize the pytorch lightning trainer object.
@@ -157,18 +244,26 @@ def init_trainer(
         enable_checkpointing (bool): Whether to enable checkpointing. If True, then
             checkpoints will be saved. We use False for the example notebooks in the
             repository/documentation.
+        checkpoint_filename (str): Checkpoint filename. Default None if using default checkpointing.
+        own_early_stopping_callback (object): Own early stopping callback object. Default None to use default
+            early stopping callback. If you want to use your own early stopping callback, then you need to
+            define it in the main training script and pass it here or pass into the datamodule object and then
+            it will read it from there.
 
     Returns:
         trainer (object): Pytorch lightning trainer object.
     """
-
-    early_stop_callback = EarlyStopping(
-        monitor="val_loss",
-        min_delta=0.00,
-        patience=15,
-        verbose=False,
-        mode="min",
-    )
+    if own_early_stopping_callback is not None:
+        print("Using own early stopping callback.", own_early_stopping_callback)
+        early_stop_callback = own_early_stopping_callback
+    else:
+        early_stop_callback = EarlyStopping(
+            monitor="val_loss",
+            min_delta=0.00,
+            patience=15,
+            verbose=False,
+            mode="min",
+        )
 
     bar = LitProgressBar()
 
@@ -192,6 +287,8 @@ def init_trainer(
         logger=logger,
         enable_checkpointing=enable_checkpointing,
     )
+
+    print("Trainer early stopping", trainer.callbacks[0].patience)
 
     return trainer
 

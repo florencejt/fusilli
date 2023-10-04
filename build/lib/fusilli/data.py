@@ -441,6 +441,7 @@ class CustomDataModule(pl.LightningDataModule):
         layer_mods=None,
         max_epochs=1000,
         extra_log_string_dict=None,
+        own_early_stopping_callback=None,
     ):
         """
         Parameters
@@ -465,6 +466,10 @@ class CustomDataModule(pl.LightningDataModule):
             (default None)
         max_epochs : int
             Maximum number of epochs to train subspace methods for. (default 1000)
+        extra_log_string_dict : dict
+            Dictionary of extra strings to add to the log.
+        own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
+            Early stopping callback class (default None).
 
 
         Raises
@@ -506,6 +511,7 @@ class CustomDataModule(pl.LightningDataModule):
         self.subspace_method = subspace_method
         self.layer_mods = layer_mods
         self.max_epochs = max_epochs
+        self.own_early_stopping_callback = own_early_stopping_callback
 
     def prepare_data(self):
         """
@@ -544,7 +550,11 @@ class CustomDataModule(pl.LightningDataModule):
 
         if self.subspace_method is not None:  # if subspace method is specified
             if checkpoint_path is None:
-                subspace_method = self.subspace_method(self, self.max_epochs)
+                subspace_method = self.subspace_method(
+                    self,
+                    max_epochs=self.max_epochs,
+                    k=None,
+                )
 
                 if self.layer_mods is not None:
                     # if subspace method in layer_mods
@@ -556,21 +566,42 @@ class CustomDataModule(pl.LightningDataModule):
                 train_latents, train_labels = subspace_method.train(
                     self.train_dataset, self.test_dataset
                 )
-                # print("Data: trained trainers", subspace_method.trained_trainers)
+
                 (
                     test_latents,
                     test_labels,
                     data_dims,
                 ) = subspace_method.convert_to_latent(self.test_dataset)
 
-                # make a new CustomDataset with the latent features
-
                 self.train_dataset = CustomDataset(train_latents, train_labels)
                 self.test_dataset = CustomDataset(test_latents, test_labels)
                 self.data_dims = data_dims
 
-            # else:
-            #     subspace_method = self.subspace_method(self, self.max_epochs, checkpoint_path)
+            else:
+                # we have the checkpoint paths for the subspace models
+
+                subspace_method = self.subspace_method(
+                    self,
+                    max_epochs=self.max_epochs,
+                    k=None,
+                    checkpoint_path=checkpoint_path,
+                )
+
+                (
+                    train_latents,
+                    train_labels,
+                    data_dims,
+                ) = subspace_method.convert_to_latent(self.train_dataset)
+
+                (
+                    test_latents,
+                    test_labels,
+                    data_dims,
+                ) = subspace_method.convert_to_latent(self.test_dataset)
+
+                self.train_dataset = CustomDataset(train_latents, train_labels)
+                self.test_dataset = CustomDataset(test_latents, test_labels)
+                self.data_dims = data_dims
 
     def train_dataloader(self):
         """
@@ -653,6 +684,7 @@ class KFoldDataModule(pl.LightningDataModule):
         layer_mods=None,
         max_epochs=1000,
         extra_log_string_dict=None,
+        own_early_stopping_callback=None,
     ):
         """
         Parameters
@@ -668,13 +700,19 @@ class KFoldDataModule(pl.LightningDataModule):
             Batch size (default 8).
         subspace_method : class
             Subspace method class (default None) (only for subspace methods).
-        max_epochs : int
-            Maximum number of epochs to train subspace methods for. (default 1000)
         image_downsample_size : tuple
             Size to downsample the images to (height, width, depth) or (height, width) for 2D
             images. None if not downsampling. (default None)
         layer_mods : dict
             Dictionary of layer modifications to make to the subspace method.
+            (default None)
+        max_epochs : int
+            Maximum number of epochs to train subspace methods for. (default 1000)
+        extra_log_string_dict : dict
+            Dictionary of extra strings to add to the log.
+        own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
+            Early stopping callback class (default None).
+
 
         Raises
         ------
@@ -718,6 +756,7 @@ class KFoldDataModule(pl.LightningDataModule):
             self.multiclass_dims = None
         self.layer_mods = layer_mods
         self.max_epochs = max_epochs
+        self.own_early_stopping_callback = own_early_stopping_callback
 
     def prepare_data(self):
         """
@@ -777,37 +816,78 @@ class KFoldDataModule(pl.LightningDataModule):
 
         # if subspace method is specified, run the subspace method on each fold
         if self.subspace_method is not None:
-            new_folds = []
-            for fold in self.folds:
-                train_dataset, test_dataset = fold
-                subspace_method = self.subspace_method(self, max_epochs=self.max_epochs)
-
-                if self.layer_mods is not None:
-                    # if subspace method in layer_mods
-                    subspace_method = model_modifier.modify_model_architecture(
-                        subspace_method,
-                        self.layer_mods,
+            if checkpoint_path is None:
+                new_folds = []
+                for k, fold in enumerate(self.folds):
+                    train_dataset, test_dataset = fold
+                    subspace_method = self.subspace_method(
+                        self,
+                        k=k,
+                        max_epochs=self.max_epochs,
                     )
 
-                train_latents, train_labels = subspace_method.train(
-                    train_dataset, test_dataset
+                    if self.layer_mods is not None:
+                        # if subspace method in layer_mods
+                        subspace_method = model_modifier.modify_model_architecture(
+                            subspace_method,
+                            self.layer_mods,
+                        )
+
+                    train_latents, train_labels = subspace_method.train(
+                        train_dataset, test_dataset
+                    )
+                    (
+                        test_latents,
+                        test_labels,
+                        data_dims,
+                    ) = subspace_method.convert_to_latent(test_dataset)
+
+                    # make a new CustomDataset with the latent features
+                    train_dataset = CustomDataset(train_latents, train_labels)
+                    test_dataset = CustomDataset(test_latents, test_labels)
+
+                    new_folds.append((train_dataset, test_dataset))
+
+                self.folds = (
+                    new_folds  # update the folds with the new train and test datasets
                 )
-                (
-                    test_latents,
-                    test_labels,
-                    data_dims,
-                ) = subspace_method.convert_to_latent(test_dataset)
+                self.data_dims = data_dims  # update the data dimensions
 
-                # make a new CustomDataset with the latent features
-                train_dataset = CustomDataset(train_latents, train_labels)
-                test_dataset = CustomDataset(test_latents, test_labels)
+            else:
+                new_folds = []
 
-                new_folds.append((train_dataset, test_dataset))
+                for k, fold in enumerate(self.folds):
+                    train_dataset, test_dataset = fold
 
-            self.folds = (
-                new_folds  # update the folds with the new train and test datasets
-            )
-            self.data_dims = data_dims  # update the data dimensions
+                    subspace_method = self.subspace_method(
+                        self,
+                        k=k,
+                        max_epochs=self.max_epochs,
+                        checkpoint_path=checkpoint_path,
+                    )
+
+                    (
+                        train_latents,
+                        train_labels,
+                        data_dims,
+                    ) = subspace_method.convert_to_latent(train_dataset)
+
+                    (
+                        test_latents,
+                        test_labels,
+                        data_dims,
+                    ) = subspace_method.convert_to_latent(test_dataset)
+
+                    # make a new CustomDataset with the latent features
+                    train_dataset = CustomDataset(train_latents, train_labels)
+                    test_dataset = CustomDataset(test_latents, test_labels)
+
+                    new_folds.append((train_dataset, test_dataset))
+
+                self.folds = (
+                    new_folds  # update the folds with the new train and test datasets
+                )
+                self.data_dims = data_dims  # update the data dimensions
 
     def train_dataloader(self, fold_idx):
         """
@@ -1221,6 +1301,7 @@ def get_data_module(
     optional_suffix="",
     checkpoint_path=None,
     extra_log_string_dict=None,
+    own_early_stopping_callback=None,
 ):
     """
     Gets the data module for the specified modality and fusion type.
@@ -1247,6 +1328,8 @@ def get_data_module(
         Input format {"name": "value"}. In the run name, the extra string will be added
         as "name_value". And a tag will be added as "name_value".
         Default None.
+    own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
+        Early stopping callback class (default None).
 
 
     Returns
@@ -1313,6 +1396,7 @@ def get_data_module(
             layer_mods=layer_mods,
             max_epochs=max_epochs,
             extra_log_string_dict=extra_log_string_dict,
+            own_early_stopping_callback=own_early_stopping_callback,
         )
         dm.prepare_data()
         dm.setup(checkpoint_path=checkpoint_path)

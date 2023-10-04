@@ -52,7 +52,14 @@ Key Features:
 
 
 
+.. rst-class:: sphx-glr-script-out
 
+.. code-block:: pytb
+
+    Traceback (most recent call last):
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/training_and_testing/plot_two_models_traintest.py", line 24, in <module>
+        from fusilli.eval import Plotter
+    ImportError: cannot import name 'Plotter' from 'fusilli.eval' (/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/eval.py)
 
 
 
@@ -93,19 +100,6 @@ We're importing ConcatTabularData and TabularChannelWiseMultiAttention models fo
 
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    Imported methods:
-    ['Concatenating tabular data' 'Channel-wise multiplication net (tabular)']
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 60-72
 
 2. Set the training parameters
@@ -135,12 +129,6 @@ If we were going to use a subspace-based fusion model, we would also need to set
 
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 82-86
 
 3. Generating simulated data
@@ -160,12 +148,6 @@ This function also simulated image data which we aren't using here.
         img_dims=(1, 100, 100),
         params=params,
     )
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 96-108
@@ -188,12 +170,6 @@ First we'll create a dictionary to store both the trained models so we can compa
 .. code-block:: default
 
     all_trained_models = {}  # create dictionary to store trained models
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 111-120
@@ -232,21 +208,6 @@ To train the first model we need to:
 
     # Add trained model to dictionary
     all_trained_models[fusion_model.__name__] = model_1_dict[fusion_model.__name__]
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
-.. code-block:: pytb
-
-    Traceback (most recent call last):
-      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/training_and_testing/plot_two_models_traintest.py", line 131, in <module>
-        model_1_dict = train_and_save_models(
-      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/train.py", line 251, in train_and_save_models
-        trained_model.trainer.checkpoint_callback.best_model_path,
-    AttributeError: 'NoneType' object has no attribute 'best_model_path'
-
 
 
 
@@ -351,7 +312,7 @@ We can also get the metrics of the two models into a Pandas DataFrame using the 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.785 seconds)
+   **Total running time of the script:** (0 minutes 0.001 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_and_testing_plot_two_models_traintest.py:

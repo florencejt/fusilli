@@ -63,7 +63,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
@@ -102,11 +101,15 @@
 <span class="kn">from</span> <span class="nn">fusilli.fusion_models.base_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">pytorch_lightning</span> <span class="k">as</span> <span class="nn">pl</span>
-<span class="kn">from</span> <span class="nn">fusilli.utils.training_utils</span> <span class="kn">import</span> <span class="n">init_trainer</span>
+<span class="kn">from</span> <span class="nn">fusilli.utils.training_utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">init_trainer</span><span class="p">,</span>
+    <span class="n">get_checkpoint_filenames_for_subspace_models</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 <span class="kn">from</span> <span class="nn">fusilli.fusion_models.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+
 
 <span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
 
@@ -661,7 +664,14 @@
 <span class="sd">        Image unimodal network.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="denoising_autoencoder_subspace_method.__init__"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="c1"># adding the autoencoder and img_unimodal to the class so that we can access them later?</span>
+
+    <span class="n">subspace_models</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">DenoisingAutoencoder</span><span class="p">,</span>
+        <span class="n">ImgUnimodalDAE</span><span class="p">,</span>
+    <span class="p">]</span>  <span class="c1"># access later for loading checkpoint paths?</span>
+
+<div class="viewcode-block" id="denoising_autoencoder_subspace_method.__init__"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -669,18 +679,52 @@
 <span class="sd">            Data module containing the data.</span>
 <span class="sd">        max_epochs : int</span>
 <span class="sd">            Maximum number of epochs. Default is 1000.</span>
+<span class="sd">        checkpoint_path : list</span>
+<span class="sd">            List containing the checkpoint paths for the denoising autoencoder and the image</span>
+<span class="sd">            unimodal network. Default is None - which means that the model needs training.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span> <span class="o">=</span> <span class="n">datamodule</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dae_trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal_trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span> <span class="o">=</span> <span class="n">DenoisingAutoencoder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">)</span>
+        <span class="n">checkpoint_filenames</span> <span class="o">=</span> <span class="n">get_checkpoint_filenames_for_subspace_models</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal</span> <span class="o">=</span> <span class="n">ImgUnimodalDAE</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">pred_type</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">multiclass_dims</span><span class="p">,</span>
-        <span class="p">)</span></div>
+        <span class="c1"># if checkpoint_path is None, then we are training the model</span>
+        <span class="k">if</span> <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dae_trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span>
+                <span class="kc">None</span><span class="p">,</span>
+                <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">params</span><span class="p">,</span>
+                <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
+                <span class="n">checkpoint_filename</span><span class="o">=</span><span class="n">checkpoint_filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal_trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span>
+                <span class="kc">None</span><span class="p">,</span>
+                <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">params</span><span class="p">,</span>
+                <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
+                <span class="n">checkpoint_filename</span><span class="o">=</span><span class="n">checkpoint_filenames</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_models</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_models</span><span class="p">[</span><span class="mi">1</span><span class="p">](</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">pred_type</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">multiclass_dims</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># if checkpoint_path is not None, then we are loading the model</span>
+        <span class="c1"># probably for plotting with from_new_data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span>
+                <span class="n">checkpoint_path</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">data_dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_models</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span>
+                <span class="n">checkpoint_path</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">data_dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span>
+                <span class="n">pred_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">pred_type</span><span class="p">,</span>
+                <span class="n">multiclass_dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">multiclass_dims</span><span class="p">,</span>
+            <span class="p">)</span></div>
 
 <div class="viewcode-block" id="denoising_autoencoder_subspace_method.train"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -747,6 +791,12 @@
         <span class="n">train_latent_image_space</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
             <span class="p">(</span><span class="n">train_tab_latent_space</span><span class="p">,</span> <span class="n">train_img_feature_maps</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span>
         <span class="p">)</span>
+
+        <span class="c1"># save the trained trainers in dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trained_trainers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dae_trainer</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal_trainer</span><span class="p">,</span>
+        <span class="p">}</span>
 
         <span class="c1"># make the training dataset out of them</span>
         <span class="k">return</span> <span class="p">(</span>

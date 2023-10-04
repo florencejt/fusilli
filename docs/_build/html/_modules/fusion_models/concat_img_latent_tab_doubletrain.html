@@ -63,7 +63,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
@@ -113,7 +112,10 @@
 
 <span class="kn">from</span> <span class="nn">fusilli.fusion_models.base_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
 <span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
-<span class="kn">from</span> <span class="nn">fusilli.utils.training_utils</span> <span class="kn">import</span> <span class="n">init_trainer</span>
+<span class="kn">from</span> <span class="nn">fusilli.utils.training_utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_checkpoint_filenames_for_subspace_models</span><span class="p">,</span>
+    <span class="n">init_trainer</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="ImgLatentSpace"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.ImgLatentSpace">[docs]</a><span class="k">class</span> <span class="nc">ImgLatentSpace</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
@@ -382,7 +384,9 @@
 <span class="sd">        Autoencoder to train the latent image space.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="concat_img_latent_tab_subspace_method.__init__"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="n">subspace_models</span> <span class="o">=</span> <span class="p">[</span><span class="n">ImgLatentSpace</span><span class="p">]</span>
+
+<div class="viewcode-block" id="concat_img_latent_tab_subspace_method.__init__"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -390,10 +394,28 @@
 <span class="sd">            Data module containing the data.</span>
 <span class="sd">        max_epochs : int</span>
 <span class="sd">            Maximum number of epochs to train the latent image space.</span>
+<span class="sd">        checkpoint_path : list</span>
+<span class="sd">            List containing the path to the checkpoint of the latent image space.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span> <span class="o">=</span> <span class="n">datamodule</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span> <span class="o">=</span> <span class="n">ImgLatentSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">)</span></div>
+
+        <span class="n">checkpoint_filenames</span> <span class="o">=</span> <span class="n">get_checkpoint_filenames_for_subspace_models</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span>
+                <span class="n">checkpoint_path</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">data_dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span>
+                <span class="kc">None</span><span class="p">,</span>
+                <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">params</span><span class="p">,</span>
+                <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
+                <span class="n">checkpoint_filename</span><span class="o">=</span><span class="n">checkpoint_filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span> <span class="o">=</span> <span class="n">ImgLatentSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="concat_img_latent_tab_subspace_method.train"><a class="viewcode-back" href="../../source/fusion_models.html#fusion_models.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
