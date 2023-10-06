@@ -2,15 +2,15 @@
 Functions for initializing the pytorch lightning logger and trainer.
 """
 
-import wandb
-from pytorch_lightning.loggers import TensorBoardLogger, WandbLogger
-from pytorch_lightning.callbacks.early_stopping import EarlyStopping
-from pytorch_lightning.callbacks import ModelCheckpoint
-from pytorch_lightning import Trainer
-from tqdm import tqdm
-from pytorch_lightning.callbacks import TQDMProgressBar
 import os
+
 import torch.nn as nn
+import wandb
+from pytorch_lightning import Trainer
+from pytorch_lightning.callbacks import ModelCheckpoint, TQDMProgressBar
+from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+from pytorch_lightning.loggers import CSVLogger, TensorBoardLogger, WandbLogger
+from tqdm import tqdm
 
 
 def get_file_suffix_from_dict(extra_log_string_dict):
@@ -57,7 +57,10 @@ def set_logger(params, fold, fusion_model, extra_log_string_dict=None):
     Returns:
         logger (object): Pytorch lightning logger object.
     """
-    method_name = fusion_model.__class__.__name__
+    if hasattr(fusion_model, "__name__"):
+        method_name = fusion_model.__name__
+    else:
+        method_name = fusion_model.__class__.__name__
     modality_type = fusion_model.modality_type
     fusion_type = fusion_model.fusion_type
 
@@ -86,7 +89,13 @@ def set_logger(params, fold, fusion_model, extra_log_string_dict=None):
                 logger.experiment.config[key] = value
 
     else:
-        logger = None
+        # change to csvlogger instead of log
+
+        logger = CSVLogger(
+            save_dir=params["loss_log_dir"],
+            name=None,
+            version=name,
+        )
 
     return logger
 
@@ -312,6 +321,23 @@ def get_final_val_metrics(trainer):
         metric2 (float): Final validation metric 2.
     """
     metric_names = trainer.model.metric_names_list
+
+    print(trainer.callback_metrics)
+
+    # raise error if trainer.callback_metrics is empty
+    if len(trainer.callback_metrics) == 0:
+        raise ValueError("trainer.callback_metrics is empty.")
+
+    # raise error if metric_names[0]_val or metric_names[1]_val is not in trainer.callback_metrics
+    if f"{metric_names[0]}_val" not in trainer.callback_metrics.keys():
+        raise ValueError(
+            f"{metric_names[0]}_val not in trainer.callback_metrics.keys()."
+        )
+    if f"{metric_names[1]}_val" not in trainer.callback_metrics.keys():
+        raise ValueError(
+            f"{metric_names[1]}_val not in trainer.callback_metrics.keys()."
+        )
+
     metric1 = trainer.callback_metrics[f"{metric_names[0]}_val"].item()
     metric2 = trainer.callback_metrics[f"{metric_names[1]}_val"].item()
 

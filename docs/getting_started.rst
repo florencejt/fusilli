@@ -10,6 +10,15 @@ Installation
 
    pip install fusilli
 
+
+File structure needed
+------------------------
+
+- loss_logs if using CSVLogger
+- local_figures
+- checkpoints
+
+
 Simple Example
 --------------
 

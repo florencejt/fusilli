@@ -13,6 +13,8 @@ import wandb
 import warnings
 import inspect
 from fusilli.utils import model_modifier
+from pytorch_lightning.loggers import CSVLogger
+from fusilli.utils.csv_loss_plotter import plot_loss_curve
 
 
 def train_and_test(
@@ -146,6 +148,10 @@ def train_and_test(
 
     pl_model.metric1 = metric_1
     pl_model.metric2 = metric_2
+
+    # if loss is saved in csv file: plot the loss and save it now
+    if isinstance(logger, CSVLogger):
+        plot_loss_curve(params, logger)
 
     return pl_model
 

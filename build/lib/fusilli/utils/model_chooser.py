@@ -182,10 +182,12 @@ def get_models(conditions_dict, fusion_model_dict=fusion_model_dict):
                 ]
                 if invalid_fusion_types:
                     raise ValueError(
-                        "Invalid fusion types for feature",
+                        "Invalid fusion type for feature",
                         feature,
                         ":",
                         invalid_fusion_types,
+                        ". Choose from:",
+                        valid_fusion_types,
                     )
             elif condition != "all" and condition not in valid_fusion_types:
                 raise ValueError(
@@ -202,10 +204,12 @@ def get_models(conditions_dict, fusion_model_dict=fusion_model_dict):
                 ]
                 if invalid_modality_types:
                     raise ValueError(
-                        "Invalid modality types for feature",
+                        "Invalid modality type for feature",
                         feature,
                         ":",
                         invalid_modality_types,
+                        ". Choose from:",
+                        valid_modality_types,
                     )
             elif condition != "all" and condition not in valid_modality_types:
                 raise ValueError(

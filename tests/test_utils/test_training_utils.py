@@ -415,33 +415,6 @@ def test_get_final_val_metrics_empty_metrics():
         get_final_val_metrics(trainer)
 
 
-# test error raised when more than 2 metrics
-def test_get_final_val_metrics_more_than_2_metrics():
-    # Create a dummy LightningModule and a Trainer
-    model = DummyLightningModule()
-
-    class MockTrainer:
-        def __init__(self, model):
-            self.callback_metrics = {}
-            self.model = model
-
-    trainer = MockTrainer(model)
-
-    # Set some dummy metrics in the Trainer
-    trainer.callback_metrics = {
-        "Accuracy_val": torch.tensor(0.5),  # Example value
-        "R2_val": torch.tensor(0.8),  # Example value
-        "R2_val2": torch.tensor(0.8),  # Example value
-    }
-
-    # Get the final validation metrics
-    with pytest.raises(
-        Warning,
-        match=r"More than 2 metrics in trainer.callback_metrics",
-    ):
-        get_final_val_metrics(trainer)
-
-
 # raises error with wrong metric names
 def test_get_final_val_metrics_wrong_metric_names():
     # Create a dummy LightningModule and a Trainer
