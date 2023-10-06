@@ -11,7 +11,7 @@ import contextlib
 import pandas as pd
 import numpy as np
 from fusilli.utils.training_utils import get_checkpoint_filenames_for_subspace_models
-
+import sys
 
 from fusilli.utils import check_model_validity
 
@@ -51,7 +51,8 @@ def mcvae_early_stopping_tol(patience, tolerance, loss_logs, verbose=False):
                 if verbose:
                     print(
                         f"Epoch chosen after early stopping with patience {patience} \
-                    and tolerance {tolerance} : {i}."
+                    and tolerance {tolerance} : {i - triggertimes}.",
+                        file=sys.stdout,
                     )
                 done = 1
                 break
@@ -65,7 +66,7 @@ def mcvae_early_stopping_tol(patience, tolerance, loss_logs, verbose=False):
         if verbose:
             print("No epoch chosen with this patience.")
 
-    return i
+    return i - triggertimes
 
 
 class MCVAESubspaceMethod:

@@ -312,6 +312,27 @@ def get_final_val_metrics(trainer):
         metric2 (float): Final validation metric 2.
     """
     metric_names = trainer.model.metric_names_list
+
+    # raise error if trainer.callback_metrics is empty
+    if len(trainer.callback_metrics) == 0:
+        raise ValueError("trainer.callback_metrics is empty.")
+
+    # raise warning if more than 2 metrics in trainer.callback_metrics
+    if len(trainer.callback_metrics) > 2:
+        raise Warning(
+            f"More than 2 metrics in trainer.callback_metrics. Using {metric_names[0]}_val and {metric_names[1]}_val."
+        )
+
+    # raise error if metric_names[0]_val or metric_names[1]_val is not in trainer.callback_metrics
+    if f"{metric_names[0]}_val" not in trainer.callback_metrics.keys():
+        raise ValueError(
+            f"{metric_names[0]}_val not in trainer.callback_metrics.keys()."
+        )
+    if f"{metric_names[1]}_val" not in trainer.callback_metrics.keys():
+        raise ValueError(
+            f"{metric_names[1]}_val not in trainer.callback_metrics.keys()."
+        )
+
     metric1 = trainer.callback_metrics[f"{metric_names[0]}_val"].item()
     metric2 = trainer.callback_metrics[f"{metric_names[1]}_val"].item()
 

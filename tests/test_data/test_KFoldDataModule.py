@@ -19,11 +19,13 @@ def create_kfold_data_module(create_test_files):
 
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     batch_size = 23
-    modality_type = "tab_img"
+
+    example_fusion_model = Mock()
+    example_fusion_model.modality_type = "tab_img"
 
     data_module = KFoldDataModule(
         params,
-        modality_type,
+        example_fusion_model,
         sources,
         batch_size,
     )

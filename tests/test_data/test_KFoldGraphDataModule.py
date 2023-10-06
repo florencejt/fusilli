@@ -3,6 +3,7 @@ from fusilli.data import KFoldGraphDataModule
 from .test_CustomDataModule import create_test_files
 import torch_geometric
 import numpy as np
+from unittest.mock import patch, Mock
 
 
 class MockGraphMakerModule:
@@ -26,11 +27,12 @@ def create_graph_data_module(create_test_files):
     image_torch_file_2d = create_test_files["image_torch_file_2d"]
 
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
-    modality_type = "both_tab"
+    example_fusion_model = Mock()
+    example_fusion_model.modality_type = "both_tab"
 
     data_module = KFoldGraphDataModule(
         params,
-        modality_type,
+        example_fusion_model,
         sources,
         graph_creation_method=MockGraphMakerModule,
     )

@@ -5,6 +5,7 @@ from fusilli.fusion_models.edge_corr_gnn import EdgeCorrGNN, EdgeCorrGraphMaker
 from tests.test_data.test_CustomDataModule import create_test_files
 from fusilli.data import GraphDataModule
 from torch_geometric.nn import GCNConv
+from unittest.mock import patch, Mock
 
 
 @pytest.fixture
@@ -26,10 +27,11 @@ def model_instance_EdgeCorrGraphMaker(create_test_files):
     }
 
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
-    modality_type = "both_tab"
+    example_fusion_model = Mock()
+    example_fusion_model.modality_type = "both_tab"
 
     # Initialize the CustomDataModule
-    dm = GraphDataModule(params, modality_type, sources, EdgeCorrGraphMaker)
+    dm = GraphDataModule(params, example_fusion_model, sources, EdgeCorrGraphMaker)
     dm.prepare_data()
 
     return EdgeCorrGraphMaker(dm.dataset)

@@ -79,10 +79,12 @@ def test_train_dataloader(create_test_files):
     }
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     batch_size = 8
-    modality_type = "tabular1"
+
+    example_fusion_model = Mock()
+    example_fusion_model.modality_type = "tabular1"
 
     # Initialize the CustomDataModule
-    datamodule = CustomDataModule(params, modality_type, sources, batch_size)
+    datamodule = CustomDataModule(params, example_fusion_model, sources, batch_size)
     datamodule.prepare_data()
     datamodule.setup()
 
@@ -108,10 +110,12 @@ def test_val_dataloader(create_test_files):
 
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     batch_size = 23
-    modality_type = "tab_img"
+
+    example_fusion_model = Mock()
+    example_fusion_model.modality_type = "tab_img"
 
     # Initialize the CustomDataModule
-    datamodule = CustomDataModule(params, modality_type, sources, batch_size)
+    datamodule = CustomDataModule(params, example_fusion_model, sources, batch_size)
     datamodule.prepare_data()
     datamodule.setup()
 
@@ -150,7 +154,9 @@ def test_setup_calls_subspace_method(create_test_files):
 
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     batch_size = 23
-    modality_type = "tab_img"
+
+    example_fusion_model = Mock()
+    example_fusion_model.modality_type = "tab_img"
 
     with patch(
         "fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method",
@@ -159,7 +165,7 @@ def test_setup_calls_subspace_method(create_test_files):
         # Initialize the CustomDataModule
         datamodule = CustomDataModule(
             params,
-            modality_type,
+            example_fusion_model,
             sources,
             batch_size,
             subspace_method=mock_subspace_method,
@@ -168,7 +174,9 @@ def test_setup_calls_subspace_method(create_test_files):
         datamodule.setup()
 
         # Assert that the subspace_method class was called
-        mock_subspace_method.assert_called_once_with(datamodule, datamodule.max_epochs)
+        mock_subspace_method.assert_called_once_with(
+            datamodule, max_epochs=datamodule.max_epochs, k=None
+        )
 
 
 # Run pytest

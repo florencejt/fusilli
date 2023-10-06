@@ -26,11 +26,17 @@ def create_graph_data_module(create_test_files):
 
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     batch_size = 23
-    modality_type = "both_tab"
+    # modality_type = "both_tab"
+
+    class example_fusion_model:
+        modality_type = "both_tab"
+
+        def __init__(self):
+            pass
 
     data_module = GraphDataModule(
         params,
-        modality_type,
+        example_fusion_model,
         sources,
         graph_creation_method=MockGraphMakerModule,
     )

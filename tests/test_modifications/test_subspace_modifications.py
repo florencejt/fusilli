@@ -20,6 +20,7 @@ from fusilli.fusion_models.mcvae_tab import (
 from tests.test_data.test_CustomDataModule import create_test_files
 from fusilli.data import CustomDataModule
 import warnings
+from unittest.mock import patch, Mock
 
 
 # correct modifications
@@ -723,13 +724,15 @@ def model_instance_denoising_autoencoder_subspace_method_2D(create_test_files):
         "test_size": 0.2,
         "pred_type": "binary",
         "multiclass_dims": None,
+        "checkpoint_dir": None,
     }
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     batch_size = 8
-    modality_type = "tab_img"
+    example_fusion_model = Mock()
+    example_fusion_model.modality_type = "tab_img"
 
     # Initialize the CustomDataModule
-    dm = CustomDataModule(params, modality_type, sources, batch_size)
+    dm = CustomDataModule(params, example_fusion_model, sources, batch_size)
     dm.prepare_data()
     dm.setup()
 
@@ -746,13 +749,15 @@ def model_instance_denoising_autoencoder_subspace_method_3D(create_test_files):
         "test_size": 0.2,
         "pred_type": "binary",
         "multiclass_dims": None,
+        "checkpoint_dir": None,
     }
     sources = [tabular1_csv, tabular2_csv, image_torch_file_3d]
     batch_size = 8
-    modality_type = "tab_img"
+    example_fusion_model = Mock()
+    example_fusion_model.modality_type = "tab_img"
 
     # Initialize the CustomDataModule
-    dm = CustomDataModule(params, modality_type, sources, batch_size)
+    dm = CustomDataModule(params, example_fusion_model, sources, batch_size)
     dm.prepare_data()
     dm.setup()
 
@@ -769,13 +774,15 @@ def model_instance_concat_img_latent_tab_subspace_method_2D(create_test_files):
         "test_size": 0.2,
         "pred_type": "binary",
         "multiclass_dims": None,
+        "checkpoint_dir": None,
     }
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     batch_size = 8
-    modality_type = "tab_img"
+    example_fusion_model = Mock()
+    example_fusion_model.modality_type = "tab_img"
 
     # Initialize the CustomDataModule
-    dm = CustomDataModule(params, modality_type, sources, batch_size)
+    dm = CustomDataModule(params, example_fusion_model, sources, batch_size)
     dm.prepare_data()
     dm.setup()
 
@@ -792,13 +799,15 @@ def model_instance_concat_img_latent_tab_subspace_method_3D(create_test_files):
         "test_size": 0.2,
         "pred_type": "binary",
         "multiclass_dims": None,
+        "checkpoint_dir": None,
     }
     sources = [tabular1_csv, tabular2_csv, image_torch_file_3d]
     batch_size = 8
-    modality_type = "tab_img"
+    example_fusion_model = Mock()
+    example_fusion_model.modality_type = "tab_img"
 
     # Initialize the CustomDataModule
-    datamodule = CustomDataModule(params, modality_type, sources, batch_size)
+    datamodule = CustomDataModule(params, example_fusion_model, sources, batch_size)
     datamodule.prepare_data()
     datamodule.setup()
 
@@ -815,13 +824,15 @@ def model_instance_MCVAESubspaceMethod(create_test_files):
         "test_size": 0.2,
         "pred_type": "binary",
         "multiclass_dims": None,
+        "checkpoint_dir": None,
     }
     sources = [tabular1_csv, tabular2_csv, image_torch_file_3d]
     batch_size = 8
-    modality_type = "both_tab"
+    example_fusion_model = Mock()
+    example_fusion_model.modality_type = "both_tab"
 
     # Initialize the CustomDataModule
-    datamodule = CustomDataModule(params, modality_type, sources, batch_size)
+    datamodule = CustomDataModule(params, example_fusion_model, sources, batch_size)
     datamodule.prepare_data()
     datamodule.setup()
 
