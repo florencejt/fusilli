@@ -2,24 +2,26 @@
 Functions for evaluating the performance of the models and plotting the results.
 """
 
-import matplotlib.pyplot as plt
-import numpy as np
-import torch
-from sklearn.metrics import confusion_matrix
 import math
-from matplotlib import gridspec
-import torch_geometric as pyg
-import networkx as nx
-from sklearn.manifold import TSNE
-import pandas as pd
-import torch.nn as nn
-from torch.utils.data import ConcatDataset, DataLoader
 import os
+
+import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
+import pandas as pd
+import torch
+import torch.nn as nn
+import torch_geometric as pyg
+from matplotlib import gridspec
+from sklearn.manifold import TSNE
+from sklearn.metrics import confusion_matrix
+from torch.utils.data import ConcatDataset, DataLoader
+
+import fusilli.data as data
 from fusilli.fusion_models.base_model import BaseModel
 from fusilli.utils.training_utils import (
     get_checkpoint_filename_for_trained_fusion_model,
 )
-import fusilli.data as data
 
 
 class ParentPlotter:
@@ -157,9 +159,6 @@ class ParentPlotter:
         metrics_per_fold = {metric_names[0]: [], metric_names[1]: []}
 
         params_copy = params.copy()
-        # Setting to False because we don't want to split the new data into folds
-        # We just want to know how our new data performs on each trained fold
-        # params_copy["kfold_flag"] = False
 
         # loop through the folds and get the predictions for each fold
         for k, fold_model in enumerate(model_list):
@@ -455,8 +454,16 @@ class RealsVsPreds(ParentPlotter):
             ``params["img_source_test]``.
             Change this to whatever suffix you have chosen for your new data files.
         """
-        # run X, y through the models and get the predictions
-        # calculate metricS
+
+        if not isinstance(model, list):
+            raise ValueError(
+                (
+                    "Argument 'model' is not a list. "
+                    "Please check the model and the function input."
+                    "If you are using a train/test model, the single model must be in a list of length 1."
+                )
+            )
+
         if len(model) > 1:
             # if isinstance(model, list):  # kfold model
             if not model[0].model.params["kfold_flag"]:
@@ -495,8 +502,8 @@ class RealsVsPreds(ParentPlotter):
             if model[0].model.params["kfold_flag"]:
                 raise ValueError(
                     (
-                        "Argument 'model' is a length-1 list but kfold_flag is True. "
-                        "Please check the model and the function input."
+                        "Argument 'model' is a list of one model but kfold_flag is True. "
+                        "Please check the model and the function input (k must be larger than 1)."
                     )
                 )
 
@@ -518,19 +525,20 @@ class RealsVsPreds(ParentPlotter):
             figure.suptitle("From new data")
 
         else:
-            raise ValueError(
-                (
-                    "Argument 'model' is not a list or nn.Module. "
-                    "Please check the model and the function input."
-                )
-            )
+            raise ValueError(("Argument 'model' is an empty list. "))
 
         return figure
 
     @classmethod
     def from_final_val_data(self, model):
-        # get the predictions from the models (already saved in the model)
-        # get the metrics from the models (already saved in the model)
+        if not isinstance(model, list):
+            raise ValueError(
+                (
+                    "Argument 'model' is not a list. "
+                    "Please check the model and the function input."
+                    "If you are using a train/test model, the single model must be in a list of length 1."
+                )
+            )
 
         if len(model) > 1:  # kfold model (list of models and their checkpoints)
             # if isinstance(model[0], list):  # kfold model
@@ -592,12 +600,7 @@ class RealsVsPreds(ParentPlotter):
             figure.suptitle("From final val data")
 
         else:
-            raise ValueError(
-                (
-                    "Argument 'model' is not a list. Even just one model has to be in a list."
-                    "Please check the model and the function input."
-                )
-            )
+            raise ValueError(("Argument 'model' is an empty list. "))
 
         return figure
 
@@ -761,8 +764,15 @@ class ConfusionMatrix(ParentPlotter):
             ``params["img_source_test]``.
             Change this to whatever suffix you have chosen for your new data files.
         """
-        # run X, y through the models and get the predictions
-        # calculate metricS
+
+        if not isinstance(model, list):
+            raise ValueError(
+                (
+                    "Argument 'model' is not a list. "
+                    "Please check the model and the function input."
+                    "If you are using a train/test model, the single model must be in a list of length 1."
+                )
+            )
 
         if len(model) > 1:  # kfold model
             if not model[0].model.params["kfold_flag"]:
@@ -793,6 +803,14 @@ class ConfusionMatrix(ParentPlotter):
             )
 
         elif len(model) == 1:  # train/test model
+            if model[0].model.params["kfold_flag"]:
+                raise ValueError(
+                    (
+                        "Argument 'model' is a list of one model but kfold_flag is True. "
+                        "Please check the model and the function input (k must be larger than 1)."
+                    )
+                )
+
             (
                 train_reals,
                 train_preds,
@@ -802,24 +820,23 @@ class ConfusionMatrix(ParentPlotter):
             ) = self.get_new_tt_data(model, params, data_file_suffix)
 
             # plot the figure
-            figure = self.confusion_matrix_tt(
-                model, train_reals, train_preds, val_reals, val_preds, metric_values
-            )
+            figure = self.confusion_matrix_tt(val_reals, val_preds, metric_values)
 
         else:
-            raise ValueError(
-                (
-                    "Argument 'model' is not a list or nn.Module. "
-                    "Please check the model and the function input."
-                )
-            )
+            raise ValueError(("Argument 'model' is an empty list. "))
 
         return figure
 
     @classmethod
     def from_final_val_data(self, model):
-        # get the predictions from the models (already saved in the model)
-        # get the metrics from the models (already saved in the model)
+        if not isinstance(model, list):
+            raise ValueError(
+                (
+                    "Argument 'model' is not a list. "
+                    "Please check the model and the function input."
+                    "If you are using a train/test model, the single model must be in a list of length 1."
+                )
+            )
 
         if len(model) > 1:  # kfold model
             if not model[0].model.params["kfold_flag"]:
@@ -852,6 +869,14 @@ class ConfusionMatrix(ParentPlotter):
             )
 
         elif len(model) == 1:  # train/test model
+            if model[0].model.params["kfold_flag"]:
+                raise ValueError(
+                    (
+                        "Argument 'model' is a list of one model but kfold_flag is True. "
+                        "Please check the model and the function input (k must be larger than 1)."
+                    )
+                )
+
             self.model = model
 
             (
@@ -865,12 +890,7 @@ class ConfusionMatrix(ParentPlotter):
             figure = self.confusion_matrix_tt(val_reals, val_preds, metric_values)
 
         else:
-            raise ValueError(
-                (
-                    "Argument 'model' is not a list or nn.Module. "
-                    "Please check the model and the function input."
-                )
-            )
+            raise ValueError(("Argument 'model' is an empty list. "))
 
         return figure
 
@@ -1070,11 +1090,6 @@ class ModelComparison(ParentPlotter):
                 comparing_models_metrics[model[0].model.method_name] = metric_values
 
             print("comparing models metrics", comparing_models_metrics)
-
-            # metric_values = {
-            #     model.metrics[model.model.pred_type][0]["name"]: model.metric1,
-            #     model.metrics[model.model.pred_type][1]["name"]: model.metric2,
-            # }
 
             figure = self.train_test_comparison_plot(comparing_models_metrics)
             df = self.get_performance_dataframe(
