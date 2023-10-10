@@ -63,11 +63,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -150,7 +147,7 @@
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="model_importer"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.model_chooser.html#fusilli.utils.model_chooser.model_importer">[docs]</a><span class="k">def</span> <span class="nf">model_importer</span><span class="p">(</span><span class="n">fusion_model_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="model_importer"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_chooser.html#fusilli.utils.model_chooser.model_importer">[docs]</a><span class="k">def</span> <span class="nf">model_importer</span><span class="p">(</span><span class="n">fusion_model_dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Imports all the fusion models in the fusion_model_dict.</span>
 
@@ -178,7 +175,7 @@
     <span class="k">return</span> <span class="n">fusion_models</span></div>
 
 
-<div class="viewcode-block" id="get_models"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.model_chooser.html#fusilli.utils.model_chooser.get_models">[docs]</a><span class="k">def</span> <span class="nf">get_models</span><span class="p">(</span><span class="n">conditions_dict</span><span class="p">,</span> <span class="n">fusion_model_dict</span><span class="o">=</span><span class="n">fusion_model_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="get_models"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_chooser.html#fusilli.utils.model_chooser.get_models">[docs]</a><span class="k">def</span> <span class="nf">get_models</span><span class="p">(</span><span class="n">conditions_dict</span><span class="p">,</span> <span class="n">fusion_model_dict</span><span class="o">=</span><span class="n">fusion_model_dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Filters the models based on the conditions specified by the user.</span>
 
 <span class="sd">    Parameters</span>
@@ -279,10 +276,12 @@
                 <span class="p">]</span>
                 <span class="k">if</span> <span class="n">invalid_fusion_types</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="s2">&quot;Invalid fusion types for feature&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Invalid fusion type for feature&quot;</span><span class="p">,</span>
                         <span class="n">feature</span><span class="p">,</span>
                         <span class="s2">&quot;:&quot;</span><span class="p">,</span>
                         <span class="n">invalid_fusion_types</span><span class="p">,</span>
+                        <span class="s2">&quot;. Choose from:&quot;</span><span class="p">,</span>
+                        <span class="n">valid_fusion_types</span><span class="p">,</span>
                     <span class="p">)</span>
             <span class="k">elif</span> <span class="n">condition</span> <span class="o">!=</span> <span class="s2">&quot;all&quot;</span> <span class="ow">and</span> <span class="n">condition</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_fusion_types</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -299,10 +298,12 @@
                 <span class="p">]</span>
                 <span class="k">if</span> <span class="n">invalid_modality_types</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="s2">&quot;Invalid modality types for feature&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Invalid modality type for feature&quot;</span><span class="p">,</span>
                         <span class="n">feature</span><span class="p">,</span>
                         <span class="s2">&quot;:&quot;</span><span class="p">,</span>
                         <span class="n">invalid_modality_types</span><span class="p">,</span>
+                        <span class="s2">&quot;. Choose from:&quot;</span><span class="p">,</span>
+                        <span class="n">valid_modality_types</span><span class="p">,</span>
                     <span class="p">)</span>
             <span class="k">elif</span> <span class="n">condition</span> <span class="o">!=</span> <span class="s2">&quot;all&quot;</span> <span class="ow">and</span> <span class="n">condition</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_modality_types</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>

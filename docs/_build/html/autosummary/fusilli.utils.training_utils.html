@@ -25,8 +25,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="fusilli.utils.model_modifier" href="fusilli.utils.model_modifier.html" />
-    <link rel="prev" title="fusilli.utils.model_chooser" href="fusilli.utils.model_chooser.html" /> 
+    <link rel="prev" title="fusilli.utils.model_modifier" href="fusilli.utils.model_modifier.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -66,23 +65,28 @@
 <li class="toctree-l1"><a class="reference internal" href="fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">fusilli.utils.training_utils</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.LitProgressBar"><code class="docutils literal notranslate"><span class="pre">LitProgressBar</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#fusilli.utils.training_utils.LitProgressBar.init_validation_tqdm"><code class="docutils literal notranslate"><span class="pre">LitProgressBar.init_validation_tqdm()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="fusilli.utils.html">fusilli.utils</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusilli.utils.csv_loss_plotter.html">fusilli.utils.csv_loss_plotter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">fusilli.utils.training_utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.utils.training_utils.LitProgressBar"><code class="docutils literal notranslate"><span class="pre">LitProgressBar</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fusilli.utils.training_utils.LitProgressBar.init_validation_tqdm"><code class="docutils literal notranslate"><span class="pre">LitProgressBar.init_validation_tqdm()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model"><code class="docutils literal notranslate"><span class="pre">get_checkpoint_filename_for_trained_fusion_model()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models"><code class="docutils literal notranslate"><span class="pre">get_checkpoint_filenames_for_subspace_models()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.get_file_suffix_from_dict"><code class="docutils literal notranslate"><span class="pre">get_file_suffix_from_dict()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.get_final_val_metrics"><code class="docutils literal notranslate"><span class="pre">get_final_val_metrics()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.init_trainer"><code class="docutils literal notranslate"><span class="pre">init_trainer()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.set_checkpoint_name"><code class="docutils literal notranslate"><span class="pre">set_checkpoint_name()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#fusilli.utils.training_utils.set_logger"><code class="docutils literal notranslate"><span class="pre">set_logger()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model"><code class="docutils literal notranslate"><span class="pre">get_checkpoint_filename_for_trained_fusion_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models"><code class="docutils literal notranslate"><span class="pre">get_checkpoint_filenames_for_subspace_models()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.utils.training_utils.get_file_suffix_from_dict"><code class="docutils literal notranslate"><span class="pre">get_file_suffix_from_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.utils.training_utils.get_final_val_metrics"><code class="docutils literal notranslate"><span class="pre">get_final_val_metrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.utils.training_utils.init_trainer"><code class="docutils literal notranslate"><span class="pre">init_trainer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.utils.training_utils.set_checkpoint_name"><code class="docutils literal notranslate"><span class="pre">set_checkpoint_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.utils.training_utils.set_logger"><code class="docutils literal notranslate"><span class="pre">set_logger()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -99,6 +103,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="fusilli.utils.html">fusilli.utils</a></li>
       <li class="breadcrumb-item active">fusilli.utils.training_utils</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/autosummary/fusilli.utils.training_utils.rst.txt" rel="nofollow"> View page source</a>
@@ -244,7 +249,7 @@ metric2 (float): Final validation metric 2.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fusilli.utils.training_utils.init_trainer">
-<span class="sig-name descname"><span class="pre">init_trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_checkpointing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#init_trainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.init_trainer" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">init_trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_checkpointing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">own_early_stopping_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#init_trainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.init_trainer" title="Permalink to this definition"></a></dt>
 <dd><p>Initialize the pytorch lightning trainer object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -255,6 +260,11 @@ metric2 (float): Final validation metric 2.</p>
 <li><p><strong>enable_checkpointing</strong> (<em>bool</em>) – Whether to enable checkpointing. If True, then
 checkpoints will be saved. We use False for the example notebooks in the
 repository/documentation.</p></li>
+<li><p><strong>checkpoint_filename</strong> (<em>str</em>) – Checkpoint filename. Default None if using default checkpointing.</p></li>
+<li><p><strong>own_early_stopping_callback</strong> (<em>object</em>) – Own early stopping callback object. Default None to use default
+early stopping callback. If you want to use your own early stopping callback, then you need to
+define it in the main training script and pass it here or pass into the datamodule object and then
+it will read it from there.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -324,8 +334,7 @@ as “name_value”. And a tag will be added as “name_value”.</p></li>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="fusilli.utils.model_chooser.html" class="btn btn-neutral float-left" title="fusilli.utils.model_chooser" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="fusilli.utils.model_modifier.html" class="btn btn-neutral float-right" title="fusilli.utils.model_modifier" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="fusilli.utils.model_modifier.html" class="btn btn-neutral float-left" title="fusilli.utils.model_modifier" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

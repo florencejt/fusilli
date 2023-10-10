@@ -54,7 +54,11 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Fusilli: an introduction</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#simple-example">Simple Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#file-structure-needed">File structure needed</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#example-beginning-block-for-getting-file-structure">Example beginning block for getting file structure</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#simple-example-to-run-fusilli">Simple Example to run fusilli</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a></li>
@@ -70,10 +74,8 @@
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -109,8 +111,46 @@
 </pre></div>
 </div>
 </section>
-<section id="simple-example">
-<h2>Simple Example<a class="headerlink" href="#simple-example" title="Permalink to this heading"></a></h2>
+<section id="file-structure-needed">
+<h2>File structure needed<a class="headerlink" href="#file-structure-needed" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>loss_log_dir, loss_fig_path if using CSVLogger</p></li>
+<li><dl class="simple">
+<dt>local_figures</dt><dd><ul>
+<li><p>Only really needed if using CSVLogger, otherwise you can plt.show() the figures</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>checkpoints: need to specify in params dict with key “checkpoint_dir”</dt><dd><ul>
+<li><p>params[“checkpoint_dir”] for loading checkpoints</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<section id="example-beginning-block-for-getting-file-structure">
+<h3>Example beginning block for getting file structure<a class="headerlink" href="#example-beginning-block-for-getting-file-structure" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">params</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S&quot;</span><span class="p">),</span>
+
+<span class="n">params</span><span class="p">[</span><span class="s2">&quot;local_fig_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;local_figures/</span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="n">params</span><span class="p">[</span><span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;checkpoints/</span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="n">params</span><span class="p">[</span><span class="s2">&quot;loss_log_dir&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;loss_logs/</span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="n">params</span><span class="p">[</span><span class="s2">&quot;loss_fig_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;local_fig_path&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/losses&quot;</span>
+
+<span class="c1"># make directories</span>
+<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;local_fig_path&quot;</span><span class="p">])</span> <span class="c1"># local_figures</span>
+<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">])</span> <span class="c1"># checkpoints</span>
+<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;loss_log_dir&quot;</span><span class="p">])</span> <span class="c1"># loss_log csvs</span>
+<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;loss_fig_path&quot;</span><span class="p">])</span> <span class="c1"># loss_figures dir within local_figures</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="simple-example-to-run-fusilli">
+<h2>Simple Example to run fusilli<a class="headerlink" href="#simple-example-to-run-fusilli" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># example of using the library goes here!</span>
 </pre></div>
 </div>

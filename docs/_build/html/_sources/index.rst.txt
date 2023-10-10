@@ -42,11 +42,8 @@ This library provides a way to compare different fusion methods for your multimo
    fusilli.fusion_models
    fusilli.data
    fusilli.train
-   fusilli.eval.Plotter
-   fusilli.utils.model_chooser
-   fusilli.utils.training_utils
-   fusilli.utils.model_modifier
-   fusilli.utils.check_model_validity
+   fusilli.eval
+   fusilli.utils
 
 
 

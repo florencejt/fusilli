@@ -1,4 +1,4 @@
-﻿fusilli.utils.model\_modifier
+fusilli.utils.model\_modifier
 =============================
 
 .. automodule:: fusilli.utils.model_modifier

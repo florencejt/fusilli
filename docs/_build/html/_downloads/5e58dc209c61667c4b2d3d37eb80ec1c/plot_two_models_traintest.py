@@ -1,36 +1,37 @@
 """
-Regression: comparing two tabular models trained on simulated data
-====================================================================
+📈 Regression: Comparing Two Tabular Models Trained on Simulated Data 📊
+========================================================================
 
-This script shows how to train two fusion models on a regression task with train/test protocol and multimodal tabular data.
+🚀 Welcome to this tutorial on training and comparing two fusion models on a regression task using simulated multimodal tabular data! 🎉
 
-Key Features:
+🌟 Key Features:
 
-- Importing models based on name.
-- Training and testing models with train/test protocol.
-- Saving trained models to a dictionary for later analysis.
-- Plotting the results of a single model.
-- Plotting the results of multiple models as a bar chart.
-- Saving the results of multiple models as a csv file.
+- 📥 Importing models based on name.
+- 🧪 Training and testing models with train/test protocol.
+- 💾 Saving trained models to a dictionary for later analysis.
+- 📊 Plotting the results of a single model.
+- 📈 Plotting the results of multiple models as a bar chart.
+- 💾 Saving the results of multiple models as a CSV file.
+
 """
 
 import importlib
 
 import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
+import os
 
 from docs.examples import generate_sklearn_simulated_data
 from fusilli.data import get_data_module
-from fusilli.eval import Plotter
-from fusilli.fusion_models.base_model import BaseModel
+from fusilli.eval import RealsVsPreds, ModelComparison
 from fusilli.train import train_and_save_models
 from fusilli.utils.model_chooser import get_models
 
 
 # %%
-# 1. Import fusion models
-# ------------------------
-# Here we import the fusion models to be compared. The models are imported using the
+# 1. Import fusion models 🔍
+# --------------------------------
+# Let's kick things off by importing our fusion models. The models are imported using the
 # :func:`~fusilli.utils.model_chooser.get_models` function, which takes a dictionary of conditions
 # as an input. The conditions are the attributes of the models, e.g. the class name, the modality type, etc.
 #
@@ -57,9 +58,9 @@ for index, row in imported_models.iterrows():
 
 
 # %%
-# 2. Set the training parameters
-# --------------------------------
-# Here we define the parameters for training and testing the models. The parameters are stored in a dictionary and passed to most
+# 2. Set the training parameters 🎯 
+# -----------------------------------
+# Now, let's configure our training parameters. The parameters are stored in a dictionary and passed to most
 # of the methods in this library.
 # For training and testing, the necessary parameters are:
 #
@@ -67,21 +68,21 @@ for index, row in imported_models.iterrows():
 # - ``kfold_flag``: the user sets this to False for train/test protocol.
 # - ``log``: a boolean of whether to log the results using Weights and Biases.
 # - ``pred_type``: the type of prediction to be performed. This is either ``regression``, ``binary``, or ``classification``. For this example we're using regression.
-#
-# If we were going to use a subspace-based fusion model, we would also need to set the latent dimensionality of the subspace with ``subspace_latdims``. This will be shown in a different example.
+# - ``loss_log_dir``: the directory to save the loss logs to. This is used for plotting the loss curves.
 
 params = {
     "test_size": 0.2,
     "kfold_flag": False,
     "log": False,
     "pred_type": "regression",
+    "loss_log_dir": "loss_logs", # where the csv of the loss is saved for plotting later
 }
 
 
 # %%
-# 3. Generating simulated data
+# 3. Generating simulated data 🔮
 # --------------------------------
-# Here we generate simulated data for the two tabular modalities for this example.
+# Time to create some simulated data for our models to work their wonders on. 
 # This function also simulated image data which we aren't using here.
 
 params = generate_sklearn_simulated_data(
@@ -93,8 +94,8 @@ params = generate_sklearn_simulated_data(
 )
 
 # %%
-# 4. Training the first fusion model
-# ----------------------------------
+# 4. Training the first fusion model 🏁
+# --------------------------------------
 # Here we train the first fusion model. We're using the ``train_and_save_models`` function to train and test the models.
 # This function takes the following inputs:
 #
@@ -102,7 +103,6 @@ params = generate_sklearn_simulated_data(
 # - ``data_module``: the data module containing the data.
 # - ``params``: the parameters for training and testing.
 # - ``fusion_model``: the fusion model to be trained.
-# - ``init_model``: the initialised dummy fusion model.
 #
 # First we'll create a dictionary to store both the trained models so we can compare them later.
 all_trained_models = {}  # create dictionary to store trained models
@@ -133,6 +133,7 @@ model_1_dict = train_and_save_models(
     params=params,
     fusion_model=fusion_model,
     enable_checkpointing=False,  # False for the example notebooks
+    show_loss_plot=True, 
 )
 
 # Add trained model to dictionary
@@ -140,19 +141,21 @@ all_trained_models[fusion_model.__name__] = model_1_dict[fusion_model.__name__]
 
 
 # %%
-# 5. Plotting the results of the first model
-# --------------------------------------------
-# We're using the :class:`~fusilli.eval.Plotter` class to plot the results of the first model. This class takes the dictionary of trained models and the parameters as inputs. It returns a dictionary of figures.
-# If there is one model in the dictionary (i.e. only one unique key), then it plots the figures for analysing the results of a single model.
+# 5. Plotting the results of the first model 📊
+# -----------------------------------------------
+# Let's unveil the results of our first model's hard work. We're using the :class:`~fusilli.eval.RealsVsPreds` class to plot the results of the first model. 
+# This class takes the trained model as an input and returns a plot of the real values vs the predicted values from the final validation data (when using from_final_val_data).
+# If you want to plot the results from the test data, you can use from_new_data instead. See the example notebook on plotting with new data for more detail.
 
-plotter = Plotter(model_1_dict, params)
-single_model_figures_dict = plotter.plot_all()
-plotter.show_all(single_model_figures_dict)
+model_1 = list(model_1_dict.values())[0]
+reals_preds_model_1 = RealsVsPreds.from_final_val_data(model_1)
+
+plt.show()
 
 # %% [markdown]
-# 6. Training the second fusion model
-# -------------------------------------
-# Here we train the second fusion model: TabularChannelWiseMultiAttention. We're using the same steps as before, but this time we're using the second model in the ``fusion_models`` list.
+# 6. Training the second fusion model 🏁
+# ---------------------------------------
+#  It's time for our second fusion model to shine! Here we train the second fusion model: TabularChannelWiseMultiAttention. We're using the same steps as before, but this time we're using the second model in the ``fusion_models`` list.
 
 
 # %%
@@ -173,6 +176,7 @@ model_2_dict = train_and_save_models(
     params=params,
     fusion_model=fusion_model,
     enable_checkpointing=False,  # False for the example notebooks
+    show_loss_plot=True,
 )
 
 # Add trained model to dictionary
@@ -180,25 +184,28 @@ all_trained_models[fusion_model.__name__] = model_2_dict[fusion_model.__name__]
 
 
 # %%
-# 7. Plotting the results of the second model
+# 7. Plotting the results of the second model 📊
+# -----------------------------------------------
+
+model_2 = list(model_2_dict.values())[0]
+reals_preds_model_2 = RealsVsPreds.from_final_val_data(model_2)
+
+plt.show()
+
+# %%
+# 8. Comparing the results of the two models 📈
 # ----------------------------------------------
+# Let the ultimate showdown begin! We're comparing the results of our two models.
+# We're using the :class:`~fusilli.eval.ModelComparison` class to compare the results of the two models.
+# This class takes the trained models as an input and returns a plot of the results of the two models and a Pandas DataFrame of the metrics of the two models.
 
-plotter = Plotter(model_2_dict, params)
-single_model_figures_dict = plotter.plot_all()
-plotter.show_all(single_model_figures_dict)
+comparison_plotter, metrics_dataframe = ModelComparison.from_final_val_data(all_trained_models, kfold_flag=False)
 
-# %%
-# 8. Comparing the results of the two models
-# ---------------------------------------------
-# Now we're going to compare the results of the two models. We're using the same steps as when we used Plotter before, but this time we're using the ``all_trained_models`` dictionary which contains both models.
-
-comparison_plotter = Plotter(all_trained_models, params)
-comparison_plot_dict = comparison_plotter.plot_all()
-comparison_plotter.show_all(comparison_plot_dict)
+plt.show()
 
 # %%
-# 9. Saving the metrics of the two models
-# -----------------------------------------
-# We can also get the metrics of the two models into a Pandas DataFrame using the :func:`~fusilli.eval.Plotter.get_performance_df` function.
-performances_df = comparison_plotter.get_performance_df()
-performances_df
+# 9. Saving the metrics of the two models 💾
+# -------------------------------------------
+# Time to archive our models' achievements. We're using the :class:`~fusilli.eval.ModelComparison` class to save the metrics of the two models.
+
+metrics_dataframe

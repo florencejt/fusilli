@@ -1,4 +1,4 @@
-﻿fusilli.utils.training\_utils
+fusilli.utils.training\_utils
 =============================
 
 .. automodule:: fusilli.utils.training_utils

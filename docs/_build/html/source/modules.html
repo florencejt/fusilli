@@ -64,10 +64,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -123,10 +121,11 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="data.html#data.CustomDataset"><code class="docutils literal notranslate"><span class="pre">CustomDataset</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataset.pred_features"><code class="docutils literal notranslate"><span class="pre">CustomDataset.pred_features</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataset.multimodal_flag"><code class="docutils literal notranslate"><span class="pre">CustomDataset.multimodal_flag</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataset.dataset1"><code class="docutils literal notranslate"><span class="pre">CustomDataset.dataset1</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataset.dataset2"><code class="docutils literal notranslate"><span class="pre">CustomDataset.dataset2</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataset.dataset"><code class="docutils literal notranslate"><span class="pre">CustomDataset.dataset</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataset.labels"><code class="docutils literal notranslate"><span class="pre">CustomDataset.labels</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataset.__len__"><code class="docutils literal notranslate"><span class="pre">CustomDataset.__len__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataset.__getitem__"><code class="docutils literal notranslate"><span class="pre">CustomDataset.__getitem__()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="data.html#data.CustomDataset.__init__"><code class="docutils literal notranslate"><span class="pre">CustomDataset.__init__()</span></code></a></li>
 </ul>
 </li>
@@ -200,17 +199,12 @@
 <li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.tabular2_source"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.tabular2_source</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.img_source"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.img_source</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.image_downsample_size"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.image_downsample_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.__init__"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.load_both_tabular"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_both_tabular()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.load_img"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_img()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.load_tab_and_img"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_tab_and_img()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.load_tabular1"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_tabular1()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.load_tabular2"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_tabular2()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.load_img"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_img()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.load_both_tabular"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_both_tabular()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.load_tab_and_img"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_tab_and_img()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#data.LoadDatasets.__init__"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#id0"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_both_tabular()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#id1"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_img()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#id2"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_tab_and_img()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#id3"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_tabular1()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="data.html#id4"><code class="docutils literal notranslate"><span class="pre">LoadDatasets.load_tabular2()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="data.html#data.downsample_img_batch"><code class="docutils literal notranslate"><span class="pre">downsample_img_batch()</span></code></a></li>

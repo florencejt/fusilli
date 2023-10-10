@@ -63,10 +63,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -107,7 +105,7 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">fusilli.utils.training_utils</span> <span class="kn">import</span> <span class="n">get_checkpoint_filenames_for_subspace_models</span>
-
+<span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
 
@@ -147,7 +145,8 @@
                 <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;Epoch chosen after early stopping with patience </span><span class="si">{</span><span class="n">patience</span><span class="si">}</span><span class="s2"> </span><span class="se">\</span>
-<span class="s2">                    and tolerance </span><span class="si">{</span><span class="n">tolerance</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.&quot;</span>
+<span class="s2">                    and tolerance </span><span class="si">{</span><span class="n">tolerance</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">i</span> <span class="o">-</span> <span class="n">triggertimes</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">,</span>
+                        <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
                     <span class="p">)</span>
                 <span class="n">done</span> <span class="o">=</span> <span class="mi">1</span>
                 <span class="k">break</span>
@@ -161,7 +160,7 @@
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No epoch chosen with this patience.&quot;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">i</span></div>
+    <span class="k">return</span> <span class="n">i</span> <span class="o">-</span> <span class="n">triggertimes</span></div>
 
 
 <div class="viewcode-block" id="MCVAESubspaceMethod"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.mcvae_tab.html#fusilli.fusion_models.mcvae_tab.MCVAESubspaceMethod">[docs]</a><span class="k">class</span> <span class="nc">MCVAESubspaceMethod</span><span class="p">:</span>

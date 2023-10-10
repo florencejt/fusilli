@@ -25,7 +25,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Training and testing" href="training_and_testing/index.html" />
+    <link rel="next" title="How to create your own fusion model" href="creating_your_own_fusion_model/index.html" />
     <link rel="prev" title="Modifying the fusion models" href="../modifying_models.html" /> 
 </head>
 
@@ -60,12 +60,12 @@
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials and Examples Gallery</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#training-and-testing">Training and testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-create-your-own-fusion-model">How to create your own fusion model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#customising-behaviour">Customising behaviour</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#how-to-create-your-own-fusion-model">How to create your own fusion model</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="training_and_testing/index.html">Training and testing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="customising_behaviour/index.html">Customising behaviour</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#training-and-testing">Training and testing</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="creating_your_own_fusion_model/index.html">How to create your own fusion model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="customising_behaviour/index.html">Customising behaviour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="training_and_testing/index.html">Training and testing</a></li>
 </ul>
 </li>
 </ul>
@@ -76,10 +76,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -109,30 +107,7 @@
   <section id="tutorials-and-examples-gallery">
 <h1>Tutorials and Examples Gallery<a class="headerlink" href="#tutorials-and-examples-gallery" title="Permalink to this heading"></a></h1>
 <p>Below is a gallery of examples on how to use this package, and scripts showing how to add/contribute new multimodal methods to this package.</p>
-<div class="sphx-glr-thumbnails"></div><section id="training-and-testing">
-<h2>Training and testing<a class="headerlink" href="#training-and-testing" title="Permalink to this heading"></a></h2>
-<p>These are examples of how to train and validate fusion models with Fusilli.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This script shows how to train one fusion models on a binary task with k-fold training protocol..."><img alt="" src="../_images/sphx_glr_plot_one_model_binary_kfold_thumb.png" />
-<p><a class="reference internal" href="training_and_testing/plot_one_model_binary_kfold.html#sphx-glr-auto-examples-training-and-testing-plot-one-model-binary-kfold-py"><span class="std std-ref">Binary: training one kfold model</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Binary: training one kfold model</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Welcome to the &quot;Comparing Multiple K-Fold Trained Fusion Models&quot; tutorial! In this tutorial, we..."><img alt="" src="../_images/sphx_glr_plot_model_comparison_loop_kfold_thumb.png" />
-<p><a class="reference internal" href="training_and_testing/plot_model_comparison_loop_kfold.html#sphx-glr-auto-examples-training-and-testing-plot-model-comparison-loop-kfold-py"><span class="std std-ref">Comparing Multiple K-Fold Trained Fusion Models</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Comparing Multiple K-Fold Trained Fusion Models</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This script shows how to train two fusion models on a regression task with train/test protocol ..."><img alt="" src="../_images/sphx_glr_plot_two_models_traintest_thumb.png" />
-<p><a class="reference internal" href="training_and_testing/plot_two_models_traintest.html#sphx-glr-auto-examples-training-and-testing-plot-two-models-traintest-py"><span class="std std-ref">Regression: comparing two tabular models trained on simulated data</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Regression: comparing two tabular models trained on simulated data</div>
-</div></div></section>
-<section id="customising-behaviour">
-<h2>Customising behaviour<a class="headerlink" href="#customising-behaviour" title="Permalink to this heading"></a></h2>
-<p>These are examples showing how to get more in depth with Fusilli and customise its behaviour.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="How to use Weights and Biases Logging with Fusilli"><img alt="" src="../_images/sphx_glr_how_to_use_logging_thumb.png" />
-<p><a class="reference internal" href="customising_behaviour/how_to_use_logging.html#sphx-glr-auto-examples-customising-behaviour-how-to-use-logging-py"><span class="std std-ref">How to use Weights and Biases Logging with Fusilli</span></a></p>
-  <div class="sphx-glr-thumbnail-title">How to use Weights and Biases Logging with Fusilli</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial will show you how to modify the architectures of fusion models."><img alt="" src="../_images/sphx_glr_modify_layer_sizes_thumb.png" />
-<p><a class="reference internal" href="customising_behaviour/modify_layer_sizes.html#sphx-glr-auto-examples-customising-behaviour-modify-layer-sizes-py"><span class="std std-ref">How to modify architectures of fusion models</span></a></p>
-  <div class="sphx-glr-thumbnail-title">How to modify architectures of fusion models</div>
-</div></div></section>
-<section id="how-to-create-your-own-fusion-model">
+<div class="sphx-glr-thumbnails"></div><section id="how-to-create-your-own-fusion-model">
 <h2>How to create your own fusion model<a class="headerlink" href="#how-to-create-your-own-fusion-model" title="Permalink to this heading"></a></h2>
 <p>These are examples of .py files that can be used to create your own fusion models. They are not meant to be run as is, but rather to be used as a starting point for your own models.</p>
 <div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Subspace fusion template"><img alt="" src="../_images/sphx_glr_template_subspace_fusion_thumb.png" />
@@ -144,6 +119,29 @@
 </div><div class="sphx-glr-thumbcontainer" tooltip="This is a template for creating your own fusion model: operation-based, attention-based, or ten..."><img alt="" src="../_images/sphx_glr_template_other_fusion_thumb.png" />
 <p><a class="reference internal" href="creating_your_own_fusion_model/template_other_fusion.html#sphx-glr-auto-examples-creating-your-own-fusion-model-template-other-fusion-py"><span class="std std-ref">General fusion template</span></a></p>
   <div class="sphx-glr-thumbnail-title">General fusion template</div>
+</div></div></section>
+<section id="customising-behaviour">
+<h2>Customising behaviour<a class="headerlink" href="#customising-behaviour" title="Permalink to this heading"></a></h2>
+<p>These are examples showing how to get more in depth with Fusilli and customise its behaviour.</p>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="How to use Weights and Biases Logging with Fusilli"><img alt="" src="../_images/sphx_glr_how_to_use_logging_thumb.png" />
+<p><a class="reference internal" href="customising_behaviour/how_to_use_logging.html#sphx-glr-auto-examples-customising-behaviour-how-to-use-logging-py"><span class="std std-ref">How to use Weights and Biases Logging with Fusilli</span></a></p>
+  <div class="sphx-glr-thumbnail-title">How to use Weights and Biases Logging with Fusilli</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This tutorial will show you how to modify the architectures of fusion models."><img alt="" src="../_images/sphx_glr_modify_layer_sizes_thumb.png" />
+<p><a class="reference internal" href="customising_behaviour/modify_layer_sizes.html#sphx-glr-auto-examples-customising-behaviour-modify-layer-sizes-py"><span class="std std-ref">How to modify architectures of fusion models</span></a></p>
+  <div class="sphx-glr-thumbnail-title">How to modify architectures of fusion models</div>
+</div></div></section>
+<section id="training-and-testing">
+<h2>Training and testing<a class="headerlink" href="#training-and-testing" title="Permalink to this heading"></a></h2>
+<p>These are examples of how to train and validate fusion models with Fusilli.</p>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This script shows how to train one fusion models on a binary task with k-fold training protocol..."><img alt="" src="../_images/sphx_glr_plot_one_model_binary_kfold_thumb.png" />
+<p><a class="reference internal" href="training_and_testing/plot_one_model_binary_kfold.html#sphx-glr-auto-examples-training-and-testing-plot-one-model-binary-kfold-py"><span class="std std-ref">Binary: training one kfold model</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Binary: training one kfold model</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Welcome to the &quot;Comparing Multiple K-Fold Trained Fusion Models&quot; tutorial! In this tutorial, we..."><img alt="" src="../_images/sphx_glr_plot_model_comparison_loop_kfold_thumb.png" />
+<p><a class="reference internal" href="training_and_testing/plot_model_comparison_loop_kfold.html#sphx-glr-auto-examples-training-and-testing-plot-model-comparison-loop-kfold-py"><span class="std std-ref">Comparing Multiple K-Fold Trained Fusion Models</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Comparing Multiple K-Fold Trained Fusion Models</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="🚀 Welcome to this tutorial on training and comparing two fusion models on a regression task usi..."><img alt="" src="../_images/sphx_glr_plot_two_models_traintest_thumb.png" />
+<p><a class="reference internal" href="training_and_testing/plot_two_models_traintest.html#sphx-glr-auto-examples-training-and-testing-plot-two-models-traintest-py"><span class="std std-ref">📈 Regression: Comparing Two Tabular Models Trained on Simulated Data 📊</span></a></p>
+  <div class="sphx-glr-thumbnail-title">📈 Regression: Comparing Two Tabular Models Trained on Simulated Data 📊</div>
 </div></div><div class="toctree-wrapper compound">
 </div>
 <div class="sphx-glr-footer sphx-glr-footer-gallery docutils container">
@@ -163,7 +161,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../modifying_models.html" class="btn btn-neutral float-left" title="Modifying the fusion models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="training_and_testing/index.html" class="btn btn-neutral float-right" title="Training and testing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="creating_your_own_fusion_model/index.html" class="btn btn-neutral float-right" title="How to create your own fusion model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

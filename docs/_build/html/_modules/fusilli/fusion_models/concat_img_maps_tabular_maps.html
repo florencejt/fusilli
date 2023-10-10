@@ -63,11 +63,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -107,7 +104,7 @@
 <span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
 
 
-<div class="viewcode-block" id="ConcatImageMapsTabularMaps"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html#fusilli.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps">[docs]</a><span class="k">class</span> <span class="nc">ConcatImageMapsTabularMaps</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="ConcatImageMapsTabularMaps"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.concat_img_maps_tabular_maps.html#fusilli.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps">[docs]</a><span class="k">class</span> <span class="nc">ConcatImageMapsTabularMaps</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Concatenating the feature maps of the first tabular modalities and the feature maps of the</span>
 <span class="sd">    image modality.</span>
@@ -141,7 +138,7 @@
     <span class="c1"># str: Type of fusion.</span>
     <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;operation&quot;</span>
 
-<div class="viewcode-block" id="ConcatImageMapsTabularMaps.__init__"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html#fusilli.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="ConcatImageMapsTabularMaps.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.concat_img_maps_tabular_maps.html#fusilli.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -165,7 +162,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ConcatImageMapsTabularMaps.get_fused_dim"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html#fusilli.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.get_fused_dim">[docs]</a>    <span class="k">def</span> <span class="nf">get_fused_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ConcatImageMapsTabularMaps.get_fused_dim"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.concat_img_maps_tabular_maps.html#fusilli.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.get_fused_dim">[docs]</a>    <span class="k">def</span> <span class="nf">get_fused_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the number of features of the fused layers.</span>
 
@@ -184,7 +181,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="n">tab_output_size</span> <span class="o">+</span> <span class="n">flattened_img_size</span></div>
 
-<div class="viewcode-block" id="ConcatImageMapsTabularMaps.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html#fusilli.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ConcatImageMapsTabularMaps.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.concat_img_maps_tabular_maps.html#fusilli.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the fused layers.</span>
 
@@ -208,7 +205,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="n">out_dim</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ConcatImageMapsTabularMaps.forward"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.fusion_models.concat_img_maps_tabular_maps.html#fusilli.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="ConcatImageMapsTabularMaps.forward"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.concat_img_maps_tabular_maps.html#fusilli.fusion_models.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward pass of the model.</span>
 

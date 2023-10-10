@@ -1044,7 +1044,7 @@ class ModelComparison(ParentPlotter):
         ----------
 
         model_list: dict
-            Dictionary of models. Keys are the model names and values are [[model, ckpt_path]*num_k]
+            Dictionary of models. Keys are the model names and values are [[model]*num_k]
         kfold_flag: bool
             Whether the models are kfold models or not.
         """

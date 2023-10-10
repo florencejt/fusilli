@@ -63,10 +63,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -98,881 +96,26 @@
 <span class="sd">Functions for evaluating the performance of the models and plotting the results.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">confusion_matrix</span>
 <span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">gridspec</span>
-<span class="kn">import</span> <span class="nn">torch_geometric</span> <span class="k">as</span> <span class="nn">pyg</span>
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
-<span class="kn">from</span> <span class="nn">sklearn.manifold</span> <span class="kn">import</span> <span class="n">TSNE</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">ConcatDataset</span><span class="p">,</span> <span class="n">DataLoader</span>
 <span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">torch_geometric</span> <span class="k">as</span> <span class="nn">pyg</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">gridspec</span>
+<span class="kn">from</span> <span class="nn">sklearn.manifold</span> <span class="kn">import</span> <span class="n">TSNE</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">confusion_matrix</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">ConcatDataset</span><span class="p">,</span> <span class="n">DataLoader</span>
+
+<span class="kn">import</span> <span class="nn">fusilli.data</span> <span class="k">as</span> <span class="nn">data</span>
 <span class="kn">from</span> <span class="nn">fusilli.fusion_models.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 <span class="kn">from</span> <span class="nn">fusilli.utils.training_utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">get_checkpoint_filename_for_trained_fusion_model</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">import</span> <span class="nn">fusilli.data</span> <span class="k">as</span> <span class="nn">data</span>
-
-
-<span class="c1"># class Plotter:</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     Class for plotting the results of the models.</span>
-
-<span class="c1">#     Attributes</span>
-<span class="c1">#     ----------</span>
-<span class="c1">#     trained_model_dict : dict</span>
-<span class="c1">#         Dictionary of trained models.</span>
-<span class="c1">#     model_names : list</span>
-<span class="c1">#         List of model names.</span>
-<span class="c1">#     params : dict</span>
-<span class="c1">#         Dictionary of parameters.</span>
-<span class="c1">#     pred_type : str</span>
-<span class="c1">#         Prediction type.</span>
-<span class="c1">#     metric1name : str</span>
-<span class="c1">#         Name of metric 1.</span>
-<span class="c1">#     metric1func : function</span>
-<span class="c1">#         Function for calculating metric 1.</span>
-<span class="c1">#     metric2name : str</span>
-<span class="c1">#         Name of metric 2.</span>
-<span class="c1">#     metric2func : function</span>
-<span class="c1">#         Function for calculating metric 2.</span>
-
-<span class="c1">#     &quot;&quot;&quot;</span>
-
-<span class="c1">#     def __init__(self, trained_model_dict, params):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Initialize the Plotter instance.</span>
-
-<span class="c1">#         Parameters</span>
-<span class="c1">#         ----------</span>
-<span class="c1">#         trained_model_dict : dict</span>
-<span class="c1">#             Dictionary of trained models.</span>
-<span class="c1">#         params : dict</span>
-<span class="c1">#             Dictionary of parameters.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-
-<span class="c1">#         super().__init__()</span>
-
-<span class="c1">#         # Initialise variables for use later in the class</span>
-<span class="c1">#         self.trained_model_dict = trained_model_dict</span>
-<span class="c1">#         self.model_names = list(trained_model_dict.keys())</span>
-<span class="c1">#         print(&quot;Plotting models&quot;, self.model_names, &quot;...&quot;)</span>
-
-<span class="c1">#         self.params = params</span>
-<span class="c1">#         self.pred_type = self.params[&quot;pred_type&quot;]  # for less verbose access</span>
-
-<span class="c1">#         # getting first model to get metric names and functions for less verbose access</span>
-<span class="c1">#         if params[&quot;kfold_flag&quot;]:</span>
-<span class="c1">#             first_model = self.trained_model_dict[self.model_names[0]][0]</span>
-<span class="c1">#         else:</span>
-<span class="c1">#             first_model = self.trained_model_dict[self.model_names[0]]</span>
-
-<span class="c1">#         # metric names for less verbose access (they are consistent across models)</span>
-<span class="c1">#         self.metric1name = first_model.metrics[self.pred_type][0][&quot;name&quot;]</span>
-<span class="c1">#         self.metric1func = first_model.metrics[self.pred_type][0][&quot;metric&quot;]</span>
-
-<span class="c1">#         self.metric2name = first_model.metrics[self.pred_type][1][&quot;name&quot;]</span>
-<span class="c1">#         self.metric2func = first_model.metrics[self.pred_type][1][&quot;metric&quot;]</span>
-
-<span class="c1">#         # if there is one model</span>
-<span class="c1">#         if len(self.model_names) == 1:</span>
-<span class="c1">#             print(&quot;Plotting results of a single model.&quot;)</span>
-<span class="c1">#         else:</span>
-<span class="c1">#             print(</span>
-<span class="c1">#                 &quot;Plotting comparison plots for&quot;,</span>
-<span class="c1">#                 len(self.model_names),</span>
-<span class="c1">#                 &quot;models:&quot;,</span>
-<span class="c1">#                 self.model_names,</span>
-<span class="c1">#             )</span>
-
-<span class="c1">#         self.single_model_tt_plots = {</span>
-<span class="c1">#             &quot;regression&quot;: self.reals_vs_preds,</span>
-<span class="c1">#             &quot;binary&quot;: self.confusion_matrix_plotter,</span>
-<span class="c1">#             &quot;multiclass&quot;: self.confusion_matrix_plotter,</span>
-<span class="c1">#         }</span>
-
-<span class="c1">#         self.single_model_kfold_plots = {</span>
-<span class="c1">#             &quot;regression&quot;: self.reals_vs_preds_kfold,</span>
-<span class="c1">#             &quot;binary&quot;: self.confusion_matrix_plotter_kfold,</span>
-<span class="c1">#             &quot;multiclass&quot;: self.confusion_matrix_plotter_kfold,</span>
-<span class="c1">#         }</span>
-
-<span class="c1">#         self.multi_model_tt_plots = {</span>
-<span class="c1">#             &quot;regression&quot;: self.compare_bar_chart,  # csv saving? bar chart?</span>
-<span class="c1">#             &quot;binary&quot;: self.compare_bar_chart,</span>
-<span class="c1">#             &quot;multiclass&quot;: self.compare_bar_chart,</span>
-<span class="c1">#         }</span>
-
-<span class="c1">#         self.multi_model_kfold_plots = {</span>
-<span class="c1">#             &quot;regression&quot;: self.compare_violin_plot,  # violin plots of the folds</span>
-<span class="c1">#             &quot;binary&quot;: self.compare_violin_plot,</span>
-<span class="c1">#             &quot;multiclass&quot;: self.compare_violin_plot,</span>
-<span class="c1">#         }</span>
-
-<span class="c1">#     def get_kfold_numbers(self):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Gets the lists of train_reals, train_preds, val_reals, val_preds for all folds and saves to self.</span>
-<span class="c1">#         Gets the altogether list of val_reals and val_preds over folds and saves to self.</span>
-<span class="c1">#         Gets metrics to put in the plot titles, adds to metrics list.</span>
-
-<span class="c1">#         Returns</span>
-<span class="c1">#         -------</span>
-<span class="c1">#         None</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-
-<span class="c1">#         # create empty lists for the folds of train_reals, train_preds, val_reals, val_preds</span>
-<span class="c1">#         self.train_reals = []</span>
-<span class="c1">#         self.train_preds = []</span>
-<span class="c1">#         self.val_reals = []</span>
-<span class="c1">#         self.val_preds = []</span>
-<span class="c1">#         self.val_logits = []</span>
-
-<span class="c1">#         # dictionary to store the metrics for each fold</span>
-<span class="c1">#         self.kfold_plot_val_accs = {self.metric1name: [], self.metric2name: []}</span>
-
-<span class="c1">#         self.trained_model_list = self.trained_model_dict[self.current_model_name]</span>
-
-<span class="c1">#         for k in range(self.params[&quot;num_k&quot;]):</span>
-<span class="c1">#             k_trained_model_var = vars(self.trained_model_list[k])</span>
-
-<span class="c1">#             self.trained_model_list[k].eval()</span>
-
-<span class="c1">#             self.train_reals.append(k_trained_model_var[&quot;train_reals&quot;].cpu())</span>
-<span class="c1">#             self.train_preds.append(k_trained_model_var[&quot;train_preds&quot;].cpu())</span>
-<span class="c1">#             self.val_reals.append(k_trained_model_var[&quot;val_reals&quot;].cpu())</span>
-<span class="c1">#             self.val_preds.append(k_trained_model_var[&quot;val_preds&quot;].cpu())</span>
-<span class="c1">#             self.val_logits.append(k_trained_model_var[&quot;val_logits&quot;].cpu())</span>
-
-<span class="c1">#             self.kfold_plot_val_accs[self.metric1name].append(</span>
-<span class="c1">#                 k_trained_model_var[&quot;metric1&quot;]</span>
-<span class="c1">#             )</span>
-<span class="c1">#             self.kfold_plot_val_accs[self.metric2name].append(</span>
-<span class="c1">#                 k_trained_model_var[&quot;metric2&quot;]</span>
-<span class="c1">#             )</span>
-
-<span class="c1">#         # altogether validation sets: concatenate all the lists of val_reals and val_preds</span>
-<span class="c1">#         self.all_preds = torch.cat(self.val_preds, dim=-1)</span>
-<span class="c1">#         self.all_reals = torch.cat(self.val_reals, dim=-1)</span>
-<span class="c1">#         self.all_logits = torch.cat(self.val_logits, dim=0)</span>
-
-<span class="c1">#         self.plot_val_accs = {}</span>
-
-<span class="c1">#         # saving the metrics for the altogether validation sets</span>
-<span class="c1">#         for i, metric in enumerate(self.trained_model_list[0].metrics[self.pred_type]):</span>
-<span class="c1">#             if &quot;auroc&quot; in metric[&quot;name&quot;]:</span>
-<span class="c1">#                 predicted = self.all_logits  # AUROC needs logits</span>
-<span class="c1">#             else:</span>
-<span class="c1">#                 predicted = self.all_preds</span>
-
-<span class="c1">#             val_step_acc = metric[&quot;metric&quot;](</span>
-<span class="c1">#                 self.trained_model_list[0].safe_squeeze(predicted),</span>
-<span class="c1">#                 self.trained_model_list[0].safe_squeeze(self.all_reals),</span>
-<span class="c1">#             )</span>
-<span class="c1">#             self.plot_val_accs[metric[&quot;name&quot;]] = val_step_acc</span>
-
-<span class="c1">#     def get_train_test_numbers(self):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Gets the lists of train_reals, train_preds, val_reals, val_preds and saves to self.</span>
-<span class="c1">#         Gets metrics to put in the plot titles, adds to metrics list.</span>
-
-<span class="c1">#         Returns</span>
-<span class="c1">#         -------</span>
-<span class="c1">#         None</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-
-<span class="c1">#         self.trained_model = self.trained_model_dict[self.current_model_name]</span>
-<span class="c1">#         self.trained_model.eval()</span>
-
-<span class="c1">#         # get lists of train_reals, train_preds, val_reals, val_preds and save to self</span>
-<span class="c1">#         self.train_reals = vars(self.trained_model_dict[self.current_model_name])[</span>
-<span class="c1">#             &quot;train_reals&quot;</span>
-<span class="c1">#         ].cpu()</span>
-<span class="c1">#         self.train_preds = vars(self.trained_model_dict[self.current_model_name])[</span>
-<span class="c1">#             &quot;train_preds&quot;</span>
-<span class="c1">#         ].cpu()</span>
-<span class="c1">#         self.val_reals = vars(self.trained_model_dict[self.current_model_name])[</span>
-<span class="c1">#             &quot;val_reals&quot;</span>
-<span class="c1">#         ].cpu()</span>
-<span class="c1">#         self.val_preds = vars(self.trained_model_dict[self.current_model_name])[</span>
-<span class="c1">#             &quot;val_preds&quot;</span>
-<span class="c1">#         ].cpu()</span>
-
-<span class="c1">#         self.plot_val_accs = {</span>
-<span class="c1">#             self.metric1name: vars(self.trained_model_dict[self.current_model_name])[</span>
-<span class="c1">#                 &quot;metric1&quot;</span>
-<span class="c1">#             ],</span>
-<span class="c1">#             self.metric2name: vars(self.trained_model_dict[self.current_model_name])[</span>
-<span class="c1">#                 &quot;metric2&quot;</span>
-<span class="c1">#             ],</span>
-<span class="c1">#         }</span>
-
-<span class="c1">#     def plot_all(self):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Plots all the results.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-
-<span class="c1">#         # if there is only one model</span>
-<span class="c1">#         if len(self.model_names) == 1:</span>
-<span class="c1">#             self.current_model_name = self.model_names[0]</span>
-
-<span class="c1">#             if self.params[&quot;kfold_flag&quot;]:</span>
-<span class="c1">#                 # get lists of train_reals, train_preds, val_reals, val_preds for all folds and save to self</span>
-
-<span class="c1">#                 self.get_kfold_numbers()</span>
-
-<span class="c1">#                 results_figs_dict = self.single_model_kfold_plots[self.pred_type]()</span>
-
-<span class="c1">#                 return results_figs_dict</span>
-
-<span class="c1">#             else:</span>
-<span class="c1">#                 self.get_train_test_numbers()</span>
-
-<span class="c1">#                 self.trained_model = self.trained_model_dict[self.model_names[0]]</span>
-
-<span class="c1">#                 # plot the results for one train/test model</span>
-<span class="c1">#                 results_figs_dict = self.single_model_tt_plots[self.pred_type]()</span>
-
-<span class="c1">#                 return results_figs_dict</span>
-
-<span class="c1">#         # if there are multiple models, plot the comparison plots</span>
-<span class="c1">#         else:</span>
-<span class="c1">#             figures_dict = (</span>
-<span class="c1">#                 {}</span>
-<span class="c1">#             )  # keys: figure names (including model name), values: figures</span>
-
-<span class="c1">#             if self.params[&quot;kfold_flag&quot;]:</span>
-<span class="c1">#                 self.comparing_models_metrics = (</span>
-<span class="c1">#                     {}</span>
-<span class="c1">#                 )  # keys: model names, values: lists of kfold metrics len(k)</span>
-
-<span class="c1">#                 self.overall_kfold_metrics = {}</span>
-<span class="c1">#                 # or maybe value is another dictionary {&quot;R2&quot;: [...,...,...], &quot;MAE&quot;: [...,..,...]}</span>
-
-<span class="c1">#                 for model_name in self.model_names:</span>
-<span class="c1">#                     self.current_model_name = model_name</span>
-
-<span class="c1">#                     self.get_kfold_numbers()</span>
-<span class="c1">#                     # get lists of train_reals, train_preds, val_reals, val_preds for all folds and save to self</span>
-<span class="c1">#                     # get altogether list of val_reals and val_preds over folds and save to self</span>
-<span class="c1">#                     # get metrics to put in the plot titles, add to metrics list</span>
-<span class="c1">#                     self.comparing_models_metrics[model_name] = self.kfold_plot_val_accs</span>
-<span class="c1">#                     self.overall_kfold_metrics[model_name] = self.plot_val_accs</span>
-
-<span class="c1">#                 # plot comparison of all kfold models: violin plot?</span>
-<span class="c1">#                 comparison_figs_dict = self.multi_model_kfold_plots[self.pred_type]()</span>
-<span class="c1">#                 figures_dict.update(comparison_figs_dict)</span>
-
-<span class="c1">#                 # self.save_performance_csv()</span>
-<span class="c1">#                 # incorporate self.plot_val_accs (overall kfold performance) into this csv</span>
-
-<span class="c1">#                 return figures_dict</span>
-
-<span class="c1">#             else:</span>
-<span class="c1">#                 self.comparing_models_metrics = (</span>
-<span class="c1">#                     {}</span>
-<span class="c1">#                 )  # keys: model names, values: metric values (single numbers)</span>
-<span class="c1">#                 # or maybe value is another dictionary {&quot;R2&quot;: ... &quot;MAE&quot;: ...}</span>
-<span class="c1">#                 for model_name in self.model_names:</span>
-<span class="c1">#                     # get train_reals, train_preds, val_reals, val_preds and save to self</span>
-<span class="c1">#                     self.current_model_name = model_name</span>
-<span class="c1">#                     self.get_train_test_numbers()</span>
-
-<span class="c1">#                     # plot the predefined models for self.params[&quot;pred_type&quot;]</span>
-<span class="c1">#                     self.comparing_models_metrics[model_name] = self.plot_val_accs</span>
-
-<span class="c1">#                 # plot comparison of all train/test models: bar chart?</span>
-<span class="c1">#                 comparison_figs_dict = self.multi_model_tt_plots[self.pred_type]()</span>
-<span class="c1">#                 figures_dict.update(comparison_figs_dict)</span>
-
-<span class="c1">#                 # self.save_performance_csv()</span>
-
-<span class="c1">#                 return figures_dict</span>
-
-<span class="c1">#     def get_performance_df(self):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Saves the performance metrics to a CSV file.</span>
-
-<span class="c1">#         Returns</span>
-<span class="c1">#         -------</span>
-<span class="c1">#         pandas.DataFrame</span>
-<span class="c1">#             DataFrame containing the performance metrics.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         if self.params[&quot;kfold_flag&quot;]:</span>
-<span class="c1">#             # copy self.overall_kfold_metrics to a new dictionary</span>
-<span class="c1">#             # so that we can change the values from lists to single numbers</span>
-
-<span class="c1">#             overall_kfold_metrics_copy = self.overall_kfold_metrics.copy()</span>
-
-<span class="c1">#             for method, metrics in overall_kfold_metrics_copy.items():</span>
-<span class="c1">#                 for metric, value in metrics.items():</span>
-<span class="c1">#                     overall_kfold_metrics_copy[method][metric] = value.item()</span>
-
-<span class="c1">#             df = pd.DataFrame(overall_kfold_metrics_copy).transpose()</span>
-
-<span class="c1">#             # Create a DataFrame for overall kfold metrics</span>
-<span class="c1">#             folds_df = pd.DataFrame(self.comparing_models_metrics).T.reset_index()</span>
-<span class="c1">#             folds_df.rename(columns={&quot;index&quot;: &quot;Method&quot;}, inplace=True)</span>
-
-<span class="c1">#             # num_folds = len(folds_df[self.metric1name][0])</span>
-<span class="c1">#             fold_columns_metric1 = [</span>
-<span class="c1">#                 f&quot;fold{i+1}_{self.metric1name}&quot; for i in range(self.params[&quot;num_k&quot;])</span>
-<span class="c1">#             ]</span>
-<span class="c1">#             fold_columns_metric2 = [</span>
-<span class="c1">#                 f&quot;fold{i+1}_{self.metric2name}&quot; for i in range(self.params[&quot;num_k&quot;])</span>
-<span class="c1">#             ]</span>
-
-<span class="c1">#             for i, col in enumerate(fold_columns_metric1):</span>
-<span class="c1">#                 folds_df[fold_columns_metric1[i]] = folds_df[self.metric1name].apply(</span>
-<span class="c1">#                     lambda x: x[i] if len(x) &gt; i else None</span>
-<span class="c1">#                 )</span>
-<span class="c1">#                 folds_df[fold_columns_metric2[i]] = folds_df[self.metric2name].apply(</span>
-<span class="c1">#                     lambda x: x[i] if len(x) &gt; i else None</span>
-<span class="c1">#                 )</span>
-
-<span class="c1">#             folds_df.drop(columns=[self.metric1name, self.metric2name], inplace=True)</span>
-<span class="c1">#             folds_df.set_index(&quot;Method&quot;, inplace=True)</span>
-
-<span class="c1">#             final_df = pd.concat([df, folds_df], axis=1)</span>
-
-<span class="c1">#             return final_df</span>
-
-<span class="c1">#         else:</span>
-<span class="c1">#             # Reshape the data into a list of dictionaries</span>
-<span class="c1">#             reshaped_data = []</span>
-<span class="c1">#             for method, metrics in self.comparing_models_metrics.items():</span>
-<span class="c1">#                 reshaped_data.append({&quot;Method&quot;: method, **metrics})</span>
-
-<span class="c1">#             # Create a DataFrame from the reshaped data</span>
-<span class="c1">#             df = pd.DataFrame(reshaped_data)</span>
-<span class="c1">#             df.set_index(&quot;Method&quot;, inplace=True)</span>
-<span class="c1">#             df.index.name = None</span>
-
-<span class="c1">#             return df</span>
-
-<span class="c1">#     def reals_vs_preds(self):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Plots the real values against the predicted values for the training and validation sets.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-
-<span class="c1">#         fig, ax = plt.subplots()</span>
-
-<span class="c1">#         ax.scatter(</span>
-<span class="c1">#             self.train_reals,</span>
-<span class="c1">#             self.train_preds,</span>
-<span class="c1">#             c=&quot;#f082ef&quot;,</span>
-<span class="c1">#             marker=&quot;o&quot;,</span>
-<span class="c1">#             label=&quot;Train&quot;,</span>
-<span class="c1">#         )</span>
-<span class="c1">#         ax.scatter(</span>
-<span class="c1">#             self.val_reals, self.val_preds, c=&quot;#00b64e&quot;, marker=&quot;^&quot;, label=&quot;Validation&quot;</span>
-<span class="c1">#         )</span>
-
-<span class="c1">#         # Get the limits of the current scatter plot</span>
-<span class="c1">#         x_min, x_max = plt.xlim()</span>
-<span class="c1">#         y_min, y_max = plt.ylim()</span>
-
-<span class="c1">#         # Set up data points for the x=y line</span>
-<span class="c1">#         line_x = np.linspace(min(x_min, y_min), max(x_max, y_max), 100)</span>
-<span class="c1">#         line_y = line_x</span>
-
-<span class="c1">#         # Plot the x=y line as a dashed line</span>
-<span class="c1">#         plt.plot(line_x, line_y, linestyle=&quot;dashed&quot;, color=&quot;black&quot;, label=&quot;x=y Line&quot;)</span>
-
-<span class="c1">#         ax.set_title(</span>
-<span class="c1">#             f&quot;{self.current_model_name} - Validation {self.metric1name}: {float(self.plot_val_accs[self.metric1name]):.3f}&quot;</span>
-<span class="c1">#         )</span>
-
-<span class="c1">#         ax.set_xlabel(&quot;Real Values&quot;)</span>
-<span class="c1">#         ax.set_ylabel(&quot;Predictions&quot;)</span>
-<span class="c1">#         ax.legend()</span>
-
-<span class="c1">#         return {f&quot;{self.current_model_name}_reals_vs_preds&quot;: fig}</span>
-
-<span class="c1">#     def confusion_matrix_plotter(self):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Plots the confusion matrix of a train/test model.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         # Get the confusion matrix for the validation set</span>
-
-<span class="c1">#         conf_matrix = confusion_matrix(y_true=self.val_reals, y_pred=self.val_preds)</span>
-
-<span class="c1">#         # Create a figure and axis for the plot</span>
-<span class="c1">#         fig, ax = plt.subplots(figsize=(7.5, 7.5))</span>
-
-<span class="c1">#         # Plot the confusion matrix as a heatmap</span>
-<span class="c1">#         ax.matshow(conf_matrix, cmap=plt.cm.RdPu, alpha=0.3)</span>
-<span class="c1">#         for i in range(conf_matrix.shape[0]):</span>
-<span class="c1">#             for j in range(conf_matrix.shape[1]):</span>
-<span class="c1">#                 # Add the value of each cell to the plot</span>
-<span class="c1">#                 ax.text(</span>
-<span class="c1">#                     x=j,</span>
-<span class="c1">#                     y=i,</span>
-<span class="c1">#                     s=conf_matrix[i, j],</span>
-<span class="c1">#                     va=&quot;center&quot;,</span>
-<span class="c1">#                     ha=&quot;center&quot;,</span>
-<span class="c1">#                     size=&quot;xx-large&quot;,</span>
-<span class="c1">#                 )</span>
-
-<span class="c1">#         plt.xlabel(&quot;Predictions&quot;, fontsize=18)</span>
-<span class="c1">#         plt.ylabel(&quot;Actuals&quot;, fontsize=18)</span>
-
-<span class="c1">#         plt.title(</span>
-<span class="c1">#             f&quot;Validation {self.metric1name}: {float(self.plot_val_accs[self.metric1name]):.3f}&quot;</span>
-<span class="c1">#         )</span>
-
-<span class="c1">#         plt.tight_layout()</span>
-
-<span class="c1">#         return {f&quot;{self.current_model_name}_confusion_matrix&quot;: fig}</span>
-
-<span class="c1">#     def reals_vs_preds_kfold(self):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Plots the real values against the predicted values for the training and validation sets.</span>
-<span class="c1">#         For kfold models.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-
-<span class="c1">#         # concatenate real and pred values from all folds</span>
-
-<span class="c1">#         N = self.params[&quot;num_k&quot;]</span>
-<span class="c1">#         cols = 3</span>
-<span class="c1">#         rows = int(math.ceil(N / cols))</span>
-
-<span class="c1">#         gs = gridspec.GridSpec(rows, cols)</span>
-<span class="c1">#         reals_vs_preds_fig = plt.figure()</span>
-<span class="c1">#         for n in range(N):</span>
-<span class="c1">#             if n == 0:</span>
-<span class="c1">#                 ax = reals_vs_preds_fig.add_subplot(gs[n])</span>
-<span class="c1">#                 ax_og = ax</span>
-<span class="c1">#             else:</span>
-<span class="c1">#                 ax = reals_vs_preds_fig.add_subplot(gs[n], sharey=ax_og, sharex=ax_og)</span>
-
-<span class="c1">#             # get real and predicted values for the current fold</span>
-<span class="c1">#             reals = self.val_reals[n]</span>
-<span class="c1">#             preds = self.val_preds[n]</span>
-
-<span class="c1">#             # plot real vs. predicted values</span>
-<span class="c1">#             ax.scatter(reals, preds, c=&quot;#f082ef&quot;, marker=&quot;o&quot;)</span>
-
-<span class="c1">#             # plot x=y line as a dashed line</span>
-<span class="c1">#             ax.plot(</span>
-<span class="c1">#                 [0, 1],</span>
-<span class="c1">#                 [0, 1],</span>
-<span class="c1">#                 color=&quot;k&quot;,</span>
-<span class="c1">#                 linestyle=&quot;--&quot;,</span>
-<span class="c1">#                 alpha=0.75,</span>
-<span class="c1">#                 zorder=0,</span>
-<span class="c1">#                 transform=ax.transAxes,</span>
-<span class="c1">#             )</span>
-
-<span class="c1">#             # set title of plot to the metric for the current fold</span>
-<span class="c1">#             ax.set_title(</span>
-<span class="c1">#                 f&quot;Fold {n+1}: R2={float(self.kfold_plot_val_accs[self.metric1name][n]):.3f}&quot;</span>
-<span class="c1">#             )</span>
-
-<span class="c1">#         plt.suptitle(f&quot;{self.current_model_name}: reals vs. predicteds&quot;)</span>
-
-<span class="c1">#         reals_vs_preds_fig.tight_layout()</span>
-
-<span class="c1">#         # plot all real vs. predicted values</span>
-<span class="c1">#         together_reals_v_preds_fig, ax1 = plt.subplots()</span>
-<span class="c1">#         ax1.scatter(self.all_reals, self.all_preds, c=&quot;#f082ef&quot;, marker=&quot;o&quot;)</span>
-
-<span class="c1">#         # plot x=y line as a dashed line</span>
-<span class="c1">#         ax1.plot(</span>
-<span class="c1">#             [0, 1],</span>
-<span class="c1">#             [0, 1],</span>
-<span class="c1">#             color=&quot;k&quot;,</span>
-<span class="c1">#             linestyle=&quot;--&quot;,</span>
-<span class="c1">#             alpha=0.75,</span>
-<span class="c1">#             zorder=0,</span>
-<span class="c1">#             transform=ax1.transAxes,</span>
-<span class="c1">#         )</span>
-<span class="c1">#         ax1.set_title(</span>
-<span class="c1">#             f&quot;{self.current_model_name}: {self.metric1name}={float(self.plot_val_accs[self.metric1name]):.3f}&quot;</span>
-<span class="c1">#         )</span>
-<span class="c1">#         together_reals_v_preds_fig.tight_layout()</span>
-
-<span class="c1">#         # TODO combine these images to be pretty without worrying about what k is? ask chatgpt</span>
-<span class="c1">#         # return [reals_vs_preds_fig, together_reals_v_preds_fig]</span>
-<span class="c1">#         return {</span>
-<span class="c1">#             f&quot;{self.current_model_name}_reals_vs_preds_kfold&quot;: reals_vs_preds_fig,</span>
-<span class="c1">#             f&quot;{self.current_model_name}_reals_vs_preds_kfold_together&quot;: together_reals_v_preds_fig,</span>
-<span class="c1">#         }</span>
-
-<span class="c1">#     def confusion_matrix_plotter_kfold(self):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Plots the confusion matrix of a kfold model.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-
-<span class="c1">#         N = self.params[&quot;num_k&quot;]</span>
-<span class="c1">#         cols = 3</span>
-<span class="c1">#         rows = int(math.ceil(N / cols))</span>
-
-<span class="c1">#         gs = gridspec.GridSpec(rows, cols)</span>
-<span class="c1">#         k_fold_confusion_matrix_fig = plt.figure()</span>
-<span class="c1">#         for n in range(N):</span>
-<span class="c1">#             if n == 0:</span>
-<span class="c1">#                 ax = k_fold_confusion_matrix_fig.add_subplot(gs[n])</span>
-<span class="c1">#                 ax_og = ax</span>
-<span class="c1">#             else:</span>
-<span class="c1">#                 ax = k_fold_confusion_matrix_fig.add_subplot(</span>
-<span class="c1">#                     gs[n], sharey=ax_og, sharex=ax_og</span>
-<span class="c1">#                 )</span>
-
-<span class="c1">#             # get real and predicted values for the current fold</span>
-<span class="c1">#             reals = self.val_reals[n]</span>
-<span class="c1">#             preds = self.val_preds[n]</span>
-
-<span class="c1">#             # confusion plot time</span>
-<span class="c1">#             # Get the confusion matrix for the validation set</span>
-<span class="c1">#             conf_matrix = confusion_matrix(y_true=reals, y_pred=preds.squeeze())</span>
-
-<span class="c1">#             # Plot the confusion matrix as a heatmap</span>
-<span class="c1">#             ax.matshow(conf_matrix, cmap=plt.cm.RdPu, alpha=0.3)</span>
-<span class="c1">#             for i in range(conf_matrix.shape[0]):</span>
-<span class="c1">#                 for j in range(conf_matrix.shape[1]):</span>
-<span class="c1">#                     # Add the value of each cell to the plot</span>
-<span class="c1">#                     ax.text(</span>
-<span class="c1">#                         x=j,</span>
-<span class="c1">#                         y=i,</span>
-<span class="c1">#                         s=conf_matrix[i, j],</span>
-<span class="c1">#                         va=&quot;center&quot;,</span>
-<span class="c1">#                         ha=&quot;center&quot;,</span>
-<span class="c1">#                         size=&quot;large&quot;,</span>
-<span class="c1">#                     )</span>
-
-<span class="c1">#             ax.set_xlabel(&quot;Predictions&quot;, fontsize=10)</span>
-<span class="c1">#             ax.set_ylabel(&quot;Actuals&quot;, fontsize=10)</span>
-
-<span class="c1">#             ax.set_title(</span>
-<span class="c1">#                 f&quot;Fold {n+1} {self.metric1name}: \n{float(self.kfold_plot_val_accs[self.metric1name][n]):.3f}&quot;</span>
-<span class="c1">#             )</span>
-
-<span class="c1">#         plt.suptitle(f&quot;{self.current_model_name}: confusion matrices&quot;)</span>
-<span class="c1">#         k_fold_confusion_matrix_fig.tight_layout()</span>
-
-<span class="c1">#         # altogether confusion matrix</span>
-<span class="c1">#         together_k_fold_confusion_matrix_fig, ax1 = plt.subplots()</span>
-<span class="c1">#         # Get the confusion matrix for the validation set</span>
-<span class="c1">#         conf_matrix = confusion_matrix(</span>
-<span class="c1">#             y_true=self.all_reals, y_pred=self.all_preds.squeeze()</span>
-<span class="c1">#         )</span>
-
-<span class="c1">#         # Plot the confusion matrix as a heatmap</span>
-<span class="c1">#         ax1.matshow(conf_matrix, cmap=plt.cm.RdPu, alpha=0.3)</span>
-<span class="c1">#         for i in range(conf_matrix.shape[0]):</span>
-<span class="c1">#             for j in range(conf_matrix.shape[1]):</span>
-<span class="c1">#                 # Add the value of each cell to the plot</span>
-<span class="c1">#                 ax1.text(</span>
-<span class="c1">#                     x=j,</span>
-<span class="c1">#                     y=i,</span>
-<span class="c1">#                     s=conf_matrix[i, j],</span>
-<span class="c1">#                     va=&quot;center&quot;,</span>
-<span class="c1">#                     ha=&quot;center&quot;,</span>
-<span class="c1">#                     size=&quot;xx-large&quot;,</span>
-<span class="c1">#                 )</span>
-
-<span class="c1">#         ax1.set_xlabel(&quot;Predictions&quot;, fontsize=18)</span>
-<span class="c1">#         ax1.set_ylabel(&quot;Actuals&quot;, fontsize=18)</span>
-<span class="c1">#         ax1.set_title(</span>
-<span class="c1">#             f&quot;{self.current_model_name}: {self.metric1name} = {float(self.plot_val_accs[self.metric1name]):.3f}&quot;</span>
-<span class="c1">#         )</span>
-<span class="c1">#         together_k_fold_confusion_matrix_fig.tight_layout()</span>
-
-<span class="c1">#         return {</span>
-<span class="c1">#             f&quot;{self.current_model_name}_confusion_matrix_kfold&quot;: k_fold_confusion_matrix_fig,</span>
-<span class="c1">#             f&quot;{self.current_model_name}_confusion_matrix_kfold_together&quot;: together_k_fold_confusion_matrix_fig,</span>
-<span class="c1">#         }</span>
-
-<span class="c1">#     def compare_violin_plot(self):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Plots a violin plot comparing the results of multiple kfold models.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-
-<span class="c1">#         # get method names and metric names</span>
-<span class="c1">#         method_names = list(</span>
-<span class="c1">#             self.comparing_models_metrics.keys()</span>
-<span class="c1">#         )  # [method1name, method2name,...]</span>
-
-<span class="c1">#         # get metric values for each method</span>
-<span class="c1">#         metric_1_values = [</span>
-<span class="c1">#             self.comparing_models_metrics[method][self.metric1name]</span>
-<span class="c1">#             for method in method_names</span>
-<span class="c1">#         ]</span>
-<span class="c1">#         metric_2_values = [</span>
-<span class="c1">#             self.comparing_models_metrics[method][self.metric2name]</span>
-<span class="c1">#             for method in method_names</span>
-<span class="c1">#         ]</span>
-
-<span class="c1">#         # Calculate mean or median of metric_1_values for sorting</span>
-<span class="c1">#         metric_1_means = np.array(metric_1_values).mean(</span>
-<span class="c1">#             axis=1</span>
-<span class="c1">#         )  # Change to median if needed</span>
-
-<span class="c1">#         sorted_indices = np.argsort(metric_1_means)</span>
-
-<span class="c1">#         # Reorder method names, metric values, and other related data</span>
-<span class="c1">#         method_names = np.array(method_names)[sorted_indices]</span>
-<span class="c1">#         metric_1_values = np.array(metric_1_values)[sorted_indices].transpose()</span>
-<span class="c1">#         metric_2_values = np.array(metric_2_values)[sorted_indices].transpose()</span>
-
-<span class="c1">#         # create figure 1x2 subplots</span>
-<span class="c1">#         fig, ax = plt.subplots(1, 2)</span>
-<span class="c1">#         ax[0].grid()</span>
-<span class="c1">#         ax[1].grid()</span>
-
-<span class="c1">#         # create violin plots for each metric</span>
-<span class="c1">#         bp = ax[0].violinplot(metric_1_values, vert=False, showmeans=True)</span>
-
-<span class="c1">#         def set_violin_colors(instance, colour):</span>
-<span class="c1">#             for pc in instance[&quot;bodies&quot;]:</span>
-<span class="c1">#                 pc.set_facecolor(colour)</span>
-<span class="c1">#                 pc.set_edgecolor(&quot;black&quot;)</span>
-<span class="c1">#                 pc.set_alpha(0.5)</span>
-<span class="c1">#             instance[&quot;cmeans&quot;].set_edgecolor(&quot;black&quot;)</span>
-<span class="c1">#             instance[&quot;cmins&quot;].set_edgecolor(&quot;black&quot;)</span>
-<span class="c1">#             instance[&quot;cmaxes&quot;].set_edgecolor(&quot;black&quot;)</span>
-<span class="c1">#             instance[&quot;cbars&quot;].set_edgecolor(&quot;black&quot;)</span>
-
-<span class="c1">#         set_violin_colors(bp, &quot;violet&quot;)</span>
-
-<span class="c1">#         ax[0].yaxis.set_ticks(np.arange(len(method_names)) + 1)</span>
-<span class="c1">#         ax[0].set_yticklabels(method_names)</span>
-<span class="c1">#         ax[0].get_xaxis().tick_bottom()</span>
-<span class="c1">#         ax[0].set_xlim(right=1.0)</span>
-
-<span class="c1">#         bp2 = ax[1].violinplot(metric_2_values, vert=False, showmeans=True)</span>
-<span class="c1">#         set_violin_colors(bp2, &quot;powderblue&quot;)</span>
-
-<span class="c1">#         ax[1].yaxis.set_ticks(np.arange(len(method_names)) + 1)</span>
-<span class="c1">#         ax[1].set_yticklabels([] * len(metric_2_values))</span>
-<span class="c1">#         ax[1].get_xaxis().tick_bottom()</span>
-
-<span class="c1">#         # set titles and limits</span>
-<span class="c1">#         ax[0].set_title(self.metric1name)</span>
-<span class="c1">#         ax[1].set_title(self.metric2name)</span>
-<span class="c1">#         ax[1].set_xlim(left=0.0)</span>
-
-<span class="c1">#         plt.suptitle(&quot;Distribution of metrics between cross-validation folds&quot;)</span>
-
-<span class="c1">#         plt.tight_layout()</span>
-
-<span class="c1">#         return {&quot;compare_kfold_models&quot;: fig}</span>
-
-<span class="c1">#     def compare_bar_chart(self):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Plots a bar chart comparing the results of multiple train/test models.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-
-<span class="c1">#         # get method names and metric names</span>
-<span class="c1">#         method_names = list(</span>
-<span class="c1">#             self.comparing_models_metrics.keys()</span>
-<span class="c1">#         )  # [method1name, method2name,...]</span>
-
-<span class="c1">#         # get metric values for each method</span>
-<span class="c1">#         metric_1_values = [</span>
-<span class="c1">#             self.comparing_models_metrics[method][self.metric1name]</span>
-<span class="c1">#             for method in method_names</span>
-<span class="c1">#         ]</span>
-<span class="c1">#         metric_2_values = [</span>
-<span class="c1">#             self.comparing_models_metrics[method][self.metric2name]</span>
-<span class="c1">#             for method in method_names</span>
-<span class="c1">#         ]</span>
-
-<span class="c1">#         sorted_indices = np.argsort(metric_1_values)</span>
-<span class="c1">#         method_names = np.array(method_names)[sorted_indices]</span>
-<span class="c1">#         metric_1_values = np.array(metric_1_values)[sorted_indices]</span>
-<span class="c1">#         metric_2_values = np.array(metric_2_values)[sorted_indices]</span>
-
-<span class="c1">#         # Create an array of indices for the x-axis</span>
-<span class="c1">#         y_indices = np.arange(len(method_names))</span>
-
-<span class="c1">#         # Width of the bars</span>
-<span class="c1">#         bar_width = 0.35</span>
-
-<span class="c1">#         # Create the figure and the primary y-axis</span>
-<span class="c1">#         fig, ax = plt.subplots(1, 2)</span>
-<span class="c1">#         ax[0].grid()</span>
-<span class="c1">#         ax[1].grid()</span>
-
-<span class="c1">#         # Create the first bar chart using the primary y-axis (ax1)</span>
-<span class="c1">#         bars1 = ax[0].barh(</span>
-<span class="c1">#             y_indices,</span>
-<span class="c1">#             #   - bar_width / 2,</span>
-<span class="c1">#             metric_1_values,</span>
-<span class="c1">#             bar_width,</span>
-<span class="c1">#             color=&quot;violet&quot;,</span>
-<span class="c1">#             edgecolor=&quot;purple&quot;</span>
-<span class="c1">#             # label=self.metric1name,</span>
-<span class="c1">#         )</span>
-<span class="c1">#         # ax[0].bar_label(bars1, fmt=&quot;%.2f&quot;, label_type=&quot;edge&quot;)</span>
-
-<span class="c1">#         # black dashed line at x=0</span>
-<span class="c1">#         ax[0].axvline(x=0, color=&quot;black&quot;, linestyle=&quot;--&quot;, alpha=0.5)</span>
-
-<span class="c1">#         ax[0].yaxis.set_ticks(np.arange(len(method_names)))</span>
-<span class="c1">#         ax[0].set_yticklabels(method_names)</span>
-<span class="c1">#         ax[0].get_xaxis().tick_bottom()</span>
-<span class="c1">#         ax[0].set_xlim(right=1.0)</span>
-
-<span class="c1">#         # Create a secondary y-axis for the second metric</span>
-<span class="c1">#         # ax2 = ax1.twiny()</span>
-
-<span class="c1">#         # Create the second bar chart using the secondary y-axis (ax2)</span>
-<span class="c1">#         bars2 = ax[1].barh(</span>
-<span class="c1">#             y_indices,</span>
-<span class="c1">#             #   + bar_width / 2,</span>
-<span class="c1">#             metric_2_values,</span>
-<span class="c1">#             bar_width,</span>
-<span class="c1">#             color=&quot;powderblue&quot;,</span>
-<span class="c1">#             edgecolor=&quot;steelblue&quot;,</span>
-<span class="c1">#             # label=self.metric2name,</span>
-<span class="c1">#         )</span>
-<span class="c1">#         # ax[1].bar_label(bars2, fmt=&quot;%.2f&quot;, label_type=&quot;edge&quot;)</span>
-
-<span class="c1">#         ax[1].yaxis.set_ticks(np.arange(len(method_names)))</span>
-<span class="c1">#         ax[1].set_yticklabels([] * len(metric_2_values))</span>
-<span class="c1">#         ax[1].get_xaxis().tick_bottom()</span>
-
-<span class="c1">#         # set titles and limits</span>
-<span class="c1">#         ax[0].set_title(self.metric1name)</span>
-<span class="c1">#         ax[1].set_title(self.metric2name)</span>
-<span class="c1">#         ax[1].set_xlim(left=0.0)</span>
-
-<span class="c1">#         # Show the plot</span>
-<span class="c1">#         plt.suptitle(&quot;Model Performance Comparison&quot;)</span>
-<span class="c1">#         plt.tight_layout()</span>
-
-<span class="c1">#         return {&quot;compare_tt_models&quot;: fig}</span>
-
-<span class="c1">#     def save_to_local(self, plots_dict, extra_string=&quot;&quot;):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Save dictionary of plots to local directory.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-
-<span class="c1">#         for figure_name, figure in plots_dict.items():</span>
-<span class="c1">#             figure.savefig(</span>
-<span class="c1">#                 f&quot;{self.params[&#39;local_fig_path&#39;]}/{figure_name}{extra_string}.png&quot;</span>
-<span class="c1">#             )</span>
-<span class="c1">#             plt.close(figure)</span>
-
-<span class="c1">#     def show_all(self, plots_dict):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Show all plots in dictionary.</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         for figure_name, figure in plots_dict.items():</span>
-<span class="c1">#             print(figure_name)</span>
-<span class="c1">#             figure.show()</span>
-
-
-<span class="c1">#####################################</span>
-<span class="c1"># Graph plotting functions (not used)</span>
-<span class="c1">#####################################</span>
-
-
-<span class="c1"># def plot_graph(graph_data, params):</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     Plots the graph structure.</span>
-
-<span class="c1">#     Parameters</span>
-<span class="c1">#     ----------</span>
-<span class="c1">#     graph_data: pyg.data.Data</span>
-<span class="c1">#         Graph data.</span>
-<span class="c1">#     params: dict</span>
-<span class="c1">#         Additional parameters.</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-
-<span class="c1">#     # convert graph data to networkx graph</span>
-<span class="c1">#     G = pyg.utils.convert.to_networkx(</span>
-<span class="c1">#         graph_data,</span>
-<span class="c1">#         to_undirected=True,</span>
-<span class="c1">#         remove_self_loops=True,</span>
-<span class="c1">#         node_attrs=[&quot;x&quot;],</span>
-<span class="c1">#         edge_attrs=[&quot;edge_attr&quot;],</span>
-<span class="c1">#     )</span>
-<span class="c1">#     for u, v, d in G.edges(data=True):</span>
-<span class="c1">#         d[&quot;weight&quot;] = d[&quot;edge_attr&quot;]</span>
-<span class="c1">#         # d[&#39;nodecolor&#39;] = d[&quot;y&quot;].item()</span>
-
-<span class="c1">#     # colour nodes with their label</span>
-<span class="c1">#     for n, d in G.nodes(data=True):</span>
-<span class="c1">#         d[&quot;nodecolor&quot;] = graph_data.y[n].item()</span>
-
-<span class="c1">#     edges, weights = zip(*nx.get_edge_attributes(G, &quot;weight&quot;).items())</span>
-<span class="c1">#     nodes, colors = zip(*nx.get_node_attributes(G, &quot;nodecolor&quot;).items())</span>
-
-<span class="c1">#     pos = nx.spectral_layout(G)</span>
-
-<span class="c1">#     # draw graph with node colour and edge weight</span>
-<span class="c1">#     nx.draw(</span>
-<span class="c1">#         G,</span>
-<span class="c1">#         pos,</span>
-<span class="c1">#         node_color=colors,</span>
-<span class="c1">#         edgelist=edges,</span>
-<span class="c1">#         edge_color=weights,</span>
-<span class="c1">#         width=5.0,</span>
-<span class="c1">#         edge_cmap=plt.cm.Blues,</span>
-<span class="c1">#         cmap=plt.cm.coolwarm,</span>
-<span class="c1">#         node_size=50,</span>
-<span class="c1">#     )</span>
-<span class="c1">#     vmin = np.min(weights)</span>
-<span class="c1">#     vmax = np.max(weights)</span>
-<span class="c1">#     sm = plt.cm.ScalarMappable(</span>
-<span class="c1">#         cmap=plt.cm.Blues, norm=plt.Normalize(vmin=vmin, vmax=vmax)</span>
-<span class="c1">#     )</span>
-<span class="c1">#     sm.set_array([])</span>
-<span class="c1">#     cbar = plt.colorbar(sm)</span>
-
-<span class="c1">#     if params[&quot;cluster&quot;] is False and params[&quot;log&quot;] is False:</span>
-<span class="c1">#         # save graph structure plot as a png locally</span>
-<span class="c1">#         plt.savefig(f&quot;{params[&#39;local_fig_path&#39;]}/graph_structure&quot;, dpi=180)</span>
-<span class="c1">#         plt.close()</span>
-
-
-<span class="c1"># def visualise_graphspace(h, color, params, path_suffix, method_name):</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     Visualizes the graph space using t-SNE.</span>
-
-<span class="c1">#     Parameters</span>
-<span class="c1">#     ----------</span>
-<span class="c1">#     h: torch.Tensor</span>
-<span class="c1">#         Graph data.</span>
-<span class="c1">#     color: list</span>
-<span class="c1">#         List of colors.</span>
-<span class="c1">#     params: dict</span>
-<span class="c1">#         Additional parameters.</span>
-<span class="c1">#     path_suffix: str</span>
-<span class="c1">#         Suffix for the saved image.</span>
-<span class="c1">#     method_name: str</span>
-<span class="c1">#         Name of the method.</span>
-
-<span class="c1">#     Returns</span>
-<span class="c1">#     -------</span>
-<span class="c1">#     fig: matplotlib.figure.Figure</span>
-<span class="c1">#         The figure containing the t-SNE plot.</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-
-<span class="c1">#     z = TSNE(n_components=2, perplexity=30).fit_transform(</span>
-<span class="c1">#         h.reshape(-1, 1).detach().cpu().numpy()</span>
-<span class="c1">#     )</span>
-
-<span class="c1">#     fig, ax = plt.subplots(figsize=(10, 10))</span>
-
-<span class="c1">#     ax.set_xticks([])</span>
-<span class="c1">#     ax.set_yticks([])</span>
-
-<span class="c1">#     scatter = ax.scatter(z[:, 0], z[:, 1], s=70, c=color, cmap=&quot;Set2&quot;)</span>
-<span class="c1">#     cbar = fig.colorbar(scatter)</span>
-<span class="c1">#     cbar.set_label(&quot;Color Legend&quot;)</span>
-<span class="c1">#     ax.set_title(f&quot;Method: {method_name}&quot;)</span>
-<span class="c1">#     return fig</span>
-
-<span class="c1"># ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span>
-<span class="c1"># ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PLOTS FOR ONE MODEL~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span>
-<span class="c1"># ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span>
 
 
 <div class="viewcode-block" id="ParentPlotter"><a class="viewcode-back" href="../source/eval.html#eval.ParentPlotter">[docs]</a><span class="k">class</span> <span class="nc">ParentPlotter</span><span class="p">:</span>
@@ -1110,9 +253,6 @@
         <span class="n">metrics_per_fold</span> <span class="o">=</span> <span class="p">{</span><span class="n">metric_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="p">[],</span> <span class="n">metric_names</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="p">[]}</span>
 
         <span class="n">params_copy</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="c1"># Setting to False because we don&#39;t want to split the new data into folds</span>
-        <span class="c1"># We just want to know how our new data performs on each trained fold</span>
-        <span class="c1"># params_copy[&quot;kfold_flag&quot;] = False</span>
 
         <span class="c1"># loop through the folds and get the predictions for each fold</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">fold_model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">model_list</span><span class="p">):</span>
@@ -1168,7 +308,6 @@
             <span class="p">)</span>
 
             <span class="n">new_model</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span>
-                <span class="c1"># ckpt_path,</span>
                 <span class="n">trained_fusion_model_checkpoint</span><span class="p">,</span>
                 <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
                     <span class="n">pred_type</span><span class="o">=</span><span class="n">params</span><span class="p">[</span>
@@ -1302,8 +441,6 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">subspace_ckpts</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;subspace_ckpts&quot;</span><span class="p">,</span> <span class="n">subspace_ckpts</span><span class="p">)</span>
-
         <span class="c1"># get data module (potentially will need to be trained with a subspace method or graph-maker)</span>
         <span class="n">dm</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_data_module</span><span class="p">(</span>
             <span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span>
@@ -1411,8 +548,16 @@
 <span class="sd">            ``params[&quot;img_source_test]``.</span>
 <span class="sd">            Change this to whatever suffix you have chosen for your new data files.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># run X, y through the models and get the predictions</span>
-        <span class="c1"># calculate metricS</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="s2">&quot;Argument &#39;model&#39; is not a list. &quot;</span>
+                    <span class="s2">&quot;Please check the model and the function input.&quot;</span>
+                    <span class="s2">&quot;If you are using a train/test model, the single model must be in a list of length 1.&quot;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># if isinstance(model, list):  # kfold model</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
@@ -1451,8 +596,8 @@
             <span class="k">if</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="p">(</span>
-                        <span class="s2">&quot;Argument &#39;model&#39; is a length-1 list but kfold_flag is True. &quot;</span>
-                        <span class="s2">&quot;Please check the model and the function input.&quot;</span>
+                        <span class="s2">&quot;Argument &#39;model&#39; is a list of one model but kfold_flag is True. &quot;</span>
+                        <span class="s2">&quot;Please check the model and the function input (k must be larger than 1).&quot;</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
 
@@ -1474,19 +619,20 @@
             <span class="n">figure</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;From new data&quot;</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="p">(</span>
-                    <span class="s2">&quot;Argument &#39;model&#39; is not a list or nn.Module. &quot;</span>
-                    <span class="s2">&quot;Please check the model and the function input.&quot;</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s2">&quot;Argument &#39;model&#39; is an empty list. &quot;</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">figure</span></div>
 
 <div class="viewcode-block" id="RealsVsPreds.from_final_val_data"><a class="viewcode-back" href="../source/eval.html#eval.RealsVsPreds.from_final_val_data">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_final_val_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
-        <span class="c1"># get the predictions from the models (already saved in the model)</span>
-        <span class="c1"># get the metrics from the models (already saved in the model)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="s2">&quot;Argument &#39;model&#39; is not a list. &quot;</span>
+                    <span class="s2">&quot;Please check the model and the function input.&quot;</span>
+                    <span class="s2">&quot;If you are using a train/test model, the single model must be in a list of length 1.&quot;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># kfold model (list of models and their checkpoints)</span>
             <span class="c1"># if isinstance(model[0], list):  # kfold model</span>
@@ -1548,12 +694,7 @@
             <span class="n">figure</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;From final val data&quot;</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="p">(</span>
-                    <span class="s2">&quot;Argument &#39;model&#39; is not a list or nn.Module. &quot;</span>
-                    <span class="s2">&quot;Please check the model and the function input.&quot;</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s2">&quot;Argument &#39;model&#39; is an empty list. &quot;</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">figure</span></div>
 
@@ -1717,8 +858,15 @@
 <span class="sd">            ``params[&quot;img_source_test]``.</span>
 <span class="sd">            Change this to whatever suffix you have chosen for your new data files.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># run X, y through the models and get the predictions</span>
-        <span class="c1"># calculate metricS</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="s2">&quot;Argument &#39;model&#39; is not a list. &quot;</span>
+                    <span class="s2">&quot;Please check the model and the function input.&quot;</span>
+                    <span class="s2">&quot;If you are using a train/test model, the single model must be in a list of length 1.&quot;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># kfold model</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
@@ -1749,6 +897,14 @@
             <span class="p">)</span>
 
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># train/test model</span>
+            <span class="k">if</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="s2">&quot;Argument &#39;model&#39; is a list of one model but kfold_flag is True. &quot;</span>
+                        <span class="s2">&quot;Please check the model and the function input (k must be larger than 1).&quot;</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
             <span class="p">(</span>
                 <span class="n">train_reals</span><span class="p">,</span>
                 <span class="n">train_preds</span><span class="p">,</span>
@@ -1758,24 +914,23 @@
             <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_new_tt_data</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="p">)</span>
 
             <span class="c1"># plot the figure</span>
-            <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix_tt</span><span class="p">(</span>
-                <span class="n">model</span><span class="p">,</span> <span class="n">train_reals</span><span class="p">,</span> <span class="n">train_preds</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span>
-            <span class="p">)</span>
+            <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix_tt</span><span class="p">(</span><span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="p">(</span>
-                    <span class="s2">&quot;Argument &#39;model&#39; is not a list or nn.Module. &quot;</span>
-                    <span class="s2">&quot;Please check the model and the function input.&quot;</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s2">&quot;Argument &#39;model&#39; is an empty list. &quot;</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">figure</span></div>
 
 <div class="viewcode-block" id="ConfusionMatrix.from_final_val_data"><a class="viewcode-back" href="../source/eval.html#eval.ConfusionMatrix.from_final_val_data">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_final_val_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
-        <span class="c1"># get the predictions from the models (already saved in the model)</span>
-        <span class="c1"># get the metrics from the models (already saved in the model)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="s2">&quot;Argument &#39;model&#39; is not a list. &quot;</span>
+                    <span class="s2">&quot;Please check the model and the function input.&quot;</span>
+                    <span class="s2">&quot;If you are using a train/test model, the single model must be in a list of length 1.&quot;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># kfold model</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
@@ -1808,6 +963,14 @@
             <span class="p">)</span>
 
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># train/test model</span>
+            <span class="k">if</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="s2">&quot;Argument &#39;model&#39; is a list of one model but kfold_flag is True. &quot;</span>
+                        <span class="s2">&quot;Please check the model and the function input (k must be larger than 1).&quot;</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
 
             <span class="p">(</span>
@@ -1821,12 +984,7 @@
             <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix_tt</span><span class="p">(</span><span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="p">(</span>
-                    <span class="s2">&quot;Argument &#39;model&#39; is not a list or nn.Module. &quot;</span>
-                    <span class="s2">&quot;Please check the model and the function input.&quot;</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s2">&quot;Argument &#39;model&#39; is an empty list. &quot;</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">figure</span></div>
 
@@ -1980,7 +1138,7 @@
 <span class="sd">        ----------</span>
 
 <span class="sd">        model_list: dict</span>
-<span class="sd">            Dictionary of models. Keys are the model names and values are [[model, ckpt_path]*num_k]</span>
+<span class="sd">            Dictionary of models. Keys are the model names and values are [[model]*num_k]</span>
 <span class="sd">        kfold_flag: bool</span>
 <span class="sd">            Whether the models are kfold models or not.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2026,11 +1184,6 @@
                 <span class="n">comparing_models_metrics</span><span class="p">[</span><span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">method_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">metric_values</span>
 
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;comparing models metrics&quot;</span><span class="p">,</span> <span class="n">comparing_models_metrics</span><span class="p">)</span>
-
-            <span class="c1"># metric_values = {</span>
-            <span class="c1">#     model.metrics[model.model.pred_type][0][&quot;name&quot;]: model.metric1,</span>
-            <span class="c1">#     model.metrics[model.model.pred_type][1][&quot;name&quot;]: model.metric2,</span>
-            <span class="c1"># }</span>
 
             <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_test_comparison_plot</span><span class="p">(</span><span class="n">comparing_models_metrics</span><span class="p">)</span>
             <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_performance_dataframe</span><span class="p">(</span>

@@ -63,10 +63,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -109,6 +107,8 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">model_modifier</span>
+<span class="kn">from</span> <span class="nn">pytorch_lightning.loggers</span> <span class="kn">import</span> <span class="n">CSVLogger</span>
+<span class="kn">from</span> <span class="nn">fusilli.utils.csv_loss_plotter</span> <span class="kn">import</span> <span class="n">plot_loss_curve</span>
 
 
 <div class="viewcode-block" id="train_and_test"><a class="viewcode-back" href="../../autosummary/fusilli.train.html#fusilli.train.train_and_test">[docs]</a><span class="k">def</span> <span class="nf">train_and_test</span><span class="p">(</span>
@@ -120,6 +120,7 @@
     <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">show_loss_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Trains and tests a model and, if k_fold trained, a fold.</span>
@@ -172,9 +173,13 @@
 
     <span class="c1"># define checkpoint filename</span>
     <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
-        <span class="n">checkpoint_filename</span> <span class="o">=</span> <span class="n">set_checkpoint_name</span><span class="p">(</span>
-            <span class="n">params</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">fold</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">enable_checkpointing</span><span class="p">:</span>
+            <span class="n">checkpoint_filename</span> <span class="o">=</span> <span class="n">set_checkpoint_name</span><span class="p">(</span>
+                <span class="n">params</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">fold</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">checkpoint_filename</span> <span class="o">=</span> <span class="kc">None</span>
+
 
         <span class="k">if</span> <span class="n">fusion_model</span><span class="o">.</span><span class="n">fusion_type</span> <span class="o">==</span> <span class="s2">&quot;graph&quot;</span><span class="p">:</span>
             <span class="c1"># graph k-fold loader is different to normal k-fold loader</span>
@@ -186,11 +191,14 @@
             <span class="n">val_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">val_dataloader</span><span class="p">(</span><span class="n">fold_idx</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">checkpoint_filename</span> <span class="o">=</span> <span class="n">set_checkpoint_name</span><span class="p">(</span>
-            <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
-            <span class="n">fusion_model</span><span class="o">=</span><span class="n">fusion_model</span><span class="p">,</span>
-            <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">enable_checkpointing</span><span class="p">:</span>
+            <span class="n">checkpoint_filename</span> <span class="o">=</span> <span class="n">set_checkpoint_name</span><span class="p">(</span>
+                <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+                <span class="n">fusion_model</span><span class="o">=</span><span class="n">fusion_model</span><span class="p">,</span>
+                <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">checkpoint_filename</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">()</span>
         <span class="n">val_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">val_dataloader</span><span class="p">()</span>
@@ -203,6 +211,7 @@
         <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
         <span class="n">enable_checkpointing</span><span class="o">=</span><span class="n">enable_checkpointing</span><span class="p">,</span>
         <span class="n">checkpoint_filename</span><span class="o">=</span><span class="n">checkpoint_filename</span><span class="p">,</span>
+        <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="n">dm</span><span class="o">.</span><span class="n">own_early_stopping_callback</span><span class="p">,</span>
     <span class="p">)</span>  <span class="c1"># init trainer</span>
 
     <span class="c1"># initialise model with pytorch lightning framework, hence pl_model</span>
@@ -241,6 +250,10 @@
 
     <span class="n">pl_model</span><span class="o">.</span><span class="n">metric1</span> <span class="o">=</span> <span class="n">metric_1</span>
     <span class="n">pl_model</span><span class="o">.</span><span class="n">metric2</span> <span class="o">=</span> <span class="n">metric_2</span>
+
+    <span class="c1"># if loss is saved in csv file: plot the loss and save it now</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">CSVLogger</span><span class="p">):</span>
+        <span class="n">plot_loss_curve</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show_loss_plot</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">pl_model</span></div>
 
@@ -290,6 +303,7 @@
     <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">show_loss_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Trains/tests the model and saves the trained model to a dictionary for further analysis.</span>
@@ -319,6 +333,11 @@
 <span class="sd">        Maximum number of epochs. Default 1000.</span>
 <span class="sd">    enable_checkpointing : bool</span>
 <span class="sd">        Whether to enable checkpointing. Default True.</span>
+<span class="sd">    own_early_stopping_callback : pytorch lightning callback</span>
+<span class="sd">        Early stopping callback object. Default None. If None, the default early stopping</span>
+<span class="sd">        will be used.</span>
+<span class="sd">    show_loss_plot : bool</span>
+<span class="sd">        Whether to show the loss plot. Default False.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -341,15 +360,13 @@
                 <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
                 <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
                 <span class="n">enable_checkpointing</span><span class="o">=</span><span class="n">enable_checkpointing</span><span class="p">,</span>
+                <span class="n">show_loss_plot</span><span class="o">=</span><span class="n">show_loss_plot</span><span class="p">,</span>
             <span class="p">)</span>
-
-            <span class="c1"># print(&quot;Trainer&quot;, trained_model.trainer)</span>
 
             <span class="n">trained_models_dict</span> <span class="o">=</span> <span class="n">store_trained_model</span><span class="p">(</span>
                 <span class="n">trained_model</span><span class="p">,</span>
                 <span class="n">trained_models_dict</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="c1"># print(trained_model.trainer.checkpoint_callback.best_model_path)</span>
 
             <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;log&quot;</span><span class="p">]:</span>
                 <span class="n">wandb</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
@@ -364,6 +381,7 @@
             <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
             <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
             <span class="n">enable_checkpointing</span><span class="o">=</span><span class="n">enable_checkpointing</span><span class="p">,</span>
+            <span class="n">show_loss_plot</span><span class="o">=</span><span class="n">show_loss_plot</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">trained_models_dict</span> <span class="o">=</span> <span class="n">store_trained_model</span><span class="p">(</span>

@@ -63,10 +63,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -98,15 +96,15 @@
 <span class="sd">Functions for initializing the pytorch lightning logger and trainer.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">wandb</span>
-<span class="kn">from</span> <span class="nn">pytorch_lightning.loggers</span> <span class="kn">import</span> <span class="n">TensorBoardLogger</span><span class="p">,</span> <span class="n">WandbLogger</span>
-<span class="kn">from</span> <span class="nn">pytorch_lightning.callbacks.early_stopping</span> <span class="kn">import</span> <span class="n">EarlyStopping</span>
-<span class="kn">from</span> <span class="nn">pytorch_lightning.callbacks</span> <span class="kn">import</span> <span class="n">ModelCheckpoint</span>
-<span class="kn">from</span> <span class="nn">pytorch_lightning</span> <span class="kn">import</span> <span class="n">Trainer</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
-<span class="kn">from</span> <span class="nn">pytorch_lightning.callbacks</span> <span class="kn">import</span> <span class="n">TQDMProgressBar</span>
 <span class="kn">import</span> <span class="nn">os</span>
+
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">wandb</span>
+<span class="kn">from</span> <span class="nn">pytorch_lightning</span> <span class="kn">import</span> <span class="n">Trainer</span>
+<span class="kn">from</span> <span class="nn">pytorch_lightning.callbacks</span> <span class="kn">import</span> <span class="n">ModelCheckpoint</span><span class="p">,</span> <span class="n">TQDMProgressBar</span>
+<span class="kn">from</span> <span class="nn">pytorch_lightning.callbacks.early_stopping</span> <span class="kn">import</span> <span class="n">EarlyStopping</span>
+<span class="kn">from</span> <span class="nn">pytorch_lightning.loggers</span> <span class="kn">import</span> <span class="n">CSVLogger</span><span class="p">,</span> <span class="n">TensorBoardLogger</span><span class="p">,</span> <span class="n">WandbLogger</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 
 <div class="viewcode-block" id="get_file_suffix_from_dict"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.get_file_suffix_from_dict">[docs]</a><span class="k">def</span> <span class="nf">get_file_suffix_from_dict</span><span class="p">(</span><span class="n">extra_log_string_dict</span><span class="p">):</span>
@@ -153,7 +151,10 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        logger (object): Pytorch lightning logger object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">method_name</span> <span class="o">=</span> <span class="n">fusion_model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fusion_model</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">):</span>
+        <span class="n">method_name</span> <span class="o">=</span> <span class="n">fusion_model</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">method_name</span> <span class="o">=</span> <span class="n">fusion_model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
     <span class="n">modality_type</span> <span class="o">=</span> <span class="n">fusion_model</span><span class="o">.</span><span class="n">modality_type</span>
     <span class="n">fusion_type</span> <span class="o">=</span> <span class="n">fusion_model</span><span class="o">.</span><span class="n">fusion_type</span>
 
@@ -182,7 +183,13 @@
                 <span class="n">logger</span><span class="o">.</span><span class="n">experiment</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">logger</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># change to csvlogger instead of log</span>
+
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">CSVLogger</span><span class="p">(</span>
+            <span class="n">save_dir</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;loss_log_dir&quot;</span><span class="p">],</span>
+            <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">version</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">logger</span></div>
 
@@ -323,7 +330,12 @@
 
 
 <div class="viewcode-block" id="init_trainer"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.init_trainer">[docs]</a><span class="k">def</span> <span class="nf">init_trainer</span><span class="p">(</span>
-    <span class="n">logger</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">checkpoint_filename</span><span class="o">=</span><span class="kc">None</span>
+    <span class="n">logger</span><span class="p">,</span>
+    <span class="n">params</span><span class="p">,</span>
+    <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">checkpoint_filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize the pytorch lightning trainer object.</span>
@@ -335,18 +347,26 @@
 <span class="sd">        enable_checkpointing (bool): Whether to enable checkpointing. If True, then</span>
 <span class="sd">            checkpoints will be saved. We use False for the example notebooks in the</span>
 <span class="sd">            repository/documentation.</span>
+<span class="sd">        checkpoint_filename (str): Checkpoint filename. Default None if using default checkpointing.</span>
+<span class="sd">        own_early_stopping_callback (object): Own early stopping callback object. Default None to use default</span>
+<span class="sd">            early stopping callback. If you want to use your own early stopping callback, then you need to</span>
+<span class="sd">            define it in the main training script and pass it here or pass into the datamodule object and then</span>
+<span class="sd">            it will read it from there.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        trainer (object): Pytorch lightning trainer object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">early_stop_callback</span> <span class="o">=</span> <span class="n">EarlyStopping</span><span class="p">(</span>
-        <span class="n">monitor</span><span class="o">=</span><span class="s2">&quot;val_loss&quot;</span><span class="p">,</span>
-        <span class="n">min_delta</span><span class="o">=</span><span class="mf">0.00</span><span class="p">,</span>
-        <span class="n">patience</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
-        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">own_early_stopping_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">early_stop_callback</span> <span class="o">=</span> <span class="n">own_early_stopping_callback</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">early_stop_callback</span> <span class="o">=</span> <span class="n">EarlyStopping</span><span class="p">(</span>
+            <span class="n">monitor</span><span class="o">=</span><span class="s2">&quot;val_loss&quot;</span><span class="p">,</span>
+            <span class="n">min_delta</span><span class="o">=</span><span class="mf">0.00</span><span class="p">,</span>
+            <span class="n">patience</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="n">bar</span> <span class="o">=</span> <span class="n">LitProgressBar</span><span class="p">()</span>
 
@@ -359,11 +379,19 @@
         <span class="p">)</span>
         <span class="n">callbacks_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">checkpoint_callback</span><span class="p">)</span>
 
+    <span class="c1"># check if accelerator and devices are in params given by user</span>
+    <span class="n">accelerator</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span>  <span class="c1"># default</span>
+    <span class="n">devices</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># default</span>
+    <span class="k">if</span> <span class="s2">&quot;accelerator&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">accelerator</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;accelerator&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">&quot;devices&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;devices&quot;</span><span class="p">]</span>
+
     <span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span>
         <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
         <span class="n">num_sanity_val_steps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="c1"># accelerator=&quot;mps&quot;,</span>
-        <span class="n">devices</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">accelerator</span><span class="o">=</span><span class="n">accelerator</span><span class="p">,</span>
+        <span class="n">devices</span><span class="o">=</span><span class="n">devices</span><span class="p">,</span>
         <span class="n">callbacks</span><span class="o">=</span><span class="n">callbacks_list</span><span class="p">,</span>
         <span class="n">log_every_n_steps</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="c1"># default_root_dir=run_dir,</span>
@@ -387,6 +415,23 @@
 <span class="sd">        metric2 (float): Final validation metric 2.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">metric_names</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">metric_names_list</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">trainer</span><span class="o">.</span><span class="n">callback_metrics</span><span class="p">)</span>
+
+    <span class="c1"># raise error if trainer.callback_metrics is empty</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">trainer</span><span class="o">.</span><span class="n">callback_metrics</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;trainer.callback_metrics is empty.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># raise error if metric_names[0]_val or metric_names[1]_val is not in trainer.callback_metrics</span>
+    <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_val&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">trainer</span><span class="o">.</span><span class="n">callback_metrics</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_val not in trainer.callback_metrics.keys().&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric_names</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">_val&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">trainer</span><span class="o">.</span><span class="n">callback_metrics</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric_names</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">_val not in trainer.callback_metrics.keys().&quot;</span>
+        <span class="p">)</span>
+
     <span class="n">metric1</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">callback_metrics</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_val&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
     <span class="n">metric2</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">callback_metrics</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric_names</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">_val&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
 

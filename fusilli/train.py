@@ -26,6 +26,7 @@ def train_and_test(
     layer_mods=None,
     max_epochs=1000,
     enable_checkpointing=True,
+    show_loss_plot=False,
 ):
     """
     Trains and tests a model and, if k_fold trained, a fold.
@@ -78,9 +79,13 @@ def train_and_test(
 
     # define checkpoint filename
     if params["kfold_flag"]:
-        checkpoint_filename = set_checkpoint_name(
-            params, fusion_model, fold=k, extra_log_string_dict=extra_log_string_dict
-        )
+        if enable_checkpointing:
+            checkpoint_filename = set_checkpoint_name(
+                params, fusion_model, fold=k, extra_log_string_dict=extra_log_string_dict
+            )
+        else:
+            checkpoint_filename = None
+
 
         if fusion_model.fusion_type == "graph":
             # graph k-fold loader is different to normal k-fold loader
@@ -92,11 +97,14 @@ def train_and_test(
             val_dataloader = dm.val_dataloader(fold_idx=k)
 
     else:
-        checkpoint_filename = set_checkpoint_name(
-            params=params,
-            fusion_model=fusion_model,
-            extra_log_string_dict=extra_log_string_dict,
-        )
+        if enable_checkpointing:
+            checkpoint_filename = set_checkpoint_name(
+                params=params,
+                fusion_model=fusion_model,
+                extra_log_string_dict=extra_log_string_dict,
+            )
+        else:
+            checkpoint_filename = None
 
         train_dataloader = dm.train_dataloader()
         val_dataloader = dm.val_dataloader()
@@ -151,7 +159,7 @@ def train_and_test(
 
     # if loss is saved in csv file: plot the loss and save it now
     if isinstance(logger, CSVLogger):
-        plot_loss_curve(params, logger)
+        plot_loss_curve(params, logger, show=show_loss_plot)
 
     return pl_model
 
@@ -201,6 +209,7 @@ def train_and_save_models(
     layer_mods=None,
     max_epochs=1000,
     enable_checkpointing=True,
+    show_loss_plot=False,
 ):
     """
     Trains/tests the model and saves the trained model to a dictionary for further analysis.
@@ -233,6 +242,8 @@ def train_and_save_models(
     own_early_stopping_callback : pytorch lightning callback
         Early stopping callback object. Default None. If None, the default early stopping
         will be used.
+    show_loss_plot : bool
+        Whether to show the loss plot. Default False.
 
     Returns
     -------
@@ -255,6 +266,7 @@ def train_and_save_models(
                 layer_mods=layer_mods,
                 max_epochs=max_epochs,
                 enable_checkpointing=enable_checkpointing,
+                show_loss_plot=show_loss_plot,
             )
 
             trained_models_dict = store_trained_model(
@@ -275,6 +287,7 @@ def train_and_save_models(
             layer_mods=layer_mods,
             max_epochs=max_epochs,
             enable_checkpointing=enable_checkpointing,
+            show_loss_plot=show_loss_plot,
         )
 
         trained_models_dict = store_trained_model(

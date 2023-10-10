@@ -64,10 +64,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -2874,6 +2872,8 @@ to the latent image space.</p>
 <li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs. Default is 1000.</p></li>
 <li><p><strong>checkpoint_path</strong> (<em>list</em>) – List containing the checkpoint paths for the denoising autoencoder and the image
 unimodal network. Default is None - which means that the model needs training.</p></li>
+<li><p><strong>own_early_stopping_callback</strong> (<em>pytorch lightning callback</em>) – Early stopping callback object. Default None. If None, the default early stopping
+will be used.</p></li>
 </ul>
 </dd>
 </dl>

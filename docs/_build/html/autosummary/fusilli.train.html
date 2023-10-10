@@ -25,7 +25,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="fusilli.utils.model_chooser" href="fusilli.utils.model_chooser.html" />
+    <link rel="next" title="fusilli.eval" href="fusilli.eval.html" />
     <link rel="prev" title="fusilli.data" href="fusilli.data.html" /> 
 </head>
 
@@ -71,10 +71,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#fusilli.train.train_and_test"><code class="docutils literal notranslate"><span class="pre">train_and_test()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -142,7 +140,7 @@ the list of models.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fusilli.train.train_and_save_models">
-<span class="sig-name descname"><span class="pre">train_and_save_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_checkpointing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/train.html#train_and_save_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.train.train_and_save_models" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">train_and_save_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_checkpointing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_loss_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/train.html#train_and_save_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.train.train_and_save_models" title="Permalink to this definition"></a></dt>
 <dd><p>Trains/tests the model and saves the trained model to a dictionary for further analysis.
 If the training type is kfold, it will train and test the model for each fold and store the
 trained models in a list under the model type key.</p>
@@ -163,6 +161,9 @@ e.g. {“TabularCrossmodalAttention”: {“mod1_layers”: new mod 1 layers nn.
 Default None.</p></li>
 <li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs. Default 1000.</p></li>
 <li><p><strong>enable_checkpointing</strong> (<em>bool</em>) – Whether to enable checkpointing. Default True.</p></li>
+<li><p><strong>own_early_stopping_callback</strong> (<em>pytorch lightning callback</em>) – Early stopping callback object. Default None. If None, the default early stopping
+will be used.</p></li>
+<li><p><strong>show_loss_plot</strong> (<em>bool</em>) – Whether to show the loss plot. Default False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -177,7 +178,7 @@ train/test training or a list of trained models for k-fold training).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fusilli.train.train_and_test">
-<span class="sig-name descname"><span class="pre">train_and_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_checkpointing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/train.html#train_and_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.train.train_and_test" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">train_and_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_checkpointing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_loss_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/train.html#train_and_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.train.train_and_test" title="Permalink to this definition"></a></dt>
 <dd><p>Trains and tests a model and, if k_fold trained, a fold.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -225,7 +226,7 @@ Default None.</p></li>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="fusilli.data.html" class="btn btn-neutral float-left" title="fusilli.data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="fusilli.utils.model_chooser.html" class="btn btn-neutral float-right" title="fusilli.utils.model_chooser" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="fusilli.eval.html" class="btn btn-neutral float-right" title="fusilli.eval" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -63,10 +63,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -95,9 +93,10 @@
              
   <h1>Source code for fusilli.data</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This file contains the data for the different modalities and the different</span>
-<span class="sd">fusion methods. The data are used to load the data and create the</span>
-<span class="sd">dataloader objects for training and validation.</span>
+<span class="sd">Data loading classes for multimodal and unimodal data.</span>
+<span class="sd">This file contains functions and classes for loading the data for the different modalities, and</span>
+<span class="sd">in training the subspace methods on the data (if the subspace methods need pre-training).</span>
+<span class="sd">Train/test splits and k-fold cross validation are also implemented here.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="c1"># imports</span>
@@ -110,8 +109,6 @@
 <span class="kn">from</span> <span class="nn">torch_geometric.data.lightning</span> <span class="kn">import</span> <span class="n">LightningNodeData</span>
 <span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">model_modifier</span>
 
-
-<span class="c1"># from fusilli.eval import plot_graph</span>
 
 
 <div class="viewcode-block" id="downsample_img_batch"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.downsample_img_batch">[docs]</a><span class="k">def</span> <span class="nf">downsample_img_batch</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">output_size</span><span class="p">):</span>
@@ -191,19 +188,17 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    pred_features : list or tensor</span>
-<span class="sd">        List of tensors or tensor of predictive features</span>
-<span class="sd">        (i.e. tabular or image data without labels).</span>
-<span class="sd">    labels : dataframe</span>
-<span class="sd">        Dataframe of labels (column name must be &quot;pred_label&quot;).</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    __len__()</span>
-<span class="sd">        Returns the length of the dataset.</span>
-<span class="sd">    __getitem__(idx)</span>
-<span class="sd">        Returns the item at the specified index.</span>
-
+<span class="sd">    multimodal_flag : bool</span>
+<span class="sd">        Flag for multimodal data. True if multimodal, False if unimodal.</span>
+<span class="sd">    dataset1 : tensor</span>
+<span class="sd">        Tensor of predictive features for modality 1.</span>
+<span class="sd">    dataset2 : tensor</span>
+<span class="sd">        Tensor of predictive features for modality 2.</span>
+<span class="sd">    dataset : tensor</span>
+<span class="sd">        Tensor of predictive features for uni-modal data.</span>
+<span class="sd">    labels : tensor</span>
+<span class="sd">        Tensor of labels.</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="CustomDataset.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataset.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_features</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
@@ -249,7 +244,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">float</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CustomDataset.__len__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataset.__len__">[docs]</a>    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the length of the dataset.</span>
 
@@ -261,9 +256,9 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">multimodal_flag</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
 
-<div class="viewcode-block" id="CustomDataset.__getitem__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataset.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the item at the specified index.</span>
 
@@ -275,7 +270,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">multimodal_flag</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset1</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset2</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span></div></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="LoadDatasets"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets">[docs]</a><span class="k">class</span> <span class="nc">LoadDatasets</span><span class="p">:</span>
@@ -291,20 +286,9 @@
 <span class="sd">    img_source : str</span>
 <span class="sd">        Source torch file for image data.</span>
 <span class="sd">    image_downsample_size : tuple</span>
-<span class="sd">        Size to downsample the images to (height, width, depth).</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    load_tabular1()</span>
-<span class="sd">        Loads the tabular1-only dataset.</span>
-<span class="sd">    load_tabular2()</span>
-<span class="sd">        Loads the tabular2-only dataset.</span>
-<span class="sd">    load_img()</span>
-<span class="sd">        Loads the image-only dataset.</span>
-<span class="sd">    load_both_tabular()</span>
-<span class="sd">        Loads the tabular1 and tabular2 multimodal dataset.</span>
-<span class="sd">    load_tab_and_img()</span>
-<span class="sd">        Loads the tabular1 and image multimodal dataset.</span>
+<span class="sd">        Size to downsample the images to (height, width, depth) or (height, width) for 2D</span>
+<span class="sd">        images.</span>
+<span class="sd">        None if not downsampling. (default None)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="LoadDatasets.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span> <span class="n">img_downsample_dims</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -323,6 +307,10 @@
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
 <span class="sd">            If sources is not a list.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the CSVs do not have the right columns or if the index column is not named</span>
+<span class="sd">            &quot;study_id&quot;.</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tabular1_source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tabular2_source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_source</span> <span class="o">=</span> <span class="n">sources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span> <span class="o">=</span> <span class="p">(</span>
@@ -363,11 +351,11 @@
         <span class="n">pred_features</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">tab_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
         <span class="n">pred_label</span> <span class="o">=</span> <span class="n">tab_df</span><span class="p">[[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">]]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">pred_features</span><span class="p">,</span> <span class="n">pred_label</span><span class="p">)</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">pred_features</span><span class="p">,</span> <span class="n">pred_label</span><span class="p">)</span>
 
         <span class="n">mod1_dim</span> <span class="o">=</span> <span class="n">pred_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="n">mod1_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="n">mod1_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="LoadDatasets.load_tabular2"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.load_tabular2">[docs]</a>    <span class="k">def</span> <span class="nf">load_tabular2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -389,10 +377,10 @@
         <span class="n">pred_features</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">tab_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
         <span class="n">pred_label</span> <span class="o">=</span> <span class="n">tab_df</span><span class="p">[[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">]]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">pred_features</span><span class="p">,</span> <span class="n">pred_label</span><span class="p">)</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">pred_features</span><span class="p">,</span> <span class="n">pred_label</span><span class="p">)</span>
         <span class="n">mod2_dim</span> <span class="o">=</span> <span class="n">pred_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">mod2_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">mod2_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="LoadDatasets.load_img"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.load_img">[docs]</a>    <span class="k">def</span> <span class="nf">load_img</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -417,11 +405,11 @@
 
         <span class="n">pred_label</span> <span class="o">=</span> <span class="n">label_df</span><span class="p">[[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">]]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">all_scans_ds</span><span class="p">,</span> <span class="n">pred_label</span><span class="p">)</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">all_scans_ds</span><span class="p">,</span> <span class="n">pred_label</span><span class="p">)</span>
 
         <span class="n">img_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">all_scans_ds</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>  <span class="c1"># not including batch size or channels</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">img_dim</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">img_dim</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="LoadDatasets.load_both_tabular"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.load_both_tabular">[docs]</a>    <span class="k">def</span> <span class="nf">load_both_tabular</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -446,14 +434,14 @@
         <span class="n">tab2_pred_features</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">tab2_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 
         <span class="n">pred_label</span> <span class="o">=</span> <span class="n">tab1_df</span><span class="p">[[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">]]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span>
             <span class="p">[</span><span class="n">tab1_pred_features</span><span class="p">,</span> <span class="n">tab2_pred_features</span><span class="p">],</span> <span class="n">pred_label</span>
         <span class="p">)</span>
 
         <span class="n">mod1_dim</span> <span class="o">=</span> <span class="n">tab1_pred_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">mod2_dim</span> <span class="o">=</span> <span class="n">tab2_pred_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="n">mod1_dim</span><span class="p">,</span> <span class="n">mod2_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="n">mod1_dim</span><span class="p">,</span> <span class="n">mod2_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="LoadDatasets.load_tab_and_img"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.load_tab_and_img">[docs]</a>    <span class="k">def</span> <span class="nf">load_tab_and_img</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -478,11 +466,11 @@
         <span class="n">imgs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_source</span><span class="p">)</span>
         <span class="n">imgs</span> <span class="o">=</span> <span class="n">downsample_img_batch</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">([</span><span class="n">tab1_features</span><span class="p">,</span> <span class="n">imgs</span><span class="p">],</span> <span class="n">label_df</span><span class="p">)</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">([</span><span class="n">tab1_features</span><span class="p">,</span> <span class="n">imgs</span><span class="p">],</span> <span class="n">label_df</span><span class="p">)</span>
         <span class="n">mod1_dim</span> <span class="o">=</span> <span class="n">tab1_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">img_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">imgs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>  <span class="c1"># not including batch size or channels</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="n">mod1_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">img_dim</span><span class="p">]</span></div></div>
+        <span class="k">return</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="n">mod1_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">img_dim</span><span class="p">]</span></div></div>
 
 
 <div class="viewcode-block" id="CustomDataModule"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataModule">[docs]</a><span class="k">class</span> <span class="nc">CustomDataModule</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningDataModule</span><span class="p">):</span>
@@ -537,6 +525,7 @@
         <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
         <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -561,6 +550,10 @@
 <span class="sd">            (default None)</span>
 <span class="sd">        max_epochs : int</span>
 <span class="sd">            Maximum number of epochs to train subspace methods for. (default 1000)</span>
+<span class="sd">        extra_log_string_dict : dict</span>
+<span class="sd">            Dictionary of extra strings to add to the log.</span>
+<span class="sd">        own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping</span>
+<span class="sd">            Early stopping callback class (default None).</span>
 
 
 <span class="sd">        Raises</span>
@@ -601,7 +594,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dims</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="n">subspace_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="o">=</span> <span class="n">layer_mods</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span> <span class="o">=</span> <span class="n">max_epochs</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span> <span class="o">=</span> <span class="n">max_epochs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">own_early_stopping_callback</span> <span class="o">=</span> <span class="n">own_early_stopping_callback</span></div>
 
 <div class="viewcode-block" id="CustomDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -640,7 +634,11 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if subspace method is specified</span>
             <span class="k">if</span> <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">)</span>
+                <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">,</span>
+                    <span class="n">max_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">,</span>
+                    <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="p">)</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="c1"># if subspace method in layer_mods</span>
@@ -770,6 +768,7 @@
         <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
         <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -785,13 +784,19 @@
 <span class="sd">            Batch size (default 8).</span>
 <span class="sd">        subspace_method : class</span>
 <span class="sd">            Subspace method class (default None) (only for subspace methods).</span>
-<span class="sd">        max_epochs : int</span>
-<span class="sd">            Maximum number of epochs to train subspace methods for. (default 1000)</span>
 <span class="sd">        image_downsample_size : tuple</span>
 <span class="sd">            Size to downsample the images to (height, width, depth) or (height, width) for 2D</span>
 <span class="sd">            images. None if not downsampling. (default None)</span>
 <span class="sd">        layer_mods : dict</span>
 <span class="sd">            Dictionary of layer modifications to make to the subspace method.</span>
+<span class="sd">            (default None)</span>
+<span class="sd">        max_epochs : int</span>
+<span class="sd">            Maximum number of epochs to train subspace methods for. (default 1000)</span>
+<span class="sd">        extra_log_string_dict : dict</span>
+<span class="sd">            Dictionary of extra strings to add to the log.</span>
+<span class="sd">        own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping</span>
+<span class="sd">            Early stopping callback class (default None).</span>
+
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
@@ -834,7 +839,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dims</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="o">=</span> <span class="n">layer_mods</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span> <span class="o">=</span> <span class="n">max_epochs</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span> <span class="o">=</span> <span class="n">max_epochs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">own_early_stopping_callback</span> <span class="o">=</span> <span class="n">own_early_stopping_callback</span></div>
 
 <div class="viewcode-block" id="KFoldDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -899,7 +905,9 @@
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">fold</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folds</span><span class="p">):</span>
                     <span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">fold</span>
                     <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span>
+                        <span class="bp">self</span><span class="p">,</span>
+                        <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+                        <span class="n">max_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">,</span>
                     <span class="p">)</span>
 
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1174,6 +1182,7 @@
             <span class="n">input_pred_nodes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_idxs</span><span class="p">,</span>
             <span class="n">loader</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span>
         <span class="p">)</span>
+
         <span class="k">return</span> <span class="n">lightning_module</span></div></div>
 
 
@@ -1205,6 +1214,7 @@
 <span class="sd">        List of data dimensions [mod1_dim, mod2_dim, img_dim]</span>
 <span class="sd">    folds : list</span>
 <span class="sd">        List of tuples of (graph_data, train_idxs, test_idxs)</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="KFoldGraphDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -1233,6 +1243,8 @@
 <span class="sd">            images. None if not downsampling. (default None)</span>
 <span class="sd">        layer_mods : dict</span>
 <span class="sd">            Dictionary of layer modifications to make to the graph maker method.</span>
+<span class="sd">        extra_log_string_dict : dict</span>
+<span class="sd">            Dictionary of extra strings to add to the log.</span>
 
 
 <span class="sd">        Raises</span>
@@ -1377,6 +1389,7 @@
     <span class="n">optional_suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gets the data module for the specified modality and fusion type.</span>
@@ -1403,6 +1416,8 @@
 <span class="sd">        Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
 <span class="sd">        as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
 <span class="sd">        Default None.</span>
+<span class="sd">    own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping</span>
+<span class="sd">        Early stopping callback class (default None).</span>
 
 
 <span class="sd">    Returns</span>
@@ -1449,8 +1464,10 @@
         <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
             <span class="k">for</span> <span class="n">dm_instance</span> <span class="ow">in</span> <span class="n">dm</span><span class="p">:</span>
                 <span class="n">dm_instance</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">dmg</span><span class="o">.</span><span class="n">data_dims</span>
+                <span class="n">dm_instance</span><span class="o">.</span><span class="n">own_early_stopping_callback</span> <span class="o">=</span> <span class="n">own_early_stopping_callback</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">dm</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">dmg</span><span class="o">.</span><span class="n">data_dims</span>
+            <span class="n">dm</span><span class="o">.</span><span class="n">own_early_stopping_callback</span> <span class="o">=</span> <span class="n">own_early_stopping_callback</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># another other than graph fusion</span>
@@ -1469,6 +1486,7 @@
             <span class="n">layer_mods</span><span class="o">=</span><span class="n">layer_mods</span><span class="p">,</span>
             <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
             <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span><span class="p">,</span>
+            <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="n">own_early_stopping_callback</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">dm</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">()</span>
         <span class="n">dm</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="o">=</span><span class="n">checkpoint_path</span><span class="p">)</span>

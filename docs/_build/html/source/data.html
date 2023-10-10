@@ -64,10 +64,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -96,12 +94,13 @@
              
   <section id="module-data">
 <span id="data-module"></span><h1>data module<a class="headerlink" href="#module-data" title="Permalink to this heading"></a></h1>
-<p>This file contains the data for the different modalities and the different
-fusion methods. The data are used to load the data and create the
-dataloader objects for training and validation.</p>
+<p>Data loading classes for multimodal and unimodal data.
+This file contains functions and classes for loading the data for the different modalities, and
+in training the subspace methods on the data (if the subspace methods need pre-training).
+Train/test splits and k-fold cross validation are also implemented here.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="data.CustomDataModule">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CustomDataModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#CustomDataModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.CustomDataModule" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CustomDataModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">own_early_stopping_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#CustomDataModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.CustomDataModule" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">LightningDataModule</span></code></p>
 <p>Custom pytorch lightning datamodule class for the different modalities.</p>
 <dl class="py attribute">
@@ -273,7 +272,7 @@ images.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="data.CustomDataModule.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#CustomDataModule.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.CustomDataModule.__init__" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">own_early_stopping_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#CustomDataModule.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.CustomDataModule.__init__" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -288,6 +287,8 @@ None if not downsampling. (default None)</p></li>
 <li><p><strong>layer_mods</strong> (<em>dict</em>) – Dictionary of layer modifications to make to the subspace method.
 (default None)</p></li>
 <li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs to train subspace methods for. (default 1000)</p></li>
+<li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – Dictionary of extra strings to add to the log.</p></li>
+<li><p><strong>own_early_stopping_callback</strong> (<em>pytorch_lightning.callbacks.EarlyStopping</em>) – Early stopping callback class (default None).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -366,13 +367,45 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></p>
 <p>Custom dataset class for multimodal data.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="data.CustomDataset.pred_features">
-<span class="sig-name descname"><span class="pre">pred_features</span></span><a class="headerlink" href="#data.CustomDataset.pred_features" title="Permalink to this definition"></a></dt>
-<dd><p>List of tensors or tensor of predictive features
-(i.e. tabular or image data without labels).</p>
+<dt class="sig sig-object py" id="data.CustomDataset.multimodal_flag">
+<span class="sig-name descname"><span class="pre">multimodal_flag</span></span><a class="headerlink" href="#data.CustomDataset.multimodal_flag" title="Permalink to this definition"></a></dt>
+<dd><p>Flag for multimodal data. True if multimodal, False if unimodal.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list or tensor</p>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.CustomDataset.dataset1">
+<span class="sig-name descname"><span class="pre">dataset1</span></span><a class="headerlink" href="#data.CustomDataset.dataset1" title="Permalink to this definition"></a></dt>
+<dd><p>Tensor of predictive features for modality 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.CustomDataset.dataset2">
+<span class="sig-name descname"><span class="pre">dataset2</span></span><a class="headerlink" href="#data.CustomDataset.dataset2" title="Permalink to this definition"></a></dt>
+<dd><p>Tensor of predictive features for modality 2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.CustomDataset.dataset">
+<span class="sig-name descname"><span class="pre">dataset</span></span><a class="headerlink" href="#data.CustomDataset.dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Tensor of predictive features for uni-modal data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tensor</p>
 </dd>
 </dl>
 </dd></dl>
@@ -380,24 +413,12 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="data.CustomDataset.labels">
 <span class="sig-name descname"><span class="pre">labels</span></span><a class="headerlink" href="#data.CustomDataset.labels" title="Permalink to this definition"></a></dt>
-<dd><p>Dataframe of labels (column name must be “pred_label”).</p>
+<dd><p>Tensor of labels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dataframe</p>
+<dd class="field-odd"><p>tensor</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="data.CustomDataset.__len__">
-<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#CustomDataset.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.CustomDataset.__len__" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the length of the dataset.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="data.CustomDataset.__getitem__">
-<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#CustomDataset.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.CustomDataset.__getitem__" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the item at the specified index.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -661,7 +682,7 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 
 <dl class="py class">
 <dt class="sig sig-object py" id="data.KFoldDataModule">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KFoldDataModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#KFoldDataModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.KFoldDataModule" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KFoldDataModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">own_early_stopping_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#KFoldDataModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.KFoldDataModule" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">LightningDataModule</span></code></p>
 <p>Custom pytorch lightning datamodule class for the different modalities with k-fold cross
 validation</p>
@@ -845,7 +866,7 @@ images.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="data.KFoldDataModule.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#KFoldDataModule.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.KFoldDataModule.__init__" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">own_early_stopping_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#KFoldDataModule.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.KFoldDataModule.__init__" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -854,10 +875,13 @@ images.</p>
 <li><p><strong>sources</strong> (<em>list</em>) – List of source csv files.</p></li>
 <li><p><strong>batch_size</strong> (<em>int</em>) – Batch size (default 8).</p></li>
 <li><p><strong>subspace_method</strong> (<em>class</em>) – Subspace method class (default None) (only for subspace methods).</p></li>
-<li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs to train subspace methods for. (default 1000)</p></li>
 <li><p><strong>image_downsample_size</strong> (<em>tuple</em>) – Size to downsample the images to (height, width, depth) or (height, width) for 2D
 images. None if not downsampling. (default None)</p></li>
-<li><p><strong>layer_mods</strong> (<em>dict</em>) – Dictionary of layer modifications to make to the subspace method.</p></li>
+<li><p><strong>layer_mods</strong> (<em>dict</em>) – Dictionary of layer modifications to make to the subspace method.
+(default None)</p></li>
+<li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs to train subspace methods for. (default 1000)</p></li>
+<li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – Dictionary of extra strings to add to the log.</p></li>
+<li><p><strong>own_early_stopping_callback</strong> (<em>pytorch_lightning.callbacks.EarlyStopping</em>) – Early stopping callback class (default None).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -1080,6 +1104,7 @@ images.</p>
 <li><p><strong>image_downsample_size</strong> (<em>tuple</em>) – Size to downsample the images to (height, width, depth) or (height, width) for 2D
 images. None if not downsampling. (default None)</p></li>
 <li><p><strong>layer_mods</strong> (<em>dict</em>) – Dictionary of layer modifications to make to the graph maker method.</p></li>
+<li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – Dictionary of extra strings to add to the log.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -1183,42 +1208,14 @@ the graph data structure into a pytorch dataloader.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="data.LoadDatasets.image_downsample_size">
 <span class="sig-name descname"><span class="pre">image_downsample_size</span></span><a class="headerlink" href="#data.LoadDatasets.image_downsample_size" title="Permalink to this definition"></a></dt>
-<dd><p>Size to downsample the images to (height, width, depth).</p>
+<dd><p>Size to downsample the images to (height, width, depth) or (height, width) for 2D
+images.
+None if not downsampling. (default None)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="data.LoadDatasets.load_tabular1">
-<span class="sig-name descname"><span class="pre">load_tabular1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#LoadDatasets.load_tabular1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.LoadDatasets.load_tabular1" title="Permalink to this definition"></a></dt>
-<dd><p>Loads the tabular1-only dataset.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="data.LoadDatasets.load_tabular2">
-<span class="sig-name descname"><span class="pre">load_tabular2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#LoadDatasets.load_tabular2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.LoadDatasets.load_tabular2" title="Permalink to this definition"></a></dt>
-<dd><p>Loads the tabular2-only dataset.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="data.LoadDatasets.load_img">
-<span class="sig-name descname"><span class="pre">load_img</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#LoadDatasets.load_img"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.LoadDatasets.load_img" title="Permalink to this definition"></a></dt>
-<dd><p>Loads the image-only dataset.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="data.LoadDatasets.load_both_tabular">
-<span class="sig-name descname"><span class="pre">load_both_tabular</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#LoadDatasets.load_both_tabular"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.LoadDatasets.load_both_tabular" title="Permalink to this definition"></a></dt>
-<dd><p>Loads the tabular1 and tabular2 multimodal dataset.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="data.LoadDatasets.load_tab_and_img">
-<span class="sig-name descname"><span class="pre">load_tab_and_img</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#LoadDatasets.load_tab_and_img"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.LoadDatasets.load_tab_and_img" title="Permalink to this definition"></a></dt>
-<dd><p>Loads the tabular1 and image multimodal dataset.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1235,14 +1232,18 @@ None if not downsampling. (default None)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If sources is not a list.</p>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If sources is not a list.</p></li>
+<li><p><strong>ValueError</strong> – If the CSVs do not have the right columns or if the index column is not named
+    “study_id”.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">load_both_tabular</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#LoadDatasets.load_both_tabular"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="data.LoadDatasets.load_both_tabular">
+<span class="sig-name descname"><span class="pre">load_both_tabular</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#LoadDatasets.load_both_tabular"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.LoadDatasets.load_both_tabular" title="Permalink to this definition"></a></dt>
 <dd><p>Loads the tabular1 and tabular2 multimodal dataset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1258,8 +1259,8 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">load_img</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#LoadDatasets.load_img"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="data.LoadDatasets.load_img">
+<span class="sig-name descname"><span class="pre">load_img</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#LoadDatasets.load_img"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.LoadDatasets.load_img" title="Permalink to this definition"></a></dt>
 <dd><p>Loads the image-only dataset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1275,8 +1276,8 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">load_tab_and_img</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#LoadDatasets.load_tab_and_img"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="data.LoadDatasets.load_tab_and_img">
+<span class="sig-name descname"><span class="pre">load_tab_and_img</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#LoadDatasets.load_tab_and_img"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.LoadDatasets.load_tab_and_img" title="Permalink to this definition"></a></dt>
 <dd><p>Loads the tabular1 and image multimodal dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1292,8 +1293,8 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">load_tabular1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#LoadDatasets.load_tabular1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="data.LoadDatasets.load_tabular1">
+<span class="sig-name descname"><span class="pre">load_tabular1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#LoadDatasets.load_tabular1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.LoadDatasets.load_tabular1" title="Permalink to this definition"></a></dt>
 <dd><p>Loads the tabular1-only dataset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1309,8 +1310,8 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">load_tabular2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#LoadDatasets.load_tabular2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="data.LoadDatasets.load_tabular2">
+<span class="sig-name descname"><span class="pre">load_tabular2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#LoadDatasets.load_tabular2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.LoadDatasets.load_tabular2" title="Permalink to this definition"></a></dt>
 <dd><p>Loads the tabular2-only dataset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1352,7 +1353,7 @@ If None, no downsampling is performed</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="data.get_data_module">
-<span class="sig-name descname"><span class="pre">get_data_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#get_data_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.get_data_module" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_data_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">own_early_stopping_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data.html#get_data_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.get_data_module" title="Permalink to this definition"></a></dt>
 <dd><p>Gets the data module for the specified modality and fusion type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1369,6 +1370,7 @@ e.g. if you’re running the same model with different hyperparameters, you can 
 Input format {“name”: “value”}. In the run name, the extra string will be added
 as “name_value”. And a tag will be added as “name_value”.
 Default None.</p></li>
+<li><p><strong>own_early_stopping_callback</strong> (<em>pytorch_lightning.callbacks.EarlyStopping</em>) – Early stopping callback class (default None).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

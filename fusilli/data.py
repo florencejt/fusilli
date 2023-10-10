@@ -1,7 +1,8 @@
 """
-This file contains the data for the different modalities and the different
-fusion methods. The data are used to load the data and create the
-dataloader objects for training and validation.
+Data loading classes for multimodal and unimodal data.
+This file contains functions and classes for loading the data for the different modalities, and
+in training the subspace methods on the data (if the subspace methods need pre-training).
+Train/test splits and k-fold cross validation are also implemented here.
 """
 
 # imports
@@ -14,8 +15,6 @@ from torch.utils.data import DataLoader, Dataset
 from torch_geometric.data.lightning import LightningNodeData
 from fusilli.utils import model_modifier
 
-
-# from fusilli.eval import plot_graph
 
 
 def downsample_img_batch(imgs, output_size):
@@ -95,19 +94,17 @@ class CustomDataset(Dataset):
 
     Attributes
     ----------
-    pred_features : list or tensor
-        List of tensors or tensor of predictive features
-        (i.e. tabular or image data without labels).
-    labels : dataframe
-        Dataframe of labels (column name must be "pred_label").
-
-    Methods
-    -------
-    __len__()
-        Returns the length of the dataset.
-    __getitem__(idx)
-        Returns the item at the specified index.
-
+    multimodal_flag : bool
+        Flag for multimodal data. True if multimodal, False if unimodal.
+    dataset1 : tensor
+        Tensor of predictive features for modality 1.
+    dataset2 : tensor
+        Tensor of predictive features for modality 2.
+    dataset : tensor
+        Tensor of predictive features for uni-modal data.
+    labels : tensor
+        Tensor of labels.
+    
     """
 
     def __init__(self, pred_features, labels):
@@ -195,20 +192,9 @@ class LoadDatasets:
     img_source : str
         Source torch file for image data.
     image_downsample_size : tuple
-        Size to downsample the images to (height, width, depth).
-
-    Methods
-    -------
-    load_tabular1()
-        Loads the tabular1-only dataset.
-    load_tabular2()
-        Loads the tabular2-only dataset.
-    load_img()
-        Loads the image-only dataset.
-    load_both_tabular()
-        Loads the tabular1 and tabular2 multimodal dataset.
-    load_tab_and_img()
-        Loads the tabular1 and image multimodal dataset.
+        Size to downsample the images to (height, width, depth) or (height, width) for 2D
+        images.
+        None if not downsampling. (default None)
     """
 
     def __init__(self, sources, img_downsample_dims=None):
@@ -227,6 +213,10 @@ class LoadDatasets:
         ------
         ValueError
             If sources is not a list.
+        ValueError
+            If the CSVs do not have the right columns or if the index column is not named
+            "study_id".
+        
         """
         self.tabular1_source, self.tabular2_source, self.img_source = sources
         self.image_downsample_size = (
@@ -267,11 +257,11 @@ class LoadDatasets:
         pred_features = torch.Tensor(tab_df.drop(columns=["pred_label"]).values)
         pred_label = tab_df[["pred_label"]]
 
-        self.dataset = CustomDataset(pred_features, pred_label)
+        dataset = CustomDataset(pred_features, pred_label)
 
         mod1_dim = pred_features.shape[1]
 
-        return self.dataset, [mod1_dim, None, None]
+        return dataset, [mod1_dim, None, None]
 
     def load_tabular2(self):
         """
@@ -293,10 +283,10 @@ class LoadDatasets:
         pred_features = torch.Tensor(tab_df.drop(columns=["pred_label"]).values)
         pred_label = tab_df[["pred_label"]]
 
-        self.dataset = CustomDataset(pred_features, pred_label)
+        dataset = CustomDataset(pred_features, pred_label)
         mod2_dim = pred_features.shape[1]
 
-        return self.dataset, [None, mod2_dim, None]
+        return dataset, [None, mod2_dim, None]
 
     def load_img(self):
         """
@@ -321,11 +311,11 @@ class LoadDatasets:
 
         pred_label = label_df[["pred_label"]]
 
-        self.dataset = CustomDataset(all_scans_ds, pred_label)
+        dataset = CustomDataset(all_scans_ds, pred_label)
 
         img_dim = list(all_scans_ds.shape[2:])  # not including batch size or channels
 
-        return self.dataset, [None, None, img_dim]
+        return dataset, [None, None, img_dim]
 
     def load_both_tabular(self):
         """
@@ -350,14 +340,14 @@ class LoadDatasets:
         tab2_pred_features = torch.Tensor(tab2_df.drop(columns=["pred_label"]).values)
 
         pred_label = tab1_df[["pred_label"]]
-        self.dataset = CustomDataset(
+        dataset = CustomDataset(
             [tab1_pred_features, tab2_pred_features], pred_label
         )
 
         mod1_dim = tab1_pred_features.shape[1]
         mod2_dim = tab2_pred_features.shape[1]
 
-        return self.dataset, [mod1_dim, mod2_dim, None]
+        return dataset, [mod1_dim, mod2_dim, None]
 
     def load_tab_and_img(self):
         """
@@ -382,11 +372,11 @@ class LoadDatasets:
         imgs = torch.load(self.img_source)
         imgs = downsample_img_batch(imgs, self.image_downsample_size)
 
-        self.dataset = CustomDataset([tab1_features, imgs], label_df)
+        dataset = CustomDataset([tab1_features, imgs], label_df)
         mod1_dim = tab1_features.shape[1]
         img_dim = list(imgs.shape[2:])  # not including batch size or channels
 
-        return self.dataset, [mod1_dim, None, img_dim]
+        return dataset, [mod1_dim, None, img_dim]
 
 
 class CustomDataModule(pl.LightningDataModule):

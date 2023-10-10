@@ -63,11 +63,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.Plotter.html">fusilli.eval.Plotter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -102,7 +99,7 @@
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 
 
-<div class="viewcode-block" id="check_dtype"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_dtype">[docs]</a><span class="k">def</span> <span class="nf">check_dtype</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">correct_dtype</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">):</span>
+<div class="viewcode-block" id="check_dtype"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_dtype">[docs]</a><span class="k">def</span> <span class="nf">check_dtype</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">correct_dtype</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Check if the modification is of the correct data type.</span>
 
 <span class="sd">    Parameters</span>
@@ -130,7 +127,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="check_img_dim"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_img_dim">[docs]</a><span class="k">def</span> <span class="nf">check_img_dim</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">img_dim</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">):</span>
+<div class="viewcode-block" id="check_img_dim"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_img_dim">[docs]</a><span class="k">def</span> <span class="nf">check_img_dim</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">img_dim</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Check if the modification img layers are the correct dimension.</span>
 
 <span class="sd">    Parameters</span>
@@ -187,7 +184,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="check_var_is_function"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_var_is_function">[docs]</a><span class="k">def</span> <span class="nf">check_var_is_function</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">):</span>
+<div class="viewcode-block" id="check_var_is_function"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_var_is_function">[docs]</a><span class="k">def</span> <span class="nf">check_var_is_function</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Check if the modification is a function.</span>
 
 <span class="sd">    Parameters</span>
@@ -210,7 +207,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="check_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusionlibrary.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_fused_layers">[docs]</a><span class="k">def</span> <span class="nf">check_fused_layers</span><span class="p">(</span><span class="n">fused_layers</span><span class="p">,</span> <span class="n">fused_dim</span><span class="p">):</span>
+<div class="viewcode-block" id="check_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_fused_layers">[docs]</a><span class="k">def</span> <span class="nf">check_fused_layers</span><span class="p">(</span><span class="n">fused_layers</span><span class="p">,</span> <span class="n">fused_dim</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check the fused layers in a fusion model:</span>
 

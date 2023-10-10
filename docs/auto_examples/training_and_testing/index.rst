@@ -49,7 +49,7 @@ These are examples of how to train and validate fusion models with Fusilli.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This script shows how to train two fusion models on a regression task with train/test protocol ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="🚀 Welcome to this tutorial on training and comparing two fusion models on a regression task usi...">
 
 .. only:: html
 
@@ -60,7 +60,7 @@ These are examples of how to train and validate fusion models with Fusilli.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Regression: comparing two tabular models trained on simulated data</div>
+      <div class="sphx-glr-thumbnail-title">📈 Regression: Comparing Two Tabular Models Trained on Simulated Data 📊</div>
     </div>
 
 

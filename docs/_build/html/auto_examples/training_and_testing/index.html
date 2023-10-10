@@ -26,7 +26,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Binary: training one kfold model" href="plot_one_model_binary_kfold.html" />
-    <link rel="prev" title="Tutorials and Examples Gallery" href="../index.html" /> 
+    <link rel="prev" title="How to modify architectures of fusion models" href="../customising_behaviour/modify_layer_sizes.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -60,17 +60,17 @@
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Tutorials and Examples Gallery</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../index.html#training-and-testing">Training and testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#how-to-create-your-own-fusion-model">How to create your own fusion model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#customising-behaviour">Customising behaviour</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html#how-to-create-your-own-fusion-model">How to create your own fusion model</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#training-and-testing">Training and testing</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../creating_your_own_fusion_model/index.html">How to create your own fusion model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../customising_behaviour/index.html">Customising behaviour</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Training and testing</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="plot_one_model_binary_kfold.html">Binary: training one kfold model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="plot_model_comparison_loop_kfold.html">Comparing Multiple K-Fold Trained Fusion Models</a></li>
-<li class="toctree-l4"><a class="reference internal" href="plot_two_models_traintest.html">Regression: comparing two tabular models trained on simulated data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot_two_models_traintest.html">📈 Regression: Comparing Two Tabular Models Trained on Simulated Data 📊</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../customising_behaviour/index.html">Customising behaviour</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../creating_your_own_fusion_model/index.html">How to create your own fusion model</a></li>
 </ul>
 </li>
 </ul>
@@ -81,10 +81,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_chooser.html">fusilli.utils.model_chooser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.model_modifier.html">fusilli.utils.model_modifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.check_model_validity.html">fusilli.utils.check_model_validity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -121,9 +119,9 @@
 </div><div class="sphx-glr-thumbcontainer" tooltip="Welcome to the &quot;Comparing Multiple K-Fold Trained Fusion Models&quot; tutorial! In this tutorial, we..."><img alt="" src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_thumb.png" />
 <p><a class="reference internal" href="plot_model_comparison_loop_kfold.html#sphx-glr-auto-examples-training-and-testing-plot-model-comparison-loop-kfold-py"><span class="std std-ref">Comparing Multiple K-Fold Trained Fusion Models</span></a></p>
   <div class="sphx-glr-thumbnail-title">Comparing Multiple K-Fold Trained Fusion Models</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This script shows how to train two fusion models on a regression task with train/test protocol ..."><img alt="" src="../../_images/sphx_glr_plot_two_models_traintest_thumb.png" />
-<p><a class="reference internal" href="plot_two_models_traintest.html#sphx-glr-auto-examples-training-and-testing-plot-two-models-traintest-py"><span class="std std-ref">Regression: comparing two tabular models trained on simulated data</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Regression: comparing two tabular models trained on simulated data</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="🚀 Welcome to this tutorial on training and comparing two fusion models on a regression task usi..."><img alt="" src="../../_images/sphx_glr_plot_two_models_traintest_thumb.png" />
+<p><a class="reference internal" href="plot_two_models_traintest.html#sphx-glr-auto-examples-training-and-testing-plot-two-models-traintest-py"><span class="std std-ref">📈 Regression: Comparing Two Tabular Models Trained on Simulated Data 📊</span></a></p>
+  <div class="sphx-glr-thumbnail-title">📈 Regression: Comparing Two Tabular Models Trained on Simulated Data 📊</div>
 </div></div><div class="toctree-wrapper compound">
 </div>
 </section>
@@ -132,7 +130,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../index.html" class="btn btn-neutral float-left" title="Tutorials and Examples Gallery" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../customising_behaviour/modify_layer_sizes.html" class="btn btn-neutral float-left" title="How to modify architectures of fusion models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="plot_one_model_binary_kfold.html" class="btn btn-neutral float-right" title="Binary: training one kfold model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

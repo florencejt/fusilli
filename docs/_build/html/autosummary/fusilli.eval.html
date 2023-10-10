@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fusilli.eval &mdash; fusilli  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/florencestheme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/pink_pasta_logo.png"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fusilli.utils" href="fusilli.utils.html" />
+    <link rel="prev" title="fusilli.train" href="fusilli.train.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            fusilli
+              <img src="../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">fusilli.eval</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fusilli.eval.ConfusionMatrix"><code class="docutils literal notranslate"><span class="pre">ConfusionMatrix</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ConfusionMatrix.__init__"><code class="docutils literal notranslate"><span class="pre">ConfusionMatrix.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ConfusionMatrix.from_new_data"><code class="docutils literal notranslate"><span class="pre">ConfusionMatrix.from_new_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fusilli.eval.ModelComparison"><code class="docutils literal notranslate"><span class="pre">ModelComparison</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ModelComparison.__init__"><code class="docutils literal notranslate"><span class="pre">ModelComparison.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ModelComparison.from_final_val_data"><code class="docutils literal notranslate"><span class="pre">ModelComparison.from_final_val_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ModelComparison.kfold_comparison_plot"><code class="docutils literal notranslate"><span class="pre">ModelComparison.kfold_comparison_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ModelComparison.train_test_comparison_plot"><code class="docutils literal notranslate"><span class="pre">ModelComparison.train_test_comparison_plot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fusilli.eval.ParentPlotter"><code class="docutils literal notranslate"><span class="pre">ParentPlotter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ParentPlotter.__init__"><code class="docutils literal notranslate"><span class="pre">ParentPlotter.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ParentPlotter.get_new_kfold_data"><code class="docutils literal notranslate"><span class="pre">ParentPlotter.get_new_kfold_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ParentPlotter.get_new_tt_data"><code class="docutils literal notranslate"><span class="pre">ParentPlotter.get_new_tt_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ParentPlotter.get_tt_data_from_model"><code class="docutils literal notranslate"><span class="pre">ParentPlotter.get_tt_data_from_model()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fusilli.eval.RealsVsPreds"><code class="docutils literal notranslate"><span class="pre">RealsVsPreds</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.RealsVsPreds.__init__"><code class="docutils literal notranslate"><span class="pre">RealsVsPreds.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.RealsVsPreds.from_new_data"><code class="docutils literal notranslate"><span class="pre">RealsVsPreds.from_new_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fusilli.utils.html">fusilli.utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fusilli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">fusilli.eval</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/autosummary/fusilli.eval.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-fusilli.eval">
+<span id="fusilli-eval"></span><h1>fusilli.eval<a class="headerlink" href="#module-fusilli.eval" title="Permalink to this heading"></a></h1>
+<p>Functions for evaluating the performance of the models and plotting the results.</p>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.eval.ConfusionMatrix" title="fusilli.eval.ConfusionMatrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConfusionMatrix</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.eval.ModelComparison" title="fusilli.eval.ModelComparison"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModelComparison</span></code></a>()</p></td>
+<td><p>Plotting class for comparing models.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.eval.ParentPlotter" title="fusilli.eval.ParentPlotter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParentPlotter</span></code></a>()</p></td>
+<td><p>Parent class for all plot classes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.eval.RealsVsPreds" title="fusilli.eval.RealsVsPreds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RealsVsPreds</span></code></a>()</p></td>
+<td><p>Plots the real values vs the predicted values for a model.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="fusilli.eval.ConfusionMatrix">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConfusionMatrix</span></span><a class="reference internal" href="../_modules/fusilli/eval.html#ConfusionMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ConfusionMatrix" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fusilli.eval.ParentPlotter" title="fusilli.eval.ParentPlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentPlotter</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.eval.ConfusionMatrix.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ConfusionMatrix.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ConfusionMatrix.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.eval.ConfusionMatrix.from_new_data">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_new_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_file_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_test'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ConfusionMatrix.from_new_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ConfusionMatrix.from_new_data" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data_file_suffix</strong> (<em>str</em>) – Suffix for the data file e.g. _test means that the source files are
+<code class="docutils literal notranslate"><span class="pre">params[&quot;tabular1_source_test]</span></code>, <code class="docutils literal notranslate"><span class="pre">params[&quot;tabular2_source_test]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">params[&quot;img_source_test]</span></code>.
+Change this to whatever suffix you have chosen for your new data files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fusilli.eval.ModelComparison">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ModelComparison</span></span><a class="reference internal" href="../_modules/fusilli/eval.html#ModelComparison"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ModelComparison" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fusilli.eval.ParentPlotter" title="fusilli.eval.ParentPlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentPlotter</span></code></a></p>
+<p>Plotting class for comparing models.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.eval.ModelComparison.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ModelComparison.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ModelComparison.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.eval.ModelComparison.from_final_val_data">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_final_val_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kfold_flag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ModelComparison.from_final_val_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ModelComparison.from_final_val_data" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_list</strong> (<em>dict</em>) – Dictionary of models. Keys are the model names and values are [[model]*num_k]</p></li>
+<li><p><strong>kfold_flag</strong> (<em>bool</em>) – Whether the models are kfold models or not.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.eval.ModelComparison.kfold_comparison_plot">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kfold_comparison_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comparing_models_metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ModelComparison.kfold_comparison_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ModelComparison.kfold_comparison_plot" title="Permalink to this definition"></a></dt>
+<dd><p>Plotting function for comparing models on kfold metrics. Produces a violin plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>comparing_models_metrics</strong> (<em>dict</em>) – Dictionary of metrics. Keys are the model names and values are dict {metric1name: metric_value, metric2name: metric_value}</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fig</strong> – Figure containing the violin plots.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.eval.ModelComparison.train_test_comparison_plot">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">train_test_comparison_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comparing_models_metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ModelComparison.train_test_comparison_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ModelComparison.train_test_comparison_plot" title="Permalink to this definition"></a></dt>
+<dd><p>Plotting function for comparing models on train and test metrics. Produces a horizontal bar chart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>comparing_models_metrics</strong> (<em>dict</em>) – Dictionary of metrics. Keys are the model names and values are dict {metric1name: metric_value, metric2name: metric_value}</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fig</strong> – Figure containing the horizontal bar chart.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fusilli.eval.ParentPlotter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ParentPlotter</span></span><a class="reference internal" href="../_modules/fusilli/eval.html#ParentPlotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ParentPlotter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parent class for all plot classes.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.eval.ParentPlotter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ParentPlotter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ParentPlotter.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.eval.ParentPlotter.get_new_kfold_data">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_new_kfold_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_file_suffix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_file_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ParentPlotter.get_new_kfold_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ParentPlotter.get_new_kfold_data" title="Permalink to this definition"></a></dt>
+<dd><p>Putting new data into each k-fold trained model: we don’t need to split the new data into folds.
+We just need to get the predictions for each fold and plot them.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.eval.ParentPlotter.get_new_tt_data">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_new_tt_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_file_suffix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_file_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ParentPlotter.get_new_tt_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ParentPlotter.get_new_tt_data" title="Permalink to this definition"></a></dt>
+<dd><p>Get new data by running through trained model for a train/test model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>nn.Module</em>) – The trained model.</p></li>
+<li><p><strong>sources</strong> (<em>list</em>) – List of sources to get data from. [tabular1source csv, tabular2source csv, image csv]</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – Additional parameters.</p></li>
+<li><p><strong>data_file_suffix</strong> (<em>str</em>) – Suffix that is on the new data csv and pt files. e.g. “_new_data” or “_test”</p></li>
+<li><p><strong>checkpoint_file_suffix</strong> (<em>str</em><em>, </em><em>optional</em>) – Suffix that is on the trained model checkpoint files. e.g. “_firsttry”. Added by the user.
+Default is None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>return train_reals, train_preds, val_reals, val_preds, metric_values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.eval.ParentPlotter.get_tt_data_from_model">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_tt_data_from_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ParentPlotter.get_tt_data_from_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ParentPlotter.get_tt_data_from_model" title="Permalink to this definition"></a></dt>
+<dd><p>Get the data from a train/test model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model</strong> (<em>nn.Module</em>) – The trained model.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>train_reals</strong> (<em>torch.Tensor</em>) – The real values for the training set.</p></li>
+<li><p><strong>train_preds</strong> (<em>torch.Tensor</em>) – The predicted values for the training set.</p></li>
+<li><p><strong>val_reals</strong> (<em>torch.Tensor</em>) – The real values for the validation set.</p></li>
+<li><p><strong>val_preds</strong> (<em>torch.Tensor</em>) – The predicted values for the validation set.</p></li>
+<li><p><strong>metric_values</strong> (<em>dict</em>) – The values of the metrics for the model.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fusilli.eval.RealsVsPreds">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RealsVsPreds</span></span><a class="reference internal" href="../_modules/fusilli/eval.html#RealsVsPreds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.RealsVsPreds" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fusilli.eval.ParentPlotter" title="fusilli.eval.ParentPlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentPlotter</span></code></a></p>
+<p>Plots the real values vs the predicted values for a model.
+Pink dots are the training data, green dots are the validation data. The validation data is
+either new data if using from_new_data or the original validation data if using from_final_val_data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>which_data</strong> (<em>str</em>) – Either “from_new_data” or “from_final_val_data”.</p></li>
+<li><p><strong>model</strong> (<em>nn.Module</em>) – The trained model.</p></li>
+<li><p><strong>X</strong> (<em>torch.Tensor</em>) – The data to plot.</p></li>
+<li><p><strong>y</strong> (<em>torch.Tensor</em>) – The labels for the data.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.eval.RealsVsPreds.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#RealsVsPreds.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.RealsVsPreds.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.eval.RealsVsPreds.from_new_data">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_new_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_file_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_test'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_file_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#RealsVsPreds.from_new_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.RealsVsPreds.from_new_data" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data_file_suffix</strong> (<em>str</em>) – Suffix for the data file e.g. _test means that the source files are
+<code class="docutils literal notranslate"><span class="pre">params[&quot;tabular1_source_test]</span></code>, <code class="docutils literal notranslate"><span class="pre">params[&quot;tabular2_source_test]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">params[&quot;img_source_test]</span></code>.
+Change this to whatever suffix you have chosen for your new data files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fusilli.train.html" class="btn btn-neutral float-left" title="fusilli.train" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fusilli.utils.html" class="btn btn-neutral float-right" title="fusilli.utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Florence J Townend.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
