@@ -58,14 +58,6 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
-</ul>
 
         </div>
       </div>
@@ -105,7 +97,7 @@
 <span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
 
 
-<div class="viewcode-block" id="ImageDecision"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.img_tab_decision.html#fusilli.fusion_models.img_tab_decision.ImageDecision">[docs]</a><span class="k">class</span> <span class="nc">ImageDecision</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDecision"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.img_tab_decision.ImageDecision.html#fusilli.fusion_models.img_tab_decision.ImageDecision">[docs]</a><span class="k">class</span> <span class="nc">ImageDecision</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class implements a model that fuses the first tabular data and the image data using a decision fusion</span>
 <span class="sd">        approach.</span>
@@ -141,7 +133,7 @@
     <span class="c1"># str: Type of fusion.</span>
     <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;decision&quot;</span>
 
-<div class="viewcode-block" id="ImageDecision.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.img_tab_decision.html#fusilli.fusion_models.img_tab_decision.ImageDecision.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDecision.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.img_tab_decision.ImageDecision.html#fusilli.fusion_models.img_tab_decision.ImageDecision.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -162,7 +154,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_mod1_layers</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ImageDecision.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.img_tab_decision.html#fusilli.fusion_models.img_tab_decision.ImageDecision.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDecision.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.img_tab_decision.ImageDecision.html#fusilli.fusion_models.img_tab_decision.ImageDecision.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the fusion layers.</span>
 
@@ -194,7 +186,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="n">img_fusion_size</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">final_prediction_img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_prediction</span></div>
 
-<div class="viewcode-block" id="ImageDecision.forward"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.img_tab_decision.html#fusilli.fusion_models.img_tab_decision.ImageDecision.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageDecision.forward"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.img_tab_decision.ImageDecision.html#fusilli.fusion_models.img_tab_decision.ImageDecision.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward pass of the model.</span>
 

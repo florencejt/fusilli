@@ -1,0 +1,29 @@
+fusilli.fusion\_models.img\_unimodal
+====================================
+
+.. automodule:: fusilli.fusion_models.img_unimodal
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ImgUnimodal
+   
+   
+
+   
+   
+   
+
+
+

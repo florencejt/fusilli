@@ -1,0 +1,142 @@
+﻿fusilli.fusion\_models.tab\_crossmodal\_att.TabularCrossmodalMultiheadAttention
+===============================================================================
+
+.. currentmodule:: fusilli.fusion_models.tab_crossmodal_att
+
+.. autoclass:: TabularCrossmodalMultiheadAttention
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~TabularCrossmodalMultiheadAttention.__call__
+      ~TabularCrossmodalMultiheadAttention.__delattr__
+      ~TabularCrossmodalMultiheadAttention.__dir__
+      ~TabularCrossmodalMultiheadAttention.__eq__
+      ~TabularCrossmodalMultiheadAttention.__format__
+      ~TabularCrossmodalMultiheadAttention.__ge__
+      ~TabularCrossmodalMultiheadAttention.__getattr__
+      ~TabularCrossmodalMultiheadAttention.__getattribute__
+      ~TabularCrossmodalMultiheadAttention.__gt__
+      ~TabularCrossmodalMultiheadAttention.__hash__
+      ~TabularCrossmodalMultiheadAttention.__init__
+      ~TabularCrossmodalMultiheadAttention.__init_subclass__
+      ~TabularCrossmodalMultiheadAttention.__le__
+      ~TabularCrossmodalMultiheadAttention.__lt__
+      ~TabularCrossmodalMultiheadAttention.__ne__
+      ~TabularCrossmodalMultiheadAttention.__new__
+      ~TabularCrossmodalMultiheadAttention.__reduce__
+      ~TabularCrossmodalMultiheadAttention.__reduce_ex__
+      ~TabularCrossmodalMultiheadAttention.__repr__
+      ~TabularCrossmodalMultiheadAttention.__setattr__
+      ~TabularCrossmodalMultiheadAttention.__setstate__
+      ~TabularCrossmodalMultiheadAttention.__sizeof__
+      ~TabularCrossmodalMultiheadAttention.__str__
+      ~TabularCrossmodalMultiheadAttention.__subclasshook__
+      ~TabularCrossmodalMultiheadAttention._apply
+      ~TabularCrossmodalMultiheadAttention._call_impl
+      ~TabularCrossmodalMultiheadAttention._get_backward_hooks
+      ~TabularCrossmodalMultiheadAttention._get_backward_pre_hooks
+      ~TabularCrossmodalMultiheadAttention._get_name
+      ~TabularCrossmodalMultiheadAttention._load_from_state_dict
+      ~TabularCrossmodalMultiheadAttention._maybe_warn_non_full_backward_hook
+      ~TabularCrossmodalMultiheadAttention._named_members
+      ~TabularCrossmodalMultiheadAttention._register_load_state_dict_pre_hook
+      ~TabularCrossmodalMultiheadAttention._register_state_dict_hook
+      ~TabularCrossmodalMultiheadAttention._replicate_for_data_parallel
+      ~TabularCrossmodalMultiheadAttention._save_to_state_dict
+      ~TabularCrossmodalMultiheadAttention._slow_forward
+      ~TabularCrossmodalMultiheadAttention.add_module
+      ~TabularCrossmodalMultiheadAttention.apply
+      ~TabularCrossmodalMultiheadAttention.bfloat16
+      ~TabularCrossmodalMultiheadAttention.buffers
+      ~TabularCrossmodalMultiheadAttention.calc_fused_layers
+      ~TabularCrossmodalMultiheadAttention.children
+      ~TabularCrossmodalMultiheadAttention.cpu
+      ~TabularCrossmodalMultiheadAttention.cuda
+      ~TabularCrossmodalMultiheadAttention.double
+      ~TabularCrossmodalMultiheadAttention.eval
+      ~TabularCrossmodalMultiheadAttention.extra_repr
+      ~TabularCrossmodalMultiheadAttention.float
+      ~TabularCrossmodalMultiheadAttention.forward
+      ~TabularCrossmodalMultiheadAttention.get_buffer
+      ~TabularCrossmodalMultiheadAttention.get_extra_state
+      ~TabularCrossmodalMultiheadAttention.get_parameter
+      ~TabularCrossmodalMultiheadAttention.get_submodule
+      ~TabularCrossmodalMultiheadAttention.half
+      ~TabularCrossmodalMultiheadAttention.ipu
+      ~TabularCrossmodalMultiheadAttention.load_state_dict
+      ~TabularCrossmodalMultiheadAttention.modules
+      ~TabularCrossmodalMultiheadAttention.named_buffers
+      ~TabularCrossmodalMultiheadAttention.named_children
+      ~TabularCrossmodalMultiheadAttention.named_modules
+      ~TabularCrossmodalMultiheadAttention.named_parameters
+      ~TabularCrossmodalMultiheadAttention.parameters
+      ~TabularCrossmodalMultiheadAttention.register_backward_hook
+      ~TabularCrossmodalMultiheadAttention.register_buffer
+      ~TabularCrossmodalMultiheadAttention.register_forward_hook
+      ~TabularCrossmodalMultiheadAttention.register_forward_pre_hook
+      ~TabularCrossmodalMultiheadAttention.register_full_backward_hook
+      ~TabularCrossmodalMultiheadAttention.register_full_backward_pre_hook
+      ~TabularCrossmodalMultiheadAttention.register_load_state_dict_post_hook
+      ~TabularCrossmodalMultiheadAttention.register_module
+      ~TabularCrossmodalMultiheadAttention.register_parameter
+      ~TabularCrossmodalMultiheadAttention.register_state_dict_pre_hook
+      ~TabularCrossmodalMultiheadAttention.requires_grad_
+      ~TabularCrossmodalMultiheadAttention.set_extra_state
+      ~TabularCrossmodalMultiheadAttention.set_final_pred_layers
+      ~TabularCrossmodalMultiheadAttention.set_fused_layers
+      ~TabularCrossmodalMultiheadAttention.set_img_layers
+      ~TabularCrossmodalMultiheadAttention.set_mod1_layers
+      ~TabularCrossmodalMultiheadAttention.set_mod2_layers
+      ~TabularCrossmodalMultiheadAttention.share_memory
+      ~TabularCrossmodalMultiheadAttention.state_dict
+      ~TabularCrossmodalMultiheadAttention.to
+      ~TabularCrossmodalMultiheadAttention.to_empty
+      ~TabularCrossmodalMultiheadAttention.train
+      ~TabularCrossmodalMultiheadAttention.type
+      ~TabularCrossmodalMultiheadAttention.xpu
+      ~TabularCrossmodalMultiheadAttention.zero_grad
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~TabularCrossmodalMultiheadAttention.T_destination
+      ~TabularCrossmodalMultiheadAttention.__annotations__
+      ~TabularCrossmodalMultiheadAttention.__dict__
+      ~TabularCrossmodalMultiheadAttention.__doc__
+      ~TabularCrossmodalMultiheadAttention.__module__
+      ~TabularCrossmodalMultiheadAttention.__weakref__
+      ~TabularCrossmodalMultiheadAttention._version
+      ~TabularCrossmodalMultiheadAttention.call_super_init
+      ~TabularCrossmodalMultiheadAttention.dump_patches
+      ~TabularCrossmodalMultiheadAttention.fusion_type
+      ~TabularCrossmodalMultiheadAttention.method_name
+      ~TabularCrossmodalMultiheadAttention.modality_type
+      ~TabularCrossmodalMultiheadAttention.training
+      ~TabularCrossmodalMultiheadAttention._parameters
+      ~TabularCrossmodalMultiheadAttention._buffers
+      ~TabularCrossmodalMultiheadAttention._non_persistent_buffers_set
+      ~TabularCrossmodalMultiheadAttention._backward_pre_hooks
+      ~TabularCrossmodalMultiheadAttention._backward_hooks
+      ~TabularCrossmodalMultiheadAttention._is_full_backward_hook
+      ~TabularCrossmodalMultiheadAttention._forward_hooks
+      ~TabularCrossmodalMultiheadAttention._forward_hooks_with_kwargs
+      ~TabularCrossmodalMultiheadAttention._forward_pre_hooks
+      ~TabularCrossmodalMultiheadAttention._forward_pre_hooks_with_kwargs
+      ~TabularCrossmodalMultiheadAttention._state_dict_hooks
+      ~TabularCrossmodalMultiheadAttention._load_state_dict_pre_hooks
+      ~TabularCrossmodalMultiheadAttention._state_dict_pre_hooks
+      ~TabularCrossmodalMultiheadAttention._load_state_dict_post_hooks
+      ~TabularCrossmodalMultiheadAttention._modules
+   
+   

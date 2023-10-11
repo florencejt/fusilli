@@ -1,0 +1,54 @@
+﻿fusilli.data.TrainTestGraphDataModule
+=====================================
+
+.. currentmodule:: fusilli.data
+
+.. autoclass:: TrainTestGraphDataModule
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~TrainTestGraphDataModule.__delattr__
+      ~TrainTestGraphDataModule.__dir__
+      ~TrainTestGraphDataModule.__eq__
+      ~TrainTestGraphDataModule.__format__
+      ~TrainTestGraphDataModule.__ge__
+      ~TrainTestGraphDataModule.__getattribute__
+      ~TrainTestGraphDataModule.__gt__
+      ~TrainTestGraphDataModule.__hash__
+      ~TrainTestGraphDataModule.__init__
+      ~TrainTestGraphDataModule.__init_subclass__
+      ~TrainTestGraphDataModule.__le__
+      ~TrainTestGraphDataModule.__lt__
+      ~TrainTestGraphDataModule.__ne__
+      ~TrainTestGraphDataModule.__new__
+      ~TrainTestGraphDataModule.__reduce__
+      ~TrainTestGraphDataModule.__reduce_ex__
+      ~TrainTestGraphDataModule.__repr__
+      ~TrainTestGraphDataModule.__setattr__
+      ~TrainTestGraphDataModule.__sizeof__
+      ~TrainTestGraphDataModule.__str__
+      ~TrainTestGraphDataModule.__subclasshook__
+      ~TrainTestGraphDataModule.get_lightning_module
+      ~TrainTestGraphDataModule.prepare_data
+      ~TrainTestGraphDataModule.setup
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~TrainTestGraphDataModule.__dict__
+      ~TrainTestGraphDataModule.__doc__
+      ~TrainTestGraphDataModule.__module__
+      ~TrainTestGraphDataModule.__weakref__
+   
+   

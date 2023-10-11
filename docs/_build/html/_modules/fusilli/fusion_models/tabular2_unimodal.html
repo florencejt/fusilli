@@ -58,14 +58,6 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
-</ul>
 
         </div>
       </div>
@@ -101,7 +93,7 @@
 <span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
 
 
-<div class="viewcode-block" id="Tabular2Unimodal"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.tabular2_unimodal.html#fusilli.fusion_models.tabular2_unimodal.Tabular2Unimodal">[docs]</a><span class="k">class</span> <span class="nc">Tabular2Unimodal</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="Tabular2Unimodal"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.tabular2_unimodal.Tabular2Unimodal.html#fusilli.fusion_models.tabular2_unimodal.Tabular2Unimodal">[docs]</a><span class="k">class</span> <span class="nc">Tabular2Unimodal</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Tabular2 uni-modal model.</span>
 
 <span class="sd">    This class implements a uni-modal model using only the 2nd type of tabular data.</span>
@@ -128,7 +120,7 @@
     <span class="c1"># str: Fusion type.</span>
     <span class="n">fusion_type</span> <span class="o">=</span> <span class="s2">&quot;Uni-modal&quot;</span>
 
-<div class="viewcode-block" id="Tabular2Unimodal.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.tabular2_unimodal.html#fusilli.fusion_models.tabular2_unimodal.Tabular2Unimodal.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="Tabular2Unimodal.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.tabular2_unimodal.Tabular2Unimodal.html#fusilli.fusion_models.tabular2_unimodal.Tabular2Unimodal.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -152,7 +144,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Tabular2Unimodal.get_fused_dim"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.tabular2_unimodal.html#fusilli.fusion_models.tabular2_unimodal.Tabular2Unimodal.get_fused_dim">[docs]</a>    <span class="k">def</span> <span class="nf">get_fused_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Tabular2Unimodal.get_fused_dim"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.tabular2_unimodal.Tabular2Unimodal.html#fusilli.fusion_models.tabular2_unimodal.Tabular2Unimodal.get_fused_dim">[docs]</a>    <span class="k">def</span> <span class="nf">get_fused_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the number of features of the fused layers.</span>
 
@@ -162,7 +154,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod2_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span></div>
 
-<div class="viewcode-block" id="Tabular2Unimodal.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.tabular2_unimodal.html#fusilli.fusion_models.tabular2_unimodal.Tabular2Unimodal.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Tabular2Unimodal.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.tabular2_unimodal.Tabular2Unimodal.html#fusilli.fusion_models.tabular2_unimodal.Tabular2Unimodal.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the fused layers.</span>
 
@@ -180,7 +172,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="n">out_dim</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Tabular2Unimodal.forward"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.tabular2_unimodal.html#fusilli.fusion_models.tabular2_unimodal.Tabular2Unimodal.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="Tabular2Unimodal.forward"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.tabular2_unimodal.Tabular2Unimodal.html#fusilli.fusion_models.tabular2_unimodal.Tabular2Unimodal.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward pass of the model.</span>
 

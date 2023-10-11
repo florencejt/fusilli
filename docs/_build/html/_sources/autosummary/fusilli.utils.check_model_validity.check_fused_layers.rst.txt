@@ -1,0 +1,6 @@
+﻿fusilli.utils.check\_model\_validity.check\_fused\_layers
+=========================================================
+
+.. currentmodule:: fusilli.utils.check_model_validity
+
+.. autofunction:: check_fused_layers

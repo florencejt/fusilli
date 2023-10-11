@@ -1,0 +1,142 @@
+﻿fusilli.fusion\_models.edge\_corr\_gnn.EdgeCorrGNN
+==================================================
+
+.. currentmodule:: fusilli.fusion_models.edge_corr_gnn
+
+.. autoclass:: EdgeCorrGNN
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~EdgeCorrGNN.__call__
+      ~EdgeCorrGNN.__delattr__
+      ~EdgeCorrGNN.__dir__
+      ~EdgeCorrGNN.__eq__
+      ~EdgeCorrGNN.__format__
+      ~EdgeCorrGNN.__ge__
+      ~EdgeCorrGNN.__getattr__
+      ~EdgeCorrGNN.__getattribute__
+      ~EdgeCorrGNN.__gt__
+      ~EdgeCorrGNN.__hash__
+      ~EdgeCorrGNN.__init__
+      ~EdgeCorrGNN.__init_subclass__
+      ~EdgeCorrGNN.__le__
+      ~EdgeCorrGNN.__lt__
+      ~EdgeCorrGNN.__ne__
+      ~EdgeCorrGNN.__new__
+      ~EdgeCorrGNN.__reduce__
+      ~EdgeCorrGNN.__reduce_ex__
+      ~EdgeCorrGNN.__repr__
+      ~EdgeCorrGNN.__setattr__
+      ~EdgeCorrGNN.__setstate__
+      ~EdgeCorrGNN.__sizeof__
+      ~EdgeCorrGNN.__str__
+      ~EdgeCorrGNN.__subclasshook__
+      ~EdgeCorrGNN._apply
+      ~EdgeCorrGNN._call_impl
+      ~EdgeCorrGNN._get_backward_hooks
+      ~EdgeCorrGNN._get_backward_pre_hooks
+      ~EdgeCorrGNN._get_name
+      ~EdgeCorrGNN._load_from_state_dict
+      ~EdgeCorrGNN._maybe_warn_non_full_backward_hook
+      ~EdgeCorrGNN._named_members
+      ~EdgeCorrGNN._register_load_state_dict_pre_hook
+      ~EdgeCorrGNN._register_state_dict_hook
+      ~EdgeCorrGNN._replicate_for_data_parallel
+      ~EdgeCorrGNN._save_to_state_dict
+      ~EdgeCorrGNN._slow_forward
+      ~EdgeCorrGNN.add_module
+      ~EdgeCorrGNN.apply
+      ~EdgeCorrGNN.bfloat16
+      ~EdgeCorrGNN.buffers
+      ~EdgeCorrGNN.calc_fused_layers
+      ~EdgeCorrGNN.children
+      ~EdgeCorrGNN.cpu
+      ~EdgeCorrGNN.cuda
+      ~EdgeCorrGNN.double
+      ~EdgeCorrGNN.eval
+      ~EdgeCorrGNN.extra_repr
+      ~EdgeCorrGNN.float
+      ~EdgeCorrGNN.forward
+      ~EdgeCorrGNN.get_buffer
+      ~EdgeCorrGNN.get_extra_state
+      ~EdgeCorrGNN.get_parameter
+      ~EdgeCorrGNN.get_submodule
+      ~EdgeCorrGNN.half
+      ~EdgeCorrGNN.ipu
+      ~EdgeCorrGNN.load_state_dict
+      ~EdgeCorrGNN.modules
+      ~EdgeCorrGNN.named_buffers
+      ~EdgeCorrGNN.named_children
+      ~EdgeCorrGNN.named_modules
+      ~EdgeCorrGNN.named_parameters
+      ~EdgeCorrGNN.parameters
+      ~EdgeCorrGNN.register_backward_hook
+      ~EdgeCorrGNN.register_buffer
+      ~EdgeCorrGNN.register_forward_hook
+      ~EdgeCorrGNN.register_forward_pre_hook
+      ~EdgeCorrGNN.register_full_backward_hook
+      ~EdgeCorrGNN.register_full_backward_pre_hook
+      ~EdgeCorrGNN.register_load_state_dict_post_hook
+      ~EdgeCorrGNN.register_module
+      ~EdgeCorrGNN.register_parameter
+      ~EdgeCorrGNN.register_state_dict_pre_hook
+      ~EdgeCorrGNN.requires_grad_
+      ~EdgeCorrGNN.set_extra_state
+      ~EdgeCorrGNN.set_final_pred_layers
+      ~EdgeCorrGNN.set_fused_layers
+      ~EdgeCorrGNN.set_img_layers
+      ~EdgeCorrGNN.set_mod1_layers
+      ~EdgeCorrGNN.set_mod2_layers
+      ~EdgeCorrGNN.share_memory
+      ~EdgeCorrGNN.state_dict
+      ~EdgeCorrGNN.to
+      ~EdgeCorrGNN.to_empty
+      ~EdgeCorrGNN.train
+      ~EdgeCorrGNN.type
+      ~EdgeCorrGNN.xpu
+      ~EdgeCorrGNN.zero_grad
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~EdgeCorrGNN.T_destination
+      ~EdgeCorrGNN.__annotations__
+      ~EdgeCorrGNN.__dict__
+      ~EdgeCorrGNN.__doc__
+      ~EdgeCorrGNN.__module__
+      ~EdgeCorrGNN.__weakref__
+      ~EdgeCorrGNN._version
+      ~EdgeCorrGNN.call_super_init
+      ~EdgeCorrGNN.dump_patches
+      ~EdgeCorrGNN.fusion_type
+      ~EdgeCorrGNN.method_name
+      ~EdgeCorrGNN.modality_type
+      ~EdgeCorrGNN.training
+      ~EdgeCorrGNN._parameters
+      ~EdgeCorrGNN._buffers
+      ~EdgeCorrGNN._non_persistent_buffers_set
+      ~EdgeCorrGNN._backward_pre_hooks
+      ~EdgeCorrGNN._backward_hooks
+      ~EdgeCorrGNN._is_full_backward_hook
+      ~EdgeCorrGNN._forward_hooks
+      ~EdgeCorrGNN._forward_hooks_with_kwargs
+      ~EdgeCorrGNN._forward_pre_hooks
+      ~EdgeCorrGNN._forward_pre_hooks_with_kwargs
+      ~EdgeCorrGNN._state_dict_hooks
+      ~EdgeCorrGNN._load_state_dict_pre_hooks
+      ~EdgeCorrGNN._state_dict_pre_hooks
+      ~EdgeCorrGNN._load_state_dict_post_hooks
+      ~EdgeCorrGNN._modules
+   
+   

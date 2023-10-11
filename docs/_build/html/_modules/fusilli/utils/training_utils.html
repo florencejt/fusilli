@@ -58,14 +58,6 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
-</ul>
 
         </div>
       </div>
@@ -107,7 +99,7 @@
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 
-<div class="viewcode-block" id="get_file_suffix_from_dict"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.get_file_suffix_from_dict">[docs]</a><span class="k">def</span> <span class="nf">get_file_suffix_from_dict</span><span class="p">(</span><span class="n">extra_log_string_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="get_file_suffix_from_dict"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.get_file_suffix_from_dict.html#fusilli.utils.training_utils.get_file_suffix_from_dict">[docs]</a><span class="k">def</span> <span class="nf">get_file_suffix_from_dict</span><span class="p">(</span><span class="n">extra_log_string_dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the extra name string and tags from the extra_log_string_dict.</span>
 
@@ -134,7 +126,7 @@
     <span class="k">return</span> <span class="n">extra_name_string</span><span class="p">,</span> <span class="n">extra_tags</span></div>
 
 
-<div class="viewcode-block" id="set_logger"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.set_logger">[docs]</a><span class="k">def</span> <span class="nf">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="set_logger"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.set_logger.html#fusilli.utils.training_utils.set_logger">[docs]</a><span class="k">def</span> <span class="nf">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set the logger for the current run. If params[&quot;log&quot;] is True, then the logger is set to</span>
 <span class="sd">    WandbLogger, otherwise it is set to None.</span>
@@ -194,7 +186,7 @@
     <span class="k">return</span> <span class="n">logger</span></div>
 
 
-<div class="viewcode-block" id="set_checkpoint_name"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.set_checkpoint_name">[docs]</a><span class="k">def</span> <span class="nf">set_checkpoint_name</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">fold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="set_checkpoint_name"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.set_checkpoint_name.html#fusilli.utils.training_utils.set_checkpoint_name">[docs]</a><span class="k">def</span> <span class="nf">set_checkpoint_name</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">fold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set the checkpoint name for the current run of the main fusion model.</span>
 
@@ -229,7 +221,7 @@
     <span class="k">return</span> <span class="n">checkpoint_filename</span></div>
 
 
-<div class="viewcode-block" id="get_checkpoint_filenames_for_subspace_models"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models">[docs]</a><span class="k">def</span> <span class="nf">get_checkpoint_filenames_for_subspace_models</span><span class="p">(</span><span class="n">subspace_method</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="get_checkpoint_filenames_for_subspace_models"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models.html#fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models">[docs]</a><span class="k">def</span> <span class="nf">get_checkpoint_filenames_for_subspace_models</span><span class="p">(</span><span class="n">subspace_method</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the checkpoint filenames for the subspace models.</span>
 
@@ -270,7 +262,7 @@
     <span class="k">return</span> <span class="n">checkpoint_filenames</span></div>
 
 
-<div class="viewcode-block" id="get_checkpoint_filename_for_trained_fusion_model"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model">[docs]</a><span class="k">def</span> <span class="nf">get_checkpoint_filename_for_trained_fusion_model</span><span class="p">(</span>
+<div class="viewcode-block" id="get_checkpoint_filename_for_trained_fusion_model"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model.html#fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model">[docs]</a><span class="k">def</span> <span class="nf">get_checkpoint_filename_for_trained_fusion_model</span><span class="p">(</span>
     <span class="n">params</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">checkpoint_file_suffix</span><span class="p">,</span> <span class="n">fold</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Get the checkpoint filename for the trained fusion model using the model object.</span>
@@ -321,15 +313,15 @@
         <span class="k">return</span> <span class="n">checkpoint_filename</span></div>
 
 
-<div class="viewcode-block" id="LitProgressBar"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.LitProgressBar">[docs]</a><span class="k">class</span> <span class="nc">LitProgressBar</span><span class="p">(</span><span class="n">TQDMProgressBar</span><span class="p">):</span>
-<div class="viewcode-block" id="LitProgressBar.init_validation_tqdm"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.LitProgressBar.init_validation_tqdm">[docs]</a>    <span class="k">def</span> <span class="nf">init_validation_tqdm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LitProgressBar"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.LitProgressBar.html#fusilli.utils.training_utils.LitProgressBar">[docs]</a><span class="k">class</span> <span class="nc">LitProgressBar</span><span class="p">(</span><span class="n">TQDMProgressBar</span><span class="p">):</span>
+<div class="viewcode-block" id="LitProgressBar.init_validation_tqdm"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.LitProgressBar.html#fusilli.utils.training_utils.LitProgressBar.init_validation_tqdm">[docs]</a>    <span class="k">def</span> <span class="nf">init_validation_tqdm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">bar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span>
             <span class="n">disable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">bar</span></div></div>
 
 
-<div class="viewcode-block" id="init_trainer"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.init_trainer">[docs]</a><span class="k">def</span> <span class="nf">init_trainer</span><span class="p">(</span>
+<div class="viewcode-block" id="init_trainer"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.init_trainer.html#fusilli.utils.training_utils.init_trainer">[docs]</a><span class="k">def</span> <span class="nf">init_trainer</span><span class="p">(</span>
     <span class="n">logger</span><span class="p">,</span>
     <span class="n">params</span><span class="p">,</span>
     <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
@@ -402,7 +394,7 @@
     <span class="k">return</span> <span class="n">trainer</span></div>
 
 
-<div class="viewcode-block" id="get_final_val_metrics"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.get_final_val_metrics">[docs]</a><span class="k">def</span> <span class="nf">get_final_val_metrics</span><span class="p">(</span><span class="n">trainer</span><span class="p">):</span>
+<div class="viewcode-block" id="get_final_val_metrics"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.get_final_val_metrics.html#fusilli.utils.training_utils.get_final_val_metrics">[docs]</a><span class="k">def</span> <span class="nf">get_final_val_metrics</span><span class="p">(</span><span class="n">trainer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the final validation metrics from the trainer object.</span>
 

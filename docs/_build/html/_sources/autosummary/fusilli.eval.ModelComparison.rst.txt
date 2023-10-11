@@ -1,0 +1,60 @@
+﻿fusilli.eval.ModelComparison
+============================
+
+.. currentmodule:: fusilli.eval
+
+.. autoclass:: ModelComparison
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ModelComparison.__delattr__
+      ~ModelComparison.__dir__
+      ~ModelComparison.__eq__
+      ~ModelComparison.__format__
+      ~ModelComparison.__ge__
+      ~ModelComparison.__getattribute__
+      ~ModelComparison.__gt__
+      ~ModelComparison.__hash__
+      ~ModelComparison.__init__
+      ~ModelComparison.__init_subclass__
+      ~ModelComparison.__le__
+      ~ModelComparison.__lt__
+      ~ModelComparison.__ne__
+      ~ModelComparison.__new__
+      ~ModelComparison.__reduce__
+      ~ModelComparison.__reduce_ex__
+      ~ModelComparison.__repr__
+      ~ModelComparison.__setattr__
+      ~ModelComparison.__sizeof__
+      ~ModelComparison.__str__
+      ~ModelComparison.__subclasshook__
+      ~ModelComparison.from_final_val_data
+      ~ModelComparison.from_new_data
+      ~ModelComparison.get_kfold_data_from_model
+      ~ModelComparison.get_new_kfold_data
+      ~ModelComparison.get_new_tt_data
+      ~ModelComparison.get_performance_dataframe
+      ~ModelComparison.get_tt_data_from_model
+      ~ModelComparison.kfold_comparison_plot
+      ~ModelComparison.train_test_comparison_plot
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ModelComparison.__dict__
+      ~ModelComparison.__doc__
+      ~ModelComparison.__module__
+      ~ModelComparison.__weakref__
+   
+   

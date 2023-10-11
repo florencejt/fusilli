@@ -1,0 +1,249 @@
+﻿fusilli.fusion\_models.concat\_img\_latent\_tab\_doubletrain.ImgLatentSpace
+===========================================================================
+
+.. currentmodule:: fusilli.fusion_models.concat_img_latent_tab_doubletrain
+
+.. autoclass:: ImgLatentSpace
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ImgLatentSpace._DeviceDtypeModuleMixin__update_properties
+      ~ImgLatentSpace.__call__
+      ~ImgLatentSpace.__delattr__
+      ~ImgLatentSpace.__dir__
+      ~ImgLatentSpace.__eq__
+      ~ImgLatentSpace.__format__
+      ~ImgLatentSpace.__ge__
+      ~ImgLatentSpace.__getattr__
+      ~ImgLatentSpace.__getattribute__
+      ~ImgLatentSpace.__getstate__
+      ~ImgLatentSpace.__gt__
+      ~ImgLatentSpace.__hash__
+      ~ImgLatentSpace.__init__
+      ~ImgLatentSpace.__init_subclass__
+      ~ImgLatentSpace.__le__
+      ~ImgLatentSpace.__lt__
+      ~ImgLatentSpace.__ne__
+      ~ImgLatentSpace.__new__
+      ~ImgLatentSpace.__reduce__
+      ~ImgLatentSpace.__reduce_ex__
+      ~ImgLatentSpace.__repr__
+      ~ImgLatentSpace.__setattr__
+      ~ImgLatentSpace.__setstate__
+      ~ImgLatentSpace.__sizeof__
+      ~ImgLatentSpace.__str__
+      ~ImgLatentSpace.__subclasshook__
+      ~ImgLatentSpace._apply
+      ~ImgLatentSpace._apply_batch_transfer_handler
+      ~ImgLatentSpace._call_batch_hook
+      ~ImgLatentSpace._call_impl
+      ~ImgLatentSpace._get_backward_hooks
+      ~ImgLatentSpace._get_backward_pre_hooks
+      ~ImgLatentSpace._get_name
+      ~ImgLatentSpace._load_from_state_dict
+      ~ImgLatentSpace._maybe_warn_non_full_backward_hook
+      ~ImgLatentSpace._named_members
+      ~ImgLatentSpace._on_before_batch_transfer
+      ~ImgLatentSpace._prevent_trainer_and_dataloaders_deepcopy
+      ~ImgLatentSpace._register_load_state_dict_pre_hook
+      ~ImgLatentSpace._register_sharded_tensor_state_dict_hooks_if_available
+      ~ImgLatentSpace._register_state_dict_hook
+      ~ImgLatentSpace._replicate_for_data_parallel
+      ~ImgLatentSpace._save_to_state_dict
+      ~ImgLatentSpace._set_hparams
+      ~ImgLatentSpace._slow_forward
+      ~ImgLatentSpace._to_hparams_dict
+      ~ImgLatentSpace._verify_is_manual_optimization
+      ~ImgLatentSpace.add_module
+      ~ImgLatentSpace.all_gather
+      ~ImgLatentSpace.apply
+      ~ImgLatentSpace.backward
+      ~ImgLatentSpace.bfloat16
+      ~ImgLatentSpace.buffers
+      ~ImgLatentSpace.calc_fused_layers
+      ~ImgLatentSpace.children
+      ~ImgLatentSpace.clip_gradients
+      ~ImgLatentSpace.configure_callbacks
+      ~ImgLatentSpace.configure_gradient_clipping
+      ~ImgLatentSpace.configure_optimizers
+      ~ImgLatentSpace.configure_sharded_model
+      ~ImgLatentSpace.cpu
+      ~ImgLatentSpace.cuda
+      ~ImgLatentSpace.double
+      ~ImgLatentSpace.encode_image
+      ~ImgLatentSpace.eval
+      ~ImgLatentSpace.extra_repr
+      ~ImgLatentSpace.float
+      ~ImgLatentSpace.forward
+      ~ImgLatentSpace.freeze
+      ~ImgLatentSpace.get_buffer
+      ~ImgLatentSpace.get_extra_state
+      ~ImgLatentSpace.get_parameter
+      ~ImgLatentSpace.get_submodule
+      ~ImgLatentSpace.half
+      ~ImgLatentSpace.ipu
+      ~ImgLatentSpace.load_from_checkpoint
+      ~ImgLatentSpace.load_state_dict
+      ~ImgLatentSpace.log
+      ~ImgLatentSpace.log_dict
+      ~ImgLatentSpace.log_grad_norm
+      ~ImgLatentSpace.lr_scheduler_step
+      ~ImgLatentSpace.lr_schedulers
+      ~ImgLatentSpace.manual_backward
+      ~ImgLatentSpace.modules
+      ~ImgLatentSpace.named_buffers
+      ~ImgLatentSpace.named_children
+      ~ImgLatentSpace.named_modules
+      ~ImgLatentSpace.named_parameters
+      ~ImgLatentSpace.on_after_backward
+      ~ImgLatentSpace.on_after_batch_transfer
+      ~ImgLatentSpace.on_before_backward
+      ~ImgLatentSpace.on_before_batch_transfer
+      ~ImgLatentSpace.on_before_optimizer_step
+      ~ImgLatentSpace.on_before_zero_grad
+      ~ImgLatentSpace.on_fit_end
+      ~ImgLatentSpace.on_fit_start
+      ~ImgLatentSpace.on_load_checkpoint
+      ~ImgLatentSpace.on_predict_batch_end
+      ~ImgLatentSpace.on_predict_batch_start
+      ~ImgLatentSpace.on_predict_end
+      ~ImgLatentSpace.on_predict_epoch_end
+      ~ImgLatentSpace.on_predict_epoch_start
+      ~ImgLatentSpace.on_predict_model_eval
+      ~ImgLatentSpace.on_predict_start
+      ~ImgLatentSpace.on_save_checkpoint
+      ~ImgLatentSpace.on_test_batch_end
+      ~ImgLatentSpace.on_test_batch_start
+      ~ImgLatentSpace.on_test_end
+      ~ImgLatentSpace.on_test_epoch_end
+      ~ImgLatentSpace.on_test_epoch_start
+      ~ImgLatentSpace.on_test_model_eval
+      ~ImgLatentSpace.on_test_model_train
+      ~ImgLatentSpace.on_test_start
+      ~ImgLatentSpace.on_train_batch_end
+      ~ImgLatentSpace.on_train_batch_start
+      ~ImgLatentSpace.on_train_end
+      ~ImgLatentSpace.on_train_epoch_end
+      ~ImgLatentSpace.on_train_epoch_start
+      ~ImgLatentSpace.on_train_start
+      ~ImgLatentSpace.on_validation_batch_end
+      ~ImgLatentSpace.on_validation_batch_start
+      ~ImgLatentSpace.on_validation_end
+      ~ImgLatentSpace.on_validation_epoch_end
+      ~ImgLatentSpace.on_validation_epoch_start
+      ~ImgLatentSpace.on_validation_model_eval
+      ~ImgLatentSpace.on_validation_model_train
+      ~ImgLatentSpace.on_validation_start
+      ~ImgLatentSpace.optimizer_step
+      ~ImgLatentSpace.optimizer_zero_grad
+      ~ImgLatentSpace.optimizers
+      ~ImgLatentSpace.parameters
+      ~ImgLatentSpace.predict_dataloader
+      ~ImgLatentSpace.predict_step
+      ~ImgLatentSpace.prepare_data
+      ~ImgLatentSpace.print
+      ~ImgLatentSpace.register_backward_hook
+      ~ImgLatentSpace.register_buffer
+      ~ImgLatentSpace.register_forward_hook
+      ~ImgLatentSpace.register_forward_pre_hook
+      ~ImgLatentSpace.register_full_backward_hook
+      ~ImgLatentSpace.register_full_backward_pre_hook
+      ~ImgLatentSpace.register_load_state_dict_post_hook
+      ~ImgLatentSpace.register_module
+      ~ImgLatentSpace.register_parameter
+      ~ImgLatentSpace.register_state_dict_pre_hook
+      ~ImgLatentSpace.requires_grad_
+      ~ImgLatentSpace.save_hyperparameters
+      ~ImgLatentSpace.set_extra_state
+      ~ImgLatentSpace.setup
+      ~ImgLatentSpace.share_memory
+      ~ImgLatentSpace.state_dict
+      ~ImgLatentSpace.tbptt_split_batch
+      ~ImgLatentSpace.teardown
+      ~ImgLatentSpace.test_dataloader
+      ~ImgLatentSpace.test_epoch_end
+      ~ImgLatentSpace.test_step
+      ~ImgLatentSpace.test_step_end
+      ~ImgLatentSpace.to
+      ~ImgLatentSpace.to_empty
+      ~ImgLatentSpace.to_onnx
+      ~ImgLatentSpace.to_torchscript
+      ~ImgLatentSpace.toggle_optimizer
+      ~ImgLatentSpace.train
+      ~ImgLatentSpace.train_dataloader
+      ~ImgLatentSpace.training_epoch_end
+      ~ImgLatentSpace.training_step
+      ~ImgLatentSpace.training_step_end
+      ~ImgLatentSpace.transfer_batch_to_device
+      ~ImgLatentSpace.type
+      ~ImgLatentSpace.unfreeze
+      ~ImgLatentSpace.untoggle_optimizer
+      ~ImgLatentSpace.val_dataloader
+      ~ImgLatentSpace.validation_epoch_end
+      ~ImgLatentSpace.validation_step
+      ~ImgLatentSpace.validation_step_end
+      ~ImgLatentSpace.xpu
+      ~ImgLatentSpace.zero_grad
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ImgLatentSpace.CHECKPOINT_HYPER_PARAMS_KEY
+      ~ImgLatentSpace.CHECKPOINT_HYPER_PARAMS_NAME
+      ~ImgLatentSpace.CHECKPOINT_HYPER_PARAMS_TYPE
+      ~ImgLatentSpace.T_destination
+      ~ImgLatentSpace.__annotations__
+      ~ImgLatentSpace.__dict__
+      ~ImgLatentSpace.__doc__
+      ~ImgLatentSpace.__jit_unused_properties__
+      ~ImgLatentSpace.__module__
+      ~ImgLatentSpace.__weakref__
+      ~ImgLatentSpace._jit_is_scripting
+      ~ImgLatentSpace._version
+      ~ImgLatentSpace.automatic_optimization
+      ~ImgLatentSpace.call_super_init
+      ~ImgLatentSpace.current_epoch
+      ~ImgLatentSpace.device
+      ~ImgLatentSpace.dtype
+      ~ImgLatentSpace.dump_patches
+      ~ImgLatentSpace.example_input_array
+      ~ImgLatentSpace.global_rank
+      ~ImgLatentSpace.global_step
+      ~ImgLatentSpace.hparams
+      ~ImgLatentSpace.hparams_initial
+      ~ImgLatentSpace.local_rank
+      ~ImgLatentSpace.logger
+      ~ImgLatentSpace.loggers
+      ~ImgLatentSpace.on_gpu
+      ~ImgLatentSpace.trainer
+      ~ImgLatentSpace.truncated_bptt_steps
+      ~ImgLatentSpace.use_amp
+      ~ImgLatentSpace.training
+      ~ImgLatentSpace._parameters
+      ~ImgLatentSpace._buffers
+      ~ImgLatentSpace._non_persistent_buffers_set
+      ~ImgLatentSpace._backward_pre_hooks
+      ~ImgLatentSpace._backward_hooks
+      ~ImgLatentSpace._is_full_backward_hook
+      ~ImgLatentSpace._forward_hooks
+      ~ImgLatentSpace._forward_hooks_with_kwargs
+      ~ImgLatentSpace._forward_pre_hooks
+      ~ImgLatentSpace._forward_pre_hooks_with_kwargs
+      ~ImgLatentSpace._state_dict_hooks
+      ~ImgLatentSpace._load_state_dict_pre_hooks
+      ~ImgLatentSpace._state_dict_pre_hooks
+      ~ImgLatentSpace._load_state_dict_post_hooks
+      ~ImgLatentSpace._modules
+   
+   

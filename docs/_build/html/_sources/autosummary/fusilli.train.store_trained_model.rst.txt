@@ -1,0 +1,6 @@
+﻿fusilli.train.store\_trained\_model
+===================================
+
+.. currentmodule:: fusilli.train
+
+.. autofunction:: store_trained_model

@@ -1,0 +1,59 @@
+﻿fusilli.eval.ConfusionMatrix
+============================
+
+.. currentmodule:: fusilli.eval
+
+.. autoclass:: ConfusionMatrix
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ConfusionMatrix.__delattr__
+      ~ConfusionMatrix.__dir__
+      ~ConfusionMatrix.__eq__
+      ~ConfusionMatrix.__format__
+      ~ConfusionMatrix.__ge__
+      ~ConfusionMatrix.__getattribute__
+      ~ConfusionMatrix.__gt__
+      ~ConfusionMatrix.__hash__
+      ~ConfusionMatrix.__init__
+      ~ConfusionMatrix.__init_subclass__
+      ~ConfusionMatrix.__le__
+      ~ConfusionMatrix.__lt__
+      ~ConfusionMatrix.__ne__
+      ~ConfusionMatrix.__new__
+      ~ConfusionMatrix.__reduce__
+      ~ConfusionMatrix.__reduce_ex__
+      ~ConfusionMatrix.__repr__
+      ~ConfusionMatrix.__setattr__
+      ~ConfusionMatrix.__sizeof__
+      ~ConfusionMatrix.__str__
+      ~ConfusionMatrix.__subclasshook__
+      ~ConfusionMatrix._confusion_matrix_kfold
+      ~ConfusionMatrix._confusion_matrix_tt
+      ~ConfusionMatrix.from_final_val_data
+      ~ConfusionMatrix.from_new_data
+      ~ConfusionMatrix.get_kfold_data_from_model
+      ~ConfusionMatrix.get_new_kfold_data
+      ~ConfusionMatrix.get_new_tt_data
+      ~ConfusionMatrix.get_tt_data_from_model
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ConfusionMatrix.__dict__
+      ~ConfusionMatrix.__doc__
+      ~ConfusionMatrix.__module__
+      ~ConfusionMatrix.__weakref__
+   
+   

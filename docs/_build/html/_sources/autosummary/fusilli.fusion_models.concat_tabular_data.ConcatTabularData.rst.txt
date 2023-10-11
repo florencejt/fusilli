@@ -1,0 +1,143 @@
+﻿fusilli.fusion\_models.concat\_tabular\_data.ConcatTabularData
+==============================================================
+
+.. currentmodule:: fusilli.fusion_models.concat_tabular_data
+
+.. autoclass:: ConcatTabularData
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ConcatTabularData.__call__
+      ~ConcatTabularData.__delattr__
+      ~ConcatTabularData.__dir__
+      ~ConcatTabularData.__eq__
+      ~ConcatTabularData.__format__
+      ~ConcatTabularData.__ge__
+      ~ConcatTabularData.__getattr__
+      ~ConcatTabularData.__getattribute__
+      ~ConcatTabularData.__gt__
+      ~ConcatTabularData.__hash__
+      ~ConcatTabularData.__init__
+      ~ConcatTabularData.__init_subclass__
+      ~ConcatTabularData.__le__
+      ~ConcatTabularData.__lt__
+      ~ConcatTabularData.__ne__
+      ~ConcatTabularData.__new__
+      ~ConcatTabularData.__reduce__
+      ~ConcatTabularData.__reduce_ex__
+      ~ConcatTabularData.__repr__
+      ~ConcatTabularData.__setattr__
+      ~ConcatTabularData.__setstate__
+      ~ConcatTabularData.__sizeof__
+      ~ConcatTabularData.__str__
+      ~ConcatTabularData.__subclasshook__
+      ~ConcatTabularData._apply
+      ~ConcatTabularData._call_impl
+      ~ConcatTabularData._get_backward_hooks
+      ~ConcatTabularData._get_backward_pre_hooks
+      ~ConcatTabularData._get_name
+      ~ConcatTabularData._load_from_state_dict
+      ~ConcatTabularData._maybe_warn_non_full_backward_hook
+      ~ConcatTabularData._named_members
+      ~ConcatTabularData._register_load_state_dict_pre_hook
+      ~ConcatTabularData._register_state_dict_hook
+      ~ConcatTabularData._replicate_for_data_parallel
+      ~ConcatTabularData._save_to_state_dict
+      ~ConcatTabularData._slow_forward
+      ~ConcatTabularData.add_module
+      ~ConcatTabularData.apply
+      ~ConcatTabularData.bfloat16
+      ~ConcatTabularData.buffers
+      ~ConcatTabularData.calc_fused_layers
+      ~ConcatTabularData.children
+      ~ConcatTabularData.cpu
+      ~ConcatTabularData.cuda
+      ~ConcatTabularData.double
+      ~ConcatTabularData.eval
+      ~ConcatTabularData.extra_repr
+      ~ConcatTabularData.float
+      ~ConcatTabularData.forward
+      ~ConcatTabularData.get_buffer
+      ~ConcatTabularData.get_extra_state
+      ~ConcatTabularData.get_fused_dim
+      ~ConcatTabularData.get_parameter
+      ~ConcatTabularData.get_submodule
+      ~ConcatTabularData.half
+      ~ConcatTabularData.ipu
+      ~ConcatTabularData.load_state_dict
+      ~ConcatTabularData.modules
+      ~ConcatTabularData.named_buffers
+      ~ConcatTabularData.named_children
+      ~ConcatTabularData.named_modules
+      ~ConcatTabularData.named_parameters
+      ~ConcatTabularData.parameters
+      ~ConcatTabularData.register_backward_hook
+      ~ConcatTabularData.register_buffer
+      ~ConcatTabularData.register_forward_hook
+      ~ConcatTabularData.register_forward_pre_hook
+      ~ConcatTabularData.register_full_backward_hook
+      ~ConcatTabularData.register_full_backward_pre_hook
+      ~ConcatTabularData.register_load_state_dict_post_hook
+      ~ConcatTabularData.register_module
+      ~ConcatTabularData.register_parameter
+      ~ConcatTabularData.register_state_dict_pre_hook
+      ~ConcatTabularData.requires_grad_
+      ~ConcatTabularData.set_extra_state
+      ~ConcatTabularData.set_final_pred_layers
+      ~ConcatTabularData.set_fused_layers
+      ~ConcatTabularData.set_img_layers
+      ~ConcatTabularData.set_mod1_layers
+      ~ConcatTabularData.set_mod2_layers
+      ~ConcatTabularData.share_memory
+      ~ConcatTabularData.state_dict
+      ~ConcatTabularData.to
+      ~ConcatTabularData.to_empty
+      ~ConcatTabularData.train
+      ~ConcatTabularData.type
+      ~ConcatTabularData.xpu
+      ~ConcatTabularData.zero_grad
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ConcatTabularData.T_destination
+      ~ConcatTabularData.__annotations__
+      ~ConcatTabularData.__dict__
+      ~ConcatTabularData.__doc__
+      ~ConcatTabularData.__module__
+      ~ConcatTabularData.__weakref__
+      ~ConcatTabularData._version
+      ~ConcatTabularData.call_super_init
+      ~ConcatTabularData.dump_patches
+      ~ConcatTabularData.fusion_type
+      ~ConcatTabularData.method_name
+      ~ConcatTabularData.modality_type
+      ~ConcatTabularData.training
+      ~ConcatTabularData._parameters
+      ~ConcatTabularData._buffers
+      ~ConcatTabularData._non_persistent_buffers_set
+      ~ConcatTabularData._backward_pre_hooks
+      ~ConcatTabularData._backward_hooks
+      ~ConcatTabularData._is_full_backward_hook
+      ~ConcatTabularData._forward_hooks
+      ~ConcatTabularData._forward_hooks_with_kwargs
+      ~ConcatTabularData._forward_pre_hooks
+      ~ConcatTabularData._forward_pre_hooks_with_kwargs
+      ~ConcatTabularData._state_dict_hooks
+      ~ConcatTabularData._load_state_dict_pre_hooks
+      ~ConcatTabularData._state_dict_pre_hooks
+      ~ConcatTabularData._load_state_dict_post_hooks
+      ~ConcatTabularData._modules
+   
+   

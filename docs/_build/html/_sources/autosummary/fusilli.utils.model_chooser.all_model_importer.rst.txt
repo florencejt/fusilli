@@ -1,0 +1,6 @@
+﻿fusilli.utils.model\_chooser.all\_model\_importer
+=================================================
+
+.. currentmodule:: fusilli.utils.model_chooser
+
+.. autofunction:: all_model_importer

@@ -1,0 +1,142 @@
+﻿fusilli.fusion\_models.tabular\_decision.TabularDecision
+========================================================
+
+.. currentmodule:: fusilli.fusion_models.tabular_decision
+
+.. autoclass:: TabularDecision
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~TabularDecision.__call__
+      ~TabularDecision.__delattr__
+      ~TabularDecision.__dir__
+      ~TabularDecision.__eq__
+      ~TabularDecision.__format__
+      ~TabularDecision.__ge__
+      ~TabularDecision.__getattr__
+      ~TabularDecision.__getattribute__
+      ~TabularDecision.__gt__
+      ~TabularDecision.__hash__
+      ~TabularDecision.__init__
+      ~TabularDecision.__init_subclass__
+      ~TabularDecision.__le__
+      ~TabularDecision.__lt__
+      ~TabularDecision.__ne__
+      ~TabularDecision.__new__
+      ~TabularDecision.__reduce__
+      ~TabularDecision.__reduce_ex__
+      ~TabularDecision.__repr__
+      ~TabularDecision.__setattr__
+      ~TabularDecision.__setstate__
+      ~TabularDecision.__sizeof__
+      ~TabularDecision.__str__
+      ~TabularDecision.__subclasshook__
+      ~TabularDecision._apply
+      ~TabularDecision._call_impl
+      ~TabularDecision._get_backward_hooks
+      ~TabularDecision._get_backward_pre_hooks
+      ~TabularDecision._get_name
+      ~TabularDecision._load_from_state_dict
+      ~TabularDecision._maybe_warn_non_full_backward_hook
+      ~TabularDecision._named_members
+      ~TabularDecision._register_load_state_dict_pre_hook
+      ~TabularDecision._register_state_dict_hook
+      ~TabularDecision._replicate_for_data_parallel
+      ~TabularDecision._save_to_state_dict
+      ~TabularDecision._slow_forward
+      ~TabularDecision.add_module
+      ~TabularDecision.apply
+      ~TabularDecision.bfloat16
+      ~TabularDecision.buffers
+      ~TabularDecision.calc_fused_layers
+      ~TabularDecision.children
+      ~TabularDecision.cpu
+      ~TabularDecision.cuda
+      ~TabularDecision.double
+      ~TabularDecision.eval
+      ~TabularDecision.extra_repr
+      ~TabularDecision.float
+      ~TabularDecision.forward
+      ~TabularDecision.get_buffer
+      ~TabularDecision.get_extra_state
+      ~TabularDecision.get_parameter
+      ~TabularDecision.get_submodule
+      ~TabularDecision.half
+      ~TabularDecision.ipu
+      ~TabularDecision.load_state_dict
+      ~TabularDecision.modules
+      ~TabularDecision.named_buffers
+      ~TabularDecision.named_children
+      ~TabularDecision.named_modules
+      ~TabularDecision.named_parameters
+      ~TabularDecision.parameters
+      ~TabularDecision.register_backward_hook
+      ~TabularDecision.register_buffer
+      ~TabularDecision.register_forward_hook
+      ~TabularDecision.register_forward_pre_hook
+      ~TabularDecision.register_full_backward_hook
+      ~TabularDecision.register_full_backward_pre_hook
+      ~TabularDecision.register_load_state_dict_post_hook
+      ~TabularDecision.register_module
+      ~TabularDecision.register_parameter
+      ~TabularDecision.register_state_dict_pre_hook
+      ~TabularDecision.requires_grad_
+      ~TabularDecision.set_extra_state
+      ~TabularDecision.set_final_pred_layers
+      ~TabularDecision.set_fused_layers
+      ~TabularDecision.set_img_layers
+      ~TabularDecision.set_mod1_layers
+      ~TabularDecision.set_mod2_layers
+      ~TabularDecision.share_memory
+      ~TabularDecision.state_dict
+      ~TabularDecision.to
+      ~TabularDecision.to_empty
+      ~TabularDecision.train
+      ~TabularDecision.type
+      ~TabularDecision.xpu
+      ~TabularDecision.zero_grad
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~TabularDecision.T_destination
+      ~TabularDecision.__annotations__
+      ~TabularDecision.__dict__
+      ~TabularDecision.__doc__
+      ~TabularDecision.__module__
+      ~TabularDecision.__weakref__
+      ~TabularDecision._version
+      ~TabularDecision.call_super_init
+      ~TabularDecision.dump_patches
+      ~TabularDecision.fusion_type
+      ~TabularDecision.method_name
+      ~TabularDecision.modality_type
+      ~TabularDecision.training
+      ~TabularDecision._parameters
+      ~TabularDecision._buffers
+      ~TabularDecision._non_persistent_buffers_set
+      ~TabularDecision._backward_pre_hooks
+      ~TabularDecision._backward_hooks
+      ~TabularDecision._is_full_backward_hook
+      ~TabularDecision._forward_hooks
+      ~TabularDecision._forward_hooks_with_kwargs
+      ~TabularDecision._forward_pre_hooks
+      ~TabularDecision._forward_pre_hooks_with_kwargs
+      ~TabularDecision._state_dict_hooks
+      ~TabularDecision._load_state_dict_pre_hooks
+      ~TabularDecision._state_dict_pre_hooks
+      ~TabularDecision._load_state_dict_post_hooks
+      ~TabularDecision._modules
+   
+   

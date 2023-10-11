@@ -100,12 +100,10 @@ all_trained_models = {}  # create dictionary to store trained models
 # To train the first model we need to:
 #
 # 1. *Choose the model*: We're using the first model in the ``fusion_models`` list we made earlier.
-# 2. *Create a dictionary to store the trained model*: We're using the name of the model as the key. It may seem overkill to make a dictionary just to store one model, but we also use this when we do k-fold training to store the trained models from the different folds.
-# 3. *Initialise the model with dummy data*: This is so we can find out whether there are extra instructions for creating the datamodule (such as a method for creating a graph datamodule).
-# 4. *Print the attributes of the model*: To check it's been initialised correctly.
-# 5. *Create the datamodule*: This is done with the :func:`~fusilli.data.get_data_module` function. This function takes the initialised model and the parameters as inputs. It returns the datamodule.
-# 6. *Train and test the model*: This is done with the :func:`~fusilli.train.train_and_save_models` function. This function takes the trained_models_dict, the datamodule, the parameters, the fusion model, and the initialised model as inputs. It returns the trained_models_dict with the trained model added to it.
-# 7. *Add the trained model to the ``all_trained_models`` dictionary*: This is so we can compare the results of the two models later.
+# 2. *Print the attributes of the model*: To check it's been initialised correctly.
+# 3. *Create the datamodule*: This is done with the :func:`~fusilli.data.get_data_module` function. This function takes the initialised model and the parameters as inputs. It returns the datamodule.
+# 4. *Train and test the model*: This is done with the :func:`~fusilli.train.train_and_save_models` function. This function takes the trained_models_dict, the datamodule, the parameters, the fusion model, and the initialised model as inputs. It returns the trained_models_dict with the trained model added to it.
+# 5. *Add the trained model to the ``all_trained_models`` dictionary*: This is so we can compare the results of the two models later.
 
 fusion_model = fusion_models[0]
 

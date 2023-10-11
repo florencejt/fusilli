@@ -1,0 +1,6 @@
+﻿fusilli.utils.training\_utils.init\_trainer
+===========================================
+
+.. currentmodule:: fusilli.utils.training_utils
+
+.. autofunction:: init_trainer

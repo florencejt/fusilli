@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method &mdash; fusilli  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/florencestheme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/pink_pasta_logo.png"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            fusilli
+              <img src="../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fusilli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/autosummary/fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fusilli-fusion-models-denoise-tab-img-maps-denoising-autoencoder-subspace-method">
+<h1>fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method<a class="headerlink" href="#fusilli-fusion-models-denoise-tab-img-maps-denoising-autoencoder-subspace-method" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">denoising_autoencoder_subspace_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datamodule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusion_models/denoise_tab_img_maps.html#denoising_autoencoder_subspace_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class containing the method to train the denoising autoencoder and to convert the image data
+to the latent image space.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.datamodule">
+<span class="sig-name descname"><span class="pre">datamodule</span></span><a class="headerlink" href="#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.datamodule" title="Permalink to this definition"></a></dt>
+<dd><p>Data module containing the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.LightningDataModule</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.dae_trainer">
+<span class="sig-name descname"><span class="pre">dae_trainer</span></span><a class="headerlink" href="#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.dae_trainer" title="Permalink to this definition"></a></dt>
+<dd><p>Trainer for the denoising autoencoder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.Trainer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.img_unimodal_trainer">
+<span class="sig-name descname"><span class="pre">img_unimodal_trainer</span></span><a class="headerlink" href="#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.img_unimodal_trainer" title="Permalink to this definition"></a></dt>
+<dd><p>Trainer for the image unimodal network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.Trainer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.autoencoder">
+<span class="sig-name descname"><span class="pre">autoencoder</span></span><a class="headerlink" href="#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.autoencoder" title="Permalink to this definition"></a></dt>
+<dd><p>Tabular denoising autoencoder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder" title="fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder">DenoisingAutoencoder</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.img_unimodal">
+<span class="sig-name descname"><span class="pre">img_unimodal</span></span><a class="headerlink" href="#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.img_unimodal" title="Permalink to this definition"></a></dt>
+<dd><p>Image unimodal network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE" title="fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE">ImgUnimodalDAE</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datamodule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusion_models/denoise_tab_img_maps.html#denoising_autoencoder_subspace_method.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.__init__" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datamodule</strong> (<em>pl.LightningDataModule</em>) – Data module containing the data.</p></li>
+<li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs. Default is 1000.</p></li>
+<li><p><strong>checkpoint_path</strong> (<em>list</em>) – List containing the checkpoint paths for the denoising autoencoder and the image
+unimodal network. Default is None - which means that the model needs training.</p></li>
+<li><p><strong>own_early_stopping_callback</strong> (<em>pytorch lightning callback</em>) – Early stopping callback object. Default None. If None, the default early stopping
+will be used.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__delattr__</span></code>(name, /)</p></td>
+<td><p>Implement delattr(self, name).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__dir__</span></code>()</p></td>
+<td><p>Default dir() implementation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__eq__</span></code>(value, /)</p></td>
+<td><p>Return self==value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__format__</span></code>(format_spec, /)</p></td>
+<td><p>Default object formatter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__ge__</span></code>(value, /)</p></td>
+<td><p>Return self&gt;=value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__getattribute__</span></code>(name, /)</p></td>
+<td><p>Return getattr(self, name).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__gt__</span></code>(value, /)</p></td>
+<td><p>Return self&gt;value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__hash__</span></code>()</p></td>
+<td><p>Return hash(self).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id0" title="fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(datamodule[, k, max_epochs, ...])</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">param datamodule<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Data module containing the data.</p>
+</dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init_subclass__</span></code></p></td>
+<td><p>This method is called when a class is subclassed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__le__</span></code>(value, /)</p></td>
+<td><p>Return self&lt;=value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__lt__</span></code>(value, /)</p></td>
+<td><p>Return self&lt;value.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__ne__</span></code>(value, /)</p></td>
+<td><p>Return self!=value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__new__</span></code>(**kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce__</span></code>()</p></td>
+<td><p>Helper for pickle.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce_ex__</span></code>(protocol, /)</p></td>
+<td><p>Helper for pickle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__repr__</span></code>()</p></td>
+<td><p>Return repr(self).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__setattr__</span></code>(name, value, /)</p></td>
+<td><p>Implement setattr(self, name, value).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__sizeof__</span></code>()</p></td>
+<td><p>Size of object in memory, in bytes.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__str__</span></code>()</p></td>
+<td><p>Return str(self).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__subclasshook__</span></code></p></td>
+<td><p>Abstract classes can override this to customize issubclass().</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.convert_to_latent" title="fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.convert_to_latent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_to_latent</span></code></a>(test_dataset)</p></td>
+<td><p>Convert the image data to the latent image space.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.train" title="fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.train"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train</span></code></a>(train_dataset, val_dataset)</p></td>
+<td><p>Train the latent image space.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__dict__</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__doc__</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__module__</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__weakref__</span></code></p></td>
+<td><p>list of weak references to the object (if defined)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">subspace_models</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datamodule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusion_models/denoise_tab_img_maps.html#denoising_autoencoder_subspace_method.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datamodule</strong> (<em>pl.LightningDataModule</em>) – Data module containing the data.</p></li>
+<li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs. Default is 1000.</p></li>
+<li><p><strong>checkpoint_path</strong> (<em>list</em>) – List containing the checkpoint paths for the denoising autoencoder and the image
+unimodal network. Default is None - which means that the model needs training.</p></li>
+<li><p><strong>own_early_stopping_callback</strong> (<em>pytorch lightning callback</em>) – Early stopping callback object. Default None. If None, the default early stopping
+will be used.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.convert_to_latent">
+<span class="sig-name descname"><span class="pre">convert_to_latent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusion_models/denoise_tab_img_maps.html#denoising_autoencoder_subspace_method.convert_to_latent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.convert_to_latent" title="Permalink to this definition"></a></dt>
+<dd><p>Convert the image data to the latent image space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>test_dataset</strong> (<em>Dataset</em>) – Test dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>list</em> – List containing the raw tabular data and the latent image space.</p></li>
+<li><p><em>pd.DataFrame</em> – Dataframe containing the labels.</p></li>
+<li><p><em>list</em> – List containing the dimensions of the data.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusion_models/denoise_tab_img_maps.html#denoising_autoencoder_subspace_method.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.train" title="Permalink to this definition"></a></dt>
+<dd><p>Train the latent image space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_dataset</strong> (<em>Dataset</em>) – Training dataset.</p></li>
+<li><p><strong>val_dataset</strong> (<em>Dataset</em>) – Validation dataset.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>list</em> – List containing the raw tabular data and the latent image space.</p></li>
+<li><p><em>pd.DataFrame</em> – Dataframe containing the labels.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Florence J Townend.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

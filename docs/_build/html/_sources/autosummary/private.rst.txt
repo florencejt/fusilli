@@ -1,0 +1,13 @@
+🌸 Private API Reference 🌸
+----------------------------
+
+.. autosummary::
+   :toctree: autosummary
+   :recursive:
+   :toctree-filters: privatemembers
+
+   fusilli.fusion_models
+   fusilli.data
+   fusilli.train
+   fusilli.eval
+   fusilli.utils

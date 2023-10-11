@@ -61,7 +61,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
+<p class="caption" role="heading"><span class="caption-text">🌸 Public API Reference 🌸</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="fusilli.fusion_models.html">fusilli.fusion_models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusilli.data.html">fusilli.data</a></li>
@@ -69,8 +69,6 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">fusilli.eval</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#fusilli.eval.ConfusionMatrix"><code class="docutils literal notranslate"><span class="pre">ConfusionMatrix</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ConfusionMatrix.__init__"><code class="docutils literal notranslate"><span class="pre">ConfusionMatrix.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ConfusionMatrix.confusion_matrix_kfold"><code class="docutils literal notranslate"><span class="pre">ConfusionMatrix.confusion_matrix_kfold()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ConfusionMatrix.confusion_matrix_tt"><code class="docutils literal notranslate"><span class="pre">ConfusionMatrix.confusion_matrix_tt()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ConfusionMatrix.from_final_val_data"><code class="docutils literal notranslate"><span class="pre">ConfusionMatrix.from_final_val_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ConfusionMatrix.from_new_data"><code class="docutils literal notranslate"><span class="pre">ConfusionMatrix.from_new_data()</span></code></a></li>
 </ul>
@@ -84,7 +82,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#fusilli.eval.ParentPlotter"><code class="docutils literal notranslate"><span class="pre">ParentPlotter</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ParentPlotter.None"><code class="docutils literal notranslate"><span class="pre">ParentPlotter.None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ParentPlotter.__init__"><code class="docutils literal notranslate"><span class="pre">ParentPlotter.__init__()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ParentPlotter.get_kfold_data_from_model"><code class="docutils literal notranslate"><span class="pre">ParentPlotter.get_kfold_data_from_model()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ParentPlotter.get_new_kfold_data"><code class="docutils literal notranslate"><span class="pre">ParentPlotter.get_new_kfold_data()</span></code></a></li>
@@ -164,58 +161,6 @@ if using from_final_val_data.</p>
 <dt class="sig sig-object py" id="fusilli.eval.ConfusionMatrix.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ConfusionMatrix.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ConfusionMatrix.__init__" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fusilli.eval.ConfusionMatrix.confusion_matrix_kfold">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">confusion_matrix_kfold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_reals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_per_fold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overall_kfold_metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ConfusionMatrix.confusion_matrix_kfold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ConfusionMatrix.confusion_matrix_kfold" title="Permalink to this definition"></a></dt>
-<dd><p>Confusion matrix for a kfold model. This function should be called within the ConfusionMatrix class
-after the k-fold data has been obtained from the model (either old data or new data).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>model_list</strong> (<em>list</em>) – List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first
-element is the k=1 model and the second element is the k=2 model, etc.</p></li>
-<li><p><strong>val_reals</strong> (<em>list</em>) – List of torch.Tensors of the real values for the new data set for each fold.</p></li>
-<li><p><strong>val_preds</strong> (<em>list</em>) – List of torch.Tensors of the predicted values for the new data set for each fold.</p></li>
-<li><p><strong>metrics_per_fold</strong> (<em>dict</em>) – Dictionary of the metrics for each fold.
-The keys are the names of the metrics and the values are lists of the metric values for each fold.</p></li>
-<li><p><strong>overall_kfold_metrics</strong> (<em>dict</em>) – Dictionary of the overall kfold metrics.
-The keys are the names of the metrics and the values are the metric values for the overall kfold,
-meaning the metric values for the concatenated new data over all the folds.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>fig</strong> – The figure of the plot.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>matplotlib.pyplot.figure</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fusilli.eval.ConfusionMatrix.confusion_matrix_tt">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">confusion_matrix_tt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_reals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ConfusionMatrix.confusion_matrix_tt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ConfusionMatrix.confusion_matrix_tt" title="Permalink to this definition"></a></dt>
-<dd><p>Confusion matrix for a train/test model. This function should be called within the ConfusionMatrix class
-after the train/test data has been obtained from the model (either old data or new data).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>model_list</strong> (<em>list</em>) – A list of length 1 containing the trained pytorch_lightning model.</p></li>
-<li><p><strong>val_reals</strong> (<em>torch.Tensor</em>) – Torch.Tensor of the real values for the new data set.</p></li>
-<li><p><strong>val_preds</strong> (<em>torch.Tensor</em>) – Torch.Tensor of the predicted values for the new data set.</p></li>
-<li><p><strong>metric_values</strong> (<em>dict</em>) – Dictionary of the metrics for the model.
-The keys are the names of the metrics and the values are the metric values for the model.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>fig</strong> – The figure of the plot.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>matplotlib.pyplot.figure</p>
-</dd>
-</dl>
-</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fusilli.eval.ConfusionMatrix.from_final_val_data">
@@ -385,11 +330,6 @@ For train/test models, the dataframe contains the metrics for the train and test
 <p>It includes methods that are used by multiple plot classes, such as obtaining final
 validation data from kfold and train/test models, and putting new data through the
 models for both kfold and train/test protocols.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusilli.eval.ParentPlotter.None">
-<span class="sig-name descname"><span class="pre">None</span></span><a class="headerlink" href="#fusilli.eval.ParentPlotter.None" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="fusilli.eval.ParentPlotter.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ParentPlotter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ParentPlotter.__init__" title="Permalink to this definition"></a></dt>

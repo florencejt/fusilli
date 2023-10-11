@@ -58,14 +58,6 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
-</ul>
 
         </div>
       </div>
@@ -112,7 +104,7 @@
 <span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
 
 
-<div class="viewcode-block" id="DenoisingAutoencoder"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder">[docs]</a><span class="k">class</span> <span class="nc">DenoisingAutoencoder</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
+<div class="viewcode-block" id="DenoisingAutoencoder"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder">[docs]</a><span class="k">class</span> <span class="nc">DenoisingAutoencoder</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Denoising autoencoder for tabular data: pytorch lightning module.</span>
 
@@ -130,7 +122,7 @@
 <span class="sd">        Loss function. In this case, it&#39;s the mean squared error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="DenoisingAutoencoder.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">):</span>
+<div class="viewcode-block" id="DenoisingAutoencoder.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialise the model.</span>
 
@@ -167,7 +159,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DenoisingAutoencoder.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DenoisingAutoencoder.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the fused layers.</span>
 
@@ -201,7 +193,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">downsampler</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">in_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_dims</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="DenoisingAutoencoder.forward"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="DenoisingAutoencoder.forward"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward pass.</span>
 
@@ -230,7 +222,7 @@
 
         <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">x_dropout</span></div>
 
-<div class="viewcode-block" id="DenoisingAutoencoder.training_step"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.training_step">[docs]</a>    <span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
+<div class="viewcode-block" id="DenoisingAutoencoder.training_step"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.training_step">[docs]</a>    <span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Training step.</span>
 
@@ -258,7 +250,7 @@
 
         <span class="k">return</span> <span class="n">loss</span></div>
 
-<div class="viewcode-block" id="DenoisingAutoencoder.validation_step"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.validation_step">[docs]</a>    <span class="k">def</span> <span class="nf">validation_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
+<div class="viewcode-block" id="DenoisingAutoencoder.validation_step"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.validation_step">[docs]</a>    <span class="k">def</span> <span class="nf">validation_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Validation step.</span>
 
@@ -284,7 +276,7 @@
 
         <span class="k">return</span> <span class="n">loss</span></div>
 
-<div class="viewcode-block" id="DenoisingAutoencoder.configure_optimizers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.configure_optimizers">[docs]</a>    <span class="k">def</span> <span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DenoisingAutoencoder.configure_optimizers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.configure_optimizers">[docs]</a>    <span class="k">def</span> <span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Configure the optimizers of the model.</span>
 
@@ -295,7 +287,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DenoisingAutoencoder.denoise"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.denoise">[docs]</a>    <span class="k">def</span> <span class="nf">denoise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="DenoisingAutoencoder.denoise"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.html#fusilli.fusion_models.denoise_tab_img_maps.DenoisingAutoencoder.denoise">[docs]</a>    <span class="k">def</span> <span class="nf">denoise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Denoise the data to create the latent subspace.</span>
 
@@ -318,7 +310,7 @@
         <span class="k">return</span> <span class="n">x_latent</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="ImgUnimodalDAE"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE">[docs]</a><span class="k">class</span> <span class="nc">ImgUnimodalDAE</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
+<div class="viewcode-block" id="ImgUnimodalDAE"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE">[docs]</a><span class="k">class</span> <span class="nc">ImgUnimodalDAE</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Image unimodal network to go alongside the tabular denoising autoencoder: pytorch</span>
 <span class="sd">    lightning module.</span>
@@ -351,7 +343,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ImgUnimodalDAE.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">multiclass_dims</span><span class="p">):</span>
+<div class="viewcode-block" id="ImgUnimodalDAE.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">multiclass_dims</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialise the model.</span>
 
@@ -395,7 +387,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ImgUnimodalDAE.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImgUnimodalDAE.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the fused layers.</span>
 
@@ -418,7 +410,7 @@
 
         <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_dim</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ImgUnimodalDAE.forward"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="ImgUnimodalDAE.forward"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward pass.</span>
 
@@ -450,7 +442,7 @@
 
         <span class="k">return</span> <span class="n">out</span></div>
 
-<div class="viewcode-block" id="ImgUnimodalDAE.training_step"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.training_step">[docs]</a>    <span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
+<div class="viewcode-block" id="ImgUnimodalDAE.training_step"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.training_step">[docs]</a>    <span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Training step.</span>
 
@@ -479,7 +471,7 @@
 
         <span class="k">return</span> <span class="n">loss</span></div>
 
-<div class="viewcode-block" id="ImgUnimodalDAE.validation_step"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.validation_step">[docs]</a>    <span class="k">def</span> <span class="nf">validation_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
+<div class="viewcode-block" id="ImgUnimodalDAE.validation_step"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.validation_step">[docs]</a>    <span class="k">def</span> <span class="nf">validation_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Validation step.</span>
 
@@ -508,7 +500,7 @@
 
         <span class="k">return</span> <span class="n">loss</span></div>
 
-<div class="viewcode-block" id="ImgUnimodalDAE.configure_optimizers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.configure_optimizers">[docs]</a>    <span class="k">def</span> <span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ImgUnimodalDAE.configure_optimizers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.configure_optimizers">[docs]</a>    <span class="k">def</span> <span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Configure the optimizers of the model.</span>
 
@@ -519,7 +511,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ImgUnimodalDAE.get_intermediate_featuremaps"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.get_intermediate_featuremaps">[docs]</a>    <span class="k">def</span> <span class="nf">get_intermediate_featuremaps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="ImgUnimodalDAE.get_intermediate_featuremaps"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.html#fusilli.fusion_models.denoise_tab_img_maps.ImgUnimodalDAE.get_intermediate_featuremaps">[docs]</a>    <span class="k">def</span> <span class="nf">get_intermediate_featuremaps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the intermediate feature maps to concatenate with the tabular latent subspace.</span>
 
@@ -551,7 +543,7 @@
         <span class="k">return</span> <span class="n">concatenated_feature_maps</span></div></div>
 
 
-<div class="viewcode-block" id="denoising_autoencoder_subspace_method"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method">[docs]</a><span class="k">class</span> <span class="nc">denoising_autoencoder_subspace_method</span><span class="p">:</span>
+<div class="viewcode-block" id="denoising_autoencoder_subspace_method"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.html#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method">[docs]</a><span class="k">class</span> <span class="nc">denoising_autoencoder_subspace_method</span><span class="p">:</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class containing the method to train the denoising autoencoder and to convert the image data</span>
@@ -578,7 +570,7 @@
         <span class="n">ImgUnimodalDAE</span><span class="p">,</span>
     <span class="p">]</span>  <span class="c1"># access later for loading checkpoint paths?</span>
 
-<div class="viewcode-block" id="denoising_autoencoder_subspace_method.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="denoising_autoencoder_subspace_method.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.html#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">datamodule</span><span class="p">,</span>
         <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -644,7 +636,7 @@
                 <span class="n">multiclass_dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">multiclass_dims</span><span class="p">,</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="denoising_autoencoder_subspace_method.train"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="p">):</span>
+<div class="viewcode-block" id="denoising_autoencoder_subspace_method.train"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.html#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Train the latent image space.</span>
 
@@ -725,7 +717,7 @@
             <span class="p">),</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="denoising_autoencoder_subspace_method.convert_to_latent"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.convert_to_latent">[docs]</a>    <span class="k">def</span> <span class="nf">convert_to_latent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">):</span>
+<div class="viewcode-block" id="denoising_autoencoder_subspace_method.convert_to_latent"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.html#fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method.convert_to_latent">[docs]</a>    <span class="k">def</span> <span class="nf">convert_to_latent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert the image data to the latent image space.</span>
 
@@ -768,7 +760,7 @@
         <span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="DAETabImgMaps"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.DAETabImgMaps">[docs]</a><span class="k">class</span> <span class="nc">DAETabImgMaps</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="DAETabImgMaps"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.DAETabImgMaps.html#fusilli.fusion_models.denoise_tab_img_maps.DAETabImgMaps">[docs]</a><span class="k">class</span> <span class="nc">DAETabImgMaps</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Using a denoising autoencoder to upsample tabular data, then concatenating with feature maps</span>
 <span class="sd">    from final 3 conv layers of image data.</span>
@@ -796,7 +788,7 @@
     <span class="c1"># class: Subspace method.</span>
     <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">denoising_autoencoder_subspace_method</span>
 
-<div class="viewcode-block" id="DAETabImgMaps.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.DAETabImgMaps.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="DAETabImgMaps.__init__"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.DAETabImgMaps.html#fusilli.fusion_models.denoise_tab_img_maps.DAETabImgMaps.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_type</span><span class="p">,</span> <span class="n">data_dims</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialise the model.</span>
 
@@ -823,7 +815,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DAETabImgMaps.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.DAETabImgMaps.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DAETabImgMaps.calc_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.DAETabImgMaps.html#fusilli.fusion_models.denoise_tab_img_maps.DAETabImgMaps.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the fused layers.</span>
 
@@ -842,7 +834,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_final_pred_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DAETabImgMaps.forward"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.html#fusilli.fusion_models.denoise_tab_img_maps.DAETabImgMaps.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="DAETabImgMaps.forward"><a class="viewcode-back" href="../../../autosummary/fusilli.fusion_models.denoise_tab_img_maps.DAETabImgMaps.html#fusilli.fusion_models.denoise_tab_img_maps.DAETabImgMaps.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward pass.</span>
 

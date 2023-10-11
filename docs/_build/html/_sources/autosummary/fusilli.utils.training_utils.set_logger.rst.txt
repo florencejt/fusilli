@@ -1,0 +1,6 @@
+﻿fusilli.utils.training\_utils.set\_logger
+=========================================
+
+.. currentmodule:: fusilli.utils.training_utils
+
+.. autofunction:: set_logger

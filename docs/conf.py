@@ -58,6 +58,13 @@ extensions = [
 #     "jaxlib": ("https://jax.readthedocs.io/en/latest/", None),
 # }
 
+# def include_public_members(app, what, name, obj, skip, options):
+#     # Filter public members based on their names
+#     return not name.startswith('_')
+
+# def include_private_members(app, what, name, obj, skip, options):
+#     # Filter private members based on their names
+#     return name.startswith('_')
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
@@ -68,6 +75,14 @@ autodoc_default_options = {
     "show-inheritance": True,
 }
 autosummary_generate = True
+# autosummary_generate = [
+#     "autosummary/public.rst",
+#     "autosummary/private.rst",
+# ]
+# autosummary_toc_tree = {
+#     'publicmembers': include_public_members,
+#     'privatemembers': include_private_members,
+# }
 autosummary_imported_members = False
 add_module_names = False
 

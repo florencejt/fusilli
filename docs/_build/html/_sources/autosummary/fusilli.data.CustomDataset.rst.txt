@@ -1,0 +1,59 @@
+﻿fusilli.data.CustomDataset
+==========================
+
+.. currentmodule:: fusilli.data
+
+.. autoclass:: CustomDataset
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CustomDataset.__add__
+      ~CustomDataset.__class_getitem__
+      ~CustomDataset.__delattr__
+      ~CustomDataset.__dir__
+      ~CustomDataset.__eq__
+      ~CustomDataset.__format__
+      ~CustomDataset.__ge__
+      ~CustomDataset.__getattribute__
+      ~CustomDataset.__getitem__
+      ~CustomDataset.__gt__
+      ~CustomDataset.__hash__
+      ~CustomDataset.__init__
+      ~CustomDataset.__init_subclass__
+      ~CustomDataset.__le__
+      ~CustomDataset.__len__
+      ~CustomDataset.__lt__
+      ~CustomDataset.__ne__
+      ~CustomDataset.__new__
+      ~CustomDataset.__reduce__
+      ~CustomDataset.__reduce_ex__
+      ~CustomDataset.__repr__
+      ~CustomDataset.__setattr__
+      ~CustomDataset.__sizeof__
+      ~CustomDataset.__str__
+      ~CustomDataset.__subclasshook__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CustomDataset.__dict__
+      ~CustomDataset.__doc__
+      ~CustomDataset.__module__
+      ~CustomDataset.__orig_bases__
+      ~CustomDataset.__parameters__
+      ~CustomDataset.__slots__
+      ~CustomDataset.__weakref__
+      ~CustomDataset._is_protocol
+   
+   

@@ -1,0 +1,143 @@
+﻿fusilli.fusion\_models.crossmodal\_att.CrossmodalMultiheadAttention
+===================================================================
+
+.. currentmodule:: fusilli.fusion_models.crossmodal_att
+
+.. autoclass:: CrossmodalMultiheadAttention
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CrossmodalMultiheadAttention.__call__
+      ~CrossmodalMultiheadAttention.__delattr__
+      ~CrossmodalMultiheadAttention.__dir__
+      ~CrossmodalMultiheadAttention.__eq__
+      ~CrossmodalMultiheadAttention.__format__
+      ~CrossmodalMultiheadAttention.__ge__
+      ~CrossmodalMultiheadAttention.__getattr__
+      ~CrossmodalMultiheadAttention.__getattribute__
+      ~CrossmodalMultiheadAttention.__gt__
+      ~CrossmodalMultiheadAttention.__hash__
+      ~CrossmodalMultiheadAttention.__init__
+      ~CrossmodalMultiheadAttention.__init_subclass__
+      ~CrossmodalMultiheadAttention.__le__
+      ~CrossmodalMultiheadAttention.__lt__
+      ~CrossmodalMultiheadAttention.__ne__
+      ~CrossmodalMultiheadAttention.__new__
+      ~CrossmodalMultiheadAttention.__reduce__
+      ~CrossmodalMultiheadAttention.__reduce_ex__
+      ~CrossmodalMultiheadAttention.__repr__
+      ~CrossmodalMultiheadAttention.__setattr__
+      ~CrossmodalMultiheadAttention.__setstate__
+      ~CrossmodalMultiheadAttention.__sizeof__
+      ~CrossmodalMultiheadAttention.__str__
+      ~CrossmodalMultiheadAttention.__subclasshook__
+      ~CrossmodalMultiheadAttention._apply
+      ~CrossmodalMultiheadAttention._call_impl
+      ~CrossmodalMultiheadAttention._get_backward_hooks
+      ~CrossmodalMultiheadAttention._get_backward_pre_hooks
+      ~CrossmodalMultiheadAttention._get_name
+      ~CrossmodalMultiheadAttention._load_from_state_dict
+      ~CrossmodalMultiheadAttention._maybe_warn_non_full_backward_hook
+      ~CrossmodalMultiheadAttention._named_members
+      ~CrossmodalMultiheadAttention._register_load_state_dict_pre_hook
+      ~CrossmodalMultiheadAttention._register_state_dict_hook
+      ~CrossmodalMultiheadAttention._replicate_for_data_parallel
+      ~CrossmodalMultiheadAttention._save_to_state_dict
+      ~CrossmodalMultiheadAttention._slow_forward
+      ~CrossmodalMultiheadAttention.add_module
+      ~CrossmodalMultiheadAttention.apply
+      ~CrossmodalMultiheadAttention.bfloat16
+      ~CrossmodalMultiheadAttention.buffers
+      ~CrossmodalMultiheadAttention.calc_fused_layers
+      ~CrossmodalMultiheadAttention.children
+      ~CrossmodalMultiheadAttention.cpu
+      ~CrossmodalMultiheadAttention.cuda
+      ~CrossmodalMultiheadAttention.double
+      ~CrossmodalMultiheadAttention.eval
+      ~CrossmodalMultiheadAttention.extra_repr
+      ~CrossmodalMultiheadAttention.float
+      ~CrossmodalMultiheadAttention.forward
+      ~CrossmodalMultiheadAttention.get_buffer
+      ~CrossmodalMultiheadAttention.get_extra_state
+      ~CrossmodalMultiheadAttention.get_fused_dim
+      ~CrossmodalMultiheadAttention.get_parameter
+      ~CrossmodalMultiheadAttention.get_submodule
+      ~CrossmodalMultiheadAttention.half
+      ~CrossmodalMultiheadAttention.ipu
+      ~CrossmodalMultiheadAttention.load_state_dict
+      ~CrossmodalMultiheadAttention.modules
+      ~CrossmodalMultiheadAttention.named_buffers
+      ~CrossmodalMultiheadAttention.named_children
+      ~CrossmodalMultiheadAttention.named_modules
+      ~CrossmodalMultiheadAttention.named_parameters
+      ~CrossmodalMultiheadAttention.parameters
+      ~CrossmodalMultiheadAttention.register_backward_hook
+      ~CrossmodalMultiheadAttention.register_buffer
+      ~CrossmodalMultiheadAttention.register_forward_hook
+      ~CrossmodalMultiheadAttention.register_forward_pre_hook
+      ~CrossmodalMultiheadAttention.register_full_backward_hook
+      ~CrossmodalMultiheadAttention.register_full_backward_pre_hook
+      ~CrossmodalMultiheadAttention.register_load_state_dict_post_hook
+      ~CrossmodalMultiheadAttention.register_module
+      ~CrossmodalMultiheadAttention.register_parameter
+      ~CrossmodalMultiheadAttention.register_state_dict_pre_hook
+      ~CrossmodalMultiheadAttention.requires_grad_
+      ~CrossmodalMultiheadAttention.set_extra_state
+      ~CrossmodalMultiheadAttention.set_final_pred_layers
+      ~CrossmodalMultiheadAttention.set_fused_layers
+      ~CrossmodalMultiheadAttention.set_img_layers
+      ~CrossmodalMultiheadAttention.set_mod1_layers
+      ~CrossmodalMultiheadAttention.set_mod2_layers
+      ~CrossmodalMultiheadAttention.share_memory
+      ~CrossmodalMultiheadAttention.state_dict
+      ~CrossmodalMultiheadAttention.to
+      ~CrossmodalMultiheadAttention.to_empty
+      ~CrossmodalMultiheadAttention.train
+      ~CrossmodalMultiheadAttention.type
+      ~CrossmodalMultiheadAttention.xpu
+      ~CrossmodalMultiheadAttention.zero_grad
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CrossmodalMultiheadAttention.T_destination
+      ~CrossmodalMultiheadAttention.__annotations__
+      ~CrossmodalMultiheadAttention.__dict__
+      ~CrossmodalMultiheadAttention.__doc__
+      ~CrossmodalMultiheadAttention.__module__
+      ~CrossmodalMultiheadAttention.__weakref__
+      ~CrossmodalMultiheadAttention._version
+      ~CrossmodalMultiheadAttention.call_super_init
+      ~CrossmodalMultiheadAttention.dump_patches
+      ~CrossmodalMultiheadAttention.fusion_type
+      ~CrossmodalMultiheadAttention.method_name
+      ~CrossmodalMultiheadAttention.modality_type
+      ~CrossmodalMultiheadAttention.training
+      ~CrossmodalMultiheadAttention._parameters
+      ~CrossmodalMultiheadAttention._buffers
+      ~CrossmodalMultiheadAttention._non_persistent_buffers_set
+      ~CrossmodalMultiheadAttention._backward_pre_hooks
+      ~CrossmodalMultiheadAttention._backward_hooks
+      ~CrossmodalMultiheadAttention._is_full_backward_hook
+      ~CrossmodalMultiheadAttention._forward_hooks
+      ~CrossmodalMultiheadAttention._forward_hooks_with_kwargs
+      ~CrossmodalMultiheadAttention._forward_pre_hooks
+      ~CrossmodalMultiheadAttention._forward_pre_hooks_with_kwargs
+      ~CrossmodalMultiheadAttention._state_dict_hooks
+      ~CrossmodalMultiheadAttention._load_state_dict_pre_hooks
+      ~CrossmodalMultiheadAttention._state_dict_pre_hooks
+      ~CrossmodalMultiheadAttention._load_state_dict_post_hooks
+      ~CrossmodalMultiheadAttention._modules
+   
+   

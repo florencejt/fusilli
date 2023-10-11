@@ -1,0 +1,55 @@
+﻿fusilli.eval.ParentPlotter
+==========================
+
+.. currentmodule:: fusilli.eval
+
+.. autoclass:: ParentPlotter
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ParentPlotter.__delattr__
+      ~ParentPlotter.__dir__
+      ~ParentPlotter.__eq__
+      ~ParentPlotter.__format__
+      ~ParentPlotter.__ge__
+      ~ParentPlotter.__getattribute__
+      ~ParentPlotter.__gt__
+      ~ParentPlotter.__hash__
+      ~ParentPlotter.__init__
+      ~ParentPlotter.__init_subclass__
+      ~ParentPlotter.__le__
+      ~ParentPlotter.__lt__
+      ~ParentPlotter.__ne__
+      ~ParentPlotter.__new__
+      ~ParentPlotter.__reduce__
+      ~ParentPlotter.__reduce_ex__
+      ~ParentPlotter.__repr__
+      ~ParentPlotter.__setattr__
+      ~ParentPlotter.__sizeof__
+      ~ParentPlotter.__str__
+      ~ParentPlotter.__subclasshook__
+      ~ParentPlotter.get_kfold_data_from_model
+      ~ParentPlotter.get_new_kfold_data
+      ~ParentPlotter.get_new_tt_data
+      ~ParentPlotter.get_tt_data_from_model
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ParentPlotter.__dict__
+      ~ParentPlotter.__doc__
+      ~ParentPlotter.__module__
+      ~ParentPlotter.__weakref__
+   
+   

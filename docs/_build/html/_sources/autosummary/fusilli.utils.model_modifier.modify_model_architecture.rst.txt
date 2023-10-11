@@ -1,0 +1,6 @@
+﻿fusilli.utils.model\_modifier.modify\_model\_architecture
+=========================================================
+
+.. currentmodule:: fusilli.utils.model_modifier
+
+.. autofunction:: modify_model_architecture

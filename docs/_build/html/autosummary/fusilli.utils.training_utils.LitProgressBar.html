@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fusilli.utils.training_utils.LitProgressBar &mdash; fusilli  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/florencestheme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/pink_pasta_logo.png"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            fusilli
+              <img src="../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fusilli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">fusilli.utils.training_utils.LitProgressBar</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/autosummary/fusilli.utils.training_utils.LitProgressBar.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fusilli-utils-training-utils-litprogressbar">
+<h1>fusilli.utils.training_utils.LitProgressBar<a class="headerlink" href="#fusilli-utils-training-utils-litprogressbar" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="fusilli.utils.training_utils.LitProgressBar">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LitProgressBar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">refresh_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#LitProgressBar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.LitProgressBar" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TQDMProgressBar</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.utils.training_utils.LitProgressBar.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">refresh_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fusilli.utils.training_utils.LitProgressBar.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__delattr__</span></code>(name, /)</p></td>
+<td><p>Implement delattr(self, name).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__dir__</span></code>()</p></td>
+<td><p>Default dir() implementation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__eq__</span></code>(value, /)</p></td>
+<td><p>Return self==value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__format__</span></code>(format_spec, /)</p></td>
+<td><p>Default object formatter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__ge__</span></code>(value, /)</p></td>
+<td><p>Return self&gt;=value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__getattribute__</span></code>(name, /)</p></td>
+<td><p>Return getattr(self, name).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__getstate__</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__gt__</span></code>(value, /)</p></td>
+<td><p>Return self&gt;value.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__hash__</span></code>()</p></td>
+<td><p>Return hash(self).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.LitProgressBar.__init__" title="fusilli.utils.training_utils.LitProgressBar.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([refresh_rate, process_position])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init_subclass__</span></code></p></td>
+<td><p>This method is called when a class is subclassed.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__le__</span></code>(value, /)</p></td>
+<td><p>Return self&lt;=value.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__lt__</span></code>(value, /)</p></td>
+<td><p>Return self&lt;value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__ne__</span></code>(value, /)</p></td>
+<td><p>Return self!=value.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__new__</span></code>(**kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce__</span></code>()</p></td>
+<td><p>Helper for pickle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce_ex__</span></code>(protocol, /)</p></td>
+<td><p>Helper for pickle.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__repr__</span></code>()</p></td>
+<td><p>Return repr(self).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__setattr__</span></code>(name, value, /)</p></td>
+<td><p>Implement setattr(self, name, value).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__sizeof__</span></code>()</p></td>
+<td><p>Size of object in memory, in bytes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__str__</span></code>()</p></td>
+<td><p>Return str(self).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__subclasshook__</span></code></p></td>
+<td><p>Abstract classes can override this to customize issubclass().</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_generate_state_key</span></code>(**kwargs)</p></td>
+<td><p>Formats a set of key-value pairs into a state key string with the callback class name prefixed.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_resolve_refresh_rate</span></code>(refresh_rate)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_should_update</span></code>(current, total)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">disable</span></code>()</p></td>
+<td><p>You should provide a way to disable the progress bar.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">enable</span></code>()</p></td>
+<td><p>You should provide a way to enable the progress bar.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_metrics</span></code>(trainer, pl_module)</p></td>
+<td><p>Combines progress bar metrics collected from the trainer with standard metrics from get_standard_metrics.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_dataloader_changed</span></code>(dataloader_idx)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_predict_tqdm</span></code>()</p></td>
+<td><p>Override this to customize the tqdm bar for predicting.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_sanity_tqdm</span></code>()</p></td>
+<td><p>Override this to customize the tqdm bar for the validation sanity run.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_test_tqdm</span></code>()</p></td>
+<td><p>Override this to customize the tqdm bar for testing.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_train_tqdm</span></code>()</p></td>
+<td><p>Override this to customize the tqdm bar for training.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.LitProgressBar.init_validation_tqdm" title="fusilli.utils.training_utils.LitProgressBar.init_validation_tqdm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_validation_tqdm</span></code></a>()</p></td>
+<td><p>Override this to customize the tqdm bar for validation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_state_dict</span></code>(state_dict)</p></td>
+<td><p>Called when loading a checkpoint, implement to reload callback state given callback's <code class="docutils literal notranslate"><span class="pre">state_dict</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_after_backward</span></code>(trainer, pl_module)</p></td>
+<td><p>Called after <code class="docutils literal notranslate"><span class="pre">loss.backward()</span></code> and before optimizers are stepped.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_before_backward</span></code>(trainer, pl_module, loss)</p></td>
+<td><p>Called before <code class="docutils literal notranslate"><span class="pre">loss.backward()</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_before_optimizer_step</span></code>(trainer, pl_module, ...)</p></td>
+<td><p>Called before <code class="docutils literal notranslate"><span class="pre">optimizer.step()</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_before_zero_grad</span></code>(trainer, pl_module, ...)</p></td>
+<td><p>Called before <code class="docutils literal notranslate"><span class="pre">optimizer.zero_grad()</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_exception</span></code>(trainer, pl_module, exception)</p></td>
+<td><p>Called when any trainer execution is interrupted by an exception.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_fit_end</span></code>(trainer, pl_module)</p></td>
+<td><p>Called when fit ends.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_fit_start</span></code>(trainer, pl_module)</p></td>
+<td><p>Called when fit begins.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_load_checkpoint</span></code>(trainer, pl_module, ...)</p></td>
+<td><p>Called when loading a model checkpoint, use to reload state.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_predict_batch_end</span></code>(*_)</p></td>
+<td><p>Called when the predict batch ends.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_predict_batch_start</span></code>(trainer, pl_module, ...)</p></td>
+<td><p>Called when the predict batch begins.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_predict_end</span></code>(trainer, pl_module)</p></td>
+<td><p>Called when predict ends.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_predict_epoch_end</span></code>(trainer, pl_module, outputs)</p></td>
+<td><p>Called when the predict epoch ends.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_predict_epoch_start</span></code>(trainer, pl_module)</p></td>
+<td><p>Called when the predict epoch begins.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_predict_start</span></code>(trainer, pl_module)</p></td>
+<td><p>Called when the predict begins.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_sanity_check_end</span></code>(*_)</p></td>
+<td><p>Called when the validation sanity check ends.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_sanity_check_start</span></code>(*_)</p></td>
+<td><p>Called when the validation sanity check starts.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_save_checkpoint</span></code>(trainer, pl_module, ...)</p></td>
+<td><p>Called when saving a checkpoint to give you a chance to store anything else you might want to save.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_test_batch_end</span></code>(*_)</p></td>
+<td><p>Called when the test batch ends.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_test_batch_start</span></code>(trainer, pl_module, ...)</p></td>
+<td><p>Called when the test batch begins.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_test_end</span></code>(trainer, pl_module)</p></td>
+<td><p>Called when the test ends.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_test_epoch_end</span></code>(trainer, pl_module)</p></td>
+<td><p>Called when the test epoch ends.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_test_epoch_start</span></code>(trainer, pl_module)</p></td>
+<td><p>Called when the test epoch begins.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_test_start</span></code>(trainer, pl_module)</p></td>
+<td><p>Called when the test begins.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_train_batch_end</span></code>(trainer, pl_module, *_)</p></td>
+<td><p>Called when the train batch ends.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_train_batch_start</span></code>(trainer, pl_module, ...)</p></td>
+<td><p>Called when the train batch begins.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_train_end</span></code>(*_)</p></td>
+<td><p>Called when the train ends.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_train_epoch_end</span></code>(trainer, pl_module)</p></td>
+<td><p>Called when the train epoch ends.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_train_epoch_start</span></code>(trainer, *_)</p></td>
+<td><p>Called when the train epoch begins.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_train_start</span></code>(*_)</p></td>
+<td><p>Called when the train begins.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_validation_batch_end</span></code>(trainer, *_)</p></td>
+<td><p>Called when the validation batch ends.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_validation_batch_start</span></code>(trainer, ...)</p></td>
+<td><p>Called when the validation batch begins.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_validation_end</span></code>(trainer, pl_module)</p></td>
+<td><p>Called when the validation loop ends.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_validation_epoch_end</span></code>(trainer, pl_module)</p></td>
+<td><p>Called when the val epoch ends.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_validation_epoch_start</span></code>(trainer, pl_module)</p></td>
+<td><p>Called when the val epoch begins.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_validation_start</span></code>(trainer, pl_module)</p></td>
+<td><p>Called when the validation loop begins.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">print</span></code>(*args[, sep])</p></td>
+<td><p>You should provide a way to print without breaking the progress bar.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_dataloader_idx_tracker</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code>(trainer, pl_module, stage)</p></td>
+<td><p>Called when fit, validate, test, predict, or tune begins.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_dict</span></code>()</p></td>
+<td><p>Called when saving a checkpoint, implement to generate callback's <code class="docutils literal notranslate"><span class="pre">state_dict</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">teardown</span></code>(trainer, pl_module, stage)</p></td>
+<td><p>Called when fit, validate, test, predict, or tune ends.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__dict__</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__doc__</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__module__</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__weakref__</span></code></p></td>
+<td><p>list of weak references to the object (if defined)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_legacy_state_key</span></code></p></td>
+<td><p>State key for checkpoints saved prior to version 1.5.0.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_val_processed</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_disabled</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_enabled</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">main_progress_bar</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_batch_idx</span></code></p></td>
+<td><p>The number of batches processed during prediction.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_description</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_progress_bar</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_position</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">refresh_rate</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sanity_check_description</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_key</span></code></p></td>
+<td><p>Identifier for the state of the callback.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_batch_idx</span></code></p></td>
+<td><p>The number of batches processed during testing.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_description</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_progress_bar</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">total_batches_current_epoch</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">total_predict_batches_current_dataloader</span></code></p></td>
+<td><p>The total number of prediction batches, which may change from epoch to epoch for current dataloader.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">total_test_batches_current_dataloader</span></code></p></td>
+<td><p>The total number of testing batches, which may change from epoch to epoch for current dataloader.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">total_train_batches</span></code></p></td>
+<td><p>The total number of training batches, which may change from epoch to epoch.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">total_val_batches</span></code></p></td>
+<td><p>The total number of validation batches, which may change from epoch to epoch for all val dataloaders.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">total_val_batches_current_dataloader</span></code></p></td>
+<td><p>The total number of validation batches, which may change from epoch to epoch for current dataloader.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_batch_idx</span></code></p></td>
+<td><p>The number of batches processed during training.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_description</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">trainer</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">val_batch_idx</span></code></p></td>
+<td><p>The number of batches processed during validation.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">val_progress_bar</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">validation_description</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.utils.training_utils.LitProgressBar.init_validation_tqdm">
+<span class="sig-name descname"><span class="pre">init_validation_tqdm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#LitProgressBar.init_validation_tqdm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.LitProgressBar.init_validation_tqdm" title="Permalink to this definition"></a></dt>
+<dd><p>Override this to customize the tqdm bar for validation.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Florence J Townend.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

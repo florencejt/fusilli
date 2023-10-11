@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fusilli.data.TrainTestDataModule &mdash; fusilli  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/florencestheme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/pink_pasta_logo.png"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            fusilli
+              <img src="../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fusilli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">fusilli.data.TrainTestDataModule</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/autosummary/fusilli.data.TrainTestDataModule.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fusilli-data-traintestdatamodule">
+<h1>fusilli.data.TrainTestDataModule<a class="headerlink" href="#fusilli-data-traintestdatamodule" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TrainTestDataModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">own_early_stopping_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/data.html#TrainTestDataModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.data.TrainTestDataModule" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">LightningDataModule</span></code></p>
+<p>Custom pytorch lightning datamodule class for the different modalities.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.sources">
+<span class="sig-name descname"><span class="pre">sources</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.sources" title="Permalink to this definition"></a></dt>
+<dd><p>List of source csv files. [Tabular1, Tabular2, Image]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.modality_methods">
+<span class="sig-name descname"><span class="pre">modality_methods</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.modality_methods" title="Permalink to this definition"></a></dt>
+<dd><p>Dictionary of methods for loading the different modalities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.params">
+<span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.params" title="Permalink to this definition"></a></dt>
+<dd><p>Dictionary of parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.fusion_model">
+<span class="sig-name descname"><span class="pre">fusion_model</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.fusion_model" title="Permalink to this definition"></a></dt>
+<dd><p>fusion model class. e.g. “TabularCrossmodalAttention”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.batch_size">
+<span class="sig-name descname"><span class="pre">batch_size</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.batch_size" title="Permalink to this definition"></a></dt>
+<dd><p>Batch size (default 8).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.test_size">
+<span class="sig-name descname"><span class="pre">test_size</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.test_size" title="Permalink to this definition"></a></dt>
+<dd><p>Fraction of data to use for testing (default 0.2).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.pred_type">
+<span class="sig-name descname"><span class="pre">pred_type</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.pred_type" title="Permalink to this definition"></a></dt>
+<dd><p>Prediction type (binary, multiclass, or regression).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.multiclass_dims">
+<span class="sig-name descname"><span class="pre">multiclass_dims</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.multiclass_dims" title="Permalink to this definition"></a></dt>
+<dd><p>Number of classes for multiclass prediction (default None).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.subspace_method">
+<span class="sig-name descname"><span class="pre">subspace_method</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.subspace_method" title="Permalink to this definition"></a></dt>
+<dd><p>Subspace method class (default None) (only for subspace methods).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.layer_mods">
+<span class="sig-name descname"><span class="pre">layer_mods</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.layer_mods" title="Permalink to this definition"></a></dt>
+<dd><p>Dictionary of layer modifications to make to the subspace method.
+(default None)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.max_epochs">
+<span class="sig-name descname"><span class="pre">max_epochs</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.max_epochs" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum number of epochs to train subspace methods for. (default 1000)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.dataset">
+<span class="sig-name descname"><span class="pre">dataset</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Tensor of predictive features. Created in prepare_data().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.data_dims">
+<span class="sig-name descname"><span class="pre">data_dims</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.data_dims" title="Permalink to this definition"></a></dt>
+<dd><p>List of data dimensions [mod1_dim, mod2_dim, img_dim].
+Created in prepare_data().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.train_dataset">
+<span class="sig-name descname"><span class="pre">train_dataset</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.train_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Tensor of predictive features for training. Created in setup().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.test_dataset">
+<span class="sig-name descname"><span class="pre">test_dataset</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.test_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Tensor of predictive features for testing. Created in setup().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">own_early_stopping_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/data.html#TrainTestDataModule.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.data.TrainTestDataModule.__init__" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
+<li><p><strong>fusion_model</strong> (<em>str</em>) – Fusion model class. e.g. “TabularCrossmodalAttention”.</p></li>
+<li><p><strong>sources</strong> (<em>list</em>) – List of source csv files.</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – Batch size (default 8).</p></li>
+<li><p><strong>subspace_method</strong> (<em>class</em>) – Subspace method class (default None) (only for subspace methods).</p></li>
+<li><p><strong>image_downsample_size</strong> (<em>tuple</em>) – Size to downsample the images to (height, width, depth) or (height, width) for 2D
+images.
+None if not downsampling. (default None)</p></li>
+<li><p><strong>layer_mods</strong> (<em>dict</em>) – Dictionary of layer modifications to make to the subspace method.
+(default None)</p></li>
+<li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs to train subspace methods for. (default 1000)</p></li>
+<li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – Dictionary of extra strings to add to the log.</p></li>
+<li><p><strong>own_early_stopping_callback</strong> (<em>pytorch_lightning.callbacks.EarlyStopping</em>) – Early stopping callback class (default None).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__delattr__</span></code>(name, /)</p></td>
+<td><p>Implement delattr(self, name).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__dir__</span></code>()</p></td>
+<td><p>Default dir() implementation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__eq__</span></code>(value, /)</p></td>
+<td><p>Return self==value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__format__</span></code>(format_spec, /)</p></td>
+<td><p>Default object formatter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__ge__</span></code>(value, /)</p></td>
+<td><p>Return self&gt;=value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__getattribute__</span></code>(name, /)</p></td>
+<td><p>Return getattr(self, name).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__gt__</span></code>(value, /)</p></td>
+<td><p>Return self&gt;value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__hash__</span></code>()</p></td>
+<td><p>Return hash(self).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id0" title="fusilli.data.TrainTestDataModule.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(params, fusion_model, sources, ...)</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">param params<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary of parameters.</p>
+</dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init_subclass__</span></code></p></td>
+<td><p>This method is called when a class is subclassed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__le__</span></code>(value, /)</p></td>
+<td><p>Return self&lt;=value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__lt__</span></code>(value, /)</p></td>
+<td><p>Return self&lt;value.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__ne__</span></code>(value, /)</p></td>
+<td><p>Return self!=value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__new__</span></code>(**kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce__</span></code>()</p></td>
+<td><p>Helper for pickle.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce_ex__</span></code>(protocol, /)</p></td>
+<td><p>Helper for pickle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__repr__</span></code>()</p></td>
+<td><p>Return repr(self).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__setattr__</span></code>(name, value, /)</p></td>
+<td><p>Implement setattr(self, name, value).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__sizeof__</span></code>()</p></td>
+<td><p>Size of object in memory, in bytes.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__str__</span></code>()</p></td>
+<td><p>Return str(self).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__subclasshook__</span></code></p></td>
+<td><p>Abstract classes can override this to customize issubclass().</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_set_hparams</span></code>(hp)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_to_hparams_dict</span></code>(hp)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_argparse_args</span></code>(parent_parser, **kwargs)</p></td>
+<td><p>Extends existing argparse by default <cite>LightningDataModule</cite> attributes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_argparse_args</span></code>(args, **kwargs)</p></td>
+<td><p>Create an instance from CLI arguments.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_datasets</span></code>([train_dataset, val_dataset, ...])</p></td>
+<td><p>Create an instance from torch.utils.data.Dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_init_arguments_and_types</span></code>()</p></td>
+<td><p>Scans the DataModule signature and returns argument names, types and default values.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_from_checkpoint</span></code>(checkpoint_path[, ...])</p></td>
+<td><p>Primary way of loading a datamodule from a checkpoint.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_state_dict</span></code>(state_dict)</p></td>
+<td><p>Called when loading a checkpoint, implement to reload datamodule state given datamodule state_dict.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_after_batch_transfer</span></code>(batch, dataloader_idx)</p></td>
+<td><p>Override to alter or apply batch augmentations to your batch after it is transferred to the device.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_before_batch_transfer</span></code>(batch, dataloader_idx)</p></td>
+<td><p>Override to alter or apply batch augmentations to your batch before it is transferred to the device.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_load_checkpoint</span></code>(__)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_save_checkpoint</span></code>(__)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_argparser</span></code>(arg_parser)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_dataloader</span></code>()</p></td>
+<td><p>Implement one or multiple PyTorch DataLoaders for prediction.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.data.TrainTestDataModule.prepare_data" title="fusilli.data.TrainTestDataModule.prepare_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_data</span></code></a>()</p></td>
+<td><p>Loads the data with LoadDatasets class</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_hyperparameters</span></code>(*args[, ignore, frame, ...])</p></td>
+<td><p>Save arguments to <code class="docutils literal notranslate"><span class="pre">hparams</span></code> attribute.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.data.TrainTestDataModule.setup" title="fusilli.data.TrainTestDataModule.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>([checkpoint_path])</p></td>
+<td><p>Splits the data into train and test sets, and runs the subspace method if specified.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">state_dict</span></code>()</p></td>
+<td><p>Called when saving a checkpoint, implement to generate and save datamodule state.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">teardown</span></code>(stage)</p></td>
+<td><p>Called at the end of fit (train + validate), validate, test, or predict.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_dataloader</span></code>()</p></td>
+<td><p>Implement one or multiple PyTorch DataLoaders for testing.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.data.TrainTestDataModule.train_dataloader" title="fusilli.data.TrainTestDataModule.train_dataloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_dataloader</span></code></a>()</p></td>
+<td><p>Returns the dataloader for training.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">transfer_batch_to_device</span></code>(batch, device, ...)</p></td>
+<td><p>Override this hook if your <code class="xref py py-class docutils literal notranslate"><span class="pre">DataLoader</span></code> returns tensors wrapped in a custom data structure.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.data.TrainTestDataModule.val_dataloader" title="fusilli.data.TrainTestDataModule.val_dataloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">val_dataloader</span></code></a>()</p></td>
+<td><p>Returns the dataloader for validation.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CHECKPOINT_HYPER_PARAMS_KEY</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CHECKPOINT_HYPER_PARAMS_NAME</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CHECKPOINT_HYPER_PARAMS_TYPE</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__annotations__</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__dict__</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__doc__</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__jit_unused_properties__</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__module__</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__weakref__</span></code></p></td>
+<td><p>list of weak references to the object (if defined)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hparams</span></code></p></td>
+<td><p>The collection of hyperparameters saved with <code class="xref py py-meth docutils literal notranslate"><span class="pre">save_hyperparameters()</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hparams_initial</span></code></p></td>
+<td><p>The collection of hyperparameters saved with <code class="xref py py-meth docutils literal notranslate"><span class="pre">save_hyperparameters()</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">own_early_stopping_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/data.html#TrainTestDataModule.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
+<li><p><strong>fusion_model</strong> (<em>str</em>) – Fusion model class. e.g. “TabularCrossmodalAttention”.</p></li>
+<li><p><strong>sources</strong> (<em>list</em>) – List of source csv files.</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – Batch size (default 8).</p></li>
+<li><p><strong>subspace_method</strong> (<em>class</em>) – Subspace method class (default None) (only for subspace methods).</p></li>
+<li><p><strong>image_downsample_size</strong> (<em>tuple</em>) – Size to downsample the images to (height, width, depth) or (height, width) for 2D
+images.
+None if not downsampling. (default None)</p></li>
+<li><p><strong>layer_mods</strong> (<em>dict</em>) – Dictionary of layer modifications to make to the subspace method.
+(default None)</p></li>
+<li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs to train subspace methods for. (default 1000)</p></li>
+<li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – Dictionary of extra strings to add to the log.</p></li>
+<li><p><strong>own_early_stopping_callback</strong> (<em>pytorch_lightning.callbacks.EarlyStopping</em>) – Early stopping callback class (default None).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.prepare_data">
+<span class="sig-name descname"><span class="pre">prepare_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/data.html#TrainTestDataModule.prepare_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.data.TrainTestDataModule.prepare_data" title="Permalink to this definition"></a></dt>
+<dd><p>Loads the data with LoadDatasets class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>dataset</strong> (<em>tensor</em>) – Tensor of predictive features.</p></li>
+<li><p><strong>data_dims</strong> (<em>list</em>) – List of data dimensions [mod1_dim, mod2_dim, img_dim]
+i.e. [None, None, [100, 100, 100]] for image only (image dimensions 100 x 100 x 100)
+i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has
+32 features), and no image</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checkpoint_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/data.html#TrainTestDataModule.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.data.TrainTestDataModule.setup" title="Permalink to this definition"></a></dt>
+<dd><p>Splits the data into train and test sets, and runs the subspace method if specified.
+If checkpoint_path is specified, the subspace method is loaded from the checkpoint and not trained.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.checkpoint_path">
+<span class="sig-name descname"><span class="pre">checkpoint_path</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.checkpoint_path" title="Permalink to this definition"></a></dt>
+<dd><p>Path to the checkpoint file for the subspace method (default None).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>train_dataloader</strong> (<em>dataloader</em>) – Dataloader for training.</p></li>
+<li><p><strong>val_dataloader</strong> (<em>dataloader</em>) – Dataloader for validation.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.train_dataloader">
+<span class="sig-name descname"><span class="pre">train_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/data.html#TrainTestDataModule.train_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.data.TrainTestDataModule.train_dataloader" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the dataloader for training.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataloader</strong> – Dataloader for training.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dataloader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.val_dataloader">
+<span class="sig-name descname"><span class="pre">val_dataloader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/data.html#TrainTestDataModule.val_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.data.TrainTestDataModule.val_dataloader" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the dataloader for validation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataloader</strong> – Dataloader for validation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dataloader</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Florence J Townend.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+﻿fusilli.utils.csv\_loss\_plotter.plot\_loss\_curve
+==================================================
+
+.. currentmodule:: fusilli.utils.csv_loss_plotter
+
+.. autofunction:: plot_loss_curve

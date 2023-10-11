@@ -96,24 +96,24 @@ def test_from_final_val_data_invalid_input():
         # Pass an empty list as input, which is invalid
         RealsVsPreds.from_final_val_data([])
 
-    assert "Argument 'model' is an empty list" in str(excinfo.value)
+    assert "Argument 'model_list' is an empty list" in str(excinfo.value)
 
     with pytest.raises(ValueError) as excinfo:
         # Pass a list with no models as input, which is invalid
         RealsVsPreds.from_final_val_data({})
 
-    assert "Argument 'model' is not a list" in str(excinfo.value)
+    assert "Argument 'model_list' is not a list" in str(excinfo.value)
 
     # Confusion Matrix
     with pytest.raises(ValueError) as excinfo:
         # Pass an empty list as input, which is invalid
         ConfusionMatrix.from_final_val_data([])
-    assert "Argument 'model' is an empty list" in str(excinfo.value)
+    assert "Argument 'model_list' is an empty list" in str(excinfo.value)
 
     with pytest.raises(ValueError) as excinfo:
         # Pass a list with no models as input, which is invalid
         ConfusionMatrix.from_final_val_data({})
-    assert "Argument 'model' is not a list" in str(excinfo.value)
+    assert "Argument 'model_list' is not a list" in str(excinfo.value)
 
 
 # Test case for calling get_new_kfold_data when kfold flag is True and model_list has more than 1 entry

@@ -1,0 +1,6 @@
+﻿fusilli.utils.training\_utils.get\_file\_suffix\_from\_dict
+===========================================================
+
+.. currentmodule:: fusilli.utils.training_utils
+
+.. autofunction:: get_file_suffix_from_dict

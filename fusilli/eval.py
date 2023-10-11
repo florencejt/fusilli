@@ -33,11 +33,6 @@ class ParentPlotter:
     It includes methods that are used by multiple plot classes, such as obtaining final
     validation data from kfold and train/test models, and putting new data through the
     models for both kfold and train/test protocols.
-    
-    Attributes
-    ----------
-    None
-    
     """
 
     def __init__(self):
@@ -1018,7 +1013,7 @@ class ConfusionMatrix(ParentPlotter):
                 overall_kfold_metrics,
             ) = self.get_new_kfold_data(model_list, params, data_file_suffix)
 
-            figure = self.confusion_matrix_kfold(
+            figure = self._confusion_matrix_kfold(
                 model_list,
                 val_reals,
                 val_preds,
@@ -1044,7 +1039,7 @@ class ConfusionMatrix(ParentPlotter):
             ) = self.get_new_tt_data(model_list, params, data_file_suffix)
 
             # plot the figure
-            figure = self.confusion_matrix_tt(val_reals, val_preds, metric_values)
+            figure = self._confusion_matrix_tt(model_list, val_reals, val_preds, metric_values)
 
         else:
             raise ValueError(("Argument 'model_list' is an empty list. "))
@@ -1104,7 +1099,7 @@ class ConfusionMatrix(ParentPlotter):
                 overall_kfold_metrics,
             ) = self.get_kfold_data_from_model(model_list)
 
-            figure = self.confusion_matrix_kfold(
+            figure = self._confusion_matrix_kfold(
                 model_list,
                 val_reals,
                 val_preds,
@@ -1129,7 +1124,7 @@ class ConfusionMatrix(ParentPlotter):
                 metric_values,
             ) = self.get_tt_data_from_model(model_list)
 
-            figure = self.confusion_matrix_tt(model_list, val_reals, val_preds, metric_values)
+            figure = self._confusion_matrix_tt(model_list, val_reals, val_preds, metric_values)
 
         else:
             raise ValueError(("Argument 'model_list' is an empty list. "))
@@ -1137,7 +1132,7 @@ class ConfusionMatrix(ParentPlotter):
         return figure
 
     @classmethod
-    def confusion_matrix_tt(self, model_list, val_reals, val_preds, metric_values):
+    def _confusion_matrix_tt(self, model_list, val_reals, val_preds, metric_values):
         """
         Confusion matrix for a train/test model. This function should be called within the ConfusionMatrix class
         after the train/test data has been obtained from the model (either old data or new data).
@@ -1193,7 +1188,7 @@ class ConfusionMatrix(ParentPlotter):
         return fig
 
     @classmethod
-    def confusion_matrix_kfold(
+    def _confusion_matrix_kfold(
         self,
         model_list,
         val_reals,

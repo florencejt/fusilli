@@ -1,0 +1,82 @@
+﻿fusilli.data.TrainTestDataModule
+================================
+
+.. currentmodule:: fusilli.data
+
+.. autoclass:: TrainTestDataModule
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~TrainTestDataModule.__delattr__
+      ~TrainTestDataModule.__dir__
+      ~TrainTestDataModule.__eq__
+      ~TrainTestDataModule.__format__
+      ~TrainTestDataModule.__ge__
+      ~TrainTestDataModule.__getattribute__
+      ~TrainTestDataModule.__gt__
+      ~TrainTestDataModule.__hash__
+      ~TrainTestDataModule.__init__
+      ~TrainTestDataModule.__init_subclass__
+      ~TrainTestDataModule.__le__
+      ~TrainTestDataModule.__lt__
+      ~TrainTestDataModule.__ne__
+      ~TrainTestDataModule.__new__
+      ~TrainTestDataModule.__reduce__
+      ~TrainTestDataModule.__reduce_ex__
+      ~TrainTestDataModule.__repr__
+      ~TrainTestDataModule.__setattr__
+      ~TrainTestDataModule.__sizeof__
+      ~TrainTestDataModule.__str__
+      ~TrainTestDataModule.__subclasshook__
+      ~TrainTestDataModule._set_hparams
+      ~TrainTestDataModule._to_hparams_dict
+      ~TrainTestDataModule.add_argparse_args
+      ~TrainTestDataModule.from_argparse_args
+      ~TrainTestDataModule.from_datasets
+      ~TrainTestDataModule.get_init_arguments_and_types
+      ~TrainTestDataModule.load_from_checkpoint
+      ~TrainTestDataModule.load_state_dict
+      ~TrainTestDataModule.on_after_batch_transfer
+      ~TrainTestDataModule.on_before_batch_transfer
+      ~TrainTestDataModule.on_load_checkpoint
+      ~TrainTestDataModule.on_save_checkpoint
+      ~TrainTestDataModule.parse_argparser
+      ~TrainTestDataModule.predict_dataloader
+      ~TrainTestDataModule.prepare_data
+      ~TrainTestDataModule.save_hyperparameters
+      ~TrainTestDataModule.setup
+      ~TrainTestDataModule.state_dict
+      ~TrainTestDataModule.teardown
+      ~TrainTestDataModule.test_dataloader
+      ~TrainTestDataModule.train_dataloader
+      ~TrainTestDataModule.transfer_batch_to_device
+      ~TrainTestDataModule.val_dataloader
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~TrainTestDataModule.CHECKPOINT_HYPER_PARAMS_KEY
+      ~TrainTestDataModule.CHECKPOINT_HYPER_PARAMS_NAME
+      ~TrainTestDataModule.CHECKPOINT_HYPER_PARAMS_TYPE
+      ~TrainTestDataModule.__annotations__
+      ~TrainTestDataModule.__dict__
+      ~TrainTestDataModule.__doc__
+      ~TrainTestDataModule.__jit_unused_properties__
+      ~TrainTestDataModule.__module__
+      ~TrainTestDataModule.__weakref__
+      ~TrainTestDataModule.hparams
+      ~TrainTestDataModule.hparams_initial
+      ~TrainTestDataModule.name
+   
+   

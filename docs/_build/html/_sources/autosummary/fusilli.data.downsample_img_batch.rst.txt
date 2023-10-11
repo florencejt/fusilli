@@ -1,0 +1,6 @@
+﻿fusilli.data.downsample\_img\_batch
+===================================
+
+.. currentmodule:: fusilli.data
+
+.. autofunction:: downsample_img_batch

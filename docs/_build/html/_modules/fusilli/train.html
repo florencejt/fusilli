@@ -58,14 +58,6 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.data.html">fusilli.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
-</ul>
 
         </div>
       </div>
@@ -109,7 +101,7 @@
 <span class="kn">from</span> <span class="nn">fusilli.utils.csv_loss_plotter</span> <span class="kn">import</span> <span class="n">plot_loss_curve</span>
 
 
-<div class="viewcode-block" id="train_and_test"><a class="viewcode-back" href="../../autosummary/fusilli.train.html#fusilli.train.train_and_test">[docs]</a><span class="k">def</span> <span class="nf">train_and_test</span><span class="p">(</span>
+<div class="viewcode-block" id="train_and_test"><a class="viewcode-back" href="../../autosummary/fusilli.train.train_and_test.html#fusilli.train.train_and_test">[docs]</a><span class="k">def</span> <span class="nf">train_and_test</span><span class="p">(</span>
     <span class="n">data_module</span><span class="p">,</span>
     <span class="n">params</span><span class="p">,</span>
     <span class="n">k</span><span class="p">,</span>
@@ -256,7 +248,7 @@
     <span class="k">return</span> <span class="n">pl_model</span></div>
 
 
-<div class="viewcode-block" id="store_trained_model"><a class="viewcode-back" href="../../autosummary/fusilli.train.html#fusilli.train.store_trained_model">[docs]</a><span class="k">def</span> <span class="nf">store_trained_model</span><span class="p">(</span><span class="n">trained_model</span><span class="p">,</span> <span class="n">trained_models_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="store_trained_model"><a class="viewcode-back" href="../../autosummary/fusilli.train.store_trained_model.html#fusilli.train.store_trained_model">[docs]</a><span class="k">def</span> <span class="nf">store_trained_model</span><span class="p">(</span><span class="n">trained_model</span><span class="p">,</span> <span class="n">trained_models_dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Stores the trained model to a dictionary.</span>
 <span class="sd">    If model type is already in dictionary (e.g. if it&#39;s a kfold model), append the model to</span>
@@ -301,7 +293,7 @@
     <span class="k">return</span> <span class="n">trained_models_dict</span></div>
 
 
-<div class="viewcode-block" id="train_and_save_models"><a class="viewcode-back" href="../../autosummary/fusilli.train.html#fusilli.train.train_and_save_models">[docs]</a><span class="k">def</span> <span class="nf">train_and_save_models</span><span class="p">(</span>
+<div class="viewcode-block" id="train_and_save_models"><a class="viewcode-back" href="../../autosummary/fusilli.train.train_and_save_models.html#fusilli.train.train_and_save_models">[docs]</a><span class="k">def</span> <span class="nf">train_and_save_models</span><span class="p">(</span>
     <span class="n">data_module</span><span class="p">,</span>
     <span class="n">params</span><span class="p">,</span>
     <span class="n">fusion_model</span><span class="p">,</span>

@@ -1,0 +1,56 @@
+﻿fusilli.data.LoadDatasets
+=========================
+
+.. currentmodule:: fusilli.data
+
+.. autoclass:: LoadDatasets
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LoadDatasets.__delattr__
+      ~LoadDatasets.__dir__
+      ~LoadDatasets.__eq__
+      ~LoadDatasets.__format__
+      ~LoadDatasets.__ge__
+      ~LoadDatasets.__getattribute__
+      ~LoadDatasets.__gt__
+      ~LoadDatasets.__hash__
+      ~LoadDatasets.__init__
+      ~LoadDatasets.__init_subclass__
+      ~LoadDatasets.__le__
+      ~LoadDatasets.__lt__
+      ~LoadDatasets.__ne__
+      ~LoadDatasets.__new__
+      ~LoadDatasets.__reduce__
+      ~LoadDatasets.__reduce_ex__
+      ~LoadDatasets.__repr__
+      ~LoadDatasets.__setattr__
+      ~LoadDatasets.__sizeof__
+      ~LoadDatasets.__str__
+      ~LoadDatasets.__subclasshook__
+      ~LoadDatasets.load_both_tabular
+      ~LoadDatasets.load_img
+      ~LoadDatasets.load_tab_and_img
+      ~LoadDatasets.load_tabular1
+      ~LoadDatasets.load_tabular2
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LoadDatasets.__dict__
+      ~LoadDatasets.__doc__
+      ~LoadDatasets.__module__
+      ~LoadDatasets.__weakref__
+   
+   

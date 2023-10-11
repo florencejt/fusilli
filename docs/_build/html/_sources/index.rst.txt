@@ -3,11 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Fusilli: Fuse Easily
+fusilli
 ======================================================
 
-Welcome to Fusilli: Fuse Easily!
+Welcome to fusilli!
 ---------------------------------
+
+**Don't be silly, use fusilli!**
+
 Have you got multimodal data but not sure how to combine them for your machine learning task? Look no further!
 This library provides a way to compare different fusion methods for your multimodal data.
 
@@ -37,14 +40,13 @@ This library provides a way to compare different fusion methods for your multimo
 .. autosummary::
    :toctree: autosummary
    :recursive:
-   :caption: 🌸 API Reference 🌸
+   :caption: 🌸 Public API Reference 🌸
 
    fusilli.fusion_models
    fusilli.data
    fusilli.train
    fusilli.eval
    fusilli.utils
-
 
 
 Indices and tables

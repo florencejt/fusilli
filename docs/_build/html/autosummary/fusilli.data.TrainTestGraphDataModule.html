@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fusilli.data.TrainTestGraphDataModule &mdash; fusilli  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/florencestheme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/pink_pasta_logo.png"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            fusilli
+              <img src="../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Fusilli: an introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fusilli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">fusilli.data.TrainTestGraphDataModule</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/autosummary/fusilli.data.TrainTestGraphDataModule.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fusilli-data-traintestgraphdatamodule">
+<h1>fusilli.data.TrainTestGraphDataModule<a class="headerlink" href="#fusilli-data-traintestgraphdatamodule" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TrainTestGraphDataModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_creation_method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/data.html#TrainTestGraphDataModule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Custom pytorch lightning datamodule class for the different modalities with graph data
+structure.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.sources">
+<span class="sig-name descname"><span class="pre">sources</span></span><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.sources" title="Permalink to this definition"></a></dt>
+<dd><p>List of source csv files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.image_downsample_size">
+<span class="sig-name descname"><span class="pre">image_downsample_size</span></span><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.image_downsample_size" title="Permalink to this definition"></a></dt>
+<dd><p>Size to downsample the images to (height, width, depth) or (height, width) for 2D
+images.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.modality_methods">
+<span class="sig-name descname"><span class="pre">modality_methods</span></span><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.modality_methods" title="Permalink to this definition"></a></dt>
+<dd><p>Dictionary of methods for loading the different modalities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.fusion_model">
+<span class="sig-name descname"><span class="pre">fusion_model</span></span><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.fusion_model" title="Permalink to this definition"></a></dt>
+<dd><p>Fusion model class. e.g. “TabularCrossmodalAttention”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.test_size">
+<span class="sig-name descname"><span class="pre">test_size</span></span><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.test_size" title="Permalink to this definition"></a></dt>
+<dd><p>Fraction of data to use for testing (default 0.2).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.graph_creation_method">
+<span class="sig-name descname"><span class="pre">graph_creation_method</span></span><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.graph_creation_method" title="Permalink to this definition"></a></dt>
+<dd><p>Graph creation method class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.params">
+<span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.params" title="Permalink to this definition"></a></dt>
+<dd><p>Dictionary of parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.layer_mods">
+<span class="sig-name descname"><span class="pre">layer_mods</span></span><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.layer_mods" title="Permalink to this definition"></a></dt>
+<dd><p>Dictionary of layer modifications to make to the graph maker method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.dataset">
+<span class="sig-name descname"><span class="pre">dataset</span></span><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Tensor of predictive features. Created in prepare_data().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.data_dims">
+<span class="sig-name descname"><span class="pre">data_dims</span></span><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.data_dims" title="Permalink to this definition"></a></dt>
+<dd><p>List of data dimensions [mod1_dim, mod2_dim, img_dim]. Created in prepare_data().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.train_idxs">
+<span class="sig-name descname"><span class="pre">train_idxs</span></span><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.train_idxs" title="Permalink to this definition"></a></dt>
+<dd><p>List of indices for training. Created in setup().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.test_idxs">
+<span class="sig-name descname"><span class="pre">test_idxs</span></span><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.test_idxs" title="Permalink to this definition"></a></dt>
+<dd><p>List of indices for testing. Created in setup().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.graph_data">
+<span class="sig-name descname"><span class="pre">graph_data</span></span><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.graph_data" title="Permalink to this definition"></a></dt>
+<dd><p>Graph data structure. Created in setup().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>graph data structure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_creation_method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/data.html#TrainTestGraphDataModule.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.__init__" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
+<li><p><strong>fusion_model</strong> (<em>class</em>) – Fusion model class. e.g. “TabularCrossmodalAttention”.</p></li>
+<li><p><strong>sources</strong> (<em>list</em>) – List of source csv files.</p></li>
+<li><p><strong>graph_creation_method</strong> (<em>class</em>) – Graph creation method class.</p></li>
+<li><p><strong>image_downsample_size</strong> (<em>tuple</em>) – Size to downsample the images to (height, width, depth) or (height, width) for 2D
+images. None if not downsampling. (default None)</p></li>
+<li><p><strong>layer_mods</strong> (<em>dict</em>) – Dictionary of layer modifications to make to the graph maker method.
+(default None)</p></li>
+<li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – Dictionary of extra strings to add to the log.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__delattr__</span></code>(name, /)</p></td>
+<td><p>Implement delattr(self, name).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__dir__</span></code>()</p></td>
+<td><p>Default dir() implementation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__eq__</span></code>(value, /)</p></td>
+<td><p>Return self==value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__format__</span></code>(format_spec, /)</p></td>
+<td><p>Default object formatter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__ge__</span></code>(value, /)</p></td>
+<td><p>Return self&gt;=value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__getattribute__</span></code>(name, /)</p></td>
+<td><p>Return getattr(self, name).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__gt__</span></code>(value, /)</p></td>
+<td><p>Return self&gt;value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__hash__</span></code>()</p></td>
+<td><p>Return hash(self).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id0" title="fusilli.data.TrainTestGraphDataModule.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(params, fusion_model, sources, ...)</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">param params<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary of parameters.</p>
+</dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init_subclass__</span></code></p></td>
+<td><p>This method is called when a class is subclassed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__le__</span></code>(value, /)</p></td>
+<td><p>Return self&lt;=value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__lt__</span></code>(value, /)</p></td>
+<td><p>Return self&lt;value.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__ne__</span></code>(value, /)</p></td>
+<td><p>Return self!=value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__new__</span></code>(**kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce__</span></code>()</p></td>
+<td><p>Helper for pickle.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce_ex__</span></code>(protocol, /)</p></td>
+<td><p>Helper for pickle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__repr__</span></code>()</p></td>
+<td><p>Return repr(self).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__setattr__</span></code>(name, value, /)</p></td>
+<td><p>Implement setattr(self, name, value).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__sizeof__</span></code>()</p></td>
+<td><p>Size of object in memory, in bytes.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__str__</span></code>()</p></td>
+<td><p>Return str(self).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__subclasshook__</span></code></p></td>
+<td><p>Abstract classes can override this to customize issubclass().</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.data.TrainTestGraphDataModule.get_lightning_module" title="fusilli.data.TrainTestGraphDataModule.get_lightning_module"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_lightning_module</span></code></a>()</p></td>
+<td><p>Gets the lightning module using the pytorch geometric lightning module for converting the graph data structure into a pytorch dataloader.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.data.TrainTestGraphDataModule.prepare_data" title="fusilli.data.TrainTestGraphDataModule.prepare_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_data</span></code></a>()</p></td>
+<td><p>Loads the data with LoadDatasets class</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.data.TrainTestGraphDataModule.setup" title="fusilli.data.TrainTestGraphDataModule.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>()</p></td>
+<td><p>Gets random train and test indices, and gets the graph data structure.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__dict__</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__doc__</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__module__</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__weakref__</span></code></p></td>
+<td><p>list of weak references to the object (if defined)</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_creation_method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_downsample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/data.html#TrainTestGraphDataModule.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
+<li><p><strong>fusion_model</strong> (<em>class</em>) – Fusion model class. e.g. “TabularCrossmodalAttention”.</p></li>
+<li><p><strong>sources</strong> (<em>list</em>) – List of source csv files.</p></li>
+<li><p><strong>graph_creation_method</strong> (<em>class</em>) – Graph creation method class.</p></li>
+<li><p><strong>image_downsample_size</strong> (<em>tuple</em>) – Size to downsample the images to (height, width, depth) or (height, width) for 2D
+images. None if not downsampling. (default None)</p></li>
+<li><p><strong>layer_mods</strong> (<em>dict</em>) – Dictionary of layer modifications to make to the graph maker method.
+(default None)</p></li>
+<li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – Dictionary of extra strings to add to the log.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.get_lightning_module">
+<span class="sig-name descname"><span class="pre">get_lightning_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/data.html#TrainTestGraphDataModule.get_lightning_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.get_lightning_module" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the lightning module using the pytorch geometric lightning module for converting
+the graph data structure into a pytorch dataloader.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lightning_module</strong> – Lightning module for converting the graph data structure into a pytorch dataloader.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>lightning module</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.prepare_data">
+<span class="sig-name descname"><span class="pre">prepare_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/data.html#TrainTestGraphDataModule.prepare_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.prepare_data" title="Permalink to this definition"></a></dt>
+<dd><p>Loads the data with LoadDatasets class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>dataset</strong> (<em>tensor</em>) – Tensor of predictive features.</p></li>
+<li><p><strong>data_dims</strong> (<em>list</em>) – List of data dimensions [mod1_dim, mod2_dim, img_dim]
+i.e. [None, None, [100, 100, 100]] for image only (image dimensions 100 x 100 x 100)
+i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has
+32 features), and no image</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestGraphDataModule.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/data.html#TrainTestGraphDataModule.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.data.TrainTestGraphDataModule.setup" title="Permalink to this definition"></a></dt>
+<dd><p>Gets random train and test indices, and gets the graph data structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Florence J Townend.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

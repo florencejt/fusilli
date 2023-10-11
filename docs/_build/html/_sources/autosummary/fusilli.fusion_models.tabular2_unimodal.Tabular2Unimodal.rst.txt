@@ -1,0 +1,143 @@
+﻿fusilli.fusion\_models.tabular2\_unimodal.Tabular2Unimodal
+==========================================================
+
+.. currentmodule:: fusilli.fusion_models.tabular2_unimodal
+
+.. autoclass:: Tabular2Unimodal
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Tabular2Unimodal.__call__
+      ~Tabular2Unimodal.__delattr__
+      ~Tabular2Unimodal.__dir__
+      ~Tabular2Unimodal.__eq__
+      ~Tabular2Unimodal.__format__
+      ~Tabular2Unimodal.__ge__
+      ~Tabular2Unimodal.__getattr__
+      ~Tabular2Unimodal.__getattribute__
+      ~Tabular2Unimodal.__gt__
+      ~Tabular2Unimodal.__hash__
+      ~Tabular2Unimodal.__init__
+      ~Tabular2Unimodal.__init_subclass__
+      ~Tabular2Unimodal.__le__
+      ~Tabular2Unimodal.__lt__
+      ~Tabular2Unimodal.__ne__
+      ~Tabular2Unimodal.__new__
+      ~Tabular2Unimodal.__reduce__
+      ~Tabular2Unimodal.__reduce_ex__
+      ~Tabular2Unimodal.__repr__
+      ~Tabular2Unimodal.__setattr__
+      ~Tabular2Unimodal.__setstate__
+      ~Tabular2Unimodal.__sizeof__
+      ~Tabular2Unimodal.__str__
+      ~Tabular2Unimodal.__subclasshook__
+      ~Tabular2Unimodal._apply
+      ~Tabular2Unimodal._call_impl
+      ~Tabular2Unimodal._get_backward_hooks
+      ~Tabular2Unimodal._get_backward_pre_hooks
+      ~Tabular2Unimodal._get_name
+      ~Tabular2Unimodal._load_from_state_dict
+      ~Tabular2Unimodal._maybe_warn_non_full_backward_hook
+      ~Tabular2Unimodal._named_members
+      ~Tabular2Unimodal._register_load_state_dict_pre_hook
+      ~Tabular2Unimodal._register_state_dict_hook
+      ~Tabular2Unimodal._replicate_for_data_parallel
+      ~Tabular2Unimodal._save_to_state_dict
+      ~Tabular2Unimodal._slow_forward
+      ~Tabular2Unimodal.add_module
+      ~Tabular2Unimodal.apply
+      ~Tabular2Unimodal.bfloat16
+      ~Tabular2Unimodal.buffers
+      ~Tabular2Unimodal.calc_fused_layers
+      ~Tabular2Unimodal.children
+      ~Tabular2Unimodal.cpu
+      ~Tabular2Unimodal.cuda
+      ~Tabular2Unimodal.double
+      ~Tabular2Unimodal.eval
+      ~Tabular2Unimodal.extra_repr
+      ~Tabular2Unimodal.float
+      ~Tabular2Unimodal.forward
+      ~Tabular2Unimodal.get_buffer
+      ~Tabular2Unimodal.get_extra_state
+      ~Tabular2Unimodal.get_fused_dim
+      ~Tabular2Unimodal.get_parameter
+      ~Tabular2Unimodal.get_submodule
+      ~Tabular2Unimodal.half
+      ~Tabular2Unimodal.ipu
+      ~Tabular2Unimodal.load_state_dict
+      ~Tabular2Unimodal.modules
+      ~Tabular2Unimodal.named_buffers
+      ~Tabular2Unimodal.named_children
+      ~Tabular2Unimodal.named_modules
+      ~Tabular2Unimodal.named_parameters
+      ~Tabular2Unimodal.parameters
+      ~Tabular2Unimodal.register_backward_hook
+      ~Tabular2Unimodal.register_buffer
+      ~Tabular2Unimodal.register_forward_hook
+      ~Tabular2Unimodal.register_forward_pre_hook
+      ~Tabular2Unimodal.register_full_backward_hook
+      ~Tabular2Unimodal.register_full_backward_pre_hook
+      ~Tabular2Unimodal.register_load_state_dict_post_hook
+      ~Tabular2Unimodal.register_module
+      ~Tabular2Unimodal.register_parameter
+      ~Tabular2Unimodal.register_state_dict_pre_hook
+      ~Tabular2Unimodal.requires_grad_
+      ~Tabular2Unimodal.set_extra_state
+      ~Tabular2Unimodal.set_final_pred_layers
+      ~Tabular2Unimodal.set_fused_layers
+      ~Tabular2Unimodal.set_img_layers
+      ~Tabular2Unimodal.set_mod1_layers
+      ~Tabular2Unimodal.set_mod2_layers
+      ~Tabular2Unimodal.share_memory
+      ~Tabular2Unimodal.state_dict
+      ~Tabular2Unimodal.to
+      ~Tabular2Unimodal.to_empty
+      ~Tabular2Unimodal.train
+      ~Tabular2Unimodal.type
+      ~Tabular2Unimodal.xpu
+      ~Tabular2Unimodal.zero_grad
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Tabular2Unimodal.T_destination
+      ~Tabular2Unimodal.__annotations__
+      ~Tabular2Unimodal.__dict__
+      ~Tabular2Unimodal.__doc__
+      ~Tabular2Unimodal.__module__
+      ~Tabular2Unimodal.__weakref__
+      ~Tabular2Unimodal._version
+      ~Tabular2Unimodal.call_super_init
+      ~Tabular2Unimodal.dump_patches
+      ~Tabular2Unimodal.fusion_type
+      ~Tabular2Unimodal.method_name
+      ~Tabular2Unimodal.modality_type
+      ~Tabular2Unimodal.training
+      ~Tabular2Unimodal._parameters
+      ~Tabular2Unimodal._buffers
+      ~Tabular2Unimodal._non_persistent_buffers_set
+      ~Tabular2Unimodal._backward_pre_hooks
+      ~Tabular2Unimodal._backward_hooks
+      ~Tabular2Unimodal._is_full_backward_hook
+      ~Tabular2Unimodal._forward_hooks
+      ~Tabular2Unimodal._forward_hooks_with_kwargs
+      ~Tabular2Unimodal._forward_pre_hooks
+      ~Tabular2Unimodal._forward_pre_hooks_with_kwargs
+      ~Tabular2Unimodal._state_dict_hooks
+      ~Tabular2Unimodal._load_state_dict_pre_hooks
+      ~Tabular2Unimodal._state_dict_pre_hooks
+      ~Tabular2Unimodal._load_state_dict_post_hooks
+      ~Tabular2Unimodal._modules
+   
+   

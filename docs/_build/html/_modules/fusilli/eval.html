@@ -58,14 +58,6 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.data.html">fusilli.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
-</ul>
 
         </div>
       </div>
@@ -121,23 +113,18 @@
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="ParentPlotter"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ParentPlotter">[docs]</a><span class="k">class</span> <span class="nc">ParentPlotter</span><span class="p">:</span>
+<div class="viewcode-block" id="ParentPlotter"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ParentPlotter.html#fusilli.eval.ParentPlotter">[docs]</a><span class="k">class</span> <span class="nc">ParentPlotter</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Parent class for all plot classes. </span>
 <span class="sd">    </span>
 <span class="sd">    It includes methods that are used by multiple plot classes, such as obtaining final</span>
 <span class="sd">    validation data from kfold and train/test models, and putting new data through the</span>
 <span class="sd">    models for both kfold and train/test protocols.</span>
-<span class="sd">    </span>
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    None</span>
-<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ParentPlotter.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ParentPlotter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ParentPlotter.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ParentPlotter.html#fusilli.eval.ParentPlotter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="ParentPlotter.get_kfold_data_from_model"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ParentPlotter.get_kfold_data_from_model">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ParentPlotter.get_kfold_data_from_model"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ParentPlotter.html#fusilli.eval.ParentPlotter.get_kfold_data_from_model">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_kfold_data_from_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the final validation data from a kfold model, meaning the data that was used to evaluate the model</span>
@@ -231,7 +218,7 @@
             <span class="n">overall_kfold_metrics</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="ParentPlotter.get_tt_data_from_model"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ParentPlotter.get_tt_data_from_model">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ParentPlotter.get_tt_data_from_model"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ParentPlotter.html#fusilli.eval.ParentPlotter.get_tt_data_from_model">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_tt_data_from_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the final validation data from a train/test model, meaning the data that was used to evaluate the model</span>
@@ -281,7 +268,7 @@
 
         <span class="k">return</span> <span class="n">train_reals</span><span class="p">,</span> <span class="n">train_preds</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span></div>
 
-<div class="viewcode-block" id="ParentPlotter.get_new_kfold_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ParentPlotter.get_new_kfold_data">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ParentPlotter.get_new_kfold_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ParentPlotter.html#fusilli.eval.ParentPlotter.get_new_kfold_data">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_new_kfold_data</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="p">,</span> <span class="n">checkpoint_file_suffix</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
@@ -478,7 +465,7 @@
             <span class="n">overall_kfold_metrics</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="ParentPlotter.get_new_tt_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ParentPlotter.get_new_tt_data">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ParentPlotter.get_new_tt_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ParentPlotter.html#fusilli.eval.ParentPlotter.get_new_tt_data">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_new_tt_data</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="p">,</span> <span class="n">checkpoint_file_suffix</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
@@ -620,7 +607,7 @@
         <span class="k">return</span> <span class="n">train_reals</span><span class="p">,</span> <span class="n">train_preds</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span></div></div>
 
 
-<div class="viewcode-block" id="RealsVsPreds"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.RealsVsPreds">[docs]</a><span class="k">class</span> <span class="nc">RealsVsPreds</span><span class="p">(</span><span class="n">ParentPlotter</span><span class="p">):</span>
+<div class="viewcode-block" id="RealsVsPreds"><a class="viewcode-back" href="../../autosummary/fusilli.eval.RealsVsPreds.html#fusilli.eval.RealsVsPreds">[docs]</a><span class="k">class</span> <span class="nc">RealsVsPreds</span><span class="p">(</span><span class="n">ParentPlotter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots the real values vs the predicted values for a model.</span>
 <span class="sd">    Pink dots are the training data, green dots are the validation data. The validation data is</span>
@@ -631,10 +618,10 @@
 <span class="sd">    None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="RealsVsPreds.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.RealsVsPreds.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RealsVsPreds.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.eval.RealsVsPreds.html#fusilli.eval.RealsVsPreds.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="RealsVsPreds.from_new_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.RealsVsPreds.from_new_data">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="RealsVsPreds.from_new_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.RealsVsPreds.html#fusilli.eval.RealsVsPreds.from_new_data">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_new_data</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="o">=</span><span class="s2">&quot;_test&quot;</span><span class="p">,</span> <span class="n">checkpoint_file_suffix</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
@@ -748,7 +735,7 @@
 
         <span class="k">return</span> <span class="n">figure</span></div>
 
-<div class="viewcode-block" id="RealsVsPreds.from_final_val_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.RealsVsPreds.from_final_val_data">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="RealsVsPreds.from_final_val_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.RealsVsPreds.html#fusilli.eval.RealsVsPreds.from_final_val_data">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_final_val_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reals vs preds plot using the final validation data (i.e. the data that was used to evaluate the model</span>
@@ -846,7 +833,7 @@
 
         <span class="k">return</span> <span class="n">figure</span></div>
 
-<div class="viewcode-block" id="RealsVsPreds.reals_vs_preds_kfold"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.RealsVsPreds.reals_vs_preds_kfold">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="RealsVsPreds.reals_vs_preds_kfold"><a class="viewcode-back" href="../../autosummary/fusilli.eval.RealsVsPreds.html#fusilli.eval.RealsVsPreds.reals_vs_preds_kfold">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">reals_vs_preds_kfold</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">model_list</span><span class="p">,</span>
@@ -970,7 +957,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="RealsVsPreds.reals_vs_preds_tt"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.RealsVsPreds.reals_vs_preds_tt">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="RealsVsPreds.reals_vs_preds_tt"><a class="viewcode-back" href="../../autosummary/fusilli.eval.RealsVsPreds.html#fusilli.eval.RealsVsPreds.reals_vs_preds_tt">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">reals_vs_preds_tt</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">,</span> <span class="n">train_reals</span><span class="p">,</span> <span class="n">train_preds</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span>
     <span class="p">):</span>
@@ -1040,16 +1027,16 @@
         <span class="k">return</span> <span class="n">fig</span></div></div>
 
 
-<div class="viewcode-block" id="ConfusionMatrix"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ConfusionMatrix">[docs]</a><span class="k">class</span> <span class="nc">ConfusionMatrix</span><span class="p">(</span><span class="n">ParentPlotter</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfusionMatrix"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ConfusionMatrix.html#fusilli.eval.ConfusionMatrix">[docs]</a><span class="k">class</span> <span class="nc">ConfusionMatrix</span><span class="p">(</span><span class="n">ParentPlotter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots the confusion matrix for a model. This should be used for classification models only (binary or multiclass).</span>
 <span class="sd">    The data used to create the confusion matrix is either new data if using from_new_data or the original validation data</span>
 <span class="sd">    if using from_final_val_data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="ConfusionMatrix.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ConfusionMatrix.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfusionMatrix.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ConfusionMatrix.html#fusilli.eval.ConfusionMatrix.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ConfusionMatrix.from_new_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ConfusionMatrix.from_new_data">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ConfusionMatrix.from_new_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ConfusionMatrix.html#fusilli.eval.ConfusionMatrix.from_new_data">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_new_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="o">=</span><span class="s2">&quot;_test&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Confusion matrix using new data (i.e. data that was not used to train or validate the model).</span>
@@ -1112,7 +1099,7 @@
                 <span class="n">overall_kfold_metrics</span><span class="p">,</span>
             <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_new_kfold_data</span><span class="p">(</span><span class="n">model_list</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="p">)</span>
 
-            <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix_kfold</span><span class="p">(</span>
+            <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_confusion_matrix_kfold</span><span class="p">(</span>
                 <span class="n">model_list</span><span class="p">,</span>
                 <span class="n">val_reals</span><span class="p">,</span>
                 <span class="n">val_preds</span><span class="p">,</span>
@@ -1138,14 +1125,14 @@
             <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_new_tt_data</span><span class="p">(</span><span class="n">model_list</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="p">)</span>
 
             <span class="c1"># plot the figure</span>
-            <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix_tt</span><span class="p">(</span><span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">)</span>
+            <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_confusion_matrix_tt</span><span class="p">(</span><span class="n">model_list</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s2">&quot;Argument &#39;model_list&#39; is an empty list. &quot;</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">figure</span></div>
 
-<div class="viewcode-block" id="ConfusionMatrix.from_final_val_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ConfusionMatrix.from_final_val_data">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ConfusionMatrix.from_final_val_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ConfusionMatrix.html#fusilli.eval.ConfusionMatrix.from_final_val_data">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_final_val_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Confusion matrix using the final validation data (i.e. the data that was used to evaluate the model</span>
@@ -1198,7 +1185,7 @@
                 <span class="n">overall_kfold_metrics</span><span class="p">,</span>
             <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_kfold_data_from_model</span><span class="p">(</span><span class="n">model_list</span><span class="p">)</span>
 
-            <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix_kfold</span><span class="p">(</span>
+            <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_confusion_matrix_kfold</span><span class="p">(</span>
                 <span class="n">model_list</span><span class="p">,</span>
                 <span class="n">val_reals</span><span class="p">,</span>
                 <span class="n">val_preds</span><span class="p">,</span>
@@ -1223,15 +1210,15 @@
                 <span class="n">metric_values</span><span class="p">,</span>
             <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tt_data_from_model</span><span class="p">(</span><span class="n">model_list</span><span class="p">)</span>
 
-            <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix_tt</span><span class="p">(</span><span class="n">model_list</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">)</span>
+            <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_confusion_matrix_tt</span><span class="p">(</span><span class="n">model_list</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s2">&quot;Argument &#39;model_list&#39; is an empty list. &quot;</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">figure</span></div>
 
-<div class="viewcode-block" id="ConfusionMatrix.confusion_matrix_tt"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ConfusionMatrix.confusion_matrix_tt">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">confusion_matrix_tt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_confusion_matrix_tt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Confusion matrix for a train/test model. This function should be called within the ConfusionMatrix class</span>
 <span class="sd">        after the train/test data has been obtained from the model (either old data or new data).</span>
@@ -1284,10 +1271,10 @@
 
         <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">fig</span></div>
+        <span class="k">return</span> <span class="n">fig</span>
 
-<div class="viewcode-block" id="ConfusionMatrix.confusion_matrix_kfold"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ConfusionMatrix.confusion_matrix_kfold">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">confusion_matrix_kfold</span><span class="p">(</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_confusion_matrix_kfold</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">model_list</span><span class="p">,</span>
         <span class="n">val_reals</span><span class="p">,</span>
@@ -1411,10 +1398,10 @@
         <span class="c1"># Set the overall title for the entire figure</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">first_fold_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: confusion matrix&quot;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">fig</span></div></div>
+        <span class="k">return</span> <span class="n">fig</span></div>
 
 
-<div class="viewcode-block" id="ModelComparison"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ModelComparison">[docs]</a><span class="k">class</span> <span class="nc">ModelComparison</span><span class="p">(</span><span class="n">ParentPlotter</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelComparison"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ModelComparison.html#fusilli.eval.ModelComparison">[docs]</a><span class="k">class</span> <span class="nc">ModelComparison</span><span class="p">(</span><span class="n">ParentPlotter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots the performance of multiple models on a single plot. Currently (as of 2023-10-11) this is only</span>
 <span class="sd">    implemented for from_final_val_data because it is not clear how to implement from_new_data for graph-based models, so </span>
@@ -1422,10 +1409,10 @@
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ModelComparison.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ModelComparison.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelComparison.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ModelComparison.html#fusilli.eval.ModelComparison.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ModelComparison.from_final_val_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ModelComparison.from_final_val_data">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ModelComparison.from_final_val_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ModelComparison.html#fusilli.eval.ModelComparison.from_final_val_data">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_final_val_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">,</span> <span class="n">kfold_flag</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plotting function for comparing models on metrics using the final validation data (i.e. the data that was used to evaluate the model</span>
@@ -1504,7 +1491,7 @@
     <span class="k">def</span> <span class="nf">from_new_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<div class="viewcode-block" id="ModelComparison.kfold_comparison_plot"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ModelComparison.kfold_comparison_plot">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ModelComparison.kfold_comparison_plot"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ModelComparison.html#fusilli.eval.ModelComparison.kfold_comparison_plot">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">kfold_comparison_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comparing_models_metrics</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Plotting function for comparing models on kfold metrics. Produces a violin plot.</span>
 
@@ -1590,7 +1577,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="ModelComparison.train_test_comparison_plot"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ModelComparison.train_test_comparison_plot">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ModelComparison.train_test_comparison_plot"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ModelComparison.html#fusilli.eval.ModelComparison.train_test_comparison_plot">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">train_test_comparison_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comparing_models_metrics</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Plotting function for comparing models on train and test metrics. Produces a horizontal bar chart.</span>
 
@@ -1680,7 +1667,7 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="ModelComparison.get_performance_dataframe"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ModelComparison.get_performance_dataframe">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ModelComparison.get_performance_dataframe"><a class="viewcode-back" href="../../autosummary/fusilli.eval.ModelComparison.html#fusilli.eval.ModelComparison.get_performance_dataframe">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_performance_dataframe</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">comparing_models_metrics</span><span class="p">,</span> <span class="n">overall_kfold_metrics_dict</span><span class="p">,</span> <span class="n">kfold_flag</span>
     <span class="p">):</span>

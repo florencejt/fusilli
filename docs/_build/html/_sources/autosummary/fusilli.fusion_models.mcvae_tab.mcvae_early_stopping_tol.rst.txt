@@ -1,0 +1,6 @@
+﻿fusilli.fusion\_models.mcvae\_tab.mcvae\_early\_stopping\_tol
+=============================================================
+
+.. currentmodule:: fusilli.fusion_models.mcvae_tab
+
+.. autofunction:: mcvae_early_stopping_tol

@@ -1,4 +1,4 @@
-﻿fusilli.utils.model\_chooser
+fusilli.utils.model\_chooser
 ============================
 
 .. automodule:: fusilli.utils.model_chooser

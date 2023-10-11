@@ -1,0 +1,142 @@
+﻿fusilli.fusion\_models.img\_tab\_decision.ImageDecision
+=======================================================
+
+.. currentmodule:: fusilli.fusion_models.img_tab_decision
+
+.. autoclass:: ImageDecision
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ImageDecision.__call__
+      ~ImageDecision.__delattr__
+      ~ImageDecision.__dir__
+      ~ImageDecision.__eq__
+      ~ImageDecision.__format__
+      ~ImageDecision.__ge__
+      ~ImageDecision.__getattr__
+      ~ImageDecision.__getattribute__
+      ~ImageDecision.__gt__
+      ~ImageDecision.__hash__
+      ~ImageDecision.__init__
+      ~ImageDecision.__init_subclass__
+      ~ImageDecision.__le__
+      ~ImageDecision.__lt__
+      ~ImageDecision.__ne__
+      ~ImageDecision.__new__
+      ~ImageDecision.__reduce__
+      ~ImageDecision.__reduce_ex__
+      ~ImageDecision.__repr__
+      ~ImageDecision.__setattr__
+      ~ImageDecision.__setstate__
+      ~ImageDecision.__sizeof__
+      ~ImageDecision.__str__
+      ~ImageDecision.__subclasshook__
+      ~ImageDecision._apply
+      ~ImageDecision._call_impl
+      ~ImageDecision._get_backward_hooks
+      ~ImageDecision._get_backward_pre_hooks
+      ~ImageDecision._get_name
+      ~ImageDecision._load_from_state_dict
+      ~ImageDecision._maybe_warn_non_full_backward_hook
+      ~ImageDecision._named_members
+      ~ImageDecision._register_load_state_dict_pre_hook
+      ~ImageDecision._register_state_dict_hook
+      ~ImageDecision._replicate_for_data_parallel
+      ~ImageDecision._save_to_state_dict
+      ~ImageDecision._slow_forward
+      ~ImageDecision.add_module
+      ~ImageDecision.apply
+      ~ImageDecision.bfloat16
+      ~ImageDecision.buffers
+      ~ImageDecision.calc_fused_layers
+      ~ImageDecision.children
+      ~ImageDecision.cpu
+      ~ImageDecision.cuda
+      ~ImageDecision.double
+      ~ImageDecision.eval
+      ~ImageDecision.extra_repr
+      ~ImageDecision.float
+      ~ImageDecision.forward
+      ~ImageDecision.get_buffer
+      ~ImageDecision.get_extra_state
+      ~ImageDecision.get_parameter
+      ~ImageDecision.get_submodule
+      ~ImageDecision.half
+      ~ImageDecision.ipu
+      ~ImageDecision.load_state_dict
+      ~ImageDecision.modules
+      ~ImageDecision.named_buffers
+      ~ImageDecision.named_children
+      ~ImageDecision.named_modules
+      ~ImageDecision.named_parameters
+      ~ImageDecision.parameters
+      ~ImageDecision.register_backward_hook
+      ~ImageDecision.register_buffer
+      ~ImageDecision.register_forward_hook
+      ~ImageDecision.register_forward_pre_hook
+      ~ImageDecision.register_full_backward_hook
+      ~ImageDecision.register_full_backward_pre_hook
+      ~ImageDecision.register_load_state_dict_post_hook
+      ~ImageDecision.register_module
+      ~ImageDecision.register_parameter
+      ~ImageDecision.register_state_dict_pre_hook
+      ~ImageDecision.requires_grad_
+      ~ImageDecision.set_extra_state
+      ~ImageDecision.set_final_pred_layers
+      ~ImageDecision.set_fused_layers
+      ~ImageDecision.set_img_layers
+      ~ImageDecision.set_mod1_layers
+      ~ImageDecision.set_mod2_layers
+      ~ImageDecision.share_memory
+      ~ImageDecision.state_dict
+      ~ImageDecision.to
+      ~ImageDecision.to_empty
+      ~ImageDecision.train
+      ~ImageDecision.type
+      ~ImageDecision.xpu
+      ~ImageDecision.zero_grad
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ImageDecision.T_destination
+      ~ImageDecision.__annotations__
+      ~ImageDecision.__dict__
+      ~ImageDecision.__doc__
+      ~ImageDecision.__module__
+      ~ImageDecision.__weakref__
+      ~ImageDecision._version
+      ~ImageDecision.call_super_init
+      ~ImageDecision.dump_patches
+      ~ImageDecision.fusion_type
+      ~ImageDecision.method_name
+      ~ImageDecision.modality_type
+      ~ImageDecision.training
+      ~ImageDecision._parameters
+      ~ImageDecision._buffers
+      ~ImageDecision._non_persistent_buffers_set
+      ~ImageDecision._backward_pre_hooks
+      ~ImageDecision._backward_hooks
+      ~ImageDecision._is_full_backward_hook
+      ~ImageDecision._forward_hooks
+      ~ImageDecision._forward_hooks_with_kwargs
+      ~ImageDecision._forward_pre_hooks
+      ~ImageDecision._forward_pre_hooks_with_kwargs
+      ~ImageDecision._state_dict_hooks
+      ~ImageDecision._load_state_dict_pre_hooks
+      ~ImageDecision._state_dict_pre_hooks
+      ~ImageDecision._load_state_dict_post_hooks
+      ~ImageDecision._modules
+   
+   

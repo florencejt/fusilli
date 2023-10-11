@@ -1,0 +1,143 @@
+﻿fusilli.fusion\_models.concat\_img\_maps\_tabular\_maps.ConcatImageMapsTabularMaps
+==================================================================================
+
+.. currentmodule:: fusilli.fusion_models.concat_img_maps_tabular_maps
+
+.. autoclass:: ConcatImageMapsTabularMaps
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ConcatImageMapsTabularMaps.__call__
+      ~ConcatImageMapsTabularMaps.__delattr__
+      ~ConcatImageMapsTabularMaps.__dir__
+      ~ConcatImageMapsTabularMaps.__eq__
+      ~ConcatImageMapsTabularMaps.__format__
+      ~ConcatImageMapsTabularMaps.__ge__
+      ~ConcatImageMapsTabularMaps.__getattr__
+      ~ConcatImageMapsTabularMaps.__getattribute__
+      ~ConcatImageMapsTabularMaps.__gt__
+      ~ConcatImageMapsTabularMaps.__hash__
+      ~ConcatImageMapsTabularMaps.__init__
+      ~ConcatImageMapsTabularMaps.__init_subclass__
+      ~ConcatImageMapsTabularMaps.__le__
+      ~ConcatImageMapsTabularMaps.__lt__
+      ~ConcatImageMapsTabularMaps.__ne__
+      ~ConcatImageMapsTabularMaps.__new__
+      ~ConcatImageMapsTabularMaps.__reduce__
+      ~ConcatImageMapsTabularMaps.__reduce_ex__
+      ~ConcatImageMapsTabularMaps.__repr__
+      ~ConcatImageMapsTabularMaps.__setattr__
+      ~ConcatImageMapsTabularMaps.__setstate__
+      ~ConcatImageMapsTabularMaps.__sizeof__
+      ~ConcatImageMapsTabularMaps.__str__
+      ~ConcatImageMapsTabularMaps.__subclasshook__
+      ~ConcatImageMapsTabularMaps._apply
+      ~ConcatImageMapsTabularMaps._call_impl
+      ~ConcatImageMapsTabularMaps._get_backward_hooks
+      ~ConcatImageMapsTabularMaps._get_backward_pre_hooks
+      ~ConcatImageMapsTabularMaps._get_name
+      ~ConcatImageMapsTabularMaps._load_from_state_dict
+      ~ConcatImageMapsTabularMaps._maybe_warn_non_full_backward_hook
+      ~ConcatImageMapsTabularMaps._named_members
+      ~ConcatImageMapsTabularMaps._register_load_state_dict_pre_hook
+      ~ConcatImageMapsTabularMaps._register_state_dict_hook
+      ~ConcatImageMapsTabularMaps._replicate_for_data_parallel
+      ~ConcatImageMapsTabularMaps._save_to_state_dict
+      ~ConcatImageMapsTabularMaps._slow_forward
+      ~ConcatImageMapsTabularMaps.add_module
+      ~ConcatImageMapsTabularMaps.apply
+      ~ConcatImageMapsTabularMaps.bfloat16
+      ~ConcatImageMapsTabularMaps.buffers
+      ~ConcatImageMapsTabularMaps.calc_fused_layers
+      ~ConcatImageMapsTabularMaps.children
+      ~ConcatImageMapsTabularMaps.cpu
+      ~ConcatImageMapsTabularMaps.cuda
+      ~ConcatImageMapsTabularMaps.double
+      ~ConcatImageMapsTabularMaps.eval
+      ~ConcatImageMapsTabularMaps.extra_repr
+      ~ConcatImageMapsTabularMaps.float
+      ~ConcatImageMapsTabularMaps.forward
+      ~ConcatImageMapsTabularMaps.get_buffer
+      ~ConcatImageMapsTabularMaps.get_extra_state
+      ~ConcatImageMapsTabularMaps.get_fused_dim
+      ~ConcatImageMapsTabularMaps.get_parameter
+      ~ConcatImageMapsTabularMaps.get_submodule
+      ~ConcatImageMapsTabularMaps.half
+      ~ConcatImageMapsTabularMaps.ipu
+      ~ConcatImageMapsTabularMaps.load_state_dict
+      ~ConcatImageMapsTabularMaps.modules
+      ~ConcatImageMapsTabularMaps.named_buffers
+      ~ConcatImageMapsTabularMaps.named_children
+      ~ConcatImageMapsTabularMaps.named_modules
+      ~ConcatImageMapsTabularMaps.named_parameters
+      ~ConcatImageMapsTabularMaps.parameters
+      ~ConcatImageMapsTabularMaps.register_backward_hook
+      ~ConcatImageMapsTabularMaps.register_buffer
+      ~ConcatImageMapsTabularMaps.register_forward_hook
+      ~ConcatImageMapsTabularMaps.register_forward_pre_hook
+      ~ConcatImageMapsTabularMaps.register_full_backward_hook
+      ~ConcatImageMapsTabularMaps.register_full_backward_pre_hook
+      ~ConcatImageMapsTabularMaps.register_load_state_dict_post_hook
+      ~ConcatImageMapsTabularMaps.register_module
+      ~ConcatImageMapsTabularMaps.register_parameter
+      ~ConcatImageMapsTabularMaps.register_state_dict_pre_hook
+      ~ConcatImageMapsTabularMaps.requires_grad_
+      ~ConcatImageMapsTabularMaps.set_extra_state
+      ~ConcatImageMapsTabularMaps.set_final_pred_layers
+      ~ConcatImageMapsTabularMaps.set_fused_layers
+      ~ConcatImageMapsTabularMaps.set_img_layers
+      ~ConcatImageMapsTabularMaps.set_mod1_layers
+      ~ConcatImageMapsTabularMaps.set_mod2_layers
+      ~ConcatImageMapsTabularMaps.share_memory
+      ~ConcatImageMapsTabularMaps.state_dict
+      ~ConcatImageMapsTabularMaps.to
+      ~ConcatImageMapsTabularMaps.to_empty
+      ~ConcatImageMapsTabularMaps.train
+      ~ConcatImageMapsTabularMaps.type
+      ~ConcatImageMapsTabularMaps.xpu
+      ~ConcatImageMapsTabularMaps.zero_grad
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ConcatImageMapsTabularMaps.T_destination
+      ~ConcatImageMapsTabularMaps.__annotations__
+      ~ConcatImageMapsTabularMaps.__dict__
+      ~ConcatImageMapsTabularMaps.__doc__
+      ~ConcatImageMapsTabularMaps.__module__
+      ~ConcatImageMapsTabularMaps.__weakref__
+      ~ConcatImageMapsTabularMaps._version
+      ~ConcatImageMapsTabularMaps.call_super_init
+      ~ConcatImageMapsTabularMaps.dump_patches
+      ~ConcatImageMapsTabularMaps.fusion_type
+      ~ConcatImageMapsTabularMaps.method_name
+      ~ConcatImageMapsTabularMaps.modality_type
+      ~ConcatImageMapsTabularMaps.training
+      ~ConcatImageMapsTabularMaps._parameters
+      ~ConcatImageMapsTabularMaps._buffers
+      ~ConcatImageMapsTabularMaps._non_persistent_buffers_set
+      ~ConcatImageMapsTabularMaps._backward_pre_hooks
+      ~ConcatImageMapsTabularMaps._backward_hooks
+      ~ConcatImageMapsTabularMaps._is_full_backward_hook
+      ~ConcatImageMapsTabularMaps._forward_hooks
+      ~ConcatImageMapsTabularMaps._forward_hooks_with_kwargs
+      ~ConcatImageMapsTabularMaps._forward_pre_hooks
+      ~ConcatImageMapsTabularMaps._forward_pre_hooks_with_kwargs
+      ~ConcatImageMapsTabularMaps._state_dict_hooks
+      ~ConcatImageMapsTabularMaps._load_state_dict_pre_hooks
+      ~ConcatImageMapsTabularMaps._state_dict_pre_hooks
+      ~ConcatImageMapsTabularMaps._load_state_dict_post_hooks
+      ~ConcatImageMapsTabularMaps._modules
+   
+   

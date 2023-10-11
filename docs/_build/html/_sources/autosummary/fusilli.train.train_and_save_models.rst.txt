@@ -1,0 +1,6 @@
+﻿fusilli.train.train\_and\_save\_models
+======================================
+
+.. currentmodule:: fusilli.train
+
+.. autofunction:: train_and_save_models

@@ -1,0 +1,56 @@
+﻿fusilli.fusion\_models.base\_model.ParentFusionModel
+====================================================
+
+.. currentmodule:: fusilli.fusion_models.base_model
+
+.. autoclass:: ParentFusionModel
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ParentFusionModel.__delattr__
+      ~ParentFusionModel.__dir__
+      ~ParentFusionModel.__eq__
+      ~ParentFusionModel.__format__
+      ~ParentFusionModel.__ge__
+      ~ParentFusionModel.__getattribute__
+      ~ParentFusionModel.__gt__
+      ~ParentFusionModel.__hash__
+      ~ParentFusionModel.__init__
+      ~ParentFusionModel.__init_subclass__
+      ~ParentFusionModel.__le__
+      ~ParentFusionModel.__lt__
+      ~ParentFusionModel.__ne__
+      ~ParentFusionModel.__new__
+      ~ParentFusionModel.__reduce__
+      ~ParentFusionModel.__reduce_ex__
+      ~ParentFusionModel.__repr__
+      ~ParentFusionModel.__setattr__
+      ~ParentFusionModel.__sizeof__
+      ~ParentFusionModel.__str__
+      ~ParentFusionModel.__subclasshook__
+      ~ParentFusionModel.set_final_pred_layers
+      ~ParentFusionModel.set_fused_layers
+      ~ParentFusionModel.set_img_layers
+      ~ParentFusionModel.set_mod1_layers
+      ~ParentFusionModel.set_mod2_layers
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ParentFusionModel.__dict__
+      ~ParentFusionModel.__doc__
+      ~ParentFusionModel.__module__
+      ~ParentFusionModel.__weakref__
+   
+   
