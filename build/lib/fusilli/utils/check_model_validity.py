@@ -1,5 +1,7 @@
 """
-Check validity of model modifications.
+This module contains functions to check the validity of the model modifications, such as
+checking the data type of the modifications and checking the input image dimensions of the
+modifications.
 """
 
 import torch.nn as nn
@@ -14,6 +16,8 @@ def check_dtype(attribute, correct_dtype, attribute_name):
         Attribute to check.
     correct_dtype : object
         Correct data type.
+    attribute_name : str
+        Name of the attribute to check (for the error message)
 
     Raises
     ------
@@ -42,6 +46,8 @@ def check_img_dim(attribute, img_dim, attribute_name):
         Attribute to check.
     img_dim : object
         Correct img dimensions.
+    attribute_name : str
+        Name of the attribute to check (for the error message)
 
     Raises
     ------
@@ -97,6 +103,8 @@ def check_var_is_function(attribute, attribute_name):
     ----------
     attribute : object
         Attribute to check.
+    attribute_name : str
+        Name of the attribute to check (for the error message)
 
     Raises
     ------
@@ -115,12 +123,10 @@ def check_var_is_function(attribute, attribute_name):
 
 def check_fused_layers(fused_layers, fused_dim):
     """
-    Check the fused layers in a fusion model:
-
-    - check fused_layers is nn.Sequential
-    - check the input features of the first layer is the fused_dim
-    - find the output features of the last layer to make prediction layer
-    - check first layer is a linear layer
+    Check that the fused layers within the fusion model (meaning the layers that take place
+    after the fusion) are of the correct data type (nn.Sequential) and that the first layer
+    is a nn.Linear layer with the correct in_features. Also returns the output dimension of
+    the fused layers for the final prediction layers of the model.
 
     Parameters
     ----------

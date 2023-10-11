@@ -183,7 +183,7 @@ Key Features:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.065 seconds)
+   **Total running time of the script:** (0 minutes 0.059 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_and_testing_plot_one_model_binary_kfold.py:

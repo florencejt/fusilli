@@ -140,8 +140,6 @@ e.g. {“TabularCrossmodalAttention”: {“mod1_layers”: new mod 1 layers nn.
 Default None.</p></li>
 <li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs. Default 1000.</p></li>
 <li><p><strong>enable_checkpointing</strong> (<em>bool</em>) – Whether to enable checkpointing. Default True.</p></li>
-<li><p><strong>own_early_stopping_callback</strong> (<em>pytorch lightning callback</em>) – Early stopping callback object. Default None. If None, the default early stopping
-will be used.</p></li>
 <li><p><strong>show_loss_plot</strong> (<em>bool</em>) – Whether to show the loss plot. Default False.</p></li>
 </ul>
 </dd>
@@ -157,17 +155,16 @@ train/test training or a list of trained models for k-fold training).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="train.train_and_test">
-<span class="sig-name descname"><span class="pre">train_and_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_checkpointing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_loss_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/train.html#train_and_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#train.train_and_test" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">train_and_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_mods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_checkpointing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_loss_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/train.html#train_and_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#train.train_and_test" title="Permalink to this definition"></a></dt>
 <dd><p>Trains and tests a model and, if k_fold trained, a fold.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dm</strong> (<em>pytorch lightning data module</em>) – Data module.</p></li>
+<li><p><strong>data_module</strong> (<em>pytorch lightning data module</em>) – Data module.
+Contains the train and val dataloaders.</p></li>
 <li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
 <li><p><strong>k</strong> (<em>int</em>) – Fold number.</p></li>
 <li><p><strong>fusion_model</strong> (<em>class</em>) – Fusion model class.</p></li>
-<li><p><strong>metric_name_list</strong> (<em>list</em>) – List of metric names.</p></li>
-<li><p><strong>method_name</strong> (<em>str</em>) – Name of the method.</p></li>
 <li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – <dl class="simple">
 <dt>Dictionary of extra log strings. Extra string to add to the run name during logging.</dt><dd><p>e.g. if you’re running the same model with different hyperparameters, you can add
 the hyperparameters.
@@ -182,6 +179,9 @@ e.g. {“TabularCrossmodalAttention”: {“mod1_layers”: new mod 1 layers nn.
 Default None.</p></li>
 <li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs. Default 1000.</p></li>
 <li><p><strong>enable_checkpointing</strong> (<em>bool</em>) – Whether to enable checkpointing. Default True.</p></li>
+<li><p><strong>show_loss_plot</strong> (<em>bool</em>) – Whether to show the loss plot. Default False.
+If True, the loss plot will be shown after training with <code class="docutils literal notranslate"><span class="pre">plt.show()</span></code>
+If False, the loss plot will be saved to the log directory.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

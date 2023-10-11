@@ -25,19 +25,17 @@ from docs.examples import generate_sklearn_simulated_data
 from fusilli.data import get_data_module
 from fusilli.eval import RealsVsPreds, ModelComparison
 from fusilli.train import train_and_save_models
-from fusilli.utils.model_chooser import get_models
+from fusilli.utils.model_chooser import import_chosen_fusion_models
 
 
 # %%
 # 1. Import fusion models 🔍
 # --------------------------------
 # Let's kick things off by importing our fusion models. The models are imported using the
-# :func:`~fusilli.utils.model_chooser.get_models` function, which takes a dictionary of conditions
+# :func:`~fusilli.utils.model_chooser.import_chosen_fusion_models` function, which takes a dictionary of conditions
 # as an input. The conditions are the attributes of the models, e.g. the class name, the modality type, etc.
 #
-# The function returns a dataframe of the models that match the conditions. The dataframe contains the
-# method name, the class name, the modality type, the fusion type, the path to the model, and the path to the
-# model's parent class. The paths are used to import the models with the :func:`importlib.import_module`.
+# The function returns list of class objects that match the conditions. If no conditions are specified, then all the models are returned.
 #
 # We're importing ConcatTabularData and TabularChannelWiseMultiAttention models for this example. Both are multimodal tabular models.
 
@@ -45,16 +43,7 @@ model_conditions = {
     "class_name": ["ConcatTabularData", "TabularChannelWiseMultiAttention"],
 }
 
-imported_models = get_models(model_conditions)
-print("Imported methods:")
-print(imported_models.method_name.values)
-
-fusion_models = []  # contains the class objects for each model
-for index, row in imported_models.iterrows():
-    module = importlib.import_module(row["method_path"])
-    module_class = getattr(module, row["class_name"])
-
-    fusion_models.append(module_class)
+fusion_models = import_chosen_fusion_models(model_conditions)
 
 
 # %%

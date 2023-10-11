@@ -1,4 +1,4 @@
-fusilli.utils.model\_chooser
+﻿fusilli.utils.model\_chooser
 ============================
 
 .. automodule:: fusilli.utils.model_chooser
@@ -13,8 +13,9 @@ fusilli.utils.model\_chooser
 
    .. autosummary::
    
+      all_model_importer
       get_models
-      model_importer
+      import_chosen_fusion_models
    
    
 

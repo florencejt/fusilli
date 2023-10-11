@@ -1,7 +1,7 @@
 import pytest
 import torch
 from fusilli.data import KFoldDataModule
-from .test_CustomDataModule import create_test_files, MockSubspaceMethod
+from .test_TrainTestDataModule import create_test_files, MockSubspaceMethod
 from unittest.mock import patch, Mock
 
 

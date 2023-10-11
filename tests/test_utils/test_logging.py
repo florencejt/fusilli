@@ -1,6 +1,6 @@
 import os
 from unittest.mock import patch, Mock
-from pytorch_lightning.loggers import WandbLogger
+from pytorch_lightning.loggers import WandbLogger, CSVLogger
 from fusilli.utils.training_utils import set_logger
 import wandb
 
@@ -72,6 +72,7 @@ def test_set_logger_with_log_false():
         "log": False,
         "kfold_flag": True,
         "timestamp": "2023-10-05",
+        "loss_log_dir": "loss_log_dir",
     }
     fold = 1
     fusion_model = Mock()
@@ -79,4 +80,4 @@ def test_set_logger_with_log_false():
 
     logger = set_logger(params, fold, fusion_model, extra_log_string_dict)
 
-    assert logger is None
+    assert isinstance(logger, CSVLogger)

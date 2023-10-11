@@ -1,12 +1,15 @@
 """
-Function/functions to help user choose model's to run
+This module contains the function to filter the fusion models based on the conditions specified by the user.
+Conditions are specified in a dictionary, where the keys are the features to filter by and the values are the
+conditions to filter by. The function returns a dataframe containing the filtered models.
 """
 
 import importlib
 import pandas as pd
 import warnings
 
-# all the fusion models' names and paths
+# list of dictionaries containing the fusion models' names and paths
+# this must be updated whenever a new fusion model is added
 fusion_model_dict = [
     {"name": "Tabular1Unimodal", "path": "fusion_models.tabular1_unimodal"},
     {"name": "Tabular2Unimodal", "path": "fusion_models.tabular2_unimodal"},
@@ -53,14 +56,17 @@ fusion_model_dict = [
 ]
 
 
-def model_importer(fusion_model_dict):
+def all_model_importer(fusion_model_dict):
     """
     Imports all the fusion models in the fusion_model_dict.
 
     Parameters
     ----------
     fusion_model_dict : list
-        List of dictionaries containing the fusion models' names and paths.
+        List of dictionaries containing all the fusion models' names and paths.
+        Names mean the name of the class, and paths mean the path to the .py file
+        containing the class.
+        Note: this must be updated whenever a new fusion model is added.
 
     Returns
     -------
@@ -138,7 +144,7 @@ def get_models(conditions_dict, fusion_model_dict=fusion_model_dict):
     ]
     valid_modality_types = ["tabular1", "tabular2", "img", "both_tab", "tab_img"]
 
-    fusion_models = model_importer(fusion_model_dict)
+    fusion_models = all_model_importer(fusion_model_dict)
 
     # get model names, fusion types, modality types
 
@@ -231,3 +237,48 @@ def get_models(conditions_dict, fusion_model_dict=fusion_model_dict):
         warnings.warn("No models match the specified conditions.")
 
     return filtered_models
+
+
+def import_chosen_fusion_models(model_conditions):
+    """
+    Imports the fusion models specified by the user.
+
+    Parameters
+    ----------
+    model_conditions : dict
+        Dictionary containing the conditions to filter the models.
+        Structure: {feature1: condition, feature2: condition, ...}
+        or {feature1: [condition1, condition2, ...], feature2: [condition1, ...], ...}
+
+        Accepted features and accepted conditions:
+
+        - "fusion_type": "Uni-modal", "operation", "attention", "subspace", "graph", or "all"
+        - "modality_type": "tabular1", "tabular2", "img", "both_tab", "tab_img", or "all"
+        - "method_name": any method name currently implemented (e.g. "Tabular decision"), or "all"
+        - "class_name": any model name currently implemented (e.g. "TabularDecision"), or "all"
+
+        Example: To get all the models that are uni-modal and attention-based, the dictionary would be:
+
+        .. code-block:: python
+
+            conditions_dict = {
+                "fusion_type": ["Uni-modal", "operation"],
+                "modality_type": "all",
+                }
+
+    Returns
+    -------
+    fusion_models : list
+        List of all the fusion models class objects
+    """
+    imported_models = get_models(model_conditions)
+    print("Imported methods:")
+    print(imported_models.method_name.values)
+
+    fusion_models = []
+    for index, row in imported_models.iterrows():
+        module = importlib.import_module(row["method_path"])
+        module_class = getattr(module, row["class_name"])
+        fusion_models.append(module_class)
+
+    return fusion_models

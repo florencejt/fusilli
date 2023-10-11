@@ -110,7 +110,9 @@
              
   <section id="module-fusilli.utils.check_model_validity">
 <span id="fusilli-utils-check-model-validity"></span><h1>fusilli.utils.check_model_validity<a class="headerlink" href="#module-fusilli.utils.check_model_validity" title="Permalink to this heading"></a></h1>
-<p>Check validity of model modifications.</p>
+<p>This module contains functions to check the validity of the model modifications, such as
+checking the data type of the modifications and checking the input image dimensions of the
+modifications.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
@@ -118,7 +120,7 @@
 <td><p>Check if the modification is of the correct data type.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#fusilli.utils.check_model_validity.check_fused_layers" title="fusilli.utils.check_model_validity.check_fused_layers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_fused_layers</span></code></a>(fused_layers, fused_dim)</p></td>
-<td><p>Check the fused layers in a fusion model:</p></td>
+<td><p>Check that the fused layers within the fusion model (meaning the layers that take place after the fusion) are of the correct data type (nn.Sequential) and that the first layer is a nn.Linear layer with the correct in_features.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.utils.check_model_validity.check_img_dim" title="fusilli.utils.check_model_validity.check_img_dim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_img_dim</span></code></a>(attribute, img_dim, attribute_name)</p></td>
 <td><p>Check if the modification img layers are the correct dimension.</p></td>
@@ -137,6 +139,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>attribute</strong> (<em>object</em>) – Attribute to check.</p></li>
 <li><p><strong>correct_dtype</strong> (<em>object</em>) – Correct data type.</p></li>
+<li><p><strong>attribute_name</strong> (<em>str</em>) – Name of the attribute to check (for the error message)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -148,13 +151,10 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="fusilli.utils.check_model_validity.check_fused_layers">
 <span class="sig-name descname"><span class="pre">check_fused_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fused_layers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fused_dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/check_model_validity.html#check_fused_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.check_model_validity.check_fused_layers" title="Permalink to this definition"></a></dt>
-<dd><p>Check the fused layers in a fusion model:</p>
-<ul class="simple">
-<li><p>check fused_layers is nn.Sequential</p></li>
-<li><p>check the input features of the first layer is the fused_dim</p></li>
-<li><p>find the output features of the last layer to make prediction layer</p></li>
-<li><p>check first layer is a linear layer</p></li>
-</ul>
+<dd><p>Check that the fused layers within the fusion model (meaning the layers that take place
+after the fusion) are of the correct data type (nn.Sequential) and that the first layer
+is a nn.Linear layer with the correct in_features. Also returns the output dimension of
+the fused layers for the final prediction layers of the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -181,6 +181,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>attribute</strong> (<em>object</em>) – Attribute to check.</p></li>
 <li><p><strong>img_dim</strong> (<em>object</em>) – Correct img dimensions.</p></li>
+<li><p><strong>attribute_name</strong> (<em>str</em>) – Name of the attribute to check (for the error message)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -195,7 +196,10 @@
 <dd><p>Check if the modification is a function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>attribute</strong> (<em>object</em>) – Attribute to check.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attribute</strong> (<em>object</em>) – Attribute to check.</p></li>
+<li><p><strong>attribute_name</strong> (<em>str</em>) – Name of the attribute to check (for the error message)</p></li>
+</ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>TypeError</strong> – If the modification is not a function.</p>

@@ -93,14 +93,17 @@
              
   <h1>Source code for fusilli.utils.model_chooser</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Function/functions to help user choose model&#39;s to run</span>
+<span class="sd">This module contains the function to filter the fusion models based on the conditions specified by the user.</span>
+<span class="sd">Conditions are specified in a dictionary, where the keys are the features to filter by and the values are the</span>
+<span class="sd">conditions to filter by. The function returns a dataframe containing the filtered models.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
-<span class="c1"># all the fusion models&#39; names and paths</span>
+<span class="c1"># list of dictionaries containing the fusion models&#39; names and paths</span>
+<span class="c1"># this must be updated whenever a new fusion model is added</span>
 <span class="n">fusion_model_dict</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Tabular1Unimodal&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabular1_unimodal&quot;</span><span class="p">},</span>
     <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Tabular2Unimodal&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabular2_unimodal&quot;</span><span class="p">},</span>
@@ -147,14 +150,17 @@
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="model_importer"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_chooser.html#fusilli.utils.model_chooser.model_importer">[docs]</a><span class="k">def</span> <span class="nf">model_importer</span><span class="p">(</span><span class="n">fusion_model_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="all_model_importer"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_chooser.html#fusilli.utils.model_chooser.all_model_importer">[docs]</a><span class="k">def</span> <span class="nf">all_model_importer</span><span class="p">(</span><span class="n">fusion_model_dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Imports all the fusion models in the fusion_model_dict.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    fusion_model_dict : list</span>
-<span class="sd">        List of dictionaries containing the fusion models&#39; names and paths.</span>
+<span class="sd">        List of dictionaries containing all the fusion models&#39; names and paths.</span>
+<span class="sd">        Names mean the name of the class, and paths mean the path to the .py file</span>
+<span class="sd">        containing the class.</span>
+<span class="sd">        Note: this must be updated whenever a new fusion model is added.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -232,7 +238,7 @@
     <span class="p">]</span>
     <span class="n">valid_modality_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;tabular1&quot;</span><span class="p">,</span> <span class="s2">&quot;tabular2&quot;</span><span class="p">,</span> <span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;both_tab&quot;</span><span class="p">,</span> <span class="s2">&quot;tab_img&quot;</span><span class="p">]</span>
 
-    <span class="n">fusion_models</span> <span class="o">=</span> <span class="n">model_importer</span><span class="p">(</span><span class="n">fusion_model_dict</span><span class="p">)</span>
+    <span class="n">fusion_models</span> <span class="o">=</span> <span class="n">all_model_importer</span><span class="p">(</span><span class="n">fusion_model_dict</span><span class="p">)</span>
 
     <span class="c1"># get model names, fusion types, modality types</span>
 
@@ -325,6 +331,51 @@
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No models match the specified conditions.&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">filtered_models</span></div>
+
+
+<div class="viewcode-block" id="import_chosen_fusion_models"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_chooser.html#fusilli.utils.model_chooser.import_chosen_fusion_models">[docs]</a><span class="k">def</span> <span class="nf">import_chosen_fusion_models</span><span class="p">(</span><span class="n">model_conditions</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Imports the fusion models specified by the user.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model_conditions : dict</span>
+<span class="sd">        Dictionary containing the conditions to filter the models.</span>
+<span class="sd">        Structure: {feature1: condition, feature2: condition, ...}</span>
+<span class="sd">        or {feature1: [condition1, condition2, ...], feature2: [condition1, ...], ...}</span>
+
+<span class="sd">        Accepted features and accepted conditions:</span>
+
+<span class="sd">        - &quot;fusion_type&quot;: &quot;Uni-modal&quot;, &quot;operation&quot;, &quot;attention&quot;, &quot;subspace&quot;, &quot;graph&quot;, or &quot;all&quot;</span>
+<span class="sd">        - &quot;modality_type&quot;: &quot;tabular1&quot;, &quot;tabular2&quot;, &quot;img&quot;, &quot;both_tab&quot;, &quot;tab_img&quot;, or &quot;all&quot;</span>
+<span class="sd">        - &quot;method_name&quot;: any method name currently implemented (e.g. &quot;Tabular decision&quot;), or &quot;all&quot;</span>
+<span class="sd">        - &quot;class_name&quot;: any model name currently implemented (e.g. &quot;TabularDecision&quot;), or &quot;all&quot;</span>
+
+<span class="sd">        Example: To get all the models that are uni-modal and attention-based, the dictionary would be:</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            conditions_dict = {</span>
+<span class="sd">                &quot;fusion_type&quot;: [&quot;Uni-modal&quot;, &quot;operation&quot;],</span>
+<span class="sd">                &quot;modality_type&quot;: &quot;all&quot;,</span>
+<span class="sd">                }</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fusion_models : list</span>
+<span class="sd">        List of all the fusion models class objects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">imported_models</span> <span class="o">=</span> <span class="n">get_models</span><span class="p">(</span><span class="n">model_conditions</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Imported methods:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">imported_models</span><span class="o">.</span><span class="n">method_name</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+    <span class="n">fusion_models</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">imported_models</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;method_path&quot;</span><span class="p">])</span>
+        <span class="n">module_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;class_name&quot;</span><span class="p">])</span>
+        <span class="n">fusion_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">module_class</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fusion_models</span></div>
 </pre></div>
 
            </div>

@@ -17,8 +17,8 @@ from fusilli.fusion_models.mcvae_tab import (
     MCVAE_tab,
 )
 
-from tests.test_data.test_CustomDataModule import create_test_files
-from fusilli.data import CustomDataModule
+from tests.test_data.test_TrainTestDataModule import create_test_files
+from fusilli.data import TrainTestDataModule
 import warnings
 from unittest.mock import patch, Mock
 
@@ -731,8 +731,8 @@ def model_instance_denoising_autoencoder_subspace_method_2D(create_test_files):
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tab_img"
 
-    # Initialize the CustomDataModule
-    dm = CustomDataModule(params, example_fusion_model, sources, batch_size)
+    # Initialize the TrainTestDataModule
+    dm = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
     dm.prepare_data()
     dm.setup()
 
@@ -756,8 +756,8 @@ def model_instance_denoising_autoencoder_subspace_method_3D(create_test_files):
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tab_img"
 
-    # Initialize the CustomDataModule
-    dm = CustomDataModule(params, example_fusion_model, sources, batch_size)
+    # Initialize the TrainTestDataModule
+    dm = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
     dm.prepare_data()
     dm.setup()
 
@@ -781,8 +781,8 @@ def model_instance_concat_img_latent_tab_subspace_method_2D(create_test_files):
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tab_img"
 
-    # Initialize the CustomDataModule
-    dm = CustomDataModule(params, example_fusion_model, sources, batch_size)
+    # Initialize the TrainTestDataModule
+    dm = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
     dm.prepare_data()
     dm.setup()
 
@@ -806,8 +806,8 @@ def model_instance_concat_img_latent_tab_subspace_method_3D(create_test_files):
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tab_img"
 
-    # Initialize the CustomDataModule
-    datamodule = CustomDataModule(params, example_fusion_model, sources, batch_size)
+    # Initialize the TrainTestDataModule
+    datamodule = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
     datamodule.prepare_data()
     datamodule.setup()
 
@@ -831,8 +831,8 @@ def model_instance_MCVAESubspaceMethod(create_test_files):
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "both_tab"
 
-    # Initialize the CustomDataModule
-    datamodule = CustomDataModule(params, example_fusion_model, sources, batch_size)
+    # Initialize the TrainTestDataModule
+    datamodule = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
     datamodule.prepare_data()
     datamodule.setup()
 

@@ -1,13 +1,13 @@
 import pytest
 from fusilli.data import (
     KFoldDataModule,
-    CustomDataModule,
-    GraphDataModule,
+    TrainTestDataModule,
+    TrainTestGraphDataModule,
     KFoldGraphDataModule,
     get_data_module,
 )
-from .test_CustomDataModule import create_test_files, MockSubspaceMethod
-from .test_GraphDataModule import MockGraphMakerModule
+from .test_TrainTestDataModule import create_test_files, MockSubspaceMethod
+from .test_TrainTestGraphDataModule import MockGraphMakerModule
 from torch_geometric.data.lightning import LightningNodeData
 import torch
 import pandas as pd
@@ -95,7 +95,7 @@ def test_get_data_module_custom(create_test_files):
     dm = get_data_module(fusion_model, params)
 
     # Add assertions based on your expectations
-    assert isinstance(dm, CustomDataModule)
+    assert isinstance(dm, TrainTestDataModule)
     assert dm.batch_size == params.get("batch_size", 8)  # default batch size
     assert dm.data_dims == [2, None, [100, 100]]  # Adjust based on your data dimensions
     assert dm.test_size == params.get("test_size", 0.3)
@@ -222,7 +222,7 @@ def test_optional_suffix(create_optional_suffix_files):
         dm = get_data_module(fusion_model, params, optional_suffix="_wrong_suffix")
 
     # Add assertions based on your expectations
-    assert isinstance(dm, CustomDataModule)
+    assert isinstance(dm, TrainTestDataModule)
     assert dm.batch_size == params.get("batch_size", 8)  # default batch size
     assert dm.data_dims == [2, None, [100, 100]]  # Adjust based on your data dimensions
     assert dm.test_size == params.get("test_size", 0.3)

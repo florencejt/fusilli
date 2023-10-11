@@ -93,7 +93,10 @@
              
   <h1>Source code for fusilli.eval</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Functions for evaluating the performance of the models and plotting the results.</span>
+<span class="sd">This module contains classes and functions for evaluating trained models (i.e. plotting results from training).</span>
+<span class="sd">The setup for this module has been inspired by the scikit-learn API for plotting results, which involves each plot</span>
+<span class="sd">being a class with a ``from_model`` method that takes in a trained model and returns a plot with the validation data, and a ``from_new_data``</span>
+<span class="sd">method that takes in a trained model and new data and returns a plot. </span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">math</span>
@@ -119,14 +122,56 @@
 
 
 <div class="viewcode-block" id="ParentPlotter"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ParentPlotter">[docs]</a><span class="k">class</span> <span class="nc">ParentPlotter</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Parent class for all plot classes.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Parent class for all plot classes. </span>
+<span class="sd">    </span>
+<span class="sd">    It includes methods that are used by multiple plot classes, such as obtaining final</span>
+<span class="sd">    validation data from kfold and train/test models, and putting new data through the</span>
+<span class="sd">    models for both kfold and train/test protocols.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    None</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ParentPlotter.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ParentPlotter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div>
 
-    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ParentPlotter.get_kfold_data_from_model"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ParentPlotter.get_kfold_data_from_model">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_kfold_data_from_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">):</span>
-        <span class="c1"># create empty lists for the folds of train_reals, train_preds, val_reals, val_preds</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the final validation data from a kfold model, meaning the data that was used to evaluate the model</span>
+<span class="sd">        when the model training was complete.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model_list: list</span>
+<span class="sd">            List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first</span>
+<span class="sd">            element is the k=1 model and the second element is the k=2 model, etc.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        train_reals: list</span>
+<span class="sd">            List of torch.Tensors of the real values for the training set for each fold.</span>
+<span class="sd">            This is stored in each trained model&#39;s class instance.</span>
+<span class="sd">        train_preds: list</span>
+<span class="sd">            List of torch.Tensors of the predicted values for the training set for each fold.</span>
+<span class="sd">            This is stored in each trained model&#39;s class instance.</span>
+<span class="sd">        val_reals: list</span>
+<span class="sd">            List of torch.Tensors of the real values for the validation set for each fold.</span>
+<span class="sd">            This is stored in each trained model&#39;s class instance.</span>
+<span class="sd">        val_preds: list</span>
+<span class="sd">            List of torch.Tensors of the predicted values for the validation set for each fold.</span>
+<span class="sd">            This is stored in each trained model&#39;s class instance.</span>
+<span class="sd">        metrics_per_fold: dict</span>
+<span class="sd">            Dictionary of the metrics for each fold.</span>
+<span class="sd">            The keys are the names of the metrics and the values are lists of the metric values for each fold.</span>
+<span class="sd">        overall_kfold_metrics: dict</span>
+<span class="sd">            Dictionary of the overall kfold metrics. </span>
+<span class="sd">            The keys are the names of the metrics and the values are the metric values for the overall kfold,</span>
+<span class="sd">            meaning the metric values for the concatenated final validation data over all the folds.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">train_reals</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">train_preds</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">val_reals</span> <span class="o">=</span> <span class="p">[]</span>
@@ -184,33 +229,40 @@
             <span class="n">val_preds</span><span class="p">,</span>
             <span class="n">metrics_per_fold</span><span class="p">,</span>
             <span class="n">overall_kfold_metrics</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ParentPlotter.get_tt_data_from_model"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ParentPlotter.get_tt_data_from_model">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_tt_data_from_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_tt_data_from_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the data from a train/test model.</span>
-
+<span class="sd">        Get the final validation data from a train/test model, meaning the data that was used to evaluate the model</span>
+<span class="sd">        when the model training was complete.</span>
+<span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        model: nn.Module</span>
-<span class="sd">            The trained model.</span>
-
+<span class="sd">        model_list: list</span>
+<span class="sd">            A list of length 1 containing the trained pytorch_lightning model.</span>
+<span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        train_reals: torch.Tensor</span>
-<span class="sd">            The real values for the training set.</span>
+<span class="sd">            Torch.Tensor of the real values for the training set.</span>
+<span class="sd">            This is stored in the trained model&#39;s class instance.</span>
 <span class="sd">        train_preds: torch.Tensor</span>
-<span class="sd">            The predicted values for the training set.</span>
+<span class="sd">            Torch.Tensor of the predicted values for the training set.</span>
+<span class="sd">            This is stored in the trained model&#39;s class instance.</span>
 <span class="sd">        val_reals: torch.Tensor</span>
-<span class="sd">            The real values for the validation set.</span>
+<span class="sd">            Torch.Tensor of the real values for the validation set.</span>
+<span class="sd">            This is stored in the trained model&#39;s class instance.</span>
 <span class="sd">        val_preds: torch.Tensor</span>
-<span class="sd">            The predicted values for the validation set.</span>
+<span class="sd">            Torch.Tensor of the predicted values for the validation set.</span>
+<span class="sd">            This is stored in the trained model&#39;s class instance.</span>
 <span class="sd">        metric_values: dict</span>
-<span class="sd">            The values of the metrics for the model.</span>
+<span class="sd">            Dictionary of the metrics for the model.</span>
+<span class="sd">            The keys are the names of the metrics and the values are the metric values for the model.</span>
+<span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">model_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># get the model from the list of length 1</span>
 
         <span class="c1"># not training the model</span>
         <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
@@ -234,10 +286,48 @@
         <span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="p">,</span> <span class="n">checkpoint_file_suffix</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Putting new data into each k-fold trained model: we don&#39;t need to split the new data into folds.</span>
-<span class="sd">        We just need to get the predictions for each fold and plot them.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        Get new data by running through trained model for a kfold model.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model_list: list</span>
+<span class="sd">            List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first</span>
+<span class="sd">            element is the k=1 model and the second element is the k=2 model, etc.</span>
+<span class="sd">        params: dict</span>
+<span class="sd">            Additional parameters. Used for knowing where the checkpoint files are stored and </span>
+<span class="sd">            creating the pytorch lightning data_module for the new data.</span>
+<span class="sd">        data_file_suffix: str</span>
+<span class="sd">            Suffix that is on the new data csv and pt files. e.g. &quot;_new_data&quot; or &quot;_test&quot;</span>
+<span class="sd">        checkpoint_file_suffix: str, optional</span>
+<span class="sd">            Suffix that is on the trained model checkpoint files. e.g. &quot;_firsttry&quot;. Added by the user.</span>
+<span class="sd">            Default is None.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        train_reals: list</span>
+<span class="sd">            List of torch.Tensors of the real values for the training set for each fold.</span>
+<span class="sd">            This is stored in each trained model&#39;s class instance.</span>
+<span class="sd">        train_preds: list</span>
+<span class="sd">            List of torch.Tensors of the predicted values for the training set for each fold.</span>
+<span class="sd">            This is stored in each trained model&#39;s class instance.</span>
+<span class="sd">        val_reals: list</span>
+<span class="sd">            List of torch.Tensors of the real values for the new data set for each fold.</span>
+<span class="sd">        val_preds: list</span>
+<span class="sd">            List of torch.Tensors of the predicted values for the new data set for each fold.</span>
+<span class="sd">            This was obtained by running the new data through the trained model.</span>
+<span class="sd">        metrics_per_fold: dict</span>
+<span class="sd">            Dictionary of the metrics for each fold.</span>
+<span class="sd">            The keys are the names of the metrics and the values are lists of the metric values for each fold.  </span>
+<span class="sd">        overall_kfold_metrics: dict</span>
+<span class="sd">            Dictionary of the overall kfold metrics.</span>
+<span class="sd">            The keys are the names of the metrics and the values are the metric values for the overall kfold,</span>
+<span class="sd">            meaning the metric values for the concatenated new data over all the folds.</span>
 
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the model has a graph maker, it&#39;s not supported yet for creating graphs from new data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">train_reals</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">train_preds</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">val_reals</span> <span class="o">=</span> <span class="p">[]</span>
@@ -390,33 +480,50 @@
 
 <div class="viewcode-block" id="ParentPlotter.get_new_tt_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ParentPlotter.get_new_tt_data">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_new_tt_data</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="p">,</span> <span class="n">checkpoint_file_suffix</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="p">,</span> <span class="n">checkpoint_file_suffix</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get new data by running through trained model for a train/test model.</span>
-
+<span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        model: nn.Module</span>
-<span class="sd">            The trained model.</span>
-<span class="sd">        sources: list</span>
-<span class="sd">            List of sources to get data from. [tabular1source csv, tabular2source csv, image csv]</span>
+<span class="sd">        model_list: list</span>
+<span class="sd">            A list of length 1 containing the trained pytorch_lightning model.</span>
 <span class="sd">        params: dict</span>
-<span class="sd">            Additional parameters.</span>
+<span class="sd">            Additional parameters. Used for knowing where the checkpoint files are stored and </span>
+<span class="sd">            creating the pytorch lightning data_module for the new data.</span>
 <span class="sd">        data_file_suffix: str</span>
 <span class="sd">            Suffix that is on the new data csv and pt files. e.g. &quot;_new_data&quot; or &quot;_test&quot;</span>
 <span class="sd">        checkpoint_file_suffix: str, optional</span>
 <span class="sd">            Suffix that is on the trained model checkpoint files. e.g. &quot;_firsttry&quot;. Added by the user.</span>
 <span class="sd">            Default is None.</span>
-
+<span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        return train_reals, train_preds, val_reals, val_preds, metric_values</span>
+<span class="sd">        train_reals: torch.Tensor</span>
+<span class="sd">            Torch.Tensor of the real values for the training set.</span>
+<span class="sd">            This is stored in the trained model&#39;s class instance.</span>
+<span class="sd">        train_preds: torch.Tensor</span>
+<span class="sd">            Torch.Tensor of the predicted values for the training set.</span>
+<span class="sd">            This is stored in the trained model&#39;s class instance.</span>
+<span class="sd">        val_reals: torch.Tensor</span>
+<span class="sd">            Torch.Tensor of the real values for the new data set.</span>
+<span class="sd">        val_preds: torch.Tensor</span>
+<span class="sd">            Torch.Tensor of the predicted values for the new data set.</span>
+<span class="sd">        metric_values: dict</span>
+<span class="sd">            Dictionary of the metrics for the model.</span>
+<span class="sd">            The keys are the names of the metrics and the values are the metric values for the model.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the model has a graph maker, it&#39;s not supported yet for creating graphs from new data.</span>
+<span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># eval the model</span>
         <span class="c1"># ckpt_path = model[0][1]</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">model_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
@@ -519,16 +626,9 @@
 <span class="sd">    Pink dots are the training data, green dots are the validation data. The validation data is</span>
 <span class="sd">    either new data if using from_new_data or the original validation data if using from_final_val_data.</span>
 
-<span class="sd">    Parameters</span>
+<span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    which_data: str</span>
-<span class="sd">        Either &quot;from_new_data&quot; or &quot;from_final_val_data&quot;.</span>
-<span class="sd">    model: nn.Module</span>
-<span class="sd">        The trained model.</span>
-<span class="sd">    X: torch.Tensor</span>
-<span class="sd">        The data to plot.</span>
-<span class="sd">    y: torch.Tensor</span>
-<span class="sd">        The labels for the data.</span>
+<span class="sd">    None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="RealsVsPreds.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.RealsVsPreds.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -536,39 +636,64 @@
 
 <div class="viewcode-block" id="RealsVsPreds.from_new_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.RealsVsPreds.from_new_data">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_new_data</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="o">=</span><span class="s2">&quot;_test&quot;</span><span class="p">,</span> <span class="n">checkpoint_file_suffix</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="o">=</span><span class="s2">&quot;_test&quot;</span><span class="p">,</span> <span class="n">checkpoint_file_suffix</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="sd">        Reals vs preds plot using new data (i.e. data that was not used to train or validate the model).</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        model_list: list</span>
+<span class="sd">            List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first</span>
+<span class="sd">            element is the k=1 model and the second element is the k=2 model, etc.</span>
+<span class="sd">            For train/test models, this is a list of length 1.</span>
+<span class="sd">        params: dict</span>
+<span class="sd">            Additional parameters. Used for knowing where the checkpoint files are stored and</span>
+<span class="sd">            creating the pytorch lightning data_module for the new data.</span>
 <span class="sd">        data_file_suffix: str</span>
 <span class="sd">            Suffix for the data file e.g. _test means that the source files are</span>
 <span class="sd">            ``params[&quot;tabular1_source_test]``, ``params[&quot;tabular2_source_test]``,</span>
 <span class="sd">            ``params[&quot;img_source_test]``.</span>
 <span class="sd">            Change this to whatever suffix you have chosen for your new data files.</span>
+<span class="sd">            Default is &quot;_test&quot;.</span>
+<span class="sd">        checkpoint_file_suffix: str, optional</span>
+<span class="sd">            Suffix that is on the trained model checkpoint files. e.g. &quot;_firsttry&quot;. Added by the user.</span>
+<span class="sd">            Default is None.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        figure: matplotlib.pyplot.figure</span>
+<span class="sd">            The figure of the plot.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the model is not a list.</span>
+<span class="sd">            If the model is a list of length &gt; 1 but kfold_flag is False.</span>
+<span class="sd">            If the model is a list of length 1 but kfold_flag is True.</span>
+<span class="sd">            If the model is an empty list.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="p">(</span>
-                    <span class="s2">&quot;Argument &#39;model&#39; is not a list. &quot;</span>
+                    <span class="s2">&quot;Argument &#39;model_list&#39; is not a list. &quot;</span>
                     <span class="s2">&quot;Please check the model and the function input.&quot;</span>
                     <span class="s2">&quot;If you are using a train/test model, the single model must be in a list of length 1.&quot;</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">model_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># if isinstance(model, list):  # kfold model</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">model_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="p">(</span>
-                        <span class="s2">&quot;Argument &#39;model&#39; is a list but kfold_flag is False. &quot;</span>
+                        <span class="s2">&quot;Argument &#39;model_list&#39; is a list but kfold_flag is False. &quot;</span>
                         <span class="s2">&quot;Please check the model and the function input.&quot;</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
-
-            <span class="n">model_list</span> <span class="o">=</span> <span class="n">model</span>
 
             <span class="p">(</span>
                 <span class="n">train_reals</span><span class="p">,</span>
@@ -591,12 +716,12 @@
 
             <span class="n">figure</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;From new data&quot;</span><span class="p">)</span>
 
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">model_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># isinstance(model, nn.Module):  # train/test model</span>
-            <span class="k">if</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">model_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="p">(</span>
-                        <span class="s2">&quot;Argument &#39;model&#39; is a list of one model but kfold_flag is True. &quot;</span>
+                        <span class="s2">&quot;Argument &#39;model_list&#39; is a list of one model but kfold_flag is True. &quot;</span>
                         <span class="s2">&quot;Please check the model and the function input (k must be larger than 1).&quot;</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
@@ -608,45 +733,68 @@
                 <span class="n">val_preds</span><span class="p">,</span>
                 <span class="n">metric_values</span><span class="p">,</span>
             <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_new_tt_data</span><span class="p">(</span>
-                <span class="n">model</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="p">,</span> <span class="n">checkpoint_file_suffix</span>
+                <span class="n">model_list</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="p">,</span> <span class="n">checkpoint_file_suffix</span>
             <span class="p">)</span>
 
             <span class="c1"># plot the figure</span>
             <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reals_vs_preds_tt</span><span class="p">(</span>
-                <span class="n">model</span><span class="p">,</span> <span class="n">train_reals</span><span class="p">,</span> <span class="n">train_preds</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span>
+                <span class="n">model_list</span><span class="p">,</span> <span class="n">train_reals</span><span class="p">,</span> <span class="n">train_preds</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span>
             <span class="p">)</span>
 
             <span class="n">figure</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;From new data&quot;</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s2">&quot;Argument &#39;model&#39; is an empty list. &quot;</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s2">&quot;Argument &#39;model_list&#39; is an empty list. &quot;</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">figure</span></div>
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_final_val_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+<div class="viewcode-block" id="RealsVsPreds.from_final_val_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.RealsVsPreds.from_final_val_data">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_final_val_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reals vs preds plot using the final validation data (i.e. the data that was used to evaluate the model</span>
+<span class="sd">        when the model training was complete).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model_list: list</span>
+<span class="sd">            List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first</span>
+<span class="sd">            element is the k=1 model and the second element is the k=2 model, etc.</span>
+<span class="sd">            For train/test models, this is a list of length 1.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        figure: matplotlib.pyplot.figure</span>
+<span class="sd">            The figure of the plot.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the model is not a list.</span>
+<span class="sd">            If the model is a list of length &gt; 1 but kfold_flag is False.</span>
+<span class="sd">            If the model is a list of length 1 but kfold_flag is True.</span>
+<span class="sd">            If the model is an empty list.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="p">(</span>
-                    <span class="s2">&quot;Argument &#39;model&#39; is not a list. &quot;</span>
+                    <span class="s2">&quot;Argument &#39;model_list&#39; is not a list. &quot;</span>
                     <span class="s2">&quot;Please check the model and the function input.&quot;</span>
                     <span class="s2">&quot;If you are using a train/test model, the single model must be in a list of length 1.&quot;</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># kfold model (list of models and their checkpoints)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">model_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># kfold model (list of models and their checkpoints)</span>
             <span class="c1"># if isinstance(model[0], list):  # kfold model</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">model_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="p">(</span>
-                        <span class="s2">&quot;Argument &#39;model&#39; is a list of length &gt; 1 but kfold_flag is False. &quot;</span>
+                        <span class="s2">&quot;Argument &#39;model_list&#39; is a list of length &gt; 1 but kfold_flag is False. &quot;</span>
                         <span class="s2">&quot;Please check the model and the function input.&quot;</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
 
-            <span class="n">model_list</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">model</span>  <span class="c1"># renaming for clarity that this is a list of trained models</span>
-            <span class="p">)</span>
 
             <span class="p">(</span>
                 <span class="n">train_reals</span><span class="p">,</span>
@@ -667,13 +815,13 @@
 
             <span class="n">figure</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;From final val data&quot;</span><span class="p">)</span>
 
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">model_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># isinstance(model[0], nn.Module):  # train/test model</span>
 
-            <span class="k">if</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">model_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="p">(</span>
-                        <span class="s2">&quot;Argument &#39;model&#39; is a list of one model+checkpoint but kfold_flag is True. &quot;</span>
+                        <span class="s2">&quot;Argument &#39;model_list&#39; is a list of one model+checkpoint but kfold_flag is True. &quot;</span>
                         <span class="s2">&quot;Please check the model and the function input.&quot;</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
@@ -684,21 +832,21 @@
                 <span class="n">val_reals</span><span class="p">,</span>
                 <span class="n">val_preds</span><span class="p">,</span>
                 <span class="n">metric_values</span><span class="p">,</span>
-            <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tt_data_from_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+            <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tt_data_from_model</span><span class="p">(</span><span class="n">model_list</span><span class="p">)</span>
 
             <span class="c1"># plot the figure</span>
             <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reals_vs_preds_tt</span><span class="p">(</span>
-                <span class="n">model</span><span class="p">,</span> <span class="n">train_reals</span><span class="p">,</span> <span class="n">train_preds</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span>
+                <span class="n">model_list</span><span class="p">,</span> <span class="n">train_reals</span><span class="p">,</span> <span class="n">train_preds</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span>
             <span class="p">)</span>
 
             <span class="n">figure</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;From final val data&quot;</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s2">&quot;Argument &#39;model&#39; is an empty list. &quot;</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s2">&quot;Argument &#39;model_list&#39; is an empty list. &quot;</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="n">figure</span>
+        <span class="k">return</span> <span class="n">figure</span></div>
 
-    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="RealsVsPreds.reals_vs_preds_kfold"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.RealsVsPreds.reals_vs_preds_kfold">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">reals_vs_preds_kfold</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">model_list</span><span class="p">,</span>
@@ -707,6 +855,34 @@
         <span class="n">metrics_per_fold</span><span class="p">,</span>
         <span class="n">overall_kfold_metrics</span><span class="p">,</span>
     <span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reals vs preds plot for a kfold model. This function should be called within the RealVsPreds class</span>
+<span class="sd">        after the k-fold data has been obtained from the model (either old data or new data).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model_list: list</span>
+<span class="sd">            List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first</span>
+<span class="sd">            element is the k=1 model and the second element is the k=2 model, etc.</span>
+<span class="sd">        val_reals: list</span>
+<span class="sd">            List of torch.Tensors of the real values for the new data set for each fold.</span>
+<span class="sd">        val_preds: list</span>
+<span class="sd">            List of torch.Tensors of the predicted values for the new data set for each fold.</span>
+<span class="sd">        metrics_per_fold: dict</span>
+<span class="sd">            Dictionary of the metrics for each fold.</span>
+<span class="sd">            The keys are the names of the metrics and the values are lists of the metric values for each fold.</span>
+<span class="sd">        overall_kfold_metrics: dict</span>
+<span class="sd">            Dictionary of the overall kfold metrics.</span>
+<span class="sd">            The keys are the names of the metrics and the values are the metric values for the overall kfold,</span>
+<span class="sd">            meaning the metric values for the concatenated new data over all the folds.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fig: matplotlib.pyplot.figure</span>
+<span class="sd">            The figure of the plot.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">first_fold_model</span> <span class="o">=</span> <span class="n">model_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">metric_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">metrics_per_fold</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">N</span> <span class="o">=</span> <span class="n">first_fold_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;num_k&quot;</span><span class="p">]</span>
@@ -792,18 +968,40 @@
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">first_fold_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: reals vs. predicteds&quot;</span>
         <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">fig</span>
+        <span class="k">return</span> <span class="n">fig</span></div>
 
-    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="RealsVsPreds.reals_vs_preds_tt"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.RealsVsPreds.reals_vs_preds_tt">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">reals_vs_preds_tt</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">train_reals</span><span class="p">,</span> <span class="n">train_preds</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">,</span> <span class="n">train_reals</span><span class="p">,</span> <span class="n">train_preds</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span>
     <span class="p">):</span>
-        <span class="c1"># plot for train/test reals v preds</span>
-        <span class="c1"># called from from_new_data or from_final_val_data</span>
-        <span class="c1"># takes in data from either from_new_data or from_final_val_data</span>
-        <span class="c1"># returns a list of figures or dict of figures</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reals vs preds plot for a train/test model. This function should be called within the RealVsPreds class</span>
+<span class="sd">        after the train/test data has been obtained from the model (either old data or new data).</span>
 
-        <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model: list</span>
+<span class="sd">            A list of length 1 containing the trained pytorch_lightning model.</span>
+<span class="sd">        train_reals: torch.Tensor</span>
+<span class="sd">            Torch.Tensor of the real values for the training set.</span>
+<span class="sd">        train_preds: torch.Tensor</span>
+<span class="sd">            Torch.Tensor of the predicted values for the training set.</span>
+<span class="sd">        val_reals: torch.Tensor</span>
+<span class="sd">            Torch.Tensor of the real values for the new data set.</span>
+<span class="sd">        val_preds: torch.Tensor</span>
+<span class="sd">            Torch.Tensor of the predicted values for the new data set.</span>
+<span class="sd">        metric_values: dict</span>
+<span class="sd">            Dictionary of the metrics for the model.</span>
+<span class="sd">            The keys are the names of the metrics and the values are the metric values for the model.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fig: matplotlib.pyplot.figure</span>
+<span class="sd">            The figure of the plot.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">model_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
 
@@ -839,45 +1037,71 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Predictions&quot;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">fig</span></div>
+        <span class="k">return</span> <span class="n">fig</span></div></div>
 
 
 <div class="viewcode-block" id="ConfusionMatrix"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ConfusionMatrix">[docs]</a><span class="k">class</span> <span class="nc">ConfusionMatrix</span><span class="p">(</span><span class="n">ParentPlotter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots the confusion matrix for a model. This should be used for classification models only (binary or multiclass).</span>
+<span class="sd">    The data used to create the confusion matrix is either new data if using from_new_data or the original validation data</span>
+<span class="sd">    if using from_final_val_data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="ConfusionMatrix.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ConfusionMatrix.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ConfusionMatrix.from_new_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ConfusionMatrix.from_new_data">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_new_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="o">=</span><span class="s2">&quot;_test&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">from_new_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="o">=</span><span class="s2">&quot;_test&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Confusion matrix using new data (i.e. data that was not used to train or validate the model).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        model_list: list</span>
+<span class="sd">            List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first</span>
+<span class="sd">            element is the k=1 model and the second element is the k=2 model, etc.</span>
+<span class="sd">            For train/test models, this is a list of length 1.</span>
+<span class="sd">        params: dict</span>
+<span class="sd">            Additional parameters. Used for knowing where the checkpoint files are stored and</span>
+<span class="sd">            creating the pytorch lightning data_module for the new data.</span>
 <span class="sd">        data_file_suffix: str</span>
 <span class="sd">            Suffix for the data file e.g. _test means that the source files are</span>
 <span class="sd">            ``params[&quot;tabular1_source_test]``, ``params[&quot;tabular2_source_test]``,</span>
 <span class="sd">            ``params[&quot;img_source_test]``.</span>
 <span class="sd">            Change this to whatever suffix you have chosen for your new data files.</span>
+<span class="sd">            Default is &quot;_test&quot;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        figure: matplotlib.pyplot.figure</span>
+<span class="sd">            The figure of the plot.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the model is not a list.</span>
+<span class="sd">            If the model is a list of length &gt; 1 but kfold_flag is False.</span>
+<span class="sd">            If the model is a list of length 1 but kfold_flag is True.</span>
+<span class="sd">            If the model is an empty list.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="p">(</span>
-                    <span class="s2">&quot;Argument &#39;model&#39; is not a list. &quot;</span>
+                    <span class="s2">&quot;Argument &#39;model_list&#39; is not a list. &quot;</span>
                     <span class="s2">&quot;Please check the model and the function input.&quot;</span>
                     <span class="s2">&quot;If you are using a train/test model, the single model must be in a list of length 1.&quot;</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># kfold model</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">model_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># kfold model</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">model_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="p">(</span>
-                        <span class="s2">&quot;Argument &#39;model&#39; is a list but kfold_flag is False. &quot;</span>
+                        <span class="s2">&quot;Argument &#39;model_list&#39; is a list but kfold_flag is False. &quot;</span>
                         <span class="s2">&quot;Please check the model and the function input.&quot;</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
-
-            <span class="n">model_list</span> <span class="o">=</span> <span class="n">model</span>
 
             <span class="p">(</span>
                 <span class="n">train_reals</span><span class="p">,</span>
@@ -896,11 +1120,11 @@
                 <span class="n">overall_kfold_metrics</span><span class="p">,</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># train/test model</span>
-            <span class="k">if</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">model_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># train/test model</span>
+            <span class="k">if</span> <span class="n">model_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="p">(</span>
-                        <span class="s2">&quot;Argument &#39;model&#39; is a list of one model but kfold_flag is True. &quot;</span>
+                        <span class="s2">&quot;Argument &#39;model_list&#39; is a list of one model but kfold_flag is True. &quot;</span>
                         <span class="s2">&quot;Please check the model and the function input (k must be larger than 1).&quot;</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
@@ -911,39 +1135,59 @@
                 <span class="n">val_reals</span><span class="p">,</span>
                 <span class="n">val_preds</span><span class="p">,</span>
                 <span class="n">metric_values</span><span class="p">,</span>
-            <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_new_tt_data</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="p">)</span>
+            <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_new_tt_data</span><span class="p">(</span><span class="n">model_list</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">data_file_suffix</span><span class="p">)</span>
 
             <span class="c1"># plot the figure</span>
             <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix_tt</span><span class="p">(</span><span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s2">&quot;Argument &#39;model&#39; is an empty list. &quot;</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s2">&quot;Argument &#39;model_list&#39; is an empty list. &quot;</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">figure</span></div>
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_final_val_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfusionMatrix.from_final_val_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ConfusionMatrix.from_final_val_data">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_final_val_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Confusion matrix using the final validation data (i.e. the data that was used to evaluate the model</span>
+<span class="sd">        when the model training was complete).</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model_list: list</span>
+<span class="sd">            List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first</span>
+<span class="sd">            element is the k=1 model and the second element is the k=2 model, etc.</span>
+<span class="sd">            For train/test models, this is a list of length 1.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        figure: matplotlib.pyplot.figure</span>
+<span class="sd">            The figure of the plot.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the model is not a list.</span>
+<span class="sd">            If the model is a list of length &gt; 1 but kfold_flag is False.</span>
+<span class="sd">            If the model is a list of length 1 but kfold_flag is True.</span>
+<span class="sd">            If the model is an empty list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="p">(</span>
-                    <span class="s2">&quot;Argument &#39;model&#39; is not a list. &quot;</span>
+                    <span class="s2">&quot;Argument &#39;model_list&#39; is not a list. &quot;</span>
                     <span class="s2">&quot;Please check the model and the function input.&quot;</span>
                     <span class="s2">&quot;If you are using a train/test model, the single model must be in a list of length 1.&quot;</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># kfold model</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">model_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># kfold model</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">model_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="p">(</span>
-                        <span class="s2">&quot;Argument &#39;model&#39; is a list but kfold_flag is False. &quot;</span>
+                        <span class="s2">&quot;Argument &#39;model_list&#39; is a list but kfold_flag is False. &quot;</span>
                         <span class="s2">&quot;Please check the model and the function input.&quot;</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
-
-            <span class="n">model_list</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">model</span>  <span class="c1"># renaming for clarity that this is a list of trained models</span>
-            <span class="p">)</span>
 
             <span class="p">(</span>
                 <span class="n">train_reals</span><span class="p">,</span>
@@ -962,16 +1206,14 @@
                 <span class="n">overall_kfold_metrics</span><span class="p">,</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># train/test model</span>
-            <span class="k">if</span> <span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">model_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># train/test model</span>
+            <span class="k">if</span> <span class="n">model_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="p">(</span>
-                        <span class="s2">&quot;Argument &#39;model&#39; is a list of one model but kfold_flag is True. &quot;</span>
+                        <span class="s2">&quot;Argument &#39;model_list&#39; is a list of one model but kfold_flag is True. &quot;</span>
                         <span class="s2">&quot;Please check the model and the function input (k must be larger than 1).&quot;</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
 
             <span class="p">(</span>
                 <span class="n">train_reals</span><span class="p">,</span>
@@ -979,18 +1221,38 @@
                 <span class="n">val_reals</span><span class="p">,</span>
                 <span class="n">val_preds</span><span class="p">,</span>
                 <span class="n">metric_values</span><span class="p">,</span>
-            <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tt_data_from_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+            <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tt_data_from_model</span><span class="p">(</span><span class="n">model_list</span><span class="p">)</span>
 
-            <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix_tt</span><span class="p">(</span><span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">)</span>
+            <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">confusion_matrix_tt</span><span class="p">(</span><span class="n">model_list</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s2">&quot;Argument &#39;model&#39; is an empty list. &quot;</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s2">&quot;Argument &#39;model_list&#39; is an empty list. &quot;</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="n">figure</span>
+        <span class="k">return</span> <span class="n">figure</span></div>
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">confusion_matrix_tt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">):</span>
-        <span class="c1"># plot for kfold confusion matrix</span>
+<div class="viewcode-block" id="ConfusionMatrix.confusion_matrix_tt"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ConfusionMatrix.confusion_matrix_tt">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">confusion_matrix_tt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">,</span> <span class="n">val_reals</span><span class="p">,</span> <span class="n">val_preds</span><span class="p">,</span> <span class="n">metric_values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Confusion matrix for a train/test model. This function should be called within the ConfusionMatrix class</span>
+<span class="sd">        after the train/test data has been obtained from the model (either old data or new data).</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model_list: list</span>
+<span class="sd">            A list of length 1 containing the trained pytorch_lightning model.</span>
+<span class="sd">        val_reals: torch.Tensor</span>
+<span class="sd">            Torch.Tensor of the real values for the new data set.</span>
+<span class="sd">        val_preds: torch.Tensor</span>
+<span class="sd">            Torch.Tensor of the predicted values for the new data set.</span>
+<span class="sd">        metric_values: dict</span>
+<span class="sd">            Dictionary of the metrics for the model.</span>
+<span class="sd">            The keys are the names of the metrics and the values are the metric values for the model.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fig: matplotlib.pyplot.figure</span>
+<span class="sd">            The figure of the plot.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">conf_matrix</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">val_reals</span><span class="p">,</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">val_preds</span><span class="p">)</span>
 
@@ -1017,14 +1279,14 @@
         <span class="n">metric1_name</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">metric_values</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">method_name</span><span class="si">}</span><span class="s2"> - Validation </span><span class="si">{</span><span class="n">metric1_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">metric_values</span><span class="p">[</span><span class="n">metric1_name</span><span class="p">])</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">method_name</span><span class="si">}</span><span class="s2"> - Validation </span><span class="si">{</span><span class="n">metric1_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">metric_values</span><span class="p">[</span><span class="n">metric1_name</span><span class="p">])</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
         <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">fig</span>
+        <span class="k">return</span> <span class="n">fig</span></div>
 
-    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ConfusionMatrix.confusion_matrix_kfold"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ConfusionMatrix.confusion_matrix_kfold">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">confusion_matrix_kfold</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">model_list</span><span class="p">,</span>
@@ -1033,6 +1295,33 @@
         <span class="n">metrics_per_fold</span><span class="p">,</span>
         <span class="n">overall_kfold_metrics</span><span class="p">,</span>
     <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Confusion matrix for a kfold model. This function should be called within the ConfusionMatrix class</span>
+<span class="sd">        after the k-fold data has been obtained from the model (either old data or new data).</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model_list: list</span>
+<span class="sd">            List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first</span>
+<span class="sd">            element is the k=1 model and the second element is the k=2 model, etc.</span>
+<span class="sd">        val_reals: list</span>
+<span class="sd">            List of torch.Tensors of the real values for the new data set for each fold.</span>
+<span class="sd">        val_preds: list</span>
+<span class="sd">            List of torch.Tensors of the predicted values for the new data set for each fold.</span>
+<span class="sd">        metrics_per_fold: dict</span>
+<span class="sd">            Dictionary of the metrics for each fold.</span>
+<span class="sd">            The keys are the names of the metrics and the values are lists of the metric values for each fold.</span>
+<span class="sd">        overall_kfold_metrics: dict</span>
+<span class="sd">            Dictionary of the overall kfold metrics.</span>
+<span class="sd">            The keys are the names of the metrics and the values are the metric values for the overall kfold,</span>
+<span class="sd">            meaning the metric values for the concatenated new data over all the folds.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fig: matplotlib.pyplot.figure</span>
+<span class="sd">            The figure of the plot.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">first_fold_model</span> <span class="o">=</span> <span class="n">model_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">metric_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">metrics_per_fold</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">N</span> <span class="o">=</span> <span class="n">first_fold_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;num_k&quot;</span><span class="p">]</span>
@@ -1122,11 +1411,16 @@
         <span class="c1"># Set the overall title for the entire figure</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">first_fold_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: confusion matrix&quot;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">fig</span></div>
+        <span class="k">return</span> <span class="n">fig</span></div></div>
 
 
 <div class="viewcode-block" id="ModelComparison"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ModelComparison">[docs]</a><span class="k">class</span> <span class="nc">ModelComparison</span><span class="p">(</span><span class="n">ParentPlotter</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Plotting class for comparing models.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots the performance of multiple models on a single plot. Currently (as of 2023-10-11) this is only</span>
+<span class="sd">    implemented for from_final_val_data because it is not clear how to implement from_new_data for graph-based models, so </span>
+<span class="sd">    they would have to be left out of the main plot (which feels wrong tbh).</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ModelComparison.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ModelComparison.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
@@ -1134,13 +1428,29 @@
 <div class="viewcode-block" id="ModelComparison.from_final_val_data"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ModelComparison.from_final_val_data">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_final_val_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_list</span><span class="p">,</span> <span class="n">kfold_flag</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plotting function for comparing models on metrics using the final validation data (i.e. the data that was used to evaluate the model</span>
+<span class="sd">        when the model training was complete).</span>
+<span class="sd">        Produces a violin plot if kfold_flag is True and a bar plot if kfold_flag is False.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-
-<span class="sd">        model_list: dict</span>
-<span class="sd">            Dictionary of models. Keys are the model names and values are [[model]*num_k]</span>
+<span class="sd">        model_list: list of lists</span>
+<span class="sd">            List of trained pytorch_lightning models.</span>
+<span class="sd">            For k-fold, this is a list with length number of fusion methods, where each element is a list of length k</span>
+<span class="sd">            containing the trained pytorch_lightning models for each fold.</span>
+<span class="sd">            For train/test, this is a list of length number of fusion methods, where each element is a list of length 1</span>
+<span class="sd">            containing the trained pytorch_lightning model.</span>
 <span class="sd">        kfold_flag: bool</span>
-<span class="sd">            Whether the models are kfold models or not.</span>
+<span class="sd">            True if the model is a kfold model, False if the model is a train/test model.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fig: matplotlib.pyplot.figure</span>
+<span class="sd">            The figure of the plot.</span>
+<span class="sd">        df: pandas.DataFrame</span>
+<span class="sd">            The dataframe of the metrics.</span>
+<span class="sd">    </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">comparing_models_metrics</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -1182,8 +1492,6 @@
                 <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tt_data_from_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 
                 <span class="n">comparing_models_metrics</span><span class="p">[</span><span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">method_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">metric_values</span>
-
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;comparing models metrics&quot;</span><span class="p">,</span> <span class="n">comparing_models_metrics</span><span class="p">)</span>
 
             <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_test_comparison_plot</span><span class="p">(</span><span class="n">comparing_models_metrics</span><span class="p">)</span>
             <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_performance_dataframe</span><span class="p">(</span>
@@ -1331,14 +1639,11 @@
         <span class="c1"># Create the first bar chart using the primary y-axis (ax1)</span>
         <span class="n">bars1</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span>
             <span class="n">y_indices</span><span class="p">,</span>
-            <span class="c1">#   - bar_width / 2,</span>
             <span class="n">metric_1_values</span><span class="p">,</span>
             <span class="n">bar_width</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="s2">&quot;violet&quot;</span><span class="p">,</span>
             <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;purple&quot;</span>
-            <span class="c1"># label=self.metric1name,</span>
         <span class="p">)</span>
-        <span class="c1"># ax[0].bar_label(bars1, fmt=&quot;%.2f&quot;, label_type=&quot;edge&quot;)</span>
 
         <span class="c1"># black dashed line at x=0</span>
         <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
@@ -1354,14 +1659,11 @@
         <span class="c1"># Create the second bar chart using the secondary y-axis (ax2)</span>
         <span class="n">bars2</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span>
             <span class="n">y_indices</span><span class="p">,</span>
-            <span class="c1">#   + bar_width / 2,</span>
             <span class="n">metric_2_values</span><span class="p">,</span>
             <span class="n">bar_width</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="s2">&quot;powderblue&quot;</span><span class="p">,</span>
             <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;steelblue&quot;</span><span class="p">,</span>
-            <span class="c1"># label=self.metric2name,</span>
         <span class="p">)</span>
-        <span class="c1"># ax[1].bar_label(bars2, fmt=&quot;%.2f&quot;, label_type=&quot;edge&quot;)</span>
 
         <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">method_names</span><span class="p">)))</span>
         <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">metric_2_values</span><span class="p">))</span>
@@ -1378,10 +1680,29 @@
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
-    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ModelComparison.get_performance_dataframe"><a class="viewcode-back" href="../../autosummary/fusilli.eval.html#fusilli.eval.ModelComparison.get_performance_dataframe">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_performance_dataframe</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">comparing_models_metrics</span><span class="p">,</span> <span class="n">overall_kfold_metrics_dict</span><span class="p">,</span> <span class="n">kfold_flag</span>
     <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a dataframe of the performance metrics for each model.</span>
+<span class="sd">        For kfold models, the dataframe contains the overall kfold metrics and the metrics for each fold.</span>
+<span class="sd">        For train/test models, the dataframe contains the metrics for the train and test sets.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        comparing_models_metrics: dict</span>
+<span class="sd">            Dictionary of metrics. Keys are the model names and values are dict {metric1name: metric_value, metric2name: metric_value}</span>
+<span class="sd">        overall_kfold_metrics_dict: dict</span>
+<span class="sd">            Dictionary of overall kfold metrics. Keys are the model names and values are dict {metric1name: metric_value, metric2name: metric_value}</span>
+<span class="sd">        kfold_flag: bool</span>
+<span class="sd">            True if the model is a kfold model, False if the model is a train/test model.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        df: pandas.DataFrame</span>
+<span class="sd">            Dataframe of the performance metrics for each model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">method_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
             <span class="n">comparing_models_metrics</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="p">)</span>  <span class="c1"># [method1name, method2name,...]</span>
@@ -1389,8 +1710,6 @@
         <span class="n">metric2name</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">comparing_models_metrics</span><span class="p">[</span><span class="n">method_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">kfold_flag</span><span class="p">:</span>
-            <span class="c1"># copy self.overall_kfold_metrics to a new dictionary</span>
-            <span class="c1"># so that we can change the values from lists to single numbers</span>
 
             <span class="n">overall_kfold_metrics_copy</span> <span class="o">=</span> <span class="n">overall_kfold_metrics_dict</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
@@ -1438,7 +1757,7 @@
             <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;Method&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
 
-            <span class="k">return</span> <span class="n">df</span></div>
+            <span class="k">return</span> <span class="n">df</span></div></div>
 </pre></div>
 
            </div>

@@ -10,15 +10,13 @@ from fusilli.utils.training_utils import (
     set_checkpoint_name,
 )
 import wandb
-import warnings
-import inspect
 from fusilli.utils import model_modifier
 from pytorch_lightning.loggers import CSVLogger
 from fusilli.utils.csv_loss_plotter import plot_loss_curve
 
 
 def train_and_test(
-    dm,
+    data_module,
     params,
     k,
     fusion_model,
@@ -26,24 +24,22 @@ def train_and_test(
     layer_mods=None,
     max_epochs=1000,
     enable_checkpointing=True,
+    show_loss_plot=False,
 ):
     """
     Trains and tests a model and, if k_fold trained, a fold.
 
     Parameters
     ----------
-    dm : pytorch lightning data module
-        Data module.
+    data_module : pytorch lightning data module
+        Data module. 
+        Contains the train and val dataloaders.
     params : dict
         Dictionary of parameters.
     k : int
         Fold number.
     fusion_model : class
         Fusion model class.
-    metric_name_list : list
-        List of metric names.
-    method_name : str
-        Name of the method.
     extra_log_string_dict : dict
         Dictionary of extra log strings. Extra string to add to the run name during logging.
             e.g. if you're running the same model with different hyperparameters, you can add
@@ -59,6 +55,10 @@ def train_and_test(
         Maximum number of epochs. Default 1000.
     enable_checkpointing : bool
         Whether to enable checkpointing. Default True.
+    show_loss_plot : bool
+        Whether to show the loss plot. Default False.
+        If True, the loss plot will be shown after training with ``plt.show()``
+        If False, the loss plot will be saved to the log directory.
 
     Returns
     -------
@@ -78,28 +78,34 @@ def train_and_test(
 
     # define checkpoint filename
     if params["kfold_flag"]:
-        checkpoint_filename = set_checkpoint_name(
-            params, fusion_model, fold=k, extra_log_string_dict=extra_log_string_dict
-        )
+        if enable_checkpointing:
+            checkpoint_filename = set_checkpoint_name(
+                params, fusion_model, fold=k, extra_log_string_dict=extra_log_string_dict
+            )
+        else:
+            checkpoint_filename = None
+
 
         if fusion_model.fusion_type == "graph":
-            # graph k-fold loader is different to normal k-fold loader
-            dm = dm[k]
-            train_dataloader = dm.train_dataloader()
-            val_dataloader = dm.val_dataloader()
+            data_module = data_module[k]
+            train_dataloader = data_module.train_dataloader()
+            val_dataloader = data_module.val_dataloader()
         else:
-            train_dataloader = dm.train_dataloader(fold_idx=k)
-            val_dataloader = dm.val_dataloader(fold_idx=k)
+            train_dataloader = data_module.train_dataloader(fold_idx=k)
+            val_dataloader = data_module.val_dataloader(fold_idx=k)
 
     else:
-        checkpoint_filename = set_checkpoint_name(
-            params=params,
-            fusion_model=fusion_model,
-            extra_log_string_dict=extra_log_string_dict,
-        )
+        if enable_checkpointing:
+            checkpoint_filename = set_checkpoint_name(
+                params=params,
+                fusion_model=fusion_model,
+                extra_log_string_dict=extra_log_string_dict,
+            )
+        else:
+            checkpoint_filename = None
 
-        train_dataloader = dm.train_dataloader()
-        val_dataloader = dm.val_dataloader()
+        train_dataloader = data_module.train_dataloader()
+        val_dataloader = data_module.val_dataloader()
 
     logger = set_logger(params, k, fusion_model, extra_log_string_dict)  # set logger
 
@@ -109,7 +115,7 @@ def train_and_test(
         max_epochs=max_epochs,
         enable_checkpointing=enable_checkpointing,
         checkpoint_filename=checkpoint_filename,
-        own_early_stopping_callback=dm.own_early_stopping_callback,
+        own_early_stopping_callback=data_module.own_early_stopping_callback,
     )  # init trainer
 
     # initialise model with pytorch lightning framework, hence pl_model
@@ -117,22 +123,22 @@ def train_and_test(
         fusion_model(
             pred_type=params[
                 "pred_type"
-            ],  # pred_type is a string (binary, regression, multiclass)
-            data_dims=dm.data_dims,  # data_dims is a list of tuples
+            ],  
+            data_dims=data_module.data_dims,  # data_dims is a list of tuples
             params=params,  # params is a dict
         )
     )
 
+    # modify model architecture if layer_mods is not None
     if layer_mods is not None:
         pl_model.model = model_modifier.modify_model_architecture(
             pl_model.model, layer_mods
         )
 
     # graph-methods use masks to select train and val nodes rather than train and val dataloaders
-    # train and val dataloaders are still used for graph but they're identical
     if pl_model.model.fusion_type == "graph":
-        pl_model.train_mask = dm.input_train_nodes
-        pl_model.val_mask = dm.input_test_nodes
+        pl_model.train_mask = data_module.input_train_nodes
+        pl_model.val_mask = data_module.input_test_nodes
 
     # fit model
     trainer.fit(
@@ -144,14 +150,14 @@ def train_and_test(
     # test model
     trainer.validate(pl_model, val_dataloader)
 
+    # get final validation metrics
     metric_1, metric_2 = get_final_val_metrics(trainer)
-
     pl_model.metric1 = metric_1
     pl_model.metric2 = metric_2
 
-    # if loss is saved in csv file: plot the loss and save it now
+    # if logger is CSVLogger, plot loss curve
     if isinstance(logger, CSVLogger):
-        plot_loss_curve(params, logger)
+        plot_loss_curve(params, logger, show=show_loss_plot)
 
     return pl_model
 
@@ -175,12 +181,18 @@ def store_trained_model(trained_model, trained_models_dict):
         Dictionary of trained models.
     """
 
+    # get model name
     classname = trained_model.model.__class__.__name__
 
+    # if model is already in dictionary, we're training a kfold model
     if classname in trained_models_dict:
-        # If the model is already in the dictionary, convert the existing value to a list
+
+        # if the model is already a list, append the new model to the list
+        # this is for when we're training a kfold model and on the third fold onwards
         if isinstance(trained_models_dict[classname], list):
             trained_models_dict[classname].append(trained_model)
+        # if the model is not a list, make it a list and append the new model to the list
+        # this is for when we're training a kfold model and on the second fold
         else:
             trained_models_dict[classname] = [
                 trained_models_dict[classname],
@@ -188,6 +200,8 @@ def store_trained_model(trained_model, trained_models_dict):
             ]
     else:
         # If the model is not in the dictionary, add it as a new key-value pair
+        # This is for when we're training a single model with train/test split or 
+        # when we're training a kfold model and on the first fold
         trained_models_dict[classname] = [trained_model]
 
     return trained_models_dict
@@ -201,6 +215,7 @@ def train_and_save_models(
     layer_mods=None,
     max_epochs=1000,
     enable_checkpointing=True,
+    show_loss_plot=False,
 ):
     """
     Trains/tests the model and saves the trained model to a dictionary for further analysis.
@@ -230,9 +245,8 @@ def train_and_save_models(
         Maximum number of epochs. Default 1000.
     enable_checkpointing : bool
         Whether to enable checkpointing. Default True.
-    own_early_stopping_callback : pytorch lightning callback
-        Early stopping callback object. Default None. If None, the default early stopping
-        will be used.
+    show_loss_plot : bool
+        Whether to show the loss plot. Default False.
 
     Returns
     -------
@@ -247,7 +261,7 @@ def train_and_save_models(
     if params["kfold_flag"]:
         for k in range(params["num_k"]):
             trained_model = train_and_test(
-                dm=data_module,
+                data_module=data_module,
                 params=params,
                 k=k,
                 fusion_model=fusion_model,
@@ -255,6 +269,7 @@ def train_and_save_models(
                 layer_mods=layer_mods,
                 max_epochs=max_epochs,
                 enable_checkpointing=enable_checkpointing,
+                show_loss_plot=show_loss_plot,
             )
 
             trained_models_dict = store_trained_model(
@@ -267,7 +282,7 @@ def train_and_save_models(
 
     else:
         trained_model = train_and_test(
-            dm=data_module,
+            data_module=data_module,
             params=params,
             k=None,
             fusion_model=fusion_model,
@@ -275,6 +290,7 @@ def train_and_save_models(
             layer_mods=layer_mods,
             max_epochs=max_epochs,
             enable_checkpointing=enable_checkpointing,
+            show_loss_plot=show_loss_plot,
         )
 
         trained_models_dict = store_trained_model(

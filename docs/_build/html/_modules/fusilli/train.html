@@ -104,15 +104,13 @@
     <span class="n">set_checkpoint_name</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">import</span> <span class="nn">wandb</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">model_modifier</span>
 <span class="kn">from</span> <span class="nn">pytorch_lightning.loggers</span> <span class="kn">import</span> <span class="n">CSVLogger</span>
 <span class="kn">from</span> <span class="nn">fusilli.utils.csv_loss_plotter</span> <span class="kn">import</span> <span class="n">plot_loss_curve</span>
 
 
 <div class="viewcode-block" id="train_and_test"><a class="viewcode-back" href="../../autosummary/fusilli.train.html#fusilli.train.train_and_test">[docs]</a><span class="k">def</span> <span class="nf">train_and_test</span><span class="p">(</span>
-    <span class="n">dm</span><span class="p">,</span>
+    <span class="n">data_module</span><span class="p">,</span>
     <span class="n">params</span><span class="p">,</span>
     <span class="n">k</span><span class="p">,</span>
     <span class="n">fusion_model</span><span class="p">,</span>
@@ -127,18 +125,15 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    dm : pytorch lightning data module</span>
-<span class="sd">        Data module.</span>
+<span class="sd">    data_module : pytorch lightning data module</span>
+<span class="sd">        Data module. </span>
+<span class="sd">        Contains the train and val dataloaders.</span>
 <span class="sd">    params : dict</span>
 <span class="sd">        Dictionary of parameters.</span>
 <span class="sd">    k : int</span>
 <span class="sd">        Fold number.</span>
 <span class="sd">    fusion_model : class</span>
 <span class="sd">        Fusion model class.</span>
-<span class="sd">    metric_name_list : list</span>
-<span class="sd">        List of metric names.</span>
-<span class="sd">    method_name : str</span>
-<span class="sd">        Name of the method.</span>
 <span class="sd">    extra_log_string_dict : dict</span>
 <span class="sd">        Dictionary of extra log strings. Extra string to add to the run name during logging.</span>
 <span class="sd">            e.g. if you&#39;re running the same model with different hyperparameters, you can add</span>
@@ -154,6 +149,10 @@
 <span class="sd">        Maximum number of epochs. Default 1000.</span>
 <span class="sd">    enable_checkpointing : bool</span>
 <span class="sd">        Whether to enable checkpointing. Default True.</span>
+<span class="sd">    show_loss_plot : bool</span>
+<span class="sd">        Whether to show the loss plot. Default False.</span>
+<span class="sd">        If True, the loss plot will be shown after training with ``plt.show()``</span>
+<span class="sd">        If False, the loss plot will be saved to the log directory.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -182,13 +181,12 @@
 
 
         <span class="k">if</span> <span class="n">fusion_model</span><span class="o">.</span><span class="n">fusion_type</span> <span class="o">==</span> <span class="s2">&quot;graph&quot;</span><span class="p">:</span>
-            <span class="c1"># graph k-fold loader is different to normal k-fold loader</span>
-            <span class="n">dm</span> <span class="o">=</span> <span class="n">dm</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-            <span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">()</span>
-            <span class="n">val_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">val_dataloader</span><span class="p">()</span>
+            <span class="n">data_module</span> <span class="o">=</span> <span class="n">data_module</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">data_module</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">()</span>
+            <span class="n">val_dataloader</span> <span class="o">=</span> <span class="n">data_module</span><span class="o">.</span><span class="n">val_dataloader</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">(</span><span class="n">fold_idx</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
-            <span class="n">val_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">val_dataloader</span><span class="p">(</span><span class="n">fold_idx</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">data_module</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">(</span><span class="n">fold_idx</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">val_dataloader</span> <span class="o">=</span> <span class="n">data_module</span><span class="o">.</span><span class="n">val_dataloader</span><span class="p">(</span><span class="n">fold_idx</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">enable_checkpointing</span><span class="p">:</span>
@@ -200,8 +198,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">checkpoint_filename</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">()</span>
-        <span class="n">val_dataloader</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">val_dataloader</span><span class="p">()</span>
+        <span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">data_module</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">()</span>
+        <span class="n">val_dataloader</span> <span class="o">=</span> <span class="n">data_module</span><span class="o">.</span><span class="n">val_dataloader</span><span class="p">()</span>
 
     <span class="n">logger</span> <span class="o">=</span> <span class="n">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="p">)</span>  <span class="c1"># set logger</span>
 
@@ -211,7 +209,7 @@
         <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
         <span class="n">enable_checkpointing</span><span class="o">=</span><span class="n">enable_checkpointing</span><span class="p">,</span>
         <span class="n">checkpoint_filename</span><span class="o">=</span><span class="n">checkpoint_filename</span><span class="p">,</span>
-        <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="n">dm</span><span class="o">.</span><span class="n">own_early_stopping_callback</span><span class="p">,</span>
+        <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="n">data_module</span><span class="o">.</span><span class="n">own_early_stopping_callback</span><span class="p">,</span>
     <span class="p">)</span>  <span class="c1"># init trainer</span>
 
     <span class="c1"># initialise model with pytorch lightning framework, hence pl_model</span>
@@ -219,22 +217,22 @@
         <span class="n">fusion_model</span><span class="p">(</span>
             <span class="n">pred_type</span><span class="o">=</span><span class="n">params</span><span class="p">[</span>
                 <span class="s2">&quot;pred_type&quot;</span>
-            <span class="p">],</span>  <span class="c1"># pred_type is a string (binary, regression, multiclass)</span>
-            <span class="n">data_dims</span><span class="o">=</span><span class="n">dm</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span>  <span class="c1"># data_dims is a list of tuples</span>
+            <span class="p">],</span>  
+            <span class="n">data_dims</span><span class="o">=</span><span class="n">data_module</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span>  <span class="c1"># data_dims is a list of tuples</span>
             <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>  <span class="c1"># params is a dict</span>
         <span class="p">)</span>
     <span class="p">)</span>
 
+    <span class="c1"># modify model architecture if layer_mods is not None</span>
     <span class="k">if</span> <span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">pl_model</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model_modifier</span><span class="o">.</span><span class="n">modify_model_architecture</span><span class="p">(</span>
             <span class="n">pl_model</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">layer_mods</span>
         <span class="p">)</span>
 
     <span class="c1"># graph-methods use masks to select train and val nodes rather than train and val dataloaders</span>
-    <span class="c1"># train and val dataloaders are still used for graph but they&#39;re identical</span>
     <span class="k">if</span> <span class="n">pl_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fusion_type</span> <span class="o">==</span> <span class="s2">&quot;graph&quot;</span><span class="p">:</span>
-        <span class="n">pl_model</span><span class="o">.</span><span class="n">train_mask</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">input_train_nodes</span>
-        <span class="n">pl_model</span><span class="o">.</span><span class="n">val_mask</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">input_test_nodes</span>
+        <span class="n">pl_model</span><span class="o">.</span><span class="n">train_mask</span> <span class="o">=</span> <span class="n">data_module</span><span class="o">.</span><span class="n">input_train_nodes</span>
+        <span class="n">pl_model</span><span class="o">.</span><span class="n">val_mask</span> <span class="o">=</span> <span class="n">data_module</span><span class="o">.</span><span class="n">input_test_nodes</span>
 
     <span class="c1"># fit model</span>
     <span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
@@ -246,12 +244,12 @@
     <span class="c1"># test model</span>
     <span class="n">trainer</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">pl_model</span><span class="p">,</span> <span class="n">val_dataloader</span><span class="p">)</span>
 
+    <span class="c1"># get final validation metrics</span>
     <span class="n">metric_1</span><span class="p">,</span> <span class="n">metric_2</span> <span class="o">=</span> <span class="n">get_final_val_metrics</span><span class="p">(</span><span class="n">trainer</span><span class="p">)</span>
-
     <span class="n">pl_model</span><span class="o">.</span><span class="n">metric1</span> <span class="o">=</span> <span class="n">metric_1</span>
     <span class="n">pl_model</span><span class="o">.</span><span class="n">metric2</span> <span class="o">=</span> <span class="n">metric_2</span>
 
-    <span class="c1"># if loss is saved in csv file: plot the loss and save it now</span>
+    <span class="c1"># if logger is CSVLogger, plot loss curve</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">CSVLogger</span><span class="p">):</span>
         <span class="n">plot_loss_curve</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show_loss_plot</span><span class="p">)</span>
 
@@ -277,12 +275,18 @@
 <span class="sd">        Dictionary of trained models.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># get model name</span>
     <span class="n">classname</span> <span class="o">=</span> <span class="n">trained_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
 
+    <span class="c1"># if model is already in dictionary, we&#39;re training a kfold model</span>
     <span class="k">if</span> <span class="n">classname</span> <span class="ow">in</span> <span class="n">trained_models_dict</span><span class="p">:</span>
-        <span class="c1"># If the model is already in the dictionary, convert the existing value to a list</span>
+
+        <span class="c1"># if the model is already a list, append the new model to the list</span>
+        <span class="c1"># this is for when we&#39;re training a kfold model and on the third fold onwards</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">trained_models_dict</span><span class="p">[</span><span class="n">classname</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">trained_models_dict</span><span class="p">[</span><span class="n">classname</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trained_model</span><span class="p">)</span>
+        <span class="c1"># if the model is not a list, make it a list and append the new model to the list</span>
+        <span class="c1"># this is for when we&#39;re training a kfold model and on the second fold</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">trained_models_dict</span><span class="p">[</span><span class="n">classname</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">trained_models_dict</span><span class="p">[</span><span class="n">classname</span><span class="p">],</span>
@@ -290,6 +294,8 @@
             <span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># If the model is not in the dictionary, add it as a new key-value pair</span>
+        <span class="c1"># This is for when we&#39;re training a single model with train/test split or </span>
+        <span class="c1"># when we&#39;re training a kfold model and on the first fold</span>
         <span class="n">trained_models_dict</span><span class="p">[</span><span class="n">classname</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">trained_model</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">trained_models_dict</span></div>
@@ -333,9 +339,6 @@
 <span class="sd">        Maximum number of epochs. Default 1000.</span>
 <span class="sd">    enable_checkpointing : bool</span>
 <span class="sd">        Whether to enable checkpointing. Default True.</span>
-<span class="sd">    own_early_stopping_callback : pytorch lightning callback</span>
-<span class="sd">        Early stopping callback object. Default None. If None, the default early stopping</span>
-<span class="sd">        will be used.</span>
 <span class="sd">    show_loss_plot : bool</span>
 <span class="sd">        Whether to show the loss plot. Default False.</span>
 
@@ -352,7 +355,7 @@
     <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;num_k&quot;</span><span class="p">]):</span>
             <span class="n">trained_model</span> <span class="o">=</span> <span class="n">train_and_test</span><span class="p">(</span>
-                <span class="n">dm</span><span class="o">=</span><span class="n">data_module</span><span class="p">,</span>
+                <span class="n">data_module</span><span class="o">=</span><span class="n">data_module</span><span class="p">,</span>
                 <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
                 <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
                 <span class="n">fusion_model</span><span class="o">=</span><span class="n">fusion_model</span><span class="p">,</span>
@@ -373,7 +376,7 @@
 
     <span class="k">else</span><span class="p">:</span>
         <span class="n">trained_model</span> <span class="o">=</span> <span class="n">train_and_test</span><span class="p">(</span>
-            <span class="n">dm</span><span class="o">=</span><span class="n">data_module</span><span class="p">,</span>
+            <span class="n">data_module</span><span class="o">=</span><span class="n">data_module</span><span class="p">,</span>
             <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
             <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">fusion_model</span><span class="o">=</span><span class="n">fusion_model</span><span class="p">,</span>

@@ -1,6 +1,6 @@
 import pytest
 from fusilli.data import KFoldGraphDataModule
-from .test_CustomDataModule import create_test_files
+from .test_TrainTestDataModule import create_test_files
 import torch_geometric
 import numpy as np
 from unittest.mock import patch, Mock

@@ -24,12 +24,12 @@
 
    .. autosummary::
    
-      CustomDataModule
       CustomDataset
-      GraphDataModule
       KFoldDataModule
       KFoldGraphDataModule
       LoadDatasets
+      TrainTestDataModule
+      TrainTestGraphDataModule
    
    
 

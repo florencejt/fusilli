@@ -1,7 +1,8 @@
 """
-This file contains the data for the different modalities and the different
-fusion methods. The data are used to load the data and create the
-dataloader objects for training and validation.
+Data loading classes for multimodal and unimodal data.
+This file contains functions and classes for loading the data for the different modalities, and
+in training the subspace methods on the data (if the subspace methods need pre-training).
+Train/test splits and k-fold cross validation are also implemented here.
 """
 
 # imports
@@ -14,8 +15,6 @@ from torch.utils.data import DataLoader, Dataset
 from torch_geometric.data.lightning import LightningNodeData
 from fusilli.utils import model_modifier
 
-
-# from fusilli.eval import plot_graph
 
 
 def downsample_img_batch(imgs, output_size):
@@ -95,19 +94,17 @@ class CustomDataset(Dataset):
 
     Attributes
     ----------
-    pred_features : list or tensor
-        List of tensors or tensor of predictive features
-        (i.e. tabular or image data without labels).
-    labels : dataframe
-        Dataframe of labels (column name must be "pred_label").
-
-    Methods
-    -------
-    __len__()
-        Returns the length of the dataset.
-    __getitem__(idx)
-        Returns the item at the specified index.
-
+    multimodal_flag : bool
+        Flag for multimodal data. True if multimodal, False if unimodal.
+    dataset1 : tensor
+        Tensor of predictive features for modality 1.
+    dataset2 : tensor
+        Tensor of predictive features for modality 2.
+    dataset : tensor
+        Tensor of predictive features for uni-modal data.
+    labels : tensor
+        Tensor of labels.
+    
     """
 
     def __init__(self, pred_features, labels):
@@ -195,20 +192,9 @@ class LoadDatasets:
     img_source : str
         Source torch file for image data.
     image_downsample_size : tuple
-        Size to downsample the images to (height, width, depth).
-
-    Methods
-    -------
-    load_tabular1()
-        Loads the tabular1-only dataset.
-    load_tabular2()
-        Loads the tabular2-only dataset.
-    load_img()
-        Loads the image-only dataset.
-    load_both_tabular()
-        Loads the tabular1 and tabular2 multimodal dataset.
-    load_tab_and_img()
-        Loads the tabular1 and image multimodal dataset.
+        Size to downsample the images to (height, width, depth) or (height, width) for 2D
+        images.
+        None if not downsampling. (default None)
     """
 
     def __init__(self, sources, img_downsample_dims=None):
@@ -227,6 +213,10 @@ class LoadDatasets:
         ------
         ValueError
             If sources is not a list.
+        ValueError
+            If the CSVs do not have the right columns or if the index column is not named
+            "study_id".
+        
         """
         self.tabular1_source, self.tabular2_source, self.img_source = sources
         self.image_downsample_size = (
@@ -267,11 +257,11 @@ class LoadDatasets:
         pred_features = torch.Tensor(tab_df.drop(columns=["pred_label"]).values)
         pred_label = tab_df[["pred_label"]]
 
-        self.dataset = CustomDataset(pred_features, pred_label)
+        dataset = CustomDataset(pred_features, pred_label)
 
         mod1_dim = pred_features.shape[1]
 
-        return self.dataset, [mod1_dim, None, None]
+        return dataset, [mod1_dim, None, None]
 
     def load_tabular2(self):
         """
@@ -293,10 +283,10 @@ class LoadDatasets:
         pred_features = torch.Tensor(tab_df.drop(columns=["pred_label"]).values)
         pred_label = tab_df[["pred_label"]]
 
-        self.dataset = CustomDataset(pred_features, pred_label)
+        dataset = CustomDataset(pred_features, pred_label)
         mod2_dim = pred_features.shape[1]
 
-        return self.dataset, [None, mod2_dim, None]
+        return dataset, [None, mod2_dim, None]
 
     def load_img(self):
         """
@@ -321,11 +311,11 @@ class LoadDatasets:
 
         pred_label = label_df[["pred_label"]]
 
-        self.dataset = CustomDataset(all_scans_ds, pred_label)
+        dataset = CustomDataset(all_scans_ds, pred_label)
 
         img_dim = list(all_scans_ds.shape[2:])  # not including batch size or channels
 
-        return self.dataset, [None, None, img_dim]
+        return dataset, [None, None, img_dim]
 
     def load_both_tabular(self):
         """
@@ -350,14 +340,14 @@ class LoadDatasets:
         tab2_pred_features = torch.Tensor(tab2_df.drop(columns=["pred_label"]).values)
 
         pred_label = tab1_df[["pred_label"]]
-        self.dataset = CustomDataset(
+        dataset = CustomDataset(
             [tab1_pred_features, tab2_pred_features], pred_label
         )
 
         mod1_dim = tab1_pred_features.shape[1]
         mod2_dim = tab2_pred_features.shape[1]
 
-        return self.dataset, [mod1_dim, mod2_dim, None]
+        return dataset, [mod1_dim, mod2_dim, None]
 
     def load_tab_and_img(self):
         """
@@ -382,26 +372,25 @@ class LoadDatasets:
         imgs = torch.load(self.img_source)
         imgs = downsample_img_batch(imgs, self.image_downsample_size)
 
-        self.dataset = CustomDataset([tab1_features, imgs], label_df)
+        dataset = CustomDataset([tab1_features, imgs], label_df)
         mod1_dim = tab1_features.shape[1]
         img_dim = list(imgs.shape[2:])  # not including batch size or channels
 
-        return self.dataset, [mod1_dim, None, img_dim]
+        return dataset, [mod1_dim, None, img_dim]
 
 
-class CustomDataModule(pl.LightningDataModule):
+class TrainTestDataModule(pl.LightningDataModule):
     """
     Custom pytorch lightning datamodule class for the different modalities.
 
     Attributes
     ----------
     sources : list
-        List of source csv files.
-    image_downsample_size : tuple
-        Size to downsample the images to (height, width, depth) or (height, width) for 2D
-        images.
+        List of source csv files. [Tabular1, Tabular2, Image]
     modality_methods : dict
         Dictionary of methods for loading the different modalities.
+    params : dict
+        Dictionary of parameters.
     fusion_model : str
         fusion model class. e.g. "TabularCrossmodalAttention".
     batch_size : int
@@ -409,7 +398,7 @@ class CustomDataModule(pl.LightningDataModule):
     test_size : float
         Fraction of data to use for testing (default 0.2).
     pred_type : str
-        Prediction type (binary, multiclass, regression).
+        Prediction type (binary, multiclass, or regression).
     multiclass_dims : int
         Number of classes for multiclass prediction (default None).
     subspace_method : class
@@ -420,13 +409,14 @@ class CustomDataModule(pl.LightningDataModule):
     max_epochs : int
         Maximum number of epochs to train subspace methods for. (default 1000)
     dataset : tensor
-        Tensor of predictive features.
+        Tensor of predictive features. Created in prepare_data().
     data_dims : list
-        List of data dimensions [mod1_dim, mod2_dim, img_dim]
-    train_dataset : tensor
-        Tensor of predictive features for training.
+        List of data dimensions [mod1_dim, mod2_dim, img_dim].
+        Created in prepare_data(). 
+    train_dataset : tensor 
+        Tensor of predictive features for training. Created in setup().
     test_dataset : tensor
-        Tensor of predictive features for testing.
+        Tensor of predictive features for testing. Created in setup().
 
     """
 
@@ -471,31 +461,24 @@ class CustomDataModule(pl.LightningDataModule):
         own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
             Early stopping callback class (default None).
 
-
-        Raises
-        ------
-        ValueError
-            If fusion_model.modality_type is not one of the following: tabular1, tabular2, img, both_tab,
-            tab_img.
         """
         super().__init__()
 
         self.sources = sources
-        self.image_downsample_size = image_downsample_size
         self.extra_log_string_dict = extra_log_string_dict
         self.modality_methods = {
             "tabular1": LoadDatasets(
-                self.sources, self.image_downsample_size
+                self.sources, image_downsample_size
             ).load_tabular1,
             "tabular2": LoadDatasets(
-                self.sources, self.image_downsample_size
+                self.sources, image_downsample_size
             ).load_tabular2,
-            "img": LoadDatasets(self.sources, self.image_downsample_size).load_img,
+            "img": LoadDatasets(self.sources, image_downsample_size).load_img,
             "both_tab": LoadDatasets(
-                self.sources, self.image_downsample_size
+                self.sources, image_downsample_size
             ).load_both_tabular,
             "tab_img": LoadDatasets(
-                self.sources, self.image_downsample_size
+                self.sources, image_downsample_size
             ).load_tab_and_img,
         }
         self.params = params
@@ -527,7 +510,6 @@ class CustomDataModule(pl.LightningDataModule):
             i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has
             32 features), and no image
         """
-        # TODO add in some evaluation figures of the subspace methods
         self.dataset, self.data_dims = self.modality_methods[self.modality_type]()
 
     def setup(
@@ -535,7 +517,13 @@ class CustomDataModule(pl.LightningDataModule):
         checkpoint_path=None,
     ):
         """
-        Splits the data into train and test sets, and runs the subspace method if specified
+        Splits the data into train and test sets, and runs the subspace method if specified.
+        If checkpoint_path is specified, the subspace method is loaded from the checkpoint and not trained.
+
+        Attributes
+        ----------
+        checkpoint_path : str
+            Path to the checkpoint file for the subspace method (default None).
 
         Returns
         ------
@@ -544,41 +532,47 @@ class CustomDataModule(pl.LightningDataModule):
         val_dataloader : dataloader
             Dataloader for validation.
         """
+
+        # split the dataset into train and test sets
         [self.train_dataset, self.test_dataset] = torch.utils.data.random_split(
             self.dataset, [1 - self.test_size, self.test_size]
         )
 
         if self.subspace_method is not None:  # if subspace method is specified
-            if checkpoint_path is None:
+
+            if checkpoint_path is None: # if no checkpoint path specified, train the subspace method
                 subspace_method = self.subspace_method(
                     self,
                     max_epochs=self.max_epochs,
                     k=None,
                 )
 
+                # modify the subspace method architecture if specified
                 if self.layer_mods is not None:
-                    # if subspace method in layer_mods
                     subspace_method = model_modifier.modify_model_architecture(
                         subspace_method,
                         self.layer_mods,
                     )
 
+                # train the subspace method and convert train dataset to the latent space
                 train_latents, train_labels = subspace_method.train(
                     self.train_dataset, self.test_dataset
                 )
 
+                # convert the test dataset to the latent space
                 (
                     test_latents,
                     test_labels,
                     data_dims,
                 ) = subspace_method.convert_to_latent(self.test_dataset)
 
+                # create the new train and test datasets from the latent space with updated dimensions
                 self.train_dataset = CustomDataset(train_latents, train_labels)
                 self.test_dataset = CustomDataset(test_latents, test_labels)
                 self.data_dims = data_dims
 
             else:
-                # we have the checkpoint paths for the subspace models
+                # we have already trained the subspace method, so load it from the checkpoint
 
                 subspace_method = self.subspace_method(
                     self,
@@ -587,6 +581,14 @@ class CustomDataModule(pl.LightningDataModule):
                     checkpoint_path=checkpoint_path,
                 )
 
+                # modify the subspace method architecture if specified
+                if self.layer_mods is not None:
+                    subspace_method = model_modifier.modify_model_architecture(
+                        subspace_method,
+                        self.layer_mods,
+                    )
+
+                # converting the train and test datasets to the latent space
                 (
                     train_latents,
                     train_labels,
@@ -599,6 +601,7 @@ class CustomDataModule(pl.LightningDataModule):
                     data_dims,
                 ) = subspace_method.convert_to_latent(self.test_dataset)
 
+                # create the new train and test datasets from the latent space with updated dimensions
                 self.train_dataset = CustomDataset(train_latents, train_labels)
                 self.test_dataset = CustomDataset(test_latents, test_labels)
                 self.data_dims = data_dims
@@ -638,12 +641,13 @@ class KFoldDataModule(pl.LightningDataModule):
     Attributes
     ----------
     num_folds : int
-        Total number of folds.
+        Total number of folds. 
     sources : list
-        List of source csv files.
+        List of source csv files. [Tabular1, Tabular2, Image]
     image_downsample_size : tuple
         Size to downsample the images to (height, width, depth) or (height, width) for 2D
         images.
+        None if not downsampling. (default None)
     modality_methods : dict
         Dictionary of methods for loading the different modalities.
     fusion_model : class
@@ -664,13 +668,13 @@ class KFoldDataModule(pl.LightningDataModule):
     max_epochs : int
         Maximum number of epochs to train subspace methods for. (default 1000)
     dataset : tensor
-        Tensor of predictive features.
+        Tensor of predictive features. Created in prepare_data().
     data_dims : list
-        List of data dimensions [mod1_dim, mod2_dim, img_dim]
+        List of data dimensions [mod1_dim, mod2_dim, img_dim]. Created in prepare_data().
     train_dataset : tensor
-        Tensor of predictive features for training.
+        Tensor of predictive features for training. Created in setup().
     test_dataset : tensor
-        Tensor of predictive features for testing.
+        Tensor of predictive features for testing. Created in setup().
     """
 
     def __init__(
@@ -697,7 +701,7 @@ class KFoldDataModule(pl.LightningDataModule):
         sources : list
             List of source csv files.
         batch_size : int
-            Batch size (default 8).
+            Batch size.
         subspace_method : class
             Subspace method class (default None) (only for subspace methods).
         image_downsample_size : tuple
@@ -712,13 +716,6 @@ class KFoldDataModule(pl.LightningDataModule):
             Dictionary of extra strings to add to the log.
         own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
             Early stopping callback class (default None).
-
-
-        Raises
-        ------
-        ValueError
-            If fusion_model.modality_type is not one of the following: tabular1, tabular2, img, both_tab,
-            tab_img.
 
         """
         super().__init__()
@@ -747,9 +744,7 @@ class KFoldDataModule(pl.LightningDataModule):
         self.fusion_model = fusion_model
         self.modality_type = self.fusion_model.modality_type
         self.batch_size = batch_size
-        self.subspace_method = (
-            subspace_method  # subspace method class (only for subspace methods)
-        )
+        self.subspace_method = subspace_method  # subspace method class (only for subspace methods)
         if self.pred_type == "multiclass":
             self.multiclass_dims = params["multiclass_dims"]
         else:
@@ -783,7 +778,8 @@ class KFoldDataModule(pl.LightningDataModule):
         folds : list
             List of tuples of (train_dataset, test_dataset)
         """
-        # splits the dataset into k folds
+
+        # split the dataset into k folds
         kf = KFold(n_splits=self.num_folds, shuffle=True)
 
         # get the indices of the dataset
@@ -794,6 +790,8 @@ class KFoldDataModule(pl.LightningDataModule):
             # split the dataset into train and test sets for each fold
             train_dataset = torch.utils.data.Subset(self.dataset, train_indices)
             test_dataset = torch.utils.data.Subset(self.dataset, val_indices)
+
+            # append the train and test datasets to the folds list
             folds.append((train_dataset, test_dataset))
 
         return folds  # list of tuples of (train_dataset, test_dataset)
@@ -804,6 +802,11 @@ class KFoldDataModule(pl.LightningDataModule):
     ):
         """
         Splits the data into train and test sets, and runs the subspace method if specified
+
+        Attributes
+        ----------
+        checkpoint_path : str
+            Path to the checkpoint file for the subspace method (default None).
 
         Returns
         ------
@@ -816,16 +819,24 @@ class KFoldDataModule(pl.LightningDataModule):
 
         # if subspace method is specified, run the subspace method on each fold
         if self.subspace_method is not None:
+
+            # if no checkpoint path specified, train the subspace method
             if checkpoint_path is None:
                 new_folds = []
+
                 for k, fold in enumerate(self.folds):
+
+                    # get the train and test datasets for each fold
                     train_dataset, test_dataset = fold
+
+                    #  initialise the subspace method
                     subspace_method = self.subspace_method(
                         self,
                         k=k,
                         max_epochs=self.max_epochs,
                     )
 
+                    # modify the subspace method architecture if specified
                     if self.layer_mods is not None:
                         # if subspace method in layer_mods
                         subspace_method = model_modifier.modify_model_architecture(
@@ -833,9 +844,12 @@ class KFoldDataModule(pl.LightningDataModule):
                             self.layer_mods,
                         )
 
+                    # train the subspace method and convert train dataset to the latent space
                     train_latents, train_labels = subspace_method.train(
                         train_dataset, test_dataset
                     )
+
+                    # convert the test dataset to the latent space
                     (
                         test_latents,
                         test_labels,
@@ -846,19 +860,23 @@ class KFoldDataModule(pl.LightningDataModule):
                     train_dataset = CustomDataset(train_latents, train_labels)
                     test_dataset = CustomDataset(test_latents, test_labels)
 
-                    new_folds.append((train_dataset, test_dataset))
+                    new_folds.append((train_dataset, test_dataset)) # append to new_folds
 
                 self.folds = (
                     new_folds  # update the folds with the new train and test datasets
                 )
                 self.data_dims = data_dims  # update the data dimensions
 
-            else:
+            else: # we have already trained the subspace method, so load it from the checkpoint
+
                 new_folds = []
 
                 for k, fold in enumerate(self.folds):
+
+                    # get the train and test datasets for each fold
                     train_dataset, test_dataset = fold
 
+                    #  initialise the subspace method
                     subspace_method = self.subspace_method(
                         self,
                         k=k,
@@ -866,12 +884,14 @@ class KFoldDataModule(pl.LightningDataModule):
                         checkpoint_path=checkpoint_path,
                     )
 
+                    # modify the subspace method architecture if specified
                     (
                         train_latents,
                         train_labels,
                         data_dims,
                     ) = subspace_method.convert_to_latent(train_dataset)
 
+                    # convert the test dataset to the latent space
                     (
                         test_latents,
                         test_labels,
@@ -930,7 +950,7 @@ class KFoldDataModule(pl.LightningDataModule):
         )
 
 
-class GraphDataModule:
+class TrainTestGraphDataModule:
     """
     Custom pytorch lightning datamodule class for the different modalities with graph data
     structure.
@@ -955,19 +975,15 @@ class GraphDataModule:
     layer_mods : dict
         Dictionary of layer modifications to make to the graph maker method.
     dataset : tensor
-        Tensor of predictive features.
+        Tensor of predictive features. Created in prepare_data().
     data_dims : list
-        List of data dimensions [mod1_dim, mod2_dim, img_dim]
-    train_dataset : tensor
-        Tensor of predictive features for training.
+        List of data dimensions [mod1_dim, mod2_dim, img_dim]. Created in prepare_data().
     train_idxs : list
-        List of indices for training.
-    test_dataset : tensor
-        Tensor of predictive features for testing.
+        List of indices for training. Created in setup().
     test_idxs : list
-        List of indices for testing.
+        List of indices for testing. Created in setup().
     graph_data : graph data structure
-        Graph data structure.
+        Graph data structure. Created in setup().
     """
 
     def __init__(
@@ -997,12 +1013,10 @@ class GraphDataModule:
             images. None if not downsampling. (default None)
         layer_mods : dict
             Dictionary of layer modifications to make to the graph maker method.
+            (default None)
+        extra_log_string_dict : dict
+            Dictionary of extra strings to add to the log.
 
-        Raises
-        ------
-        ValueError
-            If fusion_model.modality_type is not one of the following: tabular1, tabular2, img, both_tab,
-            tab_img.
         """
 
         super().__init__()
@@ -1057,27 +1071,22 @@ class GraphDataModule:
         None
         """
         # get random train and test idxs
-        [self.train_dataset, self.test_dataset] = torch.utils.data.random_split(
+        [train_dataset, test_dataset] = torch.utils.data.random_split(
             self.dataset, [1 - self.test_size, self.test_size]
         )
-        self.train_idxs = self.train_dataset.indices
-        self.test_idxs = self.test_dataset.indices
+        self.train_idxs = train_dataset.indices
+        self.test_idxs = test_dataset.indices
 
         # get the graph data structure
         graph_maker = self.graph_creation_method(self.dataset)
         if self.layer_mods is not None:
-            # if subspace method in layer_mods
+            # modify the graph maker architecture if specified
             graph_maker = model_modifier.modify_model_architecture(
                 graph_maker,
                 self.layer_mods,
             )
 
         self.graph_data = graph_maker.make_graph()
-        # self.graph_data = self.graph_creation_method(self.dataset)
-
-        # plot and save the graph
-        # TODO move to the soon-to-be-made plotting module? or just remove
-        # plot_graph(self.graph_data, self.params)
 
     def get_lightning_module(self):
         """
@@ -1115,7 +1124,7 @@ class KFoldGraphDataModule:
         Size to downsample the images to (height, width, depth) or (height, width) for 2D
         images.
     sources : list
-        List of source csv files.
+        List of source csv files. [Tabular1, Tabular2, Image]
     modality_methods : dict
         Dictionary of methods for loading the different modalities.
     fusion_model : class
@@ -1159,15 +1168,9 @@ class KFoldGraphDataModule:
             images. None if not downsampling. (default None)
         layer_mods : dict
             Dictionary of layer modifications to make to the graph maker method.
+            (default None)
         extra_log_string_dict : dict
             Dictionary of extra strings to add to the log.
-
-
-        Raises
-        ------
-        ValueError
-            If fusion_model.modality_type is not one of the following: tabular1, tabular2, img, both_tab,
-            tab_img.
         """
         super().__init__()
         self.num_folds = params["num_k"]  # total number of folds
@@ -1240,24 +1243,24 @@ class KFoldGraphDataModule:
 
         new_folds = []
         for fold in self.folds:
-            train_dataset, test_dataset = fold
 
+            # get the train and test datasets for each fold
+            train_dataset, test_dataset = fold
             train_idxs = train_dataset.indices  # get train node idxs from kfold_split()
             test_idxs = test_dataset.indices  # get test node idxs from kfold_split()
+            
             # get the graph data structure
             graph_maker = self.graph_creation_method(self.dataset)
+
+            # modify the graph maker architecture if specified
             if self.layer_mods is not None:
-                # if subspace method in layer_mods
                 graph_maker = model_modifier.modify_model_architecture(
                     graph_maker,
                     self.layer_mods,
                 )
 
+            # make the graph data structure
             graph_data = graph_maker.make_graph()
-
-            # plot and save the graph?
-            # TODO remove?
-            # plot_graph(graph_data, self.params)
 
             new_folds.append((graph_data, train_idxs, test_idxs))
 
@@ -1308,7 +1311,7 @@ def get_data_module(
     own_early_stopping_callback=None,
 ):
     """
-    Gets the data module for the specified modality and fusion type.
+    Gets the data module for a specific fusion model and training protocol.
 
     Parameters
     ----------
@@ -1353,7 +1356,7 @@ def get_data_module(
 
     if fusion_model.fusion_type == "graph":
         if params["kfold_flag"]:
-            dmg = KFoldGraphDataModule(
+            graph_data_module = KFoldGraphDataModule(
                 params,
                 fusion_model,
                 sources=data_sources,
@@ -1363,7 +1366,7 @@ def get_data_module(
                 extra_log_string_dict=extra_log_string_dict,
             )
         else:
-            dmg = GraphDataModule(
+            graph_data_module = TrainTestGraphDataModule(
                 params,
                 fusion_model,
                 sources=data_sources,
@@ -1373,26 +1376,28 @@ def get_data_module(
                 extra_log_string_dict=extra_log_string_dict,
             )
 
-        dmg.prepare_data()
-        dmg.setup()
-        dm = dmg.get_lightning_module()
+        graph_data_module.prepare_data()
+        graph_data_module.setup()
+        data_module = graph_data_module.get_lightning_module()
 
         if params["kfold_flag"]:
-            for dm_instance in dm:
-                dm_instance.data_dims = dmg.data_dims
+            # if kfold, then we have a list of lightning modules
+            # so we need to set the data dimensions for each lightning module
+            for dm_instance in data_module:
+                dm_instance.data_dims = graph_data_module.data_dims
                 dm_instance.own_early_stopping_callback = own_early_stopping_callback
         else:
-            dm.data_dims = dmg.data_dims
-            dm.own_early_stopping_callback = own_early_stopping_callback
+            data_module.data_dims = graph_data_module.data_dims
+            data_module.own_early_stopping_callback = own_early_stopping_callback
 
     else:
         # another other than graph fusion
         if params["kfold_flag"]:
             datamodule_func = KFoldDataModule
         else:
-            datamodule_func = CustomDataModule
+            datamodule_func = TrainTestDataModule
 
-        dm = datamodule_func(
+        data_module = datamodule_func(
             params,
             fusion_model,
             sources=data_sources,
@@ -1404,7 +1409,7 @@ def get_data_module(
             extra_log_string_dict=extra_log_string_dict,
             own_early_stopping_callback=own_early_stopping_callback,
         )
-        dm.prepare_data()
-        dm.setup(checkpoint_path=checkpoint_path)
+        data_module.prepare_data()
+        data_module.setup(checkpoint_path=checkpoint_path)
 
-    return dm
+    return data_module

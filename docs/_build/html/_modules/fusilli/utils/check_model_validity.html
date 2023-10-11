@@ -93,7 +93,9 @@
              
   <h1>Source code for fusilli.utils.check_model_validity</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Check validity of model modifications.</span>
+<span class="sd">This module contains functions to check the validity of the model modifications, such as</span>
+<span class="sd">checking the data type of the modifications and checking the input image dimensions of the</span>
+<span class="sd">modifications.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
@@ -108,6 +110,8 @@
 <span class="sd">        Attribute to check.</span>
 <span class="sd">    correct_dtype : object</span>
 <span class="sd">        Correct data type.</span>
+<span class="sd">    attribute_name : str</span>
+<span class="sd">        Name of the attribute to check (for the error message)</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
@@ -136,6 +140,8 @@
 <span class="sd">        Attribute to check.</span>
 <span class="sd">    img_dim : object</span>
 <span class="sd">        Correct img dimensions.</span>
+<span class="sd">    attribute_name : str</span>
+<span class="sd">        Name of the attribute to check (for the error message)</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
@@ -191,6 +197,8 @@
 <span class="sd">    ----------</span>
 <span class="sd">    attribute : object</span>
 <span class="sd">        Attribute to check.</span>
+<span class="sd">    attribute_name : str</span>
+<span class="sd">        Name of the attribute to check (for the error message)</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
@@ -209,12 +217,10 @@
 
 <div class="viewcode-block" id="check_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_fused_layers">[docs]</a><span class="k">def</span> <span class="nf">check_fused_layers</span><span class="p">(</span><span class="n">fused_layers</span><span class="p">,</span> <span class="n">fused_dim</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Check the fused layers in a fusion model:</span>
-
-<span class="sd">    - check fused_layers is nn.Sequential</span>
-<span class="sd">    - check the input features of the first layer is the fused_dim</span>
-<span class="sd">    - find the output features of the last layer to make prediction layer</span>
-<span class="sd">    - check first layer is a linear layer</span>
+<span class="sd">    Check that the fused layers within the fusion model (meaning the layers that take place</span>
+<span class="sd">    after the fusion) are of the correct data type (nn.Sequential) and that the first layer</span>
+<span class="sd">    is a nn.Linear layer with the correct in_features. Also returns the output dimension of</span>
+<span class="sd">    the fused layers for the final prediction layers of the model.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
