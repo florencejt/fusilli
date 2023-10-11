@@ -1,5 +1,7 @@
 """
-Functions for initializing the pytorch lightning logger and trainer.
+Functions for initialising the pytorch lightning logger and trainer, getting final validation metrics
+from trained pytorch lightning models, and various functions for setting checkpoint filenames based
+on model, parameters, and user-defined strings.
 """
 
 import os
@@ -17,16 +19,22 @@ def get_file_suffix_from_dict(extra_log_string_dict):
     """
     Get the extra name string and tags from the extra_log_string_dict.
 
-    Args:
-        extra_log_string_dict (dict): Extra string to add to the run name. e.g. if you're running
-            the same model with different hyperparameters, you can add the hyperparameters.
-            Input format {"name": "value"}. In the run name, the extra string will be added
-            as "name_value". And a tag will be added as "name_value".
-
-    Returns:
-        extra_name_string (str): Extra name string to add to the some path name.
-        extra_tags (list): List of extra tags to add to the logged run (wandb).
+    Parameters
+    ----------
+    extra_log_string_dict : dict
+        Extra string to add to the run name. e.g. if you're running
+        the same model with different hyperparameters, you can add the hyperparameters.
+        Input format {"name": "value"}. In the run name, the extra string will be added
+        as "name_value". And a tag will be added as "name_value".
+    
+    Returns
+    -------
+    extra_name_string : str
+        Extra name string to add to the some path name.
+    extra_tags : list
+        List of extra tags to add to the logged run (wandb).
     """
+
     if extra_log_string_dict is not None:
         extra_name_string = ""
         extra_tags = []
@@ -43,20 +51,29 @@ def get_file_suffix_from_dict(extra_log_string_dict):
 def set_logger(params, fold, fusion_model, extra_log_string_dict=None):
     """
     Set the logger for the current run. If params["log"] is True, then the logger is set to
-    WandbLogger, otherwise it is set to None.
+    WandbLogger, otherwise it is set to CSVLogger and the logs are saved to params["loss_log_dir"].
 
-    Args:
-        params (dict): Dictionary of parameters.
-        fold (int): Fold number.
-        fusion_model (class): Fusion model class.
-        extra_string_dict (dict): Extra string to add to the run name. e.g. if you're running
-            the same model with different hyperparameters, you can add the hyperparameters.
-            Input format {"name": "value"}. In the run name, the extra string will be added
-            as "name_value". And a tag will be added as "name_value".
+    Parameters
+    ----------
+    params : dict
+        Dictionary of parameters.
+    fold : int
+        Fold number. None if not using kfold.
+    fusion_model : class
+        Fusion model class.
+    extra_log_string_dict : dict
+        Extra string to add to the run name. e.g. if you're running
+        the same model with different hyperparameters, you can add the hyperparameters.
+        Input format {"name": "value"}. In the run name, the extra string will be added
+        as "name_value". And a tag will be added as "name_value".
+        Default None.
+    
+    Returns
+    -------
+    logger : object
+        Pytorch lightning logger object or CSVLogger object if params["log"] is False.
+    """ 
 
-    Returns:
-        logger (object): Pytorch lightning logger object.
-    """
     if hasattr(fusion_model, "__name__"):
         method_name = fusion_model.__name__
     else:
@@ -88,9 +105,7 @@ def set_logger(params, fold, fusion_model, extra_log_string_dict=None):
             for key, value in extra_log_string_dict.items():
                 logger.experiment.config[key] = value
 
-    else:
-        # change to csvlogger instead of log
-
+    else: # if params["log"] is False
         logger = CSVLogger(
             save_dir=params["loss_log_dir"],
             name=None,
@@ -104,19 +119,27 @@ def set_checkpoint_name(params, fusion_model, fold=None, extra_log_string_dict=N
     """
     Set the checkpoint name for the current run of the main fusion model.
 
-    Args:
-        params (dict): Dictionary of parameters.
-        fusion_model (class): Fusion model class.
-        fold (int): Fold number. Default None.
-        extra_log_string_dict (dict): Extra string to add to the run name. e.g. if you're running
-            the same model with different hyperparameters, you can add the hyperparameters.
-            Input format {"name": "value"}. In the run name, the extra string will be added
-            as "name_value". And a tag will be added as "name_value".
-            Default None.
-
-    Returns:
-        checkpoint_filename (str): Checkpoint filename.
+    Parameters
+    ----------
+    params : dict
+        Dictionary of parameters.
+    fusion_model : class
+        Fusion model class.
+    fold : int
+        Fold number. None if not using kfold.
+    extra_log_string_dict : dict
+        Extra string to add to the run name. e.g. if you're running
+        the same model with different hyperparameters, you can add the hyperparameters.
+        Input format {"name": "value"}. In the run name, the extra string will be added
+        as "name_value". And a tag will be added as "name_value".
+        Default None.
+    
+    Returns
+    -------
+    checkpoint_filename : str
+        Checkpoint filename.
     """
+
 
     extra_name_string, extra_tags = get_file_suffix_from_dict(extra_log_string_dict)
     if fold is not None:
@@ -137,14 +160,23 @@ def set_checkpoint_name(params, fusion_model, fold=None, extra_log_string_dict=N
 
 def get_checkpoint_filenames_for_subspace_models(subspace_method, k=None):
     """
-    Get the checkpoint filenames for the subspace models.
+    Get the checkpoint filenames for the subspace models based on the subspace method class
+    and the datamodule that is passed into the subspace method class.
 
-    Args:
-        subspace_method (class): Subspace method class. Called from the subspace method class with self.
-
-    Returns:
-        checkpoint_filenames (list): List of checkpoint filenames. One for each subspace model.
+    Parameters
+    ----------
+    subspace_method : class
+        Subspace method class.
+    k : int
+        Fold number. None if not using kfold.
+        Default None.
+    
+    Returns
+    -------
+    checkpoint_filenames : list
+        List of checkpoint filenames. One for each subspace model in the subspace method class.
     """
+
 
     if hasattr(subspace_method.datamodule.fusion_model, "__name__"):
         big_fusion_model_name = subspace_method.datamodule.fusion_model.__name__
@@ -179,21 +211,32 @@ def get_checkpoint_filenames_for_subspace_models(subspace_method, k=None):
 def get_checkpoint_filename_for_trained_fusion_model(
     params, model, checkpoint_file_suffix, fold=None
 ):
-    """Get the checkpoint filename for the trained fusion model using the model object.
-    Checkpoints should follow the naming convention:
-    fusion_model_name_fold_k_{checkpoint_file_suffix} if fold is not None
-    fusion_model_name_{checkpoint_file_suffix} if fold is None
-
-    Args:
-        params (dict): Dictionary of parameters.
-        model (object): BaseModel model object.
-        checkpoint_file_suffix (str): Checkpoint file suffix.
-        fold (int): Fold number. Default None.
-
-    Returns:
-        checkpoint_filename (str): Checkpoint filename.
-
     """
+    Gets the checkpoint filename for the trained fusion model using the model object.
+
+    Checkpoints should follow the naming convention:
+    
+    * fusion_model_name_fold_k_{checkpoint_file_suffix} if fold is not None
+    * fusion_model_name_{checkpoint_file_suffix} if fold is None
+
+    Parameters
+    ----------
+    params : dict
+        Dictionary of parameters.
+    model : object  
+        BaseModel model object.
+    checkpoint_file_suffix : str
+        Checkpoint file suffix.
+    fold : int
+        Fold number. None if not using kfold.
+        Default None.
+    
+    Returns
+    -------
+    checkpoint_filename : str
+        Checkpoint filename.
+    """
+
     if fold is None:
         ckpt_path_beginning = model.model.__class__.__name__ + checkpoint_file_suffix
     else:
@@ -228,6 +271,16 @@ def get_checkpoint_filename_for_trained_fusion_model(
 
 
 class LitProgressBar(TQDMProgressBar):
+    """
+    Custom progress bar for pytorch lightning trainer. This is to 
+    disable the progress bar for validation.
+    
+    Parameters
+    ----------
+    TQDMProgressBar : object
+        Pytorch lightning TQDMProgressBar object.
+    """
+
     def init_validation_tqdm(self):
         bar = tqdm(
             disable=True,
@@ -244,23 +297,36 @@ def init_trainer(
     own_early_stopping_callback=None,
 ):
     """
-    Initialize the pytorch lightning trainer object.
+    Initialise the pytorch lightning trainer object.
 
-    Args:
-        logger (object): Pytorch lightning logger object.
-        params (dict): Dictionary of parameters.
-        max_epochs (int): Maximum number of epochs.
-        enable_checkpointing (bool): Whether to enable checkpointing. If True, then
-            checkpoints will be saved. We use False for the example notebooks in the
-            repository/documentation.
-        checkpoint_filename (str): Checkpoint filename. Default None if using default checkpointing.
-        own_early_stopping_callback (object): Own early stopping callback object. Default None to use default
-            early stopping callback. If you want to use your own early stopping callback, then you need to
-            define it in the main training script and pass it here or pass into the datamodule object and then
-            it will read it from there.
+    Parameters
+    ----------
+    logger : object
+        Pytorch lightning logger object.
+    params : dict
+        Dictionary of parameters.
+    max_epochs : int
+        Maximum number of epochs.
+        Default 1000.
+    enable_checkpointing : bool
+        Whether to enable checkpointing. If True, then
+        checkpoints will be saved. We use False for the example notebooks in the
+        repository/documentation.
+        Default True.
+    checkpoint_filename : str
+        Checkpoint filename.
+        Default None if using default checkpointing.
+    own_early_stopping_callback : object
+        Own early stopping callback object.
+        Default None to use default early stopping callback. If you want to use your own early stopping callback, then you need to
+        define it in the main training script and pass it here or pass into the datamodule object and then
+        it will read it from there.
+    
+    Returns
+    -------
+    trainer : object
+        Pytorch lightning trainer object.
 
-    Returns:
-        trainer (object): Pytorch lightning trainer object.
     """
 
     if own_early_stopping_callback is not None:
@@ -312,14 +378,19 @@ def get_final_val_metrics(trainer):
     """
     Get the final validation metrics from the trainer object.
 
-    Args:
-        metric_names (list): List of metric names.
-        trainer (object): Pytorch lightning trainer object.
-
-    Returns:
-        metric1 (float): Final validation metric 1.
-        metric2 (float): Final validation metric 2.
+    Parameters
+    ----------
+    trainer : object
+        Pytorch lightning trainer object.
+    
+    Returns
+    -------
+    metric1 : float
+        Final validation metric 1.
+    metric2 : float
+        Final validation metric 2.
     """
+
     metric_names = trainer.model.metric_names_list
 
     print(trainer.callback_metrics)

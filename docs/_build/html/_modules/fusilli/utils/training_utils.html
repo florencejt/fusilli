@@ -58,6 +58,14 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 Public API Reference 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
+</ul>
 
         </div>
       </div>
@@ -85,7 +93,9 @@
              
   <h1>Source code for fusilli.utils.training_utils</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Functions for initializing the pytorch lightning logger and trainer.</span>
+<span class="sd">Functions for initialising the pytorch lightning logger and trainer, getting final validation metrics</span>
+<span class="sd">from trained pytorch lightning models, and various functions for setting checkpoint filenames based</span>
+<span class="sd">on model, parameters, and user-defined strings.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
@@ -99,20 +109,26 @@
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 
-<div class="viewcode-block" id="get_file_suffix_from_dict"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.get_file_suffix_from_dict.html#fusilli.utils.training_utils.get_file_suffix_from_dict">[docs]</a><span class="k">def</span> <span class="nf">get_file_suffix_from_dict</span><span class="p">(</span><span class="n">extra_log_string_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="get_file_suffix_from_dict"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.get_file_suffix_from_dict">[docs]</a><span class="k">def</span> <span class="nf">get_file_suffix_from_dict</span><span class="p">(</span><span class="n">extra_log_string_dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the extra name string and tags from the extra_log_string_dict.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        extra_log_string_dict (dict): Extra string to add to the run name. e.g. if you&#39;re running</span>
-<span class="sd">            the same model with different hyperparameters, you can add the hyperparameters.</span>
-<span class="sd">            Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
-<span class="sd">            as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        extra_name_string (str): Extra name string to add to the some path name.</span>
-<span class="sd">        extra_tags (list): List of extra tags to add to the logged run (wandb).</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    extra_log_string_dict : dict</span>
+<span class="sd">        Extra string to add to the run name. e.g. if you&#39;re running</span>
+<span class="sd">        the same model with different hyperparameters, you can add the hyperparameters.</span>
+<span class="sd">        Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
+<span class="sd">        as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    extra_name_string : str</span>
+<span class="sd">        Extra name string to add to the some path name.</span>
+<span class="sd">    extra_tags : list</span>
+<span class="sd">        List of extra tags to add to the logged run (wandb).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="n">extra_log_string_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">extra_name_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="n">extra_tags</span> <span class="o">=</span> <span class="p">[]</span>
@@ -126,23 +142,32 @@
     <span class="k">return</span> <span class="n">extra_name_string</span><span class="p">,</span> <span class="n">extra_tags</span></div>
 
 
-<div class="viewcode-block" id="set_logger"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.set_logger.html#fusilli.utils.training_utils.set_logger">[docs]</a><span class="k">def</span> <span class="nf">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="set_logger"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.set_logger">[docs]</a><span class="k">def</span> <span class="nf">set_logger</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set the logger for the current run. If params[&quot;log&quot;] is True, then the logger is set to</span>
-<span class="sd">    WandbLogger, otherwise it is set to None.</span>
+<span class="sd">    WandbLogger, otherwise it is set to CSVLogger and the logs are saved to params[&quot;loss_log_dir&quot;].</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        params (dict): Dictionary of parameters.</span>
-<span class="sd">        fold (int): Fold number.</span>
-<span class="sd">        fusion_model (class): Fusion model class.</span>
-<span class="sd">        extra_string_dict (dict): Extra string to add to the run name. e.g. if you&#39;re running</span>
-<span class="sd">            the same model with different hyperparameters, you can add the hyperparameters.</span>
-<span class="sd">            Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
-<span class="sd">            as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    params : dict</span>
+<span class="sd">        Dictionary of parameters.</span>
+<span class="sd">    fold : int</span>
+<span class="sd">        Fold number. None if not using kfold.</span>
+<span class="sd">    fusion_model : class</span>
+<span class="sd">        Fusion model class.</span>
+<span class="sd">    extra_log_string_dict : dict</span>
+<span class="sd">        Extra string to add to the run name. e.g. if you&#39;re running</span>
+<span class="sd">        the same model with different hyperparameters, you can add the hyperparameters.</span>
+<span class="sd">        Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
+<span class="sd">        as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
+<span class="sd">        Default None.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    logger : object</span>
+<span class="sd">        Pytorch lightning logger object or CSVLogger object if params[&quot;log&quot;] is False.</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
 
-<span class="sd">    Returns:</span>
-<span class="sd">        logger (object): Pytorch lightning logger object.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fusion_model</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">):</span>
         <span class="n">method_name</span> <span class="o">=</span> <span class="n">fusion_model</span><span class="o">.</span><span class="vm">__name__</span>
     <span class="k">else</span><span class="p">:</span>
@@ -174,9 +199,7 @@
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">extra_log_string_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">experiment</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># change to csvlogger instead of log</span>
-
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># if params[&quot;log&quot;] is False</span>
         <span class="n">logger</span> <span class="o">=</span> <span class="n">CSVLogger</span><span class="p">(</span>
             <span class="n">save_dir</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;loss_log_dir&quot;</span><span class="p">],</span>
             <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -186,23 +209,31 @@
     <span class="k">return</span> <span class="n">logger</span></div>
 
 
-<div class="viewcode-block" id="set_checkpoint_name"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.set_checkpoint_name.html#fusilli.utils.training_utils.set_checkpoint_name">[docs]</a><span class="k">def</span> <span class="nf">set_checkpoint_name</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">fold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="set_checkpoint_name"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.set_checkpoint_name">[docs]</a><span class="k">def</span> <span class="nf">set_checkpoint_name</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">fold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set the checkpoint name for the current run of the main fusion model.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        params (dict): Dictionary of parameters.</span>
-<span class="sd">        fusion_model (class): Fusion model class.</span>
-<span class="sd">        fold (int): Fold number. Default None.</span>
-<span class="sd">        extra_log_string_dict (dict): Extra string to add to the run name. e.g. if you&#39;re running</span>
-<span class="sd">            the same model with different hyperparameters, you can add the hyperparameters.</span>
-<span class="sd">            Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
-<span class="sd">            as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
-<span class="sd">            Default None.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        checkpoint_filename (str): Checkpoint filename.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    params : dict</span>
+<span class="sd">        Dictionary of parameters.</span>
+<span class="sd">    fusion_model : class</span>
+<span class="sd">        Fusion model class.</span>
+<span class="sd">    fold : int</span>
+<span class="sd">        Fold number. None if not using kfold.</span>
+<span class="sd">    extra_log_string_dict : dict</span>
+<span class="sd">        Extra string to add to the run name. e.g. if you&#39;re running</span>
+<span class="sd">        the same model with different hyperparameters, you can add the hyperparameters.</span>
+<span class="sd">        Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
+<span class="sd">        as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
+<span class="sd">        Default None.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    checkpoint_filename : str</span>
+<span class="sd">        Checkpoint filename.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 
     <span class="n">extra_name_string</span><span class="p">,</span> <span class="n">extra_tags</span> <span class="o">=</span> <span class="n">get_file_suffix_from_dict</span><span class="p">(</span><span class="n">extra_log_string_dict</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">fold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -221,16 +252,25 @@
     <span class="k">return</span> <span class="n">checkpoint_filename</span></div>
 
 
-<div class="viewcode-block" id="get_checkpoint_filenames_for_subspace_models"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models.html#fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models">[docs]</a><span class="k">def</span> <span class="nf">get_checkpoint_filenames_for_subspace_models</span><span class="p">(</span><span class="n">subspace_method</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="get_checkpoint_filenames_for_subspace_models"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models">[docs]</a><span class="k">def</span> <span class="nf">get_checkpoint_filenames_for_subspace_models</span><span class="p">(</span><span class="n">subspace_method</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get the checkpoint filenames for the subspace models.</span>
+<span class="sd">    Get the checkpoint filenames for the subspace models based on the subspace method class</span>
+<span class="sd">    and the datamodule that is passed into the subspace method class.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        subspace_method (class): Subspace method class. Called from the subspace method class with self.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        checkpoint_filenames (list): List of checkpoint filenames. One for each subspace model.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    subspace_method : class</span>
+<span class="sd">        Subspace method class.</span>
+<span class="sd">    k : int</span>
+<span class="sd">        Fold number. None if not using kfold.</span>
+<span class="sd">        Default None.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    checkpoint_filenames : list</span>
+<span class="sd">        List of checkpoint filenames. One for each subspace model in the subspace method class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">subspace_method</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">fusion_model</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">):</span>
         <span class="n">big_fusion_model_name</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">fusion_model</span><span class="o">.</span><span class="vm">__name__</span>
@@ -262,24 +302,35 @@
     <span class="k">return</span> <span class="n">checkpoint_filenames</span></div>
 
 
-<div class="viewcode-block" id="get_checkpoint_filename_for_trained_fusion_model"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model.html#fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model">[docs]</a><span class="k">def</span> <span class="nf">get_checkpoint_filename_for_trained_fusion_model</span><span class="p">(</span>
+<div class="viewcode-block" id="get_checkpoint_filename_for_trained_fusion_model"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model">[docs]</a><span class="k">def</span> <span class="nf">get_checkpoint_filename_for_trained_fusion_model</span><span class="p">(</span>
     <span class="n">params</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">checkpoint_file_suffix</span><span class="p">,</span> <span class="n">fold</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Get the checkpoint filename for the trained fusion model using the model object.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gets the checkpoint filename for the trained fusion model using the model object.</span>
+
 <span class="sd">    Checkpoints should follow the naming convention:</span>
-<span class="sd">    fusion_model_name_fold_k_{checkpoint_file_suffix} if fold is not None</span>
-<span class="sd">    fusion_model_name_{checkpoint_file_suffix} if fold is None</span>
+<span class="sd">    </span>
+<span class="sd">    * fusion_model_name_fold_k_{checkpoint_file_suffix} if fold is not None</span>
+<span class="sd">    * fusion_model_name_{checkpoint_file_suffix} if fold is None</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        params (dict): Dictionary of parameters.</span>
-<span class="sd">        model (object): BaseModel model object.</span>
-<span class="sd">        checkpoint_file_suffix (str): Checkpoint file suffix.</span>
-<span class="sd">        fold (int): Fold number. Default None.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        checkpoint_filename (str): Checkpoint filename.</span>
-
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    params : dict</span>
+<span class="sd">        Dictionary of parameters.</span>
+<span class="sd">    model : object  </span>
+<span class="sd">        BaseModel model object.</span>
+<span class="sd">    checkpoint_file_suffix : str</span>
+<span class="sd">        Checkpoint file suffix.</span>
+<span class="sd">    fold : int</span>
+<span class="sd">        Fold number. None if not using kfold.</span>
+<span class="sd">        Default None.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    checkpoint_filename : str</span>
+<span class="sd">        Checkpoint filename.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="n">fold</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">ckpt_path_beginning</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="n">checkpoint_file_suffix</span>
     <span class="k">else</span><span class="p">:</span>
@@ -313,15 +364,25 @@
         <span class="k">return</span> <span class="n">checkpoint_filename</span></div>
 
 
-<div class="viewcode-block" id="LitProgressBar"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.LitProgressBar.html#fusilli.utils.training_utils.LitProgressBar">[docs]</a><span class="k">class</span> <span class="nc">LitProgressBar</span><span class="p">(</span><span class="n">TQDMProgressBar</span><span class="p">):</span>
-<div class="viewcode-block" id="LitProgressBar.init_validation_tqdm"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.LitProgressBar.html#fusilli.utils.training_utils.LitProgressBar.init_validation_tqdm">[docs]</a>    <span class="k">def</span> <span class="nf">init_validation_tqdm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LitProgressBar"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.LitProgressBar">[docs]</a><span class="k">class</span> <span class="nc">LitProgressBar</span><span class="p">(</span><span class="n">TQDMProgressBar</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Custom progress bar for pytorch lightning trainer. This is to </span>
+<span class="sd">    disable the progress bar for validation.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    TQDMProgressBar : object</span>
+<span class="sd">        Pytorch lightning TQDMProgressBar object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LitProgressBar.init_validation_tqdm"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.LitProgressBar.init_validation_tqdm">[docs]</a>    <span class="k">def</span> <span class="nf">init_validation_tqdm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">bar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span>
             <span class="n">disable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">bar</span></div></div>
 
 
-<div class="viewcode-block" id="init_trainer"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.init_trainer.html#fusilli.utils.training_utils.init_trainer">[docs]</a><span class="k">def</span> <span class="nf">init_trainer</span><span class="p">(</span>
+<div class="viewcode-block" id="init_trainer"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.init_trainer">[docs]</a><span class="k">def</span> <span class="nf">init_trainer</span><span class="p">(</span>
     <span class="n">logger</span><span class="p">,</span>
     <span class="n">params</span><span class="p">,</span>
     <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
@@ -330,23 +391,36 @@
     <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Initialize the pytorch lightning trainer object.</span>
+<span class="sd">    Initialise the pytorch lightning trainer object.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        logger (object): Pytorch lightning logger object.</span>
-<span class="sd">        params (dict): Dictionary of parameters.</span>
-<span class="sd">        max_epochs (int): Maximum number of epochs.</span>
-<span class="sd">        enable_checkpointing (bool): Whether to enable checkpointing. If True, then</span>
-<span class="sd">            checkpoints will be saved. We use False for the example notebooks in the</span>
-<span class="sd">            repository/documentation.</span>
-<span class="sd">        checkpoint_filename (str): Checkpoint filename. Default None if using default checkpointing.</span>
-<span class="sd">        own_early_stopping_callback (object): Own early stopping callback object. Default None to use default</span>
-<span class="sd">            early stopping callback. If you want to use your own early stopping callback, then you need to</span>
-<span class="sd">            define it in the main training script and pass it here or pass into the datamodule object and then</span>
-<span class="sd">            it will read it from there.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    logger : object</span>
+<span class="sd">        Pytorch lightning logger object.</span>
+<span class="sd">    params : dict</span>
+<span class="sd">        Dictionary of parameters.</span>
+<span class="sd">    max_epochs : int</span>
+<span class="sd">        Maximum number of epochs.</span>
+<span class="sd">        Default 1000.</span>
+<span class="sd">    enable_checkpointing : bool</span>
+<span class="sd">        Whether to enable checkpointing. If True, then</span>
+<span class="sd">        checkpoints will be saved. We use False for the example notebooks in the</span>
+<span class="sd">        repository/documentation.</span>
+<span class="sd">        Default True.</span>
+<span class="sd">    checkpoint_filename : str</span>
+<span class="sd">        Checkpoint filename.</span>
+<span class="sd">        Default None if using default checkpointing.</span>
+<span class="sd">    own_early_stopping_callback : object</span>
+<span class="sd">        Own early stopping callback object.</span>
+<span class="sd">        Default None to use default early stopping callback. If you want to use your own early stopping callback, then you need to</span>
+<span class="sd">        define it in the main training script and pass it here or pass into the datamodule object and then</span>
+<span class="sd">        it will read it from there.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    trainer : object</span>
+<span class="sd">        Pytorch lightning trainer object.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        trainer (object): Pytorch lightning trainer object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">own_early_stopping_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -394,18 +468,23 @@
     <span class="k">return</span> <span class="n">trainer</span></div>
 
 
-<div class="viewcode-block" id="get_final_val_metrics"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.get_final_val_metrics.html#fusilli.utils.training_utils.get_final_val_metrics">[docs]</a><span class="k">def</span> <span class="nf">get_final_val_metrics</span><span class="p">(</span><span class="n">trainer</span><span class="p">):</span>
+<div class="viewcode-block" id="get_final_val_metrics"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.get_final_val_metrics">[docs]</a><span class="k">def</span> <span class="nf">get_final_val_metrics</span><span class="p">(</span><span class="n">trainer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the final validation metrics from the trainer object.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        metric_names (list): List of metric names.</span>
-<span class="sd">        trainer (object): Pytorch lightning trainer object.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        metric1 (float): Final validation metric 1.</span>
-<span class="sd">        metric2 (float): Final validation metric 2.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    trainer : object</span>
+<span class="sd">        Pytorch lightning trainer object.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    metric1 : float</span>
+<span class="sd">        Final validation metric 1.</span>
+<span class="sd">    metric2 : float</span>
+<span class="sd">        Final validation metric 2.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">metric_names</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">metric_names_list</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="n">trainer</span><span class="o">.</span><span class="n">callback_metrics</span><span class="p">)</span>

@@ -393,8 +393,6 @@ def get_final_val_metrics(trainer):
 
     metric_names = trainer.model.metric_names_list
 
-    print(trainer.callback_metrics)
-
     # raise error if trainer.callback_metrics is empty
     if len(trainer.callback_metrics) == 0:
         raise ValueError("trainer.callback_metrics is empty.")

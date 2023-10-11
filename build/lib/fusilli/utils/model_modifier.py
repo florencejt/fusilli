@@ -1,26 +1,29 @@
 """ 
-Functions for modifying aspects of the model (e.g. changing layers, latent space sizes, etc.)
+Functions for modifying aspects of the model (e.g. changing layers, latent space sizes, etc.).
 """
 
 import torch.nn as nn
 import warnings
 from copy import deepcopy
 
-# modifying model function
-
 
 def modify_model_architecture(model, architecture_modification):
     """
     Modify the architecture of a deep learning model based on the provided configuration.
 
-    Args:
-        model (nn.Module): The original deep learning model.
-        architecture_modification (dict): A dictionary containing architecture modifications.
-            Input format {"model": {"layer_group": "modification"}, ...}.
-            e.g. {"TabularCrossmodalAttention": {"mod1_layers": new mod 1 layers nn.ModuleDict}}
-
-    Returns:
-        nn.Module: The modified deep learning model.
+    Parameters
+    ----------
+    model : nn.Module
+        The original deep learning model.
+    architecture_modification : dict
+        A dictionary containing architecture modifications.
+        Input format {"model": {"layer_group": "modification"}, ...}.
+        e.g. {"TabularCrossmodalAttention": {"mod1_layers": new mod 1 layers nn.ModuleDict}}
+    
+    Returns
+    -------
+    nn.Module
+        The modified deep learning model.
     """
 
     for model_name, layer_groups in architecture_modification.items():
@@ -60,13 +63,19 @@ def get_nested_attr(obj, attr_path):
     """
     Get a nested attribute from an object using dot-separated path.
 
-    Args:
-        obj (object): The object to retrieve the nested attribute from.
-        attr_path (str): Dot-separated path to the nested attribute.
-
-    Returns:
-        object: The nested attribute if found, otherwise None.
+    Parameters
+    ----------
+    obj : object
+        The object to retrieve the nested attribute from.
+    attr_path : str
+        Dot-separated path to the nested attribute.
+    
+    Returns
+    -------
+    object
+        The nested attribute if found, otherwise None.
     """
+
     attributes = attr_path.split(".")
 
     if len(attributes) > 1:  # if we're looking for a nested attribute
@@ -86,10 +95,14 @@ def reset_fused_layers(obj, model):
     """
     Reset fused layers of a model if the reset method is available.
 
-    Args:
-        obj (nn.Module): The model to reset fused layers for.
-        model (nn.Module): The original deep learning model.
+    Parameters
+    ----------
+    obj : nn.Module
+        The model to reset fused layers for.
+    model : nn.Module
+        The original deep learning model.
     """
+
     if hasattr(obj, "calc_fused_layers"):
         obj.calc_fused_layers()
         print("Reset fused layers in", model.__class__.__name__)

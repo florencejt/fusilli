@@ -28,6 +28,7 @@ fusilli/fusion_models/tabular1_unimodal.py
 fusilli/fusion_models/tabular2_unimodal.py
 fusilli/fusion_models/tabular_channelwise_att.py
 fusilli/fusion_models/tabular_decision.py
+fusilli/utils/__init__.py
 fusilli/utils/check_model_validity.py
 fusilli/utils/csv_loss_plotter.py
 fusilli/utils/model_chooser.py

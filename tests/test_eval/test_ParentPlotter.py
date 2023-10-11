@@ -56,8 +56,8 @@ def sample_kfold_model_data():
         "train_preds": [torch.tensor([1, 0, 1]), torch.tensor([0, 1, 0])],
         "val_reals": [torch.tensor([1, 0, 1]), torch.tensor([0, 1, 0])],
         "val_preds": [torch.tensor([1, 0, 1]), torch.tensor([0, 1, 0])],
-        "metrics_per_fold": {"metric1": [0.85, 0.78], "metric2": [0.92, 0.88]},
-        "overall_kfold_metrics": {"metric1": 0.85, "metric2": 0.92},
+        "metrics_per_fold": {"metric1": [torch.tensor(0.85), torch.tensor(0.78)], "metric2": [torch.tensor(0.92), torch.tensor(0.88)]},
+        "overall_kfold_metrics": {"metric1": torch.tensor(0.85), "metric2": torch.tensor(0.92)},
     }
 
     model.set_params(model_data.copy())
@@ -83,7 +83,7 @@ def sample_train_test_model_data():
         "train_preds": torch.tensor([1, 0, 1]),
         "val_reals": torch.tensor([1, 0, 1]),
         "val_preds": torch.tensor([1, 0, 1]),
-        "metric_values": {"metric1": 0.85, "metric2": 0.92},
+        "metric_values": {"metric1": torch.tensor(0.85), "metric2": torch.tensor(0.92)},
     }
 
     model.set_params(model_data.copy())
@@ -266,4 +266,5 @@ def test_error_when_kfold_true_with_single_model(sample_kfold_model_data):
         ConfusionMatrix.from_final_val_data(model_list)
 
 
-# Model comparison
+
+

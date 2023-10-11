@@ -121,7 +121,7 @@ class ParentPlotter:
                 model_list[0].safe_squeeze(all_val_reals),
             )
 
-            overall_kfold_metrics[metric["name"]] = val_step_acc
+            overall_kfold_metrics[metric["name"]] = val_step_acc.cpu().detach().item()
 
         return (
             train_reals,
@@ -368,7 +368,7 @@ class ParentPlotter:
                 model_list[0].safe_squeeze(all_val_reals),
             )
 
-            overall_kfold_metrics[metric["name"]] = val_step_acc
+            overall_kfold_metrics[metric["name"]] = val_step_acc.cpu().detach().item()
 
         return (
             train_reals,
@@ -1327,7 +1327,7 @@ class ModelComparison(ParentPlotter):
         super().__init__()
 
     @classmethod
-    def from_final_val_data(self, model_list, kfold_flag):
+    def from_final_val_data(self, model_dict):
         """
         Plotting function for comparing models on metrics using the final validation data (i.e. the data that was used to evaluate the model
         when the model training was complete).
@@ -1335,15 +1335,12 @@ class ModelComparison(ParentPlotter):
 
         Parameters
         ----------
-        model_list: list of lists
-            List of trained pytorch_lightning models.
-            For k-fold, this is a list with length number of fusion methods, where each element is a list of length k
-            containing the trained pytorch_lightning models for each fold.
-            For train/test, this is a list of length number of fusion methods, where each element is a list of length 1
-            containing the trained pytorch_lightning model.
-        kfold_flag: bool
-            True if the model is a kfold model, False if the model is a train/test model.
-        
+        model_dict: dict
+            Dictionary of trained pytorch_lightning models.
+            Keys are the names of the models and values are lists of the trained pytorch_lightning models.
+            If kfold_flag is True, the lists must be of length > 1 (and the length of num_k)
+            If kfold_flag is False, the lists must be of length 1 (meaning there is only one model for each key).
+
         Returns
         -------
         fig: matplotlib.pyplot.figure
@@ -1352,13 +1349,50 @@ class ModelComparison(ParentPlotter):
             The dataframe of the metrics.
     
 
-        """
+        """        
+        # error if model_dict isn't a dict
+        if not isinstance(model_dict, dict):
+            raise ValueError(
+                (
+                    "Argument 'model_dict' is not a dict. "
+                    "'model_dict' should have keys as the model names and values as lists of trained models. "
+                )
+            )
+        
         comparing_models_metrics = {}
 
+        # check for empty lists in dict
+        for model in model_dict:
+            model_list = model_dict[model]
+            if len(model_list) == 0:
+                raise ValueError(
+                    (
+                        "Empty list of models has been passed into the ModelComparison.from_final_val_data. "
+                        "There is an empty list somewhere in the model_dict. Please check the model_dict."
+                    )
+                )
+
+        # get kfold_flag from first model in model_dict
+        first_model = list(model_dict.values())[0][0]
+        kfold_flag = first_model.model.params["kfold_flag"]
+
         if kfold_flag:
-            overall_kfold_metrics_dict = {}  #
-            for model in model_list:
-                model = model_list[model]
+            overall_kfold_metrics_dict = {}  
+            for model in model_dict:
+                model_list = model_dict[model] # list of length k of trained models
+
+                # error if list is of length 1
+                if len(model_list) == 1:
+                    raise ValueError(
+                        (
+                            "List of models in model_dict has length 1 but the kfold_flag is True. "
+                            "K-fold training should produce a list of models of length > 1. "
+                            "Please check the model_dict and the kfold_flag."
+                        )
+                    )
+
+
+                model_method_name = model_list[0].model.method_name
 
                 (
                     train_reals,
@@ -1367,12 +1401,12 @@ class ModelComparison(ParentPlotter):
                     val_preds,
                     metrics_per_fold,
                     overall_kfold_metrics,
-                ) = self.get_kfold_data_from_model(model)
+                ) = self.get_kfold_data_from_model(model_list)
 
-                comparing_models_metrics[model[0].model.method_name] = metrics_per_fold
+                comparing_models_metrics[model_method_name] = metrics_per_fold
 
                 overall_kfold_metrics_dict[
-                    model[0].model.method_name
+                    model_method_name
                 ] = overall_kfold_metrics
 
             figure = self.kfold_comparison_plot(comparing_models_metrics)
@@ -1382,17 +1416,28 @@ class ModelComparison(ParentPlotter):
             )
 
         else:
-            for model in model_list:
-                model = model_list[model]
+            for model in model_dict:
+                model_list = model_dict[model] # list of length 1 of trained model
+                
+                # error if list is of length > 1
+                if len(model_list) > 1:
+                    raise ValueError(
+                        (
+                            "List of models in model_dict has length > 1 but the kfold_flag is False. "
+                            "Train/test training should produce a list of models of length 1. "
+                            "Please check the model_dict and the kfold_flag."
+                        )
+                    )
+                model_method_name = model_list[0].model.method_name
                 (
                     train_reals,
                     train_preds,
                     val_reals,
                     val_preds,
                     metric_values,
-                ) = self.get_tt_data_from_model(model)
+                ) = self.get_tt_data_from_model(model_list)
 
-                comparing_models_metrics[model[0].model.method_name] = metric_values
+                comparing_models_metrics[model_method_name] = metric_values
 
             figure = self.train_test_comparison_plot(comparing_models_metrics)
             df = self.get_performance_dataframe(
@@ -1402,7 +1447,7 @@ class ModelComparison(ParentPlotter):
         return figure, df
 
     @classmethod
-    def from_new_data(self, model_list):
+    def from_new_data(self, model_dict):
         raise NotImplementedError
 
     @classmethod
@@ -1506,6 +1551,8 @@ class ModelComparison(ParentPlotter):
         fig: matplotlib figure
             Figure containing the horizontal bar chart.
         """
+
+
         method_names = list(
             comparing_models_metrics.keys()
         )  # [method1name, method2name,...]
@@ -1593,9 +1640,11 @@ class ModelComparison(ParentPlotter):
         Parameters
         ----------
         comparing_models_metrics: dict
-            Dictionary of metrics. Keys are the model names and values are dict {metric1name: metric_value, metric2name: metric_value}
+            Dictionary of metrics. Keys are the model names and values are dict {metric1name: metric_value, metric2name: metric_value}.
+            Metric values can be float or int.
         overall_kfold_metrics_dict: dict
-            Dictionary of overall kfold metrics. Keys are the model names and values are dict {metric1name: metric_value, metric2name: metric_value}
+            Dictionary of overall kfold metrics. Keys are the model names and values are dict {metric1name: metric_value, metric2name: metric_value}.
+            This is only needed for kfold models.
         kfold_flag: bool
             True if the model is a kfold model, False if the model is a train/test model.
         
@@ -1610,13 +1659,11 @@ class ModelComparison(ParentPlotter):
         metric1name = list(comparing_models_metrics[method_names[0]].keys())[0]
         metric2name = list(comparing_models_metrics[method_names[0]].keys())[1]
 
+        print("comp models metrics", comparing_models_metrics)
+
         if kfold_flag:
 
             overall_kfold_metrics_copy = overall_kfold_metrics_dict.copy()
-
-            for method, metrics in overall_kfold_metrics_copy.items():
-                for metric, value in metrics.items():
-                    overall_kfold_metrics_copy[method][metric] = value.item()
 
             df = pd.DataFrame(overall_kfold_metrics_copy).transpose()
 
@@ -1645,6 +1692,8 @@ class ModelComparison(ParentPlotter):
 
             final_df = pd.concat([df, folds_df], axis=1)
 
+            # rename final_df index to "method"
+            final_df.rename_axis("Method", inplace=True)
             return final_df
 
         else:
@@ -1655,7 +1704,7 @@ class ModelComparison(ParentPlotter):
 
             # Create a DataFrame from the reshaped data
             df = pd.DataFrame(reshaped_data)
+            # rename index to string"method"
             df.set_index("Method", inplace=True)
-            df.index.name = None
 
             return df

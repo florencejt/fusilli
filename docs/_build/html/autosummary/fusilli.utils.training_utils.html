@@ -116,15 +116,17 @@
              
   <section id="module-fusilli.utils.training_utils">
 <span id="fusilli-utils-training-utils"></span><h1>fusilli.utils.training_utils<a class="headerlink" href="#module-fusilli.utils.training_utils" title="Permalink to this heading"></a></h1>
-<p>Functions for initializing the pytorch lightning logger and trainer.</p>
+<p>Functions for initialising the pytorch lightning logger and trainer, getting final validation metrics
+from trained pytorch lightning models, and various functions for setting checkpoint filenames based
+on model, parameters, and user-defined strings.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model" title="fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_checkpoint_filename_for_trained_fusion_model</span></code></a>(...)</p></td>
-<td><p>Get the checkpoint filename for the trained fusion model using the model object.</p></td>
+<td><p>Gets the checkpoint filename for the trained fusion model using the model object.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models" title="fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_checkpoint_filenames_for_subspace_models</span></code></a>(...)</p></td>
-<td><p>Get the checkpoint filenames for the subspace models.</p></td>
+<td><p>Get the checkpoint filenames for the subspace models based on the subspace method class and the datamodule that is passed into the subspace method class.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.get_file_suffix_from_dict" title="fusilli.utils.training_utils.get_file_suffix_from_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_file_suffix_from_dict</span></code></a>(extra_log_string_dict)</p></td>
 <td><p>Get the extra name string and tags from the extra_log_string_dict.</p></td>
@@ -133,7 +135,7 @@
 <td><p>Get the final validation metrics from the trainer object.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.init_trainer" title="fusilli.utils.training_utils.init_trainer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_trainer</span></code></a>(logger, params[, max_epochs, ...])</p></td>
-<td><p>Initialize the pytorch lightning trainer object.</p></td>
+<td><p>Initialise the pytorch lightning trainer object.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.set_checkpoint_name" title="fusilli.utils.training_utils.set_checkpoint_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_checkpoint_name</span></code></a>(params, fusion_model[, ...])</p></td>
 <td><p>Set the checkpoint name for the current run of the main fusion model.</p></td>
@@ -147,7 +149,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.utils.training_utils.LitProgressBar" title="fusilli.utils.training_utils.LitProgressBar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LitProgressBar</span></code></a>([refresh_rate, process_position])</p></td>
-<td><p></p></td>
+<td><p>Custom progress bar for pytorch lightning trainer.</p></td>
 </tr>
 </tbody>
 </table>
@@ -155,6 +157,13 @@
 <dt class="sig sig-object py" id="fusilli.utils.training_utils.LitProgressBar">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LitProgressBar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">refresh_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#LitProgressBar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.LitProgressBar" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TQDMProgressBar</span></code></p>
+<p>Custom progress bar for pytorch lightning trainer. This is to
+disable the progress bar for validation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TQDMProgressBar</strong> (<em>object</em>) – Pytorch lightning TQDMProgressBar object.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="fusilli.utils.training_utils.LitProgressBar.init_validation_tqdm">
 <span class="sig-name descname"><span class="pre">init_validation_tqdm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#LitProgressBar.init_validation_tqdm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.LitProgressBar.init_validation_tqdm" title="Permalink to this definition"></a></dt>
@@ -166,24 +175,27 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model">
 <span class="sig-name descname"><span class="pre">get_checkpoint_filename_for_trained_fusion_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_file_suffix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#get_checkpoint_filename_for_trained_fusion_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.get_checkpoint_filename_for_trained_fusion_model" title="Permalink to this definition"></a></dt>
-<dd><p>Get the checkpoint filename for the trained fusion model using the model object.
-Checkpoints should follow the naming convention:
-fusion_model_name_fold_k_{checkpoint_file_suffix} if fold is not None
-fusion_model_name_{checkpoint_file_suffix} if fold is None</p>
+<dd><p>Gets the checkpoint filename for the trained fusion model using the model object.</p>
+<p>Checkpoints should follow the naming convention:</p>
+<ul class="simple">
+<li><p>fusion_model_name_fold_k_{checkpoint_file_suffix} if fold is not None</p></li>
+<li><p>fusion_model_name_{checkpoint_file_suffix} if fold is None</p></li>
+</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
 <li><p><strong>model</strong> (<em>object</em>) – BaseModel model object.</p></li>
 <li><p><strong>checkpoint_file_suffix</strong> (<em>str</em>) – Checkpoint file suffix.</p></li>
-<li><p><strong>fold</strong> (<em>int</em>) – Fold number. Default None.</p></li>
+<li><p><strong>fold</strong> (<em>int</em>) – Fold number. None if not using kfold.
+Default None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Checkpoint filename.</p>
+<dd class="field-even"><p><strong>checkpoint_filename</strong> – Checkpoint filename.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>checkpoint_filename (str)</p>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -191,16 +203,21 @@ fusion_model_name_{checkpoint_file_suffix} if fold is None</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models">
 <span class="sig-name descname"><span class="pre">get_checkpoint_filenames_for_subspace_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subspace_method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#get_checkpoint_filenames_for_subspace_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models" title="Permalink to this definition"></a></dt>
-<dd><p>Get the checkpoint filenames for the subspace models.</p>
+<dd><p>Get the checkpoint filenames for the subspace models based on the subspace method class
+and the datamodule that is passed into the subspace method class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>subspace_method</strong> (<em>class</em>) – Subspace method class. Called from the subspace method class with self.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subspace_method</strong> (<em>class</em>) – Subspace method class.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – Fold number. None if not using kfold.
+Default None.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of checkpoint filenames. One for each subspace model.</p>
+<dd class="field-even"><p><strong>checkpoint_filenames</strong> – List of checkpoint filenames. One for each subspace model in the subspace method class.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>checkpoint_filenames (list)</p>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -217,11 +234,11 @@ Input format {“name”: “value”}. In the run name, the extra string will b
 as “name_value”. And a tag will be added as “name_value”.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Extra name string to add to the some path name.
-extra_tags (list): List of extra tags to add to the logged run (wandb).</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>extra_name_string (str)</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>extra_name_string</strong> (<em>str</em>) – Extra name string to add to the some path name.</p></li>
+<li><p><strong>extra_tags</strong> (<em>list</em>) – List of extra tags to add to the logged run (wandb).</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -232,17 +249,14 @@ extra_tags (list): List of extra tags to add to the logged run (wandb).</p>
 <dd><p>Get the final validation metrics from the trainer object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>metric_names</strong> (<em>list</em>) – List of metric names.</p></li>
-<li><p><strong>trainer</strong> (<em>object</em>) – Pytorch lightning trainer object.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>trainer</strong> (<em>object</em>) – Pytorch lightning trainer object.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Final validation metric 1.
-metric2 (float): Final validation metric 2.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>metric1 (float)</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>metric1</strong> (<em>float</em>) – Final validation metric 1.</p></li>
+<li><p><strong>metric2</strong> (<em>float</em>) – Final validation metric 2.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -250,28 +264,31 @@ metric2 (float): Final validation metric 2.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fusilli.utils.training_utils.init_trainer">
 <span class="sig-name descname"><span class="pre">init_trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_checkpointing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">own_early_stopping_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#init_trainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.init_trainer" title="Permalink to this definition"></a></dt>
-<dd><p>Initialize the pytorch lightning trainer object.</p>
+<dd><p>Initialise the pytorch lightning trainer object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>logger</strong> (<em>object</em>) – Pytorch lightning logger object.</p></li>
 <li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
-<li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs.</p></li>
+<li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs.
+Default 1000.</p></li>
 <li><p><strong>enable_checkpointing</strong> (<em>bool</em>) – Whether to enable checkpointing. If True, then
 checkpoints will be saved. We use False for the example notebooks in the
-repository/documentation.</p></li>
-<li><p><strong>checkpoint_filename</strong> (<em>str</em>) – Checkpoint filename. Default None if using default checkpointing.</p></li>
-<li><p><strong>own_early_stopping_callback</strong> (<em>object</em>) – Own early stopping callback object. Default None to use default
-early stopping callback. If you want to use your own early stopping callback, then you need to
+repository/documentation.
+Default True.</p></li>
+<li><p><strong>checkpoint_filename</strong> (<em>str</em>) – Checkpoint filename.
+Default None if using default checkpointing.</p></li>
+<li><p><strong>own_early_stopping_callback</strong> (<em>object</em>) – Own early stopping callback object.
+Default None to use default early stopping callback. If you want to use your own early stopping callback, then you need to
 define it in the main training script and pass it here or pass into the datamodule object and then
 it will read it from there.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Pytorch lightning trainer object.</p>
+<dd class="field-even"><p><strong>trainer</strong> – Pytorch lightning trainer object.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>trainer (object)</p>
+<dd class="field-odd"><p>object</p>
 </dd>
 </dl>
 </dd></dl>
@@ -285,7 +302,7 @@ it will read it from there.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
 <li><p><strong>fusion_model</strong> (<em>class</em>) – Fusion model class.</p></li>
-<li><p><strong>fold</strong> (<em>int</em>) – Fold number. Default None.</p></li>
+<li><p><strong>fold</strong> (<em>int</em>) – Fold number. None if not using kfold.</p></li>
 <li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – Extra string to add to the run name. e.g. if you’re running
 the same model with different hyperparameters, you can add the hyperparameters.
 Input format {“name”: “value”}. In the run name, the extra string will be added
@@ -294,10 +311,10 @@ Default None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Checkpoint filename.</p>
+<dd class="field-even"><p><strong>checkpoint_filename</strong> – Checkpoint filename.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>checkpoint_filename (str)</p>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -306,24 +323,25 @@ Default None.</p></li>
 <dt class="sig sig-object py" id="fusilli.utils.training_utils.set_logger">
 <span class="sig-name descname"><span class="pre">set_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_log_string_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/training_utils.html#set_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.training_utils.set_logger" title="Permalink to this definition"></a></dt>
 <dd><p>Set the logger for the current run. If params[“log”] is True, then the logger is set to
-WandbLogger, otherwise it is set to None.</p>
+WandbLogger, otherwise it is set to CSVLogger and the logs are saved to params[“loss_log_dir”].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
-<li><p><strong>fold</strong> (<em>int</em>) – Fold number.</p></li>
+<li><p><strong>fold</strong> (<em>int</em>) – Fold number. None if not using kfold.</p></li>
 <li><p><strong>fusion_model</strong> (<em>class</em>) – Fusion model class.</p></li>
-<li><p><strong>extra_string_dict</strong> (<em>dict</em>) – Extra string to add to the run name. e.g. if you’re running
+<li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – Extra string to add to the run name. e.g. if you’re running
 the same model with different hyperparameters, you can add the hyperparameters.
 Input format {“name”: “value”}. In the run name, the extra string will be added
-as “name_value”. And a tag will be added as “name_value”.</p></li>
+as “name_value”. And a tag will be added as “name_value”.
+Default None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Pytorch lightning logger object.</p>
+<dd class="field-even"><p><strong>logger</strong> – Pytorch lightning logger object or CSVLogger object if params[“log”] is False.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>logger (object)</p>
+<dd class="field-odd"><p>object</p>
 </dd>
 </dl>
 </dd></dl>
