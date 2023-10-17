@@ -41,6 +41,8 @@ extensions = [
     "sphinx.ext.viewcode",  # for linking to source code
     "sphinx_gallery.gen_gallery",  # for gallery
     "sphinx_rtd_theme",  # for readthedocs theme
+    "sphinx_wagtail_theme",
+    "renku_sphinx_theme",
 ]
 
 
@@ -90,7 +92,9 @@ add_module_names = False
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "sphinx_rtd_theme"
+# html_theme = "sphinx_rtd_theme"
+# html_theme = "sphinx_wagtail_theme"
+html_theme = "renku"
 html_static_path = ["_static"]
 html_logo = "pink_pasta_logo.png"
 html_favicon = "pink_pasta_logo.png"
