@@ -47,7 +47,7 @@ fusion_models = import_chosen_fusion_models(model_conditions)
 
 
 # %%
-# 2. Set the training parameters 🎯 
+# 2. Set the training parameters 🎯
 # -----------------------------------
 # Now, let's configure our training parameters. The parameters are stored in a dictionary and passed to most
 # of the methods in this library.
@@ -55,7 +55,7 @@ fusion_models = import_chosen_fusion_models(model_conditions)
 #
 # - ``test_size``: the proportion of the data to be used for testing.
 # - ``kfold_flag``: the user sets this to False for train/test protocol.
-# - ``log``: a boolean of whether to log the results using Weights and Biases.
+# - ``log``: a boolean of whether to log the results using Weights and Biases (True) or not (False).
 # - ``pred_type``: the type of prediction to be performed. This is either ``regression``, ``binary``, or ``classification``. For this example we're using regression.
 # - ``loss_log_dir``: the directory to save the loss logs to. This is used for plotting the loss curves.
 
@@ -64,14 +64,14 @@ params = {
     "kfold_flag": False,
     "log": False,
     "pred_type": "regression",
-    "loss_log_dir": "loss_logs", # where the csv of the loss is saved for plotting later
+    "loss_log_dir": "loss_logs",  # where the csv of the loss is saved for plotting later
 }
 
 
 # %%
 # 3. Generating simulated data 🔮
 # --------------------------------
-# Time to create some simulated data for our models to work their wonders on. 
+# Time to create some simulated data for our models to work their wonders on.
 # This function also simulated image data which we aren't using here.
 
 params = generate_sklearn_simulated_data(
@@ -120,7 +120,7 @@ model_1_dict = train_and_save_models(
     params=params,
     fusion_model=fusion_model,
     enable_checkpointing=False,  # False for the example notebooks
-    show_loss_plot=True, 
+    show_loss_plot=True,
 )
 
 # Add trained model to dictionary
@@ -130,7 +130,7 @@ all_trained_models[fusion_model.__name__] = model_1_dict[fusion_model.__name__]
 # %%
 # 5. Plotting the results of the first model 📊
 # -----------------------------------------------
-# Let's unveil the results of our first model's hard work. We're using the :class:`~fusilli.eval.RealsVsPreds` class to plot the results of the first model. 
+# Let's unveil the results of our first model's hard work. We're using the :class:`~fusilli.eval.RealsVsPreds` class to plot the results of the first model.
 # This class takes the trained model as an input and returns a plot of the real values vs the predicted values from the final validation data (when using from_final_val_data).
 # If you want to plot the results from the test data, you can use from_new_data instead. See the example notebook on plotting with new data for more detail.
 
@@ -186,7 +186,9 @@ plt.show()
 # We're using the :class:`~fusilli.eval.ModelComparison` class to compare the results of the two models.
 # This class takes the trained models as an input and returns a plot of the results of the two models and a Pandas DataFrame of the metrics of the two models.
 
-comparison_plotter, metrics_dataframe = ModelComparison.from_final_val_data(all_trained_models, kfold_flag=False)
+comparison_plot, metrics_dataframe = ModelComparison.from_final_val_data(
+    all_trained_models
+)
 
 plt.show()
 

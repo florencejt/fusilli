@@ -26,7 +26,7 @@ def get_file_suffix_from_dict(extra_log_string_dict):
         the same model with different hyperparameters, you can add the hyperparameters.
         Input format {"name": "value"}. In the run name, the extra string will be added
         as "name_value". And a tag will be added as "name_value".
-    
+
     Returns
     -------
     extra_name_string : str
@@ -67,12 +67,12 @@ def set_logger(params, fold, fusion_model, extra_log_string_dict=None):
         Input format {"name": "value"}. In the run name, the extra string will be added
         as "name_value". And a tag will be added as "name_value".
         Default None.
-    
+
     Returns
     -------
     logger : object
         Pytorch lightning logger object or CSVLogger object if params["log"] is False.
-    """ 
+    """
 
     if hasattr(fusion_model, "__name__"):
         method_name = fusion_model.__name__
@@ -105,7 +105,7 @@ def set_logger(params, fold, fusion_model, extra_log_string_dict=None):
             for key, value in extra_log_string_dict.items():
                 logger.experiment.config[key] = value
 
-    else: # if params["log"] is False
+    else:  # if params["log"] is False
         logger = CSVLogger(
             save_dir=params["loss_log_dir"],
             name=None,
@@ -133,13 +133,12 @@ def set_checkpoint_name(params, fusion_model, fold=None, extra_log_string_dict=N
         Input format {"name": "value"}. In the run name, the extra string will be added
         as "name_value". And a tag will be added as "name_value".
         Default None.
-    
+
     Returns
     -------
     checkpoint_filename : str
         Checkpoint filename.
     """
-
 
     extra_name_string, extra_tags = get_file_suffix_from_dict(extra_log_string_dict)
     if fold is not None:
@@ -170,13 +169,12 @@ def get_checkpoint_filenames_for_subspace_models(subspace_method, k=None):
     k : int
         Fold number. None if not using kfold.
         Default None.
-    
+
     Returns
     -------
     checkpoint_filenames : list
         List of checkpoint filenames. One for each subspace model in the subspace method class.
     """
-
 
     if hasattr(subspace_method.datamodule.fusion_model, "__name__"):
         big_fusion_model_name = subspace_method.datamodule.fusion_model.__name__
@@ -193,7 +191,8 @@ def get_checkpoint_filenames_for_subspace_models(subspace_method, k=None):
     for subspace_model in subspace_method.subspace_models:
         if k is not None:
             checkpoint_filenames.append(
-                big_fusion_model_name
+                "subspace_"
+                + big_fusion_model_name
                 + "_"
                 + subspace_model.__name__
                 + "_fold_"
@@ -202,7 +201,11 @@ def get_checkpoint_filenames_for_subspace_models(subspace_method, k=None):
             )
         else:
             checkpoint_filenames.append(
-                big_fusion_model_name + "_" + subspace_model.__name__ + log_string,
+                "subspace_"
+                + big_fusion_model_name
+                + "_"
+                + subspace_model.__name__
+                + log_string,
             )
 
     return checkpoint_filenames
@@ -215,7 +218,7 @@ def get_checkpoint_filename_for_trained_fusion_model(
     Gets the checkpoint filename for the trained fusion model using the model object.
 
     Checkpoints should follow the naming convention:
-    
+
     * fusion_model_name_fold_k_{checkpoint_file_suffix} if fold is not None
     * fusion_model_name_{checkpoint_file_suffix} if fold is None
 
@@ -223,19 +226,21 @@ def get_checkpoint_filename_for_trained_fusion_model(
     ----------
     params : dict
         Dictionary of parameters.
-    model : object  
+    model : object
         BaseModel model object.
     checkpoint_file_suffix : str
         Checkpoint file suffix.
     fold : int
         Fold number. None if not using kfold.
         Default None.
-    
+
     Returns
     -------
     checkpoint_filename : str
         Checkpoint filename.
     """
+    if checkpoint_file_suffix is None:
+        checkpoint_file_suffix = ""
 
     if fold is None:
         ckpt_path_beginning = model.model.__class__.__name__ + checkpoint_file_suffix
@@ -258,6 +263,9 @@ def get_checkpoint_filename_for_trained_fusion_model(
             f"Could not find checkpoint file with name {ckpt_path_beginning} in {params['checkpoint_dir']}."
         )
     elif len(result) > 1:
+        # if the model is a subspace method, then we need to check if the checkpoint file is for the subspace model
+        # or the big fusion model
+        # TODO add this check
         raise ValueError(
             f"Found multiple checkpoint files with name {ckpt_path_beginning} in {params['checkpoint_dir']}."
         )
@@ -272,9 +280,9 @@ def get_checkpoint_filename_for_trained_fusion_model(
 
 class LitProgressBar(TQDMProgressBar):
     """
-    Custom progress bar for pytorch lightning trainer. This is to 
+    Custom progress bar for pytorch lightning trainer. This is to
     disable the progress bar for validation.
-    
+
     Parameters
     ----------
     TQDMProgressBar : object
@@ -321,7 +329,7 @@ def init_trainer(
         Default None to use default early stopping callback. If you want to use your own early stopping callback, then you need to
         define it in the main training script and pass it here or pass into the datamodule object and then
         it will read it from there.
-    
+
     Returns
     -------
     trainer : object
@@ -382,7 +390,7 @@ def get_final_val_metrics(trainer):
     ----------
     trainer : object
         Pytorch lightning trainer object.
-    
+
     Returns
     -------
     metric1 : float

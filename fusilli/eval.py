@@ -28,8 +28,8 @@ from fusilli.utils.training_utils import (
 
 
 class ParentPlotter:
-    """Parent class for all plot classes. 
-    
+    """Parent class for all plot classes.
+
     It includes methods that are used by multiple plot classes, such as obtaining final
     validation data from kfold and train/test models, and putting new data through the
     models for both kfold and train/test protocols.
@@ -43,13 +43,13 @@ class ParentPlotter:
         """
         Get the final validation data from a kfold model, meaning the data that was used to evaluate the model
         when the model training was complete.
-        
+
         Parameters
         ----------
         model_list: list
             List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first
             element is the k=1 model and the second element is the k=2 model, etc.
-        
+
         Returns
         -------
         train_reals: list
@@ -68,7 +68,7 @@ class ParentPlotter:
             Dictionary of the metrics for each fold.
             The keys are the names of the metrics and the values are lists of the metric values for each fold.
         overall_kfold_metrics: dict
-            Dictionary of the overall kfold metrics. 
+            Dictionary of the overall kfold metrics.
             The keys are the names of the metrics and the values are the metric values for the overall kfold,
             meaning the metric values for the concatenated final validation data over all the folds.
 
@@ -137,12 +137,12 @@ class ParentPlotter:
         """
         Get the final validation data from a train/test model, meaning the data that was used to evaluate the model
         when the model training was complete.
-        
+
         Parameters
         ----------
         model_list: list
             A list of length 1 containing the trained pytorch_lightning model.
-        
+
         Returns
         -------
         train_reals: torch.Tensor
@@ -160,10 +160,10 @@ class ParentPlotter:
         metric_values: dict
             Dictionary of the metrics for the model.
             The keys are the names of the metrics and the values are the metric values for the model.
-            
+
         """
 
-        model = model_list[0] # get the model from the list of length 1
+        model = model_list[0]  # get the model from the list of length 1
 
         # not training the model
         model.eval()
@@ -188,21 +188,21 @@ class ParentPlotter:
     ):
         """
         Get new data by running through trained model for a kfold model.
-        
+
         Parameters
         ----------
         model_list: list
             List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first
             element is the k=1 model and the second element is the k=2 model, etc.
         params: dict
-            Additional parameters. Used for knowing where the checkpoint files are stored and 
+            Additional parameters. Used for knowing where the checkpoint files are stored and
             creating the pytorch lightning data_module for the new data.
         data_file_suffix: str
             Suffix that is on the new data csv and pt files. e.g. "_new_data" or "_test"
         checkpoint_file_suffix: str, optional
             Suffix that is on the trained model checkpoint files. e.g. "_firsttry". Added by the user.
             Default is None.
-        
+
         Returns
         -------
         train_reals: list
@@ -218,7 +218,7 @@ class ParentPlotter:
             This was obtained by running the new data through the trained model.
         metrics_per_fold: dict
             Dictionary of the metrics for each fold.
-            The keys are the names of the metrics and the values are lists of the metric values for each fold.  
+            The keys are the names of the metrics and the values are lists of the metric values for each fold.
         overall_kfold_metrics: dict
             Dictionary of the overall kfold metrics.
             The keys are the names of the metrics and the values are the metric values for the overall kfold,
@@ -229,6 +229,10 @@ class ParentPlotter:
         ValueError
             If the model has a graph maker, it's not supported yet for creating graphs from new data.
         """
+
+        if checkpoint_file_suffix is None:
+            checkpoint_file_suffix = ""
+
         train_reals = []
         train_preds = []
         val_reals = []
@@ -265,6 +269,7 @@ class ParentPlotter:
                     subspace_ckpts.append(
                         params["checkpoint_dir"]
                         + "/"
+                        + "subspace_"
                         + model.model.__class__.__name__
                         + "_"
                         + subspace_model.__name__
@@ -385,20 +390,20 @@ class ParentPlotter:
     ):
         """
         Get new data by running through trained model for a train/test model.
-        
+
         Parameters
         ----------
         model_list: list
             A list of length 1 containing the trained pytorch_lightning model.
         params: dict
-            Additional parameters. Used for knowing where the checkpoint files are stored and 
+            Additional parameters. Used for knowing where the checkpoint files are stored and
             creating the pytorch lightning data_module for the new data.
         data_file_suffix: str
             Suffix that is on the new data csv and pt files. e.g. "_new_data" or "_test"
         checkpoint_file_suffix: str, optional
             Suffix that is on the trained model checkpoint files. e.g. "_firsttry". Added by the user.
             Default is None.
-        
+
         Returns
         -------
         train_reals: torch.Tensor
@@ -419,8 +424,11 @@ class ParentPlotter:
         ------
         ValueError
             If the model has a graph maker, it's not supported yet for creating graphs from new data.
-            
+
         """
+
+        if checkpoint_file_suffix is None:
+            checkpoint_file_suffix = ""
 
         # eval the model
         # ckpt_path = model[0][1]
@@ -439,6 +447,7 @@ class ParentPlotter:
                 subspace_ckpts.append(
                     params["checkpoint_dir"]
                     + "/"
+                    + "subspace_"
                     + model.model.__class__.__name__
                     + "_"
                     + subspace_model.__name__
@@ -489,9 +498,9 @@ class ParentPlotter:
             out = new_model.get_model_outputs_and_loss(x, y)
             loss, end_output, logits = out
 
-            end_outputs_list.append(end_output.cpu().detach())
-            logits_list.append(logits.cpu().detach())
-            reals_list.append(y.cpu().detach())
+            end_outputs_list.append(new_model.safe_squeeze(end_output).cpu().detach())
+            logits_list.append(new_model.safe_squeeze(logits).cpu().detach())
+            reals_list.append(new_model.safe_squeeze(y).cpu().detach())
 
         # get the train reals, train preds, val reals, val preds
         train_reals = model.train_reals.cpu()
@@ -561,7 +570,7 @@ class RealsVsPreds(ParentPlotter):
         checkpoint_file_suffix: str, optional
             Suffix that is on the trained model checkpoint files. e.g. "_firsttry". Added by the user.
             Default is None.
-        
+
         Returns
         -------
         figure: matplotlib.pyplot.figure
@@ -639,7 +648,12 @@ class RealsVsPreds(ParentPlotter):
 
             # plot the figure
             figure = self.reals_vs_preds_tt(
-                model_list, train_reals, train_preds, val_reals, val_preds, metric_values
+                model_list,
+                train_reals,
+                train_preds,
+                val_reals,
+                val_preds,
+                metric_values,
             )
 
             figure.suptitle("From new data")
@@ -661,12 +675,12 @@ class RealsVsPreds(ParentPlotter):
             List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first
             element is the k=1 model and the second element is the k=2 model, etc.
             For train/test models, this is a list of length 1.
-        
+
         Returns
         -------
         figure: matplotlib.pyplot.figure
             The figure of the plot.
-        
+
         Raises
         ------
         ValueError
@@ -674,8 +688,8 @@ class RealsVsPreds(ParentPlotter):
             If the model is a list of length > 1 but kfold_flag is False.
             If the model is a list of length 1 but kfold_flag is True.
             If the model is an empty list.
-        
-        
+
+
         """
         if not isinstance(model_list, list):
             raise ValueError(
@@ -695,7 +709,6 @@ class RealsVsPreds(ParentPlotter):
                         "Please check the model and the function input."
                     )
                 )
-
 
             (
                 train_reals,
@@ -737,7 +750,12 @@ class RealsVsPreds(ParentPlotter):
 
             # plot the figure
             figure = self.reals_vs_preds_tt(
-                model_list, train_reals, train_preds, val_reals, val_preds, metric_values
+                model_list,
+                train_reals,
+                train_preds,
+                val_reals,
+                val_preds,
+                metric_values,
             )
 
             figure.suptitle("From final val data")
@@ -756,7 +774,6 @@ class RealsVsPreds(ParentPlotter):
         metrics_per_fold,
         overall_kfold_metrics,
     ):
-
         """
         Reals vs preds plot for a kfold model. This function should be called within the RealVsPreds class
         after the k-fold data has been obtained from the model (either old data or new data).
@@ -777,7 +794,7 @@ class RealsVsPreds(ParentPlotter):
             Dictionary of the overall kfold metrics.
             The keys are the names of the metrics and the values are the metric values for the overall kfold,
             meaning the metric values for the concatenated new data over all the folds.
-        
+
         Returns
         -------
         fig: matplotlib.pyplot.figure
@@ -894,12 +911,12 @@ class RealsVsPreds(ParentPlotter):
         metric_values: dict
             Dictionary of the metrics for the model.
             The keys are the names of the metrics and the values are the metric values for the model.
-        
+
         Returns
         -------
         fig: matplotlib.pyplot.figure
             The figure of the plot.
-        
+
         """
 
         model = model_list[0]
@@ -947,6 +964,7 @@ class ConfusionMatrix(ParentPlotter):
     The data used to create the confusion matrix is either new data if using from_new_data or the original validation data
     if using from_final_val_data.
     """
+
     def __init__(self):
         super().__init__()
 
@@ -975,7 +993,7 @@ class ConfusionMatrix(ParentPlotter):
         -------
         figure: matplotlib.pyplot.figure
             The figure of the plot.
-        
+
         Raises
         ------
         ValueError
@@ -1039,7 +1057,9 @@ class ConfusionMatrix(ParentPlotter):
             ) = self.get_new_tt_data(model_list, params, data_file_suffix)
 
             # plot the figure
-            figure = self._confusion_matrix_tt(model_list, val_reals, val_preds, metric_values)
+            figure = self._confusion_matrix_tt(
+                model_list, val_reals, val_preds, metric_values
+            )
 
         else:
             raise ValueError(("Argument 'model_list' is an empty list. "))
@@ -1051,19 +1071,19 @@ class ConfusionMatrix(ParentPlotter):
         """
         Confusion matrix using the final validation data (i.e. the data that was used to evaluate the model
         when the model training was complete).
-        
+
         Parameters
         ----------
         model_list: list
             List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first
             element is the k=1 model and the second element is the k=2 model, etc.
             For train/test models, this is a list of length 1.
-        
+
         Returns
         -------
         figure: matplotlib.pyplot.figure
             The figure of the plot.
-        
+
         Raises
         ------
         ValueError
@@ -1124,7 +1144,9 @@ class ConfusionMatrix(ParentPlotter):
                 metric_values,
             ) = self.get_tt_data_from_model(model_list)
 
-            figure = self._confusion_matrix_tt(model_list, val_reals, val_preds, metric_values)
+            figure = self._confusion_matrix_tt(
+                model_list, val_reals, val_preds, metric_values
+            )
 
         else:
             raise ValueError(("Argument 'model_list' is an empty list. "))
@@ -1136,7 +1158,7 @@ class ConfusionMatrix(ParentPlotter):
         """
         Confusion matrix for a train/test model. This function should be called within the ConfusionMatrix class
         after the train/test data has been obtained from the model (either old data or new data).
-        
+
         Parameters
         ----------
         model_list: list
@@ -1148,13 +1170,12 @@ class ConfusionMatrix(ParentPlotter):
         metric_values: dict
             Dictionary of the metrics for the model.
             The keys are the names of the metrics and the values are the metric values for the model.
-        
+
         Returns
         -------
         fig: matplotlib.pyplot.figure
             The figure of the plot.
         """
-
         conf_matrix = confusion_matrix(y_true=val_reals, y_pred=val_preds)
 
         # Create a figure and axis for the plot
@@ -1199,7 +1220,7 @@ class ConfusionMatrix(ParentPlotter):
         """
         Confusion matrix for a kfold model. This function should be called within the ConfusionMatrix class
         after the k-fold data has been obtained from the model (either old data or new data).
-        
+
         Parameters
         ----------
         model_list: list
@@ -1216,12 +1237,12 @@ class ConfusionMatrix(ParentPlotter):
             Dictionary of the overall kfold metrics.
             The keys are the names of the metrics and the values are the metric values for the overall kfold,
             meaning the metric values for the concatenated new data over all the folds.
-        
+
         Returns
         -------
         fig: matplotlib.pyplot.figure
             The figure of the plot.
-        
+
         """
         first_fold_model = model_list[0]
         metric_names = list(metrics_per_fold.keys())
@@ -1318,9 +1339,9 @@ class ConfusionMatrix(ParentPlotter):
 class ModelComparison(ParentPlotter):
     """
     Plots the performance of multiple models on a single plot. Currently (as of 2023-10-11) this is only
-    implemented for from_final_val_data because it is not clear how to implement from_new_data for graph-based models, so 
+    implemented for from_final_val_data because it is not clear how to implement from_new_data for graph-based models, so
     they would have to be left out of the main plot (which feels wrong tbh).
-    
+
     """
 
     def __init__(self):
@@ -1347,9 +1368,9 @@ class ModelComparison(ParentPlotter):
             The figure of the plot.
         df: pandas.DataFrame
             The dataframe of the metrics.
-    
 
-        """        
+
+        """
         # error if model_dict isn't a dict
         if not isinstance(model_dict, dict):
             raise ValueError(
@@ -1358,7 +1379,7 @@ class ModelComparison(ParentPlotter):
                     "'model_dict' should have keys as the model names and values as lists of trained models. "
                 )
             )
-        
+
         comparing_models_metrics = {}
 
         # check for empty lists in dict
@@ -1377,9 +1398,9 @@ class ModelComparison(ParentPlotter):
         kfold_flag = first_model.model.params["kfold_flag"]
 
         if kfold_flag:
-            overall_kfold_metrics_dict = {}  
+            overall_kfold_metrics_dict = {}
             for model in model_dict:
-                model_list = model_dict[model] # list of length k of trained models
+                model_list = model_dict[model]  # list of length k of trained models
 
                 # error if list is of length 1
                 if len(model_list) == 1:
@@ -1390,7 +1411,6 @@ class ModelComparison(ParentPlotter):
                             "Please check the model_dict and the kfold_flag."
                         )
                     )
-
 
                 model_method_name = model_list[0].model.method_name
 
@@ -1405,9 +1425,7 @@ class ModelComparison(ParentPlotter):
 
                 comparing_models_metrics[model_method_name] = metrics_per_fold
 
-                overall_kfold_metrics_dict[
-                    model_method_name
-                ] = overall_kfold_metrics
+                overall_kfold_metrics_dict[model_method_name] = overall_kfold_metrics
 
             figure = self.kfold_comparison_plot(comparing_models_metrics)
 
@@ -1417,8 +1435,8 @@ class ModelComparison(ParentPlotter):
 
         else:
             for model in model_dict:
-                model_list = model_dict[model] # list of length 1 of trained model
-                
+                model_list = model_dict[model]  # list of length 1 of trained model
+
                 # error if list is of length > 1
                 if len(model_list) > 1:
                     raise ValueError(
@@ -1447,8 +1465,119 @@ class ModelComparison(ParentPlotter):
         return figure, df
 
     @classmethod
-    def from_new_data(self, model_dict):
-        raise NotImplementedError
+    def from_new_data(self, model_dict, params, data_file_suffix="_test"):
+        comparing_models_metrics = {}
+
+        if not isinstance(model_dict, dict):
+            raise ValueError(
+                (
+                    "Argument 'model_dict' is not a dict. "
+                    "'model_dict' should have keys as the model names and values as lists of trained models. "
+                )
+            )
+
+        # check for empty lists in dict
+        for model in model_dict:
+            model_list = model_dict[model]
+            if len(model_list) == 0:
+                raise ValueError(
+                    (
+                        "Empty list of models has been passed into the ModelComparison.from_new_data. "
+                        "There is an empty list somewhere in the model_dict. Please check the model_dict."
+                    )
+                )
+
+        # get kfold_flag from first model in model_dict
+        first_model = list(model_dict.values())[0][0]
+        kfold_flag = first_model.model.params["kfold_flag"]
+
+        if kfold_flag:
+            overall_kfold_metrics_dict = {}
+
+            for model in model_dict:
+                model_list = model_dict[model]  # list of length k of trained models
+
+                # if model is a graph-based model, skip it
+                if hasattr(model_list[0].model, "graph_maker"):
+                    raise Warning(
+                        (
+                            "Graph-based models are not currently supported for the ModelComparison.from_new_data. "
+                            "The graph-based models will be skipped."
+                        )
+                    )
+                    continue
+
+                if len(model_list) == 1:
+                    raise ValueError(
+                        (
+                            "List of models in model_dict has length 1 but the kfold_flag is True. "
+                            "K-fold training should produce a list of models of length > 1. "
+                            "Please check the model_dict and the kfold_flag."
+                        )
+                    )
+
+                model_method_name = model_list[0].model.method_name
+
+                (
+                    train_reals,
+                    train_preds,
+                    val_reals,
+                    val_preds,
+                    metrics_per_fold,
+                    overall_kfold_metrics,
+                ) = self.get_new_kfold_data(model_list, params, data_file_suffix)
+
+                comparing_models_metrics[model_method_name] = metrics_per_fold
+
+                overall_kfold_metrics_dict[model_method_name] = overall_kfold_metrics
+
+            figure = self.kfold_comparison_plot(comparing_models_metrics)
+
+            df = self.get_performance_dataframe(
+                comparing_models_metrics, overall_kfold_metrics_dict, kfold_flag
+            )
+
+        else:
+            for model in model_dict:
+                model_list = model_dict[model]  # list of length 1 of trained model
+
+                # if model is a graph-based model, skip it
+                if hasattr(model_list[0].model, "graph_maker"):
+                    raise Warning(
+                        (
+                            "Graph-based models are not currently supported for the ModelComparison.from_new_data. "
+                            "The graph-based models will be skipped."
+                        )
+                    )
+                    continue
+
+                if len(model_list) > 1:
+                    raise ValueError(
+                        (
+                            "List of models in model_dict has length > 1 but the kfold_flag is False. "
+                            "Train/test training should produce a list of models of length 1. "
+                            "Please check the model_dict and the kfold_flag."
+                        )
+                    )
+
+                model_method_name = model_list[0].model.method_name
+
+                (
+                    train_reals,
+                    train_preds,
+                    val_reals,
+                    val_preds,
+                    metric_values,
+                ) = self.get_new_tt_data(model_list, params, data_file_suffix)
+
+                comparing_models_metrics[model_method_name] = metric_values
+
+            figure = self.train_test_comparison_plot(comparing_models_metrics)
+            df = self.get_performance_dataframe(
+                comparing_models_metrics, None, kfold_flag
+            )
+
+        return figure, df
 
     @classmethod
     def kfold_comparison_plot(self, comparing_models_metrics):
@@ -1465,7 +1594,6 @@ class ModelComparison(ParentPlotter):
             Figure containing the violin plots.
         """
         # get method names and metric names
-        print("comp models metrics", comparing_models_metrics)
         method_names = list(
             comparing_models_metrics.keys()
         )  # [method1name, method2name,...]
@@ -1552,7 +1680,6 @@ class ModelComparison(ParentPlotter):
             Figure containing the horizontal bar chart.
         """
 
-
         method_names = list(
             comparing_models_metrics.keys()
         )  # [method1name, method2name,...]
@@ -1586,11 +1713,7 @@ class ModelComparison(ParentPlotter):
 
         # Create the first bar chart using the primary y-axis (ax1)
         bars1 = ax[0].barh(
-            y_indices,
-            metric_1_values,
-            bar_width,
-            color="violet",
-            edgecolor="purple"
+            y_indices, metric_1_values, bar_width, color="violet", edgecolor="purple"
         )
 
         # black dashed line at x=0
@@ -1647,7 +1770,7 @@ class ModelComparison(ParentPlotter):
             This is only needed for kfold models.
         kfold_flag: bool
             True if the model is a kfold model, False if the model is a train/test model.
-        
+
         Returns
         -------
         df: pandas.DataFrame
@@ -1659,10 +1782,7 @@ class ModelComparison(ParentPlotter):
         metric1name = list(comparing_models_metrics[method_names[0]].keys())[0]
         metric2name = list(comparing_models_metrics[method_names[0]].keys())[1]
 
-        print("comp models metrics", comparing_models_metrics)
-
         if kfold_flag:
-
             overall_kfold_metrics_copy = overall_kfold_metrics_dict.copy()
 
             df = pd.DataFrame(overall_kfold_metrics_copy).transpose()

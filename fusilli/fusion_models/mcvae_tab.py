@@ -106,7 +106,6 @@ class MCVAESubspaceMethod:
         )
 
         # load checkpoint if we're not training: plotting with new data
-        print("checkpoint path", checkpoint_path)
         if checkpoint_path is not None:
             new_checkpoint_path = checkpoint_path[0][: -len(".ckpt")]
             checkpoint = torch.load(new_checkpoint_path)
@@ -222,12 +221,13 @@ class MCVAESubspaceMethod:
         self.fit_model = mcvae_esfit
 
         # save .ckpt file
-        torch.save(
-            self.fit_model.state_dict(),
-            self.datamodule.params["checkpoint_dir"]
-            + "/"
-            + self.checkpoint_filenames[0],
-        )
+        if "checkpoint_dir" in self.datamodule.params.keys():
+            torch.save(
+                self.fit_model.state_dict(),
+                self.datamodule.params["checkpoint_dir"]
+                + "/"
+                + self.checkpoint_filenames[0],
+            )
 
         # getting mean latent space
         mean_latents = self.get_latents(mcvae_training_data)

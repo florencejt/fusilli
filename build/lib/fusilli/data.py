@@ -16,7 +16,6 @@ from torch_geometric.data.lightning import LightningNodeData
 from fusilli.utils import model_modifier
 
 
-
 def downsample_img_batch(imgs, output_size):
     """
     Downsamples a batch of images to a specified size.
@@ -104,7 +103,7 @@ class CustomDataset(Dataset):
         Tensor of predictive features for uni-modal data.
     labels : tensor
         Tensor of labels.
-    
+
     """
 
     def __init__(self, pred_features, labels):
@@ -216,7 +215,7 @@ class LoadDatasets:
         ValueError
             If the CSVs do not have the right columns or if the index column is not named
             "study_id".
-        
+
         """
         self.tabular1_source, self.tabular2_source, self.img_source = sources
         self.image_downsample_size = (
@@ -340,9 +339,7 @@ class LoadDatasets:
         tab2_pred_features = torch.Tensor(tab2_df.drop(columns=["pred_label"]).values)
 
         pred_label = tab1_df[["pred_label"]]
-        dataset = CustomDataset(
-            [tab1_pred_features, tab2_pred_features], pred_label
-        )
+        dataset = CustomDataset([tab1_pred_features, tab2_pred_features], pred_label)
 
         mod1_dim = tab1_pred_features.shape[1]
         mod2_dim = tab2_pred_features.shape[1]
@@ -412,8 +409,8 @@ class TrainTestDataModule(pl.LightningDataModule):
         Tensor of predictive features. Created in prepare_data().
     data_dims : list
         List of data dimensions [mod1_dim, mod2_dim, img_dim].
-        Created in prepare_data(). 
-    train_dataset : tensor 
+        Created in prepare_data().
+    train_dataset : tensor
         Tensor of predictive features for training. Created in setup().
     test_dataset : tensor
         Tensor of predictive features for testing. Created in setup().
@@ -467,12 +464,8 @@ class TrainTestDataModule(pl.LightningDataModule):
         self.sources = sources
         self.extra_log_string_dict = extra_log_string_dict
         self.modality_methods = {
-            "tabular1": LoadDatasets(
-                self.sources, image_downsample_size
-            ).load_tabular1,
-            "tabular2": LoadDatasets(
-                self.sources, image_downsample_size
-            ).load_tabular2,
+            "tabular1": LoadDatasets(self.sources, image_downsample_size).load_tabular1,
+            "tabular2": LoadDatasets(self.sources, image_downsample_size).load_tabular2,
             "img": LoadDatasets(self.sources, image_downsample_size).load_img,
             "both_tab": LoadDatasets(
                 self.sources, image_downsample_size
@@ -533,21 +526,22 @@ class TrainTestDataModule(pl.LightningDataModule):
             Dataloader for validation.
         """
 
-        # split the dataset into train and test sets
+        # split the dataset into train and test sets
         [self.train_dataset, self.test_dataset] = torch.utils.data.random_split(
             self.dataset, [1 - self.test_size, self.test_size]
         )
 
         if self.subspace_method is not None:  # if subspace method is specified
-
-            if checkpoint_path is None: # if no checkpoint path specified, train the subspace method
+            if (
+                checkpoint_path is None
+            ):  # if no checkpoint path specified, train the subspace method
                 subspace_method = self.subspace_method(
                     self,
                     max_epochs=self.max_epochs,
                     k=None,
                 )
 
-                # modify the subspace method architecture if specified
+                # modify the subspace method architecture if specified
                 if self.layer_mods is not None:
                     subspace_method = model_modifier.modify_model_architecture(
                         subspace_method,
@@ -581,7 +575,7 @@ class TrainTestDataModule(pl.LightningDataModule):
                     checkpoint_path=checkpoint_path,
                 )
 
-                # modify the subspace method architecture if specified
+                # modify the subspace method architecture if specified
                 if self.layer_mods is not None:
                     subspace_method = model_modifier.modify_model_architecture(
                         subspace_method,
@@ -641,7 +635,7 @@ class KFoldDataModule(pl.LightningDataModule):
     Attributes
     ----------
     num_folds : int
-        Total number of folds. 
+        Total number of folds.
     sources : list
         List of source csv files. [Tabular1, Tabular2, Image]
     image_downsample_size : tuple
@@ -744,7 +738,9 @@ class KFoldDataModule(pl.LightningDataModule):
         self.fusion_model = fusion_model
         self.modality_type = self.fusion_model.modality_type
         self.batch_size = batch_size
-        self.subspace_method = subspace_method  # subspace method class (only for subspace methods)
+        self.subspace_method = (
+            subspace_method  # subspace method class (only for subspace methods)
+        )
         if self.pred_type == "multiclass":
             self.multiclass_dims = params["multiclass_dims"]
         else:
@@ -819,13 +815,11 @@ class KFoldDataModule(pl.LightningDataModule):
 
         # if subspace method is specified, run the subspace method on each fold
         if self.subspace_method is not None:
-
             # if no checkpoint path specified, train the subspace method
             if checkpoint_path is None:
                 new_folds = []
 
                 for k, fold in enumerate(self.folds):
-
                     # get the train and test datasets for each fold
                     train_dataset, test_dataset = fold
 
@@ -860,19 +854,19 @@ class KFoldDataModule(pl.LightningDataModule):
                     train_dataset = CustomDataset(train_latents, train_labels)
                     test_dataset = CustomDataset(test_latents, test_labels)
 
-                    new_folds.append((train_dataset, test_dataset)) # append to new_folds
+                    new_folds.append(
+                        (train_dataset, test_dataset)
+                    )  # append to new_folds
 
                 self.folds = (
                     new_folds  # update the folds with the new train and test datasets
                 )
                 self.data_dims = data_dims  # update the data dimensions
 
-            else: # we have already trained the subspace method, so load it from the checkpoint
-
+            else:  # we have already trained the subspace method, so load it from the checkpoint
                 new_folds = []
 
                 for k, fold in enumerate(self.folds):
-
                     # get the train and test datasets for each fold
                     train_dataset, test_dataset = fold
 
@@ -1243,12 +1237,11 @@ class KFoldGraphDataModule:
 
         new_folds = []
         for fold in self.folds:
-
             # get the train and test datasets for each fold
             train_dataset, test_dataset = fold
             train_idxs = train_dataset.indices  # get train node idxs from kfold_split()
             test_idxs = test_dataset.indices  # get test node idxs from kfold_split()
-            
+
             # get the graph data structure
             graph_maker = self.graph_creation_method(self.dataset)
 

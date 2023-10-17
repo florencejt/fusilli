@@ -59,7 +59,12 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/training_and_testing/index.html">Training and testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Public API Reference 🌸</span></p>
 <ul class="current">
@@ -238,20 +243,16 @@ they would have to be left out of the main plot (which feels wrong tbh).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fusilli.eval.ModelComparison.from_final_val_data">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_final_val_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kfold_flag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ModelComparison.from_final_val_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ModelComparison.from_final_val_data" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_final_val_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ModelComparison.from_final_val_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ModelComparison.from_final_val_data" title="Permalink to this definition"></a></dt>
 <dd><p>Plotting function for comparing models on metrics using the final validation data (i.e. the data that was used to evaluate the model
 when the model training was complete).
 Produces a violin plot if kfold_flag is True and a bar plot if kfold_flag is False.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>model_list</strong> (<em>list</em><em> of </em><em>lists</em>) – List of trained pytorch_lightning models.
-For k-fold, this is a list with length number of fusion methods, where each element is a list of length k
-containing the trained pytorch_lightning models for each fold.
-For train/test, this is a list of length number of fusion methods, where each element is a list of length 1
-containing the trained pytorch_lightning model.</p></li>
-<li><p><strong>kfold_flag</strong> (<em>bool</em>) – True if the model is a kfold model, False if the model is a train/test model.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>model_dict</strong> (<em>dict</em>) – Dictionary of trained pytorch_lightning models.
+Keys are the names of the models and values are lists of the trained pytorch_lightning models.
+If kfold_flag is True, the lists must be of length &gt; 1 (and the length of num_k)
+If kfold_flag is False, the lists must be of length 1 (meaning there is only one model for each key).</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
@@ -272,8 +273,10 @@ For train/test models, the dataframe contains the metrics for the train and test
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>comparing_models_metrics</strong> (<em>dict</em>) – Dictionary of metrics. Keys are the model names and values are dict {metric1name: metric_value, metric2name: metric_value}</p></li>
-<li><p><strong>overall_kfold_metrics_dict</strong> (<em>dict</em>) – Dictionary of overall kfold metrics. Keys are the model names and values are dict {metric1name: metric_value, metric2name: metric_value}</p></li>
+<li><p><strong>comparing_models_metrics</strong> (<em>dict</em>) – Dictionary of metrics. Keys are the model names and values are dict {metric1name: metric_value, metric2name: metric_value}.
+Metric values can be float or int.</p></li>
+<li><p><strong>overall_kfold_metrics_dict</strong> (<em>dict</em>) – Dictionary of overall kfold metrics. Keys are the model names and values are dict {metric1name: metric_value, metric2name: metric_value}.
+This is only needed for kfold models.</p></li>
 <li><p><strong>kfold_flag</strong> (<em>bool</em>) – True if the model is a kfold model, False if the model is a train/test model.</p></li>
 </ul>
 </dd>

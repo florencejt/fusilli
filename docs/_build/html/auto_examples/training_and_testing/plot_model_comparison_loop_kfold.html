@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Comparing Multiple K-Fold Trained Fusion Models &mdash; fusilli  documentation</title>
+  <title>📊 Training multiple models in a loop: k-fold regression 🚀 &mdash; fusilli  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/florencestheme.css" type="text/css" />
@@ -26,7 +26,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="📈 Regression: Comparing Two Tabular Models Trained on Simulated Data 📊" href="plot_two_models_traintest.html" />
-    <link rel="prev" title="Binary: training one kfold model" href="plot_one_model_binary_kfold.html" /> 
+    <link rel="prev" title="📊 Binary Classification: Training a K-Fold Model 🚀" href="plot_one_model_binary_kfold.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -59,22 +59,26 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Tutorials and Examples Gallery</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../index.html#how-to-create-your-own-fusion-model">How to create your own fusion model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../index.html#customising-behaviour">Customising behaviour</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html#training-and-testing">Training and testing</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../creating_your_own_fusion_model/index.html">How to create your own fusion model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../customising_behaviour/index.html">Customising behaviour</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="index.html">Training and testing</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="plot_one_model_binary_kfold.html">Binary: training one kfold model</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">Comparing Multiple K-Fold Trained Fusion Models</a></li>
-<li class="toctree-l4"><a class="reference internal" href="plot_two_models_traintest.html">📈 Regression: Comparing Two Tabular Models Trained on Simulated Data 📊</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Training and testing</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="plot_one_model_binary_kfold.html">📊 Binary Classification: Training a K-Fold Model 🚀</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">📊 Training multiple models in a loop: k-fold regression 🚀</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#import-fusion-models">1. Import fusion models 🔍</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-the-training-parameters">2. Set the training parameters 🎯</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generating-simulated-data">3. Generating simulated data 🔮</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#training-the-all-the-fusion-models">4. Training the all the fusion models 🏁</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plotting-the-results-of-the-individual-models">5. Plotting the results of the individual models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plotting-comparison-of-the-models">6. Plotting comparison of the models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#saving-the-results-of-the-models">7. Saving the results of the models</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="plot_two_models_traintest.html">📈 Regression: Comparing Two Tabular Models Trained on Simulated Data 📊</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../customising_behaviour/index.html">Customising behaviour</a></li>
 </ul>
-</li>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Public API Reference 🌸</span></p>
 <ul>
@@ -99,9 +103,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../index.html">Tutorials and Examples Gallery</a></li>
           <li class="breadcrumb-item"><a href="index.html">Training and testing</a></li>
-      <li class="breadcrumb-item active">Comparing Multiple K-Fold Trained Fusion Models</li>
+      <li class="breadcrumb-item active">📊 Training multiple models in a loop: k-fold regression 🚀</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/auto_examples/training_and_testing/plot_model_comparison_loop_kfold.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -116,22 +119,21 @@
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-training-and-testing-plot-model-comparison-loop-kfold-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code</p>
 </div>
-<section class="sphx-glr-example-title" id="comparing-multiple-k-fold-trained-fusion-models">
-<span id="sphx-glr-auto-examples-training-and-testing-plot-model-comparison-loop-kfold-py"></span><h1>Comparing Multiple K-Fold Trained Fusion Models<a class="headerlink" href="#comparing-multiple-k-fold-trained-fusion-models" title="Permalink to this heading"></a></h1>
+<section class="sphx-glr-example-title" id="training-multiple-models-in-a-loop-k-fold-regression">
+<span id="sphx-glr-auto-examples-training-and-testing-plot-model-comparison-loop-kfold-py"></span><h1>📊 Training multiple models in a loop: k-fold regression 🚀<a class="headerlink" href="#training-multiple-models-in-a-loop-k-fold-regression" title="Permalink to this heading"></a></h1>
 <p>Welcome to the “Comparing Multiple K-Fold Trained Fusion Models” tutorial! In this tutorial, we’ll explore how to train and compare multiple fusion models for a regression task using k-fold cross-validation with multimodal tabular data. This tutorial is designed to help you understand and implement key features, including:</p>
-<ol class="arabic simple">
-<li><p>Importing fusion models based on modality types.</p></li>
-<li><p>Setting training parameters for your models.</p></li>
-<li><p>Generating simulated data for experimentation.</p></li>
-<li><p>Training and evaluating multiple fusion models.</p></li>
-<li><p>Visualizing the results of individual models.</p></li>
-<li><p>Comparing the performance of different models.</p></li>
-<li><p>Saving the results for further analysis.</p></li>
-</ol>
+<ul class="simple">
+<li><p>📥 Importing fusion models based on modality types.</p></li>
+<li><p>🚲 Setting training parameters for your models</p></li>
+<li><p>🔮 Generating simulated data for experimentation.</p></li>
+<li><p>🧪 Training and evaluating multiple fusion models.</p></li>
+<li><p>📈 Visualising the results of individual models.</p></li>
+<li><p>📊 Comparing the performance of different models.</p></li>
+</ul>
 <p>Let’s dive into each of these steps in detail:</p>
 <ol class="arabic">
 <li><p><strong>Importing Fusion Models:</strong></p>
-<p>We begin by importing fusion models based on modality types. These models will be used in our regression task, and we’ll explore various fusion strategies. The imported models will provide flexibility in model selection.</p>
+<p>We begin by importing fusion models based on modality types. These models will be used in our regression task, and we’ll explore various fusion strategies.</p>
 </li>
 <li><p><strong>Setting the Training Parameters:</strong></p>
 <p>To ensure consistent and controlled training, we define training parameters. These parameters include enabling k-fold cross-validation, specifying the prediction type (regression), and setting the batch size for training.</p>
@@ -143,7 +145,7 @@ to download the full example code</p>
 <p>Now, we train all the selected fusion models using the generated data and the defined training parameters. We’ll monitor the performance of each model during training and store the results for later analysis.</p>
 </li>
 <li><p><strong>Plotting Individual Model Results:</strong></p>
-<p>After training, we visualize the performance of each individual model. We create plots that show loss curves and performance metrics to help us understand how each model performed.</p>
+<p>After training, we visualise the performance of each individual model. We create plots that show loss curves and performance metrics to help us understand how each model performed.</p>
 </li>
 <li><p><strong>Comparing Model Performance:</strong></p>
 <p>To gain insights into which fusion models perform best, we compare their performance using a violin chart. This chart provides a clear overview of how each model’s performance metrics compare.</p>
@@ -152,27 +154,21 @@ to download the full example code</p>
 <p>Finally, we save the performance results of all the models as a structured DataFrame. This data can be further analyzed, exported to a CSV file, or used for additional experiments.</p>
 </li>
 </ol>
-<p>Now, let’s walk through each of these steps in code and detail. Let’s get started!</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">importlib</span>
-
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<p>Now, let’s walk through each of these steps in code and detail. Let’s get started! 🌸</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 <span class="kn">from</span> <span class="nn">docs.examples</span> <span class="kn">import</span> <span class="n">generate_sklearn_simulated_data</span>
 <span class="kn">from</span> <span class="nn">fusilli.data</span> <span class="kn">import</span> <span class="n">get_data_module</span>
-<span class="kn">from</span> <span class="nn">fusilli.eval</span> <span class="kn">import</span> <span class="n">Plotter</span>
+<span class="kn">from</span> <span class="nn">fusilli.eval</span> <span class="kn">import</span> <span class="n">RealsVsPreds</span><span class="p">,</span> <span class="n">ModelComparison</span>
 <span class="kn">from</span> <span class="nn">fusilli.train</span> <span class="kn">import</span> <span class="n">train_and_save_models</span>
-<span class="kn">from</span> <span class="nn">fusilli.utils.model_chooser</span> <span class="kn">import</span> <span class="n">get_models</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/training_and_testing/plot_model_comparison_loop_kfold.py&quot;</span>, line <span class="m">55</span>, in <span class="n">&lt;module&gt;</span>
-    <span class="kn">from</span> <span class="nn">fusilli.eval</span> <span class="kn">import</span> <span class="n">Plotter</span>
-<span class="gr">ImportError</span>: <span class="n">cannot import name &#39;Plotter&#39; from &#39;fusilli.eval&#39; (/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/eval.py)</span>
+<span class="kn">from</span> <span class="nn">fusilli.utils.model_chooser</span> <span class="kn">import</span> <span class="n">import_chosen_fusion_models</span>
+
+<span class="kn">from</span> <span class="nn">IPython.utils</span> <span class="kn">import</span> <span class="n">io</span> <span class="c1"># for hiding the tqdm progress bar</span>
 </pre></div>
 </div>
 <section id="import-fusion-models">
-<h2>1. Import fusion models<a class="headerlink" href="#import-fusion-models" title="Permalink to this heading"></a></h2>
+<h2>1. Import fusion models 🔍<a class="headerlink" href="#import-fusion-models" title="Permalink to this heading"></a></h2>
 <p>Here we import the fusion models to be compared. The models are imported using the
 <a class="reference internal" href="../../autosummary/fusilli.utils.model_chooser.html#fusilli.utils.model_chooser.get_models" title="fusilli.utils.model_chooser.get_models"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_models()</span></code></a> function, which takes a dictionary of conditions
 as an input. The conditions are the attributes of the models, e.g. the class name, the modality type, etc.</p>
@@ -184,35 +180,45 @@ model’s parent class. The paths are used to import the models with the <code c
     <span class="s2">&quot;modality_type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;tabular1&quot;</span><span class="p">,</span> <span class="s2">&quot;tabular2&quot;</span><span class="p">,</span> <span class="s2">&quot;both_tab&quot;</span><span class="p">],</span>
 <span class="p">}</span>
 
-<span class="n">imported_models</span> <span class="o">=</span> <span class="n">get_models</span><span class="p">(</span><span class="n">model_conditions</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Imported methods:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">imported_models</span><span class="o">.</span><span class="n">method_name</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-
-<span class="n">fusion_models</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># contains the class objects for each model</span>
-<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">imported_models</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-    <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;method_path&quot;</span><span class="p">])</span>
-    <span class="n">module_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;class_name&quot;</span><span class="p">])</span>
-
-    <span class="n">fusion_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">module_class</span><span class="p">)</span>
+<span class="n">fusion_models</span> <span class="o">=</span> <span class="n">import_chosen_fusion_models</span><span class="p">(</span><span class="n">model_conditions</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Imported methods:
+[&#39;Tabular1 uni-modal&#39; &#39;Tabular2 uni-modal&#39;
+ &#39;Concatenating tabular feature maps&#39; &#39;Concatenating tabular data&#39;
+ &#39;Channel-wise multiplication net (tabular)&#39;
+ &#39;Tabular Crossmodal multi-head attention&#39; &#39;Tabular decision&#39;
+ &#39;MCVAE Tabular&#39; &#39;Edge Correlation GNN&#39;]
 </pre></div>
 </div>
 </section>
 <section id="set-the-training-parameters">
-<h2>2. Set the training parameters<a class="headerlink" href="#set-the-training-parameters" title="Permalink to this heading"></a></h2>
-<p>In this section, we set the training parameters for our models. These parameters include k-fold cross-validation, prediction type (regression), and batch size.</p>
+<h2>2. Set the training parameters 🎯<a class="headerlink" href="#set-the-training-parameters" title="Permalink to this heading"></a></h2>
+<p>Let’s configure our training parameters. The parameters are stored in a dictionary and passed to most
+of the methods in this library.
+For training and testing, the necessary parameters are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">kfold_flag</span></code>: the user sets this to True for k-fold cross validation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_k</span></code>: the number of folds to use. It can’t be k=1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">log</span></code>: a boolean of whether to log the results using Weights and Biases (True) or not (False).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pred_type</span></code>: the type of prediction to be performed. This is either <code class="docutils literal notranslate"><span class="pre">regression</span></code>, <code class="docutils literal notranslate"><span class="pre">binary</span></code>, or <code class="docutils literal notranslate"><span class="pre">classification</span></code>. For this example we’re using regression.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">loss_log_dir</span></code>: the directory to save the loss logs to. This is used for plotting the loss curves with <code class="docutils literal notranslate"><span class="pre">log=False</span></code>.</p></li>
+</ul>
+<p>We’re also setting our own batch_size for this example.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;kfold_flag&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="s2">&quot;num_k&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s2">&quot;num_k&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
     <span class="s2">&quot;log&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="s2">&quot;pred_type&quot;</span><span class="p">:</span> <span class="s2">&quot;regression&quot;</span><span class="p">,</span>
     <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+    <span class="s2">&quot;loss_log_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;loss_logs&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 </section>
 <section id="generating-simulated-data">
-<h2>3. Generating simulated data<a class="headerlink" href="#generating-simulated-data" title="Permalink to this heading"></a></h2>
-<p>Here we generate simulated data for the two tabular modalities for this example.
+<h2>3. Generating simulated data 🔮<a class="headerlink" href="#generating-simulated-data" title="Permalink to this heading"></a></h2>
+<p>Time to create some simulated data for our models to work their wonders on.
 This function also simulated image data which we aren’t using here.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">generate_sklearn_simulated_data</span><span class="p">(</span>
     <span class="n">num_samples</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
@@ -225,31 +231,106 @@ This function also simulated image data which we aren’t using here.</p>
 </div>
 </section>
 <section id="training-the-all-the-fusion-models">
-<h2>4. Training the all the fusion models<a class="headerlink" href="#training-the-all-the-fusion-models" title="Permalink to this heading"></a></h2>
+<h2>4. Training the all the fusion models 🏁<a class="headerlink" href="#training-the-all-the-fusion-models" title="Permalink to this heading"></a></h2>
 <p>In this section, we train all the fusion models using the generated data and specified parameters.
 We store the results of each model for later analysis.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">all_trained_models</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">single_model_dicts</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># for plotting single models later</span>
 
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fusion_model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fusion_models</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Running model </span><span class="si">{</span><span class="n">fusion_model</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">capture_output</span><span class="p">()</span> <span class="k">as</span> <span class="n">captured</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fusion_model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fusion_models</span><span class="p">):</span>
+        <span class="n">fusion_model_name</span> <span class="o">=</span> <span class="n">fusion_model</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Running model </span><span class="si">{</span><span class="n">fusion_model_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Get data module</span>
-    <span class="n">data_module</span> <span class="o">=</span> <span class="n">get_data_module</span><span class="p">(</span><span class="n">fusion_model</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;batch_size&quot;</span><span class="p">])</span>
+        <span class="c1"># Get data module</span>
+        <span class="n">data_module</span> <span class="o">=</span> <span class="n">get_data_module</span><span class="p">(</span><span class="n">fusion_model</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;batch_size&quot;</span><span class="p">])</span>
 
-    <span class="c1"># Train and test</span>
-    <span class="n">single_model_dict</span> <span class="o">=</span> <span class="n">train_and_save_models</span><span class="p">(</span>
-        <span class="n">data_module</span><span class="o">=</span><span class="n">data_module</span><span class="p">,</span>
-        <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
-        <span class="n">fusion_model</span><span class="o">=</span><span class="n">fusion_model</span><span class="p">,</span>
-        <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># False for the example notebooks</span>
-    <span class="p">)</span>
+        <span class="c1"># Train and test</span>
+        <span class="n">single_model_dict</span> <span class="o">=</span> <span class="n">train_and_save_models</span><span class="p">(</span>
+            <span class="n">data_module</span><span class="o">=</span><span class="n">data_module</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+            <span class="n">fusion_model</span><span class="o">=</span><span class="n">fusion_model</span><span class="p">,</span>
+            <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># False for the example notebooks</span>
+            <span class="n">show_loss_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># True for the example notebooks</span>
+        <span class="p">)</span>
 
-    <span class="c1"># Save to all_trained_models</span>
-    <span class="n">all_trained_models</span><span class="p">[</span><span class="n">fusion_model</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">single_model_dict</span><span class="p">[</span><span class="n">fusion_model</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span>
-    <span class="n">single_model_dicts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">single_model_dict</span><span class="p">)</span>
+        <span class="c1"># Save to all_trained_models</span>
+        <span class="n">all_trained_models</span><span class="p">[</span><span class="n">fusion_model_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">single_model_dict</span><span class="p">[</span><span class="n">fusion_model_name</span><span class="p">]</span>
 </pre></div>
 </div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_001.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_001.png" alt="Loss Curves for Tabular1Unimodal_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_002.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_002.png" alt="Loss Curves for Tabular1Unimodal_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_003.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_003.png" alt="Loss Curves for Tabular1Unimodal_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_004.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_004.png" alt="Loss Curves for Tabular1Unimodal_fold_3" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_005.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_005.png" alt="Loss Curves for Tabular1Unimodal_fold_4" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_006.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_006.png" alt="Loss Curves for Tabular1Unimodal_fold_5" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_007.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_007.png" alt="Loss Curves for Tabular1Unimodal_fold_6" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_008.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_008.png" alt="Loss Curves for Tabular1Unimodal_fold_7" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_009.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_009.png" alt="Loss Curves for Tabular2Unimodal_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_010.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_010.png" alt="Loss Curves for Tabular2Unimodal_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_011.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_011.png" alt="Loss Curves for Tabular2Unimodal_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_012.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_012.png" alt="Loss Curves for Tabular2Unimodal_fold_3" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_013.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_013.png" alt="Loss Curves for Tabular2Unimodal_fold_4" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_014.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_014.png" alt="Loss Curves for Tabular2Unimodal_fold_5" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_015.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_015.png" alt="Loss Curves for Tabular2Unimodal_fold_6" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_016.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_016.png" alt="Loss Curves for Tabular2Unimodal_fold_7" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_017.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_017.png" alt="Loss Curves for ConcatTabularFeatureMaps_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_018.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_018.png" alt="Loss Curves for ConcatTabularFeatureMaps_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_019.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_019.png" alt="Loss Curves for ConcatTabularFeatureMaps_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_020.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_020.png" alt="Loss Curves for ConcatTabularFeatureMaps_fold_3" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_021.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_021.png" alt="Loss Curves for ConcatTabularFeatureMaps_fold_4" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_022.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_022.png" alt="Loss Curves for ConcatTabularFeatureMaps_fold_5" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_023.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_023.png" alt="Loss Curves for ConcatTabularFeatureMaps_fold_6" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_024.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_024.png" alt="Loss Curves for ConcatTabularFeatureMaps_fold_7" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_025.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_025.png" alt="Loss Curves for ConcatTabularData_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_026.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_026.png" alt="Loss Curves for ConcatTabularData_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_027.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_027.png" alt="Loss Curves for ConcatTabularData_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_028.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_028.png" alt="Loss Curves for ConcatTabularData_fold_3" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_029.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_029.png" alt="Loss Curves for ConcatTabularData_fold_4" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_030.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_030.png" alt="Loss Curves for ConcatTabularData_fold_5" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_031.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_031.png" alt="Loss Curves for ConcatTabularData_fold_6" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_032.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_032.png" alt="Loss Curves for ConcatTabularData_fold_7" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_033.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_033.png" alt="Loss Curves for TabularChannelWiseMultiAttention_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_034.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_034.png" alt="Loss Curves for TabularChannelWiseMultiAttention_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_035.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_035.png" alt="Loss Curves for TabularChannelWiseMultiAttention_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_036.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_036.png" alt="Loss Curves for TabularChannelWiseMultiAttention_fold_3" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_037.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_037.png" alt="Loss Curves for TabularChannelWiseMultiAttention_fold_4" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_038.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_038.png" alt="Loss Curves for TabularChannelWiseMultiAttention_fold_5" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_039.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_039.png" alt="Loss Curves for TabularChannelWiseMultiAttention_fold_6" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_040.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_040.png" alt="Loss Curves for TabularChannelWiseMultiAttention_fold_7" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_041.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_041.png" alt="Loss Curves for TabularCrossmodalMultiheadAttention_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_042.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_042.png" alt="Loss Curves for TabularCrossmodalMultiheadAttention_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_043.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_043.png" alt="Loss Curves for TabularCrossmodalMultiheadAttention_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_044.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_044.png" alt="Loss Curves for TabularCrossmodalMultiheadAttention_fold_3" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_045.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_045.png" alt="Loss Curves for TabularCrossmodalMultiheadAttention_fold_4" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_046.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_046.png" alt="Loss Curves for TabularCrossmodalMultiheadAttention_fold_5" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_047.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_047.png" alt="Loss Curves for TabularCrossmodalMultiheadAttention_fold_6" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_048.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_048.png" alt="Loss Curves for TabularCrossmodalMultiheadAttention_fold_7" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_049.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_049.png" alt="Loss Curves for TabularDecision_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_050.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_050.png" alt="Loss Curves for TabularDecision_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_051.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_051.png" alt="Loss Curves for TabularDecision_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_052.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_052.png" alt="Loss Curves for TabularDecision_fold_3" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_053.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_053.png" alt="Loss Curves for TabularDecision_fold_4" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_054.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_054.png" alt="Loss Curves for TabularDecision_fold_5" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_055.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_055.png" alt="Loss Curves for TabularDecision_fold_6" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_056.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_056.png" alt="Loss Curves for TabularDecision_fold_7" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_057.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_057.png" alt="Loss Curves for MCVAE_tab_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_058.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_058.png" alt="Loss Curves for MCVAE_tab_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_059.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_059.png" alt="Loss Curves for MCVAE_tab_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_060.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_060.png" alt="Loss Curves for MCVAE_tab_fold_3" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_061.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_061.png" alt="Loss Curves for MCVAE_tab_fold_4" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_062.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_062.png" alt="Loss Curves for MCVAE_tab_fold_5" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_063.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_063.png" alt="Loss Curves for MCVAE_tab_fold_6" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_064.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_064.png" alt="Loss Curves for MCVAE_tab_fold_7" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_065.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_065.png" alt="Loss Curves for EdgeCorrGNN_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_066.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_066.png" alt="Loss Curves for EdgeCorrGNN_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_067.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_067.png" alt="Loss Curves for EdgeCorrGNN_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_068.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_068.png" alt="Loss Curves for EdgeCorrGNN_fold_3" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_069.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_069.png" alt="Loss Curves for EdgeCorrGNN_fold_4" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_070.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_070.png" alt="Loss Curves for EdgeCorrGNN_fold_5" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_071.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_071.png" alt="Loss Curves for EdgeCorrGNN_fold_6" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_072.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_072.png" alt="Loss Curves for EdgeCorrGNN_fold_7" class = "sphx-glr-multi-img"/></li>
+</ul>
 </section>
 <section id="plotting-the-results-of-the-individual-models">
 <h2>5. Plotting the results of the individual models<a class="headerlink" href="#plotting-the-results-of-the-individual-models" title="Permalink to this heading"></a></h2>
@@ -257,30 +338,297 @@ We store the results of each model for later analysis.</p>
 <p>If you want to save the figures rather than show them, you can use the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Plotter()</span></code> class.
 This will save the figures in a timestamped folder in the current working directory with the method name and plot type in the filename.
 You can add an extra suffix to the filename by passing a string to the <code class="docutils literal notranslate"><span class="pre">extra_string</span></code> argument of the <code class="xref py py-meth docutils literal notranslate"><span class="pre">save_to_local()</span></code> method.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">model_dict</span> <span class="ow">in</span> <span class="n">single_model_dicts</span><span class="p">:</span>
-    <span class="n">plotter</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="n">model_dict</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-    <span class="n">single_model_figures_dict</span> <span class="o">=</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_all</span><span class="p">()</span>
-    <span class="n">plotter</span><span class="o">.</span><span class="n">show_all</span><span class="p">(</span><span class="n">single_model_figures_dict</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">model_dict</span> <span class="ow">in</span> <span class="n">all_trained_models</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">RealsVsPreds</span><span class="o">.</span><span class="n">from_final_val_data</span><span class="p">(</span><span class="n">model_dict</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_073.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_073.png" alt="From final val data, Tabular1 uni-modal: R2=0.309, Fold 1: R2=0.185, Fold 2: R2=0.354, Fold 3: R2=0.186, Fold 4: R2=0.317, Fold 5: R2=0.279, Fold 6: R2=0.266, Fold 7: R2=0.474, Fold 8: R2=0.321" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_074.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_074.png" alt="From final val data, Tabular2 uni-modal: R2=0.308, Fold 1: R2=0.453, Fold 2: R2=0.067, Fold 3: R2=0.327, Fold 4: R2=0.365, Fold 5: R2=0.424, Fold 6: R2=0.252, Fold 7: R2=0.219, Fold 8: R2=0.171" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_075.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_075.png" alt="From final val data, Concatenating tabular feature maps: R2=0.490, Fold 1: R2=0.362, Fold 2: R2=0.442, Fold 3: R2=0.424, Fold 4: R2=0.471, Fold 5: R2=0.540, Fold 6: R2=0.677, Fold 7: R2=0.559, Fold 8: R2=0.418" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_076.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_076.png" alt="From final val data, Concatenating tabular data: R2=0.535, Fold 1: R2=0.555, Fold 2: R2=0.616, Fold 3: R2=0.338, Fold 4: R2=0.547, Fold 5: R2=0.591, Fold 6: R2=0.612, Fold 7: R2=0.427, Fold 8: R2=0.453" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_077.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_077.png" alt="From final val data, Channel-wise multiplication net (tabular): R2=0.380, Fold 1: R2=0.316, Fold 2: R2=0.488, Fold 3: R2=0.244, Fold 4: R2=0.400, Fold 5: R2=0.398, Fold 6: R2=0.470, Fold 7: R2=0.285, Fold 8: R2=0.347" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_078.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_078.png" alt="From final val data, Tabular Crossmodal multi-head attention: R2=0.500, Fold 1: R2=0.432, Fold 2: R2=0.504, Fold 3: R2=0.591, Fold 4: R2=0.315, Fold 5: R2=0.533, Fold 6: R2=0.499, Fold 7: R2=0.486, Fold 8: R2=0.528" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_079.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_079.png" alt="From final val data, Tabular decision: R2=0.496, Fold 1: R2=0.508, Fold 2: R2=0.438, Fold 3: R2=0.581, Fold 4: R2=0.597, Fold 5: R2=0.527, Fold 6: R2=0.446, Fold 7: R2=0.501, Fold 8: R2=0.282" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_080.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_080.png" alt="From final val data, MCVAE Tabular: R2=0.019, Fold 1: R2=-0.007, Fold 2: R2=0.099, Fold 3: R2=-0.026, Fold 4: R2=-0.027, Fold 5: R2=-0.002, Fold 6: R2=-0.001, Fold 7: R2=0.083, Fold 8: R2=-0.014" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_081.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_081.png" alt="From final val data, Edge Correlation GNN: R2=0.134, Fold 1: R2=-0.023, Fold 2: R2=0.231, Fold 3: R2=0.251, Fold 4: R2=-0.036, Fold 5: R2=0.107, Fold 6: R2=0.227, Fold 7: R2=-0.031, Fold 8: R2=0.163" class = "sphx-glr-multi-img"/></li>
+</ul>
 </section>
 <section id="plotting-comparison-of-the-models">
 <h2>6. Plotting comparison of the models<a class="headerlink" href="#plotting-comparison-of-the-models" title="Permalink to this heading"></a></h2>
 <p>In this section, we visualize the results of each individual model.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">comparison_plotter</span> <span class="o">=</span> <span class="n">Plotter</span><span class="p">(</span><span class="n">all_trained_models</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-<span class="n">comparison_plot_dict</span> <span class="o">=</span> <span class="n">comparison_plotter</span><span class="o">.</span><span class="n">plot_all</span><span class="p">()</span>
-<span class="n">comparison_plotter</span><span class="o">.</span><span class="n">show_all</span><span class="p">(</span><span class="n">comparison_plot_dict</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">comparison_plot</span><span class="p">,</span> <span class="n">metrics_dataframe</span> <span class="o">=</span> <span class="n">ModelComparison</span><span class="o">.</span><span class="n">from_final_val_data</span><span class="p">(</span><span class="n">all_trained_models</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_082.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_082.png" alt="Distribution of metrics between cross-validation folds, R2, MAE" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>comp models metrics {&#39;Tabular1 uni-modal&#39;: {&#39;R2&#39;: [0.1847051978111267, 0.3538585901260376, 0.1862925887107849, 0.3172152638435364, 0.27925777435302734, 0.26597076654434204, 0.4737008213996887, 0.3211592435836792], &#39;MAE&#39;: [3.2544400691986084, 2.68761944770813, 3.3377034664154053, 2.752492666244507, 3.0639472007751465, 2.7530293464660645, 3.0820093154907227, 3.180541515350342]}, &#39;Tabular2 uni-modal&#39;: {&#39;R2&#39;: [0.45273905992507935, 0.06690114736557007, 0.3272819519042969, 0.36544036865234375, 0.42449718713760376, 0.25191164016723633, 0.2191036343574524, 0.1706322431564331], &#39;MAE&#39;: [2.8729043006896973, 2.9153432846069336, 3.569711923599243, 2.496086835861206, 3.015620231628418, 3.031947135925293, 2.8829123973846436, 3.4775798320770264]}, &#39;Concatenating tabular feature maps&#39;: {&#39;R2&#39;: [0.3620777130126953, 0.4417087435722351, 0.4243953824043274, 0.47078239917755127, 0.5395724773406982, 0.677090048789978, 0.5591229200363159, 0.417618989944458], &#39;MAE&#39;: [3.1868114471435547, 2.47515869140625, 2.4574267864227295, 2.7978579998016357, 2.7994909286499023, 1.9362945556640625, 2.2885961532592773, 2.9340898990631104]}, &#39;Concatenating tabular data&#39;: {&#39;R2&#39;: [0.5554353594779968, 0.6161866784095764, 0.337960422039032, 0.5468802452087402, 0.591398298740387, 0.611754298210144, 0.4270881414413452, 0.45280224084854126], &#39;MAE&#39;: [2.3282973766326904, 2.8040030002593994, 2.568645715713501, 2.3834919929504395, 2.0327255725860596, 2.6043860912323, 2.653918743133545, 2.558443546295166]}, &#39;Channel-wise multiplication net (tabular)&#39;: {&#39;R2&#39;: [0.315731406211853, 0.4883198142051697, 0.2437615543603897, 0.4001888036727905, 0.3984871506690979, 0.46959131956100464, 0.28526636958122253, 0.3470063805580139], &#39;MAE&#39;: [2.9613349437713623, 2.4645261764526367, 2.7103822231292725, 2.5807433128356934, 2.935960292816162, 2.6851439476013184, 3.319307565689087, 3.1585898399353027]}, &#39;Tabular Crossmodal multi-head attention&#39;: {&#39;R2&#39;: [0.4315035939216614, 0.5043998956680298, 0.5910037755966187, 0.3151036500930786, 0.5332671403884888, 0.49900203943252563, 0.48581087589263916, 0.5277689695358276], &#39;MAE&#39;: [3.080484390258789, 2.440844774246216, 2.448713541030884, 2.6313138008117676, 2.5238401889801025, 2.3897674083709717, 2.547105312347412, 2.5184240341186523]}, &#39;Tabular decision&#39;: {&#39;R2&#39;: [0.5075912475585938, 0.4378359317779541, 0.5806715488433838, 0.5974611043930054, 0.5270524024963379, 0.4461625814437866, 0.5007119178771973, 0.2822440266609192], &#39;MAE&#39;: [2.612638473510742, 2.3867459297180176, 2.656567096710205, 2.3077564239501953, 2.3129682540893555, 2.814648151397705, 2.6802926063537598, 3.058063268661499]}, &#39;MCVAE Tabular&#39;: {&#39;R2&#39;: [-0.006924986839294434, 0.09884881973266602, -0.025596141815185547, -0.026619911193847656, -0.002027273178100586, -0.0013638734817504883, 0.08290988206863403, -0.013564109802246094], &#39;MAE&#39;: [3.9747540950775146, 3.4029831886291504, 3.9990103244781494, 3.4104206562042236, 3.801715612411499, 3.8304989337921143, 3.323807716369629, 3.1047983169555664]}, &#39;Edge Correlation GNN&#39;: {&#39;R2&#39;: [-0.023377299308776855, 0.2308809757232666, 0.2513768672943115, -0.03601264953613281, 0.10682040452957153, 0.2267850637435913, -0.030986785888671875, 0.16299718618392944], &#39;MAE&#39;: [3.168518304824829, 3.165010452270508, 3.1371958255767822, 3.914865255355835, 3.375988483428955, 3.328338146209717, 3.245760679244995, 3.7122087478637695]}}
+comp models metrics {&#39;Tabular1 uni-modal&#39;: {&#39;R2&#39;: [0.1847051978111267, 0.3538585901260376, 0.1862925887107849, 0.3172152638435364, 0.27925777435302734, 0.26597076654434204, 0.4737008213996887, 0.3211592435836792], &#39;MAE&#39;: [3.2544400691986084, 2.68761944770813, 3.3377034664154053, 2.752492666244507, 3.0639472007751465, 2.7530293464660645, 3.0820093154907227, 3.180541515350342]}, &#39;Tabular2 uni-modal&#39;: {&#39;R2&#39;: [0.45273905992507935, 0.06690114736557007, 0.3272819519042969, 0.36544036865234375, 0.42449718713760376, 0.25191164016723633, 0.2191036343574524, 0.1706322431564331], &#39;MAE&#39;: [2.8729043006896973, 2.9153432846069336, 3.569711923599243, 2.496086835861206, 3.015620231628418, 3.031947135925293, 2.8829123973846436, 3.4775798320770264]}, &#39;Concatenating tabular feature maps&#39;: {&#39;R2&#39;: [0.3620777130126953, 0.4417087435722351, 0.4243953824043274, 0.47078239917755127, 0.5395724773406982, 0.677090048789978, 0.5591229200363159, 0.417618989944458], &#39;MAE&#39;: [3.1868114471435547, 2.47515869140625, 2.4574267864227295, 2.7978579998016357, 2.7994909286499023, 1.9362945556640625, 2.2885961532592773, 2.9340898990631104]}, &#39;Concatenating tabular data&#39;: {&#39;R2&#39;: [0.5554353594779968, 0.6161866784095764, 0.337960422039032, 0.5468802452087402, 0.591398298740387, 0.611754298210144, 0.4270881414413452, 0.45280224084854126], &#39;MAE&#39;: [2.3282973766326904, 2.8040030002593994, 2.568645715713501, 2.3834919929504395, 2.0327255725860596, 2.6043860912323, 2.653918743133545, 2.558443546295166]}, &#39;Channel-wise multiplication net (tabular)&#39;: {&#39;R2&#39;: [0.315731406211853, 0.4883198142051697, 0.2437615543603897, 0.4001888036727905, 0.3984871506690979, 0.46959131956100464, 0.28526636958122253, 0.3470063805580139], &#39;MAE&#39;: [2.9613349437713623, 2.4645261764526367, 2.7103822231292725, 2.5807433128356934, 2.935960292816162, 2.6851439476013184, 3.319307565689087, 3.1585898399353027]}, &#39;Tabular Crossmodal multi-head attention&#39;: {&#39;R2&#39;: [0.4315035939216614, 0.5043998956680298, 0.5910037755966187, 0.3151036500930786, 0.5332671403884888, 0.49900203943252563, 0.48581087589263916, 0.5277689695358276], &#39;MAE&#39;: [3.080484390258789, 2.440844774246216, 2.448713541030884, 2.6313138008117676, 2.5238401889801025, 2.3897674083709717, 2.547105312347412, 2.5184240341186523]}, &#39;Tabular decision&#39;: {&#39;R2&#39;: [0.5075912475585938, 0.4378359317779541, 0.5806715488433838, 0.5974611043930054, 0.5270524024963379, 0.4461625814437866, 0.5007119178771973, 0.2822440266609192], &#39;MAE&#39;: [2.612638473510742, 2.3867459297180176, 2.656567096710205, 2.3077564239501953, 2.3129682540893555, 2.814648151397705, 2.6802926063537598, 3.058063268661499]}, &#39;MCVAE Tabular&#39;: {&#39;R2&#39;: [-0.006924986839294434, 0.09884881973266602, -0.025596141815185547, -0.026619911193847656, -0.002027273178100586, -0.0013638734817504883, 0.08290988206863403, -0.013564109802246094], &#39;MAE&#39;: [3.9747540950775146, 3.4029831886291504, 3.9990103244781494, 3.4104206562042236, 3.801715612411499, 3.8304989337921143, 3.323807716369629, 3.1047983169555664]}, &#39;Edge Correlation GNN&#39;: {&#39;R2&#39;: [-0.023377299308776855, 0.2308809757232666, 0.2513768672943115, -0.03601264953613281, 0.10682040452957153, 0.2267850637435913, -0.030986785888671875, 0.16299718618392944], &#39;MAE&#39;: [3.168518304824829, 3.165010452270508, 3.1371958255767822, 3.914865255355835, 3.375988483428955, 3.328338146209717, 3.245760679244995, 3.7122087478637695]}}
 </pre></div>
 </div>
 </section>
 <section id="saving-the-results-of-the-models">
 <h2>7. Saving the results of the models<a class="headerlink" href="#saving-the-results-of-the-models" title="Permalink to this heading"></a></h2>
 <p>In this section, we compare the performance of all the trained models using a violin chart, providing an overview of how each model performed as a distribution over the different cross-validation folds.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">performances_df</span> <span class="o">=</span> <span class="n">comparison_plotter</span><span class="o">.</span><span class="n">get_performance_df</span><span class="p">()</span>
-<span class="n">performances_df</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metrics_dataframe</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.001 seconds)</p>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>R2</th>
+      <th>MAE</th>
+      <th>fold1_R2</th>
+      <th>fold1_MAE</th>
+      <th>fold2_R2</th>
+      <th>fold2_MAE</th>
+      <th>fold3_R2</th>
+      <th>fold3_MAE</th>
+      <th>fold4_R2</th>
+      <th>fold4_MAE</th>
+      <th>fold5_R2</th>
+      <th>fold5_MAE</th>
+      <th>fold6_R2</th>
+      <th>fold6_MAE</th>
+      <th>fold7_R2</th>
+      <th>fold7_MAE</th>
+      <th>fold8_R2</th>
+      <th>fold8_MAE</th>
+    </tr>
+    <tr>
+      <th>Method</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Tabular1 uni-modal</th>
+      <td>0.309161</td>
+      <td>3.013925</td>
+      <td>0.184705</td>
+      <td>3.254440</td>
+      <td>0.353859</td>
+      <td>2.687619</td>
+      <td>0.186293</td>
+      <td>3.337703</td>
+      <td>0.317215</td>
+      <td>2.752493</td>
+      <td>0.279258</td>
+      <td>3.063947</td>
+      <td>0.265971</td>
+      <td>2.753029</td>
+      <td>0.473701</td>
+      <td>3.082009</td>
+      <td>0.321159</td>
+      <td>3.180542</td>
+    </tr>
+    <tr>
+      <th>Tabular2 uni-modal</th>
+      <td>0.307929</td>
+      <td>3.032209</td>
+      <td>0.452739</td>
+      <td>2.872904</td>
+      <td>0.066901</td>
+      <td>2.915343</td>
+      <td>0.327282</td>
+      <td>3.569712</td>
+      <td>0.365440</td>
+      <td>2.496087</td>
+      <td>0.424497</td>
+      <td>3.015620</td>
+      <td>0.251912</td>
+      <td>3.031947</td>
+      <td>0.219104</td>
+      <td>2.882912</td>
+      <td>0.170632</td>
+      <td>3.477580</td>
+    </tr>
+    <tr>
+      <th>Concatenating tabular feature maps</th>
+      <td>0.490228</td>
+      <td>2.610425</td>
+      <td>0.362078</td>
+      <td>3.186811</td>
+      <td>0.441709</td>
+      <td>2.475159</td>
+      <td>0.424395</td>
+      <td>2.457427</td>
+      <td>0.470782</td>
+      <td>2.797858</td>
+      <td>0.539572</td>
+      <td>2.799491</td>
+      <td>0.677090</td>
+      <td>1.936295</td>
+      <td>0.559123</td>
+      <td>2.288596</td>
+      <td>0.417619</td>
+      <td>2.934090</td>
+    </tr>
+    <tr>
+      <th>Concatenating tabular data</th>
+      <td>0.534589</td>
+      <td>2.491974</td>
+      <td>0.555435</td>
+      <td>2.328297</td>
+      <td>0.616187</td>
+      <td>2.804003</td>
+      <td>0.337960</td>
+      <td>2.568646</td>
+      <td>0.546880</td>
+      <td>2.383492</td>
+      <td>0.591398</td>
+      <td>2.032726</td>
+      <td>0.611754</td>
+      <td>2.604386</td>
+      <td>0.427088</td>
+      <td>2.653919</td>
+      <td>0.452802</td>
+      <td>2.558444</td>
+    </tr>
+    <tr>
+      <th>Channel-wise multiplication net (tabular)</th>
+      <td>0.379595</td>
+      <td>2.850616</td>
+      <td>0.315731</td>
+      <td>2.961335</td>
+      <td>0.488320</td>
+      <td>2.464526</td>
+      <td>0.243762</td>
+      <td>2.710382</td>
+      <td>0.400189</td>
+      <td>2.580743</td>
+      <td>0.398487</td>
+      <td>2.935960</td>
+      <td>0.469591</td>
+      <td>2.685144</td>
+      <td>0.285266</td>
+      <td>3.319308</td>
+      <td>0.347006</td>
+      <td>3.158590</td>
+    </tr>
+    <tr>
+      <th>Tabular Crossmodal multi-head attention</th>
+      <td>0.500088</td>
+      <td>2.573184</td>
+      <td>0.431504</td>
+      <td>3.080484</td>
+      <td>0.504400</td>
+      <td>2.440845</td>
+      <td>0.591004</td>
+      <td>2.448714</td>
+      <td>0.315104</td>
+      <td>2.631314</td>
+      <td>0.533267</td>
+      <td>2.523840</td>
+      <td>0.499002</td>
+      <td>2.389767</td>
+      <td>0.485811</td>
+      <td>2.547105</td>
+      <td>0.527769</td>
+      <td>2.518424</td>
+    </tr>
+    <tr>
+      <th>Tabular decision</th>
+      <td>0.495723</td>
+      <td>2.602808</td>
+      <td>0.507591</td>
+      <td>2.612638</td>
+      <td>0.437836</td>
+      <td>2.386746</td>
+      <td>0.580672</td>
+      <td>2.656567</td>
+      <td>0.597461</td>
+      <td>2.307756</td>
+      <td>0.527052</td>
+      <td>2.312968</td>
+      <td>0.446163</td>
+      <td>2.814648</td>
+      <td>0.500712</td>
+      <td>2.680293</td>
+      <td>0.282244</td>
+      <td>3.058063</td>
+    </tr>
+    <tr>
+      <th>MCVAE Tabular</th>
+      <td>0.018776</td>
+      <td>3.606725</td>
+      <td>-0.006925</td>
+      <td>3.974754</td>
+      <td>0.098849</td>
+      <td>3.402983</td>
+      <td>-0.025596</td>
+      <td>3.999010</td>
+      <td>-0.026620</td>
+      <td>3.410421</td>
+      <td>-0.002027</td>
+      <td>3.801716</td>
+      <td>-0.001364</td>
+      <td>3.830499</td>
+      <td>0.082910</td>
+      <td>3.323808</td>
+      <td>-0.013564</td>
+      <td>3.104798</td>
+    </tr>
+    <tr>
+      <th>Edge Correlation GNN</th>
+      <td>0.134415</td>
+      <td>3.380709</td>
+      <td>-0.023377</td>
+      <td>3.168518</td>
+      <td>0.230881</td>
+      <td>3.165010</td>
+      <td>0.251377</td>
+      <td>3.137196</td>
+      <td>-0.036013</td>
+      <td>3.914865</td>
+      <td>0.106820</td>
+      <td>3.375988</td>
+      <td>0.226785</td>
+      <td>3.328338</td>
+      <td>-0.030987</td>
+      <td>3.245761</td>
+      <td>0.162997</td>
+      <td>3.712209</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<br />
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (4 minutes 50.312 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-training-and-testing-plot-model-comparison-loop-kfold-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/f79519df1d510a92c31e8566c5838670/plot_model_comparison_loop_kfold.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_model_comparison_loop_kfold.py</span></code></a></p>
@@ -297,7 +645,7 @@ You can add an extra suffix to the filename by passing a string to the <code cla
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="plot_one_model_binary_kfold.html" class="btn btn-neutral float-left" title="Binary: training one kfold model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plot_one_model_binary_kfold.html" class="btn btn-neutral float-left" title="📊 Binary Classification: Training a K-Fold Model 🚀" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="plot_two_models_traintest.html" class="btn btn-neutral float-right" title="📈 Regression: Comparing Two Tabular Models Trained on Simulated Data 📊" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

@@ -56,7 +56,20 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/training_and_testing/index.html">Training and testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing_examples/index.html">Adding a new model</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 Public API Reference 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -102,8 +115,7 @@
 <span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">model_modifier</span>
 
 
-
-<div class="viewcode-block" id="downsample_img_batch"><a class="viewcode-back" href="../../autosummary/fusilli.data.downsample_img_batch.html#fusilli.data.downsample_img_batch">[docs]</a><span class="k">def</span> <span class="nf">downsample_img_batch</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">output_size</span><span class="p">):</span>
+<div class="viewcode-block" id="downsample_img_batch"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.downsample_img_batch">[docs]</a><span class="k">def</span> <span class="nf">downsample_img_batch</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">output_size</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Downsamples a batch of images to a specified size.</span>
 
@@ -174,7 +186,7 @@
     <span class="k">return</span> <span class="n">downsampled_img</span></div>
 
 
-<div class="viewcode-block" id="CustomDataset"><a class="viewcode-back" href="../../autosummary/fusilli.data.CustomDataset.html#fusilli.data.CustomDataset">[docs]</a><span class="k">class</span> <span class="nc">CustomDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+<div class="viewcode-block" id="CustomDataset"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataset">[docs]</a><span class="k">class</span> <span class="nc">CustomDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom dataset class for multimodal data.</span>
 
@@ -190,10 +202,10 @@
 <span class="sd">        Tensor of predictive features for uni-modal data.</span>
 <span class="sd">    labels : tensor</span>
 <span class="sd">        Tensor of labels.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="CustomDataset.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.CustomDataset.html#fusilli.data.CustomDataset.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_features</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+<div class="viewcode-block" id="CustomDataset.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.CustomDataset.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_features</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -265,7 +277,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="LoadDatasets"><a class="viewcode-back" href="../../autosummary/fusilli.data.LoadDatasets.html#fusilli.data.LoadDatasets">[docs]</a><span class="k">class</span> <span class="nc">LoadDatasets</span><span class="p">:</span>
+<div class="viewcode-block" id="LoadDatasets"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets">[docs]</a><span class="k">class</span> <span class="nc">LoadDatasets</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class for loading the different datasets for the different modalities.</span>
 
@@ -283,7 +295,7 @@
 <span class="sd">        None if not downsampling. (default None)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="LoadDatasets.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.LoadDatasets.html#fusilli.data.LoadDatasets.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span> <span class="n">img_downsample_dims</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="LoadDatasets.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span> <span class="n">img_downsample_dims</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -302,7 +314,7 @@
 <span class="sd">        ValueError</span>
 <span class="sd">            If the CSVs do not have the right columns or if the index column is not named</span>
 <span class="sd">            &quot;study_id&quot;.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tabular1_source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tabular2_source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_source</span> <span class="o">=</span> <span class="n">sources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span> <span class="o">=</span> <span class="p">(</span>
@@ -323,7 +335,7 @@
         <span class="k">if</span> <span class="s2">&quot;pred_label&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tab2_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The CSV must have a label column named &#39;pred_label&#39;.&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LoadDatasets.load_tabular1"><a class="viewcode-back" href="../../autosummary/fusilli.data.LoadDatasets.html#fusilli.data.LoadDatasets.load_tabular1">[docs]</a>    <span class="k">def</span> <span class="nf">load_tabular1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LoadDatasets.load_tabular1"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.load_tabular1">[docs]</a>    <span class="k">def</span> <span class="nf">load_tabular1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the tabular1-only dataset</span>
 
@@ -349,7 +361,7 @@
 
         <span class="k">return</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="n">mod1_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="LoadDatasets.load_tabular2"><a class="viewcode-back" href="../../autosummary/fusilli.data.LoadDatasets.html#fusilli.data.LoadDatasets.load_tabular2">[docs]</a>    <span class="k">def</span> <span class="nf">load_tabular2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LoadDatasets.load_tabular2"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.load_tabular2">[docs]</a>    <span class="k">def</span> <span class="nf">load_tabular2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the tabular2-only dataset</span>
 
@@ -374,7 +386,7 @@
 
         <span class="k">return</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">mod2_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="LoadDatasets.load_img"><a class="viewcode-back" href="../../autosummary/fusilli.data.LoadDatasets.html#fusilli.data.LoadDatasets.load_img">[docs]</a>    <span class="k">def</span> <span class="nf">load_img</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LoadDatasets.load_img"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.load_img">[docs]</a>    <span class="k">def</span> <span class="nf">load_img</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the image-only dataset</span>
 
@@ -403,7 +415,7 @@
 
         <span class="k">return</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">img_dim</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="LoadDatasets.load_both_tabular"><a class="viewcode-back" href="../../autosummary/fusilli.data.LoadDatasets.html#fusilli.data.LoadDatasets.load_both_tabular">[docs]</a>    <span class="k">def</span> <span class="nf">load_both_tabular</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LoadDatasets.load_both_tabular"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.load_both_tabular">[docs]</a>    <span class="k">def</span> <span class="nf">load_both_tabular</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the tabular1 and tabular2 multimodal dataset</span>
 
@@ -426,16 +438,14 @@
         <span class="n">tab2_pred_features</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">tab2_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 
         <span class="n">pred_label</span> <span class="o">=</span> <span class="n">tab1_df</span><span class="p">[[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">]]</span>
-        <span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">tab1_pred_features</span><span class="p">,</span> <span class="n">tab2_pred_features</span><span class="p">],</span> <span class="n">pred_label</span>
-        <span class="p">)</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">([</span><span class="n">tab1_pred_features</span><span class="p">,</span> <span class="n">tab2_pred_features</span><span class="p">],</span> <span class="n">pred_label</span><span class="p">)</span>
 
         <span class="n">mod1_dim</span> <span class="o">=</span> <span class="n">tab1_pred_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">mod2_dim</span> <span class="o">=</span> <span class="n">tab2_pred_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="n">mod1_dim</span><span class="p">,</span> <span class="n">mod2_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="LoadDatasets.load_tab_and_img"><a class="viewcode-back" href="../../autosummary/fusilli.data.LoadDatasets.html#fusilli.data.LoadDatasets.load_tab_and_img">[docs]</a>    <span class="k">def</span> <span class="nf">load_tab_and_img</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LoadDatasets.load_tab_and_img"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.LoadDatasets.load_tab_and_img">[docs]</a>    <span class="k">def</span> <span class="nf">load_tab_and_img</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the tabular1 and image multimodal dataset.</span>
 
@@ -465,7 +475,7 @@
         <span class="k">return</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="n">mod1_dim</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">img_dim</span><span class="p">]</span></div></div>
 
 
-<div class="viewcode-block" id="TrainTestDataModule"><a class="viewcode-back" href="../../autosummary/fusilli.data.TrainTestDataModule.html#fusilli.data.TrainTestDataModule">[docs]</a><span class="k">class</span> <span class="nc">TrainTestDataModule</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningDataModule</span><span class="p">):</span>
+<div class="viewcode-block" id="TrainTestDataModule"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.TrainTestDataModule">[docs]</a><span class="k">class</span> <span class="nc">TrainTestDataModule</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningDataModule</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom pytorch lightning datamodule class for the different modalities.</span>
 
@@ -498,15 +508,15 @@
 <span class="sd">        Tensor of predictive features. Created in prepare_data().</span>
 <span class="sd">    data_dims : list</span>
 <span class="sd">        List of data dimensions [mod1_dim, mod2_dim, img_dim].</span>
-<span class="sd">        Created in prepare_data(). </span>
-<span class="sd">    train_dataset : tensor </span>
+<span class="sd">        Created in prepare_data().</span>
+<span class="sd">    train_dataset : tensor</span>
 <span class="sd">        Tensor of predictive features for training. Created in setup().</span>
 <span class="sd">    test_dataset : tensor</span>
 <span class="sd">        Tensor of predictive features for testing. Created in setup().</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="TrainTestDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.TrainTestDataModule.html#fusilli.data.TrainTestDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="TrainTestDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.TrainTestDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">params</span><span class="p">,</span>
         <span class="n">fusion_model</span><span class="p">,</span>
@@ -553,12 +563,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extra_log_string_dict</span> <span class="o">=</span> <span class="n">extra_log_string_dict</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;tabular1&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">image_downsample_size</span>
-            <span class="p">)</span><span class="o">.</span><span class="n">load_tabular1</span><span class="p">,</span>
-            <span class="s2">&quot;tabular2&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">image_downsample_size</span>
-            <span class="p">)</span><span class="o">.</span><span class="n">load_tabular2</span><span class="p">,</span>
+            <span class="s2">&quot;tabular1&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">image_downsample_size</span><span class="p">)</span><span class="o">.</span><span class="n">load_tabular1</span><span class="p">,</span>
+            <span class="s2">&quot;tabular2&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">image_downsample_size</span><span class="p">)</span><span class="o">.</span><span class="n">load_tabular2</span><span class="p">,</span>
             <span class="s2">&quot;img&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">image_downsample_size</span><span class="p">)</span><span class="o">.</span><span class="n">load_img</span><span class="p">,</span>
             <span class="s2">&quot;both_tab&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">image_downsample_size</span>
@@ -582,7 +588,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span> <span class="o">=</span> <span class="n">max_epochs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">own_early_stopping_callback</span> <span class="o">=</span> <span class="n">own_early_stopping_callback</span></div>
 
-<div class="viewcode-block" id="TrainTestDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusilli.data.TrainTestDataModule.html#fusilli.data.TrainTestDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TrainTestDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.TrainTestDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the data with LoadDatasets class</span>
 
@@ -598,7 +604,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span><span class="p">]()</span></div>
 
-<div class="viewcode-block" id="TrainTestDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusilli.data.TrainTestDataModule.html#fusilli.data.TrainTestDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span>
+<div class="viewcode-block" id="TrainTestDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.TrainTestDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
@@ -619,21 +625,22 @@
 <span class="sd">            Dataloader for validation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># split the dataset into train and test sets</span>
+        <span class="c1"># split the dataset into train and test sets</span>
         <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">train_dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">random_split</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span><span class="p">]</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if subspace method is specified</span>
-
-            <span class="k">if</span> <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># if no checkpoint path specified, train the subspace method</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="p">):</span>  <span class="c1"># if no checkpoint path specified, train the subspace method</span>
                 <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span>
                     <span class="bp">self</span><span class="p">,</span>
                     <span class="n">max_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">,</span>
                     <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="p">)</span>
 
-                <span class="c1"># modify the subspace method architecture if specified</span>
+                <span class="c1"># modify the subspace method architecture if specified</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">model_modifier</span><span class="o">.</span><span class="n">modify_model_architecture</span><span class="p">(</span>
                         <span class="n">subspace_method</span><span class="p">,</span>
@@ -667,7 +674,7 @@
                     <span class="n">checkpoint_path</span><span class="o">=</span><span class="n">checkpoint_path</span><span class="p">,</span>
                 <span class="p">)</span>
 
-                <span class="c1"># modify the subspace method architecture if specified</span>
+                <span class="c1"># modify the subspace method architecture if specified</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">model_modifier</span><span class="o">.</span><span class="n">modify_model_architecture</span><span class="p">(</span>
                         <span class="n">subspace_method</span><span class="p">,</span>
@@ -692,7 +699,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">test_latents</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span></div>
 
-<div class="viewcode-block" id="TrainTestDataModule.train_dataloader"><a class="viewcode-back" href="../../autosummary/fusilli.data.TrainTestDataModule.html#fusilli.data.TrainTestDataModule.train_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">train_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TrainTestDataModule.train_dataloader"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.TrainTestDataModule.train_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">train_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the dataloader for training.</span>
 
@@ -705,7 +712,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="TrainTestDataModule.val_dataloader"><a class="viewcode-back" href="../../autosummary/fusilli.data.TrainTestDataModule.html#fusilli.data.TrainTestDataModule.val_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">val_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TrainTestDataModule.val_dataloader"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.TrainTestDataModule.val_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">val_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the dataloader for validation.</span>
 
@@ -719,7 +726,7 @@
         <span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="KFoldDataModule"><a class="viewcode-back" href="../../autosummary/fusilli.data.KFoldDataModule.html#fusilli.data.KFoldDataModule">[docs]</a><span class="k">class</span> <span class="nc">KFoldDataModule</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningDataModule</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldDataModule"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule">[docs]</a><span class="k">class</span> <span class="nc">KFoldDataModule</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningDataModule</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom pytorch lightning datamodule class for the different modalities with k-fold cross</span>
 <span class="sd">    validation</span>
@@ -727,7 +734,7 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    num_folds : int</span>
-<span class="sd">        Total number of folds. </span>
+<span class="sd">        Total number of folds.</span>
 <span class="sd">    sources : list</span>
 <span class="sd">        List of source csv files. [Tabular1, Tabular2, Image]</span>
 <span class="sd">    image_downsample_size : tuple</span>
@@ -763,7 +770,7 @@
 <span class="sd">        Tensor of predictive features for testing. Created in setup().</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="KFoldDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.KFoldDataModule.html#fusilli.data.KFoldDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="KFoldDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">params</span><span class="p">,</span>
         <span class="n">fusion_model</span><span class="p">,</span>
@@ -830,7 +837,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fusion_model</span> <span class="o">=</span> <span class="n">fusion_model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion_model</span><span class="o">.</span><span class="n">modality_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="n">subspace_method</span>  <span class="c1"># subspace method class (only for subspace methods)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">subspace_method</span>  <span class="c1"># subspace method class (only for subspace methods)</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">==</span> <span class="s2">&quot;multiclass&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dims</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;multiclass_dims&quot;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -839,7 +848,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span> <span class="o">=</span> <span class="n">max_epochs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">own_early_stopping_callback</span> <span class="o">=</span> <span class="n">own_early_stopping_callback</span></div>
 
-<div class="viewcode-block" id="KFoldDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusilli.data.KFoldDataModule.html#fusilli.data.KFoldDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the data with LoadDatasets class</span>
 
@@ -855,7 +864,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span><span class="p">]()</span></div>
 
-<div class="viewcode-block" id="KFoldDataModule.kfold_split"><a class="viewcode-back" href="../../autosummary/fusilli.data.KFoldDataModule.html#fusilli.data.KFoldDataModule.kfold_split">[docs]</a>    <span class="k">def</span> <span class="nf">kfold_split</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldDataModule.kfold_split"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.kfold_split">[docs]</a>    <span class="k">def</span> <span class="nf">kfold_split</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Splits the dataset into k folds</span>
 
@@ -882,7 +891,7 @@
 
         <span class="k">return</span> <span class="n">folds</span>  <span class="c1"># list of tuples of (train_dataset, test_dataset)</span></div>
 
-<div class="viewcode-block" id="KFoldDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusilli.data.KFoldDataModule.html#fusilli.data.KFoldDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span>
+<div class="viewcode-block" id="KFoldDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
@@ -905,13 +914,11 @@
 
         <span class="c1"># if subspace method is specified, run the subspace method on each fold</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-
             <span class="c1"># if no checkpoint path specified, train the subspace method</span>
             <span class="k">if</span> <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">new_folds</span> <span class="o">=</span> <span class="p">[]</span>
 
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">fold</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folds</span><span class="p">):</span>
-
                     <span class="c1"># get the train and test datasets for each fold</span>
                     <span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">fold</span>
 
@@ -946,19 +953,19 @@
                     <span class="n">train_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">)</span>
                     <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">test_latents</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span>
 
-                    <span class="n">new_folds</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">))</span> <span class="c1"># append to new_folds</span>
+                    <span class="n">new_folds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">)</span>
+                    <span class="p">)</span>  <span class="c1"># append to new_folds</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">folds</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="n">new_folds</span>  <span class="c1"># update the folds with the new train and test datasets</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span>  <span class="c1"># update the data dimensions</span>
 
-            <span class="k">else</span><span class="p">:</span> <span class="c1"># we have already trained the subspace method, so load it from the checkpoint</span>
-
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># we have already trained the subspace method, so load it from the checkpoint</span>
                 <span class="n">new_folds</span> <span class="o">=</span> <span class="p">[]</span>
 
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">fold</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folds</span><span class="p">):</span>
-
                     <span class="c1"># get the train and test datasets for each fold</span>
                     <span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">fold</span>
 
@@ -995,7 +1002,7 @@
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span>  <span class="c1"># update the data dimensions</span></div>
 
-<div class="viewcode-block" id="KFoldDataModule.train_dataloader"><a class="viewcode-back" href="../../autosummary/fusilli.data.KFoldDataModule.html#fusilli.data.KFoldDataModule.train_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">train_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold_idx</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldDataModule.train_dataloader"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.train_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">train_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold_idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the dataloader for training.</span>
 
@@ -1015,7 +1022,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="KFoldDataModule.val_dataloader"><a class="viewcode-back" href="../../autosummary/fusilli.data.KFoldDataModule.html#fusilli.data.KFoldDataModule.val_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">val_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold_idx</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldDataModule.val_dataloader"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.val_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">val_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold_idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the dataloader for validation.</span>
 
@@ -1036,7 +1043,7 @@
         <span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="TrainTestGraphDataModule"><a class="viewcode-back" href="../../autosummary/fusilli.data.TrainTestGraphDataModule.html#fusilli.data.TrainTestGraphDataModule">[docs]</a><span class="k">class</span> <span class="nc">TrainTestGraphDataModule</span><span class="p">:</span>
+<div class="viewcode-block" id="TrainTestGraphDataModule"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.TrainTestGraphDataModule">[docs]</a><span class="k">class</span> <span class="nc">TrainTestGraphDataModule</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom pytorch lightning datamodule class for the different modalities with graph data</span>
 <span class="sd">    structure.</span>
@@ -1072,7 +1079,7 @@
 <span class="sd">        Graph data structure. Created in setup().</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="TrainTestGraphDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.TrainTestGraphDataModule.html#fusilli.data.TrainTestGraphDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="TrainTestGraphDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.TrainTestGraphDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">params</span><span class="p">,</span>
         <span class="n">fusion_model</span><span class="p">,</span>
@@ -1132,7 +1139,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span> <span class="o">=</span> <span class="n">graph_creation_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="o">=</span> <span class="n">layer_mods</span></div>
 
-<div class="viewcode-block" id="TrainTestGraphDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusilli.data.TrainTestGraphDataModule.html#fusilli.data.TrainTestGraphDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TrainTestGraphDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.TrainTestGraphDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the data with LoadDatasets class</span>
 
@@ -1148,7 +1155,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span><span class="p">]()</span></div>
 
-<div class="viewcode-block" id="TrainTestGraphDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusilli.data.TrainTestGraphDataModule.html#fusilli.data.TrainTestGraphDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TrainTestGraphDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.TrainTestGraphDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets random train and test indices, and gets the graph data structure.</span>
 
@@ -1174,7 +1181,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">graph_data</span> <span class="o">=</span> <span class="n">graph_maker</span><span class="o">.</span><span class="n">make_graph</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="TrainTestGraphDataModule.get_lightning_module"><a class="viewcode-back" href="../../autosummary/fusilli.data.TrainTestGraphDataModule.html#fusilli.data.TrainTestGraphDataModule.get_lightning_module">[docs]</a>    <span class="k">def</span> <span class="nf">get_lightning_module</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TrainTestGraphDataModule.get_lightning_module"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.TrainTestGraphDataModule.get_lightning_module">[docs]</a>    <span class="k">def</span> <span class="nf">get_lightning_module</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the lightning module using the pytorch geometric lightning module for converting</span>
 <span class="sd">        the graph data structure into a pytorch dataloader.</span>
@@ -1197,7 +1204,7 @@
         <span class="k">return</span> <span class="n">lightning_module</span></div></div>
 
 
-<div class="viewcode-block" id="KFoldGraphDataModule"><a class="viewcode-back" href="../../autosummary/fusilli.data.KFoldGraphDataModule.html#fusilli.data.KFoldGraphDataModule">[docs]</a><span class="k">class</span> <span class="nc">KFoldGraphDataModule</span><span class="p">:</span>
+<div class="viewcode-block" id="KFoldGraphDataModule"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule">[docs]</a><span class="k">class</span> <span class="nc">KFoldGraphDataModule</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom pytorch lightning datamodule class for the different modalities with graph data</span>
 <span class="sd">    structure and k-fold cross validation</span>
@@ -1228,7 +1235,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="KFoldGraphDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.KFoldGraphDataModule.html#fusilli.data.KFoldGraphDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="KFoldGraphDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">params</span><span class="p">,</span>
         <span class="n">fusion_model</span><span class="p">,</span>
@@ -1284,7 +1291,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span> <span class="o">=</span> <span class="n">graph_creation_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="o">=</span> <span class="n">layer_mods</span></div>
 
-<div class="viewcode-block" id="KFoldGraphDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusilli.data.KFoldGraphDataModule.html#fusilli.data.KFoldGraphDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldGraphDataModule.prepare_data"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.prepare_data">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the data with LoadDatasets class</span>
 
@@ -1294,7 +1301,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span><span class="p">]()</span></div>
 
-<div class="viewcode-block" id="KFoldGraphDataModule.kfold_split"><a class="viewcode-back" href="../../autosummary/fusilli.data.KFoldGraphDataModule.html#fusilli.data.KFoldGraphDataModule.kfold_split">[docs]</a>    <span class="k">def</span> <span class="nf">kfold_split</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldGraphDataModule.kfold_split"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.kfold_split">[docs]</a>    <span class="k">def</span> <span class="nf">kfold_split</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Splits the dataset into k folds</span>
 
@@ -1317,7 +1324,7 @@
             <span class="p">)</span>  <span class="c1"># list of tuples of (train_dataset, test_dataset)</span>
         <span class="k">return</span> <span class="n">folds</span></div>
 
-<div class="viewcode-block" id="KFoldGraphDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusilli.data.KFoldGraphDataModule.html#fusilli.data.KFoldGraphDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldGraphDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets random train and test indices, and gets the graph data structure.</span>
 
@@ -1329,12 +1336,11 @@
 
         <span class="n">new_folds</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">fold</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">folds</span><span class="p">:</span>
-
             <span class="c1"># get the train and test datasets for each fold</span>
             <span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">fold</span>
             <span class="n">train_idxs</span> <span class="o">=</span> <span class="n">train_dataset</span><span class="o">.</span><span class="n">indices</span>  <span class="c1"># get train node idxs from kfold_split()</span>
             <span class="n">test_idxs</span> <span class="o">=</span> <span class="n">test_dataset</span><span class="o">.</span><span class="n">indices</span>  <span class="c1"># get test node idxs from kfold_split()</span>
-            
+
             <span class="c1"># get the graph data structure</span>
             <span class="n">graph_maker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
 
@@ -1352,7 +1358,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">folds</span> <span class="o">=</span> <span class="n">new_folds</span>  <span class="c1"># list of tuples of (graph_data, train_idxs, test_idxs)</span></div>
 
-<div class="viewcode-block" id="KFoldGraphDataModule.get_lightning_module"><a class="viewcode-back" href="../../autosummary/fusilli.data.KFoldGraphDataModule.html#fusilli.data.KFoldGraphDataModule.get_lightning_module">[docs]</a>    <span class="k">def</span> <span class="nf">get_lightning_module</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KFoldGraphDataModule.get_lightning_module"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.get_lightning_module">[docs]</a>    <span class="k">def</span> <span class="nf">get_lightning_module</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the lightning module using the pytorch geometric lightning module for converting</span>
 <span class="sd">        the graph data structure into a pytorch dataloader.</span>
@@ -1384,7 +1390,7 @@
         <span class="k">return</span> <span class="n">lightning_modules</span>  <span class="c1"># list of lightning modules for each fold</span></div></div>
 
 
-<div class="viewcode-block" id="get_data_module"><a class="viewcode-back" href="../../autosummary/fusilli.data.get_data_module.html#fusilli.data.get_data_module">[docs]</a><span class="k">def</span> <span class="nf">get_data_module</span><span class="p">(</span>
+<div class="viewcode-block" id="get_data_module"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.get_data_module">[docs]</a><span class="k">def</span> <span class="nf">get_data_module</span><span class="p">(</span>
     <span class="n">fusion_model</span><span class="p">,</span>
     <span class="n">params</span><span class="p">,</span>
     <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>

@@ -56,7 +56,20 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/training_and_testing/index.html">Training and testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing_examples/index.html">Adding a new model</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 Public API Reference 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -100,7 +113,6 @@
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">Dataset</span>
 <span class="kn">from</span> <span class="nn">torch_geometric.data.lightning</span> <span class="kn">import</span> <span class="n">LightningNodeData</span>
 <span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">model_modifier</span>
-
 
 
 <div class="viewcode-block" id="downsample_img_batch"><a class="viewcode-back" href="../source/data.html#data.downsample_img_batch">[docs]</a><span class="k">def</span> <span class="nf">downsample_img_batch</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">output_size</span><span class="p">):</span>
@@ -190,7 +202,7 @@
 <span class="sd">        Tensor of predictive features for uni-modal data.</span>
 <span class="sd">    labels : tensor</span>
 <span class="sd">        Tensor of labels.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="CustomDataset.__init__"><a class="viewcode-back" href="../source/data.html#data.CustomDataset.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred_features</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
@@ -302,7 +314,7 @@
 <span class="sd">        ValueError</span>
 <span class="sd">            If the CSVs do not have the right columns or if the index column is not named</span>
 <span class="sd">            &quot;study_id&quot;.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tabular1_source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tabular2_source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_source</span> <span class="o">=</span> <span class="n">sources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">image_downsample_size</span> <span class="o">=</span> <span class="p">(</span>
@@ -426,9 +438,7 @@
         <span class="n">tab2_pred_features</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">tab2_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 
         <span class="n">pred_label</span> <span class="o">=</span> <span class="n">tab1_df</span><span class="p">[[</span><span class="s2">&quot;pred_label&quot;</span><span class="p">]]</span>
-        <span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">tab1_pred_features</span><span class="p">,</span> <span class="n">tab2_pred_features</span><span class="p">],</span> <span class="n">pred_label</span>
-        <span class="p">)</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">([</span><span class="n">tab1_pred_features</span><span class="p">,</span> <span class="n">tab2_pred_features</span><span class="p">],</span> <span class="n">pred_label</span><span class="p">)</span>
 
         <span class="n">mod1_dim</span> <span class="o">=</span> <span class="n">tab1_pred_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">mod2_dim</span> <span class="o">=</span> <span class="n">tab2_pred_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -498,8 +508,8 @@
 <span class="sd">        Tensor of predictive features. Created in prepare_data().</span>
 <span class="sd">    data_dims : list</span>
 <span class="sd">        List of data dimensions [mod1_dim, mod2_dim, img_dim].</span>
-<span class="sd">        Created in prepare_data(). </span>
-<span class="sd">    train_dataset : tensor </span>
+<span class="sd">        Created in prepare_data().</span>
+<span class="sd">    train_dataset : tensor</span>
 <span class="sd">        Tensor of predictive features for training. Created in setup().</span>
 <span class="sd">    test_dataset : tensor</span>
 <span class="sd">        Tensor of predictive features for testing. Created in setup().</span>
@@ -553,12 +563,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extra_log_string_dict</span> <span class="o">=</span> <span class="n">extra_log_string_dict</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;tabular1&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">image_downsample_size</span>
-            <span class="p">)</span><span class="o">.</span><span class="n">load_tabular1</span><span class="p">,</span>
-            <span class="s2">&quot;tabular2&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">image_downsample_size</span>
-            <span class="p">)</span><span class="o">.</span><span class="n">load_tabular2</span><span class="p">,</span>
+            <span class="s2">&quot;tabular1&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">image_downsample_size</span><span class="p">)</span><span class="o">.</span><span class="n">load_tabular1</span><span class="p">,</span>
+            <span class="s2">&quot;tabular2&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">image_downsample_size</span><span class="p">)</span><span class="o">.</span><span class="n">load_tabular2</span><span class="p">,</span>
             <span class="s2">&quot;img&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">image_downsample_size</span><span class="p">)</span><span class="o">.</span><span class="n">load_img</span><span class="p">,</span>
             <span class="s2">&quot;both_tab&quot;</span><span class="p">:</span> <span class="n">LoadDatasets</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">image_downsample_size</span>
@@ -619,21 +625,22 @@
 <span class="sd">            Dataloader for validation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># split the dataset into train and test sets</span>
+        <span class="c1"># split the dataset into train and test sets</span>
         <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">train_dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">random_split</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span><span class="p">]</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if subspace method is specified</span>
-
-            <span class="k">if</span> <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># if no checkpoint path specified, train the subspace method</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="p">):</span>  <span class="c1"># if no checkpoint path specified, train the subspace method</span>
                 <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span>
                     <span class="bp">self</span><span class="p">,</span>
                     <span class="n">max_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">,</span>
                     <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="p">)</span>
 
-                <span class="c1"># modify the subspace method architecture if specified</span>
+                <span class="c1"># modify the subspace method architecture if specified</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">model_modifier</span><span class="o">.</span><span class="n">modify_model_architecture</span><span class="p">(</span>
                         <span class="n">subspace_method</span><span class="p">,</span>
@@ -667,7 +674,7 @@
                     <span class="n">checkpoint_path</span><span class="o">=</span><span class="n">checkpoint_path</span><span class="p">,</span>
                 <span class="p">)</span>
 
-                <span class="c1"># modify the subspace method architecture if specified</span>
+                <span class="c1"># modify the subspace method architecture if specified</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">model_modifier</span><span class="o">.</span><span class="n">modify_model_architecture</span><span class="p">(</span>
                         <span class="n">subspace_method</span><span class="p">,</span>
@@ -727,7 +734,7 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    num_folds : int</span>
-<span class="sd">        Total number of folds. </span>
+<span class="sd">        Total number of folds.</span>
 <span class="sd">    sources : list</span>
 <span class="sd">        List of source csv files. [Tabular1, Tabular2, Image]</span>
 <span class="sd">    image_downsample_size : tuple</span>
@@ -830,7 +837,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fusion_model</span> <span class="o">=</span> <span class="n">fusion_model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion_model</span><span class="o">.</span><span class="n">modality_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="n">subspace_method</span>  <span class="c1"># subspace method class (only for subspace methods)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">subspace_method</span>  <span class="c1"># subspace method class (only for subspace methods)</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">==</span> <span class="s2">&quot;multiclass&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dims</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;multiclass_dims&quot;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -905,13 +914,11 @@
 
         <span class="c1"># if subspace method is specified, run the subspace method on each fold</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-
             <span class="c1"># if no checkpoint path specified, train the subspace method</span>
             <span class="k">if</span> <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">new_folds</span> <span class="o">=</span> <span class="p">[]</span>
 
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">fold</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folds</span><span class="p">):</span>
-
                     <span class="c1"># get the train and test datasets for each fold</span>
                     <span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">fold</span>
 
@@ -946,19 +953,19 @@
                     <span class="n">train_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">train_latents</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">)</span>
                     <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span><span class="n">test_latents</span><span class="p">,</span> <span class="n">test_labels</span><span class="p">)</span>
 
-                    <span class="n">new_folds</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">))</span> <span class="c1"># append to new_folds</span>
+                    <span class="n">new_folds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">)</span>
+                    <span class="p">)</span>  <span class="c1"># append to new_folds</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">folds</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="n">new_folds</span>  <span class="c1"># update the folds with the new train and test datasets</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="n">data_dims</span>  <span class="c1"># update the data dimensions</span>
 
-            <span class="k">else</span><span class="p">:</span> <span class="c1"># we have already trained the subspace method, so load it from the checkpoint</span>
-
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># we have already trained the subspace method, so load it from the checkpoint</span>
                 <span class="n">new_folds</span> <span class="o">=</span> <span class="p">[]</span>
 
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">fold</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folds</span><span class="p">):</span>
-
                     <span class="c1"># get the train and test datasets for each fold</span>
                     <span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">fold</span>
 
@@ -1329,12 +1336,11 @@
 
         <span class="n">new_folds</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">fold</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">folds</span><span class="p">:</span>
-
             <span class="c1"># get the train and test datasets for each fold</span>
             <span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">fold</span>
             <span class="n">train_idxs</span> <span class="o">=</span> <span class="n">train_dataset</span><span class="o">.</span><span class="n">indices</span>  <span class="c1"># get train node idxs from kfold_split()</span>
             <span class="n">test_idxs</span> <span class="o">=</span> <span class="n">test_dataset</span><span class="o">.</span><span class="n">indices</span>  <span class="c1"># get test node idxs from kfold_split()</span>
-            
+
             <span class="c1"># get the graph data structure</span>
             <span class="n">graph_maker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_creation_method</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
 

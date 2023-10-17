@@ -3,7 +3,7 @@
 .. _sphx_glr_auto_examples_training_and_testing:
 
 Training and testing
-----------------------
+====================
 
 These are examples of how to train and validate fusion models with Fusilli.
 
@@ -15,7 +15,7 @@ These are examples of how to train and validate fusion models with Fusilli.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This script shows how to train one fusion models on a binary task with k-fold training protocol...">
+    <div class="sphx-glr-thumbcontainer" tooltip="🚀 In this tutorial, we&#x27;ll explore binary classification using K-fold cross validation.  We&#x27;ll s...">
 
 .. only:: html
 
@@ -26,7 +26,7 @@ These are examples of how to train and validate fusion models with Fusilli.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Binary: training one kfold model</div>
+      <div class="sphx-glr-thumbnail-title">📊 Binary Classification: Training a K-Fold Model 🚀</div>
     </div>
 
 
@@ -43,7 +43,7 @@ These are examples of how to train and validate fusion models with Fusilli.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Comparing Multiple K-Fold Trained Fusion Models</div>
+      <div class="sphx-glr-thumbnail-title">📊 Training multiple models in a loop: k-fold regression 🚀</div>
     </div>
 
 

@@ -99,17 +99,19 @@ from sphinx_gallery.sorting import ExplicitOrder
 
 sphinx_gallery_conf = {
     "doc_module": "fusilli",
-    "examples_dirs": "examples",  # path to your example scripts
-    "gallery_dirs": "auto_examples",  # path to where to save gallery generated output
-    "ignore_pattern": "__init__.py",
+    "examples_dirs": ["examples", "how_to_contribute"],  # path to your example scripts
+    "gallery_dirs": [
+        "auto_examples",
+        "contributing_examples",
+    ],  # path to where to save gallery generated output
+    "ignore_pattern": r"__init__\.py",
     "run_stale_examples": False,
-    # "subsection_order": ExplicitOrder(
-    #     [
-    #         "examples/training_and_testing",
-    #         "examples/customising_behaviour",
-    #         "examples/creating_your_own_fusion_model",
-    #     ]
-    # ),
+    "subsection_order": ExplicitOrder(
+        [
+            "examples/customising_behaviour",
+            "examples/training_and_testing",
+        ]
+    ),
 }
 
 

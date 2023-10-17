@@ -19,7 +19,7 @@
 
 
 How to modify architectures of fusion models
-==================================================================
+############################################
 
 This tutorial will show you how to modify the architectures of fusion models.
 

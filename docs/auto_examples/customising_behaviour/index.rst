@@ -3,7 +3,7 @@
 .. _sphx_glr_auto_examples_customising_behaviour:
 
 Customising behaviour
------------------------
+=====================
 
 These are examples showing how to get more in depth with Fusilli and customise its behaviour.
 

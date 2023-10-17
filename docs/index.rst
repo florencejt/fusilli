@@ -30,7 +30,16 @@ This library provides a way to compare different fusion methods for your multimo
    :maxdepth: 2
    :caption: 🌸 Tutorials 🌸
 
-   auto_examples/index
+   auto_examples/training_and_testing/index
+   auto_examples/customising_behaviour/index
+
+-----
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 🌸 How to contribute 🌸
+
+   contributing_examples/index
 
 -----
 
