@@ -1,6 +1,0 @@
-﻿fusilli.utils.training\_utils.get\_final\_val\_metrics
-======================================================
-
-.. currentmodule:: fusilli.utils.training_utils
-
-.. autofunction:: get_final_val_metrics

@@ -1,6 +1,0 @@
-﻿fusilli.utils.training\_utils.set\_checkpoint\_name
-===================================================
-
-.. currentmodule:: fusilli.utils.training_utils
-
-.. autofunction:: set_checkpoint_name

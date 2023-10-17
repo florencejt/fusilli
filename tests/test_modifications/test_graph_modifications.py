@@ -1,7 +1,10 @@
 import pytest
 import torch.nn as nn
 from fusilli.utils import model_modifier
-from fusilli.fusion_models.edge_corr_gnn import EdgeCorrGNN, EdgeCorrGraphMaker
+from fusilli.fusionmodels.tabularfusion.edge_corr_gnn import (
+    EdgeCorrGNN,
+    EdgeCorrGraphMaker,
+)
 from tests.test_data.test_TrainTestDataModule import create_test_files
 from fusilli.data import TrainTestGraphDataModule
 from torch_geometric.nn import GCNConv
@@ -31,7 +34,9 @@ def model_instance_EdgeCorrGraphMaker(create_test_files):
     example_fusion_model.modality_type = "both_tab"
 
     # Initialize the TrainTestDataModule
-    dm = TrainTestGraphDataModule(params, example_fusion_model, sources, EdgeCorrGraphMaker)
+    dm = TrainTestGraphDataModule(
+        params, example_fusion_model, sources, EdgeCorrGraphMaker
+    )
     dm.prepare_data()
 
     return EdgeCorrGraphMaker(dm.dataset)

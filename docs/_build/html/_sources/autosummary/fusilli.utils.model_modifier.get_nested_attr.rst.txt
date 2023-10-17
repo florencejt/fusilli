@@ -1,6 +1,0 @@
-﻿fusilli.utils.model\_modifier.get\_nested\_attr
-===============================================
-
-.. currentmodule:: fusilli.utils.model_modifier
-
-.. autofunction:: get_nested_attr

@@ -6,10 +6,8 @@
 fusilli
 ======================================================
 
-Welcome to fusilli!
+Don't be silly, use fusilli! 🍝
 ---------------------------------
-
-**Don't be silly, use fusilli!**
 
 Have you got multimodal data but not sure how to combine them for your machine learning task? Look no further!
 This library provides a way to compare different fusion methods for your multimodal data.
@@ -35,13 +33,6 @@ This library provides a way to compare different fusion methods for your multimo
 
 -----
 
-.. toctree::
-   :maxdepth: 2
-   :caption: 🌸 How to contribute 🌸
-
-   contributing_examples/index
-
------
 
 🌸 API Reference 🌸
 -------------------
@@ -49,14 +40,23 @@ This library provides a way to compare different fusion methods for your multimo
 .. autosummary::
    :toctree: autosummary
    :recursive:
-   :caption: 🌸 Public API Reference 🌸
+   :caption: 🌸 API Reference 🌸
 
-   fusilli.fusion_models
+   fusilli.fusionmodels
    fusilli.data
    fusilli.train
    fusilli.eval
    fusilli.utils
 
+-----
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 🌸 How to contribute 🌸
+
+   contributing_examples/index
+
+-----
 
 Indices and tables
 ==================

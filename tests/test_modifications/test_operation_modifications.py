@@ -4,20 +4,20 @@ import torch.nn as nn
 # from fusilli.train import modify_model_architecture, get_nested_attr
 from fusilli.utils import model_modifier
 
-from fusilli.fusion_models.concat_img_maps_tabular_data import (
+from fusilli.fusionmodels.tabularimagefusion.concat_img_maps_tabular_data import (
     ConcatImageMapsTabularData,
 )
-from fusilli.fusion_models.concat_img_maps_tabular_maps import (
+from fusilli.fusionmodels.tabularimagefusion.concat_img_maps_tabular_maps import (
     ConcatImageMapsTabularMaps,
 )
-from fusilli.fusion_models.concat_tabular_data import (
+from fusilli.fusionmodels.tabularfusion.concat_data import (
     ConcatTabularData,
 )
 from fusilli.fusion_models.concat_tabular_feature_maps import (
     ConcatTabularFeatureMaps,
 )
-from fusilli.fusion_models.img_tab_decision import ImageDecision
-from fusilli.fusion_models.tabular_decision import TabularDecision
+from fusilli.fusionmodels.tabularimagefusion.decision import ImageDecision
+from fusilli.fusionmodels.tabularfusion.decision import TabularDecision
 
 import torch
 

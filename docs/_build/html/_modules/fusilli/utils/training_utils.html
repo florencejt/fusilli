@@ -56,15 +56,20 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/training_and_testing/index.html">Training and testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 Public API Reference 🌸</span></p>
+<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusionmodels.html">fusilli.fusionmodels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 
         </div>
@@ -120,7 +125,7 @@
 <span class="sd">        the same model with different hyperparameters, you can add the hyperparameters.</span>
 <span class="sd">        Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
 <span class="sd">        as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    extra_name_string : str</span>
@@ -161,12 +166,12 @@
 <span class="sd">        Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
 <span class="sd">        as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
 <span class="sd">        Default None.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    logger : object</span>
 <span class="sd">        Pytorch lightning logger object or CSVLogger object if params[&quot;log&quot;] is False.</span>
-<span class="sd">    &quot;&quot;&quot;</span> 
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fusion_model</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">):</span>
         <span class="n">method_name</span> <span class="o">=</span> <span class="n">fusion_model</span><span class="o">.</span><span class="vm">__name__</span>
@@ -199,7 +204,7 @@
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">extra_log_string_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">experiment</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-    <span class="k">else</span><span class="p">:</span> <span class="c1"># if params[&quot;log&quot;] is False</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># if params[&quot;log&quot;] is False</span>
         <span class="n">logger</span> <span class="o">=</span> <span class="n">CSVLogger</span><span class="p">(</span>
             <span class="n">save_dir</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;loss_log_dir&quot;</span><span class="p">],</span>
             <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -227,13 +232,12 @@
 <span class="sd">        Input format {&quot;name&quot;: &quot;value&quot;}. In the run name, the extra string will be added</span>
 <span class="sd">        as &quot;name_value&quot;. And a tag will be added as &quot;name_value&quot;.</span>
 <span class="sd">        Default None.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    checkpoint_filename : str</span>
 <span class="sd">        Checkpoint filename.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
 
     <span class="n">extra_name_string</span><span class="p">,</span> <span class="n">extra_tags</span> <span class="o">=</span> <span class="n">get_file_suffix_from_dict</span><span class="p">(</span><span class="n">extra_log_string_dict</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">fold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -264,13 +268,12 @@
 <span class="sd">    k : int</span>
 <span class="sd">        Fold number. None if not using kfold.</span>
 <span class="sd">        Default None.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    checkpoint_filenames : list</span>
 <span class="sd">        List of checkpoint filenames. One for each subspace model in the subspace method class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
 
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">subspace_method</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">fusion_model</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">):</span>
         <span class="n">big_fusion_model_name</span> <span class="o">=</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">fusion_model</span><span class="o">.</span><span class="vm">__name__</span>
@@ -287,7 +290,8 @@
     <span class="k">for</span> <span class="n">subspace_model</span> <span class="ow">in</span> <span class="n">subspace_method</span><span class="o">.</span><span class="n">subspace_models</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">checkpoint_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">big_fusion_model_name</span>
+                <span class="s2">&quot;subspace_&quot;</span>
+                <span class="o">+</span> <span class="n">big_fusion_model_name</span>
                 <span class="o">+</span> <span class="s2">&quot;_&quot;</span>
                 <span class="o">+</span> <span class="n">subspace_model</span><span class="o">.</span><span class="vm">__name__</span>
                 <span class="o">+</span> <span class="s2">&quot;_fold_&quot;</span>
@@ -296,7 +300,11 @@
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">checkpoint_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">big_fusion_model_name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">subspace_model</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="n">log_string</span><span class="p">,</span>
+                <span class="s2">&quot;subspace_&quot;</span>
+                <span class="o">+</span> <span class="n">big_fusion_model_name</span>
+                <span class="o">+</span> <span class="s2">&quot;_&quot;</span>
+                <span class="o">+</span> <span class="n">subspace_model</span><span class="o">.</span><span class="vm">__name__</span>
+                <span class="o">+</span> <span class="n">log_string</span><span class="p">,</span>
             <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">checkpoint_filenames</span></div>
@@ -309,7 +317,7 @@
 <span class="sd">    Gets the checkpoint filename for the trained fusion model using the model object.</span>
 
 <span class="sd">    Checkpoints should follow the naming convention:</span>
-<span class="sd">    </span>
+
 <span class="sd">    * fusion_model_name_fold_k_{checkpoint_file_suffix} if fold is not None</span>
 <span class="sd">    * fusion_model_name_{checkpoint_file_suffix} if fold is None</span>
 
@@ -317,19 +325,21 @@
 <span class="sd">    ----------</span>
 <span class="sd">    params : dict</span>
 <span class="sd">        Dictionary of parameters.</span>
-<span class="sd">    model : object  </span>
+<span class="sd">    model : object</span>
 <span class="sd">        BaseModel model object.</span>
 <span class="sd">    checkpoint_file_suffix : str</span>
 <span class="sd">        Checkpoint file suffix.</span>
 <span class="sd">    fold : int</span>
 <span class="sd">        Fold number. None if not using kfold.</span>
 <span class="sd">        Default None.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    checkpoint_filename : str</span>
 <span class="sd">        Checkpoint filename.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">checkpoint_file_suffix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">checkpoint_file_suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">fold</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">ckpt_path_beginning</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="n">checkpoint_file_suffix</span>
@@ -352,6 +362,9 @@
             <span class="sa">f</span><span class="s2">&quot;Could not find checkpoint file with name </span><span class="si">{</span><span class="n">ckpt_path_beginning</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;checkpoint_dir&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># if the model is a subspace method, then we need to check if the checkpoint file is for the subspace model</span>
+        <span class="c1"># or the big fusion model</span>
+        <span class="c1"># TODO add this check</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Found multiple checkpoint files with name </span><span class="si">{</span><span class="n">ckpt_path_beginning</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;checkpoint_dir&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
         <span class="p">)</span>
@@ -366,9 +379,9 @@
 
 <div class="viewcode-block" id="LitProgressBar"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.training_utils.html#fusilli.utils.training_utils.LitProgressBar">[docs]</a><span class="k">class</span> <span class="nc">LitProgressBar</span><span class="p">(</span><span class="n">TQDMProgressBar</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Custom progress bar for pytorch lightning trainer. This is to </span>
+<span class="sd">    Custom progress bar for pytorch lightning trainer. This is to</span>
 <span class="sd">    disable the progress bar for validation.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    TQDMProgressBar : object</span>
@@ -415,7 +428,7 @@
 <span class="sd">        Default None to use default early stopping callback. If you want to use your own early stopping callback, then you need to</span>
 <span class="sd">        define it in the main training script and pass it here or pass into the datamodule object and then</span>
 <span class="sd">        it will read it from there.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    trainer : object</span>
@@ -476,7 +489,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    trainer : object</span>
 <span class="sd">        Pytorch lightning trainer object.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    metric1 : float</span>

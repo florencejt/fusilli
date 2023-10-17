@@ -1,6 +1,0 @@
-﻿fusilli.utils.check\_model\_validity.check\_img\_dim
-====================================================
-
-.. currentmodule:: fusilli.utils.check_model_validity
-
-.. autofunction:: check_img_dim

@@ -56,7 +56,20 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/training_and_testing/index.html">Training and testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusionmodels.html">fusilli.fusionmodels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 
         </div>
@@ -95,54 +108,69 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="c1"># list of dictionaries containing the fusion models&#39; names and paths</span>
-<span class="c1"># this must be updated whenever a new fusion model is added</span>
+<span class="c1"># this must be updated whenever a new fusion model is added</span>
 <span class="n">fusion_model_dict</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Tabular1Unimodal&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabular1_unimodal&quot;</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Tabular2Unimodal&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabular2_unimodal&quot;</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ImgUnimodal&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.img_unimodal&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Tabular1Unimodal&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.unimodal.tabular1&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Tabular2Unimodal&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.unimodal.tabular2&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ImgUnimodal&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.unimodal.image&quot;</span><span class="p">},</span>
     <span class="p">{</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ConcatTabularFeatureMaps&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.concat_tabular_feature_maps&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabularfusion.concat_feature_maps&quot;</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="p">{</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ConcatImageMapsTabularData&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.concat_img_maps_tabular_data&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabularimagefusion.concat_img_maps_tabular_data&quot;</span><span class="p">,</span>
     <span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ConcatTabularData&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.concat_tabular_data&quot;</span><span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ConcatTabularData&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabularfusion.concat_data&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
     <span class="p">{</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ConcatImageMapsTabularMaps&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.concat_img_maps_tabular_maps&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabularimagefusion.concat_img_maps_tabular_maps&quot;</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="p">{</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;TabularChannelWiseMultiAttention&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabular_channelwise_att&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabularfusion.channelwise_att&quot;</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="p">{</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ImageChannelWiseMultiAttention&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.img_tab_channelwise_att&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabularimagefusion.channelwise_att&quot;</span><span class="p">,</span>
     <span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;CrossmodalMultiheadAttention&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.crossmodal_att&quot;</span><span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;CrossmodalMultiheadAttention&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabularimagefusion.crossmodal_att&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
     <span class="p">{</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;TabularCrossmodalMultiheadAttention&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tab_crossmodal_att&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabularfusion.crossmodal_att&quot;</span><span class="p">,</span>
     <span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;TabularDecision&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabular_decision&quot;</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ImageDecision&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.img_tab_decision&quot;</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;MCVAE_tab&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.mcvae_tab&quot;</span><span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;TabularDecision&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabularfusion.decision&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ImageDecision&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabularimagefusion.decision&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;MCVAE_tab&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabularfusion.mcvae_model&quot;</span><span class="p">},</span>
     <span class="p">{</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ConcatImgLatentTabDoubleTrain&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.concat_img_latent_tab_doubletrain&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabularimagefusion.concat_img_latent_tab_doubletrain&quot;</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="p">{</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ConcatImgLatentTabDoubleLoss&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.concat_img_latent_tab_doubleloss&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabularimagefusion.concat_img_latent_tab_doubleloss&quot;</span><span class="p">,</span>
     <span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;EdgeCorrGNN&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.edge_corr_gnn&quot;</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;DAETabImgMaps&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.denoise_tab_img_maps&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;EdgeCorrGNN&quot;</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabularfusion.edge_corr_gnn&quot;</span><span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;DAETabImgMaps&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;fusion_models.tabularimagefusion.denoise_tab_img_maps&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="all_model_importer"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_chooser.all_model_importer.html#fusilli.utils.model_chooser.all_model_importer">[docs]</a><span class="k">def</span> <span class="nf">all_model_importer</span><span class="p">(</span><span class="n">fusion_model_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="all_model_importer"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_chooser.html#fusilli.utils.model_chooser.all_model_importer">[docs]</a><span class="k">def</span> <span class="nf">all_model_importer</span><span class="p">(</span><span class="n">fusion_model_dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Imports all the fusion models in the fusion_model_dict.</span>
 
@@ -173,7 +201,7 @@
     <span class="k">return</span> <span class="n">fusion_models</span></div>
 
 
-<div class="viewcode-block" id="get_models"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_chooser.get_models.html#fusilli.utils.model_chooser.get_models">[docs]</a><span class="k">def</span> <span class="nf">get_models</span><span class="p">(</span><span class="n">conditions_dict</span><span class="p">,</span> <span class="n">fusion_model_dict</span><span class="o">=</span><span class="n">fusion_model_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="get_models"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_chooser.html#fusilli.utils.model_chooser.get_models">[docs]</a><span class="k">def</span> <span class="nf">get_models</span><span class="p">(</span><span class="n">conditions_dict</span><span class="p">,</span> <span class="n">fusion_model_dict</span><span class="o">=</span><span class="n">fusion_model_dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Filters the models based on the conditions specified by the user.</span>
 
 <span class="sd">    Parameters</span>
@@ -185,7 +213,7 @@
 
 <span class="sd">        Accepted features and accepted conditions:</span>
 
-<span class="sd">        - &quot;fusion_type&quot;: &quot;Uni-modal&quot;, &quot;operation&quot;, &quot;attention&quot;, &quot;subspace&quot;, &quot;graph&quot;, or &quot;all&quot;</span>
+<span class="sd">        - &quot;fusion_type&quot;: &quot;unimodal&quot;, &quot;operation&quot;, &quot;attention&quot;, &quot;subspace&quot;, &quot;graph&quot;, or &quot;all&quot;</span>
 <span class="sd">        - &quot;modality_type&quot;: &quot;tabular1&quot;, &quot;tabular2&quot;, &quot;img&quot;, &quot;both_tab&quot;, &quot;tab_img&quot;, or &quot;all&quot;</span>
 <span class="sd">        - &quot;method_name&quot;: any method name currently implemented (e.g. &quot;Tabular decision&quot;), or &quot;all&quot;</span>
 <span class="sd">        - &quot;class_name&quot;: any model name currently implemented (e.g. &quot;TabularDecision&quot;), or &quot;all&quot;</span>
@@ -195,7 +223,7 @@
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            conditions_dict = {</span>
-<span class="sd">                &quot;fusion_type&quot;: [&quot;Uni-modal&quot;, &quot;operation&quot;],</span>
+<span class="sd">                &quot;fusion_type&quot;: [&quot;unimodal&quot;, &quot;operation&quot;],</span>
 <span class="sd">                &quot;modality_type&quot;: &quot;all&quot;,</span>
 <span class="sd">                }</span>
 
@@ -221,7 +249,7 @@
     <span class="c1"># raise error if condition is not &quot;all&quot; and feature is not one of the options</span>
     <span class="n">valid_features</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fusion_type&quot;</span><span class="p">,</span> <span class="s2">&quot;modality_type&quot;</span><span class="p">,</span> <span class="s2">&quot;method_name&quot;</span><span class="p">,</span> <span class="s2">&quot;class_name&quot;</span><span class="p">]</span>
     <span class="n">valid_fusion_types</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;Uni-modal&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;unimodal&quot;</span><span class="p">,</span>
         <span class="s2">&quot;operation&quot;</span><span class="p">,</span>
         <span class="s2">&quot;attention&quot;</span><span class="p">,</span>
         <span class="s2">&quot;subspace&quot;</span><span class="p">,</span>
@@ -325,7 +353,7 @@
     <span class="k">return</span> <span class="n">filtered_models</span></div>
 
 
-<div class="viewcode-block" id="import_chosen_fusion_models"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_chooser.import_chosen_fusion_models.html#fusilli.utils.model_chooser.import_chosen_fusion_models">[docs]</a><span class="k">def</span> <span class="nf">import_chosen_fusion_models</span><span class="p">(</span><span class="n">model_conditions</span><span class="p">):</span>
+<div class="viewcode-block" id="import_chosen_fusion_models"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_chooser.html#fusilli.utils.model_chooser.import_chosen_fusion_models">[docs]</a><span class="k">def</span> <span class="nf">import_chosen_fusion_models</span><span class="p">(</span><span class="n">model_conditions</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Imports the fusion models specified by the user.</span>
 
@@ -338,7 +366,7 @@
 
 <span class="sd">        Accepted features and accepted conditions:</span>
 
-<span class="sd">        - &quot;fusion_type&quot;: &quot;Uni-modal&quot;, &quot;operation&quot;, &quot;attention&quot;, &quot;subspace&quot;, &quot;graph&quot;, or &quot;all&quot;</span>
+<span class="sd">        - &quot;fusion_type&quot;: &quot;unimodal&quot;, &quot;operation&quot;, &quot;attention&quot;, &quot;subspace&quot;, &quot;graph&quot;, or &quot;all&quot;</span>
 <span class="sd">        - &quot;modality_type&quot;: &quot;tabular1&quot;, &quot;tabular2&quot;, &quot;img&quot;, &quot;both_tab&quot;, &quot;tab_img&quot;, or &quot;all&quot;</span>
 <span class="sd">        - &quot;method_name&quot;: any method name currently implemented (e.g. &quot;Tabular decision&quot;), or &quot;all&quot;</span>
 <span class="sd">        - &quot;class_name&quot;: any model name currently implemented (e.g. &quot;TabularDecision&quot;), or &quot;all&quot;</span>
@@ -348,7 +376,7 @@
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            conditions_dict = {</span>
-<span class="sd">                &quot;fusion_type&quot;: [&quot;Uni-modal&quot;, &quot;operation&quot;],</span>
+<span class="sd">                &quot;fusion_type&quot;: [&quot;unimodal&quot;, &quot;operation&quot;],</span>
 <span class="sd">                &quot;modality_type&quot;: &quot;all&quot;,</span>
 <span class="sd">                }</span>
 

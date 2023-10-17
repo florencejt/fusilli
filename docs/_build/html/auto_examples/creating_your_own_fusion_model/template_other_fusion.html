@@ -60,17 +60,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../training_and_testing/index.html">Training and testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../customising_behaviour/index.html">Customising behaviour</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../contributing_examples/index.html">Adding a new model</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 Public API Reference 🌸</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusionmodels.html">fusilli.fusionmodels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.train.html">fusilli.train</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 
         </div>
@@ -108,7 +108,7 @@ to download the full example code</p>
 If you want to implement a graph-based or subspace-based fusion model, please refer to the other templates. They require additional functions to be implemented.</p>
 <p>There are two ways to create your own fusion model:</p>
 <ol class="arabic simple">
-<li><p>You can use the preset layers in the <a class="reference internal" href="../../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a> class. This is the easiest way to create your own fusion model. You can see an example of this in the <a class="reference internal" href="../../autosummary/fusilli.fusion_models.concat_tabular_data.html#fusilli.fusion_models.concat_tabular_data.ConcatTabularData" title="fusilli.fusion_models.concat_tabular_data.ConcatTabularData"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularData</span></code></a> class.</p></li>
+<li><p>You can use the preset layers in the <code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code> class. This is the easiest way to create your own fusion model. You can see an example of this in the <code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularData</span></code> class.</p></li>
 <li><p>You can create your own layers. This is the most flexible way to create your own fusion model.</p></li>
 </ol>
 <p>The most important thing to remember is to output the final prediction as a list. This is because in subspace methods, the output is the label output and a reconstruction. This project’s architecture is designed to be flexible enough to handle subspace methods too, hence the need for a list.</p>

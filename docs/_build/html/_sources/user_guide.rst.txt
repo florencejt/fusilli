@@ -45,7 +45,7 @@ More info about the fusion types can be found on section :ref:`fusion_model_expl
 
     * - Fusion type
       - Description
-    * - ``Uni-modal``
+    * - ``unimodal``
       - 
     * - ``operation``
       - 

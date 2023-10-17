@@ -1,6 +1,0 @@
-﻿fusilli.data.get\_data\_module
-==============================
-
-.. currentmodule:: fusilli.data
-
-.. autofunction:: get_data_module

@@ -56,7 +56,20 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/training_and_testing/index.html">Training and testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusionmodels.html">fusilli.fusionmodels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 
         </div>
@@ -93,7 +106,7 @@
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 
 
-<div class="viewcode-block" id="modify_model_architecture"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_modifier.modify_model_architecture.html#fusilli.utils.model_modifier.modify_model_architecture">[docs]</a><span class="k">def</span> <span class="nf">modify_model_architecture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">architecture_modification</span><span class="p">):</span>
+<div class="viewcode-block" id="modify_model_architecture"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_modifier.html#fusilli.utils.model_modifier.modify_model_architecture">[docs]</a><span class="k">def</span> <span class="nf">modify_model_architecture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">architecture_modification</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Modify the architecture of a deep learning model based on the provided configuration.</span>
 
@@ -145,7 +158,7 @@
     <span class="k">return</span> <span class="n">model</span></div>
 
 
-<div class="viewcode-block" id="get_nested_attr"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_modifier.get_nested_attr.html#fusilli.utils.model_modifier.get_nested_attr">[docs]</a><span class="k">def</span> <span class="nf">get_nested_attr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr_path</span><span class="p">):</span>
+<div class="viewcode-block" id="get_nested_attr"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_modifier.html#fusilli.utils.model_modifier.get_nested_attr">[docs]</a><span class="k">def</span> <span class="nf">get_nested_attr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr_path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get a nested attribute from an object using dot-separated path.</span>
 
@@ -177,7 +190,7 @@
     <span class="k">return</span> <span class="n">attr</span></div>
 
 
-<div class="viewcode-block" id="reset_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_modifier.reset_fused_layers.html#fusilli.utils.model_modifier.reset_fused_layers">[docs]</a><span class="k">def</span> <span class="nf">reset_fused_layers</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<div class="viewcode-block" id="reset_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.model_modifier.html#fusilli.utils.model_modifier.reset_fused_layers">[docs]</a><span class="k">def</span> <span class="nf">reset_fused_layers</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reset fused layers of a model if the reset method is available.</span>
 

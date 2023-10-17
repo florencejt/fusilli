@@ -9,50 +9,65 @@ import pandas as pd
 import warnings
 
 # list of dictionaries containing the fusion models' names and paths
-# this must be updated whenever a new fusion model is added
+# this must be updated whenever a new fusion model is added
 fusion_model_dict = [
-    {"name": "Tabular1Unimodal", "path": "fusion_models.tabular1_unimodal"},
-    {"name": "Tabular2Unimodal", "path": "fusion_models.tabular2_unimodal"},
-    {"name": "ImgUnimodal", "path": "fusion_models.img_unimodal"},
+    {"name": "Tabular1Unimodal", "path": "fusionmodels.unimodal.tabular1"},
+    {"name": "Tabular2Unimodal", "path": "fusionmodels.unimodal.tabular2"},
+    {"name": "ImgUnimodal", "path": "fusionmodels.unimodal.image"},
     {
         "name": "ConcatTabularFeatureMaps",
-        "path": "fusion_models.concat_tabular_feature_maps",
+        "path": "fusionmodels.tabularfusion.concat_feature_maps",
     },
     {
         "name": "ConcatImageMapsTabularData",
-        "path": "fusion_models.concat_img_maps_tabular_data",
+        "path": "fusionmodels.tabularimagefusion.concat_img_maps_tabular_data",
     },
-    {"name": "ConcatTabularData", "path": "fusion_models.concat_tabular_data"},
+    {
+        "name": "ConcatTabularData",
+        "path": "fusionmodels.tabularfusion.concat_data",
+    },
     {
         "name": "ConcatImageMapsTabularMaps",
-        "path": "fusion_models.concat_img_maps_tabular_maps",
+        "path": "fusionmodels.tabularimagefusion.concat_img_maps_tabular_maps",
     },
     {
         "name": "TabularChannelWiseMultiAttention",
-        "path": "fusion_models.tabular_channelwise_att",
+        "path": "fusionmodels.tabularfusion.channelwise_att",
     },
     {
         "name": "ImageChannelWiseMultiAttention",
-        "path": "fusion_models.img_tab_channelwise_att",
+        "path": "fusionmodels.tabularimagefusion.channelwise_att",
     },
-    {"name": "CrossmodalMultiheadAttention", "path": "fusion_models.crossmodal_att"},
+    {
+        "name": "CrossmodalMultiheadAttention",
+        "path": "fusionmodels.tabularimagefusion.crossmodal_att",
+    },
     {
         "name": "TabularCrossmodalMultiheadAttention",
-        "path": "fusion_models.tab_crossmodal_att",
+        "path": "fusionmodels.tabularfusion.crossmodal_att",
     },
-    {"name": "TabularDecision", "path": "fusion_models.tabular_decision"},
-    {"name": "ImageDecision", "path": "fusion_models.img_tab_decision"},
-    {"name": "MCVAE_tab", "path": "fusion_models.mcvae_tab"},
+    {
+        "name": "TabularDecision",
+        "path": "fusionmodels.tabularfusion.decision",
+    },
+    {
+        "name": "ImageDecision",
+        "path": "fusionmodels.tabularimagefusion.decision",
+    },
+    {"name": "MCVAE_tab", "path": "fusionmodels.tabularfusion.mcvae_model"},
     {
         "name": "ConcatImgLatentTabDoubleTrain",
-        "path": "fusion_models.concat_img_latent_tab_doubletrain",
+        "path": "fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain",
     },
     {
         "name": "ConcatImgLatentTabDoubleLoss",
-        "path": "fusion_models.concat_img_latent_tab_doubleloss",
+        "path": "fusionmodels.tabularimagefusion.concat_img_latent_tab_doubleloss",
     },
-    {"name": "EdgeCorrGNN", "path": "fusion_models.edge_corr_gnn"},
-    {"name": "DAETabImgMaps", "path": "fusion_models.denoise_tab_img_maps"},
+    {"name": "EdgeCorrGNN", "path": "fusionmodels.tabularfusion.edge_corr_gnn"},
+    {
+        "name": "DAETabImgMaps",
+        "path": "fusionmodels.tabularimagefusion.denoise_tab_img_maps",
+    },
 ]
 
 
@@ -99,7 +114,7 @@ def get_models(conditions_dict, fusion_model_dict=fusion_model_dict):
 
         Accepted features and accepted conditions:
 
-        - "fusion_type": "Uni-modal", "operation", "attention", "subspace", "graph", or "all"
+        - "fusion_type": "unimodal", "operation", "attention", "subspace", "graph", or "all"
         - "modality_type": "tabular1", "tabular2", "img", "both_tab", "tab_img", or "all"
         - "method_name": any method name currently implemented (e.g. "Tabular decision"), or "all"
         - "class_name": any model name currently implemented (e.g. "TabularDecision"), or "all"
@@ -109,7 +124,7 @@ def get_models(conditions_dict, fusion_model_dict=fusion_model_dict):
         .. code-block:: python
 
             conditions_dict = {
-                "fusion_type": ["Uni-modal", "operation"],
+                "fusion_type": ["unimodal", "operation"],
                 "modality_type": "all",
                 }
 
@@ -128,14 +143,14 @@ def get_models(conditions_dict, fusion_model_dict=fusion_model_dict):
         - "fusion_type": type of fusion (e.g. "operation")
         - "modality_type": type of modality (e.g. "both_tab")
         - "class_name": name of the class (e.g. "TabularDecision")
-        - "method_path": path to the method's py file (e.g. "fusilli.fusion_models.tabular_decision")
+        - "method_path": path to the method's py file (e.g. "fusilli.fusionmodels.tabular_decision")
 
     """
 
     # raise error if condition is not "all" and feature is not one of the options
     valid_features = ["fusion_type", "modality_type", "method_name", "class_name"]
     valid_fusion_types = [
-        "Uni-modal",
+        "unimodal",
         "operation",
         "attention",
         "subspace",
@@ -252,7 +267,7 @@ def import_chosen_fusion_models(model_conditions):
 
         Accepted features and accepted conditions:
 
-        - "fusion_type": "Uni-modal", "operation", "attention", "subspace", "graph", or "all"
+        - "fusion_type": "unimodal", "operation", "attention", "subspace", "graph", or "all"
         - "modality_type": "tabular1", "tabular2", "img", "both_tab", "tab_img", or "all"
         - "method_name": any method name currently implemented (e.g. "Tabular decision"), or "all"
         - "class_name": any model name currently implemented (e.g. "TabularDecision"), or "all"
@@ -262,7 +277,7 @@ def import_chosen_fusion_models(model_conditions):
         .. code-block:: python
 
             conditions_dict = {
-                "fusion_type": ["Uni-modal", "operation"],
+                "fusion_type": ["unimodal", "operation"],
                 "modality_type": "all",
                 }
 

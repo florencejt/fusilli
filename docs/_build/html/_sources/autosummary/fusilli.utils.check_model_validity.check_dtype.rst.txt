@@ -1,6 +1,0 @@
-﻿fusilli.utils.check\_model\_validity.check\_dtype
-=================================================
-
-.. currentmodule:: fusilli.utils.check_model_validity
-
-.. autofunction:: check_dtype

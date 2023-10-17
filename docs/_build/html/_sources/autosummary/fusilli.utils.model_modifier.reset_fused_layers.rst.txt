@@ -1,6 +1,0 @@
-﻿fusilli.utils.model\_modifier.reset\_fused\_layers
-==================================================
-
-.. currentmodule:: fusilli.utils.model_modifier
-
-.. autofunction:: reset_fused_layers

@@ -1,6 +1,0 @@
-﻿fusilli.train.train\_and\_test
-==============================
-
-.. currentmodule:: fusilli.train
-
-.. autofunction:: train_and_test

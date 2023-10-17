@@ -62,13 +62,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/training_and_testing/index.html">Training and testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../contributing_examples/index.html">Adding a new model</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 Public API Reference 🌸</span></p>
+<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="fusilli.fusion_models.html">fusilli.fusion_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusilli.fusionmodels.html">fusilli.fusionmodels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusilli.data.html">fusilli.data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusilli.train.html">fusilli.train</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusilli.eval.html">fusilli.eval</a></li>
@@ -85,6 +81,10 @@
 <li class="toctree-l2"><a class="reference internal" href="fusilli.utils.training_utils.html">fusilli.utils.training_utils</a></li>
 </ul>
 </li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 
         </div>
@@ -153,7 +153,7 @@ Note: this must be updated whenever a new fusion model is added.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fusilli.utils.model_chooser.get_models">
-<span class="sig-name descname"><span class="pre">get_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conditions_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[{'name':</span> <span class="pre">'Tabular1Unimodal',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabular1_unimodal'},</span> <span class="pre">{'name':</span> <span class="pre">'Tabular2Unimodal',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabular2_unimodal'},</span> <span class="pre">{'name':</span> <span class="pre">'ImgUnimodal',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.img_unimodal'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatTabularFeatureMaps',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_tabular_feature_maps'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImageMapsTabularData',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_img_maps_tabular_data'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatTabularData',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_tabular_data'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImageMapsTabularMaps',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_img_maps_tabular_maps'},</span> <span class="pre">{'name':</span> <span class="pre">'TabularChannelWiseMultiAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabular_channelwise_att'},</span> <span class="pre">{'name':</span> <span class="pre">'ImageChannelWiseMultiAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.img_tab_channelwise_att'},</span> <span class="pre">{'name':</span> <span class="pre">'CrossmodalMultiheadAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.crossmodal_att'},</span> <span class="pre">{'name':</span> <span class="pre">'TabularCrossmodalMultiheadAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tab_crossmodal_att'},</span> <span class="pre">{'name':</span> <span class="pre">'TabularDecision',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabular_decision'},</span> <span class="pre">{'name':</span> <span class="pre">'ImageDecision',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.img_tab_decision'},</span> <span class="pre">{'name':</span> <span class="pre">'MCVAE_tab',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.mcvae_tab'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImgLatentTabDoubleTrain',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_img_latent_tab_doubletrain'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImgLatentTabDoubleLoss',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.concat_img_latent_tab_doubleloss'},</span> <span class="pre">{'name':</span> <span class="pre">'EdgeCorrGNN',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.edge_corr_gnn'},</span> <span class="pre">{'name':</span> <span class="pre">'DAETabImgMaps',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.denoise_tab_img_maps'}]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/model_chooser.html#get_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.model_chooser.get_models" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conditions_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion_model_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[{'name':</span> <span class="pre">'Tabular1Unimodal',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.unimodal.tabular1'},</span> <span class="pre">{'name':</span> <span class="pre">'Tabular2Unimodal',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.unimodal.tabular2'},</span> <span class="pre">{'name':</span> <span class="pre">'ImgUnimodal',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.unimodal.image'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatTabularFeatureMaps',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabularfusion.concat_feature_maps'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImageMapsTabularData',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabularimagefusion.concat_img_maps_tabular_data'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatTabularData',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabularfusion.concat_data'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImageMapsTabularMaps',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabularimagefusion.concat_img_maps_tabular_maps'},</span> <span class="pre">{'name':</span> <span class="pre">'TabularChannelWiseMultiAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabularfusion.channelwise_att'},</span> <span class="pre">{'name':</span> <span class="pre">'ImageChannelWiseMultiAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabularimagefusion.channelwise_att'},</span> <span class="pre">{'name':</span> <span class="pre">'CrossmodalMultiheadAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabularimagefusion.crossmodal_att'},</span> <span class="pre">{'name':</span> <span class="pre">'TabularCrossmodalMultiheadAttention',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabularfusion.crossmodal_att'},</span> <span class="pre">{'name':</span> <span class="pre">'TabularDecision',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabularfusion.decision'},</span> <span class="pre">{'name':</span> <span class="pre">'ImageDecision',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabularimagefusion.decision'},</span> <span class="pre">{'name':</span> <span class="pre">'MCVAE_tab',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabularfusion.mcvae_model'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImgLatentTabDoubleTrain',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabularimagefusion.concat_img_latent_tab_doubletrain'},</span> <span class="pre">{'name':</span> <span class="pre">'ConcatImgLatentTabDoubleLoss',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabularimagefusion.concat_img_latent_tab_doubleloss'},</span> <span class="pre">{'name':</span> <span class="pre">'EdgeCorrGNN',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabularfusion.edge_corr_gnn'},</span> <span class="pre">{'name':</span> <span class="pre">'DAETabImgMaps',</span> <span class="pre">'path':</span> <span class="pre">'fusion_models.tabularimagefusion.denoise_tab_img_maps'}]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/model_chooser.html#get_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.model_chooser.get_models" title="Permalink to this definition"></a></dt>
 <dd><p>Filters the models based on the conditions specified by the user.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -163,14 +163,14 @@ Structure: {feature1: condition, feature2: condition, …}
 or {feature1: [condition1, condition2, …], feature2: [condition1, …], …}</p>
 <p>Accepted features and accepted conditions:</p>
 <ul>
-<li><p>”fusion_type”: “Uni-modal”, “operation”, “attention”, “subspace”, “graph”, or “all”</p></li>
+<li><p>”fusion_type”: “unimodal”, “operation”, “attention”, “subspace”, “graph”, or “all”</p></li>
 <li><p>”modality_type”: “tabular1”, “tabular2”, “img”, “both_tab”, “tab_img”, or “all”</p></li>
 <li><p>”method_name”: any method name currently implemented (e.g. “Tabular decision”), or “all”</p></li>
 <li><p>”class_name”: any model name currently implemented (e.g. “TabularDecision”), or “all”</p></li>
 </ul>
 <p>Example: To get all the models that are uni-modal and attention-based, the dictionary would be:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">conditions_dict</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;fusion_type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Uni-modal&quot;</span><span class="p">,</span> <span class="s2">&quot;operation&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;fusion_type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;unimodal&quot;</span><span class="p">,</span> <span class="s2">&quot;operation&quot;</span><span class="p">],</span>
     <span class="s2">&quot;modality_type&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
     <span class="p">}</span>
 </pre></div>
@@ -208,14 +208,14 @@ Structure: {feature1: condition, feature2: condition, …}
 or {feature1: [condition1, condition2, …], feature2: [condition1, …], …}</p>
 <p>Accepted features and accepted conditions:</p>
 <ul class="simple">
-<li><p>”fusion_type”: “Uni-modal”, “operation”, “attention”, “subspace”, “graph”, or “all”</p></li>
+<li><p>”fusion_type”: “unimodal”, “operation”, “attention”, “subspace”, “graph”, or “all”</p></li>
 <li><p>”modality_type”: “tabular1”, “tabular2”, “img”, “both_tab”, “tab_img”, or “all”</p></li>
 <li><p>”method_name”: any method name currently implemented (e.g. “Tabular decision”), or “all”</p></li>
 <li><p>”class_name”: any model name currently implemented (e.g. “TabularDecision”), or “all”</p></li>
 </ul>
 <p>Example: To get all the models that are uni-modal and attention-based, the dictionary would be:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">conditions_dict</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;fusion_type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Uni-modal&quot;</span><span class="p">,</span> <span class="s2">&quot;operation&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;fusion_type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;unimodal&quot;</span><span class="p">,</span> <span class="s2">&quot;operation&quot;</span><span class="p">],</span>
     <span class="s2">&quot;modality_type&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
     <span class="p">}</span>
 </pre></div>

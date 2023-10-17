@@ -1,6 +1,0 @@
-﻿fusilli.utils.model\_chooser.import\_chosen\_fusion\_models
-===========================================================
-
-.. currentmodule:: fusilli.utils.model_chooser
-
-.. autofunction:: import_chosen_fusion_models

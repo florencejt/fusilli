@@ -1,6 +1,10 @@
 import pytest
 from unittest.mock import patch, MagicMock, Mock
-from fusilli.utils.model_chooser import import_chosen_fusion_models, get_models, all_model_importer
+from fusilli.utils.model_chooser import (
+    import_chosen_fusion_models,
+    get_models,
+    all_model_importer,
+)
 
 fusion_model_dict = [
     {
@@ -32,7 +36,7 @@ def test_import_all_model_importer(mock_import_module):
     mock_module1.Model1 = Mock(
         modality_type="tabular1",
         __name__="Model1",
-        fusion_type="Uni-modal",
+        fusion_type="unimodal",
     )
 
     mock_module2 = Mock()
@@ -79,7 +83,7 @@ def test_get_models(mock_import_module):
     mock_module1.Model1 = Mock(
         modality_type="tabular1",
         __name__="Model1",
-        fusion_type="Uni-modal",
+        fusion_type="unimodal",
     )
 
     mock_module2 = Mock()

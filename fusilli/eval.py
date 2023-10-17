@@ -21,7 +21,7 @@ from sklearn.metrics import confusion_matrix
 from torch.utils.data import ConcatDataset, DataLoader
 
 import fusilli.data as data
-from fusilli.fusion_models.base_model import BaseModel
+from fusilli.fusionmodels.base_model import BaseModel
 from fusilli.utils.training_utils import (
     get_checkpoint_filename_for_trained_fusion_model,
 )

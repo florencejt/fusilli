@@ -31,7 +31,7 @@ from fusilli.train import train_and_save_models
 # Instead of using the :func:`~fusilli.utils.model_chooser.import_chosen_fusion_models` function, we're importing the model directly like with any other library method.
 
 
-from fusilli.fusion_models.tab_crossmodal_att import (
+from fusilli.fusionmodels.tabularfusion.crossmodal_att import (
     TabularCrossmodalMultiheadAttention,
 )
 

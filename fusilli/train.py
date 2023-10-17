@@ -2,7 +2,7 @@
 Contains the train_and_test function: trains and tests a model and, if k_fold trained, a fold.
 """
 
-from fusilli.fusion_models.base_model import BaseModel
+from fusilli.fusionmodels.base_model import BaseModel
 from fusilli.utils.training_utils import (
     get_final_val_metrics,
     init_trainer,
@@ -32,7 +32,7 @@ def train_and_test(
     Parameters
     ----------
     data_module : pytorch lightning data module
-        Data module. 
+        Data module.
         Contains the train and val dataloaders.
     params : dict
         Dictionary of parameters.
@@ -80,11 +80,13 @@ def train_and_test(
     if params["kfold_flag"]:
         if enable_checkpointing:
             checkpoint_filename = set_checkpoint_name(
-                params, fusion_model, fold=k, extra_log_string_dict=extra_log_string_dict
+                params,
+                fusion_model,
+                fold=k,
+                extra_log_string_dict=extra_log_string_dict,
             )
         else:
             checkpoint_filename = None
-
 
         if fusion_model.fusion_type == "graph":
             data_module = data_module[k]
@@ -121,9 +123,7 @@ def train_and_test(
     # initialise model with pytorch lightning framework, hence pl_model
     pl_model = BaseModel(
         fusion_model(
-            pred_type=params[
-                "pred_type"
-            ],  
+            pred_type=params["pred_type"],
             data_dims=data_module.data_dims,  # data_dims is a list of tuples
             params=params,  # params is a dict
         )
@@ -186,7 +186,6 @@ def store_trained_model(trained_model, trained_models_dict):
 
     # if model is already in dictionary, we're training a kfold model
     if classname in trained_models_dict:
-
         # if the model is already a list, append the new model to the list
         # this is for when we're training a kfold model and on the third fold onwards
         if isinstance(trained_models_dict[classname], list):
@@ -200,7 +199,7 @@ def store_trained_model(trained_model, trained_models_dict):
             ]
     else:
         # If the model is not in the dictionary, add it as a new key-value pair
-        # This is for when we're training a single model with train/test split or 
+        # This is for when we're training a single model with train/test split or
         # when we're training a kfold model and on the first fold
         trained_models_dict[classname] = [trained_model]
 

@@ -42,7 +42,7 @@ Have fun creating your own fusion model!
     import torch
 
     # importing the parent fusion model class
-    from fusilli.fusion_models.base_model import ParentFusionModel
+    from fusilli.fusionmodels.base_model import ParentFusionModel
 
 
     class TemplateFusionModel(ParentFusionModel, nn.Module):

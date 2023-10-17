@@ -1,6 +1,0 @@
-﻿fusilli.utils.training\_utils.get\_checkpoint\_filenames\_for\_subspace\_models
-===============================================================================
-
-.. currentmodule:: fusilli.utils.training_utils
-
-.. autofunction:: get_checkpoint_filenames_for_subspace_models

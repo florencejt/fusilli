@@ -25,7 +25,6 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="fusilli.fusion_models" href="../autosummary/fusilli.fusion_models.html" />
     <link rel="prev" title="Graph fusion template" href="template_graph_fusion.html" /> 
 </head>
 
@@ -62,6 +61,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/training_and_testing/index.html">Training and testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.fusionmodels.html">fusilli.fusionmodels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.html">fusilli.utils</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Adding a new model</a><ul class="current">
@@ -70,14 +77,6 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">General fusion template</a></li>
 </ul>
 </li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 Public API Reference 🌸</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.fusion_models.html">fusilli.fusion_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.data.html">fusilli.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.train.html">fusilli.train</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.eval.html">fusilli.eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../autosummary/fusilli.utils.html">fusilli.utils</a></li>
 </ul>
 
         </div>
@@ -116,7 +115,7 @@ to download the full example code</p>
 If you want to implement a graph-based or subspace-based fusion model, please refer to the other templates. They require additional functions to be implemented.</p>
 <p>There are two ways to create your own fusion model:</p>
 <ol class="arabic simple">
-<li><p>You can use the preset layers in the <a class="reference internal" href="../autosummary/fusilli.fusion_models.base_model.html#fusilli.fusion_models.base_model.ParentFusionModel" title="fusilli.fusion_models.base_model.ParentFusionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code></a> class. This is the easiest way to create your own fusion model. You can see an example of this in the <a class="reference internal" href="../autosummary/fusilli.fusion_models.concat_tabular_data.html#fusilli.fusion_models.concat_tabular_data.ConcatTabularData" title="fusilli.fusion_models.concat_tabular_data.ConcatTabularData"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularData</span></code></a> class.</p></li>
+<li><p>You can use the preset layers in the <code class="xref py py-class docutils literal notranslate"><span class="pre">ParentFusionModel</span></code> class. This is the easiest way to create your own fusion model. You can see an example of this in the <code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularData</span></code> class.</p></li>
 <li><p>You can create your own layers. This is the most flexible way to create your own fusion model.</p></li>
 </ol>
 <p>The most important thing to remember is to output the final prediction as a list. This is because in subspace methods, the output is the label output and a reconstruction. This project’s architecture is designed to be flexible enough to handle subspace methods too, hence the need for a list.</p>
@@ -125,7 +124,7 @@ If you want to implement a graph-based or subspace-based fusion model, please re
 <span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="c1"># importing the parent fusion model class</span>
-<span class="kn">from</span> <span class="nn">fusilli.fusion_models.base_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
+<span class="kn">from</span> <span class="nn">fusilli.fusionmodels.base_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
 
 
 <span class="k">class</span> <span class="nc">TemplateFusionModel</span><span class="p">(</span><span class="n">ParentFusionModel</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -293,7 +292,6 @@ If you want to implement a graph-based or subspace-based fusion model, please re
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="template_graph_fusion.html" class="btn btn-neutral float-left" title="Graph fusion template" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../autosummary/fusilli.fusion_models.html" class="btn btn-neutral float-right" title="fusilli.fusion_models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

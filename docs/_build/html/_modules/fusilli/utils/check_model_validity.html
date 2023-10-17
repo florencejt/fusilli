@@ -56,7 +56,20 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/training_and_testing/index.html">Training and testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.fusionmodels.html">fusilli.fusionmodels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 
         </div>
@@ -93,7 +106,7 @@
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 
 
-<div class="viewcode-block" id="check_dtype"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.check_model_validity.check_dtype.html#fusilli.utils.check_model_validity.check_dtype">[docs]</a><span class="k">def</span> <span class="nf">check_dtype</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">correct_dtype</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">):</span>
+<div class="viewcode-block" id="check_dtype"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_dtype">[docs]</a><span class="k">def</span> <span class="nf">check_dtype</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">correct_dtype</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Check if the modification is of the correct data type.</span>
 
 <span class="sd">    Parameters</span>
@@ -123,7 +136,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="check_img_dim"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.check_model_validity.check_img_dim.html#fusilli.utils.check_model_validity.check_img_dim">[docs]</a><span class="k">def</span> <span class="nf">check_img_dim</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">img_dim</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">):</span>
+<div class="viewcode-block" id="check_img_dim"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_img_dim">[docs]</a><span class="k">def</span> <span class="nf">check_img_dim</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">img_dim</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Check if the modification img layers are the correct dimension.</span>
 
 <span class="sd">    Parameters</span>
@@ -182,7 +195,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="check_var_is_function"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.check_model_validity.check_var_is_function.html#fusilli.utils.check_model_validity.check_var_is_function">[docs]</a><span class="k">def</span> <span class="nf">check_var_is_function</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">):</span>
+<div class="viewcode-block" id="check_var_is_function"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_var_is_function">[docs]</a><span class="k">def</span> <span class="nf">check_var_is_function</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Check if the modification is a function.</span>
 
 <span class="sd">    Parameters</span>
@@ -207,7 +220,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="check_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.check_model_validity.check_fused_layers.html#fusilli.utils.check_model_validity.check_fused_layers">[docs]</a><span class="k">def</span> <span class="nf">check_fused_layers</span><span class="p">(</span><span class="n">fused_layers</span><span class="p">,</span> <span class="n">fused_dim</span><span class="p">):</span>
+<div class="viewcode-block" id="check_fused_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_fused_layers">[docs]</a><span class="k">def</span> <span class="nf">check_fused_layers</span><span class="p">(</span><span class="n">fused_layers</span><span class="p">,</span> <span class="n">fused_dim</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check that the fused layers within the fusion model (meaning the layers that take place</span>
 <span class="sd">    after the fusion) are of the correct data type (nn.Sequential) and that the first layer</span>

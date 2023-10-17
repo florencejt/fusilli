@@ -1,6 +1,0 @@
-﻿fusilli.utils.model\_chooser.get\_models
-========================================
-
-.. currentmodule:: fusilli.utils.model_chooser
-
-.. autofunction:: get_models

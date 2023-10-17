@@ -1,6 +1,0 @@
-﻿fusilli.utils.training\_utils.get\_checkpoint\_filename\_for\_trained\_fusion\_model
-====================================================================================
-
-.. currentmodule:: fusilli.utils.training_utils
-
-.. autofunction:: get_checkpoint_filename_for_trained_fusion_model

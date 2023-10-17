@@ -56,7 +56,20 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Tutorials and Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/training_and_testing/index.html">Training and testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusionmodels.html">fusilli.fusionmodels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 
         </div>
@@ -88,7 +101,7 @@
 <span class="sd">Contains the train_and_test function: trains and tests a model and, if k_fold trained, a fold.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">fusilli.fusion_models.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span> <span class="nn">fusilli.fusionmodels.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 <span class="kn">from</span> <span class="nn">fusilli.utils.training_utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">get_final_val_metrics</span><span class="p">,</span>
     <span class="n">init_trainer</span><span class="p">,</span>
@@ -101,7 +114,7 @@
 <span class="kn">from</span> <span class="nn">fusilli.utils.csv_loss_plotter</span> <span class="kn">import</span> <span class="n">plot_loss_curve</span>
 
 
-<div class="viewcode-block" id="train_and_test"><a class="viewcode-back" href="../../autosummary/fusilli.train.train_and_test.html#fusilli.train.train_and_test">[docs]</a><span class="k">def</span> <span class="nf">train_and_test</span><span class="p">(</span>
+<div class="viewcode-block" id="train_and_test"><a class="viewcode-back" href="../../autosummary/fusilli.train.html#fusilli.train.train_and_test">[docs]</a><span class="k">def</span> <span class="nf">train_and_test</span><span class="p">(</span>
     <span class="n">data_module</span><span class="p">,</span>
     <span class="n">params</span><span class="p">,</span>
     <span class="n">k</span><span class="p">,</span>
@@ -118,7 +131,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    data_module : pytorch lightning data module</span>
-<span class="sd">        Data module. </span>
+<span class="sd">        Data module.</span>
 <span class="sd">        Contains the train and val dataloaders.</span>
 <span class="sd">    params : dict</span>
 <span class="sd">        Dictionary of parameters.</span>
@@ -166,11 +179,13 @@
     <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;kfold_flag&quot;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">enable_checkpointing</span><span class="p">:</span>
             <span class="n">checkpoint_filename</span> <span class="o">=</span> <span class="n">set_checkpoint_name</span><span class="p">(</span>
-                <span class="n">params</span><span class="p">,</span> <span class="n">fusion_model</span><span class="p">,</span> <span class="n">fold</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span>
+                <span class="n">params</span><span class="p">,</span>
+                <span class="n">fusion_model</span><span class="p">,</span>
+                <span class="n">fold</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+                <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="n">extra_log_string_dict</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">checkpoint_filename</span> <span class="o">=</span> <span class="kc">None</span>
-
 
         <span class="k">if</span> <span class="n">fusion_model</span><span class="o">.</span><span class="n">fusion_type</span> <span class="o">==</span> <span class="s2">&quot;graph&quot;</span><span class="p">:</span>
             <span class="n">data_module</span> <span class="o">=</span> <span class="n">data_module</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
@@ -207,9 +222,7 @@
     <span class="c1"># initialise model with pytorch lightning framework, hence pl_model</span>
     <span class="n">pl_model</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="p">(</span>
         <span class="n">fusion_model</span><span class="p">(</span>
-            <span class="n">pred_type</span><span class="o">=</span><span class="n">params</span><span class="p">[</span>
-                <span class="s2">&quot;pred_type&quot;</span>
-            <span class="p">],</span>  
+            <span class="n">pred_type</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;pred_type&quot;</span><span class="p">],</span>
             <span class="n">data_dims</span><span class="o">=</span><span class="n">data_module</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span>  <span class="c1"># data_dims is a list of tuples</span>
             <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>  <span class="c1"># params is a dict</span>
         <span class="p">)</span>
@@ -248,7 +261,7 @@
     <span class="k">return</span> <span class="n">pl_model</span></div>
 
 
-<div class="viewcode-block" id="store_trained_model"><a class="viewcode-back" href="../../autosummary/fusilli.train.store_trained_model.html#fusilli.train.store_trained_model">[docs]</a><span class="k">def</span> <span class="nf">store_trained_model</span><span class="p">(</span><span class="n">trained_model</span><span class="p">,</span> <span class="n">trained_models_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="store_trained_model"><a class="viewcode-back" href="../../autosummary/fusilli.train.html#fusilli.train.store_trained_model">[docs]</a><span class="k">def</span> <span class="nf">store_trained_model</span><span class="p">(</span><span class="n">trained_model</span><span class="p">,</span> <span class="n">trained_models_dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Stores the trained model to a dictionary.</span>
 <span class="sd">    If model type is already in dictionary (e.g. if it&#39;s a kfold model), append the model to</span>
@@ -272,7 +285,6 @@
 
     <span class="c1"># if model is already in dictionary, we&#39;re training a kfold model</span>
     <span class="k">if</span> <span class="n">classname</span> <span class="ow">in</span> <span class="n">trained_models_dict</span><span class="p">:</span>
-
         <span class="c1"># if the model is already a list, append the new model to the list</span>
         <span class="c1"># this is for when we&#39;re training a kfold model and on the third fold onwards</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">trained_models_dict</span><span class="p">[</span><span class="n">classname</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
@@ -286,14 +298,14 @@
             <span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># If the model is not in the dictionary, add it as a new key-value pair</span>
-        <span class="c1"># This is for when we&#39;re training a single model with train/test split or </span>
+        <span class="c1"># This is for when we&#39;re training a single model with train/test split or</span>
         <span class="c1"># when we&#39;re training a kfold model and on the first fold</span>
         <span class="n">trained_models_dict</span><span class="p">[</span><span class="n">classname</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">trained_model</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">trained_models_dict</span></div>
 
 
-<div class="viewcode-block" id="train_and_save_models"><a class="viewcode-back" href="../../autosummary/fusilli.train.train_and_save_models.html#fusilli.train.train_and_save_models">[docs]</a><span class="k">def</span> <span class="nf">train_and_save_models</span><span class="p">(</span>
+<div class="viewcode-block" id="train_and_save_models"><a class="viewcode-back" href="../../autosummary/fusilli.train.html#fusilli.train.train_and_save_models">[docs]</a><span class="k">def</span> <span class="nf">train_and_save_models</span><span class="p">(</span>
     <span class="n">data_module</span><span class="p">,</span>
     <span class="n">params</span><span class="p">,</span>
     <span class="n">fusion_model</span><span class="p">,</span>
