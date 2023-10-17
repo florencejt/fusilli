@@ -125,8 +125,8 @@ def test_get_checkpoint_filenames_for_subspace_models_with_fold():
     )
 
     expected_filenames = [
-        "SomeFusionModelClass_SubspaceModel1_fold_3",
-        "SomeFusionModelClass_SubspaceModel2_fold_3",
+        "subspace_SomeFusionModelClass_SubspaceModel1_fold_3",
+        "subspace_SomeFusionModelClass_SubspaceModel2_fold_3",
     ]
 
     assert checkpoint_filenames == expected_filenames
@@ -160,8 +160,8 @@ def test_get_checkpoint_filenames_for_subspace_models_without_fold():
     )
 
     expected_filenames = [
-        "SomeFusionModelClass_SubspaceModel1_key_value",
-        "SomeFusionModelClass_SubspaceModel2_key_value",
+        "subspace_SomeFusionModelClass_SubspaceModel1_key_value",
+        "subspace_SomeFusionModelClass_SubspaceModel2_key_value",
     ]
 
     assert checkpoint_filenames == expected_filenames
