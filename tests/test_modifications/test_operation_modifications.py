@@ -725,7 +725,6 @@ def test_wrong_img_dim_2D_modify_model_architecture_data(
         # using correct 3D modifications, which are incorrect for 2D images
         listed_dict = correct_modifications_3D[model_name]
         new_dict = {model_name: listed_dict}
-        print(new_dict)
 
         # only test whether the error is raised if we are actually modifying the conv layers
         conv_layer_found = any(

@@ -197,6 +197,7 @@
 <span class="sd">            List containing the output of the model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x_tab1</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x_tab1_shape&quot;</span><span class="p">,</span> <span class="n">x_tab1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">x_tab1</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">x_tab1</span><span class="p">)</span>
@@ -204,6 +205,8 @@
         <span class="n">out_fuse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fused_layers</span><span class="p">(</span><span class="n">x_tab1</span><span class="p">)</span>
 
         <span class="n">out_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_prediction</span><span class="p">(</span><span class="n">out_fuse</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;out_pred_shape&quot;</span><span class="p">,</span> <span class="n">out_pred</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">out_pred</span><span class="p">,</span>

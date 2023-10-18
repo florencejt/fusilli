@@ -306,8 +306,10 @@
                 <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Batch size is not 2 (preds and labels) or 3 (2 pred data types and labels)</span><span class="se">\</span>
-<span class="s2">                    modalities long&quot;</span>
+                    <span class="p">(</span>
+                        <span class="s2">&quot;Batch size is not 2 (preds and labels) or 3 (2 pred data types and labels) &quot;</span>
+                        <span class="s2">&quot;modalities long&quot;</span>
+                    <span class="p">)</span>
                 <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></div>
@@ -349,6 +351,8 @@
 <span class="sd">            Input data.</span>
 <span class="sd">        y : tensor</span>
 <span class="sd">            Labels.</span>
+<span class="sd">        train : bool</span>
+<span class="sd">            Whether the data is training data.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
