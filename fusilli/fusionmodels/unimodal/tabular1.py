@@ -96,6 +96,7 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
             List containing the output of the model.
         """
         x_tab1 = x
+        print("x_tab1_shape", x_tab1.shape)
 
         for layer in self.mod1_layers.values():
             x_tab1 = layer(x_tab1)
@@ -103,6 +104,8 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
         out_fuse = self.fused_layers(x_tab1)
 
         out_pred = self.final_prediction(out_fuse)
+
+        print("out_pred_shape", out_pred.shape)
 
         return [
             out_pred,

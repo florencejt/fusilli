@@ -205,8 +205,10 @@ class BaseModel(pl.LightningModule):
                 x = (x1, x2)
             else:
                 raise ValueError(
-                    "Batch size is not 2 (preds and labels) or 3 (2 pred data types and labels)\
-                    modalities long"
+                    (
+                        "Batch size is not 2 (preds and labels) or 3 (2 pred data types and labels) "
+                        "modalities long"
+                    )
                 )
 
         return x, y
@@ -248,6 +250,8 @@ class BaseModel(pl.LightningModule):
             Input data.
         y : tensor
             Labels.
+        train : bool
+            Whether the data is training data.
 
         Returns
         -------
