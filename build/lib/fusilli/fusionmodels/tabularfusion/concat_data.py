@@ -5,7 +5,6 @@ Concatenating the two tabular modalities at the data-level (early fusion)
 from fusilli.fusionmodels.base_model import ParentFusionModel
 from fusilli.utils import check_model_validity
 
-
 import torch
 import torch.nn as nn
 
@@ -43,7 +42,7 @@ class ConcatTabularData(ParentFusionModel, nn.Module):
         ----------
         pred_type : str
             Type of prediction to be performed.
-        data_dims : dict
+        data_dims : list
             Dictionary containing the dimensions of the data.
         params : dict
             Dictionary containing the parameters of the model.
@@ -92,14 +91,18 @@ class ConcatTabularData(ParentFusionModel, nn.Module):
 
         Parameters
         ----------
-        x : list
-            List containing the data of the two modalities.
+        x : tuple
+            Tuple containing the data of the two modalities.
 
         Returns
         -------
         list
             List containing the output of the model.
         """
+
+        # ~~ Checks ~~
+        check_model_validity.check_model_input(x)
+
         x_fuse = torch.cat(x, -1)
 
         out_fuse = self.fused_layers(x_fuse)

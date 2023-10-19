@@ -72,6 +72,8 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">fusilli.eval</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#fusilli.eval.ConfusionMatrix"><code class="docutils literal notranslate"><span class="pre">ConfusionMatrix</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ConfusionMatrix.__init__"><code class="docutils literal notranslate"><span class="pre">ConfusionMatrix.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ConfusionMatrix.confusion_matrix_kfold"><code class="docutils literal notranslate"><span class="pre">ConfusionMatrix.confusion_matrix_kfold()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ConfusionMatrix.confusion_matrix_tt"><code class="docutils literal notranslate"><span class="pre">ConfusionMatrix.confusion_matrix_tt()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ConfusionMatrix.from_final_val_data"><code class="docutils literal notranslate"><span class="pre">ConfusionMatrix.from_final_val_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.ConfusionMatrix.from_new_data"><code class="docutils literal notranslate"><span class="pre">ConfusionMatrix.from_new_data()</span></code></a></li>
 </ul>
@@ -93,7 +95,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#fusilli.eval.RealsVsPreds"><code class="docutils literal notranslate"><span class="pre">RealsVsPreds</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.RealsVsPreds.None"><code class="docutils literal notranslate"><span class="pre">RealsVsPreds.None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.RealsVsPreds.__init__"><code class="docutils literal notranslate"><span class="pre">RealsVsPreds.__init__()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.RealsVsPreds.from_final_val_data"><code class="docutils literal notranslate"><span class="pre">RealsVsPreds.from_final_val_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.eval.RealsVsPreds.from_new_data"><code class="docutils literal notranslate"><span class="pre">RealsVsPreds.from_new_data()</span></code></a></li>
@@ -138,8 +139,8 @@
 <span id="fusilli-eval"></span><h1>fusilli.eval<a class="headerlink" href="#module-fusilli.eval" title="Permalink to this heading"></a></h1>
 <p>This module contains classes and functions for evaluating trained models (i.e. plotting results from training).
 The setup for this module has been inspired by the scikit-learn API for plotting results, which involves each plot
-being a class with a <code class="docutils literal notranslate"><span class="pre">from_model</span></code> method that takes in a trained model and returns a plot with the validation data, and a <code class="docutils literal notranslate"><span class="pre">from_new_data</span></code>
-method that takes in a trained model and new data and returns a plot.</p>
+being a class with a <code class="docutils literal notranslate"><span class="pre">from_model</span></code> method that takes in a trained model and returns a plot with the validation data,
+and a <code class="docutils literal notranslate"><span class="pre">from_new_data</span></code> method that takes in a trained model and new data and returns a plot.</p>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
@@ -168,6 +169,58 @@ if using from_final_val_data.</p>
 <dt class="sig sig-object py" id="fusilli.eval.ConfusionMatrix.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ConfusionMatrix.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ConfusionMatrix.__init__" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.eval.ConfusionMatrix.confusion_matrix_kfold">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">confusion_matrix_kfold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_reals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_per_fold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overall_kfold_metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ConfusionMatrix.confusion_matrix_kfold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ConfusionMatrix.confusion_matrix_kfold" title="Permalink to this definition"></a></dt>
+<dd><p>Confusion matrix for a kfold model. This function should be called within the ConfusionMatrix class
+after the k-fold data has been obtained from the model (either old data or new data).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_list</strong> (<em>list</em>) – List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first
+element is the k=1 model and the second element is the k=2 model, etc.</p></li>
+<li><p><strong>val_reals</strong> (<em>list</em>) – List of torch.Tensors of the real values for the new data set for each fold.</p></li>
+<li><p><strong>val_preds</strong> (<em>list</em>) – List of torch.Tensors of the predicted values for the new data set for each fold.</p></li>
+<li><p><strong>metrics_per_fold</strong> (<em>dict</em>) – Dictionary of the metrics for each fold.
+The keys are the names of the metrics and the values are lists of the metric values for each fold.</p></li>
+<li><p><strong>overall_kfold_metrics</strong> (<em>dict</em>) – Dictionary of the overall kfold metrics.
+The keys are the names of the metrics and the values are the metric values for the overall kfold,
+meaning the metric values for the concatenated new data over all the folds.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fig</strong> – The figure of the plot.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.pyplot.figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.eval.ConfusionMatrix.confusion_matrix_tt">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">confusion_matrix_tt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_reals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_preds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#ConfusionMatrix.confusion_matrix_tt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.ConfusionMatrix.confusion_matrix_tt" title="Permalink to this definition"></a></dt>
+<dd><p>Confusion matrix for a train/test model. This function should be called within the ConfusionMatrix class
+after the train/test data has been obtained from the model (either old data or new data).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_list</strong> (<em>list</em>) – A list of length 1 containing the trained pytorch_lightning model.</p></li>
+<li><p><strong>val_reals</strong> (<em>torch.Tensor</em>) – Torch.Tensor of the real values for the new data set.</p></li>
+<li><p><strong>val_preds</strong> (<em>torch.Tensor</em>) – Torch.Tensor of the predicted values for the new data set.</p></li>
+<li><p><strong>metric_values</strong> (<em>dict</em>) – Dictionary of the metrics for the model.
+The keys are the names of the metrics and the values are the metric values for the model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fig</strong> – The figure of the plot.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.pyplot.figure</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fusilli.eval.ConfusionMatrix.from_final_val_data">
@@ -202,8 +255,8 @@ For train/test models, this is a list of length 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model_list</strong> (<em>list</em>) – List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first
-element is the k=1 model and the second element is the k=2 model, etc.
+<li><p><strong>model_list</strong> (<em>list</em>) – List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2,
+where the first element is the k=1 model and the second element is the k=2 model, etc.
 For train/test models, this is a list of length 1.</p></li>
 <li><p><strong>params</strong> (<em>dict</em>) – Additional parameters. Used for knowing where the checkpoint files are stored and
 creating the pytorch lightning data_module for the new data.</p></li>
@@ -347,8 +400,8 @@ models for both kfold and train/test protocols.</p>
 when the model training was complete.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>model_list</strong> (<em>list</em>) – List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first
-element is the k=1 model and the second element is the k=2 model, etc.</p>
+<dd class="field-odd"><p><strong>model_list</strong> (<em>list</em>) – List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2,
+where the first element is the k=1 model and the second element is the k=2 model, etc.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
@@ -378,8 +431,8 @@ meaning the metric values for the concatenated final validation data over all th
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model_list</strong> (<em>list</em>) – List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first
-element is the k=1 model and the second element is the k=2 model, etc.</p></li>
+<li><p><strong>model_list</strong> (<em>list</em>) – List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2,
+where the first element is the k=1 model and the second element is the k=2 model, etc.</p></li>
 <li><p><strong>params</strong> (<em>dict</em>) – Additional parameters. Used for knowing where the checkpoint files are stored and
 creating the pytorch lightning data_module for the new data.</p></li>
 <li><p><strong>data_file_suffix</strong> (<em>str</em>) – Suffix that is on the new data csv and pt files. e.g. “_new_data” or “_test”</p></li>
@@ -480,11 +533,6 @@ The keys are the names of the metrics and the values are the metric values for t
 <p>Plots the real values vs the predicted values for a model.
 Pink dots are the training data, green dots are the validation data. The validation data is
 either new data if using from_new_data or the original validation data if using from_final_val_data.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusilli.eval.RealsVsPreds.None">
-<span class="sig-name descname"><span class="pre">None</span></span><a class="headerlink" href="#fusilli.eval.RealsVsPreds.None" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="fusilli.eval.RealsVsPreds.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/eval.html#RealsVsPreds.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.eval.RealsVsPreds.__init__" title="Permalink to this definition"></a></dt>
@@ -523,8 +571,8 @@ For train/test models, this is a list of length 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model_list</strong> (<em>list</em>) – List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2, where the first
-element is the k=1 model and the second element is the k=2 model, etc.
+<li><p><strong>model_list</strong> (<em>list</em>) – List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2,
+where the first element is the k=1 model and the second element is the k=2 model, etc.
 For train/test models, this is a list of length 1.</p></li>
 <li><p><strong>params</strong> (<em>dict</em>) – Additional parameters. Used for knowing where the checkpoint files are stored and
 creating the pytorch lightning data_module for the new data.</p></li>
@@ -588,7 +636,7 @@ after the train/test data has been obtained from the model (either old data or n
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<em>list</em>) – A list of length 1 containing the trained pytorch_lightning model.</p></li>
+<li><p><strong>model_list</strong> (<em>list</em>) – A list of length 1 containing the trained pytorch_lightning model.</p></li>
 <li><p><strong>train_reals</strong> (<em>torch.Tensor</em>) – Torch.Tensor of the real values for the training set.</p></li>
 <li><p><strong>train_preds</strong> (<em>torch.Tensor</em>) – Torch.Tensor of the predicted values for the training set.</p></li>
 <li><p><strong>val_reals</strong> (<em>torch.Tensor</em>) – Torch.Tensor of the real values for the new data set.</p></li>

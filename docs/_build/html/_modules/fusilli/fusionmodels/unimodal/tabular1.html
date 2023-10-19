@@ -140,8 +140,11 @@
 <span class="sd">        ----------</span>
 <span class="sd">        pred_type : str</span>
 <span class="sd">            Type of prediction to be performed.</span>
-<span class="sd">        data_dims : dict</span>
+<span class="sd">        data_dims : list</span>
 <span class="sd">            Dictionary containing the dimensions of the data.</span>
+<span class="sd">            [number of features in tabular modality 1, number of features in tabular modality 2, dimension of the image</span>
+<span class="sd">            modality]. For example, [10, 20, (100,100,100)] means that the tabular modality 1 has 10 features,</span>
+<span class="sd">            tabular modality 2 has 20 features and the image modality has 100x100x100 voxels.</span>
 <span class="sd">        params : dict</span>
 <span class="sd">            Dictionary containing the parameters of the model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -196,17 +199,16 @@
 <span class="sd">        list</span>
 <span class="sd">            List containing the output of the model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">x_tab1</span> <span class="o">=</span> <span class="n">x</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x_tab1_shape&quot;</span><span class="p">,</span> <span class="n">x_tab1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_model_input</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">uni_modal_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">x_tab1</span> <span class="o">=</span> <span class="n">x</span>
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod1_layers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">x_tab1</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">x_tab1</span><span class="p">)</span>
 
         <span class="n">out_fuse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fused_layers</span><span class="p">(</span><span class="n">x_tab1</span><span class="p">)</span>
 
         <span class="n">out_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_prediction</span><span class="p">(</span><span class="n">out_fuse</span><span class="p">)</span>
-
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;out_pred_shape&quot;</span><span class="p">,</span> <span class="n">out_pred</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">out_pred</span><span class="p">,</span>

@@ -105,7 +105,6 @@
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
 <span class="kn">import</span> <span class="nn">pytorch_lightning</span> <span class="k">as</span> <span class="nn">pl</span>
-<span class="kn">from</span> <span class="nn">pytorch_lightning.utilities.types</span> <span class="kn">import</span> <span class="n">EVAL_DATALOADERS</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torchmetrics</span> <span class="k">as</span> <span class="nn">tm</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
@@ -254,9 +253,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_val_logits</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_train_reals</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_train_preds</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">batch_train_logits</span> <span class="o">=</span> <span class="p">[]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_train_logits</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="BaseModel.safe_squeeze"><a class="viewcode-back" href="../../../autosummary/fusilli.fusionmodels.base_model.html#fusilli.fusionmodels.base_model.BaseModel.safe_squeeze">[docs]</a>    <span class="k">def</span> <span class="nf">safe_squeeze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensor</span><span class="p">):</span>
+        <span class="c1"># Instance attributes for storing final validation reals and preds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val_reals</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val_preds</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val_logits</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_reals</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_preds</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="BaseModel.safe_squeeze"><a class="viewcode-back" href="../../../autosummary/fusilli.fusionmodels.base_model.html#fusilli.fusionmodels.base_model.BaseModel.safe_squeeze">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">safe_squeeze</span><span class="p">(</span><span class="n">tensor</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Squeeze tensor if it is not 1D.</span>
 
@@ -277,7 +284,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">tensor</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseModel.get_data_from_batch"><a class="viewcode-back" href="../../../autosummary/fusilli.fusionmodels.base_model.html#fusilli.fusionmodels.base_model.BaseModel.get_data_from_batch">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_from_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseModel.get_data_from_batch"><a class="viewcode-back" href="../../../autosummary/fusilli.fusionmodels.base_model.html#fusilli.fusionmodels.base_model.BaseModel.get_data_from_batch">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_from_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get data from batch.</span>
 
@@ -285,8 +292,6 @@
 <span class="sd">        ----------</span>
 <span class="sd">        batch : tensor</span>
 <span class="sd">            Batch of data.</span>
-<span class="sd">        train : bool</span>
-<span class="sd">            Whether the data is training data.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -384,6 +389,8 @@
             <span class="n">added_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">custom_loss</span><span class="p">(</span>
                 <span class="n">reconstructions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="p">)</span>  <span class="c1"># x[-1] bc img is always last</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;al&quot;</span><span class="p">,</span> <span class="n">added_loss</span><span class="p">)</span>
             <span class="n">loss</span> <span class="o">+=</span> <span class="n">added_loss</span>
 
         <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">end_output</span><span class="p">,</span> <span class="n">logits</span></div>
@@ -467,7 +474,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data_from_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data_from_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
 
         <span class="n">loss</span><span class="p">,</span> <span class="n">end_output</span><span class="p">,</span> <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_outputs_and_loss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -493,6 +500,15 @@
 <span class="sd">        When metrics are calculated at the validation step and logged on on_epoch=True,</span>
 <span class="sd">        the batch metrics are averaged. However, some metrics don&#39;t average well (e.g. R2).</span>
 <span class="sd">        Therefore, we&#39;re calculating the final validation metrics here on the full validation set.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        outputs : list</span>
+<span class="sd">            List of outputs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">val_reals</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_val_reals</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
@@ -502,7 +518,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">train_reals</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_train_reals</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">train_preds</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_train_preds</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>  <span class="c1"># if we&#39;re doing graph-based fusion and train/test doesn&#39;t work the same as normal</span>
             <span class="k">pass</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">metric</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">pred_type</span><span class="p">]):</span>
@@ -534,7 +550,7 @@
 <div class="viewcode-block" id="BaseModel.predict_step"><a class="viewcode-back" href="../../../autosummary/fusilli.fusionmodels.base_model.html#fusilli.fusionmodels.base_model.BaseModel.predict_step">[docs]</a>    <span class="k">def</span> <span class="nf">predict_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dataloader_idx</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data_from_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data_from_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
 
         <span class="n">loss</span><span class="p">,</span> <span class="n">end_output</span><span class="p">,</span> <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_outputs_and_loss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -570,8 +586,6 @@
 <span class="sd">        Dictionary of parameters.</span>
 <span class="sd">    multiclass_dim : int</span>
 <span class="sd">        Number of classes for multiclass prediction.</span>
-<span class="sd">    kfold_flag : bool</span>
-<span class="sd">        Whether to use k-fold cross validation.</span>
 <span class="sd">    final_prediction: nn.Sequential</span>
 <span class="sd">        Final prediction layers.</span>
 <span class="sd">    mod1_layers : nn.ModuleDict</span>
@@ -633,10 +647,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets layers for modality 1</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        None</span>
-
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
@@ -669,10 +679,6 @@
 <div class="viewcode-block" id="ParentFusionModel.set_mod2_layers"><a class="viewcode-back" href="../../../autosummary/fusilli.fusionmodels.base_model.html#fusilli.fusionmodels.base_model.ParentFusionModel.set_mod2_layers">[docs]</a>    <span class="k">def</span> <span class="nf">set_mod2_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets layers for modality 2</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        None</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -707,10 +713,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets layers for image modality. If using 2D images, then the layers will use Conv2D layers.</span>
 <span class="sd">        If using 3D images, then the layers will use Conv3D layers.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        None</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>

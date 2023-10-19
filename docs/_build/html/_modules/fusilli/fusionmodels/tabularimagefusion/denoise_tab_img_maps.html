@@ -115,7 +115,6 @@
 <span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 <span class="kn">from</span> <span class="nn">fusilli.fusionmodels.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 
-
 <span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">check_model_validity</span>
 
 
@@ -127,8 +126,6 @@
 <span class="sd">    ----------</span>
 <span class="sd">    tab_dims : int</span>
 <span class="sd">        Dimension of the input tabular data.</span>
-<span class="sd">    subspace_lat_dims : int</span>
-<span class="sd">        Dimension of the latent subspace (should be larger than tab_dims for a DAE).</span>
 <span class="sd">    upsampler : nn.Sequential</span>
 <span class="sd">        Upsampling layers.</span>
 <span class="sd">    downsampler : nn.Sequential</span>
@@ -378,7 +375,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
 
         <span class="c1"># get the img layers from ParentFusionModel</span>
-        <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_img_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_img_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># this will set the img_layers</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">==</span> <span class="s2">&quot;regression&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">logits</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()(</span><span class="n">logits</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
@@ -400,6 +398,8 @@
 
         <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fused_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_prediction</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># setting the final prediction layers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ImgUnimodalDAE.calc_fused_layers"><a class="viewcode-back" href="../../../../autosummary/fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.html#fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.ImgUnimodalDAE.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -559,7 +559,6 @@
 
 
 <div class="viewcode-block" id="denoising_autoencoder_subspace_method"><a class="viewcode-back" href="../../../../autosummary/fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.html#fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.denoising_autoencoder_subspace_method">[docs]</a><span class="k">class</span> <span class="nc">denoising_autoencoder_subspace_method</span><span class="p">:</span>
-
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class containing the method to train the denoising autoencoder and to convert the image data</span>
 <span class="sd">    to the latent image space.</span>
@@ -586,12 +585,12 @@
     <span class="p">]</span>  <span class="c1"># access later for loading checkpoint paths?</span>
 
 <div class="viewcode-block" id="denoising_autoencoder_subspace_method.__init__"><a class="viewcode-back" href="../../../../autosummary/fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.html#fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.denoising_autoencoder_subspace_method.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">datamodule</span><span class="p">,</span>
-        <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-        <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="c1"># own_early_stopping_callback=None,</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">datamodule</span><span class="p">,</span>
+            <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+            <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="c1"># own_early_stopping_callback=None,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -834,9 +833,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the fused layers.</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_dtype</span><span class="p">(</span>
@@ -863,6 +859,8 @@
 <span class="sd">        list</span>
 <span class="sd">            List containing the output.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_model_input</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">uni_modal_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fusion_layers</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 

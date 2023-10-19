@@ -5,6 +5,7 @@ modifications.
 """
 
 import torch.nn as nn
+import torch
 
 
 def check_dtype(attribute, correct_dtype, attribute_name):
@@ -26,8 +27,8 @@ def check_dtype(attribute, correct_dtype, attribute_name):
 
     """
     if not isinstance(
-        attribute,
-        correct_dtype,
+            attribute,
+            correct_dtype,
     ):
         raise TypeError(
             (
@@ -69,6 +70,13 @@ def check_img_dim(attribute, img_dim, attribute_name):
     elif isinstance(attribute, nn.Sequential):
         has_conv3d_layer = any(isinstance(module, nn.Conv3d) for module in attribute)
         has_conv2d_layer = any(isinstance(module, nn.Conv2d) for module in attribute)
+    else:
+        raise TypeError(
+            (
+                f"Incorrect data type for the modifications: Attribute {attribute_name}"
+                f" must be of type nn.ModuleDict or nn.Sequential, not dtype {type(attribute).__name__}.",
+            )
+        )
 
     if has_conv2d_layer is None and has_conv3d_layer is None:
         raise TypeError(
@@ -156,3 +164,40 @@ def check_fused_layers(fused_layers, fused_dim):
     fused_layers[0] = nn.Linear(fused_dim, fused_layers[0].out_features)
 
     return fused_layers, out_dim
+
+
+def check_model_input(x, uni_modal_flag=False, correct_length=2):
+    """
+    Check that the input to the model is of the correct length.
+
+    Parameters
+    ----------
+    x : tuple or torch.Tensor
+        Input to the model's forward function. Should either be a tuple of length 2 for multi-modal methods or a
+        torch tensor for uni-modal methods.
+    uni_modal_flag : bool
+        Flag to indicate whether the model is uni-modal or multi-modal. If True, the input should be a torch tensor.
+        If False, the input should be a tuple of length 2. Default is False.
+    correct_length : int
+        Correct length of the input to the model if it is multi-modal. Default is 2.
+        Could be 3 for the graph methods.
+    """
+
+    if uni_modal_flag:
+        if not isinstance(x, torch.Tensor):
+            raise TypeError(
+                f"Wrong input type for model! Expected torch.Tensor, not {type(x)}."
+            )
+    else:
+        if not isinstance(x, tuple):
+            raise TypeError(
+                f"Wrong input type for model! Expected tuple, not {type(x)}."
+            )
+        elif len(x) != correct_length:
+            raise ValueError(
+                f"Wrong number of inputs for model! Expected {correct_length}, not {len(x)}."
+            )
+        elif not all(isinstance(x_i, torch.Tensor) for x_i in x):
+            raise TypeError(
+                f"Wrong input type for model! Expected list of torch.Tensors, not {type(x)}."
+            )

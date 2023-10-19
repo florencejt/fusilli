@@ -39,8 +39,11 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
         ----------
         pred_type : str
             Type of prediction to be performed.
-        data_dims : dict
+        data_dims : list
             Dictionary containing the dimensions of the data.
+            [number of features in tabular modality 1, number of features in tabular modality 2, dimension of the image
+            modality]. For example, [10, 20, (100,100,100)] means that the tabular modality 1 has 10 features,
+            tabular modality 2 has 20 features and the image modality has 100x100x100 voxels.
         params : dict
             Dictionary containing the parameters of the model.
         """
@@ -95,17 +98,16 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
         list
             List containing the output of the model.
         """
-        x_tab1 = x
-        print("x_tab1_shape", x_tab1.shape)
 
+        check_model_validity.check_model_input(x, uni_modal_flag=True)
+
+        x_tab1 = x
         for layer in self.mod1_layers.values():
             x_tab1 = layer(x_tab1)
 
         out_fuse = self.fused_layers(x_tab1)
 
         out_pred = self.final_prediction(out_fuse)
-
-        print("out_pred_shape", out_pred.shape)
 
         return [
             out_pred,

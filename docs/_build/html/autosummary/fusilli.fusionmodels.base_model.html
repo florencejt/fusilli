@@ -105,7 +105,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.ParentFusionModel.img_dim"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.img_dim</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.ParentFusionModel.params"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.params</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.ParentFusionModel.multiclass_dim"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.multiclass_dim</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.ParentFusionModel.kfold_flag"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.kfold_flag</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.ParentFusionModel.final_prediction"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.final_prediction</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.ParentFusionModel.mod1_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.mod1_layers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.ParentFusionModel.mod2_layers"><code class="docutils literal notranslate"><span class="pre">ParentFusionModel.mod2_layers</span></code></a></li>
@@ -400,14 +399,11 @@ and access by Plotter class for plotting.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fusilli.fusionmodels.base_model.BaseModel.get_data_from_batch">
-<span class="sig-name descname"><span class="pre">get_data_from_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusionmodels/base_model.html#BaseModel.get_data_from_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusionmodels.base_model.BaseModel.get_data_from_batch" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_data_from_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusionmodels/base_model.html#BaseModel.get_data_from_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusionmodels.base_model.BaseModel.get_data_from_batch" title="Permalink to this definition"></a></dt>
 <dd><p>Get data from batch.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>batch</strong> (<em>tensor</em>) – Batch of data.</p></li>
-<li><p><strong>train</strong> (<em>bool</em>) – Whether the data is training data.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>batch</strong> (<em>tensor</em>) – Batch of data.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
@@ -504,7 +500,7 @@ or training on 8 TPU cores with <code class="docutils literal notranslate"><span
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fusilli.fusionmodels.base_model.BaseModel.safe_squeeze">
-<span class="sig-name descname"><span class="pre">safe_squeeze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusionmodels/base_model.html#BaseModel.safe_squeeze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusionmodels.base_model.BaseModel.safe_squeeze" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">safe_squeeze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusionmodels/base_model.html#BaseModel.safe_squeeze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusionmodels.base_model.BaseModel.safe_squeeze" title="Permalink to this definition"></a></dt>
 <dd><p>Squeeze tensor if it is not 1D.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -546,6 +542,14 @@ or training on 8 TPU cores with <code class="docutils literal notranslate"><span
 When metrics are calculated at the validation step and logged on on_epoch=True,
 the batch metrics are averaged. However, some metrics don’t average well (e.g. R2).
 Therefore, we’re calculating the final validation metrics here on the full validation set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>outputs</strong> (<em>list</em>) – List of outputs.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -635,17 +639,6 @@ the dimensions will be (x, y, z).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusilli.fusionmodels.base_model.ParentFusionModel.kfold_flag">
-<span class="sig-name descname"><span class="pre">kfold_flag</span></span><a class="headerlink" href="#fusilli.fusionmodels.base_model.ParentFusionModel.kfold_flag" title="Permalink to this definition"></a></dt>
-<dd><p>Whether to use k-fold cross validation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -755,11 +748,8 @@ was concatenation, the fused_dim would be 128</p>
 <dd><p>Sets layers for image modality. If using 2D images, then the layers will use Conv2D layers.
 If using 3D images, then the layers will use Conv3D layers.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>None</strong> – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -769,11 +759,8 @@ If using 3D images, then the layers will use Conv3D layers.</p>
 <span class="sig-name descname"><span class="pre">set_mod1_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusionmodels/base_model.html#ParentFusionModel.set_mod1_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusionmodels.base_model.ParentFusionModel.set_mod1_layers" title="Permalink to this definition"></a></dt>
 <dd><p>Sets layers for modality 1</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>None</strong> – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -783,11 +770,8 @@ If using 3D images, then the layers will use Conv3D layers.</p>
 <span class="sig-name descname"><span class="pre">set_mod2_layers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusionmodels/base_model.html#ParentFusionModel.set_mod2_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusionmodels.base_model.ParentFusionModel.set_mod2_layers" title="Permalink to this definition"></a></dt>
 <dd><p>Sets layers for modality 2</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>None</strong> – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>

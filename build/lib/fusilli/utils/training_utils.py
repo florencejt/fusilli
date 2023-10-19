@@ -6,12 +6,10 @@ on model, parameters, and user-defined strings.
 
 import os
 
-import torch.nn as nn
-import wandb
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint, TQDMProgressBar
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
-from pytorch_lightning.loggers import CSVLogger, TensorBoardLogger, WandbLogger
+from pytorch_lightning.loggers import CSVLogger, WandbLogger
 from tqdm import tqdm
 
 
@@ -57,7 +55,7 @@ def set_logger(params, fold, fusion_model, extra_log_string_dict=None):
     ----------
     params : dict
         Dictionary of parameters.
-    fold : int
+    fold : int or None
         Fold number. None if not using kfold.
     fusion_model : class
         Fusion model class.
@@ -108,7 +106,7 @@ def set_logger(params, fold, fusion_model, extra_log_string_dict=None):
     else:  # if params["log"] is False
         logger = CSVLogger(
             save_dir=params["loss_log_dir"],
-            name=None,
+            name='',
             version=name,
         )
 
@@ -143,15 +141,15 @@ def set_checkpoint_name(params, fusion_model, fold=None, extra_log_string_dict=N
     extra_name_string, extra_tags = get_file_suffix_from_dict(extra_log_string_dict)
     if fold is not None:
         checkpoint_filename = (
-            fusion_model.__name__
-            + "_fold_"
-            + str(fold)
-            + extra_name_string
-            + "_{epoch:02d}"
+                fusion_model.__name__
+                + "_fold_"
+                + str(fold)
+                + extra_name_string
+                + "_{epoch:02d}"
         )
     else:
         checkpoint_filename = (
-            str(fusion_model.__name__) + extra_name_string + "_{epoch:02d}"
+                str(fusion_model.__name__) + extra_name_string + "_{epoch:02d}"
         )
 
     return checkpoint_filename
@@ -212,7 +210,7 @@ def get_checkpoint_filenames_for_subspace_models(subspace_method, k=None):
 
 
 def get_checkpoint_filename_for_trained_fusion_model(
-    params, model, checkpoint_file_suffix, fold=None
+        params, model, checkpoint_file_suffix, fold=None
 ):
     """
     Gets the checkpoint filename for the trained fusion model using the model object.
@@ -226,8 +224,8 @@ def get_checkpoint_filename_for_trained_fusion_model(
     ----------
     params : dict
         Dictionary of parameters.
-    model : object
-        BaseModel model object.
+    model : BaseModel
+        BaseModel model object instance.
     checkpoint_file_suffix : str
         Checkpoint file suffix.
     fold : int
@@ -246,10 +244,10 @@ def get_checkpoint_filename_for_trained_fusion_model(
         ckpt_path_beginning = model.model.__class__.__name__ + checkpoint_file_suffix
     else:
         ckpt_path_beginning = (
-            model.model.__class__.__name__
-            + "_fold_"
-            + str(fold)
-            + checkpoint_file_suffix
+                model.model.__class__.__name__
+                + "_fold_"
+                + str(fold)
+                + checkpoint_file_suffix
         )
 
     result = [
@@ -297,12 +295,12 @@ class LitProgressBar(TQDMProgressBar):
 
 
 def init_trainer(
-    logger,
-    params,
-    max_epochs=1000,
-    enable_checkpointing=True,
-    checkpoint_filename=None,
-    own_early_stopping_callback=None,
+        logger,
+        params,
+        max_epochs=1000,
+        enable_checkpointing=True,
+        checkpoint_filename=None,
+        own_early_stopping_callback=None,
 ):
     """
     Initialise the pytorch lightning trainer object.
@@ -326,13 +324,13 @@ def init_trainer(
         Default None if using default checkpointing.
     own_early_stopping_callback : object
         Own early stopping callback object.
-        Default None to use default early stopping callback. If you want to use your own early stopping callback, then you need to
-        define it in the main training script and pass it here or pass into the datamodule object and then
-        it will read it from there.
+        Default None to use default early stopping callback. If you want to use your own early stopping callback,
+        then you need to define it in the main training script and pass it here or pass into the datamodule object
+        and then it will read it from there.
 
     Returns
     -------
-    trainer : object
+    trainer : pl.Trainer
         Pytorch lightning trainer object.
 
     """
@@ -388,7 +386,7 @@ def get_final_val_metrics(trainer):
 
     Parameters
     ----------
-    trainer : object
+    trainer : pl.Trainer
         Pytorch lightning trainer object.
 
     Returns

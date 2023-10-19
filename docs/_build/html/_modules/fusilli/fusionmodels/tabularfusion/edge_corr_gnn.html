@@ -181,7 +181,7 @@
         <span class="n">x</span> <span class="o">=</span> <span class="n">tab2</span>
         <span class="n">edge_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">edge_indices</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
         <span class="n">edge_attr</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">corr_matrix</span><span class="p">[</span><span class="n">edge_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">corr_matrix</span><span class="p">[</span><span class="n">edge_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="p">)</span>  <span class="c1"># add 1 to make all edge_attr positive</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="n">Data</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="o">=</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_attr</span><span class="o">=</span><span class="n">edge_attr</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
@@ -222,7 +222,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        pred_type : str</span>
 <span class="sd">            Type of prediction to be performed.</span>
-<span class="sd">        data_dims : dict</span>
+<span class="sd">        data_dims : list</span>
 <span class="sd">            Dictionary containing the dimensions of the data.</span>
 <span class="sd">        params : dict</span>
 <span class="sd">            Dictionary containing the parameters of the model.</span>
@@ -279,14 +279,20 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        x : torch.Tensor</span>
-<span class="sd">            Tensor containing the tabular data.</span>
+<span class="sd">        x : tuple</span>
+<span class="sd">            Tuple containing the tabular data and the graph data structure:</span>
+<span class="sd">            (node features, edge indices, edge attributes)</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        list</span>
 <span class="sd">            List containing the output of the model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># ~~ Checks ~~</span>
+        <span class="c1"># check x is a tuple of length 3</span>
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_model_input</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">correct_length</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
         <span class="n">x_n</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_attr</span> <span class="o">=</span> <span class="n">x</span>
 
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_conv_layers</span><span class="p">:</span>

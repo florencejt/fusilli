@@ -84,7 +84,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.KFoldDataModule.modality_methods"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.modality_methods</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.KFoldDataModule.fusion_model"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.fusion_model</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.KFoldDataModule.batch_size"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.batch_size</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#fusilli.data.KFoldDataModule.test_size"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.test_size</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.KFoldDataModule.pred_type"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.pred_type</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.KFoldDataModule.multiclass_dims"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.multiclass_dims</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.KFoldDataModule.subspace_method"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.subspace_method</span></code></a></li>
@@ -404,17 +403,6 @@ None if not downsampling. (default None)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fusilli.data.KFoldDataModule.test_size">
-<span class="sig-name descname"><span class="pre">test_size</span></span><a class="headerlink" href="#fusilli.data.KFoldDataModule.test_size" title="Permalink to this definition"></a></dt>
-<dd><p>Fraction of data to use for testing (default 0.2).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1507,8 +1495,10 @@ If None, no downsampling is performed</p></li>
 <li><p><strong>fusion_model</strong> (<em>class</em>) – Fusion model class.</p></li>
 <li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
 <li><p><strong>batch_size</strong> (<em>int</em>) – Batch size (default 8).</p></li>
-<li><p><strong>image_downsample_size</strong> (<em>list</em>) – List of image dimensions to downsample to (default None).</p></li>
+<li><p><strong>image_downsample_size</strong> (<em>tuple</em>) – Tuple of image dimensions to downsample to (default None).
+e.g. (100, 100, 100) for 3D images, (100, 100) for 2D images.</p></li>
 <li><p><strong>layer_mods</strong> (<em>dict</em>) – Dictionary of layer modifications (default None).</p></li>
+<li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs to train subspace methods for. (default 1000)</p></li>
 <li><p><strong>optional_suffix</strong> (<em>str</em>) – Optional suffix added to data source file names (default None).</p></li>
 <li><p><strong>checkpoint_path</strong> (<em>str</em>) – Path to call checkpoint file (default None will result in the default lightning format).</p></li>
 <li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – Dictionary of extra strings to add to a subspace method checkpoint file name (default None).

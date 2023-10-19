@@ -40,7 +40,7 @@ class Tabular2Unimodal(ParentFusionModel, nn.Module):
         ----------
         pred_type : str
             Type of prediction to be performed.
-        data_dims : dict
+        data_dims : list
             Dictionary containing the dimensions of the data.
         params : dict
             Dictionary containing the parameters of the model.
@@ -100,6 +100,9 @@ class Tabular2Unimodal(ParentFusionModel, nn.Module):
         list
             List containing the output of the model.
         """
+
+        check_model_validity.check_model_input(x, uni_modal_flag=True)
+
         x_tab2 = x
 
         for layer in self.mod2_layers.values():

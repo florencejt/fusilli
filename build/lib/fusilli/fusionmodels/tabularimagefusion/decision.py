@@ -45,7 +45,7 @@ class ImageDecision(ParentFusionModel, nn.Module):
     # str: Type of modality.
     modality_type = "tab_img"
     # str: Type of fusion.
-    fusion_type = "decision"
+    fusion_type = "operation"
 
     def __init__(self, pred_type, data_dims, params):
         """
@@ -53,7 +53,7 @@ class ImageDecision(ParentFusionModel, nn.Module):
         ----------
         pred_type : str
             Type of prediction to be performed.
-        data_dims : dict
+        data_dims : list
             Dictionary containing the dimensions of the data.
         params : dict
             Dictionary containing the parameters of the model.
@@ -62,7 +62,8 @@ class ImageDecision(ParentFusionModel, nn.Module):
 
         self.pred_type = pred_type
 
-        self.fusion_operation = lambda x: torch.mean(x, dim=1)
+        # self.fusion_operation = lambda x: torch.mean(x, dim=1)
+        self.fusion_operation = lambda x, y: torch.mean(torch.stack([x, y]), dim=0)
 
         self.set_img_layers()
         self.set_mod1_layers()
@@ -71,10 +72,6 @@ class ImageDecision(ParentFusionModel, nn.Module):
     def calc_fused_layers(self):
         """
         Calculates the fusion layers.
-
-        Returns
-        -------
-        None
         """
 
         check_model_validity.check_var_is_function(
@@ -106,14 +103,18 @@ class ImageDecision(ParentFusionModel, nn.Module):
 
         Parameters
         ----------
-        x : list
-            List containing the input data.
+        x : tuple
+            Tuple containing the input data (tabular data batch, image data batch).
 
         Returns
         -------
         list
             List containing the output of the model.
         """
+
+        # ~~ Checks ~~
+        check_model_validity.check_model_input(x)
+
         x_tab1 = x[0].squeeze(dim=1)
         x_img = x[1]
 
@@ -130,13 +131,10 @@ class ImageDecision(ParentFusionModel, nn.Module):
         pred_img = self.final_prediction_img(x_img)
 
         # Combine predictions by averaging them together
-        print("pred_tab1", pred_tab1)
-        print("pred_img", pred_img)
-        fusion_input = torch.stack((pred_tab1, pred_img), dim=1)
-        print("fusion_input", fusion_input)
-        out_fuse = self.fusion_operation(fusion_input)
-        print("out_fuse", out_fuse)
-        # out_fuse = torch.mean(torch.stack([pred_tab1, pred_img]), dim=0)
+        # fusion_input = torch.stack((pred_tab1, pred_img), dim=1)
+        # out_fuse = self.fusion_operation(fusion_input)
+
+        out_fuse = self.fusion_operation(pred_tab1, pred_img)
 
         return [
             out_fuse,

@@ -75,6 +75,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.utils.check_model_validity.check_dtype"><code class="docutils literal notranslate"><span class="pre">check_dtype()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.utils.check_model_validity.check_fused_layers"><code class="docutils literal notranslate"><span class="pre">check_fused_layers()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.utils.check_model_validity.check_img_dim"><code class="docutils literal notranslate"><span class="pre">check_img_dim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.utils.check_model_validity.check_model_input"><code class="docutils literal notranslate"><span class="pre">check_model_input()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.utils.check_model_validity.check_var_is_function"><code class="docutils literal notranslate"><span class="pre">check_var_is_function()</span></code></a></li>
 </ul>
 </li>
@@ -132,7 +133,10 @@ modifications.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.utils.check_model_validity.check_img_dim" title="fusilli.utils.check_model_validity.check_img_dim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_img_dim</span></code></a>(attribute, img_dim, attribute_name)</p></td>
 <td><p>Check if the modification img layers are the correct dimension.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.utils.check_model_validity.check_var_is_function" title="fusilli.utils.check_model_validity.check_var_is_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_var_is_function</span></code></a>(attribute, attribute_name)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#fusilli.utils.check_model_validity.check_model_input" title="fusilli.utils.check_model_validity.check_model_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_model_input</span></code></a>(x[, uni_modal_flag, ...])</p></td>
+<td><p>Check that the input to the model is of the correct length.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fusilli.utils.check_model_validity.check_var_is_function" title="fusilli.utils.check_model_validity.check_var_is_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_var_is_function</span></code></a>(attribute, attribute_name)</p></td>
 <td><p>Check if the modification is a function.</p></td>
 </tr>
 </tbody>
@@ -193,6 +197,24 @@ the fused layers for the final prediction layers of the model.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>TypeError</strong> – If the modification is not of the correct data type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fusilli.utils.check_model_validity.check_model_input">
+<span class="sig-name descname"><span class="pre">check_model_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uni_modal_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/utils/check_model_validity.html#check_model_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.utils.check_model_validity.check_model_input" title="Permalink to this definition"></a></dt>
+<dd><p>Check that the input to the model is of the correct length.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>tuple</em><em> or </em><em>torch.Tensor</em>) – Input to the model’s forward function. Should either be a tuple of length 2 for multi-modal methods or a
+torch tensor for uni-modal methods.</p></li>
+<li><p><strong>uni_modal_flag</strong> (<em>bool</em>) – Flag to indicate whether the model is uni-modal or multi-modal. If True, the input should be a torch tensor.
+If False, the input should be a tuple of length 2. Default is False.</p></li>
+<li><p><strong>correct_length</strong> (<em>int</em>) – Correct length of the input to the model if it is multi-modal. Default is 2.
+Could be 3 for the graph methods.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

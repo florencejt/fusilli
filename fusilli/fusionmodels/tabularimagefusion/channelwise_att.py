@@ -57,7 +57,7 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
     """
 
     # str: Name of the method.
-    method_name = "Channel-wise multiplication net (image)"
+    method_name = "Channel-wise Image attention"
     # str: Type of modality.
     modality_type = "tab_img"
     # str: Type of fusion.
@@ -69,7 +69,7 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         ----------
         pred_type : str
             Type of prediction to be performed.
-        data_dims : dict
+        data_dims : list
             Dictionary containing the dimensions of the data.
         params : dict
             Dictionary containing the parameters of the model.
@@ -166,6 +166,10 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         list
             List containing the output of the model.
         """
+
+        # ~~ Checks ~~
+        check_model_validity.check_model_input(x)
+
         x_tab1 = x[0].squeeze(dim=1)
         x_img = x[1]
 

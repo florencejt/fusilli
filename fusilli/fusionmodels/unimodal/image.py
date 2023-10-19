@@ -39,7 +39,7 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
         ----------
         pred_type : str
             Type of prediction to be performed.
-        data_dims : dict
+        data_dims : list
             Dictionary containing the dimensions of the data.
         params : dict
             Dictionary containing the parameters of the model.
@@ -104,6 +104,9 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
         out_pred : list
             List containing the predictions.
         """
+
+        check_model_validity.check_model_input(x, uni_modal_flag=True)
+
         x_img = x
 
         for layer in self.img_layers.values():

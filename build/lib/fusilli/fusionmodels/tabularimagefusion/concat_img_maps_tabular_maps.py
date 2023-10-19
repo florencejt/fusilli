@@ -50,7 +50,7 @@ class ConcatImageMapsTabularMaps(ParentFusionModel, nn.Module):
         ----------
         pred_type : str
             Type of prediction to be performed.
-        data_dims : dict
+        data_dims : list
             Dictionary containing the dimensions of the data.
         params : dict
             Dictionary containing the parameters of the model.
@@ -117,14 +117,17 @@ class ConcatImageMapsTabularMaps(ParentFusionModel, nn.Module):
 
         Parameters
         ----------
-        x : list
-            List containing the input data.
+        x : tuple
+            Tuple containing the input data.
 
         Returns
         -------
         list
             List containing the output of the model.
         """
+
+        # ~~ Checks ~~
+        check_model_validity.check_model_input(x)
 
         x_tab1 = x[0].squeeze(dim=1)
         x_img = x[1]

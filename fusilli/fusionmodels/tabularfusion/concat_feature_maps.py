@@ -5,7 +5,6 @@ Concatenating the feature maps of the two tabular modalities.
 import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch
-from torch.autograd import Variable
 
 from fusilli.utils import check_model_validity
 
@@ -49,7 +48,7 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
         ----------
         pred_type : str
             Type of prediction to be performed.
-        data_dims : dict
+        data_dims : list
             Dictionary containing the dimensions of the data.
         params : dict
             Dictionary containing the parameters of the model.
@@ -76,8 +75,8 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
         """
 
         self.fused_dim = (
-            list(self.mod1_layers.values())[-1][0].out_features
-            + list(self.mod2_layers.values())[-1][0].out_features
+                list(self.mod1_layers.values())[-1][0].out_features
+                + list(self.mod2_layers.values())[-1][0].out_features
         )
 
     def calc_fused_layers(self):
@@ -107,14 +106,17 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
 
         Parameters
         ----------
-        x : list
-            List containing the input data.
+        x : tuple
+            Tuple containing the input data.
 
         Returns
         -------
         list
             List containing the output of the model.
         """
+
+        # ~~ Checks ~~
+        check_model_validity.check_model_input(x)
 
         x_tab1 = x[0]
         x_tab2 = x[1]

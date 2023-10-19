@@ -185,7 +185,10 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pred_type</strong> (<em>str</em>) – Type of prediction to be performed.</p></li>
-<li><p><strong>data_dims</strong> (<em>dict</em>) – Dictionary containing the dimensions of the data.</p></li>
+<li><p><strong>data_dims</strong> (<em>list</em>) – Dictionary containing the dimensions of the data.
+[number of features in tabular modality 1, number of features in tabular modality 2, dimension of the image
+modality]. For example, [10, 20, (100,100,100)] means that the tabular modality 1 has 10 features,
+tabular modality 2 has 20 features and the image modality has 100x100x100 voxels.</p></li>
 <li><p><strong>params</strong> (<em>dict</em>) – Dictionary containing the parameters of the model.</p></li>
 </ul>
 </dd>

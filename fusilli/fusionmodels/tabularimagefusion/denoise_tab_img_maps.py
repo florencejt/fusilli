@@ -14,7 +14,6 @@ import pandas as pd
 from torch.nn import functional as F
 from fusilli.fusionmodels.base_model import BaseModel
 
-
 from fusilli.utils import check_model_validity
 
 
@@ -26,8 +25,6 @@ class DenoisingAutoencoder(pl.LightningModule):
     ----------
     tab_dims : int
         Dimension of the input tabular data.
-    subspace_lat_dims : int
-        Dimension of the latent subspace (should be larger than tab_dims for a DAE).
     upsampler : nn.Sequential
         Upsampling layers.
     downsampler : nn.Sequential
@@ -277,7 +274,8 @@ class ImgUnimodalDAE(pl.LightningModule):
         self.pred_type = pred_type
 
         # get the img layers from ParentFusionModel
-        ParentFusionModel.set_img_layers(self)
+        self.img_layers = None
+        ParentFusionModel.set_img_layers(self)  # this will set the img_layers
 
         if self.pred_type == "regression":
             self.loss = lambda logits, y: nn.MSELoss()(logits, y.unsqueeze(dim=1))
@@ -299,6 +297,8 @@ class ImgUnimodalDAE(pl.LightningModule):
 
         ParentFusionModel.set_fused_layers(self, fused_dim=self.fused_dim)
 
+        self.final_prediction = None
+        # setting the final prediction layers
         self.calc_fused_layers()
 
     def calc_fused_layers(self):
@@ -458,7 +458,6 @@ class ImgUnimodalDAE(pl.LightningModule):
 
 
 class denoising_autoencoder_subspace_method:
-
     """
     Class containing the method to train the denoising autoencoder and to convert the image data
     to the latent image space.
@@ -485,12 +484,12 @@ class denoising_autoencoder_subspace_method:
     ]  # access later for loading checkpoint paths?
 
     def __init__(
-        self,
-        datamodule,
-        k=None,
-        max_epochs=1000,
-        checkpoint_path=None,
-        # own_early_stopping_callback=None,
+            self,
+            datamodule,
+            k=None,
+            max_epochs=1000,
+            checkpoint_path=None,
+            # own_early_stopping_callback=None,
     ):
         """
         Parameters
@@ -733,9 +732,6 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         """
         Calculate the fused layers.
 
-        Returns
-        -------
-        None
         """
 
         check_model_validity.check_dtype(
@@ -762,6 +758,8 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         list
             List containing the output.
         """
+
+        check_model_validity.check_model_input(x, uni_modal_flag=True)
 
         x = self.fusion_layers(x)
 

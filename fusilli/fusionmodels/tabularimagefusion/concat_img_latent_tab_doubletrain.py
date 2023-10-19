@@ -6,7 +6,6 @@ img_latent_subspace_method class.
 
 import copy
 
-import numpy as np
 import pandas as pd
 import pytorch_lightning as pl
 import torch
@@ -128,7 +127,8 @@ class ImgLatentSpace(pl.LightningModule):
 
         if self.latent_dim < 1:
             raise ValueError(
-                "Incorrect attribute range: The latent dimension must be greater than 0. The latent dimension is currently: ",
+                f"Incorrect attribute range: The latent dimension must be greater than 0. The latent dimension is "
+                f"currently: ",
                 self.latent_dim,
             )
 
@@ -294,7 +294,7 @@ class concat_img_latent_tab_subspace_method:
         """
         Parameters
         ----------
-        datamodule : pl.LightningDataModule
+        datamodule : class
             Data module containing the data.
         max_epochs : int
             Maximum number of epochs to train the latent image space.
@@ -440,7 +440,7 @@ class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
         ----------
         pred_type : str
             Type of prediction to be performed.
-        data_dims : dict
+        data_dims : list
             Dictionary containing the dimensions of the data.
         params : dict
             Dictionary containing the parameters of the model.
@@ -491,14 +491,18 @@ class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
 
         Parameters
         ----------
-        x : list
-            List containing the input data.
+        x : tuple
+            Tuple containing the input data. First element is the tabular data, second element is
+            the image data from the image subspace method.
 
         Returns
         -------
         list
             List containing the output of the model.
         """
+
+        # ~~ Checks ~~
+        check_model_validity.check_model_input(x)
 
         x_tab = x[0]
         x_encimg = x[1].squeeze(dim=1)

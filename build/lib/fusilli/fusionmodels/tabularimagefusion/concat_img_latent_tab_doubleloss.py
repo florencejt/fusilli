@@ -83,7 +83,7 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         ----------
         pred_type : str
             Type of prediction to be performed.
-        data_dims : dict
+        data_dims : list
             Dictionary containing the dimensions of the data.
         params : dict
             Dictionary containing the parameters of the model.
@@ -187,7 +187,8 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
 
         if self.latent_dim < 1:
             raise ValueError(
-                "Incorrect attribute range: The latent dimension must be greater than 0. The latent dimension is currently: ",
+                f"Incorrect attribute range: The latent dimension must be greater than 0. The latent dimension is "
+                f"currently: ",
                 self.latent_dim,
             )
 
@@ -240,8 +241,8 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
 
         Parameters
         ----------
-        x : list
-            List containing the input data.
+        x : tuple
+            Tuple containing the input data.
 
         Returns
         -------
@@ -249,6 +250,9 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
             List containing the output data: prediction and reconstructed image.
             [ [prediction], [reconstructed_image] ]
         """
+
+        check_model_validity.check_model_input(x)
+
         x_tab = x[0].squeeze(dim=1)
         x_img = x[1]
 

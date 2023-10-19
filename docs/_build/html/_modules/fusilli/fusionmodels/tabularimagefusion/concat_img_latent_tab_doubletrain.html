@@ -107,7 +107,6 @@
 
 <span class="kn">import</span> <span class="nn">copy</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">pytorch_lightning</span> <span class="k">as</span> <span class="nn">pl</span>
 <span class="kn">import</span> <span class="nn">torch</span>
@@ -229,7 +228,8 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Incorrect attribute range: The latent dimension must be greater than 0. The latent dimension is currently: &quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;Incorrect attribute range: The latent dimension must be greater than 0. The latent dimension is &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;currently: &quot;</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">latent_dim</span><span class="p">,</span>
             <span class="p">)</span>
 
@@ -395,7 +395,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        datamodule : pl.LightningDataModule</span>
+<span class="sd">        datamodule : class</span>
 <span class="sd">            Data module containing the data.</span>
 <span class="sd">        max_epochs : int</span>
 <span class="sd">            Maximum number of epochs to train the latent image space.</span>
@@ -541,7 +541,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        pred_type : str</span>
 <span class="sd">            Type of prediction to be performed.</span>
-<span class="sd">        data_dims : dict</span>
+<span class="sd">        data_dims : list</span>
 <span class="sd">            Dictionary containing the dimensions of the data.</span>
 <span class="sd">        params : dict</span>
 <span class="sd">            Dictionary containing the parameters of the model.</span>
@@ -592,14 +592,18 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        x : list</span>
-<span class="sd">            List containing the input data.</span>
+<span class="sd">        x : tuple</span>
+<span class="sd">            Tuple containing the input data. First element is the tabular data, second element is</span>
+<span class="sd">            the image data from the image subspace method.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        list</span>
 <span class="sd">            List containing the output of the model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># ~~ Checks ~~</span>
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_model_input</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
         <span class="n">x_tab</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">x_encimg</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>

@@ -44,7 +44,7 @@ class TabularDecision(ParentFusionModel, nn.Module):
         ----------
         pred_type : str
             Type of prediction to be performed.
-        data_dims : dict
+        data_dims : list
             Dictionary containing the dimensions of the data.
         params : dict
             Dictionary containing the parameters of the model.
@@ -89,13 +89,17 @@ class TabularDecision(ParentFusionModel, nn.Module):
 
         Parameters
         ----------
-        x : list
-            List containing the two types of tabular data.
+        x : tuple
+            Tuple containing the two types of tabular data. (tab1, tab2)
 
         Returns
         -------
         list
             List containing the fused prediction."""
+
+        # ~~ Checks ~~
+        check_model_validity.check_model_input(x)
+
         x_tab1 = x[0]
         x_tab2 = x[1]
 

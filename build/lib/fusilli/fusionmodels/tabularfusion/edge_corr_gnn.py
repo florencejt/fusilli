@@ -80,7 +80,7 @@ class EdgeCorrGraphMaker:
         x = tab2
         edge_index = torch.tensor(edge_indices, dtype=torch.long)
         edge_attr = (
-            corr_matrix[edge_indices[0], edge_indices[1]] + 1
+                corr_matrix[edge_indices[0], edge_indices[1]] + 1
         )  # add 1 to make all edge_attr positive
 
         data = Data(x=x, edge_index=edge_index, edge_attr=edge_attr, y=labels)
@@ -121,7 +121,7 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
         ----------
         pred_type : str
             Type of prediction to be performed.
-        data_dims : dict
+        data_dims : list
             Dictionary containing the dimensions of the data.
         params : dict
             Dictionary containing the parameters of the model.
@@ -178,14 +178,20 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
 
         Parameters
         ----------
-        x : torch.Tensor
-            Tensor containing the tabular data.
+        x : tuple
+            Tuple containing the tabular data and the graph data structure:
+            (node features, edge indices, edge attributes)
 
         Returns
         -------
         list
             List containing the output of the model.
         """
+
+        # ~~ Checks ~~
+        # check x is a tuple of length 3
+        check_model_validity.check_model_input(x, correct_length=3)
+
         x_n, edge_index, edge_attr = x
 
         for layer in self.graph_conv_layers:

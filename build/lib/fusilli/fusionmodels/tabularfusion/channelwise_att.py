@@ -72,7 +72,7 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         ----------
         pred_type : str
           Type of prediction to be performed.
-        data_dims : dict
+        data_dims : list
           Dictionary containing the dimensions of the data.
         params : dict
           Dictionary containing the parameters of the model.
@@ -153,14 +153,18 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
 
         Parameters
         ----------
-        x : list
-          List containing the input data.
+        x : tuple
+          Tuple containing the input data.
 
         Returns
         -------
         list
           List containing the output of the model.
         """
+
+        # ~~ Checks ~~
+        check_model_validity.check_model_input(x)
+
         x_tab1 = x[0]
         x_tab2 = x[1]
 

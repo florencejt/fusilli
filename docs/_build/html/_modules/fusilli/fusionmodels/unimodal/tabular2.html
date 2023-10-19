@@ -141,7 +141,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        pred_type : str</span>
 <span class="sd">            Type of prediction to be performed.</span>
-<span class="sd">        data_dims : dict</span>
+<span class="sd">        data_dims : list</span>
 <span class="sd">            Dictionary containing the dimensions of the data.</span>
 <span class="sd">        params : dict</span>
 <span class="sd">            Dictionary containing the parameters of the model.</span>
@@ -201,6 +201,9 @@
 <span class="sd">        list</span>
 <span class="sd">            List containing the output of the model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_model_input</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">uni_modal_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
         <span class="n">x_tab2</span> <span class="o">=</span> <span class="n">x</span>
 
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod2_layers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>

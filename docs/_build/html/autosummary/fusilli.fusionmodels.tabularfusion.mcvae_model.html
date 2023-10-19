@@ -349,7 +349,7 @@ latent space layers.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pred_type</strong> (<em>str</em>) – Type of prediction to be performed.</p></li>
-<li><p><strong>data_dims</strong> (<em>dict</em>) – Dictionary containing the dimensions of the data.</p></li>
+<li><p><strong>data_dims</strong> (<em>list</em>) – Dictionary containing the dimensions of the data.</p></li>
 <li><p><strong>params</strong> (<em>dict</em>) – Dictionary containing the parameters of the model.</p></li>
 </ul>
 </dd>
@@ -373,7 +373,7 @@ latent space layers.</p>
 <dd><p>Forward pass of the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>list</em>) – List containing the two types of tabular data.</p>
+<dd class="field-odd"><p><strong>x</strong> (<em>torch.Tensor</em>) – torch.Tensor containing the input data: joint latent space of the two types of tabular data.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>out_pred</strong> – List containing the predictions.</p>

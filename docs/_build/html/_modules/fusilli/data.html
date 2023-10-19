@@ -132,8 +132,6 @@
 <span class="sd">        Do not put the batch_size dimension in the tuple.</span>
 <span class="sd">        If None, no downsampling is performed</span>
 
-
-
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    downsampled_img : array-like</span>
@@ -180,7 +178,8 @@
     <span class="c1"># if output_size is larger than image dimensions</span>
     <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">i</span> <span class="o">&gt;</span> <span class="n">j</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">output_size</span><span class="p">,</span> <span class="n">imgs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])]):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;output_size must be smaller than image dimensions, but got </span><span class="si">{</span><span class="n">output_size</span><span class="si">}</span><span class="s2"> and image dimensions </span><span class="si">{</span><span class="n">imgs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_size must be smaller than image dimensions, but got </span><span class="si">{</span><span class="n">output_size</span><span class="si">}</span><span class="s2"> and &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;image dimensions </span><span class="si">{</span><span class="n">imgs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="n">downsampled_img</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">output_size</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
@@ -519,17 +518,17 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TrainTestDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.TrainTestDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">params</span><span class="p">,</span>
-        <span class="n">fusion_model</span><span class="p">,</span>
-        <span class="n">sources</span><span class="p">,</span>
-        <span class="n">batch_size</span><span class="p">,</span>
-        <span class="n">subspace_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-        <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">params</span><span class="p">,</span>
+            <span class="n">fusion_model</span><span class="p">,</span>
+            <span class="n">sources</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">subspace_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+            <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -607,8 +606,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_dims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modality_methods</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">modality_type</span><span class="p">]()</span></div>
 
 <div class="viewcode-block" id="TrainTestDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.TrainTestDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Splits the data into train and test sets, and runs the subspace method if specified.</span>
@@ -634,7 +633,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if subspace method is specified</span>
             <span class="k">if</span> <span class="p">(</span>
-                <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span>
+                    <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span>
             <span class="p">):</span>  <span class="c1"># if no checkpoint path specified, train the subspace method</span>
                 <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span>
                     <span class="bp">self</span><span class="p">,</span>
@@ -749,8 +748,6 @@
 <span class="sd">        Fusion model class. e.g. &quot;TabularCrossmodalAttention&quot;.</span>
 <span class="sd">    batch_size : int</span>
 <span class="sd">        Batch size (default 8).</span>
-<span class="sd">    test_size : float</span>
-<span class="sd">        Fraction of data to use for testing (default 0.2).</span>
 <span class="sd">    pred_type : str</span>
 <span class="sd">        Prediction type (binary, multiclass, regression).</span>
 <span class="sd">    multiclass_dims : int</span>
@@ -773,17 +770,17 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="KFoldDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">params</span><span class="p">,</span>
-        <span class="n">fusion_model</span><span class="p">,</span>
-        <span class="n">sources</span><span class="p">,</span>
-        <span class="n">batch_size</span><span class="p">,</span>
-        <span class="n">subspace_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-        <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">params</span><span class="p">,</span>
+            <span class="n">fusion_model</span><span class="p">,</span>
+            <span class="n">sources</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">subspace_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+            <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -894,8 +891,8 @@
         <span class="k">return</span> <span class="n">folds</span>  <span class="c1"># list of tuples of (train_dataset, test_dataset)</span></div>
 
 <div class="viewcode-block" id="KFoldDataModule.setup"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Splits the data into train and test sets, and runs the subspace method if specified</span>
@@ -1082,14 +1079,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TrainTestGraphDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.TrainTestGraphDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">params</span><span class="p">,</span>
-        <span class="n">fusion_model</span><span class="p">,</span>
-        <span class="n">sources</span><span class="p">,</span>
-        <span class="n">graph_creation_method</span><span class="p">,</span>
-        <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">params</span><span class="p">,</span>
+            <span class="n">fusion_model</span><span class="p">,</span>
+            <span class="n">sources</span><span class="p">,</span>
+            <span class="n">graph_creation_method</span><span class="p">,</span>
+            <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -1238,14 +1235,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="KFoldGraphDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldGraphDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">params</span><span class="p">,</span>
-        <span class="n">fusion_model</span><span class="p">,</span>
-        <span class="n">sources</span><span class="p">,</span>
-        <span class="n">graph_creation_method</span><span class="p">,</span>
-        <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">params</span><span class="p">,</span>
+            <span class="n">fusion_model</span><span class="p">,</span>
+            <span class="n">sources</span><span class="p">,</span>
+            <span class="n">graph_creation_method</span><span class="p">,</span>
+            <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -1393,16 +1390,16 @@
 
 
 <div class="viewcode-block" id="get_data_module"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.get_data_module">[docs]</a><span class="k">def</span> <span class="nf">get_data_module</span><span class="p">(</span>
-    <span class="n">fusion_model</span><span class="p">,</span>
-    <span class="n">params</span><span class="p">,</span>
-    <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-    <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="n">optional_suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">fusion_model</span><span class="p">,</span>
+        <span class="n">params</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+        <span class="n">image_downsample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">optional_suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gets the data module for a specific fusion model and training protocol.</span>
@@ -1415,10 +1412,13 @@
 <span class="sd">        Dictionary of parameters.</span>
 <span class="sd">    batch_size : int</span>
 <span class="sd">        Batch size (default 8).</span>
-<span class="sd">    image_downsample_size : list</span>
-<span class="sd">        List of image dimensions to downsample to (default None).</span>
+<span class="sd">    image_downsample_size : tuple</span>
+<span class="sd">        Tuple of image dimensions to downsample to (default None).</span>
+<span class="sd">        e.g. (100, 100, 100) for 3D images, (100, 100) for 2D images.</span>
 <span class="sd">    layer_mods : dict</span>
 <span class="sd">        Dictionary of layer modifications (default None).</span>
+<span class="sd">    max_epochs : int</span>
+<span class="sd">        Maximum number of epochs to train subspace methods for. (default 1000)</span>
 <span class="sd">    optional_suffix : str</span>
 <span class="sd">        Optional suffix added to data source file names (default None).</span>
 <span class="sd">    checkpoint_path : str</span>

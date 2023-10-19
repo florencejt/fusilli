@@ -1,18 +1,18 @@
 import pytest
 import torch.nn as nn
 from fusilli.utils import model_modifier
-from fusilli.fusion_models.denoise_tab_img_maps import (
+from fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps import (
     denoising_autoencoder_subspace_method,
     DAETabImgMaps,
 )
-from fusilli.fusion_models.concat_img_latent_tab_doubleloss import (
+from fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubleloss import (
     ConcatImgLatentTabDoubleLoss,
 )
-from fusilli.fusion_models.concat_img_latent_tab_doubletrain import (
+from fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain import (
     concat_img_latent_tab_subspace_method,
     ConcatImgLatentTabDoubleTrain,
 )
-from fusilli.fusion_models.mcvae_tab import (
+from fusilli.fusionmodels.tabularfusion.mcvae_model import (
     MCVAESubspaceMethod,
     MCVAE_tab,
 )
@@ -21,7 +21,6 @@ from tests.test_data.test_TrainTestDataModule import create_test_files
 from fusilli.data import TrainTestDataModule
 import warnings
 from unittest.mock import patch, Mock
-
 
 # correct modifications
 correct_modifications_2D = {
@@ -570,7 +569,7 @@ model_instances_training = [
 # testing correct modifications: tabular-only or 2D
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_training)
 def test_correct_modify_model_architecture_2D_training(
-    model_name, model_fixture, request
+        model_name, model_fixture, request
 ):
     # "modification" may have been modified (ironically) by the calc_fused_layers method
     # in some of the models. This is to ensure that the input to the layers is consistent
@@ -606,15 +605,15 @@ def test_correct_modify_model_architecture_2D_training(
         # has not
         if hasattr(original_model, "final_prediction"):
             assert (
-                modified_model.final_prediction[-1].out_features
-                == original_model.final_prediction[-1].out_features
+                    modified_model.final_prediction[-1].out_features
+                    == original_model.final_prediction[-1].out_features
             )
 
 
 # testing correct modifications: tabular-only or 3D
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_training)
 def test_correct_modify_model_architecture_3D_training(
-    model_name, model_fixture, request
+        model_name, model_fixture, request
 ):
     # "modification" may have been modified (ironically) by the calc_fused_layers method
     # in some of the models. This is to ensure that the input to the layers is consistent
@@ -649,15 +648,15 @@ def test_correct_modify_model_architecture_3D_training(
         # Ensure that the final prediction layer has been modified as expected but the output dim has not
         if hasattr(original_model, "final_prediction"):
             assert (
-                modified_model.final_prediction[-1].out_features
-                == original_model.final_prediction[-1].out_features
+                    modified_model.final_prediction[-1].out_features
+                    == original_model.final_prediction[-1].out_features
             )
 
 
 # Test the modify_model_architecture function with incorrect data type for the modifications
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_training)
 def test_wrong_data_type_modify_model_architecture_training(
-    model_name, model_fixture, request
+        model_name, model_fixture, request
 ):
     # iterate through the modifications to check each throws an error
     for key, modification in wrong_layer_type_modifications.get(model_name, {}).items():
@@ -665,7 +664,7 @@ def test_wrong_data_type_modify_model_architecture_training(
 
         # Modify the model's architecture using the function
         with pytest.raises(
-            TypeError, match="Incorrect data type for the modifications"
+                TypeError, match="Incorrect data type for the modifications"
         ):
             model_modifier.modify_model_architecture(
                 request.getfixturevalue(model_fixture),
@@ -676,7 +675,7 @@ def test_wrong_data_type_modify_model_architecture_training(
 # Test the modify_model_architecture function with 3D conv layers with 2D data
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_training)
 def test_wrong_img_dim_2D_modify_model_architecture_training(
-    model_name, model_fixture, request
+        model_name, model_fixture, request
 ):
     if "2D" in model_fixture:
         # using correct 3D modifications, which are incorrect for 2D images
@@ -694,7 +693,7 @@ def test_wrong_img_dim_2D_modify_model_architecture_training(
 # Test the modify_model_architecture function with 2D conv layers with 3D data
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_training)
 def test_wrong_img_dim_3D_modify_model_architecture_training(
-    model_name, model_fixture, request
+        model_name, model_fixture, request
 ):
     if "3D" in model_fixture:
         # using correct 3D modifications, which are incorrect for 2D images
@@ -888,8 +887,8 @@ def test_correct_modify_model_architecture_2D_data(model_name, model_fixture, re
         # Ensure that the final prediction layer has been modified as expected but the output dim has not
         if hasattr(original_model, "final_prediction"):
             assert (
-                modified_model.final_prediction[-1].out_features
-                == original_model.final_prediction[-1].out_features
+                    modified_model.final_prediction[-1].out_features
+                    == original_model.final_prediction[-1].out_features
             )
 
 
@@ -921,22 +920,22 @@ def test_correct_modify_model_architecture_3D_data(model_name, model_fixture, re
         # Ensure that the final prediction layer has been modified as expected but the output dim has not
         if hasattr(original_model, "final_prediction"):
             assert (
-                modified_model.final_prediction[-1].out_features
-                == original_model.final_prediction[-1].out_features
+                    modified_model.final_prediction[-1].out_features
+                    == original_model.final_prediction[-1].out_features
             )
 
 
 # Test the modify_model_architecture function with incorrect data type for the modifications
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_data)
 def test_wrong_data_type_modify_model_architecture_data(
-    model_name, model_fixture, request
+        model_name, model_fixture, request
 ):
     for key, modification in wrong_layer_type_modifications.get(model_name, {}).items():
         individual_modification = {model_name: {key: modification}}
 
         # Modify the model's architecture using the function
         with pytest.raises(
-            TypeError, match="Incorrect data type for the modifications"
+                TypeError, match="Incorrect data type for the modifications"
         ):
             model_modifier.modify_model_architecture(
                 request.getfixturevalue(model_fixture),
@@ -947,7 +946,7 @@ def test_wrong_data_type_modify_model_architecture_data(
 # Test the modify_model_architecture function with 3D conv layers with 2D data
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_data)
 def test_wrong_img_dim_2D_modify_model_architecture_data(
-    model_name, model_fixture, request
+        model_name, model_fixture, request
 ):
     if "2D" in model_fixture:
         # using correct 3D modifications, which are incorrect for 2D images
@@ -973,7 +972,7 @@ def test_wrong_img_dim_2D_modify_model_architecture_data(
 # Test the modify_model_architecture function with 2D conv layers with 3D data
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_data)
 def test_wrong_img_dim_3D_modify_model_architecture_data(
-    model_name, model_fixture, request
+        model_name, model_fixture, request
 ):
     if "3D" in model_fixture:
         listed_dict = [correct_modifications_2D[k] for k in ("all", model_name)]

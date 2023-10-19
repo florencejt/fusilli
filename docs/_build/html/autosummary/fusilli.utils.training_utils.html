@@ -193,7 +193,7 @@ disable the progress bar for validation.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
-<li><p><strong>model</strong> (<em>object</em>) – BaseModel model object.</p></li>
+<li><p><strong>model</strong> (<a class="reference internal" href="fusilli.fusionmodels.base_model.html#fusilli.fusionmodels.base_model.BaseModel" title="fusilli.fusionmodels.base_model.BaseModel"><em>BaseModel</em></a>) – BaseModel model object instance.</p></li>
 <li><p><strong>checkpoint_file_suffix</strong> (<em>str</em>) – Checkpoint file suffix.</p></li>
 <li><p><strong>fold</strong> (<em>int</em>) – Fold number. None if not using kfold.
 Default None.</p></li>
@@ -257,7 +257,7 @@ as “name_value”. And a tag will be added as “name_value”.</p>
 <dd><p>Get the final validation metrics from the trainer object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>trainer</strong> (<em>object</em>) – Pytorch lightning trainer object.</p>
+<dd class="field-odd"><p><strong>trainer</strong> (<em>pl.Trainer</em>) – Pytorch lightning trainer object.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
@@ -287,16 +287,16 @@ Default True.</p></li>
 <li><p><strong>checkpoint_filename</strong> (<em>str</em>) – Checkpoint filename.
 Default None if using default checkpointing.</p></li>
 <li><p><strong>own_early_stopping_callback</strong> (<em>object</em>) – Own early stopping callback object.
-Default None to use default early stopping callback. If you want to use your own early stopping callback, then you need to
-define it in the main training script and pass it here or pass into the datamodule object and then
-it will read it from there.</p></li>
+Default None to use default early stopping callback. If you want to use your own early stopping callback,
+then you need to define it in the main training script and pass it here or pass into the datamodule object
+and then it will read it from there.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>trainer</strong> – Pytorch lightning trainer object.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>object</p>
+<dd class="field-odd"><p>pl.Trainer</p>
 </dd>
 </dl>
 </dd></dl>
@@ -336,7 +336,7 @@ WandbLogger, otherwise it is set to CSVLogger and the logs are saved to params[�
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
-<li><p><strong>fold</strong> (<em>int</em>) – Fold number. None if not using kfold.</p></li>
+<li><p><strong>fold</strong> (<em>int</em><em> or </em><em>None</em>) – Fold number. None if not using kfold.</p></li>
 <li><p><strong>fusion_model</strong> (<em>class</em>) – Fusion model class.</p></li>
 <li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – Extra string to add to the run name. e.g. if you’re running
 the same model with different hyperparameters, you can add the hyperparameters.

@@ -40,7 +40,7 @@ def mcvae_early_stopping_tol(patience, tolerance, loss_logs, verbose=False):
     last_loss = -2000
     triggertimes = 0
     done = 0
-
+    i = 0
     for i in range(len(loss_logs)):
         current_loss = loss_logs[i]
 
@@ -132,7 +132,8 @@ class MCVAESubspaceMethod:
 
         if self.num_latent_dims < 0:
             raise ValueError(
-                "Incorrect attribute range: The latent dimension must be greater than 0. The latent dimension is currently: ",
+                "Incorrect attribute range: The latent dimension must be greater than 0. "
+                "The latent dimension is currently: ",
                 self.num_latent_dims,
             )
 
@@ -316,7 +317,7 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
         ----------
         pred_type : str
             Type of prediction to be performed.
-        data_dims : dict
+        data_dims : list
             Dictionary containing the dimensions of the data.
         params : dict
             Dictionary containing the parameters of the model.
@@ -324,12 +325,11 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
 
         self.pred_type = pred_type
-        # self.subspace_method = MCVAESubspaceMethod
 
         self.latent_space_layers = nn.ModuleDict(
             {
                 "layer 1": nn.Sequential(
-                    nn.Linear(25, 32),
+                    nn.Linear(self.mod1_dim, 32),
                     nn.ReLU(),
                 ),
                 "layer 2": nn.Sequential(
@@ -367,11 +367,6 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
             self.latent_space_layers, nn.ModuleDict, "latent_space_layers"
         )
 
-        # make sure the first layer takes in the latent dimension
-        self.latent_space_layers["layer 1"][0] = nn.Linear(
-            self.mod1_dim, self.latent_space_layers["layer 1"][0].out_features
-        )
-
         # check fused layers
         self.fused_dim = list(self.latent_space_layers.values())[-1][0].out_features
         self.fused_layers, out_dim = check_model_validity.check_fused_layers(
@@ -386,14 +381,17 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
 
         Parameters
         ----------
-        x : list
-            List containing the two types of tabular data.
+        x : torch.Tensor
+            torch.Tensor containing the input data: joint latent space of the two types of tabular data.
 
         Returns
         -------
         out_pred : list
             List containing the predictions.
         """
+        # ~~ Checks ~~
+        check_model_validity.check_model_input(x, True)
+
         x_latent = x
 
         for layer in self.latent_space_layers.values():

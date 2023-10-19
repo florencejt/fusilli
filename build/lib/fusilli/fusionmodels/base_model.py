@@ -4,7 +4,6 @@ Base lightning module for all fusion models and parent class for all fusion mode
 
 from typing import Any
 import pytorch_lightning as pl
-from pytorch_lightning.utilities.types import EVAL_DATALOADERS
 import torch
 import torchmetrics as tm
 from torch import nn
@@ -155,7 +154,15 @@ class BaseModel(pl.LightningModule):
         self.batch_train_preds = []
         self.batch_train_logits = []
 
-    def safe_squeeze(self, tensor):
+        # Instance attributes for storing final validation reals and preds
+        self.val_reals = None
+        self.val_preds = None
+        self.val_logits = None
+        self.train_reals = None
+        self.train_preds = None
+
+    @staticmethod
+    def safe_squeeze(tensor):
         """
         Squeeze tensor if it is not 1D.
 
@@ -176,7 +183,7 @@ class BaseModel(pl.LightningModule):
         else:
             return tensor.squeeze(dim=0)
 
-    def get_data_from_batch(self, batch, train=True):
+    def get_data_from_batch(self, batch):
         """
         Get data from batch.
 
@@ -184,8 +191,6 @@ class BaseModel(pl.LightningModule):
         ----------
         batch : tensor
             Batch of data.
-        train : bool
-            Whether the data is training data.
 
         Returns
         -------
@@ -283,6 +288,8 @@ class BaseModel(pl.LightningModule):
             added_loss = self.model.custom_loss(
                 reconstructions[0], x[-1]
             )  # x[-1] bc img is always last
+            print(loss)
+            print("al", added_loss)
             loss += added_loss
 
         return loss, end_output, logits
@@ -366,7 +373,7 @@ class BaseModel(pl.LightningModule):
         -------
         None
         """
-        x, y = self.get_data_from_batch(batch, train=False)
+        x, y = self.get_data_from_batch(batch)
 
         loss, end_output, logits = self.get_model_outputs_and_loss(x, y, train=False)
 
@@ -392,6 +399,15 @@ class BaseModel(pl.LightningModule):
         When metrics are calculated at the validation step and logged on on_epoch=True,
         the batch metrics are averaged. However, some metrics don't average well (e.g. R2).
         Therefore, we're calculating the final validation metrics here on the full validation set.
+
+        Parameters
+        ----------
+        outputs : list
+            List of outputs.
+
+        Returns
+        -------
+        None
         """
 
         self.val_reals = torch.cat(self.batch_val_reals, dim=-1)
@@ -401,7 +417,7 @@ class BaseModel(pl.LightningModule):
         try:
             self.train_reals = torch.cat(self.batch_train_reals, dim=-1)
             self.train_preds = torch.cat(self.batch_train_preds, dim=-1)
-        except:
+        except RuntimeError:  # if we're doing graph-based fusion and train/test doesn't work the same as normal
             pass
 
         for i, metric in enumerate(self.metrics[self.model.pred_type]):
@@ -433,7 +449,7 @@ class BaseModel(pl.LightningModule):
     def predict_step(self, batch: Any, batch_idx: int, dataloader_idx: int = 0) -> Any:
         self.model.eval()
 
-        x, y = self.get_data_from_batch(batch, train=False)
+        x, y = self.get_data_from_batch(batch)
 
         loss, end_output, logits = self.get_model_outputs_and_loss(x, y, train=False)
 
@@ -469,8 +485,6 @@ class ParentFusionModel:
         Dictionary of parameters.
     multiclass_dim : int
         Number of classes for multiclass prediction.
-    kfold_flag : bool
-        Whether to use k-fold cross validation.
     final_prediction: nn.Sequential
         Final prediction layers.
     mod1_layers : nn.ModuleDict
@@ -532,10 +546,6 @@ class ParentFusionModel:
         """
         Sets layers for modality 1
 
-        Parameters
-        ----------
-        None
-
         Returns
         -------
         None
@@ -568,10 +578,6 @@ class ParentFusionModel:
     def set_mod2_layers(self):
         """
         Sets layers for modality 2
-
-        Parameters
-        ----------
-        None
 
         Returns
         -------
@@ -606,10 +612,6 @@ class ParentFusionModel:
         """
         Sets layers for image modality. If using 2D images, then the layers will use Conv2D layers.
         If using 3D images, then the layers will use Conv3D layers.
-
-        Parameters
-        ----------
-        None
 
         Returns
         -------

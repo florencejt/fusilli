@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "fusilli"
 version = "0.0.1"
 authors = [
-  { name="Florence J Townend", email="f.j.townend@live.com" },
+    { name = "Florence J Townend", email = "f.j.townend@live.com" },
 ]
 description = "Comparing multi-modal data fusion methods. Don't be silly, use Fusilli!"
 readme = "README.md"
@@ -24,4 +24,5 @@ filterwarnings = [
     "ignore:Layer group*:UserWarning",
     "ignore:.*Use Resampling.*:DeprecationWarning",
     "ignore:.*The 'warn' method is deprecated*:DeprecationWarning",
+    "ignore:.*np.find_common_type is deprecated*:DeprecationWarning",
 ]

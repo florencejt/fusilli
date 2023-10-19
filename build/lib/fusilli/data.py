@@ -31,8 +31,6 @@ def downsample_img_batch(imgs, output_size):
         Do not put the batch_size dimension in the tuple.
         If None, no downsampling is performed
 
-
-
     Returns
     -------
     downsampled_img : array-like
@@ -79,7 +77,8 @@ def downsample_img_batch(imgs, output_size):
     # if output_size is larger than image dimensions
     if any([i > j for i, j in zip(output_size, imgs.shape[2:])]):
         raise ValueError(
-            f"output_size must be smaller than image dimensions, but got {output_size} and image dimensions {imgs.shape[2:]}"
+            f"output_size must be smaller than image dimensions, but got {output_size} and "
+            f"image dimensions {imgs.shape[2:]}"
         )
 
     downsampled_img = F.interpolate(imgs, size=output_size, mode="nearest")
@@ -418,17 +417,17 @@ class TrainTestDataModule(pl.LightningDataModule):
     """
 
     def __init__(
-        self,
-        params,
-        fusion_model,
-        sources,
-        batch_size,
-        subspace_method=None,
-        image_downsample_size=None,
-        layer_mods=None,
-        max_epochs=1000,
-        extra_log_string_dict=None,
-        own_early_stopping_callback=None,
+            self,
+            params,
+            fusion_model,
+            sources,
+            batch_size,
+            subspace_method=None,
+            image_downsample_size=None,
+            layer_mods=None,
+            max_epochs=1000,
+            extra_log_string_dict=None,
+            own_early_stopping_callback=None,
     ):
         """
         Parameters
@@ -506,8 +505,8 @@ class TrainTestDataModule(pl.LightningDataModule):
         self.dataset, self.data_dims = self.modality_methods[self.modality_type]()
 
     def setup(
-        self,
-        checkpoint_path=None,
+            self,
+            checkpoint_path=None,
     ):
         """
         Splits the data into train and test sets, and runs the subspace method if specified.
@@ -533,7 +532,7 @@ class TrainTestDataModule(pl.LightningDataModule):
 
         if self.subspace_method is not None:  # if subspace method is specified
             if (
-                checkpoint_path is None
+                    checkpoint_path is None
             ):  # if no checkpoint path specified, train the subspace method
                 subspace_method = self.subspace_method(
                     self,
@@ -648,8 +647,6 @@ class KFoldDataModule(pl.LightningDataModule):
         Fusion model class. e.g. "TabularCrossmodalAttention".
     batch_size : int
         Batch size (default 8).
-    test_size : float
-        Fraction of data to use for testing (default 0.2).
     pred_type : str
         Prediction type (binary, multiclass, regression).
     multiclass_dims : int
@@ -672,17 +669,17 @@ class KFoldDataModule(pl.LightningDataModule):
     """
 
     def __init__(
-        self,
-        params,
-        fusion_model,
-        sources,
-        batch_size,
-        subspace_method=None,
-        image_downsample_size=None,
-        layer_mods=None,
-        max_epochs=1000,
-        extra_log_string_dict=None,
-        own_early_stopping_callback=None,
+            self,
+            params,
+            fusion_model,
+            sources,
+            batch_size,
+            subspace_method=None,
+            image_downsample_size=None,
+            layer_mods=None,
+            max_epochs=1000,
+            extra_log_string_dict=None,
+            own_early_stopping_callback=None,
     ):
         """
         Parameters
@@ -793,8 +790,8 @@ class KFoldDataModule(pl.LightningDataModule):
         return folds  # list of tuples of (train_dataset, test_dataset)
 
     def setup(
-        self,
-        checkpoint_path=None,
+            self,
+            checkpoint_path=None,
     ):
         """
         Splits the data into train and test sets, and runs the subspace method if specified
@@ -981,14 +978,14 @@ class TrainTestGraphDataModule:
     """
 
     def __init__(
-        self,
-        params,
-        fusion_model,
-        sources,
-        graph_creation_method,
-        image_downsample_size=None,
-        layer_mods=None,
-        extra_log_string_dict=None,
+            self,
+            params,
+            fusion_model,
+            sources,
+            graph_creation_method,
+            image_downsample_size=None,
+            layer_mods=None,
+            extra_log_string_dict=None,
     ):
         """
         Parameters
@@ -1137,14 +1134,14 @@ class KFoldGraphDataModule:
     """
 
     def __init__(
-        self,
-        params,
-        fusion_model,
-        sources,
-        graph_creation_method,
-        image_downsample_size=None,
-        layer_mods=None,
-        extra_log_string_dict=None,
+            self,
+            params,
+            fusion_model,
+            sources,
+            graph_creation_method,
+            image_downsample_size=None,
+            layer_mods=None,
+            extra_log_string_dict=None,
     ):
         """
         Parameters
@@ -1292,16 +1289,16 @@ class KFoldGraphDataModule:
 
 
 def get_data_module(
-    fusion_model,
-    params,
-    batch_size=8,
-    image_downsample_size=None,
-    layer_mods=None,
-    max_epochs=1000,
-    optional_suffix="",
-    checkpoint_path=None,
-    extra_log_string_dict=None,
-    own_early_stopping_callback=None,
+        fusion_model,
+        params,
+        batch_size=8,
+        image_downsample_size=None,
+        layer_mods=None,
+        max_epochs=1000,
+        optional_suffix="",
+        checkpoint_path=None,
+        extra_log_string_dict=None,
+        own_early_stopping_callback=None,
 ):
     """
     Gets the data module for a specific fusion model and training protocol.
@@ -1314,10 +1311,13 @@ def get_data_module(
         Dictionary of parameters.
     batch_size : int
         Batch size (default 8).
-    image_downsample_size : list
-        List of image dimensions to downsample to (default None).
+    image_downsample_size : tuple
+        Tuple of image dimensions to downsample to (default None).
+        e.g. (100, 100, 100) for 3D images, (100, 100) for 2D images.
     layer_mods : dict
         Dictionary of layer modifications (default None).
+    max_epochs : int
+        Maximum number of epochs to train subspace methods for. (default 1000)
     optional_suffix : str
         Optional suffix added to data source file names (default None).
     checkpoint_path : str

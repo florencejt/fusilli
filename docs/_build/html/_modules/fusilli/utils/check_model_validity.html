@@ -106,6 +106,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">torch</span>
 
 
 <div class="viewcode-block" id="check_dtype"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_dtype">[docs]</a><span class="k">def</span> <span class="nf">check_dtype</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">correct_dtype</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">):</span>
@@ -127,8 +128,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
-        <span class="n">attribute</span><span class="p">,</span>
-        <span class="n">correct_dtype</span><span class="p">,</span>
+            <span class="n">attribute</span><span class="p">,</span>
+            <span class="n">correct_dtype</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
             <span class="p">(</span>
@@ -170,6 +171,13 @@
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
         <span class="n">has_conv3d_layer</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv3d</span><span class="p">)</span> <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">attribute</span><span class="p">)</span>
         <span class="n">has_conv2d_layer</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">)</span> <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">attribute</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Incorrect data type for the modifications: Attribute </span><span class="si">{</span><span class="n">attribute_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; must be of type nn.ModuleDict or nn.Sequential, not dtype </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">attribute</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">has_conv2d_layer</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">has_conv3d_layer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
@@ -257,6 +265,43 @@
     <span class="n">fused_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">fused_dim</span><span class="p">,</span> <span class="n">fused_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_features</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">fused_layers</span><span class="p">,</span> <span class="n">out_dim</span></div>
+
+
+<div class="viewcode-block" id="check_model_input"><a class="viewcode-back" href="../../../autosummary/fusilli.utils.check_model_validity.html#fusilli.utils.check_model_validity.check_model_input">[docs]</a><span class="k">def</span> <span class="nf">check_model_input</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">uni_modal_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">correct_length</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check that the input to the model is of the correct length.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : tuple or torch.Tensor</span>
+<span class="sd">        Input to the model&#39;s forward function. Should either be a tuple of length 2 for multi-modal methods or a</span>
+<span class="sd">        torch tensor for uni-modal methods.</span>
+<span class="sd">    uni_modal_flag : bool</span>
+<span class="sd">        Flag to indicate whether the model is uni-modal or multi-modal. If True, the input should be a torch tensor.</span>
+<span class="sd">        If False, the input should be a tuple of length 2. Default is False.</span>
+<span class="sd">    correct_length : int</span>
+<span class="sd">        Correct length of the input to the model if it is multi-modal. Default is 2.</span>
+<span class="sd">        Could be 3 for the graph methods.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">uni_modal_flag</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Wrong input type for model! Expected torch.Tensor, not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Wrong input type for model! Expected tuple, not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="n">correct_length</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Wrong number of inputs for model! Expected </span><span class="si">{</span><span class="n">correct_length</span><span class="si">}</span><span class="s2">, not </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x_i</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="k">for</span> <span class="n">x_i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Wrong input type for model! Expected list of torch.Tensors, not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span></div>
 </pre></div>
 
            </div>
