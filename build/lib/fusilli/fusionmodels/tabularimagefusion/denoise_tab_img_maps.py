@@ -119,8 +119,10 @@ class DenoisingAutoencoder(pl.LightningModule):
             List containing the output.
         """
 
+        x_before_dropout = x
+
         # drop out 0.2 of the tabular data to 0
-        # simulates missing data
+        # simulates missing data (adding noise)
         x_dropout = nn.Dropout(0.2)(x)
 
         # upsample
@@ -129,9 +131,11 @@ class DenoisingAutoencoder(pl.LightningModule):
         # downsample
         out = self.downsampler(x_latent)
 
-        # return downsampled tab data
+        # return reconstructed data and the non-dropped out data
 
         return out, x_dropout
+
+        # return out, x_before_dropout
 
     def training_step(self, batch, batch_idx):
         """

@@ -51,7 +51,7 @@ class ImgLatentSpace(pl.LightningModule):
         """
         Parameters
         ----------
-        data_dims : dict
+        data_dims : list
             Dictionary containing the dimensions of the data.
         """
         super(ImgLatentSpace, self).__init__()
@@ -298,7 +298,7 @@ class concat_img_latent_tab_subspace_method:
             Data module containing the data.
         max_epochs : int
             Maximum number of epochs to train the latent image space.
-        checkpoint_path : list
+        checkpoint_path : list or None
             List containing the path to the checkpoint of the latent image space.
         """
         self.datamodule = datamodule

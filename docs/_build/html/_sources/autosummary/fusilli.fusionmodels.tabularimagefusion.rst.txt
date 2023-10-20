@@ -1,4 +1,4 @@
-﻿fusilli.fusionmodels.tabularimagefusion
+fusilli.fusionmodels.tabularimagefusion
 =======================================
 
 .. automodule:: fusilli.fusionmodels.tabularimagefusion

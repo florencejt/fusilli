@@ -1,4 +1,4 @@
-﻿fusilli.utils.check\_model\_validity
+fusilli.utils.check\_model\_validity
 ====================================
 
 .. automodule:: fusilli.utils.check_model_validity

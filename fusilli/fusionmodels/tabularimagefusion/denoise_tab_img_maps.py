@@ -119,8 +119,10 @@ class DenoisingAutoencoder(pl.LightningModule):
             List containing the output.
         """
 
+        x_before_dropout = x
+
         # drop out 0.2 of the tabular data to 0
-        # simulates missing data
+        # simulates missing data (adding noise)
         x_dropout = nn.Dropout(0.2)(x)
 
         # upsample
@@ -129,9 +131,11 @@ class DenoisingAutoencoder(pl.LightningModule):
         # downsample
         out = self.downsampler(x_latent)
 
-        # return downsampled tab data
+        # return reconstructed data and the non-dropped out data
 
-        return out, x_dropout
+        # return out, x_dropout
+
+        return out, x_before_dropout
 
     def training_step(self, batch, batch_idx):
         """
@@ -230,7 +234,7 @@ class ImgUnimodalDAE(pl.LightningModule):
     ----------
     img_dim : int
         Dimension of the input image data.
-    multiclass_dim : int
+    multiclass_dims : int
         Number of classes for multiclass classification.
     img_layers : nn.ModuleDict
         Image layers.
@@ -270,11 +274,11 @@ class ImgUnimodalDAE(pl.LightningModule):
         super().__init__()
 
         self.img_dim = data_dims[2]
+        # needed for ParentFusionModel
         self.multiclass_dim = multiclass_dims
         self.pred_type = pred_type
 
         # get the img layers from ParentFusionModel
-        self.img_layers = None
         ParentFusionModel.set_img_layers(self)  # this will set the img_layers
 
         if self.pred_type == "regression":
@@ -288,8 +292,8 @@ class ImgUnimodalDAE(pl.LightningModule):
 
         elif self.pred_type == "multiclass":
             self.loss = lambda logits, y: F.cross_entropy(
-                BaseModel.safe_squeeze(self, logits),
-                BaseModel.safe_squeeze(self, y).long(),
+                BaseModel.safe_squeeze(logits),
+                BaseModel.safe_squeeze(y).long(),
             )
             self.activation = lambda x: torch.argmax(nn.Softmax(dim=-1)(x), dim=-1)
 
@@ -498,7 +502,7 @@ class denoising_autoencoder_subspace_method:
             Data module containing the data.
         max_epochs : int
             Maximum number of epochs. Default is 1000.
-        checkpoint_path : list
+        checkpoint_path : list or None
             List containing the checkpoint paths for the denoising autoencoder and the image
             unimodal network. Default is None - which means that the model needs training.
         own_early_stopping_callback : pytorch lightning callback

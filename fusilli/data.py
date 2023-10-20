@@ -387,8 +387,8 @@ class TrainTestDataModule(pl.LightningDataModule):
         Dictionary of methods for loading the different modalities.
     params : dict
         Dictionary of parameters.
-    fusion_model : str
-        fusion model class. e.g. "TabularCrossmodalAttention".
+    fusion_model : class
+        fusion model class. e.g. TabularCrossmodalAttention.
     batch_size : int
         Batch size (default 8).
     test_size : float
@@ -435,7 +435,7 @@ class TrainTestDataModule(pl.LightningDataModule):
 
         params : dict
             Dictionary of parameters.
-        fusion_model : str
+        fusion_model : class
             Fusion model class. e.g. "TabularCrossmodalAttention".
         sources : list
             List of source csv files.

@@ -1,4 +1,4 @@
-﻿fusilli.fusionmodels.unimodal
+fusilli.fusionmodels.unimodal
 =============================
 
 .. automodule:: fusilli.fusionmodels.unimodal
