@@ -9,23 +9,25 @@ Twitter: [@FlorenceTownend](https://twitter.com/FlorenceTownend)
 
 <img height="150" src="/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/pink_pasta_logo.png" width="150"/>
 
+🍝 Welcome to `fusilli` 🍝, where we're cooking up something special in the world of machine learning! Fusilli is your
+go-to
+library for multi-modal data fusion methods, and it's designed to make data fusion a piece of cake 🍰
 
-`fusilli` is a collection of multi-modal data fusion methods for machine learning.
-*What is multi-modal data fusion??* I hear you cry! Well, let me tell you...
+*But Florence, what is multi-modal data fusion??* Well, let me tell you...
 
 Multi-modal data fusion is the combination of different types of data (or data modalities) in the pursuit of some common
 goal. For example, using both blood test results and neuroimaging to predict whether somebody will develop a disease.
 There are many different ways to combine data modalities, and the aim of `fusilli` is to provide a platform for
 anybody to compare different methods against each other.
 
-`fusilli` is built using PyTorch Lightning and PyTorch Geometric. It supports the following scenarios:
+Fusilli is built using PyTorch Lightning and PyTorch Geometric, and it currently supports the following scenarios:
 
-1. `fusilli` currently supports **tabular-tabular fusion** and **tabular-image fusion**. For example, you can combine
-   two
-   different types of tabular data, or one type of tabular data and one type of image data (2D or 3D).
-2. `fusilli` currently supports **regression**, **binary classification**, and **multi-class classification** as its
-   prediction
-   tasks. Other tasks, such as clustering or segmentation, are not currently supported.
+1. **Tabular-Tabular** **Fusion**: Combine two different types of tabular data.
+2. **Tabular-Image** **Fusion**: Combine one type of tabular data with image data (2D or 3D).
+
+Fusilli supports a range of prediction tasks, including **regression**, **binary classification**, and **multi-class
+classification.**
+Note that it does not currently support tasks such as clustering or segmentation.
 
 Want to know more? Here is a link to Read the Docs:
 [https://fusilli.readthedocs.io/en/latest/](https://fusilli.readthedocs.io/en/latest/)
@@ -37,11 +39,11 @@ Want to know more? Here is a link to Read the Docs:
     - Loading your own data
     - Logging experiments
     - Modifying model structures
-- API documentation of the `fusilli` codebase
+- A recipe book of API documentation for the Fusilli codebase.
 
 ### Installation
 
-To install `fusilli`, you can use `pip`:
+To savour the flavours of `fusilli`, you can install it using pip:
 
 ```
 pip install fusilli
