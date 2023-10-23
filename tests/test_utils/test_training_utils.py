@@ -12,6 +12,11 @@ from unittest.mock import Mock
 import wandb
 import os
 import tempfile
+import lightning.pytorch as pl
+from lightning.pytorch.callbacks import (EarlyStopping, ModelCheckpoint)
+from lightning.pytorch import Trainer
+from torchmetrics import Accuracy, R2Score
+import numpy as np
 
 
 # get_file_suffix_from_dict tests
@@ -54,8 +59,8 @@ def test_set_checkpoint_name_with_fold():
     )
 
     assert (
-        checkpoint_name
-        == "SomeFusionModelClass_fold_1_param1_value1_param2_42_{epoch:02d}"
+            checkpoint_name
+            == "SomeFusionModelClass_fold_1_param1_value1_param2_42_{epoch:02d}"
     )
 
 
@@ -236,7 +241,7 @@ def test_get_checkpoint_filename_for_trained_fusion_model_not_found(params, mode
 
     # Attempt to get a checkpoint filename when no matching file exists
     with pytest.raises(
-        ValueError, match=r"Could not find checkpoint file with name .*"
+            ValueError, match=r"Could not find checkpoint file with name .*"
     ):
         get_checkpoint_filename_for_trained_fusion_model(
             params, model, checkpoint_file_suffix
@@ -261,7 +266,7 @@ def test_get_checkpoint_filename_for_trained_fusion_model_multiple_files(params,
 
     # Attempt to get a checkpoint filename when multiple matching files exist
     with pytest.raises(
-        ValueError, match=r"Found multiple checkpoint files with name .*"
+            ValueError, match=r"Found multiple checkpoint files with name .*"
     ):
         get_checkpoint_filename_for_trained_fusion_model(
             params, model, checkpoint_file_suffix
@@ -272,8 +277,11 @@ def test_get_checkpoint_filename_for_trained_fusion_model_multiple_files(params,
     os.remove(mock_checkpoint_path_2)
 
 
-from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
-from pytorch_lightning import Trainer
+# from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
+# from pytorch_lightning import Trainer
+# from lightning.pytorch.callbacks.early_stopping import EarlyStopping
+# from lightning.pytorch.callbacks.model_checkpoint import ModelCheckpoint
+# from lightning.pytorch.trainer.trainer import Trainer
 
 
 @pytest.fixture
@@ -294,9 +302,14 @@ def test_init_trainer_default(mock_logger):
     assert trainer.checkpoint_callback is not None
 
 
+@pytest.mark.filterwarnings("ignore:.*GPU available but not used*.", )
 def test_init_trainer_custom_early_stopping(mock_logger):
     # Test initializing trainer with a custom early stopping callback
-    custom_early_stopping = Mock()
+    # custom_early_stopping = Mock()
+    custom_early_stopping = EarlyStopping(monitor="val_loss",
+                                          patience=3,
+                                          verbose=True,
+                                          mode="max", )
     trainer = init_trainer(
         mock_logger, params={}, own_early_stopping_callback=custom_early_stopping
     )
@@ -307,7 +320,12 @@ def test_init_trainer_custom_early_stopping(mock_logger):
     assert trainer.logger == mock_logger
 
     # check that the custom early stopping callback is the first callback
-    assert isinstance(trainer.callbacks[0], Mock)
+    assert trainer.early_stopping_callback is not None
+    assert isinstance(trainer.callbacks[0], EarlyStopping)
+    assert trainer.callbacks[0] == custom_early_stopping
+    for key in custom_early_stopping.__dict__:
+        assert custom_early_stopping.__dict__[key] == trainer.early_stopping_callback.__dict__[key]
+
     assert trainer.checkpoint_callback is not None
 
 
@@ -358,9 +376,10 @@ def test_init_trainer_without_checkpointing(mock_logger):
     assert isinstance(trainer.callbacks[0], EarlyStopping)
 
 
-from pytorch_lightning import Trainer
-from torchmetrics import Accuracy, R2Score
-import numpy as np
+# from pytorch_lightning import Trainer
+# from lightning.pytorch.trainer import Trainer
+# from torchmetrics import Accuracy, R2Score
+# import numpy as np
 
 
 # Define a dummy LightningModule class for testing
@@ -435,7 +454,7 @@ def test_get_final_val_metrics_wrong_metric_names():
 
     # Get the final validation metrics
     with pytest.raises(
-        ValueError,
-        match=r"not in trainer.callback_metrics.keys()",
+            ValueError,
+            match=r"not in trainer.callback_metrics.keys()",
     ):
         get_final_val_metrics(trainer)

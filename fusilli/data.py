@@ -7,7 +7,7 @@ Train/test splits and k-fold cross validation are also implemented here.
 
 # imports
 import pandas as pd
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 import torch
 import torch.nn.functional as F
 from sklearn.model_selection import KFold
@@ -829,6 +829,7 @@ class KFoldDataModule(pl.LightningDataModule):
                         self,
                         k=k,
                         max_epochs=self.max_epochs,
+                        train_subspace=True,
                     )
 
                     # modify the subspace method architecture if specified
@@ -876,10 +877,20 @@ class KFoldDataModule(pl.LightningDataModule):
                         self,
                         k=k,
                         max_epochs=self.max_epochs,
-                        checkpoint_path=checkpoint_path,
+                        train_subspace=False,
+                        # checkpoint_path=checkpoint_path,
                     )
 
                     # modify the subspace method architecture if specified
+                    if self.layer_mods is not None:
+                        # if subspace method in layer_mods
+                        subspace_method = model_modifier.modify_model_architecture(
+                            subspace_method,
+                            self.layer_mods,
+                        )
+                    print(checkpoint_path)
+                    subspace_method.load_ckpt(checkpoint_path)
+
                     (
                         train_latents,
                         train_labels,

@@ -7,7 +7,7 @@ img_latent_subspace_method class.
 import copy
 
 import pandas as pd
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
@@ -329,9 +329,9 @@ class concat_img_latent_tab_subspace_method:
 
         Parameters
         ----------
-        checkpoint_path : str
-            Path to the checkpoint. The checkpoint must be a dictionary containing the state dict
-            of the model.
+        checkpoint_path : list
+            List containing the path to the checkpoint.
+
         """
 
         # load state dict only - of the already init-ed autoencoder

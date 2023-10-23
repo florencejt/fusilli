@@ -1,6 +1,7 @@
 import os
 from unittest.mock import patch, Mock
-from pytorch_lightning.loggers import WandbLogger, CSVLogger
+from lightning.pytorch.loggers import WandbLogger, CSVLogger
+# from pytorch_lightning.loggers import WandbLogger, CSVLogger
 from fusilli.utils.training_utils import set_logger
 import wandb
 

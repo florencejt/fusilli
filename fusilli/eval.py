@@ -21,6 +21,7 @@ from fusilli.fusionmodels.base_model import BaseModel
 from fusilli.utils.training_utils import (
     get_checkpoint_filename_for_trained_fusion_model,
 )
+from fusilli.utils import model_modifier
 
 
 class ParentPlotter:
@@ -180,7 +181,7 @@ class ParentPlotter:
 
     @classmethod
     def get_new_kfold_data(
-            cls, model_list, params, data_file_suffix, checkpoint_file_suffix=None
+            cls, model_list, params, data_file_suffix, checkpoint_file_suffix=None, layer_mods=None
     ):
         """
         Get new data by running through trained model for a kfold model.
@@ -283,6 +284,7 @@ class ParentPlotter:
                 params_copy,
                 optional_suffix=data_file_suffix,
                 checkpoint_path=subspace_ckpts,
+                layer_mods=layer_mods,
             )
 
             # just taking the first fold because we don't need to split the new data into folds
@@ -299,18 +301,25 @@ class ParentPlotter:
                 )
             )
 
-            # TODO add model modifying capabilities for new data
-
-            new_model = BaseModel.load_from_checkpoint(
-                trained_fusion_model_checkpoint,
+            # init model
+            new_model = BaseModel(
                 model=model.model.__class__(
                     pred_type=params[
                         "pred_type"
                     ],  # pred_type is a string (binary, regression, multiclass)
                     data_dims=dm.data_dims,  # data_dims is a list of tuples
-                    params=params,  # params is a dict))
+                    params=params,  # params is a dict
                 ),
             )
+
+            # modify layers if needed
+            if layer_mods is not None:
+                new_model.model = model_modifier.modify_model_architecture(
+                    new_model.model,
+                    layer_mods,
+                )
+            # load the state dict
+            new_model.load_state_dict(torch.load(trained_fusion_model_checkpoint)["state_dict"])
 
             new_model.eval()
 
@@ -401,6 +410,8 @@ class ParentPlotter:
         checkpoint_file_suffix: str, optional
             Suffix that is on the trained model checkpoint files. e.g. "_firsttry". Added by the user.
             Default is None.
+        layer_mods: dict, optional
+            Dictionary of the layer modifications to make to the model.
 
         Returns
         -------
@@ -475,16 +486,25 @@ class ParentPlotter:
             )
         )
 
-        new_model = BaseModel.load_from_checkpoint(
-            trained_fusion_model_checkpoint,
+        # init model
+        new_model = BaseModel(
             model=model.model.__class__(
                 pred_type=params[
                     "pred_type"
                 ],  # pred_type is a string (binary, regression, multiclass)
                 data_dims=dm.data_dims,  # data_dims is a list of tuples
-                params=params,  # params is a dict))
+                params=params,  # params is a dict
             ),
         )
+
+        # modify layers if needed
+        if layer_mods is not None:
+            new_model.model = model_modifier.modify_model_architecture(
+                new_model.model,
+                layer_mods,
+            )
+        # load the state dict
+        new_model.load_state_dict(torch.load(trained_fusion_model_checkpoint)["state_dict"])
 
         new_model.eval()
         # get the predictions
@@ -1027,7 +1047,7 @@ class ConfusionMatrix(ParentPlotter):
                 val_preds,
                 metrics_per_fold,
                 overall_kfold_metrics,
-            ) = cls.get_new_kfold_data(model_list, params, data_file_suffix, checkpoint_file_suffix)
+            ) = cls.get_new_kfold_data(model_list, params, data_file_suffix, checkpoint_file_suffix, layer_mods)
 
             figure = cls.confusion_matrix_kfold(
                 model_list,

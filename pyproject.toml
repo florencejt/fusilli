@@ -21,6 +21,7 @@ classifiers = [
 testpaths = ["tests"]
 filterwarnings = [
     "ignore:MPS available but not used*:UserWarning",
+    "ignore:GPU available but not used*:UserWarning",
     "ignore:Layer group*:UserWarning",
     "ignore:.*Use Resampling.*:DeprecationWarning",
     "ignore:.*The 'warn' method is deprecated*:DeprecationWarning",

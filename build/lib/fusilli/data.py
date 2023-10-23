@@ -7,7 +7,7 @@ Train/test splits and k-fold cross validation are also implemented here.
 
 # imports
 import pandas as pd
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 import torch
 import torch.nn.functional as F
 from sklearn.model_selection import KFold
@@ -572,11 +572,8 @@ class TrainTestDataModule(pl.LightningDataModule):
                     self,
                     max_epochs=self.max_epochs,
                     k=None,
-                    # checkpoint_path=checkpoint_path,
                     train_subspace=False
-                )  # will return a init subspace method with a self.autoencoder
-
-                # print("latent dim before mod", subspace_method.autoencoder.latent_dim)
+                )  # will return a init subspace method with the subspace models as instance attributes
 
                 # modify the subspace method architecture if specified
                 if self.layer_mods is not None:
@@ -584,9 +581,6 @@ class TrainTestDataModule(pl.LightningDataModule):
                         subspace_method,
                         self.layer_mods,
                     )
-
-                # print("latent dim after mod", subspace_method.autoencoder.latent_dim)
-                # print(subspace_method.autoencoder)
 
                 # load checkpoint state dict
                 subspace_method.load_ckpt(checkpoint_path)
@@ -835,6 +829,7 @@ class KFoldDataModule(pl.LightningDataModule):
                         self,
                         k=k,
                         max_epochs=self.max_epochs,
+                        train_subspace=True,
                     )
 
                     # modify the subspace method architecture if specified
@@ -882,10 +877,20 @@ class KFoldDataModule(pl.LightningDataModule):
                         self,
                         k=k,
                         max_epochs=self.max_epochs,
-                        checkpoint_path=checkpoint_path,
+                        train_subspace=False,
+                        # checkpoint_path=checkpoint_path,
                     )
 
                     # modify the subspace method architecture if specified
+                    if self.layer_mods is not None:
+                        # if subspace method in layer_mods
+                        subspace_method = model_modifier.modify_model_architecture(
+                            subspace_method,
+                            self.layer_mods,
+                        )
+                    print(checkpoint_path)
+                    subspace_method.load_ckpt(checkpoint_path)
+
                     (
                         train_latents,
                         train_labels,
@@ -1330,8 +1335,10 @@ def get_data_module(
         Maximum number of epochs to train subspace methods for. (default 1000)
     optional_suffix : str
         Optional suffix added to data source file names (default None).
-    checkpoint_path : str
-        Path to call checkpoint file (default None will result in the default lightning format).
+    checkpoint_path : list
+        List containing paths to call checkpoint file. Length of the list is the number of trainable subspace models
+        in the fusion model (e.g., DAETabImgMaps requires two models to be pre-trained, so we'd pass 2 checkpoint
+        paths in the list. (default None will result in the default lightning format).
     extra_log_string_dict : dict
         Dictionary of extra strings to add to a subspace method checkpoint file name (default None).
         e.g. if you're running the same model with different hyperparameters, you can add the hyperparameters.

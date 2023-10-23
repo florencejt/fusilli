@@ -1,4 +1,4 @@
-from fusilli.fusion_models.mcvae_tab import mcvae_early_stopping_tol
+from fusilli.fusionmodels.tabularfusion.mcvae_model import mcvae_early_stopping_tol
 import pytest
 
 

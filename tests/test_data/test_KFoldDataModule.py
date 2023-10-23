@@ -92,8 +92,8 @@ def test_val_dataloader(create_kfold_data_module):
 
 def test_setup_calls_subspace_method(create_kfold_data_module):
     with patch(
-        "fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method",
-        return_value=MockSubspaceMethod(),
+            "fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.denoising_autoencoder_subspace_method",
+            return_value=MockSubspaceMethod(),
     ) as mock_subspace_method:
         # Initialize the KfoldDataModule
         data_module = create_kfold_data_module

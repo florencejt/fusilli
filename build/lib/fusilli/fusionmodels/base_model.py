@@ -3,7 +3,7 @@ Base lightning module for all fusion models and parent class for all fusion mode
 """
 
 from typing import Any
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 import torch
 import torchmetrics as tm
 from torch import nn
@@ -393,7 +393,7 @@ class BaseModel(pl.LightningModule):
         self.batch_val_preds.append(self.safe_squeeze(end_output).detach())
         self.batch_val_logits.append(self.safe_squeeze(logits).detach())
 
-    def validation_epoch_end(self, outputs):
+    def on_validation_epoch_end(self):
         """
         Gets the final validation epoch outputs and metrics.
         When metrics are calculated at the validation step and logged on on_epoch=True,

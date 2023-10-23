@@ -4,7 +4,7 @@ Denoising autoencoder for tabular data concatenated with image feature maps
 import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch
-import pytorch_lightning as pl
+import lightning.pytorch as pl
 from fusilli.utils.training_utils import (
     init_trainer,
     get_checkpoint_filenames_for_subspace_models,
@@ -509,7 +509,6 @@ class denoising_autoencoder_subspace_method:
 
         self.datamodule = datamodule
 
-        print("get filenames for subspace checkpoint")
         checkpoint_filenames = get_checkpoint_filenames_for_subspace_models(self, k)
 
         self.autoencoder = self.subspace_models[0](self.datamodule.data_dims)
@@ -544,15 +543,15 @@ class denoising_autoencoder_subspace_method:
 
         Parameters
         ----------
-        checkpoint_path : str
-            Path to the checkpoint. The checkpoint must be a dictionary containing the state dict
-            of the subspace models.
+        checkpoint_path : list
+            Paths to the checkpoints. The checkpoint list must be a list of checkpoint elements containing the state
+            dict of the subspace models.
         """
-        checkpoint1 = torch.load(checkpoint_path[0])
-        checkpoint2 = torch.load(checkpoint_path[1])
+        # checkpoint1 = torch.load(checkpoint_path[0])
+        # checkpoint2 = torch.load(checkpoint_path[1])
 
-        self.autoencoder.load_state_dict(checkpoint1["state_dict"])
-        self.img_unimodal.load_state_dict(checkpoint2["state_dict"])
+        self.autoencoder.load_state_dict(torch.load(checkpoint_path[0])["state_dict"])
+        self.img_unimodal.load_state_dict(torch.load(checkpoint_path[1])["state_dict"])
 
     def train(self, train_dataset, val_dataset):
         """

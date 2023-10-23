@@ -107,22 +107,6 @@ class MCVAESubspaceMethod:
             self, k=k
         )
 
-        # if train_subspace:
-        #
-        # # load checkpoint if we're not training: plotting with new data
-        # if checkpoint_path is not None:
-        #     new_checkpoint_path = checkpoint_path[0][: -len(".ckpt")]
-        #     checkpoint = torch.load(new_checkpoint_path)
-        #
-        #     init_dict = {
-        #         "n_channels": 2,
-        #         "lat_dim": self.num_latent_dims,
-        #         "n_feats": tuple([datamodule.data_dims[0], datamodule.data_dims[1]]),
-        #     }
-        #
-        #     self.fit_model = Mcvae(**init_dict, sparse=True)
-        #     self.fit_model.load_state_dict(checkpoint)
-
     def load_ckpt(self, checkpoint_path):
         """
         Loads the checkpoint.
@@ -147,8 +131,6 @@ class MCVAESubspaceMethod:
 
         self.fit_model = Mcvae(**init_dict, sparse=True)
         self.fit_model.load_state_dict(checkpoint)
-
-        print("Number of latent dimensions: ", self.num_latent_dims)
 
     def check_params(self):
         """

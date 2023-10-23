@@ -5,7 +5,8 @@ import torch
 import pandas as pd
 from unittest.mock import patch, Mock
 from unittest import mock
-import pytorch_lightning as pl
+import lightning.pytorch as pl
+# import pytorch_lightning as pl
 from torch import nn
 
 from fusilli.fusionmodels.tabularfusion.mcvae_model import MCVAESubspaceMethod
@@ -346,7 +347,7 @@ def test_denoising_autoencoder_subspace_method_init(sample_tabimg_datamodule, mo
 
         dm = sample_tabimg_datamodule
 
-        dae_subspace_method = denoising_autoencoder_subspace_method(dm, checkpoint_path=None)
+        dae_subspace_method = denoising_autoencoder_subspace_method(dm)
 
         # assert init trainer called twice for the two subspace methods
         assert mock_init_trainer.call_count == 2
@@ -365,25 +366,36 @@ def fixture_mock_load_chkpt():
     return _mock_load_from_checkpoint
 
 
+@pytest.fixture(name="mock_torch_load", scope="function")
+def fixture_mock_torch_load():
+    def _mock_torch_load(*args, **kwargs):
+        return {"state_dict": 30}
+
+    return _mock_torch_load
+
+
 def test_denoising_autoencoder_subspace_method_init_with_checkpoint(sample_tabimg_datamodule,
-                                                                    mock_load_from_checkpoint, mock_init_trainer):
-    # mock_init_trainer = mocker.patch("fusilli.utils.training_utils.init_trainer")
-    # mock_init_trainer.return_value = 10
+                                                                    mock_load_from_checkpoint, mock_init_trainer,
+                                                                    mock_torch_load):
     mock_load_from_checkpoint = mock.create_autospec(mock_load_from_checkpoint)
     mock_init_trainer = mock.create_autospec(mock_init_trainer)
     mock_patch = ("fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.DenoisingAutoencoder."
-                  "load_from_checkpoint")
+                  "load_state_dict")
     mock_patch12 = ("fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.ImgUnimodalDAE."
-                    "load_from_checkpoint")
+                    "load_state_dict")
     mock_patch2 = ("fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.init_trainer")
-    with patch(mock_patch) as mck, patch(mock_patch2) as mck2, patch(mock_patch12) as mck12:
+    mock_patch3 = ("fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.torch.load")
+    with patch(mock_patch) as mck, patch(mock_patch2) as mck2, patch(mock_patch12) as mck12, patch(mock_patch3) as mck3:
         mck.side_effect = mock_load_from_checkpoint
         mck12.side_effect = mock_load_from_checkpoint
         mck2.side_effect = mock_init_trainer
+        mck3.side_effect = mock_torch_load
 
         dm = sample_tabimg_datamodule
 
-        dae_subspace_method = denoising_autoencoder_subspace_method(dm, checkpoint_path=["path1", "path2"])
+        dae_subspace_method = denoising_autoencoder_subspace_method(dm, train_subspace=False)
+
+        dae_subspace_method.load_ckpt(["path1", "path2"])
 
         # assert init trainer called twice for the two subspace methods
         assert mock_init_trainer.call_count == 0
@@ -541,7 +553,7 @@ def test_concat_img_latent_tab_subspace_method_init(sample_tabimg_datamodule, mo
 
         dm = sample_tabimg_datamodule
 
-        img_latent_subspace_method = concat_img_latent_tab_subspace_method(dm, checkpoint_path=None)
+        img_latent_subspace_method = concat_img_latent_tab_subspace_method(dm)
 
         # assert init trainer called twice for the two subspace methods
         assert mock_init_trainer.call_count == 1
@@ -551,19 +563,24 @@ def test_concat_img_latent_tab_subspace_method_init(sample_tabimg_datamodule, mo
 
 
 def test_concat_img_latent_tab_subspace_method_init_with_checkpoint(sample_tabimg_datamodule,
-                                                                    mock_load_from_checkpoint, mock_init_trainer):
+                                                                    mock_load_from_checkpoint, mock_init_trainer,
+                                                                    mock_torch_load):
     mock_load_from_checkpoint = mock.create_autospec(mock_load_from_checkpoint)
     mock_init_trainer = mock.create_autospec(mock_init_trainer)
     mock_patch = ("fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.ImgLatentSpace."
-                  "load_from_checkpoint")
+                  "load_state_dict")
     mock_patch2 = ("fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.init_trainer")
-    with patch(mock_patch) as mck, patch(mock_patch2) as mck2:
+    mock_patch3 = ("fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.torch.load")
+    with patch(mock_patch) as mck, patch(mock_patch2) as mck2, patch(mock_patch3) as mck3:
         mck.side_effect = mock_load_from_checkpoint
         mck2.side_effect = mock_init_trainer
+        mck3.side_effect = mock_torch_load
 
         dm = sample_tabimg_datamodule
 
-        img_latent_subspace = concat_img_latent_tab_subspace_method(dm, checkpoint_path=["path1"])
+        img_latent_subspace = concat_img_latent_tab_subspace_method(dm, train_subspace=False)
+
+        img_latent_subspace.load_ckpt(["path1"])
 
         # assert init trainer called twice for the two subspace methods
         assert mock_init_trainer.call_count == 0
@@ -592,7 +609,7 @@ def test_concat_img_latent_tab_subspace_method_train(sample_tabimg_datamodule, m
         mck.side_effect = mock_init_trainer
 
         concat_img_latent_tab_subspace_method.subspace_models = [Subspace]
-        img_latent_subspace_method = concat_img_latent_tab_subspace_method(dm, checkpoint_path=None)
+        img_latent_subspace_method = concat_img_latent_tab_subspace_method(dm)
 
         mean_latents, labels = img_latent_subspace_method.train(train_dataset, test_dataset)
         mean_latents_val, labels_val, data_dims = img_latent_subspace_method.convert_to_latent(test_dataset)

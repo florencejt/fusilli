@@ -5,11 +5,17 @@ on model, parameters, and user-defined strings.
 """
 
 import os
+import lightning.pytorch as pl
+from lightning.pytorch.callbacks import EarlyStopping
+from lightning.pytorch.callbacks import ModelCheckpoint
+from lightning.pytorch.callbacks import TQDMProgressBar
+from lightning.pytorch.loggers import CSVLogger, WandbLogger
+from lightning.pytorch import Trainer
 
-from pytorch_lightning import Trainer
-from pytorch_lightning.callbacks import ModelCheckpoint, TQDMProgressBar
-from pytorch_lightning.callbacks.early_stopping import EarlyStopping
-from pytorch_lightning.loggers import CSVLogger, WandbLogger
+# from pytorch_lightning import Trainer
+# from pytorch_lightning.callbacks import ModelCheckpoint, TQDMProgressBar
+# from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+# from pytorch_lightning.loggers import CSVLogger, WandbLogger
 from tqdm import tqdm
 
 
@@ -354,6 +360,7 @@ def init_trainer(
         checkpoint_callback = ModelCheckpoint(
             filename=checkpoint_filename,
             dirpath=params["checkpoint_dir"],
+            enable_version_counter=False  # overwrites files with same name
         )
         callbacks_list.append(checkpoint_callback)
 
@@ -364,6 +371,11 @@ def init_trainer(
         accelerator = params["accelerator"]
     if "devices" in params.keys():
         devices = params["devices"]
+
+    if logger is None:
+        # if logger is None (not even a CSVLogger), then we don't want to log anything
+        # logger must be set to False in the trainer
+        logger = False
 
     trainer = Trainer(
         max_epochs=max_epochs,

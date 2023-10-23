@@ -159,7 +159,7 @@ def test_setup_calls_subspace_method(create_test_files):
     example_fusion_model.modality_type = "tab_img"
 
     with patch(
-            "fusilli.fusion_models.denoise_tab_img_maps.denoising_autoencoder_subspace_method",
+            "fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.denoising_autoencoder_subspace_method",
             return_value=MockSubspaceMethod(),
     ) as mock_subspace_method:
         # Initialize the TrainTestDataModule
@@ -175,11 +175,9 @@ def test_setup_calls_subspace_method(create_test_files):
 
         # Assert that the subspace_method class was called
         mock_subspace_method.assert_called_once_with(
-            datamodule, max_epochs=datamodule.max_epochs, k=None
+            datamodule=datamodule, max_epochs=datamodule.max_epochs, k=None, train_subspace=True
         )
 
-
-# TODO add tests here for loading checkpoints
 
 # Run pytest
 if __name__ == "__main__":

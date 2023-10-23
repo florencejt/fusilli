@@ -11,20 +11,20 @@ from fusilli.utils.training_utils import (
 )
 import wandb
 from fusilli.utils import model_modifier
-from pytorch_lightning.loggers import CSVLogger
+from lightning.pytorch.loggers import CSVLogger
 from fusilli.utils.csv_loss_plotter import plot_loss_curve
 
 
 def train_and_test(
-    data_module,
-    params,
-    k,
-    fusion_model,
-    extra_log_string_dict=None,
-    layer_mods=None,
-    max_epochs=1000,
-    enable_checkpointing=True,
-    show_loss_plot=False,
+        data_module,
+        params,
+        k,
+        fusion_model,
+        extra_log_string_dict=None,
+        layer_mods=None,
+        max_epochs=1000,
+        enable_checkpointing=True,
+        show_loss_plot=False,
 ):
     """
     Trains and tests a model and, if k_fold trained, a fold.
@@ -207,14 +207,14 @@ def store_trained_model(trained_model, trained_models_dict):
 
 
 def train_and_save_models(
-    data_module,
-    params,
-    fusion_model,
-    extra_log_string_dict=None,
-    layer_mods=None,
-    max_epochs=1000,
-    enable_checkpointing=True,
-    show_loss_plot=False,
+        data_module,
+        params,
+        fusion_model,
+        extra_log_string_dict=None,
+        layer_mods=None,
+        max_epochs=1000,
+        enable_checkpointing=True,
+        show_loss_plot=False,
 ):
     """
     Trains/tests the model and saves the trained model to a dictionary for further analysis.
