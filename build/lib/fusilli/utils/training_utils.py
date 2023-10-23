@@ -185,6 +185,8 @@ def get_checkpoint_filenames_for_subspace_models(subspace_method, k=None):
         subspace_method.datamodule.extra_log_string_dict
     )
 
+    print("log string:", log_string)
+
     checkpoint_filenames = []
     for subspace_model in subspace_method.subspace_models:
         if k is not None:
@@ -195,7 +197,7 @@ def get_checkpoint_filenames_for_subspace_models(subspace_method, k=None):
                 + subspace_model.__name__
                 + "_fold_"
                 + str(k)
-                + log_string,
+                + log_string
             )
         else:
             checkpoint_filenames.append(
@@ -203,8 +205,10 @@ def get_checkpoint_filenames_for_subspace_models(subspace_method, k=None):
                 + big_fusion_model_name
                 + "_"
                 + subspace_model.__name__
-                + log_string,
+                + log_string
             )
+
+    print("checkpoint filenames in utils function:", checkpoint_filenames)
 
     return checkpoint_filenames
 

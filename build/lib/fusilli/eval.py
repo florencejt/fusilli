@@ -382,7 +382,7 @@ class ParentPlotter:
 
     @classmethod
     def get_new_tt_data(
-            cls, model_list, params, data_file_suffix, checkpoint_file_suffix=None
+            cls, model_list, params, data_file_suffix, checkpoint_file_suffix=None, layer_mods=None
     ):
         """
         Get new data by running through trained model for a train/test model.
@@ -460,6 +460,7 @@ class ParentPlotter:
             params,
             optional_suffix=data_file_suffix,
             checkpoint_path=subspace_ckpts,
+            layer_mods=layer_mods,
         )
         # concatenating the train and test datasets because we want to get the predictions for all the data
         dataset = ConcatDataset([dm.train_dataset, dm.test_dataset])
@@ -961,7 +962,8 @@ class ConfusionMatrix(ParentPlotter):
         super().__init__()
 
     @classmethod
-    def from_new_data(cls, model_list, params, data_file_suffix="_test"):
+    def from_new_data(cls, model_list, params, data_file_suffix="_test",
+                      checkpoint_file_suffix=None, layer_mods=None):
         """
         Confusion matrix using new data (i.e. data that was not used to train or validate the model).
 
@@ -980,6 +982,8 @@ class ConfusionMatrix(ParentPlotter):
             ``params["img_source_test]``.
             Change this to whatever suffix you have chosen for your new data files.
             Default is "_test".
+        checkpoint_file_suffix: str, optional
+            Suffix that is on the trained model checkpoint files. e.g. "_firsttry". Added by the user.
 
         Returns
         -------
@@ -1021,7 +1025,7 @@ class ConfusionMatrix(ParentPlotter):
                 val_preds,
                 metrics_per_fold,
                 overall_kfold_metrics,
-            ) = cls.get_new_kfold_data(model_list, params, data_file_suffix)
+            ) = cls.get_new_kfold_data(model_list, params, data_file_suffix, checkpoint_file_suffix)
 
             figure = cls.confusion_matrix_kfold(
                 model_list,
@@ -1046,7 +1050,8 @@ class ConfusionMatrix(ParentPlotter):
                 val_reals,
                 val_preds,
                 metric_values,
-            ) = cls.get_new_tt_data(model_list, params, data_file_suffix)
+            ) = cls.get_new_tt_data(model_list, params, data_file_suffix, checkpoint_file_suffix,
+                                    layer_mods)
 
             # plot the figure
             figure = cls.confusion_matrix_tt(
@@ -1457,7 +1462,7 @@ class ModelComparison(ParentPlotter):
         return figure, df
 
     @classmethod
-    def from_new_data(cls, model_dict, params, data_file_suffix="_test"):
+    def from_new_data(cls, model_dict, params, data_file_suffix="_test", checkpoint_file_suffix=None):
         comparing_models_metrics = {}
 
         if not isinstance(model_dict, dict):
@@ -1517,7 +1522,7 @@ class ModelComparison(ParentPlotter):
                     val_preds,
                     metrics_per_fold,
                     overall_kfold_metrics,
-                ) = cls.get_new_kfold_data(model_list, params, data_file_suffix)
+                ) = cls.get_new_kfold_data(model_list, params, data_file_suffix, checkpoint_file_suffix)
 
                 comparing_models_metrics[model_method_name] = metrics_per_fold
 
@@ -1560,7 +1565,7 @@ class ModelComparison(ParentPlotter):
                     val_reals,
                     val_preds,
                     metric_values,
-                ) = cls.get_new_tt_data(model_list, params, data_file_suffix)
+                ) = cls.get_new_tt_data(model_list, params, data_file_suffix, checkpoint_file_suffix)
 
                 comparing_models_metrics[model_method_name] = metric_values
 

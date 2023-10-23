@@ -190,8 +190,6 @@ Modifiable attributes of the fusion models
 
   * - Attribute
     - Guidance
-  * - 
-    - ``nn.Sequential``
   * - :attr:`~.DAETabImgMaps.fusion_layers`
     - ``nn.Sequential``
 

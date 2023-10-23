@@ -535,9 +535,10 @@ class TrainTestDataModule(pl.LightningDataModule):
                     checkpoint_path is None
             ):  # if no checkpoint path specified, train the subspace method
                 subspace_method = self.subspace_method(
-                    self,
+                    datamodule=self,
                     max_epochs=self.max_epochs,
                     k=None,
+                    train_subspace=True
                 )
 
                 # modify the subspace method architecture if specified
@@ -571,8 +572,8 @@ class TrainTestDataModule(pl.LightningDataModule):
                     self,
                     max_epochs=self.max_epochs,
                     k=None,
-                    checkpoint_path=checkpoint_path,
-                )
+                    train_subspace=False
+                )  # will return a init subspace method with the subspace models as instance attributes
 
                 # modify the subspace method architecture if specified
                 if self.layer_mods is not None:
@@ -580,6 +581,9 @@ class TrainTestDataModule(pl.LightningDataModule):
                         subspace_method,
                         self.layer_mods,
                     )
+
+                # load checkpoint state dict
+                subspace_method.load_ckpt(checkpoint_path)
 
                 # converting the train and test datasets to the latent space
                 (
@@ -1320,8 +1324,10 @@ def get_data_module(
         Maximum number of epochs to train subspace methods for. (default 1000)
     optional_suffix : str
         Optional suffix added to data source file names (default None).
-    checkpoint_path : str
-        Path to call checkpoint file (default None will result in the default lightning format).
+    checkpoint_path : list
+        List containing paths to call checkpoint file. Length of the list is the number of trainable subspace models
+        in the fusion model (e.g., DAETabImgMaps requires two models to be pre-trained, so we'd pass 2 checkpoint
+        paths in the list. (default None will result in the default lightning format).
     extra_log_string_dict : dict
         Dictionary of extra strings to add to a subspace method checkpoint file name (default None).
         e.g. if you're running the same model with different hyperparameters, you can add the hyperparameters.

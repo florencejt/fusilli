@@ -19,6 +19,7 @@ from fusilli.utils.training_utils import (
     get_checkpoint_filenames_for_subspace_models,
     init_trainer,
 )
+from fusilli.utils import model_modifier
 
 
 class ImgLatentSpace(pl.LightningModule):
@@ -290,28 +291,29 @@ class concat_img_latent_tab_subspace_method:
 
     subspace_models = [ImgLatentSpace]
 
-    def __init__(self, datamodule, k=None, max_epochs=1000, checkpoint_path=None):
+    def __init__(self, datamodule, k=None, max_epochs=1000,
+                 train_subspace=True):
         """
         Parameters
         ----------
         datamodule : class
             Data module containing the data.
+        k : int or None
+            Number of folds for cross validation. Default is None.
         max_epochs : int
             Maximum number of epochs to train the latent image space.
-        checkpoint_path : list or None
-            List containing the path to the checkpoint of the latent image space.
+        train_subspace : bool
+            Whether to train the latent image space or not.
+            Default is True. If False, a new trainer will not be created. Then
+            load_ckpt() must be called to load the checkpoint of the latent image space.
         """
         self.datamodule = datamodule
 
-        checkpoint_filenames = get_checkpoint_filenames_for_subspace_models(self, k)
+        self.autoencoder = ImgLatentSpace(self.datamodule.data_dims)
 
-        if checkpoint_path is not None:
-            self.autoencoder = self.subspace_models[0].load_from_checkpoint(
-                checkpoint_path[0],
-                data_dims=self.datamodule.data_dims,
-            )
+        if train_subspace:
+            checkpoint_filenames = get_checkpoint_filenames_for_subspace_models(self, k)
 
-        else:
             self.trainer = init_trainer(
                 None,
                 params=self.datamodule.params,
@@ -320,6 +322,20 @@ class concat_img_latent_tab_subspace_method:
             )
 
             self.autoencoder = ImgLatentSpace(self.datamodule.data_dims)
+
+    def load_ckpt(self, checkpoint_path):
+        """
+        Load the checkpoint of the latent image space.
+
+        Parameters
+        ----------
+        checkpoint_path : str
+            Path to the checkpoint. The checkpoint must be a dictionary containing the state dict
+            of the model.
+        """
+
+        # load state dict only - of the already init-ed autoencoder
+        self.autoencoder.load_state_dict(torch.load(checkpoint_path[0])["state_dict"])
 
     def train(self, train_dataset, val_dataset):
         """

@@ -195,7 +195,7 @@ def get_checkpoint_filenames_for_subspace_models(subspace_method, k=None):
                 + subspace_model.__name__
                 + "_fold_"
                 + str(k)
-                + log_string,
+                + log_string
             )
         else:
             checkpoint_filenames.append(
@@ -203,7 +203,7 @@ def get_checkpoint_filenames_for_subspace_models(subspace_method, k=None):
                 + big_fusion_model_name
                 + "_"
                 + subspace_model.__name__
-                + log_string,
+                + log_string
             )
 
     return checkpoint_filenames

@@ -63,6 +63,9 @@ class EdgeCorrGraphMaker:
         data : torch_geometric.data.Data
             Graph data structure containing the tabular data.
         """
+
+        self.check_params()
+
         tab1 = self.dataset[:][0]
         tab2 = self.dataset[:][1]
         labels = self.dataset[:][2]

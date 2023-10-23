@@ -133,9 +133,9 @@ class DenoisingAutoencoder(pl.LightningModule):
 
         # return reconstructed data and the non-dropped out data
 
-        return out, x_dropout
+        # return out, x_dropout
 
-        # return out, x_before_dropout
+        return out, x_before_dropout
 
     def training_step(self, batch, batch_idx):
         """
@@ -234,7 +234,7 @@ class ImgUnimodalDAE(pl.LightningModule):
     ----------
     img_dim : int
         Dimension of the input image data.
-    multiclass_dim : int
+    multiclass_dims : int
         Number of classes for multiclass classification.
     img_layers : nn.ModuleDict
         Image layers.
@@ -274,11 +274,11 @@ class ImgUnimodalDAE(pl.LightningModule):
         super().__init__()
 
         self.img_dim = data_dims[2]
+        # needed for ParentFusionModel
         self.multiclass_dim = multiclass_dims
         self.pred_type = pred_type
 
         # get the img layers from ParentFusionModel
-        self.img_layers = None
         ParentFusionModel.set_img_layers(self)  # this will set the img_layers
 
         if self.pred_type == "regression":
@@ -292,8 +292,8 @@ class ImgUnimodalDAE(pl.LightningModule):
 
         elif self.pred_type == "multiclass":
             self.loss = lambda logits, y: F.cross_entropy(
-                BaseModel.safe_squeeze(self, logits),
-                BaseModel.safe_squeeze(self, y).long(),
+                BaseModel.safe_squeeze(logits),
+                BaseModel.safe_squeeze(y).long(),
             )
             self.activation = lambda x: torch.argmax(nn.Softmax(dim=-1)(x), dim=-1)
 
@@ -492,30 +492,37 @@ class denoising_autoencoder_subspace_method:
             datamodule,
             k=None,
             max_epochs=1000,
-            checkpoint_path=None,
-            # own_early_stopping_callback=None,
+            train_subspace=True,
     ):
         """
         Parameters
         ----------
         datamodule : pl.LightningDataModule
             Data module containing the data.
+        k : int or None
+            Number of subspaces. Default is None.
         max_epochs : int
             Maximum number of epochs. Default is 1000.
-        checkpoint_path : list
-            List containing the checkpoint paths for the denoising autoencoder and the image
-            unimodal network. Default is None - which means that the model needs training.
-        own_early_stopping_callback : pytorch lightning callback
-            Early stopping callback object. Default None. If None, the default early stopping
-            will be used.
+        train_subspace : bool
+            Whether to train the subspace models. Default is True.
         """
 
         self.datamodule = datamodule
 
+        print("get filenames for subspace checkpoint")
         checkpoint_filenames = get_checkpoint_filenames_for_subspace_models(self, k)
 
-        # if checkpoint_path is None, then we are training the model
-        if checkpoint_path is None:
+        self.autoencoder = self.subspace_models[0](self.datamodule.data_dims)
+
+        self.img_unimodal = self.subspace_models[1](
+            self.datamodule.data_dims,
+            self.datamodule.pred_type,
+            self.datamodule.multiclass_dims,
+        )
+
+        # if train_subspace is True, then we are training the model.
+        # else, we are loading the model for plotting with from_new_data
+        if train_subspace:
             self.dae_trainer = init_trainer(
                 None,
                 params=self.datamodule.params,
@@ -530,28 +537,22 @@ class denoising_autoencoder_subspace_method:
                 checkpoint_filename=checkpoint_filenames[1],
                 own_early_stopping_callback=self.datamodule.own_early_stopping_callback,
             )
-            self.autoencoder = self.subspace_models[0](self.datamodule.data_dims)
 
-            self.img_unimodal = self.subspace_models[1](
-                self.datamodule.data_dims,
-                self.datamodule.pred_type,
-                self.datamodule.multiclass_dims,
-            )
+    def load_ckpt(self, checkpoint_path):
+        """
+        Load the checkpoint of the subspace models
 
-        # if checkpoint_path is not None, then we are loading the model
-        # probably for plotting with from_new_data
-        else:
-            self.autoencoder = self.subspace_models[0].load_from_checkpoint(
-                checkpoint_path[0],
-                data_dims=self.datamodule.data_dims,
-            )
+        Parameters
+        ----------
+        checkpoint_path : str
+            Path to the checkpoint. The checkpoint must be a dictionary containing the state dict
+            of the subspace models.
+        """
+        checkpoint1 = torch.load(checkpoint_path[0])
+        checkpoint2 = torch.load(checkpoint_path[1])
 
-            self.img_unimodal = self.subspace_models[1].load_from_checkpoint(
-                checkpoint_path[1],
-                data_dims=self.datamodule.data_dims,
-                pred_type=self.datamodule.pred_type,
-                multiclass_dims=self.datamodule.multiclass_dims,
-            )
+        self.autoencoder.load_state_dict(checkpoint1["state_dict"])
+        self.img_unimodal.load_state_dict(checkpoint2["state_dict"])
 
     def train(self, train_dataset, val_dataset):
         """

@@ -535,9 +535,10 @@ class TrainTestDataModule(pl.LightningDataModule):
                     checkpoint_path is None
             ):  # if no checkpoint path specified, train the subspace method
                 subspace_method = self.subspace_method(
-                    self,
+                    datamodule=self,
                     max_epochs=self.max_epochs,
                     k=None,
+                    train_subspace=True
                 )
 
                 # modify the subspace method architecture if specified
@@ -571,8 +572,11 @@ class TrainTestDataModule(pl.LightningDataModule):
                     self,
                     max_epochs=self.max_epochs,
                     k=None,
-                    checkpoint_path=checkpoint_path,
-                )
+                    # checkpoint_path=checkpoint_path,
+                    train_subspace=False
+                )  # will return a init subspace method with a self.autoencoder
+
+                # print("latent dim before mod", subspace_method.autoencoder.latent_dim)
 
                 # modify the subspace method architecture if specified
                 if self.layer_mods is not None:
@@ -580,6 +584,12 @@ class TrainTestDataModule(pl.LightningDataModule):
                         subspace_method,
                         self.layer_mods,
                     )
+
+                # print("latent dim after mod", subspace_method.autoencoder.latent_dim)
+                # print(subspace_method.autoencoder)
+
+                # load checkpoint state dict
+                subspace_method.load_ckpt(checkpoint_path)
 
                 # converting the train and test datasets to the latent space
                 (

@@ -86,16 +86,18 @@ class MCVAESubspaceMethod:
 
     subspace_models = [Mcvae]
 
-    def __init__(self, datamodule, k=None, max_epochs=5000, checkpoint_path=None):
+    def __init__(self, datamodule, k=None, max_epochs=5000, train_subspace=True):
         """
         Parameters
         ----------
         datamodule : datamodule object
             Datamodule object containing the data.
+        k : int, optional
+            Number of latent dimensions, by default None
         max_epochs : int, optional
             Maximum number of epochs, by default 5000
-        checkpoint_path : list, optional
-            List containing the path to the checkpoint, by default None
+        train_subspace : bool, optional
+            Whether to train the subspace model, by default True.
         """
         self.datamodule = datamodule
         self.num_latent_dims = 10
@@ -105,19 +107,30 @@ class MCVAESubspaceMethod:
             self, k=k
         )
 
-        # load checkpoint if we're not training: plotting with new data
-        if checkpoint_path is not None:
-            new_checkpoint_path = checkpoint_path[0][: -len(".ckpt")]
-            checkpoint = torch.load(new_checkpoint_path)
+    def load_ckpt(self, checkpoint_path):
+        """
+        Loads the checkpoint.
 
-            init_dict = {
-                "n_channels": 2,
-                "lat_dim": self.num_latent_dims,
-                "n_feats": tuple([datamodule.data_dims[0], datamodule.data_dims[1]]),
-            }
+        Parameters
+        ----------
+        checkpoint_path : list
+            List containing the path to the checkpoint.
 
-            self.fit_model = Mcvae(**init_dict, sparse=True)
-            self.fit_model.load_state_dict(checkpoint)
+        Returns
+        -------
+        None
+        """
+        new_checkpoint_path = checkpoint_path[0][: -len(".ckpt")]
+        checkpoint = torch.load(new_checkpoint_path)
+
+        init_dict = {
+            "n_channels": 2,
+            "lat_dim": self.num_latent_dims,
+            "n_feats": tuple([self.datamodule.data_dims[0], self.datamodule.data_dims[1]]),
+        }
+
+        self.fit_model = Mcvae(**init_dict, sparse=True)
+        self.fit_model.load_state_dict(checkpoint)
 
     def check_params(self):
         """
