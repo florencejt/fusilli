@@ -376,7 +376,7 @@ Calculated with <a class="reference internal" href="#fusilli.fusionmodels.tabula
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dims</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusionmodels/tabularimagefusion/concat_img_latent_tab_doubletrain.html#ImgLatentSpace.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.ImgLatentSpace.__init__" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data_dims</strong> (<em>dict</em>) – Dictionary containing the dimensions of the data.</p>
+<dd class="field-odd"><p><strong>data_dims</strong> (<em>list</em>) – Dictionary containing the dimensions of the data.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -485,7 +485,7 @@ fused layers.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">concat_img_latent_tab_subspace_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datamodule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusionmodels/tabularimagefusion/concat_img_latent_tab_doubletrain.html#concat_img_latent_tab_subspace_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">concat_img_latent_tab_subspace_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datamodule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_subspace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusionmodels/tabularimagefusion/concat_img_latent_tab_doubletrain.html#concat_img_latent_tab_subspace_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class containing the method to train the latent image space and to convert the image data
 to the latent image space.</p>
@@ -524,13 +524,16 @@ to the latent image space.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datamodule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusionmodels/tabularimagefusion/concat_img_latent_tab_doubletrain.html#concat_img_latent_tab_subspace_method.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.__init__" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datamodule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_subspace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusionmodels/tabularimagefusion/concat_img_latent_tab_doubletrain.html#concat_img_latent_tab_subspace_method.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.__init__" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>datamodule</strong> (<em>class</em>) – Data module containing the data.</p></li>
+<li><p><strong>k</strong> (<em>int</em><em> or </em><em>None</em>) – Number of folds for cross validation. Default is None.</p></li>
 <li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs to train the latent image space.</p></li>
-<li><p><strong>checkpoint_path</strong> (<em>list</em>) – List containing the path to the checkpoint of the latent image space.</p></li>
+<li><p><strong>train_subspace</strong> (<em>bool</em>) – Whether to train the latent image space or not.
+Default is True. If False, a new trainer will not be created. Then
+load_ckpt() must be called to load the checkpoint of the latent image space.</p></li>
 </ul>
 </dd>
 </dl>
@@ -551,6 +554,17 @@ to the latent image space.</p>
 <li><p><em>list</em> – List containing the dimensions of the data.</p></li>
 </ul>
 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.load_ckpt">
+<span class="sig-name descname"><span class="pre">load_ckpt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checkpoint_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusionmodels/tabularimagefusion/concat_img_latent_tab_doubletrain.html#concat_img_latent_tab_subspace_method.load_ckpt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.load_ckpt" title="Permalink to this definition"></a></dt>
+<dd><p>Load the checkpoint of the latent image space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>checkpoint_path</strong> (<em>list</em>) – List containing the path to the checkpoint.</p>
 </dd>
 </dl>
 </dd></dl>

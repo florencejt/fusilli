@@ -105,7 +105,7 @@
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 <span class="kn">from</span> <span class="nn">fusilli.fusionmodels.base_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
 <span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">pytorch_lightning</span> <span class="k">as</span> <span class="nn">pl</span>
+<span class="kn">import</span> <span class="nn">lightning.pytorch</span> <span class="k">as</span> <span class="nn">pl</span>
 <span class="kn">from</span> <span class="nn">fusilli.utils.training_utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">init_trainer</span><span class="p">,</span>
     <span class="n">get_checkpoint_filenames_for_subspace_models</span><span class="p">,</span>
@@ -220,8 +220,10 @@
 <span class="sd">            List containing the output.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="n">x_before_dropout</span> <span class="o">=</span> <span class="n">x</span>
+
         <span class="c1"># drop out 0.2 of the tabular data to 0</span>
-        <span class="c1"># simulates missing data</span>
+        <span class="c1"># simulates missing data (adding noise)</span>
         <span class="n">x_dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
 
         <span class="c1"># upsample</span>
@@ -230,9 +232,11 @@
         <span class="c1"># downsample</span>
         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">downsampler</span><span class="p">(</span><span class="n">x_latent</span><span class="p">)</span>
 
-        <span class="c1"># return downsampled tab data</span>
+        <span class="c1"># return reconstructed data and the non-dropped out data</span>
 
-        <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">x_dropout</span></div>
+        <span class="c1"># return out, x_dropout</span>
+
+        <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">x_before_dropout</span></div>
 
 <div class="viewcode-block" id="DenoisingAutoencoder.training_step"><a class="viewcode-back" href="../../../../autosummary/fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.html#fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.DenoisingAutoencoder.training_step">[docs]</a>    <span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -331,7 +335,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    img_dim : int</span>
 <span class="sd">        Dimension of the input image data.</span>
-<span class="sd">    multiclass_dim : int</span>
+<span class="sd">    multiclass_dims : int</span>
 <span class="sd">        Number of classes for multiclass classification.</span>
 <span class="sd">    img_layers : nn.ModuleDict</span>
 <span class="sd">        Image layers.</span>
@@ -371,11 +375,11 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span> <span class="o">=</span> <span class="n">data_dims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="c1"># needed for ParentFusionModel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">multiclass_dim</span> <span class="o">=</span> <span class="n">multiclass_dims</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">=</span> <span class="n">pred_type</span>
 
         <span class="c1"># get the img layers from ParentFusionModel</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_img_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># this will set the img_layers</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">==</span> <span class="s2">&quot;regression&quot;</span><span class="p">:</span>
@@ -389,8 +393,8 @@
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_type</span> <span class="o">==</span> <span class="s2">&quot;multiclass&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">logits</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">cross_entropy</span><span class="p">(</span>
-                <span class="n">BaseModel</span><span class="o">.</span><span class="n">safe_squeeze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logits</span><span class="p">),</span>
-                <span class="n">BaseModel</span><span class="o">.</span><span class="n">safe_squeeze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">long</span><span class="p">(),</span>
+                <span class="n">BaseModel</span><span class="o">.</span><span class="n">safe_squeeze</span><span class="p">(</span><span class="n">logits</span><span class="p">),</span>
+                <span class="n">BaseModel</span><span class="o">.</span><span class="n">safe_squeeze</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">long</span><span class="p">(),</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">x</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 
@@ -589,30 +593,36 @@
             <span class="n">datamodule</span><span class="p">,</span>
             <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-            <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="c1"># own_early_stopping_callback=None,</span>
+            <span class="n">train_subspace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        datamodule : pl.LightningDataModule</span>
 <span class="sd">            Data module containing the data.</span>
+<span class="sd">        k : int or None</span>
+<span class="sd">            Number of subspaces. Default is None.</span>
 <span class="sd">        max_epochs : int</span>
 <span class="sd">            Maximum number of epochs. Default is 1000.</span>
-<span class="sd">        checkpoint_path : list</span>
-<span class="sd">            List containing the checkpoint paths for the denoising autoencoder and the image</span>
-<span class="sd">            unimodal network. Default is None - which means that the model needs training.</span>
-<span class="sd">        own_early_stopping_callback : pytorch lightning callback</span>
-<span class="sd">            Early stopping callback object. Default None. If None, the default early stopping</span>
-<span class="sd">            will be used.</span>
+<span class="sd">        train_subspace : bool</span>
+<span class="sd">            Whether to train the subspace models. Default is True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span> <span class="o">=</span> <span class="n">datamodule</span>
 
         <span class="n">checkpoint_filenames</span> <span class="o">=</span> <span class="n">get_checkpoint_filenames_for_subspace_models</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 
-        <span class="c1"># if checkpoint_path is None, then we are training the model</span>
-        <span class="k">if</span> <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_models</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_models</span><span class="p">[</span><span class="mi">1</span><span class="p">](</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">pred_type</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">multiclass_dims</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># if train_subspace is True, then we are training the model.</span>
+        <span class="c1"># else, we are loading the model for plotting with from_new_data</span>
+        <span class="k">if</span> <span class="n">train_subspace</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dae_trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span>
                 <span class="kc">None</span><span class="p">,</span>
                 <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">params</span><span class="p">,</span>
@@ -626,29 +636,23 @@
                 <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
                 <span class="n">checkpoint_filename</span><span class="o">=</span><span class="n">checkpoint_filenames</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
                 <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">own_early_stopping_callback</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_models</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_models</span><span class="p">[</span><span class="mi">1</span><span class="p">](</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">pred_type</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">multiclass_dims</span><span class="p">,</span>
-            <span class="p">)</span>
-
-        <span class="c1"># if checkpoint_path is not None, then we are loading the model</span>
-        <span class="c1"># probably for plotting with from_new_data</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span>
-                <span class="n">checkpoint_path</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                <span class="n">data_dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span>
-            <span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_models</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">load_from_checkpoint</span><span class="p">(</span>
-                <span class="n">checkpoint_path</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                <span class="n">data_dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">,</span>
-                <span class="n">pred_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">pred_type</span><span class="p">,</span>
-                <span class="n">multiclass_dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">multiclass_dims</span><span class="p">,</span>
             <span class="p">)</span></div>
+
+<div class="viewcode-block" id="denoising_autoencoder_subspace_method.load_ckpt"><a class="viewcode-back" href="../../../../autosummary/fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.html#fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.denoising_autoencoder_subspace_method.load_ckpt">[docs]</a>    <span class="k">def</span> <span class="nf">load_ckpt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checkpoint_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the checkpoint of the subspace models</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        checkpoint_path : list</span>
+<span class="sd">            Paths to the checkpoints. The checkpoint list must be a list of checkpoint elements containing the state</span>
+<span class="sd">            dict of the subspace models.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># checkpoint1 = torch.load(checkpoint_path[0])</span>
+        <span class="c1"># checkpoint2 = torch.load(checkpoint_path[1])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="s2">&quot;state_dict&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="s2">&quot;state_dict&quot;</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="denoising_autoencoder_subspace_method.train"><a class="viewcode-back" href="../../../../autosummary/fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.html#fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.denoising_autoencoder_subspace_method.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

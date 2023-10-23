@@ -108,7 +108,7 @@
 
 <span class="c1"># imports</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">pytorch_lightning</span> <span class="k">as</span> <span class="nn">pl</span>
+<span class="kn">import</span> <span class="nn">lightning.pytorch</span> <span class="k">as</span> <span class="nn">pl</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">KFold</span>
@@ -488,8 +488,8 @@
 <span class="sd">        Dictionary of methods for loading the different modalities.</span>
 <span class="sd">    params : dict</span>
 <span class="sd">        Dictionary of parameters.</span>
-<span class="sd">    fusion_model : str</span>
-<span class="sd">        fusion model class. e.g. &quot;TabularCrossmodalAttention&quot;.</span>
+<span class="sd">    fusion_model : class</span>
+<span class="sd">        fusion model class. e.g. TabularCrossmodalAttention.</span>
 <span class="sd">    batch_size : int</span>
 <span class="sd">        Batch size (default 8).</span>
 <span class="sd">    test_size : float</span>
@@ -536,7 +536,7 @@
 
 <span class="sd">        params : dict</span>
 <span class="sd">            Dictionary of parameters.</span>
-<span class="sd">        fusion_model : str</span>
+<span class="sd">        fusion_model : class</span>
 <span class="sd">            Fusion model class. e.g. &quot;TabularCrossmodalAttention&quot;.</span>
 <span class="sd">        sources : list</span>
 <span class="sd">            List of source csv files.</span>
@@ -636,9 +636,10 @@
                     <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="kc">None</span>
             <span class="p">):</span>  <span class="c1"># if no checkpoint path specified, train the subspace method</span>
                 <span class="n">subspace_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspace_method</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="p">,</span>
+                    <span class="n">datamodule</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
                     <span class="n">max_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">,</span>
                     <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">train_subspace</span><span class="o">=</span><span class="kc">True</span>
                 <span class="p">)</span>
 
                 <span class="c1"># modify the subspace method architecture if specified</span>
@@ -672,8 +673,8 @@
                     <span class="bp">self</span><span class="p">,</span>
                     <span class="n">max_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">,</span>
                     <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">checkpoint_path</span><span class="o">=</span><span class="n">checkpoint_path</span><span class="p">,</span>
-                <span class="p">)</span>
+                    <span class="n">train_subspace</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>  <span class="c1"># will return a init subspace method with the subspace models as instance attributes</span>
 
                 <span class="c1"># modify the subspace method architecture if specified</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -681,6 +682,9 @@
                         <span class="n">subspace_method</span><span class="p">,</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span><span class="p">,</span>
                     <span class="p">)</span>
+
+                <span class="c1"># load checkpoint state dict</span>
+                <span class="n">subspace_method</span><span class="o">.</span><span class="n">load_ckpt</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">)</span>
 
                 <span class="c1"># converting the train and test datasets to the latent space</span>
                 <span class="p">(</span>
@@ -926,6 +930,7 @@
                         <span class="bp">self</span><span class="p">,</span>
                         <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
                         <span class="n">max_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">,</span>
+                        <span class="n">train_subspace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="p">)</span>
 
                     <span class="c1"># modify the subspace method architecture if specified</span>
@@ -973,10 +978,20 @@
                         <span class="bp">self</span><span class="p">,</span>
                         <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
                         <span class="n">max_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">,</span>
-                        <span class="n">checkpoint_path</span><span class="o">=</span><span class="n">checkpoint_path</span><span class="p">,</span>
+                        <span class="n">train_subspace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="c1"># checkpoint_path=checkpoint_path,</span>
                     <span class="p">)</span>
 
                     <span class="c1"># modify the subspace method architecture if specified</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="c1"># if subspace method in layer_mods</span>
+                        <span class="n">subspace_method</span> <span class="o">=</span> <span class="n">model_modifier</span><span class="o">.</span><span class="n">modify_model_architecture</span><span class="p">(</span>
+                            <span class="n">subspace_method</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">layer_mods</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">)</span>
+                    <span class="n">subspace_method</span><span class="o">.</span><span class="n">load_ckpt</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">)</span>
+
                     <span class="p">(</span>
                         <span class="n">train_latents</span><span class="p">,</span>
                         <span class="n">train_labels</span><span class="p">,</span>
@@ -1421,8 +1436,10 @@
 <span class="sd">        Maximum number of epochs to train subspace methods for. (default 1000)</span>
 <span class="sd">    optional_suffix : str</span>
 <span class="sd">        Optional suffix added to data source file names (default None).</span>
-<span class="sd">    checkpoint_path : str</span>
-<span class="sd">        Path to call checkpoint file (default None will result in the default lightning format).</span>
+<span class="sd">    checkpoint_path : list</span>
+<span class="sd">        List containing paths to call checkpoint file. Length of the list is the number of trainable subspace models</span>
+<span class="sd">        in the fusion model (e.g., DAETabImgMaps requires two models to be pre-trained, so we&#39;d pass 2 checkpoint</span>
+<span class="sd">        paths in the list. (default None will result in the default lightning format).</span>
 <span class="sd">    extra_log_string_dict : dict</span>
 <span class="sd">        Dictionary of extra strings to add to a subspace method checkpoint file name (default None).</span>
 <span class="sd">        e.g. if you&#39;re running the same model with different hyperparameters, you can add the hyperparameters.</span>

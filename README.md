@@ -1,67 +1,69 @@
 # fusilli
+
 ### Florence J Townend
+
 Email: [florence.townend.21@ucl.ac.uk](mailto:florence.townend.21@ucl.ac.uk) \
 Twitter: [@FlorenceTownend](https://twitter.com/FlorenceTownend)
 
-## Description
+## Project Description
 
-Multi-modal data fusion is the combination of different types of data (or data modalities) in the pursuit of some common goal. For example, using both blood test results and neuroimaging to predict whether somebody will develop a disease.
+<img height="150" src="/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/pink_pasta_logo.png" width="150"/>
 
-MultiFuseKit is a library designed to compare different multi-modal data fusion techniques against each other. It supports the following scenarios:
 
-- Regression, binary classification, and multi-class classification
-- Combining two types of tabular data or one type of tabular data and one image data (2D or 3D)
+`fusilli` is a collection of multi-modal data fusion methods for machine learning.
+*What is multi-modal data fusion??* I hear you cry! Well, let me tell you...
 
-The library is built using PyTorch Lightning and PyTorch Geometric. Refer to the methods section to see which fusion methods are included.
+Multi-modal data fusion is the combination of different types of data (or data modalities) in the pursuit of some common
+goal. For example, using both blood test results and neuroimaging to predict whether somebody will develop a disease.
+There are many different ways to combine data modalities, and the aim of `fusilli` is to provide a platform for
+anybody to compare different methods against each other.
 
-Link to documentation: ...
+`fusilli` is built using PyTorch Lightning and PyTorch Geometric. It supports the following scenarios:
 
-## Installation
+1. `fusilli` currently supports **tabular-tabular fusion** and **tabular-image fusion**. For example, you can combine
+   two
+   different types of tabular data, or one type of tabular data and one type of image data (2D or 3D).
+2. `fusilli` currently supports **regression**, **binary classification**, and **multi-class classification** as its
+   prediction
+   tasks. Other tasks, such as clustering or segmentation, are not currently supported.
 
-Note: To be completed! Include installation instructions for users to set up MultiFuseKit.
+Want to know more? Here is a link to Read the Docs:
+[https://fusilli.readthedocs.io/en/latest/](https://fusilli.readthedocs.io/en/latest/)
 
-## Usage
+**In the Read the Docs, you can find:**
 
-### Data
+- Detailed descriptions of the methods included in `fusilli`
+- Examples and tutorials on how to use `fusilli`, with examples of:
+    - Loading your own data
+    - Logging experiments
+    - Modifying model structures
+- API documentation of the `fusilli` codebase
 
-Note: To be completed! Specify the required data formats for MultiFuseKit.
+### Installation
 
-### Training
+To install `fusilli`, you can use `pip`:
 
-You can use the following training modes:
-
-- K-fold cross-validation or train/test split
-- Regression, binary classification, or multiclass classification
-
-### Command Line Arguments
-
-Note: To be completed! Provide details on available command line arguments.
-
-### Logging
-
-MultiFuseKit supports logging with Weights and Biases. (Free for academic use; please verify.)
-
-You can utilize the logging functionality for better experiment tracking.
+```
+pip install fusilli
+```
 
 ### Methods
 
-The included methods are based on the review by Cui et al (2022). These methods are categorized as follows:
+Many of the methods included in `fusilli` are inspired by methods found in literature and have either been adapted from
+the original code to fit in with this library's structure or implemented from scratch when no code was available.
 
-- Operation-based fusion
-- Attention-based fusion
-- Tensor-based fusion
-- Subspace-based fusion
-- Graph-based fusion
-
-
-Note: Add a table of the specific methods included in Fusilli.
+The methods are categorised by the modalities they fuse (e.g. tabular-tabular fusion or tabular-image fusion) and by
+the type of fusion they perform. These fusion types have been taken from the review by Cui et al (2022) into
+data fusion approaches in diagnosis and prognosis [1].
 
 ### Authors and Acknowledgements
 
-MultiFuseKit is authored by Florence Townend and James H Cole.
+`fusilli` is authored by Florence J Townend.
 
 This work was funded by the EPSRC (Funding code to be added).
 
 ## References
 
-[1] Cui, C., Yang, H., Wang, Y., Zhao, S., Asad, Z., Coburn, L. A., Wilson, K. T., Landman, B. A., & Huo, Y. (2022). Deep Multi-modal Fusion of Image and Non-image Data in Disease Diagnosis and Prognosis: A Review (arXiv:2203.15588). arXiv. [https://doi.org/10.48550/arXiv.2203.15588](https://doi.org/10.48550/arXiv.2203.15588)
+[1] Cui, C., Yang, H., Wang, Y., Zhao, S., Asad, Z., Coburn, L. A., Wilson, K. T., Landman, B. A., & Huo, Y. (2022).
+Deep Multi-modal Fusion of Image and Non-image Data in Disease Diagnosis and Prognosis: A Review (arXiv:2203.15588).
+arXiv. [https://doi.org/10.48550/arXiv.2203.15588](https://doi.org/10.48550/arXiv.2203.15588)

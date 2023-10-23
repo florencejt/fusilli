@@ -1016,10 +1016,10 @@ i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.fusion_model">
 <span class="sig-name descname"><span class="pre">fusion_model</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.fusion_model" title="Permalink to this definition"></a></dt>
-<dd><p>fusion model class. e.g. “TabularCrossmodalAttention”.</p>
+<dd><p>fusion model class. e.g. TabularCrossmodalAttention.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>class</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1154,7 +1154,7 @@ Created in prepare_data().</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<em>dict</em>) – Dictionary of parameters.</p></li>
-<li><p><strong>fusion_model</strong> (<em>str</em>) – Fusion model class. e.g. “TabularCrossmodalAttention”.</p></li>
+<li><p><strong>fusion_model</strong> (<em>class</em>) – Fusion model class. e.g. “TabularCrossmodalAttention”.</p></li>
 <li><p><strong>sources</strong> (<em>list</em>) – List of source csv files.</p></li>
 <li><p><strong>batch_size</strong> (<em>int</em>) – Batch size (default 8).</p></li>
 <li><p><strong>subspace_method</strong> (<em>class</em>) – Subspace method class (default None) (only for subspace methods).</p></li>
@@ -1500,7 +1500,9 @@ e.g. (100, 100, 100) for 3D images, (100, 100) for 2D images.</p></li>
 <li><p><strong>layer_mods</strong> (<em>dict</em>) – Dictionary of layer modifications (default None).</p></li>
 <li><p><strong>max_epochs</strong> (<em>int</em>) – Maximum number of epochs to train subspace methods for. (default 1000)</p></li>
 <li><p><strong>optional_suffix</strong> (<em>str</em>) – Optional suffix added to data source file names (default None).</p></li>
-<li><p><strong>checkpoint_path</strong> (<em>str</em>) – Path to call checkpoint file (default None will result in the default lightning format).</p></li>
+<li><p><strong>checkpoint_path</strong> (<em>list</em>) – List containing paths to call checkpoint file. Length of the list is the number of trainable subspace models
+in the fusion model (e.g., DAETabImgMaps requires two models to be pre-trained, so we’d pass 2 checkpoint
+paths in the list. (default None will result in the default lightning format).</p></li>
 <li><p><strong>extra_log_string_dict</strong> (<em>dict</em>) – Dictionary of extra strings to add to a subspace method checkpoint file name (default None).
 e.g. if you’re running the same model with different hyperparameters, you can add the hyperparameters.
 Input format {“name”: “value”}. In the run name, the extra string will be added

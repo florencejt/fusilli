@@ -187,16 +187,18 @@
 
     <span class="n">subspace_models</span> <span class="o">=</span> <span class="p">[</span><span class="n">Mcvae</span><span class="p">]</span>
 
-<div class="viewcode-block" id="MCVAESubspaceMethod.__init__"><a class="viewcode-back" href="../../../../autosummary/fusilli.fusionmodels.tabularfusion.mcvae_model.html#fusilli.fusionmodels.tabularfusion.mcvae_model.MCVAESubspaceMethod.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MCVAESubspaceMethod.__init__"><a class="viewcode-back" href="../../../../autosummary/fusilli.fusionmodels.tabularfusion.mcvae_model.html#fusilli.fusionmodels.tabularfusion.mcvae_model.MCVAESubspaceMethod.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">train_subspace</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        datamodule : datamodule object</span>
 <span class="sd">            Datamodule object containing the data.</span>
+<span class="sd">        k : int, optional</span>
+<span class="sd">            Number of latent dimensions, by default None</span>
 <span class="sd">        max_epochs : int, optional</span>
 <span class="sd">            Maximum number of epochs, by default 5000</span>
-<span class="sd">        checkpoint_path : list, optional</span>
-<span class="sd">            List containing the path to the checkpoint, by default None</span>
+<span class="sd">        train_subspace : bool, optional</span>
+<span class="sd">            Whether to train the subspace model, by default True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span> <span class="o">=</span> <span class="n">datamodule</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_latent_dims</span> <span class="o">=</span> <span class="mi">10</span>
@@ -204,21 +206,32 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">checkpoint_filenames</span> <span class="o">=</span> <span class="n">get_checkpoint_filenames_for_subspace_models</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
-        <span class="c1"># load checkpoint if we&#39;re not training: plotting with new data</span>
-        <span class="k">if</span> <span class="n">checkpoint_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">new_checkpoint_path</span> <span class="o">=</span> <span class="n">checkpoint_path</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="s2">&quot;.ckpt&quot;</span><span class="p">)]</span>
-            <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">new_checkpoint_path</span><span class="p">)</span>
+<div class="viewcode-block" id="MCVAESubspaceMethod.load_ckpt"><a class="viewcode-back" href="../../../../autosummary/fusilli.fusionmodels.tabularfusion.mcvae_model.html#fusilli.fusionmodels.tabularfusion.mcvae_model.MCVAESubspaceMethod.load_ckpt">[docs]</a>    <span class="k">def</span> <span class="nf">load_ckpt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checkpoint_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the checkpoint.</span>
 
-            <span class="n">init_dict</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;n_channels&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-                <span class="s2">&quot;lat_dim&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_latent_dims</span><span class="p">,</span>
-                <span class="s2">&quot;n_feats&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]]),</span>
-            <span class="p">}</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        checkpoint_path : list</span>
+<span class="sd">            List containing the path to the checkpoint.</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">fit_model</span> <span class="o">=</span> <span class="n">Mcvae</span><span class="p">(</span><span class="o">**</span><span class="n">init_dict</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fit_model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">)</span></div>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_checkpoint_path</span> <span class="o">=</span> <span class="n">checkpoint_path</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="s2">&quot;.ckpt&quot;</span><span class="p">)]</span>
+        <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">new_checkpoint_path</span><span class="p">)</span>
+
+        <span class="n">init_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;n_channels&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s2">&quot;lat_dim&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_latent_dims</span><span class="p">,</span>
+            <span class="s2">&quot;n_feats&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]]),</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_model</span> <span class="o">=</span> <span class="n">Mcvae</span><span class="p">(</span><span class="o">**</span><span class="n">init_dict</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MCVAESubspaceMethod.check_params"><a class="viewcode-back" href="../../../../autosummary/fusilli.fusionmodels.tabularfusion.mcvae_model.html#fusilli.fusionmodels.tabularfusion.mcvae_model.MCVAESubspaceMethod.check_params">[docs]</a>    <span class="k">def</span> <span class="nf">check_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

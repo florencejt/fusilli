@@ -164,6 +164,9 @@
 <span class="sd">        data : torch_geometric.data.Data</span>
 <span class="sd">            Graph data structure containing the tabular data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_params</span><span class="p">()</span>
+
         <span class="n">tab1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[:][</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">tab2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[:][</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[:][</span><span class="mi">2</span><span class="p">]</span>

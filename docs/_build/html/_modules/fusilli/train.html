@@ -112,20 +112,20 @@
 <span class="p">)</span>
 <span class="kn">import</span> <span class="nn">wandb</span>
 <span class="kn">from</span> <span class="nn">fusilli.utils</span> <span class="kn">import</span> <span class="n">model_modifier</span>
-<span class="kn">from</span> <span class="nn">pytorch_lightning.loggers</span> <span class="kn">import</span> <span class="n">CSVLogger</span>
+<span class="kn">from</span> <span class="nn">lightning.pytorch.loggers</span> <span class="kn">import</span> <span class="n">CSVLogger</span>
 <span class="kn">from</span> <span class="nn">fusilli.utils.csv_loss_plotter</span> <span class="kn">import</span> <span class="n">plot_loss_curve</span>
 
 
 <div class="viewcode-block" id="train_and_test"><a class="viewcode-back" href="../../autosummary/fusilli.train.html#fusilli.train.train_and_test">[docs]</a><span class="k">def</span> <span class="nf">train_and_test</span><span class="p">(</span>
-    <span class="n">data_module</span><span class="p">,</span>
-    <span class="n">params</span><span class="p">,</span>
-    <span class="n">k</span><span class="p">,</span>
-    <span class="n">fusion_model</span><span class="p">,</span>
-    <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">show_loss_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">data_module</span><span class="p">,</span>
+        <span class="n">params</span><span class="p">,</span>
+        <span class="n">k</span><span class="p">,</span>
+        <span class="n">fusion_model</span><span class="p">,</span>
+        <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">show_loss_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Trains and tests a model and, if k_fold trained, a fold.</span>
@@ -308,14 +308,14 @@
 
 
 <div class="viewcode-block" id="train_and_save_models"><a class="viewcode-back" href="../../autosummary/fusilli.train.html#fusilli.train.train_and_save_models">[docs]</a><span class="k">def</span> <span class="nf">train_and_save_models</span><span class="p">(</span>
-    <span class="n">data_module</span><span class="p">,</span>
-    <span class="n">params</span><span class="p">,</span>
-    <span class="n">fusion_model</span><span class="p">,</span>
-    <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">show_loss_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">data_module</span><span class="p">,</span>
+        <span class="n">params</span><span class="p">,</span>
+        <span class="n">fusion_model</span><span class="p">,</span>
+        <span class="n">extra_log_string_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">layer_mods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">show_loss_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Trains/tests the model and saves the trained model to a dictionary for further analysis.</span>

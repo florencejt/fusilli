@@ -91,10 +91,10 @@
 <li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.BaseModel.get_data_from_batch"><code class="docutils literal notranslate"><span class="pre">BaseModel.get_data_from_batch()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.BaseModel.get_model_outputs"><code class="docutils literal notranslate"><span class="pre">BaseModel.get_model_outputs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.BaseModel.get_model_outputs_and_loss"><code class="docutils literal notranslate"><span class="pre">BaseModel.get_model_outputs_and_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.BaseModel.on_validation_epoch_end"><code class="docutils literal notranslate"><span class="pre">BaseModel.on_validation_epoch_end()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.BaseModel.predict_step"><code class="docutils literal notranslate"><span class="pre">BaseModel.predict_step()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.BaseModel.safe_squeeze"><code class="docutils literal notranslate"><span class="pre">BaseModel.safe_squeeze()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.BaseModel.training_step"><code class="docutils literal notranslate"><span class="pre">BaseModel.training_step()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.BaseModel.validation_epoch_end"><code class="docutils literal notranslate"><span class="pre">BaseModel.validation_epoch_end()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fusilli.fusionmodels.base_model.BaseModel.validation_step"><code class="docutils literal notranslate"><span class="pre">BaseModel.validation_step()</span></code></a></li>
 </ul>
 </li>
@@ -461,10 +461,27 @@ and access by Plotter class for plotting.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fusilli.fusionmodels.base_model.BaseModel.on_validation_epoch_end">
+<span class="sig-name descname"><span class="pre">on_validation_epoch_end</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusionmodels/base_model.html#BaseModel.on_validation_epoch_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusionmodels.base_model.BaseModel.on_validation_epoch_end" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the final validation epoch outputs and metrics.
+When metrics are calculated at the validation step and logged on on_epoch=True,
+the batch metrics are averaged. However, some metrics don’t average well (e.g. R2).
+Therefore, we’re calculating the final validation metrics here on the full validation set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>outputs</strong> (<em>list</em>) – List of outputs.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fusilli.fusionmodels.base_model.BaseModel.predict_step">
 <span class="sig-name descname"><span class="pre">predict_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataloader_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../_modules/fusilli/fusionmodels/base_model.html#BaseModel.predict_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusionmodels.base_model.BaseModel.predict_step" title="Permalink to this definition"></a></dt>
-<dd><p>Step function called during <code class="xref py py-meth docutils literal notranslate"><span class="pre">predict()</span></code>. By default, it
-calls <code class="xref py py-meth docutils literal notranslate"><span class="pre">forward()</span></code>. Override to add any processing logic.</p>
+<dd><p>Step function called during <code class="xref py py-meth docutils literal notranslate"><span class="pre">predict()</span></code>. By default, it calls
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">forward()</span></code>. Override to add any processing logic.</p>
 <p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">predict_step()</span></code> is used
 to scale inference on multi-devices.</p>
 <p>To prevent an OOM error, it is possible to use <code class="xref py py-class docutils literal notranslate"><span class="pre">BasePredictionWriter</span></code>
@@ -472,6 +489,19 @@ callback to write the predictions to disk or database after each batch or on epo
 <p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">BasePredictionWriter</span></code> should be used while using a spawn
 based accelerator. This happens for <code class="docutils literal notranslate"><span class="pre">Trainer(strategy=&quot;ddp_spawn&quot;)</span></code>
 or training on 8 TPU cores with <code class="docutils literal notranslate"><span class="pre">Trainer(accelerator=&quot;tpu&quot;,</span> <span class="pre">devices=8)</span></code> as predictions won’t be returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> – The output of your data iterable, normally a <code class="xref py py-class docutils literal notranslate"><span class="pre">DataLoader</span></code>.</p></li>
+<li><p><strong>batch_idx</strong> – The index of this batch.</p></li>
+<li><p><strong>dataloader_idx</strong> – The index of the dataloader that produced this batch.
+(only if multiple dataloaders used)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Predicted output (optional).</p>
+</dd>
+</dl>
 <p>Example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyModel</span><span class="p">(</span><span class="n">LightningModule</span><span class="p">):</span>
 
@@ -484,18 +514,6 @@ or training on 8 TPU cores with <code class="docutils literal notranslate"><span
 <span class="n">predictions</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dm</span><span class="p">)</span>
 </pre></div>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>batch</strong> – Current batch.</p></li>
-<li><p><strong>batch_idx</strong> – Index of current batch.</p></li>
-<li><p><strong>dataloader_idx</strong> – Index of the current dataloader.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Predicted output</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -531,23 +549,6 @@ or training on 8 TPU cores with <code class="docutils literal notranslate"><span
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fusilli.fusionmodels.base_model.BaseModel.validation_epoch_end">
-<span class="sig-name descname"><span class="pre">validation_epoch_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fusilli/fusionmodels/base_model.html#BaseModel.validation_epoch_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fusilli.fusionmodels.base_model.BaseModel.validation_epoch_end" title="Permalink to this definition"></a></dt>
-<dd><p>Gets the final validation epoch outputs and metrics.
-When metrics are calculated at the validation step and logged on on_epoch=True,
-the batch metrics are averaged. However, some metrics don’t average well (e.g. R2).
-Therefore, we’re calculating the final validation metrics here on the full validation set.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>outputs</strong> (<em>list</em>) – List of outputs.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
