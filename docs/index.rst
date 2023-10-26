@@ -13,6 +13,25 @@ This library provides a way to compare different fusion methods for your multimo
 
 -----
 
+Why would you want to use fusilli?
+##################################
+
+.. list-table::
+    :widths: 50 50
+    :header-rows: 1
+
+    * - Problem
+      - Solution
+    * - You have a dataset that contains multiple modalities. 🩻 📈
+      - Either two types of tabular data or one type of tabular data and one type of image data. Ever thought that maybe they'd be more powerful together? Fusilli can help you find out if multimodal fusion is right for you! ✨
+    * - You've looked at methods for multimodal fusion and thought "wow, that's a lot of code" and "wow, there are so many names for the same concept". 🤔 🆘
+      - *So* relatable. Fusilli provides a simple way for comparing multimodal fusion models without having to trawl through Google Scholar! ✨
+    * - You've found a multimodal fusion method that you want to try out, but you're not sure how to implement it or it's not quite right for your data. 😵‍💫 🙌
+      - Fusilli allows the users to modify existing methods, such as changing the architecture of the model, and provides templates for implementing new methods! ✨
+
+
+-----
+
 .. toctree::
    :maxdepth: 2
    :caption: 🌸 Table of Contents 🌸

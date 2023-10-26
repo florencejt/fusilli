@@ -181,7 +181,7 @@ Examples of using this dictionary are shown in the examples in :ref:`example_not
 
 .. warning::
 
-    Fusilli uses pre-determined file names to save the files in these directories, such as using the model name to save checkpoints. If you have files with the same names in these directories, they will be overwritten.
+    Fusilli uses pre-determined file names to save the files in these directories, such as using the model name to save checkpoints. If you have files with the same names in these directories, **they will be overwritten**.
     It is recommended to have separate directories for each run of fusilli, so that you can keep track of the files that belong to each run.
 
 

@@ -18,7 +18,7 @@ But how do you combine them? There are a variety of ways to do this, and this li
 If you find some more methods out in the wild, please have a go at implementing them and submitting a pull request!
 Templates and specific guidance on how to do this are in :ref:`contributing`.
 
-For a more detailed explanation of multimodal fusion, and a glimpse into some of the models that are out there, this `paper <https://iopscience.iop.org/article/10.1088/2516-1091/acc2fe/meta>`_ by Cui et al. is a great place to start [1].
+For a more detailed explanation of multimodal fusion, and a glimpse into some of the models that are out there, this `paper <https://iopscience.iop.org/article/10.1088/2516-1091/acc2fe/meta>`_ by Cui et al. is a great place to start [1] (not a #ad).
 
 
 Why would you want to use fusilli?
