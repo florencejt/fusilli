@@ -18,8 +18,10 @@
 .. _sphx_glr_contributing_examples_A_template_other_fusion.py:
 
 
-How to create your own fusion model
-===============================================
+.. _how_to_contribute_a_template_other_fusion:
+
+How to create your own fusion model: a general template
+=======================================================
 
 I want to create my own fusion model! Does this sound like you? Then this is the template for you! ✨✨✨
 
@@ -36,14 +38,14 @@ I want to create my own fusion model! Does this sound like you? Then this is the
     * If you're implementing a graph-based fusion model, the input into the model is a graph, not a tuple of tensors.
     * If you're implementing a subspace-based fusion model, the input into the model might be a latent space from a VAE trained on the original input data, not the original input data itself.
 
-.. GENERATED FROM PYTHON SOURCE LINES 23-27
+.. GENERATED FROM PYTHON SOURCE LINES 25-29
 
 Step 1: Importing the libraries
 --------------------------------
 Let's import the libraries we need to create our model. Because we're using PyTorch, we need to import the PyTorch libraries
 as well as the :class:`~.ParentFusionModel` class and functions to help with checking model conditions and validity in the :mod:`~.utils.check_model_validity` module.
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-38
+.. GENERATED FROM PYTHON SOURCE LINES 29-40
 
 .. code-block:: default
 
@@ -59,12 +61,12 @@ as well as the :class:`~.ParentFusionModel` class and functions to help with che
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 39-41
+.. GENERATED FROM PYTHON SOURCE LINES 41-43
 
 Step 2: Creating the model structure
 ------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 43-58
+.. GENERATED FROM PYTHON SOURCE LINES 45-60
 
 **Step 2.1: Creating the class**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,7 +84,7 @@ PyTorch model.
 These input arguments have to be passed into the ``__init__()`` function of our fusion model. When running this library, this is done automatically for you in
 the :func:`~fusilli.train.train_and_save_models` function.
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-68
+.. GENERATED FROM PYTHON SOURCE LINES 60-70
 
 .. code-block:: default
 
@@ -97,7 +99,7 @@ the :func:`~fusilli.train.train_and_save_models` function.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 69-80
+.. GENERATED FROM PYTHON SOURCE LINES 71-82
 
 **Step 2.2: Setting the model attributes**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -111,7 +113,7 @@ Each model has to have the following attributes at the class level (i.e. outside
 
   The comment above the class attributes lets the attributes be documented automatically by Sphinx. This is why the comment is formatted in a specific way.
 
-.. GENERATED FROM PYTHON SOURCE LINES 80-96
+.. GENERATED FROM PYTHON SOURCE LINES 82-98
 
 .. code-block:: default
 
@@ -132,7 +134,7 @@ Each model has to have the following attributes at the class level (i.e. outside
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 97-135
+.. GENERATED FROM PYTHON SOURCE LINES 99-137
 
 **Step 2.3: Setting the model layers**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -173,7 +175,7 @@ This is simply done by creating a dictionary of layers and assigning it to the `
 
 Let's create our own layers for our model. We'll use the preset layers in the :class:`~.ParentFusionModel` class and make a tabular-tabular fusion model.
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-169
+.. GENERATED FROM PYTHON SOURCE LINES 137-171
 
 .. code-block:: default
 
@@ -212,7 +214,7 @@ Let's create our own layers for our model. We'll use the preset layers in the :c
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 170-200
+.. GENERATED FROM PYTHON SOURCE LINES 172-202
 
 Step 3: Setting up model to be modifiable
 ------------------------------------------
@@ -245,7 +247,7 @@ The function ``set_final_pred_layers()`` should be moved into this function sinc
 
   If calculating ``self.fused_dim`` is complicated, you can create a separate function called ``get_fused_dim()`` and call it in ``__init__()`` and in ``calc_fused_layers()``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 200-245
+.. GENERATED FROM PYTHON SOURCE LINES 202-247
 
 .. code-block:: default
 
@@ -295,7 +297,7 @@ The function ``set_final_pred_layers()`` should be moved into this function sinc
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 246-258
+.. GENERATED FROM PYTHON SOURCE LINES 248-260
 
 Step 4: Defining the forward function
 ----------------------------------------
@@ -310,7 +312,7 @@ Let's define the forward function of our model. This is where we define how the 
 This is because some of the models in ``fusilli`` output reconstructed data as well as the prediction, and this library is designed to handle this by all outputs either being a list of length 1 or 2.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 258-281
+.. GENERATED FROM PYTHON SOURCE LINES 260-283
 
 .. code-block:: default
 
@@ -338,7 +340,7 @@ This is because some of the models in ``fusilli`` output reconstructed data as w
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 282-294
+.. GENERATED FROM PYTHON SOURCE LINES 284-296
 
 Step 5: Adding checks
 ----------------------------
@@ -353,7 +355,7 @@ Your model might have more specific checks, such as checking that your modality 
 
 At the beginning of the ``forward()`` function, we add the following check:
 
-.. GENERATED FROM PYTHON SOURCE LINES 294-301
+.. GENERATED FROM PYTHON SOURCE LINES 296-303
 
 .. code-block:: default
 
@@ -365,11 +367,11 @@ At the beginning of the ``forward()`` function, we add the following check:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 302-303
+.. GENERATED FROM PYTHON SOURCE LINES 304-305
 
 At the beginning of the ``calc_fused_layers()`` function, we add the following checks:
 
-.. GENERATED FROM PYTHON SOURCE LINES 303-309
+.. GENERATED FROM PYTHON SOURCE LINES 305-311
 
 .. code-block:: default
 
@@ -380,11 +382,11 @@ At the beginning of the ``calc_fused_layers()`` function, we add the following c
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 310-311
+.. GENERATED FROM PYTHON SOURCE LINES 312-313
 
 If we were using images, we would also add the following check at the beginning of the ``calc_fused_layers()`` function which checks that the image layers are a :class:`~torch.nn.ModuleDict` and that the image dimension is correct
 
-.. GENERATED FROM PYTHON SOURCE LINES 311-316
+.. GENERATED FROM PYTHON SOURCE LINES 313-318
 
 .. code-block:: default
 
@@ -394,7 +396,7 @@ If we were using images, we would also add the following check at the beginning 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 317-335
+.. GENERATED FROM PYTHON SOURCE LINES 319-337
 
 Step 6: Adding documentation
 ----------------------------
@@ -415,7 +417,7 @@ The docstring for the ``__init__()`` function and other functions in the model (
 
 Let's add documentation to our model and see it all come together!
 
-.. GENERATED FROM PYTHON SOURCE LINES 335-462
+.. GENERATED FROM PYTHON SOURCE LINES 337-464
 
 .. code-block:: default
 
@@ -547,7 +549,7 @@ Let's add documentation to our model and see it all come together!
             ]
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 463-464
+.. GENERATED FROM PYTHON SOURCE LINES 465-466
 
 I hope this template has been helpful! If you have any questions, please feel free to ask in the GitHub Discussions page.
 

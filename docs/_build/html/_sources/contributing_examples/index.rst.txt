@@ -29,13 +29,13 @@ These are examples of .py files that can be used to create your own fusion model
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">How to create your own fusion model</div>
+      <div class="sphx-glr-thumbnail-title">How to create your own fusion model: a general template</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Graph fusion template">
+    <div class="sphx-glr-thumbcontainer" tooltip="This template is for creating your own fusion model that is graph-based. An example of a graph-...">
 
 .. only:: html
 
@@ -46,7 +46,7 @@ These are examples of .py files that can be used to create your own fusion model
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Graph fusion template</div>
+      <div class="sphx-glr-thumbnail-title">Fusion Model Template: Graph-based Fusion</div>
     </div>
 
 

@@ -1,6 +1,8 @@
 """
-How to create your own fusion model
-===============================================
+.. _how_to_contribute_a_template_other_fusion:
+
+How to create your own fusion model: a general template
+=======================================================
 
 I want to create my own fusion model! Does this sound like you? Then this is the template for you! ✨✨✨
 
