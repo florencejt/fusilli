@@ -27,8 +27,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="User guide" href="user_guide.html" />
-    <link rel="prev" title="Getting Started" href="getting_started.html" /> 
+    <link rel="next" title="Modifying the fusion models" href="modifying_models.html" />
+    <link rel="prev" title="User guide" href="user_guide.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -54,7 +54,7 @@
               <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html"><strong>fusilli</strong>: an introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fusion Model Explanations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#operation-based">Operation-based</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#attention-based">Attention-based</a></li>
@@ -63,13 +63,16 @@
 <li class="toctree-l2"><a class="reference internal" href="#graph-based">Graph-based</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/training_and_testing/index.html">Training and testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
@@ -78,10 +81,6 @@
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.train.html">fusilli.train</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.eval.html">fusilli.eval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.utils.html">fusilli.utils</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 
         </div>
@@ -109,10 +108,41 @@
            <div itemprop="articleBody">
              
   <section id="fusion-model-explanations">
-<h1>Fusion Model Explanations<a class="headerlink" href="#fusion-model-explanations" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>Fusion Model Explanations<a class="headerlink" href="#fusion-model-explanations" title="Permalink to this heading"></a></h1>
 <p>Below are explanations and diagrams explaining the fusion models available in this library.
 Some of the models are inspired by papers in the literature, so links to the papers are provided
 where appropriate.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Fusion type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">unimodal</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">operation</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">attention</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">subspace</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">graph</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tensor</span></code></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <p>The categorisation of these methods is taken from Cui et al [link to paper here].</p>
 <section id="operation-based">
 <h2>Operation-based<a class="headerlink" href="#operation-based" title="Permalink to this heading"></a></h2>
@@ -172,8 +202,8 @@ where appropriate.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="user_guide.html" class="btn btn-neutral float-right" title="User guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="user_guide.html" class="btn btn-neutral float-left" title="User guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modifying_models.html" class="btn btn-neutral float-right" title="Modifying the fusion models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

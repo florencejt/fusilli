@@ -53,15 +53,18 @@
               <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html"><strong>fusilli</strong>: an introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/training_and_testing/index.html">Training and testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
@@ -70,10 +73,6 @@
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.train.html">fusilli.train</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.eval.html">fusilli.eval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.utils.html">fusilli.utils</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 
         </div>
@@ -104,21 +103,24 @@
 <h1>fusilli<a class="headerlink" href="#fusilli" title="Permalink to this heading"></a></h1>
 <section id="don-t-be-silly-use-fusilli">
 <h2>Don’t be silly, use fusilli! 🍝<a class="headerlink" href="#don-t-be-silly-use-fusilli" title="Permalink to this heading"></a></h2>
-<p>Have you got multimodal data but not sure how to combine them for your machine learning task? Look no further!
+<p><strong>Welcome to fusilli!</strong>
+Have you got multimodal data but not sure how to combine them for your machine learning task? Look no further!
 This library provides a way to compare different fusion methods for your multimodal data.</p>
+<hr class="docutils" />
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html"><strong>fusilli</strong>: an introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#what-is-multimodal-fusion">What is multimodal fusion?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#who-will-get-the-most-out-of-fuseit">Who will get the most out of FuseIt?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#why-fusilli">Why Fusilli?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#what-is-fusilli">What is fusilli?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#but-what-is-multimodal-fusion">But what is multimodal fusion?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#why-would-you-want-to-use-fusilli">Why would you want to use fusilli?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#file-structure-needed">File structure needed</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#simple-example-to-run-fusilli">Simple Example to run fusilli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#how-to-install">How to install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#data-requirements-and-formats">Data requirements and formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#how-to-structure-your-directories">How to structure your directories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#how-to-choose-a-model">How to choose a model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a><ul>
@@ -127,11 +129,6 @@ This library provides a way to compare different fusion methods for your multimo
 <li class="toctree-l2"><a class="reference internal" href="fusion_model_explanations.html#subspace-based">Subspace-based</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fusion_model_explanations.html#tensor-based">Tensor-based</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fusion_model_explanations.html#graph-based">Graph-based</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="user_guide.html#input-data">Input data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_guide.html#choosing-a-model">Choosing a model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modifying_models.html">Modifying the fusion models</a><ul>
@@ -147,6 +144,13 @@ This library provides a way to compare different fusion methods for your multimo
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/training_and_testing/index.html">Training and testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 </div>
 </section>
@@ -172,13 +176,6 @@ This library provides a way to compare different fusion methods for your multimo
 </tr>
 </tbody>
 </table>
-<hr class="docutils" />
-<div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="contributing_examples/index.html">Adding a new model</a></li>
-</ul>
-</div>
 </section>
 </section>
 <hr class="docutils" />

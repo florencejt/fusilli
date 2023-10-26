@@ -27,7 +27,7 @@ margin: 0;
     margin: 0;
 } */
 
-*/ .wy-side-nav-search,
+.wy-side-nav-search,
 .wy-nav-top {
     /* background: #EFFFE9;
     border-bottom: #eaffed; */
@@ -46,8 +46,21 @@ margin: 0;
     background-color: #ffe7fb;
 }
 
-.wy-menu-vertical li.current>a {
-    background-color: #ffe7fb;
+.wy-menu-vertical li.current > a {
+    /*background-color: #ffe7fb;*/
+    background-color: #ac47a5;
+    position: relative;
+}
+
+.wy-menu-vertical li.current > a::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ac47a5; /* Your background color */
+    z-index: -1;
 }
 
 .wy-side-nav-search input[type="text"] {
@@ -83,6 +96,8 @@ margin: 0;
 
 .wy-menu-vertical {
     padding-block: 0%;
+    background-color: #ffe7fb; /* Set the background color for the entire sidebar */
+
 }
 
 
@@ -100,7 +115,6 @@ code.literal {
 
     background-color: #ffe7fb;
 }
-
 
 
 .example a:link,
@@ -136,7 +150,7 @@ a:active {
 } */
 
 
-.wy-menu>.caption>span.caption-text {
+.wy-menu > .caption > span.caption-text {
     /* color: #990092;
     background-color: #adf793; */
     color: #ffffff;
@@ -154,7 +168,6 @@ a:active {
 }
 
 
-
 .wy-menu-vertical li ul li a {
     /* color: #EFFFE9; */
     color: #ffe7fb;
@@ -166,26 +179,26 @@ a:active {
     color: #000000;
 }
 
-.wy-menu-vertical li.current>a button.toctree-expand,
+.wy-menu-vertical li.current > a button.toctree-expand,
 .wy-menu-vertical li.on a button.toctree-expand {
     /* color: rgb(60, 168, 52); */
     /* color: #5d0058; */
     color: #000000;
 }
 
-.wy-menu-vertical li.current>a button.toctree-expand:hover,
+.wy-menu-vertical li.current > a button.toctree-expand:hover,
 .wy-menu-vertical li.on a button.toctree-expand:hover {
     color: rgb(60, 168, 52);
     color: #ac47a5;
 }
 
-.wy-menu-vertical li.toctree-l2.current li.toctree-l3>a {
+.wy-menu-vertical li.toctree-l2.current li.toctree-l3 > a {
     /* background: #cdf8be; */
     background: #ffe7fb;
     /* overflow-x: hidden; */
 }
 
-.wy-menu-vertical li.toctree-l3.current li.toctree-l4>a {
+.wy-menu-vertical li.toctree-l3.current li.toctree-l4 > a {
     /* background: #cdf8be; */
     background: #ffe7fb;
     display: inline-block;
@@ -193,11 +206,16 @@ a:active {
 
 .wy-menu-vertical {
     overflow-x: scroll;
-    background-color: #ffe7fb;
+    background-color: #ffe7fb; /* Background color for the side scroll */
 }
 
-html.writer-html4 .rst-content dl:not(.docutils)>dt,
-html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple)>dt {
+.wy-menu-vertical .wy-side-scroll .wy-menu-vertical header,
+.wy-menu-vertical .wy-side-scroll .wy-menu-vertical p.caption {
+    background-color: #370034; /* Background color for headers within the side scroll */
+}
+
+html.writer-html4 .rst-content dl:not(.docutils) > dt,
+html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) > dt {
     display: table;
     margin: 6px 0;
     font-size: 90%;
@@ -212,10 +230,17 @@ html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(
     position: relative;
 }
 
-.wy-nav-content {
-    max-width: 1200px !important;
+.rst-content .note .admonition-title {
+    display: block; /* Set to 'block' to make the title show */
 }
 
+.rst-content .warning .admonition-title {
+    display: block; /* Set to 'block' to make the title show */
+}
+
+.wy-nav-content {
+    max-width: 1000px !important;
+}
 
 
 /* .wy-table-responsive {
@@ -233,8 +258,8 @@ th {
 }
 
 /* makes the attribute/method box background colours different */
-html.writer-html4 .rst-content dl:not(.docutils) dl:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple)>dt,
-html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) dl:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple)>dt {
+html.writer-html4 .rst-content dl:not(.docutils) dl:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) > dt,
+html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) dl:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) > dt {
     /* background-color: #eaffed; */
     background-color: #ffe7fb;
 }
@@ -262,42 +287,42 @@ html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(
 /* border-top: 1px solid #eaffed; */
 /* } */
 
-*/ .wy-side-nav-search {
+.wy-side-nav-search {
     padding: 0%;
     margin-block: 0%;
 
 }
-
-/* p {
-    margin-block: 0%;
-} */
 
 
 .wy-nav-content-wrap {
     background: #fcfcfc;
 }
 
+
 .wy-menu-vertical header,
 .wy-menu-vertical p.caption {
-    /* background-color: #adf793; */
-    /* column-rule-color: #eaffed;
-    border-color: #eaffed;
-    border-top-color: #eaffed; */
-    /* background: #adf793; */
-    background: #370034;
+    background: #370034; /* Your background color */
     font-size: large;
-    padding: 0%;
-    margin-block: 0%;
-    margin-left: 0.8em;
-    /* margin-top: 0.8em solid #eaffed;
-    margin-bottom: 0.8em solid #eaffed; */
-    /* border-top: 1px solid #eaffed; */
+    padding: 6px 20px; /* Adjust padding as needed */
+    margin: 0;
+    border-top: 3px solid #370034; /* Adjust border properties as needed */
+    border-top-width: 3px;
+    border-top-style: solid;
+    border-bottom: 3px solid #370034; /* Adjust border properties as needed */
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+    display: flex;
+    align-items: center; /* Center vertically within the padding */
 }
 
-.wy-side-scroll {
-    /* width: 100%;
-    overflow-x: auto;
-    display: inline-block; */
-    background-color: #370034;
-    overflow-x: scroll;
-}
+/*.wy-side-scroll {*/
+/*    !* width: 100%;*/
+/*    overflow-x: auto;*/
+/*    display: inline-block; *!*/
+/*    !*background-color: #370034;*!*/
+/*    overflow-x: scroll;*/
+/*}*/
+
+/*.wy-menu-vertical .wy-side-scroll {*/
+/*    background-color: #370034; !* Background color for the side scroll *!*/
+/*}*/

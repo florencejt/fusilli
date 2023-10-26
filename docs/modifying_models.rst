@@ -1,3 +1,5 @@
+.. _modifying-models:
+
 Modifying the fusion models
 ===========================
 
@@ -47,7 +49,6 @@ Modifiable attributes of the fusion models
     - ``nn.Sequential``
 
 ------
-
 
 :class:`.ConcatImgLatentTabDoubleTrain`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -488,14 +489,21 @@ How to construct the dictionary:
 - Value is the value you want to change the attribute to
 
 .. note::
-  You don't need to pass the layer modifications in the 'all' key again under a specific method key if you want to modify the layers for all fusion models.
-  For example, if :attr:`mod1_layers` is modified under 'all', and that is how you want it to be for all fusion models, then you don't need to pass it again under a specific method key.
-  However, if you want :attr:`mod1_layers` to be modified equally for all fusion models except one, then you can pass the modifications in the 'all' key and then override the modifications 
-  for the specific fusion model.
 
-  I have included all possible modifiable attribute in each specific method in the example below for completeness.
+    **Note on modifying models using the "all" key:**
 
-Here's an example of a dictionary which is modifying all of the modifiable attributes of the fusion models:
+    Modifications under the 'all' key will be applied to all fusion models, unless specifically overwritten by a
+    modification to a specific fusion model.
+
+    For example, if you want to modify the attribute :attr:`mod1_layers` for every fusion model that uses it, then
+    you can pass the :attr:`mod1_layers` in the 'all' key.
+
+    If you want to modify the attribute :attr:`mod1_layers` for every fusion model except one, then you can pass the
+    :attr:`mod1_layers` in the 'all' key and then override the modifications for the specific fusion model.
+
+    An example on how to do this is shown below, where the modifications to :attr:`mod1_layers` under the 'all' key
+    are overridden for the fusion model :class:`.ConcatImgMapsTabularMaps`.
+
 
 .. code-block:: python
 
@@ -517,5 +525,27 @@ Here's an example of a dictionary which is modifying all of the modifiable attri
                     ),
                 }
             ),
-        }
+        }, # end of "all" key
+        "ConcatImgMapsTabularMaps": { # overrides the "mod1_layers" modifications made to "all"
+            "mod1_layers": nn.ModuleDict(
+                {
+                    "layer 1": nn.Sequential(
+                        nn.Linear(20, 100),
+                        nn.ReLU(),
+                    ),
+                    "layer 2": nn.Sequential(
+                        nn.Linear(100, 300),
+                        nn.ReLU(),
+                    ),
+                    "layer 3": nn.Sequential(
+                        nn.Linear(300, 250),
+                        nn.ReLU(),
+                    ),
+                    "layer 4": nn.Sequential(
+                        nn.Linear(250, 100),
+                        nn.ReLU(),
+                    ),
+                }
+            ),
+        },
     }

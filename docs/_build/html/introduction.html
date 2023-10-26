@@ -27,7 +27,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Getting Started" href="getting_started.html" />
+    <link rel="next" title="User guide" href="user_guide.html" />
     <link rel="prev" title="fusilli" href="index.html" /> 
 </head>
 
@@ -54,20 +54,23 @@
               <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>fusilli</strong>: an introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#what-is-multimodal-fusion">What is multimodal fusion?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#who-will-get-the-most-out-of-fuseit">Who will get the most out of FuseIt?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#why-fusilli">Why Fusilli?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-fusilli">What is fusilli?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#but-what-is-multimodal-fusion">But what is multimodal fusion?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#why-would-you-want-to-use-fusilli">Why would you want to use fusilli?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/training_and_testing/index.html">Training and testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
@@ -76,10 +79,6 @@
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.train.html">fusilli.train</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.eval.html">fusilli.eval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.utils.html">fusilli.utils</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 
         </div>
@@ -108,40 +107,34 @@
              
   <section id="fusilli-an-introduction">
 <h1><strong>fusilli</strong>: an introduction<a class="headerlink" href="#fusilli-an-introduction" title="Permalink to this heading"></a></h1>
-<section id="what-is-multimodal-fusion">
-<h2>What is multimodal fusion?<a class="headerlink" href="#what-is-multimodal-fusion" title="Permalink to this heading"></a></h2>
-<p><em>an explanation of multimodal fusion</em>
-For a more detailed explanation, see <em>The cui et al systematic review paper</em>. The methods in this library are based on the taxonomy they propose.</p>
+<section id="what-is-fusilli">
+<h2>What is fusilli?<a class="headerlink" href="#what-is-fusilli" title="Permalink to this heading"></a></h2>
+<p>Fusilli is a library for multimodal fusion. It’s built on top of PyTorch and PyTorch Lightning and provides a simple interface for building and comparing multimodal fusion models.
+It’s designed to be easy to use, but also flexible enough to support a variety of fusion methods.</p>
 </section>
-<section id="who-will-get-the-most-out-of-fuseit">
-<h2>Who will get the most out of FuseIt?<a class="headerlink" href="#who-will-get-the-most-out-of-fuseit" title="Permalink to this heading"></a></h2>
-<p>You might want to use Fusilli if:</p>
-<ol class="arabic simple">
-<li><p>You’ve got some multimodal data: this library supports two types of tabular data and either 2D or 3D image data.</p></li>
-<li><dl class="simple">
-<dt>You want to use multimodal fusion! This library supports a variety of fusion methods, including:</dt><dd><ul class="simple">
-<li><p>early fusion</p></li>
-<li><p>late fusion</p></li>
-<li><p>operation-based fusion</p></li>
-<li><p>attention-based fusion</p></li>
-<li><p>subspace-based fusion</p></li>
-<li><p>tensor-based fusion</p></li>
-<li><p>graph-based fusion</p></li>
-<li><p>(and uni-modal models for comparison)</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ol>
+<section id="but-what-is-multimodal-fusion">
+<h2>But what is multimodal fusion?<a class="headerlink" href="#but-what-is-multimodal-fusion" title="Permalink to this heading"></a></h2>
+<p>Multimodal fusion is the process of combining information from multiple modalities (e.g. text, image, audio) to make predictions.
+For example, you might want to predict somebody’s age. You could use a brain MRI, a blood test, and a questionnaire to make this prediction.
+Each of these modalities provides different information about the person, and the idea is that you could combine them to make a better prediction than you could with any single modality.</p>
+<p>But how do you combine them? There are a variety of ways to do this, and this library supports many of them, but not all of them.
+If you find some more methods out in the wild, please have a go at implementing them and submitting a pull request!
+Templates and specific guidance on how to do this are in <a class="reference internal" href="how_to_contribute/README.html#contributing"><span class="std std-ref">Adding a new model</span></a>.</p>
+<p>For a more detailed explanation of multimodal fusion, and a glimpse into some of the models that are out there, this <a class="reference external" href="https://iopscience.iop.org/article/10.1088/2516-1091/acc2fe/meta">paper</a> by Cui et al. is a great place to start [1].</p>
 </section>
-<section id="why-fusilli">
-<h2>Why Fusilli?<a class="headerlink" href="#why-fusilli" title="Permalink to this heading"></a></h2>
-<ol class="arabic simple">
-<li><p>Florence is super cool</p></li>
-<li><p>She’s the best</p></li>
-<li><p>And really good at coding</p></li>
-<li><p>especially coding multimodal fusion models</p></li>
-</ol>
+<section id="why-would-you-want-to-use-fusilli">
+<h2>Why would you want to use fusilli?<a class="headerlink" href="#why-would-you-want-to-use-fusilli" title="Permalink to this heading"></a></h2>
+<p>🩻📈 <strong>You have a dataset that contains multiple modalities.</strong></p>
+<p>Either two types of tabular data or one type of tabular data and one type of image data. Ever thought that maybe they’d be more powerful together?
+Fusilli can help you find out if multimodal fusion is right for you! ✨</p>
+<p>🤔🆘 <strong>You’ve looked at methods for multimodal fusion and thought “wow, that’s a lot of code” and “wow, there are so many names for the same concept”.</strong></p>
+<p><em>So</em> relatable. Fusilli provides a simple way for comparing multimodal fusion models without having to trawl through Google Scholar! ✨</p>
+<p>😵‍💫🙌 <strong>You’ve found a multimodal fusion method that you want to try out, but you’re not sure how to implement it or it’s not quite right for your data.</strong></p>
+<p>Fusilli allows the users to modify existing methods, such as changing the architecture of the model, and provides templates for implementing new methods! ✨</p>
+<hr class="docutils" />
+<p>[1] Cui, C., Yang, H., Wang, Y., Zhao, S., Asad, Z., Coburn, L. A., Wilson, K. T., Landman, B. A., &amp; Huo, Y. (2022).
+Deep Multi-modal Fusion of Image and Non-image Data in Disease Diagnosis and Prognosis:
+A Review (arXiv:2203.15588). arXiv. https://doi.org/10.48550/arXiv.2203.15588</p>
 </section>
 </section>
 
@@ -150,7 +143,7 @@ For a more detailed explanation, see <em>The cui et al systematic review paper</
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="fusilli" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="getting_started.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="user_guide.html" class="btn btn-neutral float-right" title="User guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

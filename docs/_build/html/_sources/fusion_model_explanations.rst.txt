@@ -1,9 +1,31 @@
+.. _fusion-model-explanations:
+
 Fusion Model Explanations
 ==========================
 
 Below are explanations and diagrams explaining the fusion models available in this library.
 Some of the models are inspired by papers in the literature, so links to the papers are provided
 where appropriate.
+
+.. list-table::
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Fusion type
+      - Description
+    * - ``unimodal``
+      -
+    * - ``operation``
+      -
+    * - ``attention``
+      -
+    * - ``subspace``
+      -
+    * - ``graph``
+      -
+    * - ``tensor``
+      -
+
 
 The categorisation of these methods is taken from Cui et al [link to paper here].
 

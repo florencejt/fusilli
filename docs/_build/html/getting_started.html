@@ -26,9 +26,7 @@
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Fusion Model Explanations" href="fusion_model_explanations.html" />
-    <link rel="prev" title="fusilli: an introduction" href="introduction.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,25 +50,20 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html"><strong>fusilli</strong>: an introduction</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#file-structure-needed">File structure needed</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#example-beginning-block-for-getting-file-structure">Example beginning block for getting file structure</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#simple-example-to-run-fusilli">Simple Example to run fusilli</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/training_and_testing/index.html">Training and testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
@@ -79,10 +72,6 @@
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.train.html">fusilli.train</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.eval.html">fusilli.eval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.utils.html">fusilli.utils</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 
         </div>
@@ -111,66 +100,63 @@
              
   <section id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
-<p>This will show you how to set up the Fusilli library and start fusing!</p>
+<p>This will show you how to set up the fusilli and get fusing!</p>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<p>Fusilli is available on PyPI, so you can install it with pip.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install fusilli
 </pre></div>
 </div>
 </section>
-<section id="file-structure-needed">
-<h2>File structure needed<a class="headerlink" href="#file-structure-needed" title="Permalink to this heading"></a></h2>
-<ul class="simple">
-<li><p>loss_log_dir, loss_fig_path if using CSVLogger</p></li>
-<li><dl class="simple">
-<dt>local_figures</dt><dd><ul>
-<li><p>Only really needed if using CSVLogger, otherwise you can plt.show() the figures</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>checkpoints: need to specify in params dict with key “checkpoint_dir”</dt><dd><ul>
-<li><p>params[“checkpoint_dir”] for loading checkpoints</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
+<section id="file-structure-requirements">
+<h2>File structure requirements<a class="headerlink" href="#file-structure-requirements" title="Permalink to this heading"></a></h2>
+<p>Fusilli needs a few directories to be set up in order to run. This is because fusilli needs somewhere to save the checkpoints, loss logs, and evaluation figures.
+The paths to these directories will be passed into the fusilli pipeline as elements of a dictionary.
+Examples of using this dictionary are shown in the examples in <a class="reference internal" href="examples/README.html#example-notebooks"><span class="std std-ref">Tutorials</span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parameters_dictionary</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;loss_fig_path&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">path</span> <span class="n">to</span> <span class="n">save</span> <span class="n">loss</span> <span class="n">figures</span><span class="p">},</span>
+    <span class="s2">&quot;loss_log_dir&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">path</span> <span class="n">to</span> <span class="n">save</span> <span class="n">loss</span> <span class="n">logs</span><span class="p">,</span> <span class="n">used</span> <span class="n">to</span> <span class="n">make</span> <span class="n">the</span> <span class="n">loss</span> <span class="n">figures</span><span class="p">},</span>
+    <span class="s2">&quot;local_fig_path&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">path</span> <span class="n">to</span> <span class="n">save</span> <span class="n">evaluation</span> <span class="n">figures</span><span class="p">},</span>
+    <span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">path</span> <span class="n">to</span> <span class="n">save</span> <span class="n">checkpoints</span><span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Fusilli will use pre-determined file names to save the files in these directories. If you have files with the same names in these directories, they will be overwritten.
+It is recommended to have separate directories for each run of fusilli, so that you can keep track of the files that belong to each run.</p>
+</div>
 <section id="example-beginning-block-for-getting-file-structure">
 <h3>Example beginning block for getting file structure<a class="headerlink" href="#example-beginning-block-for-getting-file-structure" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">params</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S&quot;</span><span class="p">),</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
-<span class="n">params</span><span class="p">[</span><span class="s2">&quot;local_fig_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;local_figures/</span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="n">params</span><span class="p">[</span><span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;checkpoints/</span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="n">params</span><span class="p">[</span><span class="s2">&quot;loss_log_dir&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;loss_logs/</span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="n">params</span><span class="p">[</span><span class="s2">&quot;loss_fig_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;local_fig_path&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/losses&quot;</span>
+<span class="c1"># make a timestamp for the run</span>
+<span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S&quot;</span><span class="p">)</span>
 
-<span class="c1"># make directories</span>
-<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;local_fig_path&quot;</span><span class="p">])</span> <span class="c1"># local_figures</span>
-<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">])</span> <span class="c1"># checkpoints</span>
-<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;loss_log_dir&quot;</span><span class="p">])</span> <span class="c1"># loss_log csvs</span>
-<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;loss_fig_path&quot;</span><span class="p">])</span> <span class="c1"># loss_figures dir within local_figures</span>
+<span class="c1"># make the directories</span>
+<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;local_figures/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="c1"># local_figures</span>
+<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;checkpoints/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="c1"># checkpoints</span>
+<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;loss_logs/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="c1"># loss_log csvs</span>
+<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;local_figures/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">/losses&quot;</span><span class="p">)</span> <span class="c1"># loss_figures dir within local_figures</span>
+
+<span class="c1"># add the paths to the dictionary</span>
+<span class="n">parameters_dictionary</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;loss_fig_path&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;local_figures/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">/losses&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;loss_log_dir&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;loss_logs/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;local_fig_path&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;local_figures/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;checkpoints/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </section>
-</section>
-<section id="simple-example-to-run-fusilli">
-<h2>Simple Example to run fusilli<a class="headerlink" href="#simple-example-to-run-fusilli" title="Permalink to this heading"></a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># example of using the library goes here!</span>
-</pre></div>
-</div>
 </section>
 </section>
 
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="introduction.html" class="btn btn-neutral float-left" title="fusilli: an introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="fusion_model_explanations.html" class="btn btn-neutral float-right" title="Fusion Model Explanations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

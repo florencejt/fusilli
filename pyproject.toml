@@ -27,3 +27,9 @@ filterwarnings = [
     "ignore:.*The 'warn' method is deprecated*:DeprecationWarning",
     "ignore:.*np.find_common_type is deprecated*:DeprecationWarning",
 ]
+
+[tool.coverage.run]
+omit = [
+    "*__init__*",
+    "fusilli/utils/mcvae/*",
+]

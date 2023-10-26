@@ -1,5 +1,7 @@
 :orphan:
 
+.. _contributing:
+
 Adding a new model
 ==================
 
@@ -16,18 +18,18 @@ These are examples of .py files that can be used to create your own fusion model
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Subspace fusion template">
+    <div class="sphx-glr-thumbcontainer" tooltip="I want to create my own fusion model! Does this sound like you? Then this is the template for y...">
 
 .. only:: html
 
-  .. image:: /contributing_examples/images/thumb/sphx_glr_template_subspace_fusion_thumb.png
+  .. image:: /contributing_examples/images/thumb/sphx_glr_A_template_other_fusion_thumb.png
     :alt:
 
-  :ref:`sphx_glr_contributing_examples_template_subspace_fusion.py`
+  :ref:`sphx_glr_contributing_examples_A_template_other_fusion.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Subspace fusion template</div>
+      <div class="sphx-glr-thumbnail-title">How to create your own fusion model</div>
     </div>
 
 
@@ -50,18 +52,18 @@ These are examples of .py files that can be used to create your own fusion model
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This is a template for creating your own fusion model: operation-based, attention-based, or ten...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Subspace fusion template">
 
 .. only:: html
 
-  .. image:: /contributing_examples/images/thumb/sphx_glr_template_other_fusion_thumb.png
+  .. image:: /contributing_examples/images/thumb/sphx_glr_template_subspace_fusion_thumb.png
     :alt:
 
-  :ref:`sphx_glr_contributing_examples_template_other_fusion.py`
+  :ref:`sphx_glr_contributing_examples_template_subspace_fusion.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">General fusion template</div>
+      <div class="sphx-glr-thumbnail-title">Subspace fusion template</div>
     </div>
 
 
@@ -73,9 +75,9 @@ These are examples of .py files that can be used to create your own fusion model
 .. toctree::
    :hidden:
 
-   /contributing_examples/template_subspace_fusion
+   /contributing_examples/A_template_other_fusion
    /contributing_examples/template_graph_fusion
-   /contributing_examples/template_other_fusion
+   /contributing_examples/template_subspace_fusion
 
 
 .. only:: html

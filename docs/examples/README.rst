@@ -1,3 +1,6 @@
+.. _example_notebooks:
+
+
 Tutorials
 ==========
 

@@ -9,7 +9,7 @@
 import os
 import sys
 import warnings
-
+from sphinx_gallery.sorting import FileNameSortKey
 
 sys.path.insert(0, os.path.abspath("../fusilli"))
 sys.path.insert(0, os.path.abspath("../../"))
@@ -21,7 +21,6 @@ warnings.filterwarnings("ignore", ".*MPS available but not used.*")
 warnings.filterwarnings(
     "ignore", message="Checkpoint directory.*exists and is not empty."
 )
-
 
 project = "fusilli"
 copyright = "2023, Florence J Townend"
@@ -44,7 +43,6 @@ extensions = [
     "sphinx_wagtail_theme",
     "renku_sphinx_theme",
 ]
-
 
 # intersphinx_mapping = {
 #     "numpy": ("https://docs.scipy.org/doc/numpy", None),
@@ -88,7 +86,6 @@ autosummary_generate = True
 autosummary_imported_members = False
 add_module_names = False
 
-
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
@@ -114,8 +111,9 @@ sphinx_gallery_conf = {
         [
             "examples/customising_behaviour",
             "examples/training_and_testing",
-        ]
+        ],
     ),
+    "within_subsection_order": FileNameSortKey,
 }
 
 

@@ -373,6 +373,8 @@ def init_trainer(
         devices = params["devices"]
 
     if logger is None:
+        # if logger is None (not even a CSVLogger), then we don't want to log anything
+        # logger must be set to False in the trainer
         logger = False
 
     trainer = Trainer(

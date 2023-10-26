@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Training and testing" href="auto_examples/training_and_testing/index.html" />
-    <link rel="prev" title="User guide" href="user_guide.html" /> 
+    <link rel="prev" title="Fusion Model Explanations" href="fusion_model_explanations.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -54,9 +54,8 @@
               <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html"><strong>fusilli</strong>: an introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Modifying the fusion models</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#modifiable-attributes-of-the-fusion-models">Modifiable attributes of the fusion models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#concatimglatenttabdoubleloss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss</span></code></a></li>
@@ -92,6 +91,10 @@
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/training_and_testing/index.html">Training and testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/customising_behaviour/index.html">Customising behaviour</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing_examples/index.html">Adding a new model</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.fusionmodels.html">fusilli.fusionmodels</a></li>
@@ -99,10 +102,6 @@
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.train.html">fusilli.train</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.eval.html">fusilli.eval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autosummary/fusilli.utils.html">fusilli.utils</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="contributing_examples/index.html">Adding a new model</a></li>
 </ul>
 
         </div>
@@ -130,7 +129,7 @@
            <div itemprop="articleBody">
              
   <section id="modifying-the-fusion-models">
-<h1>Modifying the fusion models<a class="headerlink" href="#modifying-the-fusion-models" title="Permalink to this heading"></a></h1>
+<span id="modifying-models"></span><h1>Modifying the fusion models<a class="headerlink" href="#modifying-the-fusion-models" title="Permalink to this heading"></a></h1>
 <ul class="simple">
 <li><p>You can modify the fusion models by passing in a dictionary of the attributes you want to modify into the <cite>get_data</cite> and <cite>training</cite> functions.</p></li>
 <li><p>The attributes that can be modified are listed below with some guidance on how they can be changed.</p></li>
@@ -766,13 +765,16 @@ actually 10, then a matrix multiplication error will occur from the <code class=
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>You don’t need to pass the layer modifications in the ‘all’ key again under a specific method key if you want to modify the layers for all fusion models.
-For example, if <code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code> is modified under ‘all’, and that is how you want it to be for all fusion models, then you don’t need to pass it again under a specific method key.
-However, if you want <code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code> to be modified equally for all fusion models except one, then you can pass the modifications in the ‘all’ key and then override the modifications
-for the specific fusion model.</p>
-<p>I have included all possible modifiable attribute in each specific method in the example below for completeness.</p>
+<p><strong>Note on modifying models using the “all” key:</strong></p>
+<p>Modifications under the ‘all’ key will be applied to all fusion models, unless specifically overwritten by a
+modification to a specific fusion model.</p>
+<p>For example, if you want to modify the attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code> for every fusion model that uses it, then
+you can pass the <code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code> in the ‘all’ key.</p>
+<p>If you want to modify the attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code> for every fusion model except one, then you can pass the
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code> in the ‘all’ key and then override the modifications for the specific fusion model.</p>
+<p>An example on how to do this is shown below, where the modifications to <code class="xref py py-attr docutils literal notranslate"><span class="pre">mod1_layers</span></code> under the ‘all’ key
+are overridden for the fusion model <code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImgMapsTabularMaps</span></code>.</p>
 </div>
-<p>Here’s an example of a dictionary which is modifying all of the modifiable attributes of the fusion models:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">layer_modifications</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;all&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;mod1_layers&quot;</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleDict</span><span class="p">(</span>
@@ -791,7 +793,29 @@ for the specific fusion model.</p>
                 <span class="p">),</span>
             <span class="p">}</span>
         <span class="p">),</span>
-    <span class="p">}</span>
+    <span class="p">},</span> <span class="c1"># end of &quot;all&quot; key</span>
+    <span class="s2">&quot;ConcatImgMapsTabularMaps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="c1"># overrides the &quot;mod1_layers&quot; modifications made to &quot;all&quot;</span>
+        <span class="s2">&quot;mod1_layers&quot;</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleDict</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;layer 1&quot;</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;layer 2&quot;</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;layer 3&quot;</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">250</span><span class="p">),</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;layer 4&quot;</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+                <span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">),</span>
+    <span class="p">},</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -802,7 +826,7 @@ for the specific fusion model.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="user_guide.html" class="btn btn-neutral float-left" title="User guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fusion_model_explanations.html" class="btn btn-neutral float-left" title="Fusion Model Explanations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="auto_examples/training_and_testing/index.html" class="btn btn-neutral float-right" title="Training and testing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

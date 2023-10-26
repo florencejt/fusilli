@@ -1,5 +1,8 @@
 :orphan:
 
+.. _example_notebooks:
+
+
 Tutorials
 ==========
 
@@ -77,23 +80,6 @@ These are examples of how to train and validate fusion models with Fusilli.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="🚀 In this tutorial, we&#x27;ll explore binary classification using K-fold cross validation.  We&#x27;ll s...">
-
-.. only:: html
-
-  .. image:: /auto_examples/training_and_testing/images/thumb/sphx_glr_plot_one_model_binary_kfold_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_auto_examples_training_and_testing_plot_one_model_binary_kfold.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">📊 Binary Classification: Training a K-Fold Model 🚀</div>
-    </div>
-
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="Welcome to the &quot;Comparing Multiple K-Fold Trained Fusion Models&quot; tutorial! In this tutorial, we...">
 
 .. only:: html
@@ -106,6 +92,23 @@ These are examples of how to train and validate fusion models with Fusilli.
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">📊 Training multiple models in a loop: k-fold regression 🚀</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="🚀 In this tutorial, we&#x27;ll explore binary classification using K-fold cross validation.  We&#x27;ll s...">
+
+.. only:: html
+
+  .. image:: /auto_examples/training_and_testing/images/thumb/sphx_glr_plot_one_model_binary_kfold_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_training_and_testing_plot_one_model_binary_kfold.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">📊 Binary Classification: Training a K-Fold Model 🚀</div>
     </div>
 
 

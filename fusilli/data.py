@@ -300,6 +300,7 @@ class LoadDatasets:
         """
 
         all_scans = torch.load(self.img_source)
+        print(all_scans.shape)
         all_scans_ds = downsample_img_batch(all_scans, self.image_downsample_size)
 
         # get the labels from the tabular1 dataset
