@@ -4,6 +4,7 @@ import torch
 from sklearn.datasets import make_classification, make_regression
 import os
 
+
 # def generate_simulated_tabular_data(num_samples, num_features):
 #     """
 #     Generate simulated tabular data with a study_id column and num_features columns of random values
@@ -85,20 +86,25 @@ def generate_simulated_image_data(num_samples, img_dims):
     num_samples : int
         Number of samples to generate
     img_dims : tuple
-        Dimensions of the image data to generate
+        Dimensions of the image data to generate. (num_channels, height, width) or (num_channels, height, width, depth).
+        If only 2 dimensions are provided, a 1-dimensional channel will be added to the beginning of the tuple.
 
     Returns
     -------
     simulated_images : torch.tensor
         Simulated image data
     """
+
+    if len(img_dims) == 2:
+        # need to add a 1-dimensional channel to beginning of tuple
+        img_dims = (1,) + img_dims
     simulated_images = []
     for _ in range(num_samples):
         simulated_image = np.random.random(img_dims)  # Generate random values
         simulated_image = torch.tensor(simulated_image, dtype=torch.float32)
         simulated_images.append(simulated_image)
 
-    simulated_images = torch.cat(simulated_images, dim=0)
+    simulated_images = torch.stack(simulated_images)
 
     return simulated_images
 
@@ -155,7 +161,7 @@ def generate_simulated_image_data(num_samples, img_dims):
 
 
 def generate_sklearn_simulated_data(
-    num_samples, num_tab1_features, num_tab2_features, img_dims, params
+        num_samples, num_tab1_features, num_tab2_features, img_dims, params
 ):
     """
     Generate simulated data for all modalities, adds a prediction label and returns the params dictionary
@@ -189,7 +195,7 @@ def generate_sklearn_simulated_data(
             n_samples=num_samples,
             n_features=num_tab1_features + num_tab2_features,  # taking  features
             n_informative=(num_tab1_features + num_tab2_features)
-            // 3,  #  features that predict the output's classes
+                          // 3,  # features that predict the output's classes
             n_classes=2,  # three output classes
             weights=None,  # equal number of samples per class)
             flip_y=0.1,  # flip 10% of the labels
@@ -200,7 +206,7 @@ def generate_sklearn_simulated_data(
             n_samples=num_samples,
             n_features=num_tab1_features + num_tab2_features,  # taking  features
             n_informative=(num_tab1_features + num_tab2_features)
-            // 2,  #  features that predict the output's classes
+                          // 2,  # features that predict the output's classes
             n_classes=num_classes,  # three output classes
             weights=None,  # equal number of samples per class)
             flip_y=0.1,  # flip 10% of the labels
@@ -210,7 +216,7 @@ def generate_sklearn_simulated_data(
             n_samples=num_samples,
             n_features=num_tab1_features + num_tab2_features,  # taking  features
             n_informative=(num_tab1_features + num_tab2_features)
-            // 2,  #  features that predict the output's classes
+                          // 2,  # features that predict the output's classes
             noise=3,
             effective_rank=3,
         )

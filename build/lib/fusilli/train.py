@@ -111,6 +111,8 @@ def train_and_test(
 
     logger = set_logger(params, k, fusion_model, extra_log_string_dict)  # set logger
 
+    print("logger:", logger)
+
     trainer = init_trainer(
         logger,
         params=params,

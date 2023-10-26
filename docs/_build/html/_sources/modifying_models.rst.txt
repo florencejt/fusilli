@@ -213,10 +213,12 @@ Modifiable attributes of the fusion models
     - ``nn.Sequential``
   * - :attr:`.autoencoder.downsampler`
     - ``nn.Sequential``
-  * - :attr:`~.img_unimodal.img_layers`
+  * - :attr:`.img_unimodal.img_layers`
     - 
       * ``nn.Sequential``
       * Overrides modification of ``img_layers`` made to "all"
+  * - :attr:`.img_unimodal.fused_layers`
+    - ``nn.Sequential``
 
 ------
 

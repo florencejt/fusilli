@@ -414,6 +414,8 @@ class TrainTestDataModule(pl.LightningDataModule):
         Tensor of predictive features for training. Created in setup().
     test_dataset : tensor
         Tensor of predictive features for testing. Created in setup().
+    subspace_method_train : class
+        Subspace method class trained (only for subspace methods).
 
     """
 
@@ -535,22 +537,26 @@ class TrainTestDataModule(pl.LightningDataModule):
             if (
                     checkpoint_path is None
             ):  # if no checkpoint path specified, train the subspace method
-                subspace_method = self.subspace_method(
+                self.subspace_method_train = self.subspace_method(
                     datamodule=self,
                     max_epochs=self.max_epochs,
                     k=None,
                     train_subspace=True
                 )
 
+                print("subspace method autoencoder before modifying:", self.subspace_method_train.autoencoder)
+
                 # modify the subspace method architecture if specified
                 if self.layer_mods is not None:
-                    subspace_method = model_modifier.modify_model_architecture(
-                        subspace_method,
+                    self.subspace_method_train = model_modifier.modify_model_architecture(
+                        self.subspace_method_train,
                         self.layer_mods,
                     )
 
+                print("subspace method autoencoder after modifying:", self.subspace_method_train.autoencoder)
+
                 # train the subspace method and convert train dataset to the latent space
-                train_latents, train_labels = subspace_method.train(
+                train_latents, train_labels = self.subspace_method_train.train(
                     self.train_dataset, self.test_dataset
                 )
 
@@ -559,7 +565,7 @@ class TrainTestDataModule(pl.LightningDataModule):
                     test_latents,
                     test_labels,
                     data_dims,
-                ) = subspace_method.convert_to_latent(self.test_dataset)
+                ) = self.subspace_method_train.convert_to_latent(self.test_dataset)
 
                 # create the new train and test datasets from the latent space with updated dimensions
                 self.train_dataset = CustomDataset(train_latents, train_labels)
@@ -569,7 +575,7 @@ class TrainTestDataModule(pl.LightningDataModule):
             else:
                 # we have already trained the subspace method, so load it from the checkpoint
 
-                subspace_method = self.subspace_method(
+                self.subspace_method_train = self.subspace_method(
                     self,
                     max_epochs=self.max_epochs,
                     k=None,
@@ -578,26 +584,26 @@ class TrainTestDataModule(pl.LightningDataModule):
 
                 # modify the subspace method architecture if specified
                 if self.layer_mods is not None:
-                    subspace_method = model_modifier.modify_model_architecture(
-                        subspace_method,
+                    self.subspace_method_train = model_modifier.modify_model_architecture(
+                        self.subspace_method_train,
                         self.layer_mods,
                     )
 
                 # load checkpoint state dict
-                subspace_method.load_ckpt(checkpoint_path)
+                self.subspace_method_train.load_ckpt(checkpoint_path)
 
                 # converting the train and test datasets to the latent space
                 (
                     train_latents,
                     train_labels,
                     data_dims,
-                ) = subspace_method.convert_to_latent(self.train_dataset)
+                ) = self.subspace_method_train.convert_to_latent(self.train_dataset)
 
                 (
                     test_latents,
                     test_labels,
                     data_dims,
-                ) = subspace_method.convert_to_latent(self.test_dataset)
+                ) = self.subspace_method_train.convert_to_latent(self.test_dataset)
 
                 # create the new train and test datasets from the latent space with updated dimensions
                 self.train_dataset = CustomDataset(train_latents, train_labels)

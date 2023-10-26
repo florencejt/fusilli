@@ -10,6 +10,7 @@ from fusilli.utils.training_utils import (
     get_checkpoint_filenames_for_subspace_models,
 )
 from torch.utils.data import DataLoader
+from torch.autograd import Variable
 import pandas as pd
 from torch.nn import functional as F
 from fusilli.fusionmodels.base_model import BaseModel
@@ -82,6 +83,8 @@ class DenoisingAutoencoder(pl.LightningModule):
         # this will change the upsampler and downsampler to be consistent with a modified latent dimension
         # you can also just change the upsampler and downsampler directly
 
+        print("DAE CALC FUSED LAYERS!!!!!!!")
+
         check_model_validity.check_dtype(self.upsampler, nn.Sequential, "upsampler")
         check_model_validity.check_dtype(self.downsampler, nn.Sequential, "downsampler")
         check_model_validity.check_dtype(self.latent_dim, int, "latent_dim")
@@ -92,7 +95,9 @@ class DenoisingAutoencoder(pl.LightningModule):
                 self.latent_dim,
             )
 
+        print("upsampler in calc_fused_layers: ", self.upsampler)
         self.upsampler[0] = nn.Linear(self.tab_dims, self.upsampler[0].out_features)
+        print("upsampler in calc_fused_layers 2: ", self.upsampler)
         self.upsampler[-2] = nn.Linear(
             self.upsampler[-2].in_features, self.latent_dim
         )  # -2 because of the relu
@@ -297,13 +302,24 @@ class ImgUnimodalDAE(pl.LightningModule):
             )
             self.activation = lambda x: torch.argmax(nn.Softmax(dim=-1)(x), dim=-1)
 
-        self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
+        self.get_fused_dim()
+        # self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
 
         ParentFusionModel.set_fused_layers(self, fused_dim=self.fused_dim)
 
-        self.final_prediction = None
         # setting the final prediction layers
         self.calc_fused_layers()
+
+    def get_fused_dim(self):
+        """
+        Get the dimension of the fused layers.
+
+        """
+
+        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
+        for layer in self.img_layers.values():
+            dummy_conv_output = layer(dummy_conv_output)
+        self.fused_dim = dummy_conv_output.data.view(1, -1).size(1)
 
     def calc_fused_layers(self):
         """
@@ -314,12 +330,16 @@ class ImgUnimodalDAE(pl.LightningModule):
         None
         """
 
+        print("IMG UNIMODAL CALC FUSED LAYERS!!!!!!!")
+
         check_model_validity.check_dtype(self.img_layers, nn.ModuleDict, "img_layers")
         check_model_validity.check_img_dim(self.img_layers, self.img_dim, "img_layers")
 
         self.num_layers = len(self.img_layers)
 
-        self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
+        self.get_fused_dim()
+
+        # self.fused_dim = list(self.img_layers.values())[-1][0].out_channels
 
         # check fused layers
         self.fused_layers, out_dim = check_model_validity.check_fused_layers(
@@ -528,6 +548,7 @@ class denoising_autoencoder_subspace_method:
                 max_epochs=max_epochs,
                 checkpoint_filename=checkpoint_filenames[0],
                 own_early_stopping_callback=self.datamodule.own_early_stopping_callback,
+
             )
             self.img_unimodal_trainer = init_trainer(
                 None,

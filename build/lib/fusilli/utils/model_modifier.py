@@ -42,10 +42,14 @@ def modify_model_architecture(model, architecture_modification):
 
         # Modify layers for a specific model class
         elif model_name == model.__class__.__name__:
+
+            nested_attrs = []  # list of nested attributes to modify
+
             for layer_group, modification in layer_groups.items():
                 nested_attr = get_nested_attr(model, layer_group)
 
                 if hasattr(nested_attr, layer_group.split(".")[-1]):
+
                     setattr(nested_attr, layer_group.split(".")[-1], modification)
                     print("Changed", layer_group.split(".")[-1], "in", model_name)
 
@@ -53,9 +57,12 @@ def modify_model_architecture(model, architecture_modification):
                     raise ValueError(
                         f"Layer group {layer_group} not found in {model_name}"
                     )
+                if nested_attr not in nested_attrs:
+                    nested_attrs.append(nested_attr)
                 # if we're on the last layer group, reset the fused layers
                 if layer_group == list(layer_groups.keys())[-1]:
-                    reset_fused_layers(nested_attr, model)
+                    for nested_attr in nested_attrs:
+                        reset_fused_layers(nested_attr, model)
     return model
 
 

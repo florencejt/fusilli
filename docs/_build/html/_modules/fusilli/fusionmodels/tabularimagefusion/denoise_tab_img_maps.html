@@ -110,6 +110,7 @@
     <span class="n">get_checkpoint_filenames_for_subspace_models</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="kn">from</span> <span class="nn">torch.autograd</span> <span class="kn">import</span> <span class="n">Variable</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 <span class="kn">from</span> <span class="nn">fusilli.fusionmodels.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
@@ -397,13 +398,24 @@
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)(</span><span class="n">x</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_fused_dim</span><span class="p">()</span>
+        <span class="c1"># self.fused_dim = list(self.img_layers.values())[-1][0].out_channels</span>
 
         <span class="n">ParentFusionModel</span><span class="o">.</span><span class="n">set_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fused_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">final_prediction</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1"># setting the final prediction layers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_fused_layers</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ImgUnimodalDAE.get_fused_dim"><a class="viewcode-back" href="../../../../autosummary/fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.html#fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.ImgUnimodalDAE.get_fused_dim">[docs]</a>    <span class="k">def</span> <span class="nf">get_fused_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the dimension of the fused layers.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_dim</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">dummy_conv_output</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">dummy_conv_output</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="n">dummy_conv_output</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ImgUnimodalDAE.calc_fused_layers"><a class="viewcode-back" href="../../../../autosummary/fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.html#fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.ImgUnimodalDAE.calc_fused_layers">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fused_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -419,7 +431,9 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fused_dim</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_layers</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">out_channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_fused_dim</span><span class="p">()</span>
+
+        <span class="c1"># self.fused_dim = list(self.img_layers.values())[-1][0].out_channels</span>
 
         <span class="c1"># check fused layers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fused_layers</span><span class="p">,</span> <span class="n">out_dim</span> <span class="o">=</span> <span class="n">check_model_validity</span><span class="o">.</span><span class="n">check_fused_layers</span><span class="p">(</span>
@@ -628,6 +642,7 @@
                 <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
                 <span class="n">checkpoint_filename</span><span class="o">=</span><span class="n">checkpoint_filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                 <span class="n">own_early_stopping_callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">own_early_stopping_callback</span><span class="p">,</span>
+
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">img_unimodal_trainer</span> <span class="o">=</span> <span class="n">init_trainer</span><span class="p">(</span>
                 <span class="kc">None</span><span class="p">,</span>

@@ -18,6 +18,8 @@ sys.path.insert(0, os.path.abspath("."))
 
 warnings.filterwarnings("ignore", ".*does not have many workers.*")
 warnings.filterwarnings("ignore", ".*MPS available but not used.*")
+warnings.filterwarnings("ignore", ".*GPU available but not used.*")
+
 warnings.filterwarnings(
     "ignore", message="Checkpoint directory.*exists and is not empty."
 )

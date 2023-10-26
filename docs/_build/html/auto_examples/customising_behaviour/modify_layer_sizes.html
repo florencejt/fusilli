@@ -26,9 +26,7 @@
         <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Adding a new model" href="../../contributing_examples/index.html" />
-    <link rel="prev" title="How to use Weights and Biases Logging with Fusilli" href="how_to_use_logging.html" /> 
+    <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -59,16 +57,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../modifying_models.html">Modifying the fusion models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../training_and_testing/index.html">Training and testing</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Customising behaviour</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="how_to_use_logging.html">How to use Weights and Biases Logging with Fusilli</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">How to modify architectures of fusion models</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Customising behaviour</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
 <ul>
@@ -97,7 +88,6 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="index.html">Customising behaviour</a></li>
       <li class="breadcrumb-item active">How to modify architectures of fusion models</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/auto_examples/customising_behaviour/modify_layer_sizes.rst.txt" rel="nofollow"> View page source</a>
@@ -116,20 +106,80 @@ to download the full example code</p>
 <section class="sphx-glr-example-title" id="how-to-modify-architectures-of-fusion-models">
 <span id="sphx-glr-auto-examples-customising-behaviour-modify-layer-sizes-py"></span><h1>How to modify architectures of fusion models<a class="headerlink" href="#how-to-modify-architectures-of-fusion-models" title="Permalink to this heading"></a></h1>
 <p>This tutorial will show you how to modify the architectures of fusion models.</p>
-<section id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this heading"></a></h2>
-<ul class="simple">
-<li><dl class="simple">
-<dt>For image channel-wise attention, the mod1 layers and the img layers must have the same number of layers and the same</dt><dd><p>number of output channels in each layer. The kernel size and padding etc can be different.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>For tabular channel-wise attention, the mod1 layers and the mod2 layers must have the same number of layers and the</dt><dd><p>same number of output features in each layer.</p>
-</dd>
-</dl>
-</li>
+<p>More guidance on what can be modified in each fusion model can be found in the <a class="reference internal" href="../../modifying_models.html#modifying-models"><span class="std std-ref">Modifying the fusion models</span></a> section.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Some of the fusion models have been designed to work with specific architectures and there are some restrictions on how they can be modified.</p>
+<p>For example, the channel-wise attention model requires the two modalities to have the same number of layers. Please read the notes section of the fusion model you are interested in to see if there are any restrictions.</p>
+</div>
+<section id="setting-up-the-experiment">
+<h2>Setting up the experiment<a class="headerlink" href="#setting-up-the-experiment" title="Permalink to this heading"></a></h2>
+<p>First, we will set up the experiment by importing the necessary packages, creating the simulated data, and setting the parameters for the experiment.</p>
+<p>For a more detailed explanation of this process, please see the <a class="reference internal" href="../../examples/training_and_testing/README.html#train-test-examples"><span class="std std-ref">Training and testing</span></a> tutorials.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">docs.examples</span> <span class="kn">import</span> <span class="n">generate_sklearn_simulated_data</span>
+<span class="kn">from</span> <span class="nn">fusilli.data</span> <span class="kn">import</span> <span class="n">get_data_module</span>
+<span class="kn">from</span> <span class="nn">fusilli.eval</span> <span class="kn">import</span> <span class="n">RealsVsPreds</span>
+<span class="kn">from</span> <span class="nn">fusilli.train</span> <span class="kn">import</span> <span class="n">train_and_save_models</span>
+
+<span class="kn">from</span> <span class="nn">fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps</span> <span class="kn">import</span> <span class="n">DAETabImgMaps</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;test_size&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="s2">&quot;kfold_flag&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;log&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;pred_type&quot;</span><span class="p">:</span> <span class="s2">&quot;regression&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;loss_log_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;loss_logs&quot;</span><span class="p">,</span>  <span class="c1"># where the csv of the loss is saved for plotting later</span>
+<span class="p">}</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">generate_sklearn_simulated_data</span><span class="p">(</span>
+    <span class="n">num_samples</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+    <span class="n">num_tab1_features</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">num_tab2_features</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">img_dims</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+    <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="specifying-the-model-modifications">
+<h2>Specifying the model modifications<a class="headerlink" href="#specifying-the-model-modifications" title="Permalink to this heading"></a></h2>
+<p>Now, we will specify the modifications we want to make to the model.</p>
+<p>We are using the <a class="reference internal" href="../../autosummary/fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.html#fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.DAETabImgMaps" title="fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.DAETabImgMaps"><code class="xref py py-class docutils literal notranslate"><span class="pre">DAETabImgMaps</span></code></a> model for this example.
+This is a subspace-based model which has two PyTorch models that need to be pretrained (a denoising autoencoder for the tabular modality, and a convolutional neural network for the image modality).
+The fusion model then uses the latent representations of these models to perform the fusion.</p>
+<p>The following modifications can be made to the model:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Guidance</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">autoencoder.latent_dim</span></code></p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">autoencoder.upsampler</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">autoencoder.downsampler</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">img_unimodal.img_layers</span></code></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.Sequential</span></code></p></li>
+<li><p>Overrides modification of <code class="docutils literal notranslate"><span class="pre">img_layers</span></code> made to “all”</p></li>
 </ul>
+</td>
+</tr>
+</tbody>
+</table>
 <p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.000 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-customising-behaviour-modify-layer-sizes-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
@@ -146,10 +196,7 @@ to download the full example code</p>
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="how_to_use_logging.html" class="btn btn-neutral float-left" title="How to use Weights and Biases Logging with Fusilli" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../../contributing_examples/index.html" class="btn btn-neutral float-right" title="Adding a new model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

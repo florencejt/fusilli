@@ -36,10 +36,10 @@ These are examples showing how to get more in depth with Fusilli and customise i
 
 .. only:: html
 
-  .. image:: /auto_examples/customising_behaviour/images/thumb/sphx_glr_modify_layer_sizes_thumb.png
+  .. image:: /auto_examples/customising_behaviour/images/thumb/sphx_glr_plot_modify_layer_sizes_thumb.png
     :alt:
 
-  :ref:`sphx_glr_auto_examples_customising_behaviour_modify_layer_sizes.py`
+  :ref:`sphx_glr_auto_examples_customising_behaviour_plot_modify_layer_sizes.py`
 
 .. raw:: html
 
@@ -56,5 +56,5 @@ These are examples showing how to get more in depth with Fusilli and customise i
    :hidden:
 
    /auto_examples/customising_behaviour/how_to_use_logging
-   /auto_examples/customising_behaviour/modify_layer_sizes
+   /auto_examples/customising_behaviour/plot_modify_layer_sizes
 

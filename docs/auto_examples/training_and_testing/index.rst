@@ -2,6 +2,8 @@
 
 .. _sphx_glr_auto_examples_training_and_testing:
 
+.. _train_test_examples:
+
 Training and testing
 ====================
 

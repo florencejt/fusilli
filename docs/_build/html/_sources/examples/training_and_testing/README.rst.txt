@@ -1,3 +1,5 @@
+.. _train_test_examples:
+
 Training and testing
 ====================
 
