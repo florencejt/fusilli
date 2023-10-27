@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Subspace fusion template &mdash; fusilli  documentation</title>
+  <title>Creating a subspace-based fusion model &mdash; fusilli  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -68,7 +68,11 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Adding a new model</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="A_template_other_fusion.html">How to create your own fusion model: a general template</a></li>
 <li class="toctree-l2"><a class="reference internal" href="template_graph_fusion.html">Fusion Model Template: Graph-based Fusion</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Subspace fusion template</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Creating a subspace-based fusion model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-create-a-pre-trained-subspace-based-fusion-model">How to create a pre-trained subspace-based fusion model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-create-a-simultaneously-trained-subspace-based-fusion-model">How to create a simultaneously-trained subspace-based fusion model</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -96,7 +100,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html">Adding a new model</a></li>
-      <li class="breadcrumb-item active">Subspace fusion template</li>
+      <li class="breadcrumb-item active">Creating a subspace-based fusion model</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/contributing_examples/template_subspace_fusion.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -111,8 +115,30 @@
 <p><a class="reference internal" href="#sphx-glr-download-contributing-examples-template-subspace-fusion-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code</p>
 </div>
-<section class="sphx-glr-example-title" id="subspace-fusion-template">
-<span id="sphx-glr-contributing-examples-template-subspace-fusion-py"></span><h1>Subspace fusion template<a class="headerlink" href="#subspace-fusion-template" title="Permalink to this heading"></a></h1>
+<section class="sphx-glr-example-title" id="creating-a-subspace-based-fusion-model">
+<span id="sphx-glr-contributing-examples-template-subspace-fusion-py"></span><h1>Creating a subspace-based fusion model<a class="headerlink" href="#creating-a-subspace-based-fusion-model" title="Permalink to this heading"></a></h1>
+<p>This tutorial will show you how to create a subspace-based fusion model.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>I recommend looking at <a class="reference internal" href="A_template_other_fusion.html#how-to-contribute-a-template-other-fusion"><span class="std std-ref">How to create your own fusion model: a general template</span></a> before looking at this template, as I will skip over some of the details that are covered in that template (particularly regarding documentation and idiosyncrasies of the fusion model template).</p>
+</div>
+<p>There are <strong>two</strong> types of subspace-based fusion models in this library:</p>
+<ol class="arabic simple">
+<li><p>A model that has subspace methods trained <strong>before</strong> the main prediction model. An example of this is <code class="xref py py-class docutils literal notranslate"><span class="pre">DAETabImgMaps</span></code>. This works by training the subspace method first, then using the output of the subspace method as the input to the main prediction model.</p></li>
+<li><p>A model that has subspace methods (such as an autoencoder) trained <strong>simultaneously</strong> as the main prediction model. An example of this is <a class="reference internal" href="../autosummary/fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubleloss.html#fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss" title="fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss</span></code></a>. This works by implementing a joint loss function that combines the loss of the subspace method and the loss of the main prediction model.</p></li>
+</ol>
+<p>We will look at how to create both of these types of models.</p>
+<section id="how-to-create-a-pre-trained-subspace-based-fusion-model">
+<h2>How to create a pre-trained subspace-based fusion model<a class="headerlink" href="#how-to-create-a-pre-trained-subspace-based-fusion-model" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># how to create it</span>
+</pre></div>
+</div>
+</section>
+<section id="how-to-create-a-simultaneously-trained-subspace-based-fusion-model">
+<h2>How to create a simultaneously-trained subspace-based fusion model<a class="headerlink" href="#how-to-create-a-simultaneously-trained-subspace-based-fusion-model" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># how to create it</span>
+</pre></div>
+</div>
 <p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.000 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-contributing-examples-template-subspace-fusion-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
@@ -123,6 +149,7 @@ to download the full example code</p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
 </section>
 
 

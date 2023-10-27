@@ -52,7 +52,7 @@ These are examples of .py files that can be used to create your own fusion model
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Subspace fusion template">
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial will show you how to create a subspace-based fusion model.">
 
 .. only:: html
 
@@ -63,7 +63,7 @@ These are examples of .py files that can be used to create your own fusion model
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Subspace fusion template</div>
+      <div class="sphx-glr-thumbnail-title">Creating a subspace-based fusion model</div>
     </div>
 
 
