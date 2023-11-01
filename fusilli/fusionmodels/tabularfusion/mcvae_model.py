@@ -218,9 +218,9 @@ class MCVAESubspaceMethod:
             ),
         }
         mcvae_fit = Mcvae(**init_dict, sparse=True)
-        mcvae_fit.init_loss()
         print("device:", DEVICE)
         mcvae_fit.to(DEVICE)
+        mcvae_fit.init_loss()
 
         mcvae_fit.optimizer = torch.optim.Adam(mcvae_fit.parameters(), lr=0.001)
 
