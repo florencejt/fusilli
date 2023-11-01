@@ -321,7 +321,7 @@ class concat_img_latent_tab_subspace_method:
                 checkpoint_filename=checkpoint_filenames[0],
             )
 
-            self.autoencoder = ImgLatentSpace(self.datamodule.data_dims)
+            # self.autoencoder = ImgLatentSpace(self.datamodule.data_dims)
 
     def load_ckpt(self, checkpoint_path):
         """

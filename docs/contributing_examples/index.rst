@@ -35,6 +35,23 @@ These are examples of .py files that can be used to create your own fusion model
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial will show you how to create a subspace-based fusion model.">
+
+.. only:: html
+
+  .. image:: /contributing_examples/images/thumb/sphx_glr_plot_template_subspace_fusion_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_contributing_examples_plot_template_subspace_fusion.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a subspace-based fusion model</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This template is for creating your own fusion model that is graph-based. An example of a graph-...">
 
 .. only:: html
@@ -52,23 +69,6 @@ These are examples of .py files that can be used to create your own fusion model
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial will show you how to create a subspace-based fusion model.">
-
-.. only:: html
-
-  .. image:: /contributing_examples/images/thumb/sphx_glr_template_subspace_fusion_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_contributing_examples_template_subspace_fusion.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Creating a subspace-based fusion model</div>
-    </div>
-
-
-.. raw:: html
-
     </div>
 
 
@@ -76,8 +76,8 @@ These are examples of .py files that can be used to create your own fusion model
    :hidden:
 
    /contributing_examples/A_template_other_fusion
+   /contributing_examples/plot_template_subspace_fusion
    /contributing_examples/template_graph_fusion
-   /contributing_examples/template_subspace_fusion
 
 
 .. only:: html

@@ -419,9 +419,9 @@
                 <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">params</span><span class="p">,</span>
                 <span class="n">max_epochs</span><span class="o">=</span><span class="n">max_epochs</span><span class="p">,</span>
                 <span class="n">checkpoint_filename</span><span class="o">=</span><span class="n">checkpoint_filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="p">)</span>
+            <span class="p">)</span></div>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">autoencoder</span> <span class="o">=</span> <span class="n">ImgLatentSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datamodule</span><span class="o">.</span><span class="n">data_dims</span><span class="p">)</span></div>
+            <span class="c1"># self.autoencoder = ImgLatentSpace(self.datamodule.data_dims)</span>
 
 <div class="viewcode-block" id="concat_img_latent_tab_subspace_method.load_ckpt"><a class="viewcode-back" href="../../../../autosummary/fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.html#fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.concat_img_latent_tab_subspace_method.load_ckpt">[docs]</a>    <span class="k">def</span> <span class="nf">load_ckpt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checkpoint_path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
