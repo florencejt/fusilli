@@ -32,15 +32,13 @@ The categorisation of these methods is taken from Cui et al [link to paper here]
 Operation-based
 ---------------
 
-**What is operation-based?**
+:class:`.ConcatTabularFeatureMaps`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Explanation here.
+.. image:: _static/Concat_tabular_data_diagram.png
+    :width: 400
+    :align: center
 
-**Methods below:**
-
-* method1
-* method2
-* method2
 
 Attention-based
 ---------------

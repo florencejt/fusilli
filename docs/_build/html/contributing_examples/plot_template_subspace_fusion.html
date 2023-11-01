@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Creating a subspace-based fusion model &mdash; fusilli  documentation</title>
+  <title>Fusion Model Template: Subspace-based Fusion &mdash; fusilli  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -65,11 +65,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Adding a new model</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Fusion Model Templates</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="A_template_other_fusion.html">How to create your own fusion model: a general template</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Creating a subspace-based fusion model</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#option-1-how-to-create-a-simultaneously-trained-subspace-based-fusion-model">Option 1: how to create a simultaneously-trained subspace-based fusion model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#option-2-how-to-create-a-pre-trained-subspace-based-fusion-model">Option 2: how to create a pre-trained subspace-based fusion model</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Fusion Model Template: Subspace-based Fusion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#option-1-simultaneously-trained-subspace-based-fusion-model">Option 1: Simultaneously-trained subspace-based fusion model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#option-2-pre-trained-subspace-based-fusion-model">Option 2: Pre-trained subspace-based fusion model</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#step-1-create-the-pytorch-lightning-subspace-model">Step 1: Create the PyTorch Lightning subspace model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-2-create-the-class-with-the-methods-load-ckpt-train-and-convert-to-latent">Step 2: create the class with the methods <code class="docutils literal notranslate"><span class="pre">load_ckpt</span></code>, <code class="docutils literal notranslate"><span class="pre">train</span></code>, and <code class="docutils literal notranslate"><span class="pre">convert_to_latent</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-3-create-the-fusion-model-class">Step 3: create the fusion model class</a></li>
@@ -104,8 +104,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="index.html">Adding a new model</a></li>
-      <li class="breadcrumb-item active">Creating a subspace-based fusion model</li>
+          <li class="breadcrumb-item"><a href="index.html">Fusion Model Templates</a></li>
+      <li class="breadcrumb-item active">Fusion Model Template: Subspace-based Fusion</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/contributing_examples/plot_template_subspace_fusion.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -120,8 +120,8 @@
 <p><a class="reference internal" href="#sphx-glr-download-contributing-examples-plot-template-subspace-fusion-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code</p>
 </div>
-<section class="sphx-glr-example-title" id="creating-a-subspace-based-fusion-model">
-<span id="sphx-glr-contributing-examples-plot-template-subspace-fusion-py"></span><h1>Creating a subspace-based fusion model<a class="headerlink" href="#creating-a-subspace-based-fusion-model" title="Permalink to this heading"></a></h1>
+<section class="sphx-glr-example-title" id="fusion-model-template-subspace-based-fusion">
+<span id="sphx-glr-contributing-examples-plot-template-subspace-fusion-py"></span><h1>Fusion Model Template: Subspace-based Fusion<a class="headerlink" href="#fusion-model-template-subspace-based-fusion" title="Permalink to this heading"></a></h1>
 <p>This tutorial will show you how to create a subspace-based fusion model.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -133,8 +133,8 @@ to download the full example code</p>
 <li><p>A model that has subspace methods (such as an autoencoder) trained <strong>simultaneously</strong> with the main prediction model. An example of this is <a class="reference internal" href="../autosummary/fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubleloss.html#fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss" title="fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss</span></code></a>. This works by implementing a joint loss function that combines the loss of the subspace method and the loss of the main prediction model.</p></li>
 </ol>
 <p>We will look at how to create both of these types of models.</p>
-<section id="option-1-how-to-create-a-simultaneously-trained-subspace-based-fusion-model">
-<h2>Option 1: how to create a simultaneously-trained subspace-based fusion model<a class="headerlink" href="#option-1-how-to-create-a-simultaneously-trained-subspace-based-fusion-model" title="Permalink to this heading"></a></h2>
+<section id="option-1-simultaneously-trained-subspace-based-fusion-model">
+<h2>Option 1: Simultaneously-trained subspace-based fusion model<a class="headerlink" href="#option-1-simultaneously-trained-subspace-based-fusion-model" title="Permalink to this heading"></a></h2>
 <p>There are two differences between this type of model and the general template in <a class="reference internal" href="A_template_other_fusion.html#how-to-contribute-a-template-other-fusion"><span class="std std-ref">How to create your own fusion model: a general template</span></a>:</p>
 <ul class="simple">
 <li><p>Must have the attribute <code class="docutils literal notranslate"><span class="pre">self.custom_loss</span></code> which is the loss function used to train the subspace method (e.g. the MSELoss for an autoencoder).</p></li>
@@ -234,8 +234,8 @@ to download the full example code</p>
 <p><strong>For more information on this, see Step 3 in :ref:`how_to_contribute_a_template_other_fusion`.</strong></p>
 </section>
 <hr class="docutils" />
-<section id="option-2-how-to-create-a-pre-trained-subspace-based-fusion-model">
-<h2>Option 2: how to create a pre-trained subspace-based fusion model<a class="headerlink" href="#option-2-how-to-create-a-pre-trained-subspace-based-fusion-model" title="Permalink to this heading"></a></h2>
+<section id="option-2-pre-trained-subspace-based-fusion-model">
+<h2>Option 2: Pre-trained subspace-based fusion model<a class="headerlink" href="#option-2-pre-trained-subspace-based-fusion-model" title="Permalink to this heading"></a></h2>
 <p>This section will show how to create susbapce-based fusion model which involves one or more models that have to be pre-trained.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">.py</span></code> file that contains the whole fusion model must have the following three things:</p>
 <ol class="arabic simple">
@@ -486,7 +486,7 @@ This is similar to the <code class="docutils literal notranslate"><span class="p
 <p>For the most user flexibility, the model attributes should be able to be modified (such as the subspace method layers) and the model should be able to recalculate the layers of the model if the attributes are modified.</p>
 <p>For more information on this, see Step 3 in <a class="reference internal" href="A_template_other_fusion.html#how-to-contribute-a-template-other-fusion"><span class="std std-ref">How to create your own fusion model: a general template</span></a>.</p>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.008 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.011 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-contributing-examples-plot-template-subspace-fusion-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/dbe4504fdbd000b44c4ae304996b55eb/plot_template_subspace_fusion.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_template_subspace_fusion.py</span></code></a></p>

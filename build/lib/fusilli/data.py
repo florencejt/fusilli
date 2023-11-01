@@ -43,6 +43,7 @@ def downsample_img_batch(imgs, output_size):
     # if number of output_size dims is equal to number of image dims - 3
     # (i.e. if output_size is (64) and image is (16, 3, 128, 128))
     # or output_size is (64, 64) and image is (16, 3, 128, 128, 128))
+
     if len(output_size) == imgs.dim() - 3:
         raise ValueError(
             f"output_size must have {imgs.dim() - 3} dimensions, not {len(output_size)}.\
@@ -300,7 +301,6 @@ class LoadDatasets:
         """
 
         all_scans = torch.load(self.img_source)
-        print(all_scans.shape)
         all_scans_ds = downsample_img_batch(all_scans, self.image_downsample_size)
 
         # get the labels from the tabular1 dataset
@@ -544,16 +544,12 @@ class TrainTestDataModule(pl.LightningDataModule):
                     train_subspace=True
                 )
 
-                print("subspace method autoencoder before modifying:", self.subspace_method_train.autoencoder)
-
                 # modify the subspace method architecture if specified
                 if self.layer_mods is not None:
                     self.subspace_method_train = model_modifier.modify_model_architecture(
                         self.subspace_method_train,
                         self.layer_mods,
                     )
-
-                print("subspace method autoencoder after modifying:", self.subspace_method_train.autoencoder)
 
                 # train the subspace method and convert train dataset to the latent space
                 train_latents, train_labels = self.subspace_method_train.train(
@@ -895,7 +891,6 @@ class KFoldDataModule(pl.LightningDataModule):
                             subspace_method,
                             self.layer_mods,
                         )
-                    print(checkpoint_path)
                     subspace_method.load_ckpt(checkpoint_path)
 
                     (

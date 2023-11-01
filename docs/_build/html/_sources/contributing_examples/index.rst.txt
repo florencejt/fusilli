@@ -2,13 +2,16 @@
 
 .. _contributing:
 
-Adding a new model
-==================
+Fusion Model Templates
+=======================
 
-Below are some guidelines for contributing to this project.
+Do you know a fusion model that isn't listed here? Please consider contributing it to the project!
 
-These are examples of .py files that can be used to create your own fusion models. They are not meant to be run as is, but rather to be used as a starting point for your own models.
+The below templates will walk you through how to add a fusion model so that it works with the rest of ``fusilli``.
 
+Even if your model is subspace-based or graph-based, I would still recommend going through the general fusion template first, as it will help you understand the structure of the project.
+
+Have fun! 🌸
 
 
 .. raw:: html
@@ -46,7 +49,7 @@ These are examples of .py files that can be used to create your own fusion model
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Creating a subspace-based fusion model</div>
+      <div class="sphx-glr-thumbnail-title">Fusion Model Template: Subspace-based Fusion</div>
     </div>
 
 

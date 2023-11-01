@@ -7,6 +7,7 @@ import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch
 from fusilli.utils.mcvae.src.mcvae.models import Mcvae
+from fusilli.utils.mcvae.src.mcvae.models.utils import DEVICE
 import contextlib
 import pandas as pd
 import numpy as np
@@ -218,6 +219,9 @@ class MCVAESubspaceMethod:
         }
         mcvae_fit = Mcvae(**init_dict, sparse=True)
         mcvae_fit.init_loss()
+        print("device:", DEVICE)
+        mcvae_fit.to(DEVICE)
+
         mcvae_fit.optimizer = torch.optim.Adam(mcvae_fit.parameters(), lr=0.001)
 
         with contextlib.redirect_stdout(None):

@@ -288,8 +288,7 @@ class BaseModel(pl.LightningModule):
             added_loss = self.model.custom_loss(
                 reconstructions[0], x[-1]
             )  # x[-1] bc img is always last
-            print(loss)
-            print("al", added_loss)
+
             loss += added_loss
 
         return loss, end_output, logits

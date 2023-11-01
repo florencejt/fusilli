@@ -1,6 +1,6 @@
 """
-Creating a subspace-based fusion model
-=======================================
+Fusion Model Template: Subspace-based Fusion
+=============================================
 
 This tutorial will show you how to create a subspace-based fusion model.
 
@@ -17,7 +17,7 @@ We will look at how to create both of these types of models.
 """
 
 # %%
-# Option 1: how to create a simultaneously-trained subspace-based fusion model
+# Option 1: Simultaneously-trained subspace-based fusion model
 # -----------------------------------------------------------------------------
 #
 # There are two differences between this type of model and the general template in :ref:`how_to_contribute_a_template_other_fusion`:
@@ -128,7 +128,7 @@ class TemplateSubspaceFusionModel(ParentFusionModel):
 #
 # -----
 #
-# Option 2: how to create a pre-trained subspace-based fusion model
+# Option 2: Pre-trained subspace-based fusion model
 # -----------------------------------------------------------------------------
 #
 # This section will show how to create susbapce-based fusion model which involves one or more models that have to be pre-trained.

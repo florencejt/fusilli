@@ -43,6 +43,7 @@ def downsample_img_batch(imgs, output_size):
     # if number of output_size dims is equal to number of image dims - 3
     # (i.e. if output_size is (64) and image is (16, 3, 128, 128))
     # or output_size is (64, 64) and image is (16, 3, 128, 128, 128))
+
     if len(output_size) == imgs.dim() - 3:
         raise ValueError(
             f"output_size must have {imgs.dim() - 3} dimensions, not {len(output_size)}.\

@@ -18,8 +18,8 @@
 .. _sphx_glr_contributing_examples_plot_template_subspace_fusion.py:
 
 
-Creating a subspace-based fusion model
-=======================================
+Fusion Model Template: Subspace-based Fusion
+=============================================
 
 This tutorial will show you how to create a subspace-based fusion model.
 
@@ -36,7 +36,7 @@ We will look at how to create both of these types of models.
 
 .. GENERATED FROM PYTHON SOURCE LINES 20-39
 
-Option 1: how to create a simultaneously-trained subspace-based fusion model
+Option 1: Simultaneously-trained subspace-based fusion model
 -----------------------------------------------------------------------------
 
 There are two differences between this type of model and the general template in :ref:`how_to_contribute_a_template_other_fusion`:
@@ -160,7 +160,7 @@ For the most user flexibility, the model attributes should be able to be modifie
 
 -----
 
-Option 2: how to create a pre-trained subspace-based fusion model
+Option 2: Pre-trained subspace-based fusion model
 -----------------------------------------------------------------------------
 
 This section will show how to create susbapce-based fusion model which involves one or more models that have to be pre-trained.
@@ -503,7 +503,7 @@ As with the simultaneously-trained subspace-based fusion model, we need to think
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.008 seconds)
+   **Total running time of the script:** (0 minutes 0.011 seconds)
 
 
 .. _sphx_glr_download_contributing_examples_plot_template_subspace_fusion.py:

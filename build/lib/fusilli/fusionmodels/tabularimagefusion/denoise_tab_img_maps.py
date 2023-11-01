@@ -83,8 +83,6 @@ class DenoisingAutoencoder(pl.LightningModule):
         # this will change the upsampler and downsampler to be consistent with a modified latent dimension
         # you can also just change the upsampler and downsampler directly
 
-        print("DAE CALC FUSED LAYERS!!!!!!!")
-
         check_model_validity.check_dtype(self.upsampler, nn.Sequential, "upsampler")
         check_model_validity.check_dtype(self.downsampler, nn.Sequential, "downsampler")
         check_model_validity.check_dtype(self.latent_dim, int, "latent_dim")
@@ -95,9 +93,7 @@ class DenoisingAutoencoder(pl.LightningModule):
                 self.latent_dim,
             )
 
-        print("upsampler in calc_fused_layers: ", self.upsampler)
         self.upsampler[0] = nn.Linear(self.tab_dims, self.upsampler[0].out_features)
-        print("upsampler in calc_fused_layers 2: ", self.upsampler)
         self.upsampler[-2] = nn.Linear(
             self.upsampler[-2].in_features, self.latent_dim
         )  # -2 because of the relu
@@ -329,8 +325,6 @@ class ImgUnimodalDAE(pl.LightningModule):
         -------
         None
         """
-
-        print("IMG UNIMODAL CALC FUSED LAYERS!!!!!!!")
 
         check_model_validity.check_dtype(self.img_layers, nn.ModuleDict, "img_layers")
         check_model_validity.check_img_dim(self.img_layers, self.img_dim, "img_layers")
