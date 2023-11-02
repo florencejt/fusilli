@@ -62,7 +62,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../contributing_examples/index.html">Adding a new model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing_examples/index.html">Fusion Model Templates</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
@@ -143,6 +143,7 @@
     <span class="c1"># if number of output_size dims is equal to number of image dims - 3</span>
     <span class="c1"># (i.e. if output_size is (64) and image is (16, 3, 128, 128))</span>
     <span class="c1"># or output_size is (64, 64) and image is (16, 3, 128, 128, 128))</span>
+
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_size</span><span class="p">)</span> <span class="o">==</span> <span class="n">imgs</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">-</span> <span class="mi">3</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;output_size must have </span><span class="si">{</span><span class="n">imgs</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">-</span> <span class="mi">3</span><span class="si">}</span><span class="s2"> dimensions, not </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">output_size</span><span class="p">)</span><span class="si">}</span><span class="s2">.</span><span class="se">\</span>

@@ -35,53 +35,75 @@ Operation-based
 :class:`.ConcatTabularFeatureMaps`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: _static/Concat_tabular_data_diagram.png
-    :width: 400
+.. image:: _static/ConcatTabularFeatureMaps.png
     :align: left
 
+:class:`.ConcatTabularData`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: _static/ConcatTabularData.png
+    :align: left
+
+:class:`.TabularDecision`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: _static/TabularDecision.png
+    :align: left
 
 Attention-based
 ---------------
 
-**What is attention-based?**
+:class:`.TabularChannelWiseMultiAttention`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Explanation here.
+.. image:: _static/TabularChannelwiseAttention.png
+    :align: left
 
-**Methods below:**
+:class:`.TabularCrossmodalMultiheadAttention`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* method1
-* method2
-* method2
+.. image:: _static/TabularCrossmodalAttention.png
+    :align: left
+
+
 
 Subspace-based
 --------------
 
-**What is subspace-based?**
+:class:`.MCVAE_tab`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Methods below:**
-
-* method1
-* method2
-* method2
+.. image:: _static/MCVAE.png
+    :align: left
 
 Tensor-based
 ------------
 
-**What is tensor-based?**
 
-**Methods below:**
-
-* method1
-* method2
-* method2
 
 Graph-based
 -----------
 
-**What is graph-based?**
+:class:`.EdgeCorrGNN`
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Methods below:**
+.. image:: _static/EdgeCorrGNN.png
+    :align: left
 
-* method1
-* method2
-* method2
+
+-----
+
+Unimodal
+-----------
+
+:class:`.Tabular1Unimodal`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: _static/Tabular1Unimodal.png
+    :align: left
+
+:class:`.Tabular2Unimodal`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: _static/Tabular2Unimodal.png
+    :align: left

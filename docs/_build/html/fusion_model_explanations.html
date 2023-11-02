@@ -58,12 +58,29 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fusion Model Explanations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#operation-based">Operation-based</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#concattabularfeaturemaps"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#concattabulardata"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularData</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tabulardecision"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularDecision</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#attention-based">Attention-based</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#subspace-based">Subspace-based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attention-based">Attention-based</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tabularchannelwisemultiattention"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tabularcrossmodalmultiheadattention"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#subspace-based">Subspace-based</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mcvae-tab"><code class="xref py py-class docutils literal notranslate"><span class="pre">MCVAE_tab</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#tensor-based">Tensor-based</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#graph-based">Graph-based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graph-based">Graph-based</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#edgecorrgnn"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeCorrGNN</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#unimodal">Unimodal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tabular1unimodal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tabular1Unimodal</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tabular2unimodal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tabular2Unimodal</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modifying_models.html">Modifying the fusion models</a></li>
@@ -151,49 +168,56 @@ where appropriate.</p>
 <h2>Operation-based<a class="headerlink" href="#operation-based" title="Permalink to this heading"></a></h2>
 <section id="concattabularfeaturemaps">
 <h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularfusion.concat_feature_maps.html#fusilli.fusionmodels.tabularfusion.concat_feature_maps.ConcatTabularFeatureMaps" title="fusilli.fusionmodels.tabularfusion.concat_feature_maps.ConcatTabularFeatureMaps"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps</span></code></a><a class="headerlink" href="#concattabularfeaturemaps" title="Permalink to this heading"></a></h3>
-<a class="reference internal image-reference" href="_images/Concat_tabular_data_diagram.png"><img alt="_images/Concat_tabular_data_diagram.png" class="align-center" src="_images/Concat_tabular_data_diagram.png" style="width: 400px;" /></a>
+<img alt="_images/ConcatTabularFeatureMaps.png" class="align-left" src="_images/ConcatTabularFeatureMaps.png" />
+</section>
+<section id="concattabulardata">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularfusion.concat_data.html#fusilli.fusionmodels.tabularfusion.concat_data.ConcatTabularData" title="fusilli.fusionmodels.tabularfusion.concat_data.ConcatTabularData"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularData</span></code></a><a class="headerlink" href="#concattabulardata" title="Permalink to this heading"></a></h3>
+<img alt="_images/ConcatTabularData.png" class="align-left" src="_images/ConcatTabularData.png" />
+</section>
+<section id="tabulardecision">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularfusion.decision.html#fusilli.fusionmodels.tabularfusion.decision.TabularDecision" title="fusilli.fusionmodels.tabularfusion.decision.TabularDecision"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularDecision</span></code></a><a class="headerlink" href="#tabulardecision" title="Permalink to this heading"></a></h3>
+<img alt="_images/TabularDecision.png" class="align-left" src="_images/TabularDecision.png" />
 </section>
 </section>
 <section id="attention-based">
 <h2>Attention-based<a class="headerlink" href="#attention-based" title="Permalink to this heading"></a></h2>
-<p><strong>What is attention-based?</strong></p>
-<p>Explanation here.</p>
-<p><strong>Methods below:</strong></p>
-<ul class="simple">
-<li><p>method1</p></li>
-<li><p>method2</p></li>
-<li><p>method2</p></li>
-</ul>
+<section id="tabularchannelwisemultiattention">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularfusion.channelwise_att.html#fusilli.fusionmodels.tabularfusion.channelwise_att.TabularChannelWiseMultiAttention" title="fusilli.fusionmodels.tabularfusion.channelwise_att.TabularChannelWiseMultiAttention"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention</span></code></a><a class="headerlink" href="#tabularchannelwisemultiattention" title="Permalink to this heading"></a></h3>
+<img alt="_images/TabularChannelwiseAttention.png" class="align-left" src="_images/TabularChannelwiseAttention.png" />
+</section>
+<section id="tabularcrossmodalmultiheadattention">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularfusion.crossmodal_att.html#fusilli.fusionmodels.tabularfusion.crossmodal_att.TabularCrossmodalMultiheadAttention" title="fusilli.fusionmodels.tabularfusion.crossmodal_att.TabularCrossmodalMultiheadAttention"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention</span></code></a><a class="headerlink" href="#tabularcrossmodalmultiheadattention" title="Permalink to this heading"></a></h3>
+<img alt="_images/TabularCrossmodalAttention.png" class="align-left" src="_images/TabularCrossmodalAttention.png" />
+</section>
 </section>
 <section id="subspace-based">
 <h2>Subspace-based<a class="headerlink" href="#subspace-based" title="Permalink to this heading"></a></h2>
-<p><strong>What is subspace-based?</strong></p>
-<p><strong>Methods below:</strong></p>
-<ul class="simple">
-<li><p>method1</p></li>
-<li><p>method2</p></li>
-<li><p>method2</p></li>
-</ul>
+<section id="mcvae-tab">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularfusion.mcvae_model.html#fusilli.fusionmodels.tabularfusion.mcvae_model.MCVAE_tab" title="fusilli.fusionmodels.tabularfusion.mcvae_model.MCVAE_tab"><code class="xref py py-class docutils literal notranslate"><span class="pre">MCVAE_tab</span></code></a><a class="headerlink" href="#mcvae-tab" title="Permalink to this heading"></a></h3>
+<img alt="_images/MCVAE.png" class="align-left" src="_images/MCVAE.png" />
+</section>
 </section>
 <section id="tensor-based">
 <h2>Tensor-based<a class="headerlink" href="#tensor-based" title="Permalink to this heading"></a></h2>
-<p><strong>What is tensor-based?</strong></p>
-<p><strong>Methods below:</strong></p>
-<ul class="simple">
-<li><p>method1</p></li>
-<li><p>method2</p></li>
-<li><p>method2</p></li>
-</ul>
 </section>
 <section id="graph-based">
 <h2>Graph-based<a class="headerlink" href="#graph-based" title="Permalink to this heading"></a></h2>
-<p><strong>What is graph-based?</strong></p>
-<p><strong>Methods below:</strong></p>
-<ul class="simple">
-<li><p>method1</p></li>
-<li><p>method2</p></li>
-<li><p>method2</p></li>
-</ul>
+<section id="edgecorrgnn">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularfusion.edge_corr_gnn.html#fusilli.fusionmodels.tabularfusion.edge_corr_gnn.EdgeCorrGNN" title="fusilli.fusionmodels.tabularfusion.edge_corr_gnn.EdgeCorrGNN"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeCorrGNN</span></code></a><a class="headerlink" href="#edgecorrgnn" title="Permalink to this heading"></a></h3>
+<img alt="_images/EdgeCorrGNN.png" class="align-left" src="_images/EdgeCorrGNN.png" />
+</section>
+</section>
+<hr class="docutils" />
+<section id="unimodal">
+<h2>Unimodal<a class="headerlink" href="#unimodal" title="Permalink to this heading"></a></h2>
+<section id="tabular1unimodal">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.unimodal.tabular1.html#fusilli.fusionmodels.unimodal.tabular1.Tabular1Unimodal" title="fusilli.fusionmodels.unimodal.tabular1.Tabular1Unimodal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tabular1Unimodal</span></code></a><a class="headerlink" href="#tabular1unimodal" title="Permalink to this heading"></a></h3>
+<img alt="_images/Tabular1Unimodal.png" class="align-left" src="_images/Tabular1Unimodal.png" />
+</section>
+<section id="tabular2unimodal">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.unimodal.tabular2.html#fusilli.fusionmodels.unimodal.tabular2.Tabular2Unimodal" title="fusilli.fusionmodels.unimodal.tabular2.Tabular2Unimodal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tabular2Unimodal</span></code></a><a class="headerlink" href="#tabular2unimodal" title="Permalink to this heading"></a></h3>
+<img alt="_images/Tabular2Unimodal.png" class="align-left" src="_images/Tabular2Unimodal.png" />
+</section>
 </section>
 </section>
 

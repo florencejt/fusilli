@@ -62,7 +62,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../contributing_examples/index.html">Adding a new model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing_examples/index.html">Fusion Model Templates</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
 <ul>
@@ -107,6 +107,7 @@
 <span class="kn">from</span> <span class="nn">fusilli.fusionmodels.base_model</span> <span class="kn">import</span> <span class="n">ParentFusionModel</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">fusilli.utils.mcvae.src.mcvae.models</span> <span class="kn">import</span> <span class="n">Mcvae</span>
+<span class="kn">from</span> <span class="nn">fusilli.utils.mcvae.src.mcvae.models.utils</span> <span class="kn">import</span> <span class="n">DEVICE</span>
 <span class="kn">import</span> <span class="nn">contextlib</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -317,7 +318,10 @@
             <span class="p">),</span>
         <span class="p">}</span>
         <span class="n">mcvae_fit</span> <span class="o">=</span> <span class="n">Mcvae</span><span class="p">(</span><span class="o">**</span><span class="n">init_dict</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;device:&quot;</span><span class="p">,</span> <span class="n">DEVICE</span><span class="p">)</span>
+        <span class="n">mcvae_fit</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">DEVICE</span><span class="p">)</span>
         <span class="n">mcvae_fit</span><span class="o">.</span><span class="n">init_loss</span><span class="p">()</span>
+
         <span class="n">mcvae_fit</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">mcvae_fit</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
 
         <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="kc">None</span><span class="p">):</span>
