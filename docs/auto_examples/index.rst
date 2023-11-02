@@ -31,7 +31,24 @@ These are examples showing how to get more in depth with Fusilli and customise i
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="How to use Weights and Biases Logging with Fusilli">
+    <div class="sphx-glr-thumbcontainer" tooltip=" Early stopping  Batch size  Number of epochs  Checkpoint suffixes">
+
+.. only:: html
+
+  .. image:: /auto_examples/customising_behaviour/images/thumb/sphx_glr_customising_training_parameters_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_customising_behaviour_customising_training_parameters.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">How to customise the training in Fusilli</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" .. note::">
 
 .. only:: html
 

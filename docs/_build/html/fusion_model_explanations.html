@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Modifying the fusion models" href="modifying_models.html" />
-    <link rel="prev" title="User guide" href="user_guide.html" /> 
+    <link rel="prev" title="Quick-Run Fusilli" href="getting_started.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,20 +55,29 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html"><strong>fusilli</strong>: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Quick-Run Fusilli</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fusion Model Explanations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#operation-based">Operation-based</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#concattabularfeaturemaps"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#concattabulardata"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularData</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tabulardecision"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularDecision</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#concatimagemapstabulardata"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#concatimagemapstabularmaps"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imagedecision"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageDecision</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#attention-based">Attention-based</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#tabularchannelwisemultiattention"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tabularcrossmodalmultiheadattention"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crossmodalmultiheadattention"><code class="xref py py-class docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imagechannelwisemultiattention"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#subspace-based">Subspace-based</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#mcvae-tab"><code class="xref py py-class docutils literal notranslate"><span class="pre">MCVAE_tab</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#concatimglatenttabdoubleloss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#concatimglatenttabdoubletrain"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#daetabimgmaps"><code class="xref py py-class docutils literal notranslate"><span class="pre">DAETabImgMaps</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#tensor-based">Tensor-based</a></li>
@@ -79,11 +88,13 @@
 <li class="toctree-l2"><a class="reference internal" href="#unimodal">Unimodal</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#tabular1unimodal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tabular1Unimodal</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tabular2unimodal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tabular2Unimodal</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#imgunimodal"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImgUnimodal</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modifying_models.html">Modifying the fusion models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contact_me.html">Contact me</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -170,13 +181,30 @@ where appropriate.</p>
 <h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularfusion.concat_feature_maps.html#fusilli.fusionmodels.tabularfusion.concat_feature_maps.ConcatTabularFeatureMaps" title="fusilli.fusionmodels.tabularfusion.concat_feature_maps.ConcatTabularFeatureMaps"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularFeatureMaps</span></code></a><a class="headerlink" href="#concattabularfeaturemaps" title="Permalink to this heading"></a></h3>
 <img alt="_images/ConcatTabularFeatureMaps.png" class="align-left" src="_images/ConcatTabularFeatureMaps.png" />
 </section>
+<hr class="docutils" />
 <section id="concattabulardata">
 <h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularfusion.concat_data.html#fusilli.fusionmodels.tabularfusion.concat_data.ConcatTabularData" title="fusilli.fusionmodels.tabularfusion.concat_data.ConcatTabularData"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatTabularData</span></code></a><a class="headerlink" href="#concattabulardata" title="Permalink to this heading"></a></h3>
 <img alt="_images/ConcatTabularData.png" class="align-left" src="_images/ConcatTabularData.png" />
 </section>
+<hr class="docutils" />
 <section id="tabulardecision">
 <h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularfusion.decision.html#fusilli.fusionmodels.tabularfusion.decision.TabularDecision" title="fusilli.fusionmodels.tabularfusion.decision.TabularDecision"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularDecision</span></code></a><a class="headerlink" href="#tabulardecision" title="Permalink to this heading"></a></h3>
 <img alt="_images/TabularDecision.png" class="align-left" src="_images/TabularDecision.png" />
+</section>
+<hr class="docutils" />
+<section id="concatimagemapstabulardata">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularimagefusion.concat_img_maps_tabular_data.html#fusilli.fusionmodels.tabularimagefusion.concat_img_maps_tabular_data.ConcatImageMapsTabularData" title="fusilli.fusionmodels.tabularimagefusion.concat_img_maps_tabular_data.ConcatImageMapsTabularData"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImageMapsTabularData</span></code></a><a class="headerlink" href="#concatimagemapstabulardata" title="Permalink to this heading"></a></h3>
+<img alt="_images/ConcatImageMapsTabularData.png" class="align-left" src="_images/ConcatImageMapsTabularData.png" />
+</section>
+<hr class="docutils" />
+<section id="concatimagemapstabularmaps">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularimagefusion.concat_img_maps_tabular_maps.html#fusilli.fusionmodels.tabularimagefusion.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps" title="fusilli.fusionmodels.tabularimagefusion.concat_img_maps_tabular_maps.ConcatImageMapsTabularMaps"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImageMapsTabularMaps</span></code></a><a class="headerlink" href="#concatimagemapstabularmaps" title="Permalink to this heading"></a></h3>
+<img alt="_images/ConcatImageMapsTabularMaps.png" class="align-left" src="_images/ConcatImageMapsTabularMaps.png" />
+</section>
+<hr class="docutils" />
+<section id="imagedecision">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularimagefusion.decision.html#fusilli.fusionmodels.tabularimagefusion.decision.ImageDecision" title="fusilli.fusionmodels.tabularimagefusion.decision.ImageDecision"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageDecision</span></code></a><a class="headerlink" href="#imagedecision" title="Permalink to this heading"></a></h3>
+<img alt="_images/ImageDecision.png" class="align-left" src="_images/ImageDecision.png" />
 </section>
 </section>
 <section id="attention-based">
@@ -185,9 +213,20 @@ where appropriate.</p>
 <h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularfusion.channelwise_att.html#fusilli.fusionmodels.tabularfusion.channelwise_att.TabularChannelWiseMultiAttention" title="fusilli.fusionmodels.tabularfusion.channelwise_att.TabularChannelWiseMultiAttention"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularChannelWiseMultiAttention</span></code></a><a class="headerlink" href="#tabularchannelwisemultiattention" title="Permalink to this heading"></a></h3>
 <img alt="_images/TabularChannelwiseAttention.png" class="align-left" src="_images/TabularChannelwiseAttention.png" />
 </section>
+<hr class="docutils" />
 <section id="tabularcrossmodalmultiheadattention">
 <h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularfusion.crossmodal_att.html#fusilli.fusionmodels.tabularfusion.crossmodal_att.TabularCrossmodalMultiheadAttention" title="fusilli.fusionmodels.tabularfusion.crossmodal_att.TabularCrossmodalMultiheadAttention"><code class="xref py py-class docutils literal notranslate"><span class="pre">TabularCrossmodalMultiheadAttention</span></code></a><a class="headerlink" href="#tabularcrossmodalmultiheadattention" title="Permalink to this heading"></a></h3>
 <img alt="_images/TabularCrossmodalAttention.png" class="align-left" src="_images/TabularCrossmodalAttention.png" />
+</section>
+<hr class="docutils" />
+<section id="crossmodalmultiheadattention">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularimagefusion.crossmodal_att.html#fusilli.fusionmodels.tabularimagefusion.crossmodal_att.CrossmodalMultiheadAttention" title="fusilli.fusionmodels.tabularimagefusion.crossmodal_att.CrossmodalMultiheadAttention"><code class="xref py py-class docutils literal notranslate"><span class="pre">CrossmodalMultiheadAttention</span></code></a><a class="headerlink" href="#crossmodalmultiheadattention" title="Permalink to this heading"></a></h3>
+<img alt="_images/CrossmodalMultiheadAttention.png" class="align-left" src="_images/CrossmodalMultiheadAttention.png" />
+</section>
+<hr class="docutils" />
+<section id="imagechannelwisemultiattention">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularimagefusion.channelwise_att.html#fusilli.fusionmodels.tabularimagefusion.channelwise_att.ImageChannelWiseMultiAttention" title="fusilli.fusionmodels.tabularimagefusion.channelwise_att.ImageChannelWiseMultiAttention"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageChannelWiseMultiAttention</span></code></a><a class="headerlink" href="#imagechannelwisemultiattention" title="Permalink to this heading"></a></h3>
+<img alt="_images/ImageChannelwiseMultiheadAttention.png" class="align-left" src="_images/ImageChannelwiseMultiheadAttention.png" />
 </section>
 </section>
 <section id="subspace-based">
@@ -195,6 +234,21 @@ where appropriate.</p>
 <section id="mcvae-tab">
 <h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularfusion.mcvae_model.html#fusilli.fusionmodels.tabularfusion.mcvae_model.MCVAE_tab" title="fusilli.fusionmodels.tabularfusion.mcvae_model.MCVAE_tab"><code class="xref py py-class docutils literal notranslate"><span class="pre">MCVAE_tab</span></code></a><a class="headerlink" href="#mcvae-tab" title="Permalink to this heading"></a></h3>
 <img alt="_images/MCVAE.png" class="align-left" src="_images/MCVAE.png" />
+</section>
+<hr class="docutils" />
+<section id="concatimglatenttabdoubleloss">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubleloss.html#fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss" title="fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleLoss</span></code></a><a class="headerlink" href="#concatimglatenttabdoubleloss" title="Permalink to this heading"></a></h3>
+<img alt="_images/ImgLatentDoubleLoss.png" class="align-left" src="_images/ImgLatentDoubleLoss.png" />
+</section>
+<hr class="docutils" />
+<section id="concatimglatenttabdoubletrain">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.html#fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain" title="fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.ConcatImgLatentTabDoubleTrain"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcatImgLatentTabDoubleTrain</span></code></a><a class="headerlink" href="#concatimglatenttabdoubletrain" title="Permalink to this heading"></a></h3>
+<img alt="_images/ImgLatentDoubleTrain.png" class="align-left" src="_images/ImgLatentDoubleTrain.png" />
+</section>
+<hr class="docutils" />
+<section id="daetabimgmaps">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.html#fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.DAETabImgMaps" title="fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.DAETabImgMaps"><code class="xref py py-class docutils literal notranslate"><span class="pre">DAETabImgMaps</span></code></a><a class="headerlink" href="#daetabimgmaps" title="Permalink to this heading"></a></h3>
+<img alt="_images/DAETabImgMaps.png" class="align-left" src="_images/DAETabImgMaps.png" />
 </section>
 </section>
 <section id="tensor-based">
@@ -214,9 +268,15 @@ where appropriate.</p>
 <h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.unimodal.tabular1.html#fusilli.fusionmodels.unimodal.tabular1.Tabular1Unimodal" title="fusilli.fusionmodels.unimodal.tabular1.Tabular1Unimodal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tabular1Unimodal</span></code></a><a class="headerlink" href="#tabular1unimodal" title="Permalink to this heading"></a></h3>
 <img alt="_images/Tabular1Unimodal.png" class="align-left" src="_images/Tabular1Unimodal.png" />
 </section>
+<hr class="docutils" />
 <section id="tabular2unimodal">
 <h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.unimodal.tabular2.html#fusilli.fusionmodels.unimodal.tabular2.Tabular2Unimodal" title="fusilli.fusionmodels.unimodal.tabular2.Tabular2Unimodal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tabular2Unimodal</span></code></a><a class="headerlink" href="#tabular2unimodal" title="Permalink to this heading"></a></h3>
 <img alt="_images/Tabular2Unimodal.png" class="align-left" src="_images/Tabular2Unimodal.png" />
+</section>
+<hr class="docutils" />
+<section id="imgunimodal">
+<h3><a class="reference internal" href="autosummary/fusilli.fusionmodels.unimodal.image.html#fusilli.fusionmodels.unimodal.image.ImgUnimodal" title="fusilli.fusionmodels.unimodal.image.ImgUnimodal"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImgUnimodal</span></code></a><a class="headerlink" href="#imgunimodal" title="Permalink to this heading"></a></h3>
+<img alt="_images/ImageUnimodal.png" class="align-left" src="_images/ImageUnimodal.png" />
 </section>
 </section>
 </section>
@@ -225,7 +285,7 @@ where appropriate.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="user_guide.html" class="btn btn-neutral float-left" title="User guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Quick-Run Fusilli" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="modifying_models.html" class="btn btn-neutral float-right" title="Modifying the fusion models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

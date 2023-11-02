@@ -236,7 +236,7 @@ def test_ConcatImgLatentTabDoubleTrain():
 
     # attributes before initialising
     assert hasattr(test_model, "method_name")
-    assert test_model.method_name == "Concatenating latent img space and tabular data training separately"
+    assert test_model.method_name == "Pretrained Latent Image + Tabular Data"
     assert hasattr(test_model, "modality_type")
     assert test_model.modality_type == "tab_img"
     assert hasattr(test_model, "fusion_type")
@@ -282,7 +282,7 @@ def test_ConcatImgLatentTabDoubleLoss():
 
     # attributes before initialising
     assert hasattr(test_model, "method_name")
-    assert test_model.method_name == "Concatenating image latent space with tabular data, trained altogether"
+    assert test_model.method_name == "Trained Together Latent Image + Tabular Data"
     assert hasattr(test_model, "modality_type")
     assert test_model.modality_type == "tab_img"
     assert hasattr(test_model, "fusion_type")

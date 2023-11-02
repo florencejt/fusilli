@@ -55,8 +55,15 @@ params = {
     "log": False,
     "pred_type": "binary",
     "batch_size": 32,
-    "loss_log_dir": "loss_logs",
+    "loss_log_dir": "loss_logs/one_model_binary_kfold",
 }
+
+# empty the loss log directory
+for dir in os.listdir(params["loss_log_dir"]):
+    for file in os.listdir(os.path.join(params["loss_log_dir"], dir)):
+        os.remove(os.path.join(params["loss_log_dir"], dir, file))
+    # remove dir
+    os.rmdir(os.path.join(params["loss_log_dir"], dir))
 
 # %%
 # 3. Generating simulated data 🔮
@@ -99,14 +106,13 @@ dm = get_data_module(
 )
 
 # train and test
-single_model_dict = train_and_save_models(
+single_model_list = train_and_save_models(
     data_module=dm,
     params=params,
     fusion_model=fusion_model,
     enable_checkpointing=False,  # False for the example notebooks
     show_loss_plot=True,
 )
-
 
 # %%
 # 6. Plotting the results 📊
@@ -116,6 +122,7 @@ single_model_dict = train_and_save_models(
 # We're seeing each fold's confusion matrices separately on the right, and the confusion matrix created from the concatenated validation sets from each fold on the left.
 
 confusion_matrix_fig = ConfusionMatrix.from_final_val_data(
-    single_model_dict["TabularCrossmodalMultiheadAttention"]
+    single_model_list
 )
+
 plt.show()

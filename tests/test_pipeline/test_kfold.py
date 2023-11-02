@@ -43,7 +43,7 @@ def test_train_and_test(create_test_files, tmp_path):
 
     dm = get_data_module(fusion_model=model, params=params)
 
-    single_model_dict = train_and_save_models(
+    single_model_list = train_and_save_models(
         data_module=dm,
         params=params,
         fusion_model=model,
@@ -51,10 +51,10 @@ def test_train_and_test(create_test_files, tmp_path):
         enable_checkpointing=False
     )
 
-    trained_model = list(single_model_dict.values())[0]
+    # trained_model = list(single_model_dict.values())[0]
 
-    assert trained_model is not None
-    assert len(trained_model) == 5
+    assert single_model_list is not None
+    assert len(single_model_list) == 5
 
-    fig = ConfusionMatrix.from_final_val_data(trained_model)
+    fig = ConfusionMatrix.from_final_val_data(single_model_list)
     assert fig is not None

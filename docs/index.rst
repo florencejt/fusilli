@@ -38,8 +38,10 @@ Why would you want to use fusilli?
 
    introduction
    user_guide
+   getting_started
    fusion_model_explanations
    modifying_models
+   contact_me
 
 -----
 
@@ -76,7 +78,6 @@ Why would you want to use fusilli?
    fusilli.utils
 
 -----
-
 
 Indices and tables
 ==================

@@ -39,10 +39,17 @@ params = {
     "kfold_flag": False,
     "log": False,
     "pred_type": "regression",
-    "loss_log_dir": "loss_logs",  # where the csv of the loss is saved for plotting later
+    "loss_log_dir": "loss_logs/modify_layers",  # where the csv of the loss is saved for plotting later
     "checkpoint_dir": "checkpoints",
     "loss_fig_path": "loss_figures",
 }
+
+# empty the loss log directory
+for dir in os.listdir(params["loss_log_dir"]):
+    for file in os.listdir(os.path.join(params["loss_log_dir"], dir)):
+        os.remove(os.path.join(params["loss_log_dir"], dir, file))
+    # remove dir
+    os.rmdir(os.path.join(params["loss_log_dir"], dir))
 
 params = generate_sklearn_simulated_data(
     num_samples=500,
@@ -165,7 +172,7 @@ layer_mods = {
 datamodule = get_data_module(DAETabImgMaps, params, layer_mods=layer_mods, max_epochs=5, batch_size=64)
 
 # train
-trained_models_dict = train_and_save_models(
+trained_model_list = train_and_save_models(
     data_module=datamodule,
     params=params,
     fusion_model=DAETabImgMaps,
@@ -178,7 +185,7 @@ trained_models_dict = train_and_save_models(
 
 print("Subspace Denoising Autoencoder:\n", datamodule.subspace_method_train.autoencoder)
 print("Subspace Image CNN:\n", datamodule.subspace_method_train.img_unimodal)
-print("Fusion model:\n", trained_models_dict["DAETabImgMaps"])
+print("Fusion model:\n", trained_model_list[0].model)
 
 # %%
 # What happens when the modifications are incorrect?

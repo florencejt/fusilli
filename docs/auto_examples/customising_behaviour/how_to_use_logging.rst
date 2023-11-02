@@ -22,6 +22,11 @@ How to use Weights and Biases Logging with Fusilli
 ###################################################
 
 
+.. note::
+
+    Coming soon!
+
+
 .. rst-class:: sphx-glr-timing
 
    **Total running time of the script:** (0 minutes 0.000 seconds)

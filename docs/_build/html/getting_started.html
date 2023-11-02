@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Getting Started &mdash; fusilli  documentation</title>
+  <title>Quick-Run Fusilli &mdash; fusilli  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -26,7 +26,9 @@
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Fusion Model Explanations" href="fusion_model_explanations.html" />
+    <link rel="prev" title="User guide" href="user_guide.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -50,11 +52,13 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html"><strong>fusilli</strong>: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick-Run Fusilli</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fusion_model_explanations.html">Fusion Model Explanations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modifying_models.html">Modifying the fusion models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contact_me.html">Contact me</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -88,7 +92,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Getting Started</li>
+      <li class="breadcrumb-item active">Quick-Run Fusilli</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/getting_started.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -98,65 +102,63 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="getting-started">
-<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
-<p>This will show you how to set up the fusilli and get fusing!</p>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
-<p>Fusilli is available on PyPI, so you can install it with pip.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install fusilli
-</pre></div>
+  <section id="quick-run-fusilli">
+<h1>Quick-Run Fusilli<a class="headerlink" href="#quick-run-fusilli" title="Permalink to this heading"></a></h1>
+<p>This script will train a model on a single dataset, using the default parameters.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a <strong>much</strong> more detailed look at how to use Fusilli, see the <a class="reference internal" href="examples/README.html#example-notebooks"><span class="std std-ref">Tutorials</span></a>.</p>
 </div>
-</section>
-<section id="file-structure-requirements">
-<h2>File structure requirements<a class="headerlink" href="#file-structure-requirements" title="Permalink to this heading"></a></h2>
-<p>Fusilli needs a few directories to be set up in order to run. This is because fusilli needs somewhere to save the checkpoints, loss logs, and evaluation figures.
-The paths to these directories will be passed into the fusilli pipeline as elements of a dictionary.
-Examples of using this dictionary are shown in the examples in <a class="reference internal" href="examples/README.html#example-notebooks"><span class="std std-ref">Tutorials</span></a>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parameters_dictionary</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;loss_fig_path&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">path</span> <span class="n">to</span> <span class="n">save</span> <span class="n">loss</span> <span class="n">figures</span><span class="p">},</span>
-    <span class="s2">&quot;loss_log_dir&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">path</span> <span class="n">to</span> <span class="n">save</span> <span class="n">loss</span> <span class="n">logs</span><span class="p">,</span> <span class="n">used</span> <span class="n">to</span> <span class="n">make</span> <span class="n">the</span> <span class="n">loss</span> <span class="n">figures</span><span class="p">},</span>
-    <span class="s2">&quot;local_fig_path&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">path</span> <span class="n">to</span> <span class="n">save</span> <span class="n">evaluation</span> <span class="n">figures</span><span class="p">},</span>
-    <span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">path</span> <span class="n">to</span> <span class="n">save</span> <span class="n">checkpoints</span><span class="p">},</span>
+<p>This code shows everything that you need to run Fusilli on a single dataset.</p>
+<p>The elements in the <code class="docutils literal notranslate"><span class="pre">params</span></code> dictionary must be there with those specific keys, but you can change the values to suit your needs.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fusilli.data</span> <span class="kn">import</span> <span class="n">get_data_module</span>
+<span class="kn">from</span> <span class="nn">fusilli.train</span> <span class="kn">import</span> <span class="n">train_and_save_models</span>
+<span class="kn">from</span> <span class="nn">fusilli.eval</span> <span class="kn">import</span> <span class="n">RealsVsPreds</span>
+
+<span class="c1"># import the example fusion model</span>
+<span class="kn">from</span> <span class="nn">fusilli.fusionmodels.tabularfusion.example_model</span> <span class="kn">import</span> <span class="n">ExampleModel</span>
+
+<span class="c1"># set paths to your tabular datasets (CSV files with study_id and pred_label columns)</span>
+<span class="n">tabular_1_path</span> <span class="o">=</span> <span class="s2">&quot;path/to/tabular_1.csv&quot;</span>
+<span class="n">tabular_2_path</span> <span class="o">=</span> <span class="s2">&quot;path/to/tabular_2.csv&quot;</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;path/to/image_file.pt&quot;</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;kfold_flag&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="c1"># train/test set split</span>
+    <span class="s2">&quot;log&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="c1"># using CSV to log losses</span>
+    <span class="s2">&quot;pred_type&quot;</span><span class="p">:</span> <span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="c1"># regression, binary, or multiclass classification</span>
+    <span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;path/to/checkpoint/dir&quot;</span><span class="p">,</span> <span class="c1"># needs unique dir for each experiment</span>
+    <span class="s2">&quot;loss_log_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;path/to/loss/log/dir&quot;</span><span class="p">,</span> <span class="c1"># needs unique dir for each experiment</span>
+    <span class="s2">&quot;loss_fig_path&quot;</span><span class="p">:</span> <span class="s2">&quot;path/to/loss/fig&quot;</span><span class="p">,</span> <span class="c1"># needs unique dir for each experiment</span>
+    <span class="s2">&quot;tabular1_source&quot;</span><span class="p">:</span> <span class="n">tabular_1_path</span><span class="p">,</span> <span class="c1"># path to tabular dataset 1</span>
+    <span class="s2">&quot;tabular2_source&quot;</span><span class="p">:</span> <span class="n">tabular_2_path</span><span class="p">,</span> <span class="c1"># path to tabular dataset 2</span>
+    <span class="s2">&quot;img_source&quot;</span><span class="p">:</span> <span class="n">image_path</span><span class="p">,</span> <span class="c1"># path to image dataset</span>
 <span class="p">}</span>
+
+<span class="c1"># get the data module (PyTorch Lightning-compatible data structure)</span>
+<span class="n">data_module</span> <span class="o">=</span> <span class="n">get_data_module</span><span class="p">(</span><span class="n">fusion_model</span><span class="o">=</span><span class="n">ExampleModel</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+
+<span class="c1"># train the model to get list of length 1 containing the trained model</span>
+<span class="n">trained_model_list</span> <span class="o">=</span> <span class="n">train_and_save_model</span><span class="p">(</span>
+    <span class="n">data_module</span><span class="o">=</span><span class="n">data_module</span><span class="p">,</span>
+    <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+    <span class="n">fusion_model</span><span class="o">=</span><span class="n">ExampleModel</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># evaluate the model by plotting the real values vs. predicted values</span>
+<span class="n">RealsVsPreds_figure</span> <span class="o">=</span> <span class="n">RealsVsPreds</span><span class="o">.</span><span class="n">from_final_val_data</span><span class="p">(</span><span class="n">trained_model_list</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Fusilli will use pre-determined file names to save the files in these directories. If you have files with the same names in these directories, they will be overwritten.
-It is recommended to have separate directories for each run of fusilli, so that you can keep track of the files that belong to each run.</p>
-</div>
-<section id="example-beginning-block-for-getting-file-structure">
-<h3>Example beginning block for getting file structure<a class="headerlink" href="#example-beginning-block-for-getting-file-structure" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-
-<span class="c1"># make a timestamp for the run</span>
-<span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S&quot;</span><span class="p">)</span>
-
-<span class="c1"># make the directories</span>
-<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;local_figures/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="c1"># local_figures</span>
-<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;checkpoints/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="c1"># checkpoints</span>
-<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;loss_logs/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="c1"># loss_log csvs</span>
-<span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;local_figures/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">/losses&quot;</span><span class="p">)</span> <span class="c1"># loss_figures dir within local_figures</span>
-
-<span class="c1"># add the paths to the dictionary</span>
-<span class="n">parameters_dictionary</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;loss_fig_path&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;local_figures/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">/losses&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;loss_log_dir&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;loss_logs/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;local_fig_path&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;local_figures/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;checkpoint_dir&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;checkpoints/</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</section>
-</section>
 </section>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="user_guide.html" class="btn btn-neutral float-left" title="User guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fusion_model_explanations.html" class="btn btn-neutral float-right" title="Fusion Model Explanations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

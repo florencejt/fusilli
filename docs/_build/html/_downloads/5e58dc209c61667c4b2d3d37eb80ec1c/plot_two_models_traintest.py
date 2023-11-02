@@ -27,7 +27,6 @@ from fusilli.eval import RealsVsPreds, ModelComparison
 from fusilli.train import train_and_save_models
 from fusilli.utils.model_chooser import import_chosen_fusion_models
 
-
 # %%
 # 1. Import fusion models 🔍
 # --------------------------------
@@ -44,7 +43,6 @@ model_conditions = {
 }
 
 fusion_models = import_chosen_fusion_models(model_conditions)
-
 
 # %%
 # 2. Set the training parameters 🎯
@@ -64,9 +62,15 @@ params = {
     "kfold_flag": False,
     "log": False,
     "pred_type": "regression",
-    "loss_log_dir": "loss_logs",  # where the csv of the loss is saved for plotting later
+    "loss_log_dir": "loss_logs/two_models_traintest",  # where the csv of the loss is saved for plotting later
 }
 
+# empty the loss log directory
+for dir in os.listdir(params["loss_log_dir"]):
+    for file in os.listdir(os.path.join(params["loss_log_dir"], dir)):
+        os.remove(os.path.join(params["loss_log_dir"], dir, file))
+    # remove dir
+    os.rmdir(os.path.join(params["loss_log_dir"], dir))
 
 # %%
 # 3. Generating simulated data 🔮
@@ -102,7 +106,7 @@ all_trained_models = {}  # create dictionary to store trained models
 # 1. *Choose the model*: We're using the first model in the ``fusion_models`` list we made earlier.
 # 2. *Print the attributes of the model*: To check it's been initialised correctly.
 # 3. *Create the datamodule*: This is done with the :func:`~fusilli.data.get_data_module` function. This function takes the initialised model and the parameters as inputs. It returns the datamodule.
-# 4. *Train and test the model*: This is done with the :func:`~fusilli.train.train_and_save_models` function. This function takes the trained_models_dict, the datamodule, the parameters, the fusion model, and the initialised model as inputs. It returns the trained_models_dict with the trained model added to it.
+# 4. *Train and test the model*: This is done with the :func:`~fusilli.train.train_and_save_models` function. This function takes the datamodule, the parameters, the fusion model, and the initialised model as inputs. It returns a list of the trained models (in this case, only one model).
 # 5. *Add the trained model to the ``all_trained_models`` dictionary*: This is so we can compare the results of the two models later.
 
 fusion_model = fusion_models[0]
@@ -115,7 +119,7 @@ print("Fusion type:", fusion_model.fusion_type)
 dm = get_data_module(fusion_model=fusion_model, params=params)
 
 # Train and test
-model_1_dict = train_and_save_models(
+model_1_list = train_and_save_models(
     data_module=dm,
     params=params,
     fusion_model=fusion_model,
@@ -124,8 +128,7 @@ model_1_dict = train_and_save_models(
 )
 
 # Add trained model to dictionary
-all_trained_models[fusion_model.__name__] = model_1_dict[fusion_model.__name__]
-
+all_trained_models[fusion_model.__name__] = model_1_list
 
 # %%
 # 5. Plotting the results of the first model 📊
@@ -134,8 +137,7 @@ all_trained_models[fusion_model.__name__] = model_1_dict[fusion_model.__name__]
 # This class takes the trained model as an input and returns a plot of the real values vs the predicted values from the final validation data (when using from_final_val_data).
 # If you want to plot the results from the test data, you can use from_new_data instead. See the example notebook on plotting with new data for more detail.
 
-model_1 = list(model_1_dict.values())[0]
-reals_preds_model_1 = RealsVsPreds.from_final_val_data(model_1)
+reals_preds_model_1 = RealsVsPreds.from_final_val_data(model_1_list)
 
 plt.show()
 
@@ -149,7 +151,6 @@ plt.show()
 # Choose the model
 fusion_model = fusion_models[1]
 
-
 print("Method name:", fusion_model.method_name)
 print("Modality type:", fusion_model.modality_type)
 print("Fusion type:", fusion_model.fusion_type)
@@ -158,7 +159,7 @@ print("Fusion type:", fusion_model.fusion_type)
 dm = get_data_module(fusion_model=fusion_model, params=params)
 
 # Train and test
-model_2_dict = train_and_save_models(
+model_2_list = train_and_save_models(
     data_module=dm,
     params=params,
     fusion_model=fusion_model,
@@ -167,15 +168,13 @@ model_2_dict = train_and_save_models(
 )
 
 # Add trained model to dictionary
-all_trained_models[fusion_model.__name__] = model_2_dict[fusion_model.__name__]
-
+all_trained_models[fusion_model.__name__] = model_2_list
 
 # %%
 # 7. Plotting the results of the second model 📊
 # -----------------------------------------------
 
-model_2 = list(model_2_dict.values())[0]
-reals_preds_model_2 = RealsVsPreds.from_final_val_data(model_2)
+reals_preds_model_2 = RealsVsPreds.from_final_val_data(model_2_list)
 
 plt.show()
 

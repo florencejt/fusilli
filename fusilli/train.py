@@ -162,7 +162,7 @@ def train_and_test(
     return pl_model
 
 
-def store_trained_model(trained_model, trained_models_dict):
+def _store_trained_model(trained_model, trained_models_dict):
     """
     Stores the trained model to a dictionary.
     If model type is already in dictionary (e.g. if it's a kfold model), append the model to
@@ -219,7 +219,7 @@ def train_and_save_models(
     """
     Trains/tests the model and saves the trained model to a dictionary for further analysis.
     If the training type is kfold, it will train and test the model for each fold and store the
-    trained models in a list under the model type key.
+    trained models in a list.
 
     Parameters
     ----------
@@ -249,13 +249,14 @@ def train_and_save_models(
 
     Returns
     -------
-    trained_models_dict : dict
-        Dictionary of trained model (key is model name, value is either single trained model for
-        train/test training or a list of trained models for k-fold training).
-
+    trained_models_list : list
+        List of trained models.
+        Length of list is 1 if training type is train/test split.
+        Length of list is num_k if training type is kfold.
     """
 
-    trained_models_dict = {}
+    # trained_models_dict = {}
+    trained_models_list = []
 
     if params["kfold_flag"]:
         for k in range(params["num_k"]):
@@ -271,10 +272,7 @@ def train_and_save_models(
                 show_loss_plot=show_loss_plot,
             )
 
-            trained_models_dict = store_trained_model(
-                trained_model,
-                trained_models_dict,
-            )
+            trained_models_list.append(trained_model)
 
             if params["log"]:
                 wandb.finish()
@@ -292,12 +290,9 @@ def train_and_save_models(
             show_loss_plot=show_loss_plot,
         )
 
-        trained_models_dict = store_trained_model(
-            trained_model,
-            trained_models_dict,
-        )
+        trained_models_list.append(trained_model)
 
         if params["log"]:
             wandb.finish()
 
-    return trained_models_dict
+    return trained_models_list

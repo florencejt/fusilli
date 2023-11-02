@@ -46,6 +46,7 @@ Now, let's walk through each of these steps in code and detail. Let's get starte
 
 import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
+import os
 
 from docs.examples import generate_sklearn_simulated_data
 from fusilli.data import get_data_module
@@ -53,7 +54,7 @@ from fusilli.eval import RealsVsPreds, ModelComparison
 from fusilli.train import train_and_save_models
 from fusilli.utils.model_chooser import import_chosen_fusion_models
 
-from IPython.utils import io # for hiding the tqdm progress bar
+from IPython.utils import io  # for hiding the tqdm progress bar
 
 # %%
 # 1. Import fusion models 🔍
@@ -74,7 +75,6 @@ model_conditions = {
 
 fusion_models = import_chosen_fusion_models(model_conditions)
 
-
 # %%
 # 2. Set the training parameters 🎯
 # ---------------------------------
@@ -93,13 +93,19 @@ fusion_models = import_chosen_fusion_models(model_conditions)
 
 params = {
     "kfold_flag": True,
-    "num_k": 8,
+    "num_k": 3,
     "log": False,
     "pred_type": "regression",
     "batch_size": 32,
-    "loss_log_dir": "loss_logs",
+    "loss_log_dir": "loss_logs/model_comparison_loop_kfold",
 }
 
+for dir in os.listdir(params["loss_log_dir"]):
+    # remove files
+    for file in os.listdir(os.path.join(params["loss_log_dir"], dir)):
+        os.remove(os.path.join(params["loss_log_dir"], dir, file))
+    # remove dir
+    os.rmdir(os.path.join(params["loss_log_dir"], dir))
 
 # %%
 # 3. Generating simulated data 🔮
@@ -132,7 +138,7 @@ with io.capture_output() as captured:
         data_module = get_data_module(fusion_model, params, batch_size=params["batch_size"])
 
         # Train and test
-        single_model_dict = train_and_save_models(
+        single_model_list = train_and_save_models(
             data_module=data_module,
             params=params,
             fusion_model=fusion_model,
@@ -141,7 +147,7 @@ with io.capture_output() as captured:
         )
 
         # Save to all_trained_models
-        all_trained_models[fusion_model_name] = single_model_dict[fusion_model_name]
+        all_trained_models[fusion_model_name] = single_model_list
 
 # %%
 # 5. Plotting the results of the individual models
@@ -152,8 +158,8 @@ with io.capture_output() as captured:
 # This will save the figures in a timestamped folder in the current working directory with the method name and plot type in the filename.
 # You can add an extra suffix to the filename by passing a string to the ``extra_string`` argument of the :meth:`~fusilli.eval.Plotter.save_to_local` method.
 
-for model_name, model_dict in all_trained_models.items():
-    fig = RealsVsPreds.from_final_val_data(model_dict)
+for model_name, model_list in all_trained_models.items():
+    fig = RealsVsPreds.from_final_val_data(model_list)
     plt.show()
 
 # %% [markdown]

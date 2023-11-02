@@ -86,7 +86,7 @@ def test_train_and_test(create_test_files, tmp_path):
                          max_epochs=20,
                          )
 
-    single_model_dict = train_and_save_models(
+    single_model_list = train_and_save_models(
         data_module=dm,
         params=params,
         fusion_model=model,
@@ -94,7 +94,7 @@ def test_train_and_test(create_test_files, tmp_path):
         layer_mods=layer_mods,
     )
 
-    trained_model = list(single_model_dict.values())[0][0]
+    trained_model = single_model_list[0]
 
     assert trained_model is not None
     assert trained_model.model is not None
@@ -183,7 +183,7 @@ def test_kfold(create_test_files, tmp_path):
                          max_epochs=20,
                          )
 
-    single_model_dict = train_and_save_models(
+    single_model_list = train_and_save_models(
         data_module=dm,
         params=params,
         fusion_model=model,
@@ -191,15 +191,15 @@ def test_kfold(create_test_files, tmp_path):
         layer_mods=layer_mods,
     )
 
-    trained_model = list(single_model_dict.values())[0]
+    # trained_model = list(single_model_dict.values())[0]
 
-    assert len(trained_model) == 3
-    assert trained_model[0] is not None
-    assert trained_model[0].model is not None
+    assert len(single_model_list) == 3
+    assert single_model_list[0] is not None
+    assert single_model_list[0].model is not None
 
-    fig = ConfusionMatrix.from_final_val_data(trained_model)
+    fig = ConfusionMatrix.from_final_val_data(single_model_list)
     assert fig is not None
 
-    fig_new_data = ConfusionMatrix.from_new_data(trained_model, params, "_test",
+    fig_new_data = ConfusionMatrix.from_new_data(single_model_list, params, "_test",
                                                  layer_mods=layer_mods)
     assert fig_new_data is not None

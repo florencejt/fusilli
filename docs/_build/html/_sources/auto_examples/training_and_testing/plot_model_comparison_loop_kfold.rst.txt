@@ -62,13 +62,14 @@ Let's dive into each of these steps in detail:
 
 Now, let's walk through each of these steps in code and detail. Let's get started! 🌸
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-58
+.. GENERATED FROM PYTHON SOURCE LINES 46-59
 
 .. code-block:: default
 
 
     import matplotlib.pyplot as plt
     from tqdm.auto import tqdm
+    import os
 
     from docs.examples import generate_sklearn_simulated_data
     from fusilli.data import get_data_module
@@ -76,7 +77,7 @@ Now, let's walk through each of these steps in code and detail. Let's get starte
     from fusilli.train import train_and_save_models
     from fusilli.utils.model_chooser import import_chosen_fusion_models
 
-    from IPython.utils import io # for hiding the tqdm progress bar
+    from IPython.utils import io  # for hiding the tqdm progress bar
 
 
 
@@ -85,7 +86,7 @@ Now, let's walk through each of these steps in code and detail. Let's get starte
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-70
+.. GENERATED FROM PYTHON SOURCE LINES 60-71
 
 1. Import fusion models 🔍
 ---------------------------
@@ -99,7 +100,7 @@ model's parent class. The paths are used to import the models with the :func:`im
 
 We're importing all the fusion models that use only tabular data for this example (either uni-modal or multi-modal).
 
-.. GENERATED FROM PYTHON SOURCE LINES 70-78
+.. GENERATED FROM PYTHON SOURCE LINES 71-78
 
 .. code-block:: default
 
@@ -109,7 +110,6 @@ We're importing all the fusion models that use only tabular data for this exampl
     }
 
     fusion_models = import_chosen_fusion_models(model_conditions)
-
 
 
 
@@ -145,7 +145,7 @@ For training and testing, the necessary parameters are:
 
 We're also setting our own batch_size for this example.
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-104
+.. GENERATED FROM PYTHON SOURCE LINES 92-110
 
 .. code-block:: default
 
@@ -153,13 +153,19 @@ We're also setting our own batch_size for this example.
 
     params = {
         "kfold_flag": True,
-        "num_k": 8,
+        "num_k": 3,
         "log": False,
         "pred_type": "regression",
         "batch_size": 32,
-        "loss_log_dir": "loss_logs",
+        "loss_log_dir": "loss_logs/model_comparison_loop_kfold",
     }
 
+    for dir in os.listdir(params["loss_log_dir"]):
+        # remove files
+        for file in os.listdir(os.path.join(params["loss_log_dir"], dir)):
+            os.remove(os.path.join(params["loss_log_dir"], dir, file))
+        # remove dir
+        os.rmdir(os.path.join(params["loss_log_dir"], dir))
 
 
 
@@ -168,14 +174,14 @@ We're also setting our own batch_size for this example.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 105-109
+.. GENERATED FROM PYTHON SOURCE LINES 111-115
 
 3. Generating simulated data 🔮
 --------------------------------
 Time to create some simulated data for our models to work their wonders on.
 This function also simulated image data which we aren't using here.
 
-.. GENERATED FROM PYTHON SOURCE LINES 109-118
+.. GENERATED FROM PYTHON SOURCE LINES 115-124
 
 .. code-block:: default
 
@@ -195,14 +201,14 @@ This function also simulated image data which we aren't using here.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-123
+.. GENERATED FROM PYTHON SOURCE LINES 125-129
 
 4. Training the all the fusion models 🏁
 -----------------------------------------
 In this section, we train all the fusion models using the generated data and specified parameters.
 We store the results of each model for later analysis.
 
-.. GENERATED FROM PYTHON SOURCE LINES 123-146
+.. GENERATED FROM PYTHON SOURCE LINES 129-152
 
 .. code-block:: default
 
@@ -218,7 +224,7 @@ We store the results of each model for later analysis.
             data_module = get_data_module(fusion_model, params, batch_size=params["batch_size"])
 
             # Train and test
-            single_model_dict = train_and_save_models(
+            single_model_list = train_and_save_models(
                 data_module=data_module,
                 params=params,
                 fusion_model=fusion_model,
@@ -227,7 +233,7 @@ We store the results of each model for later analysis.
             )
 
             # Save to all_trained_models
-            all_trained_models[fusion_model_name] = single_model_dict[fusion_model_name]
+            all_trained_models[fusion_model_name] = single_model_list
 
 
 
@@ -259,491 +265,176 @@ We store the results of each model for later analysis.
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_004.png
-         :alt: Loss Curves for Tabular1Unimodal_fold_3
+         :alt: Loss Curves for Tabular2Unimodal_fold_0
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_004.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_005.png
-         :alt: Loss Curves for Tabular1Unimodal_fold_4
+         :alt: Loss Curves for Tabular2Unimodal_fold_1
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_005.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_006.png
-         :alt: Loss Curves for Tabular1Unimodal_fold_5
+         :alt: Loss Curves for Tabular2Unimodal_fold_2
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_006.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_007.png
-         :alt: Loss Curves for Tabular1Unimodal_fold_6
+         :alt: Loss Curves for ConcatTabularFeatureMaps_fold_0
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_007.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_008.png
-         :alt: Loss Curves for Tabular1Unimodal_fold_7
+         :alt: Loss Curves for ConcatTabularFeatureMaps_fold_1
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_008.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_009.png
-         :alt: Loss Curves for Tabular2Unimodal_fold_0
+         :alt: Loss Curves for ConcatTabularFeatureMaps_fold_2
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_009.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_010.png
-         :alt: Loss Curves for Tabular2Unimodal_fold_1
+         :alt: Loss Curves for ConcatTabularData_fold_0
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_010.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_011.png
-         :alt: Loss Curves for Tabular2Unimodal_fold_2
+         :alt: Loss Curves for ConcatTabularData_fold_1
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_011.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_012.png
-         :alt: Loss Curves for Tabular2Unimodal_fold_3
+         :alt: Loss Curves for ConcatTabularData_fold_2
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_012.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_013.png
-         :alt: Loss Curves for Tabular2Unimodal_fold_4
+         :alt: Loss Curves for TabularChannelWiseMultiAttention_fold_0
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_013.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_014.png
-         :alt: Loss Curves for Tabular2Unimodal_fold_5
+         :alt: Loss Curves for TabularChannelWiseMultiAttention_fold_1
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_014.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_015.png
-         :alt: Loss Curves for Tabular2Unimodal_fold_6
+         :alt: Loss Curves for TabularChannelWiseMultiAttention_fold_2
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_015.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_016.png
-         :alt: Loss Curves for Tabular2Unimodal_fold_7
+         :alt: Loss Curves for TabularCrossmodalMultiheadAttention_fold_0
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_016.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_017.png
-         :alt: Loss Curves for ConcatTabularFeatureMaps_fold_0
+         :alt: Loss Curves for TabularCrossmodalMultiheadAttention_fold_1
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_017.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_018.png
-         :alt: Loss Curves for ConcatTabularFeatureMaps_fold_1
+         :alt: Loss Curves for TabularCrossmodalMultiheadAttention_fold_2
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_018.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_019.png
-         :alt: Loss Curves for ConcatTabularFeatureMaps_fold_2
+         :alt: Loss Curves for TabularDecision_fold_0
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_019.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_020.png
-         :alt: Loss Curves for ConcatTabularFeatureMaps_fold_3
+         :alt: Loss Curves for TabularDecision_fold_1
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_020.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_021.png
-         :alt: Loss Curves for ConcatTabularFeatureMaps_fold_4
+         :alt: Loss Curves for TabularDecision_fold_2
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_021.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_022.png
-         :alt: Loss Curves for ConcatTabularFeatureMaps_fold_5
+         :alt: Loss Curves for MCVAE_tab_fold_0
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_022.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_023.png
-         :alt: Loss Curves for ConcatTabularFeatureMaps_fold_6
+         :alt: Loss Curves for MCVAE_tab_fold_1
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_023.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_024.png
-         :alt: Loss Curves for ConcatTabularFeatureMaps_fold_7
+         :alt: Loss Curves for MCVAE_tab_fold_2
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_024.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_025.png
-         :alt: Loss Curves for ConcatTabularData_fold_0
+         :alt: Loss Curves for EdgeCorrGNN_fold_0
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_025.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_026.png
-         :alt: Loss Curves for ConcatTabularData_fold_1
+         :alt: Loss Curves for EdgeCorrGNN_fold_1
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_026.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_027.png
-         :alt: Loss Curves for ConcatTabularData_fold_2
+         :alt: Loss Curves for EdgeCorrGNN_fold_2
          :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_027.png
          :class: sphx-glr-multi-img
 
-    *
 
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_028.png
-         :alt: Loss Curves for ConcatTabularData_fold_3
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_028.png
-         :class: sphx-glr-multi-img
 
-    *
 
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_029.png
-         :alt: Loss Curves for ConcatTabularData_fold_4
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_029.png
-         :class: sphx-glr-multi-img
 
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_030.png
-         :alt: Loss Curves for ConcatTabularData_fold_5
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_030.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_031.png
-         :alt: Loss Curves for ConcatTabularData_fold_6
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_031.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_032.png
-         :alt: Loss Curves for ConcatTabularData_fold_7
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_032.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_033.png
-         :alt: Loss Curves for TabularChannelWiseMultiAttention_fold_0
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_033.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_034.png
-         :alt: Loss Curves for TabularChannelWiseMultiAttention_fold_1
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_034.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_035.png
-         :alt: Loss Curves for TabularChannelWiseMultiAttention_fold_2
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_035.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_036.png
-         :alt: Loss Curves for TabularChannelWiseMultiAttention_fold_3
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_036.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_037.png
-         :alt: Loss Curves for TabularChannelWiseMultiAttention_fold_4
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_037.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_038.png
-         :alt: Loss Curves for TabularChannelWiseMultiAttention_fold_5
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_038.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_039.png
-         :alt: Loss Curves for TabularChannelWiseMultiAttention_fold_6
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_039.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_040.png
-         :alt: Loss Curves for TabularChannelWiseMultiAttention_fold_7
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_040.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_041.png
-         :alt: Loss Curves for TabularCrossmodalMultiheadAttention_fold_0
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_041.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_042.png
-         :alt: Loss Curves for TabularCrossmodalMultiheadAttention_fold_1
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_042.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_043.png
-         :alt: Loss Curves for TabularCrossmodalMultiheadAttention_fold_2
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_043.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_044.png
-         :alt: Loss Curves for TabularCrossmodalMultiheadAttention_fold_3
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_044.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_045.png
-         :alt: Loss Curves for TabularCrossmodalMultiheadAttention_fold_4
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_045.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_046.png
-         :alt: Loss Curves for TabularCrossmodalMultiheadAttention_fold_5
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_046.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_047.png
-         :alt: Loss Curves for TabularCrossmodalMultiheadAttention_fold_6
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_047.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_048.png
-         :alt: Loss Curves for TabularCrossmodalMultiheadAttention_fold_7
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_048.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_049.png
-         :alt: Loss Curves for TabularDecision_fold_0
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_049.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_050.png
-         :alt: Loss Curves for TabularDecision_fold_1
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_050.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_051.png
-         :alt: Loss Curves for TabularDecision_fold_2
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_051.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_052.png
-         :alt: Loss Curves for TabularDecision_fold_3
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_052.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_053.png
-         :alt: Loss Curves for TabularDecision_fold_4
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_053.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_054.png
-         :alt: Loss Curves for TabularDecision_fold_5
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_054.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_055.png
-         :alt: Loss Curves for TabularDecision_fold_6
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_055.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_056.png
-         :alt: Loss Curves for TabularDecision_fold_7
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_056.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_057.png
-         :alt: Loss Curves for MCVAE_tab_fold_0
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_057.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_058.png
-         :alt: Loss Curves for MCVAE_tab_fold_1
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_058.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_059.png
-         :alt: Loss Curves for MCVAE_tab_fold_2
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_059.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_060.png
-         :alt: Loss Curves for MCVAE_tab_fold_3
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_060.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_061.png
-         :alt: Loss Curves for MCVAE_tab_fold_4
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_061.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_062.png
-         :alt: Loss Curves for MCVAE_tab_fold_5
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_062.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_063.png
-         :alt: Loss Curves for MCVAE_tab_fold_6
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_063.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_064.png
-         :alt: Loss Curves for MCVAE_tab_fold_7
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_064.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_065.png
-         :alt: Loss Curves for EdgeCorrGNN_fold_0
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_065.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_066.png
-         :alt: Loss Curves for EdgeCorrGNN_fold_1
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_066.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_067.png
-         :alt: Loss Curves for EdgeCorrGNN_fold_2
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_067.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_068.png
-         :alt: Loss Curves for EdgeCorrGNN_fold_3
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_068.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_069.png
-         :alt: Loss Curves for EdgeCorrGNN_fold_4
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_069.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_070.png
-         :alt: Loss Curves for EdgeCorrGNN_fold_5
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_070.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_071.png
-         :alt: Loss Curves for EdgeCorrGNN_fold_6
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_071.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_072.png
-         :alt: Loss Curves for EdgeCorrGNN_fold_7
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_072.png
-         :class: sphx-glr-multi-img
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 147-154
+.. GENERATED FROM PYTHON SOURCE LINES 153-160
 
 5. Plotting the results of the individual models
 -------------------------------------------------
@@ -753,13 +444,13 @@ If you want to save the figures rather than show them, you can use the :meth:`~.
 This will save the figures in a timestamped folder in the current working directory with the method name and plot type in the filename.
 You can add an extra suffix to the filename by passing a string to the ``extra_string`` argument of the :meth:`~fusilli.eval.Plotter.save_to_local` method.
 
-.. GENERATED FROM PYTHON SOURCE LINES 154-159
+.. GENERATED FROM PYTHON SOURCE LINES 160-165
 
 .. code-block:: default
 
 
-    for model_name, model_dict in all_trained_models.items():
-        fig = RealsVsPreds.from_final_val_data(model_dict)
+    for model_name, model_list in all_trained_models.items():
+        fig = RealsVsPreds.from_final_val_data(model_list)
         plt.show()
 
 
@@ -770,78 +461,78 @@ You can add an extra suffix to the filename by passing a string to the ``extra_s
 
     *
 
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_073.png
-         :alt: From final val data, Tabular1 uni-modal: R2=0.309, Fold 1: R2=0.185, Fold 2: R2=0.354, Fold 3: R2=0.186, Fold 4: R2=0.317, Fold 5: R2=0.279, Fold 6: R2=0.266, Fold 7: R2=0.474, Fold 8: R2=0.321
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_073.png
+      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_028.png
+         :alt: From final val data, Tabular1 uni-modal: R2=0.224, Fold 1: R2=0.244, Fold 2: R2=0.200, Fold 3: R2=0.225
+         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_028.png
          :class: sphx-glr-multi-img
 
     *
 
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_074.png
-         :alt: From final val data, Tabular2 uni-modal: R2=0.308, Fold 1: R2=0.453, Fold 2: R2=0.067, Fold 3: R2=0.327, Fold 4: R2=0.365, Fold 5: R2=0.424, Fold 6: R2=0.252, Fold 7: R2=0.219, Fold 8: R2=0.171
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_074.png
+      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_029.png
+         :alt: From final val data, Tabular2 uni-modal: R2=0.341, Fold 1: R2=0.197, Fold 2: R2=0.323, Fold 3: R2=0.420
+         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_029.png
          :class: sphx-glr-multi-img
 
     *
 
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_075.png
-         :alt: From final val data, Concatenating tabular feature maps: R2=0.490, Fold 1: R2=0.362, Fold 2: R2=0.442, Fold 3: R2=0.424, Fold 4: R2=0.471, Fold 5: R2=0.540, Fold 6: R2=0.677, Fold 7: R2=0.559, Fold 8: R2=0.418
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_075.png
+      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_030.png
+         :alt: From final val data, Concatenating tabular feature maps: R2=0.453, Fold 1: R2=0.480, Fold 2: R2=0.422, Fold 3: R2=0.458
+         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_030.png
          :class: sphx-glr-multi-img
 
     *
 
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_076.png
-         :alt: From final val data, Concatenating tabular data: R2=0.535, Fold 1: R2=0.555, Fold 2: R2=0.616, Fold 3: R2=0.338, Fold 4: R2=0.547, Fold 5: R2=0.591, Fold 6: R2=0.612, Fold 7: R2=0.427, Fold 8: R2=0.453
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_076.png
+      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_031.png
+         :alt: From final val data, Concatenating tabular data: R2=0.447, Fold 1: R2=0.500, Fold 2: R2=0.409, Fold 3: R2=0.425
+         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_031.png
          :class: sphx-glr-multi-img
 
     *
 
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_077.png
-         :alt: From final val data, Channel-wise multiplication net (tabular): R2=0.380, Fold 1: R2=0.316, Fold 2: R2=0.488, Fold 3: R2=0.244, Fold 4: R2=0.400, Fold 5: R2=0.398, Fold 6: R2=0.470, Fold 7: R2=0.285, Fold 8: R2=0.347
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_077.png
+      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_032.png
+         :alt: From final val data, Channel-wise multiplication net (tabular): R2=0.230, Fold 1: R2=0.262, Fold 2: R2=0.262, Fold 3: R2=0.157
+         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_032.png
          :class: sphx-glr-multi-img
 
     *
 
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_078.png
-         :alt: From final val data, Tabular Crossmodal multi-head attention: R2=0.500, Fold 1: R2=0.432, Fold 2: R2=0.504, Fold 3: R2=0.591, Fold 4: R2=0.315, Fold 5: R2=0.533, Fold 6: R2=0.499, Fold 7: R2=0.486, Fold 8: R2=0.528
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_078.png
+      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_033.png
+         :alt: From final val data, Tabular Crossmodal multi-head attention: R2=0.457, Fold 1: R2=0.447, Fold 2: R2=0.473, Fold 3: R2=0.441
+         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_033.png
          :class: sphx-glr-multi-img
 
     *
 
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_079.png
-         :alt: From final val data, Tabular decision: R2=0.496, Fold 1: R2=0.508, Fold 2: R2=0.438, Fold 3: R2=0.581, Fold 4: R2=0.597, Fold 5: R2=0.527, Fold 6: R2=0.446, Fold 7: R2=0.501, Fold 8: R2=0.282
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_079.png
+      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_034.png
+         :alt: From final val data, Tabular decision: R2=0.413, Fold 1: R2=0.456, Fold 2: R2=0.335, Fold 3: R2=0.427
+         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_034.png
          :class: sphx-glr-multi-img
 
     *
 
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_080.png
-         :alt: From final val data, MCVAE Tabular: R2=0.019, Fold 1: R2=-0.007, Fold 2: R2=0.099, Fold 3: R2=-0.026, Fold 4: R2=-0.027, Fold 5: R2=-0.002, Fold 6: R2=-0.001, Fold 7: R2=0.083, Fold 8: R2=-0.014
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_080.png
+      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_035.png
+         :alt: From final val data, MCVAE Tabular: R2=-0.004, Fold 1: R2=-0.008, Fold 2: R2=-0.001, Fold 3: R2=-0.021
+         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_035.png
          :class: sphx-glr-multi-img
 
     *
 
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_081.png
-         :alt: From final val data, Edge Correlation GNN: R2=0.134, Fold 1: R2=-0.023, Fold 2: R2=0.231, Fold 3: R2=0.251, Fold 4: R2=-0.036, Fold 5: R2=0.107, Fold 6: R2=0.227, Fold 7: R2=-0.031, Fold 8: R2=0.163
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_081.png
+      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_036.png
+         :alt: From final val data, Edge Correlation GNN: R2=0.115, Fold 1: R2=0.168, Fold 2: R2=-0.063, Fold 3: R2=0.169
+         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_036.png
          :class: sphx-glr-multi-img
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 160-163
+.. GENERATED FROM PYTHON SOURCE LINES 166-169
 
 6. Plotting comparison of the models
 -------------------------------------
 In this section, we visualize the results of each individual model.
 
-.. GENERATED FROM PYTHON SOURCE LINES 163-167
+.. GENERATED FROM PYTHON SOURCE LINES 169-173
 
 .. code-block:: default
 
@@ -852,29 +543,22 @@ In this section, we visualize the results of each individual model.
 
 
 
-.. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_082.png
+.. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_037.png
    :alt: Distribution of metrics between cross-validation folds, R2, MAE
-   :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_082.png
+   :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_037.png
    :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    comp models metrics {'Tabular1 uni-modal': {'R2': [0.1847051978111267, 0.3538585901260376, 0.1862925887107849, 0.3172152638435364, 0.27925777435302734, 0.26597076654434204, 0.4737008213996887, 0.3211592435836792], 'MAE': [3.2544400691986084, 2.68761944770813, 3.3377034664154053, 2.752492666244507, 3.0639472007751465, 2.7530293464660645, 3.0820093154907227, 3.180541515350342]}, 'Tabular2 uni-modal': {'R2': [0.45273905992507935, 0.06690114736557007, 0.3272819519042969, 0.36544036865234375, 0.42449718713760376, 0.25191164016723633, 0.2191036343574524, 0.1706322431564331], 'MAE': [2.8729043006896973, 2.9153432846069336, 3.569711923599243, 2.496086835861206, 3.015620231628418, 3.031947135925293, 2.8829123973846436, 3.4775798320770264]}, 'Concatenating tabular feature maps': {'R2': [0.3620777130126953, 0.4417087435722351, 0.4243953824043274, 0.47078239917755127, 0.5395724773406982, 0.677090048789978, 0.5591229200363159, 0.417618989944458], 'MAE': [3.1868114471435547, 2.47515869140625, 2.4574267864227295, 2.7978579998016357, 2.7994909286499023, 1.9362945556640625, 2.2885961532592773, 2.9340898990631104]}, 'Concatenating tabular data': {'R2': [0.5554353594779968, 0.6161866784095764, 0.337960422039032, 0.5468802452087402, 0.591398298740387, 0.611754298210144, 0.4270881414413452, 0.45280224084854126], 'MAE': [2.3282973766326904, 2.8040030002593994, 2.568645715713501, 2.3834919929504395, 2.0327255725860596, 2.6043860912323, 2.653918743133545, 2.558443546295166]}, 'Channel-wise multiplication net (tabular)': {'R2': [0.315731406211853, 0.4883198142051697, 0.2437615543603897, 0.4001888036727905, 0.3984871506690979, 0.46959131956100464, 0.28526636958122253, 0.3470063805580139], 'MAE': [2.9613349437713623, 2.4645261764526367, 2.7103822231292725, 2.5807433128356934, 2.935960292816162, 2.6851439476013184, 3.319307565689087, 3.1585898399353027]}, 'Tabular Crossmodal multi-head attention': {'R2': [0.4315035939216614, 0.5043998956680298, 0.5910037755966187, 0.3151036500930786, 0.5332671403884888, 0.49900203943252563, 0.48581087589263916, 0.5277689695358276], 'MAE': [3.080484390258789, 2.440844774246216, 2.448713541030884, 2.6313138008117676, 2.5238401889801025, 2.3897674083709717, 2.547105312347412, 2.5184240341186523]}, 'Tabular decision': {'R2': [0.5075912475585938, 0.4378359317779541, 0.5806715488433838, 0.5974611043930054, 0.5270524024963379, 0.4461625814437866, 0.5007119178771973, 0.2822440266609192], 'MAE': [2.612638473510742, 2.3867459297180176, 2.656567096710205, 2.3077564239501953, 2.3129682540893555, 2.814648151397705, 2.6802926063537598, 3.058063268661499]}, 'MCVAE Tabular': {'R2': [-0.006924986839294434, 0.09884881973266602, -0.025596141815185547, -0.026619911193847656, -0.002027273178100586, -0.0013638734817504883, 0.08290988206863403, -0.013564109802246094], 'MAE': [3.9747540950775146, 3.4029831886291504, 3.9990103244781494, 3.4104206562042236, 3.801715612411499, 3.8304989337921143, 3.323807716369629, 3.1047983169555664]}, 'Edge Correlation GNN': {'R2': [-0.023377299308776855, 0.2308809757232666, 0.2513768672943115, -0.03601264953613281, 0.10682040452957153, 0.2267850637435913, -0.030986785888671875, 0.16299718618392944], 'MAE': [3.168518304824829, 3.165010452270508, 3.1371958255767822, 3.914865255355835, 3.375988483428955, 3.328338146209717, 3.245760679244995, 3.7122087478637695]}}
-    comp models metrics {'Tabular1 uni-modal': {'R2': [0.1847051978111267, 0.3538585901260376, 0.1862925887107849, 0.3172152638435364, 0.27925777435302734, 0.26597076654434204, 0.4737008213996887, 0.3211592435836792], 'MAE': [3.2544400691986084, 2.68761944770813, 3.3377034664154053, 2.752492666244507, 3.0639472007751465, 2.7530293464660645, 3.0820093154907227, 3.180541515350342]}, 'Tabular2 uni-modal': {'R2': [0.45273905992507935, 0.06690114736557007, 0.3272819519042969, 0.36544036865234375, 0.42449718713760376, 0.25191164016723633, 0.2191036343574524, 0.1706322431564331], 'MAE': [2.8729043006896973, 2.9153432846069336, 3.569711923599243, 2.496086835861206, 3.015620231628418, 3.031947135925293, 2.8829123973846436, 3.4775798320770264]}, 'Concatenating tabular feature maps': {'R2': [0.3620777130126953, 0.4417087435722351, 0.4243953824043274, 0.47078239917755127, 0.5395724773406982, 0.677090048789978, 0.5591229200363159, 0.417618989944458], 'MAE': [3.1868114471435547, 2.47515869140625, 2.4574267864227295, 2.7978579998016357, 2.7994909286499023, 1.9362945556640625, 2.2885961532592773, 2.9340898990631104]}, 'Concatenating tabular data': {'R2': [0.5554353594779968, 0.6161866784095764, 0.337960422039032, 0.5468802452087402, 0.591398298740387, 0.611754298210144, 0.4270881414413452, 0.45280224084854126], 'MAE': [2.3282973766326904, 2.8040030002593994, 2.568645715713501, 2.3834919929504395, 2.0327255725860596, 2.6043860912323, 2.653918743133545, 2.558443546295166]}, 'Channel-wise multiplication net (tabular)': {'R2': [0.315731406211853, 0.4883198142051697, 0.2437615543603897, 0.4001888036727905, 0.3984871506690979, 0.46959131956100464, 0.28526636958122253, 0.3470063805580139], 'MAE': [2.9613349437713623, 2.4645261764526367, 2.7103822231292725, 2.5807433128356934, 2.935960292816162, 2.6851439476013184, 3.319307565689087, 3.1585898399353027]}, 'Tabular Crossmodal multi-head attention': {'R2': [0.4315035939216614, 0.5043998956680298, 0.5910037755966187, 0.3151036500930786, 0.5332671403884888, 0.49900203943252563, 0.48581087589263916, 0.5277689695358276], 'MAE': [3.080484390258789, 2.440844774246216, 2.448713541030884, 2.6313138008117676, 2.5238401889801025, 2.3897674083709717, 2.547105312347412, 2.5184240341186523]}, 'Tabular decision': {'R2': [0.5075912475585938, 0.4378359317779541, 0.5806715488433838, 0.5974611043930054, 0.5270524024963379, 0.4461625814437866, 0.5007119178771973, 0.2822440266609192], 'MAE': [2.612638473510742, 2.3867459297180176, 2.656567096710205, 2.3077564239501953, 2.3129682540893555, 2.814648151397705, 2.6802926063537598, 3.058063268661499]}, 'MCVAE Tabular': {'R2': [-0.006924986839294434, 0.09884881973266602, -0.025596141815185547, -0.026619911193847656, -0.002027273178100586, -0.0013638734817504883, 0.08290988206863403, -0.013564109802246094], 'MAE': [3.9747540950775146, 3.4029831886291504, 3.9990103244781494, 3.4104206562042236, 3.801715612411499, 3.8304989337921143, 3.323807716369629, 3.1047983169555664]}, 'Edge Correlation GNN': {'R2': [-0.023377299308776855, 0.2308809757232666, 0.2513768672943115, -0.03601264953613281, 0.10682040452957153, 0.2267850637435913, -0.030986785888671875, 0.16299718618392944], 'MAE': [3.168518304824829, 3.165010452270508, 3.1371958255767822, 3.914865255355835, 3.375988483428955, 3.328338146209717, 3.245760679244995, 3.7122087478637695]}}
 
 
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 168-171
+.. GENERATED FROM PYTHON SOURCE LINES 174-177
 
 7. Saving the results of the models
 -------------------------------------
 In this section, we compare the performance of all the trained models using a violin chart, providing an overview of how each model performed as a distribution over the different cross-validation folds.
 
-.. GENERATED FROM PYTHON SOURCE LINES 171-174
+.. GENERATED FROM PYTHON SOURCE LINES 177-180
 
 .. code-block:: default
 
@@ -915,29 +599,9 @@ In this section, we compare the performance of all the trained models using a vi
           <th>fold2_MAE</th>
           <th>fold3_R2</th>
           <th>fold3_MAE</th>
-          <th>fold4_R2</th>
-          <th>fold4_MAE</th>
-          <th>fold5_R2</th>
-          <th>fold5_MAE</th>
-          <th>fold6_R2</th>
-          <th>fold6_MAE</th>
-          <th>fold7_R2</th>
-          <th>fold7_MAE</th>
-          <th>fold8_R2</th>
-          <th>fold8_MAE</th>
         </tr>
         <tr>
           <th>Method</th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
           <th></th>
           <th></th>
           <th></th>
@@ -951,192 +615,102 @@ In this section, we compare the performance of all the trained models using a vi
       <tbody>
         <tr>
           <th>Tabular1 uni-modal</th>
-          <td>0.309161</td>
-          <td>3.013925</td>
-          <td>0.184705</td>
-          <td>3.254440</td>
-          <td>0.353859</td>
-          <td>2.687619</td>
-          <td>0.186293</td>
-          <td>3.337703</td>
-          <td>0.317215</td>
-          <td>2.752493</td>
-          <td>0.279258</td>
-          <td>3.063947</td>
-          <td>0.265971</td>
-          <td>2.753029</td>
-          <td>0.473701</td>
-          <td>3.082009</td>
-          <td>0.321159</td>
-          <td>3.180542</td>
+          <td>0.224208</td>
+          <td>2.989906</td>
+          <td>0.243772</td>
+          <td>2.931305</td>
+          <td>0.199562</td>
+          <td>3.134076</td>
+          <td>0.224894</td>
+          <td>2.903821</td>
         </tr>
         <tr>
           <th>Tabular2 uni-modal</th>
-          <td>0.307929</td>
-          <td>3.032209</td>
-          <td>0.452739</td>
-          <td>2.872904</td>
-          <td>0.066901</td>
-          <td>2.915343</td>
-          <td>0.327282</td>
-          <td>3.569712</td>
-          <td>0.365440</td>
-          <td>2.496087</td>
-          <td>0.424497</td>
-          <td>3.015620</td>
-          <td>0.251912</td>
-          <td>3.031947</td>
-          <td>0.219104</td>
-          <td>2.882912</td>
-          <td>0.170632</td>
-          <td>3.477580</td>
+          <td>0.340719</td>
+          <td>2.727535</td>
+          <td>0.196505</td>
+          <td>2.722531</td>
+          <td>0.323096</td>
+          <td>2.810405</td>
+          <td>0.419581</td>
+          <td>2.649198</td>
         </tr>
         <tr>
           <th>Concatenating tabular feature maps</th>
-          <td>0.490228</td>
-          <td>2.610425</td>
-          <td>0.362078</td>
-          <td>3.186811</td>
-          <td>0.441709</td>
-          <td>2.475159</td>
-          <td>0.424395</td>
-          <td>2.457427</td>
-          <td>0.470782</td>
-          <td>2.797858</td>
-          <td>0.539572</td>
-          <td>2.799491</td>
-          <td>0.677090</td>
-          <td>1.936295</td>
-          <td>0.559123</td>
-          <td>2.288596</td>
-          <td>0.417619</td>
-          <td>2.934090</td>
+          <td>0.453423</td>
+          <td>2.497899</td>
+          <td>0.479688</td>
+          <td>2.458402</td>
+          <td>0.421885</td>
+          <td>2.632848</td>
+          <td>0.457929</td>
+          <td>2.401871</td>
         </tr>
         <tr>
           <th>Concatenating tabular data</th>
-          <td>0.534589</td>
-          <td>2.491974</td>
-          <td>0.555435</td>
-          <td>2.328297</td>
-          <td>0.616187</td>
-          <td>2.804003</td>
-          <td>0.337960</td>
-          <td>2.568646</td>
-          <td>0.546880</td>
-          <td>2.383492</td>
-          <td>0.591398</td>
-          <td>2.032726</td>
-          <td>0.611754</td>
-          <td>2.604386</td>
-          <td>0.427088</td>
-          <td>2.653919</td>
-          <td>0.452802</td>
-          <td>2.558444</td>
+          <td>0.447184</td>
+          <td>2.538639</td>
+          <td>0.500172</td>
+          <td>2.310274</td>
+          <td>0.409377</td>
+          <td>2.561991</td>
+          <td>0.424697</td>
+          <td>2.744888</td>
         </tr>
         <tr>
           <th>Channel-wise multiplication net (tabular)</th>
-          <td>0.379595</td>
-          <td>2.850616</td>
-          <td>0.315731</td>
-          <td>2.961335</td>
-          <td>0.488320</td>
-          <td>2.464526</td>
-          <td>0.243762</td>
-          <td>2.710382</td>
-          <td>0.400189</td>
-          <td>2.580743</td>
-          <td>0.398487</td>
-          <td>2.935960</td>
-          <td>0.469591</td>
-          <td>2.685144</td>
-          <td>0.285266</td>
-          <td>3.319308</td>
-          <td>0.347006</td>
-          <td>3.158590</td>
+          <td>0.230294</td>
+          <td>3.026953</td>
+          <td>0.261870</td>
+          <td>2.961012</td>
+          <td>0.262466</td>
+          <td>3.084680</td>
+          <td>0.156683</td>
+          <td>3.035214</td>
         </tr>
         <tr>
           <th>Tabular Crossmodal multi-head attention</th>
-          <td>0.500088</td>
-          <td>2.573184</td>
-          <td>0.431504</td>
-          <td>3.080484</td>
-          <td>0.504400</td>
-          <td>2.440845</td>
-          <td>0.591004</td>
-          <td>2.448714</td>
-          <td>0.315104</td>
-          <td>2.631314</td>
-          <td>0.533267</td>
-          <td>2.523840</td>
-          <td>0.499002</td>
-          <td>2.389767</td>
-          <td>0.485811</td>
-          <td>2.547105</td>
-          <td>0.527769</td>
-          <td>2.518424</td>
+          <td>0.456777</td>
+          <td>2.524265</td>
+          <td>0.446814</td>
+          <td>2.466450</td>
+          <td>0.473357</td>
+          <td>2.435274</td>
+          <td>0.440551</td>
+          <td>2.671954</td>
         </tr>
         <tr>
           <th>Tabular decision</th>
-          <td>0.495723</td>
-          <td>2.602808</td>
-          <td>0.507591</td>
-          <td>2.612638</td>
-          <td>0.437836</td>
-          <td>2.386746</td>
-          <td>0.580672</td>
-          <td>2.656567</td>
-          <td>0.597461</td>
-          <td>2.307756</td>
-          <td>0.527052</td>
-          <td>2.312968</td>
-          <td>0.446163</td>
-          <td>2.814648</td>
-          <td>0.500712</td>
-          <td>2.680293</td>
-          <td>0.282244</td>
-          <td>3.058063</td>
+          <td>0.413223</td>
+          <td>2.618857</td>
+          <td>0.455687</td>
+          <td>2.655784</td>
+          <td>0.334698</td>
+          <td>2.609927</td>
+          <td>0.426682</td>
+          <td>2.590691</td>
         </tr>
         <tr>
           <th>MCVAE Tabular</th>
-          <td>0.018776</td>
-          <td>3.606725</td>
-          <td>-0.006925</td>
-          <td>3.974754</td>
-          <td>0.098849</td>
-          <td>3.402983</td>
-          <td>-0.025596</td>
-          <td>3.999010</td>
-          <td>-0.026620</td>
-          <td>3.410421</td>
-          <td>-0.002027</td>
-          <td>3.801716</td>
-          <td>-0.001364</td>
-          <td>3.830499</td>
-          <td>0.082910</td>
-          <td>3.323808</td>
-          <td>-0.013564</td>
-          <td>3.104798</td>
+          <td>-0.004398</td>
+          <td>3.445615</td>
+          <td>-0.008009</td>
+          <td>3.450989</td>
+          <td>-0.001304</td>
+          <td>3.429603</td>
+          <td>-0.021114</td>
+          <td>3.456319</td>
         </tr>
         <tr>
           <th>Edge Correlation GNN</th>
-          <td>0.134415</td>
-          <td>3.380709</td>
-          <td>-0.023377</td>
-          <td>3.168518</td>
-          <td>0.230881</td>
-          <td>3.165010</td>
-          <td>0.251377</td>
-          <td>3.137196</td>
-          <td>-0.036013</td>
-          <td>3.914865</td>
-          <td>0.106820</td>
-          <td>3.375988</td>
-          <td>0.226785</td>
-          <td>3.328338</td>
-          <td>-0.030987</td>
-          <td>3.245761</td>
-          <td>0.162997</td>
-          <td>3.712209</td>
+          <td>0.114794</td>
+          <td>3.234563</td>
+          <td>0.168078</td>
+          <td>3.335965</td>
+          <td>-0.062951</td>
+          <td>3.252570</td>
+          <td>0.168877</td>
+          <td>3.114435</td>
         </tr>
       </tbody>
     </table>
@@ -1148,7 +722,7 @@ In this section, we compare the performance of all the trained models using a vi
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (4 minutes 50.312 seconds)
+   **Total running time of the script:** (1 minutes 27.196 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_and_testing_plot_model_comparison_loop_kfold.py:
