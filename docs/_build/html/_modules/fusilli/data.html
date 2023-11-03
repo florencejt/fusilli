@@ -52,8 +52,10 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html"><strong>fusilli</strong>: an introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Quick-Run Fusilli</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../fusion_model_explanations.html">Fusion Model Explanations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modifying_models.html">Modifying the fusion models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contact_me.html">Contact me</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
 <ul>
@@ -516,6 +518,8 @@
 <span class="sd">        Tensor of predictive features for testing. Created in setup().</span>
 <span class="sd">    subspace_method_train : class</span>
 <span class="sd">        Subspace method class trained (only for subspace methods).</span>
+<span class="sd">    own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping</span>
+<span class="sd">        Early stopping callback class.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -773,6 +777,8 @@
 <span class="sd">        Tensor of predictive features for training. Created in setup().</span>
 <span class="sd">    test_dataset : tensor</span>
 <span class="sd">        Tensor of predictive features for testing. Created in setup().</span>
+<span class="sd">    own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping</span>
+<span class="sd">        Early stopping callback class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="KFoldDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.KFoldDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -1092,6 +1098,7 @@
 <span class="sd">        List of indices for testing. Created in setup().</span>
 <span class="sd">    graph_data : graph data structure</span>
 <span class="sd">        Graph data structure. Created in setup().</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TrainTestGraphDataModule.__init__"><a class="viewcode-back" href="../../autosummary/fusilli.data.html#fusilli.data.TrainTestGraphDataModule.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -1247,6 +1254,7 @@
 <span class="sd">        List of data dimensions [mod1_dim, mod2_dim, img_dim]</span>
 <span class="sd">    folds : list</span>
 <span class="sd">        List of tuples of (graph_data, train_idxs, test_idxs)</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

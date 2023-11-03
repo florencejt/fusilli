@@ -1,4 +1,4 @@
-Quick-Run Fusilli
+How to quick-run Fusilli
 ==================================
 
 This script will train a model on a single dataset, using the default parameters.

@@ -70,7 +70,7 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
 
     # str: Name of the method.
     method_name = (
-        "Concatenating image latent space with tabular data, trained altogether"
+        "Trained Together Latent Image + Tabular Data"
     )
     # str: Type of modality.
     modality_type = "tab_img"

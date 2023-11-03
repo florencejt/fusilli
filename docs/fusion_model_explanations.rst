@@ -1,7 +1,7 @@
 .. _fusion-model-explanations:
 
-Fusion Model Explanations
-==========================
+The fusion models: diagrams and explanations
+============================================
 
 Below are explanations and diagrams explaining the fusion models available in this library.
 Some of the models are inspired by papers in the literature, so links to the papers are provided

@@ -101,6 +101,9 @@ class MCVAESubspaceMethod:
             Whether to train the subspace model, by default True.
         """
         self.datamodule = datamodule
+        # self.device = torch.device(self.datamodule.params["accelerator"])
+        self.device = torch.device("cpu")
+
         self.num_latent_dims = 10
         self.max_epochs = max_epochs
 
@@ -131,6 +134,7 @@ class MCVAESubspaceMethod:
         }
 
         self.fit_model = Mcvae(**init_dict, sparse=True)
+        self.fit_model.to(self.device)
         self.fit_model.load_state_dict(checkpoint)
 
     def check_params(self):
@@ -208,7 +212,17 @@ class MCVAESubspaceMethod:
         tab1 = train_dataset[:][0]
         tab2 = train_dataset[:][1]
         labels = train_dataset[:][2]
-        mcvae_training_data = [tab1, tab2]
+
+        # turn tab1 into a tensor
+        tab1 = torch.Tensor(tab1).to(self.device)
+        tab2 = torch.Tensor(tab2).to(self.device)
+
+        # send tab1 to device and everything in tab1
+        # for i in range(len(tab1)):
+        #     tab1[i] = tab1[i].to(self.device)
+        #     tab2[i] = tab2[i].to(self.device)
+
+        mcvae_training_data = [tab1.to(self.device), tab2.to(self.device)]
 
         init_dict = {
             "n_channels": 2,
@@ -218,12 +232,14 @@ class MCVAESubspaceMethod:
             ),
         }
         mcvae_fit = Mcvae(**init_dict, sparse=True)
-        print("device:", DEVICE)
-        mcvae_fit.to(DEVICE)
+
         mcvae_fit.init_loss()
 
         mcvae_fit.optimizer = torch.optim.Adam(mcvae_fit.parameters(), lr=0.001)
+        mcvae_fit.to(self.device)
 
+        print(mcvae_training_data)
+        print(mcvae_training_data[0][0][0])
         with contextlib.redirect_stdout(None):
             mcvae_fit.optimize(epochs=self.max_epochs, data=mcvae_training_data)
             ideal_epoch = mcvae_early_stopping_tol(
@@ -231,6 +247,7 @@ class MCVAESubspaceMethod:
             )
 
         mcvae_esfit = Mcvae(**init_dict, sparse=True)
+        mcvae_esfit.to(self.device)
         mcvae_esfit.init_loss()
         mcvae_esfit.optimizer = torch.optim.Adam(mcvae_esfit.parameters(), lr=0.001)
         with contextlib.redirect_stdout(None):
@@ -273,7 +290,7 @@ class MCVAESubspaceMethod:
         tab1 = test_dataset[:][0]
         tab2 = test_dataset[:][1]
         labels = test_dataset[:][2]
-        mcvae_test_data = [tab1, tab2]
+        mcvae_test_data = [tab1.to(self.device), tab2.to(self.device)]
 
         test_mean_latents = self.get_latents(mcvae_test_data)
 

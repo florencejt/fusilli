@@ -442,7 +442,7 @@ class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
     """
 
     # str: Name of the method.
-    method_name = "Concatenating latent img space and tabular data training separately"
+    method_name = "Pretrained Latent Image + Tabular Data"
     # str: Type of modality.
     modality_type = "tab_img"
     # str: Type of fusion.

@@ -1,7 +1,7 @@
 .. _modifying-models:
 
-Modifying the fusion models
-===========================
+How to modify the fusion models
+=================================
 
 - You can modify the fusion models by passing in a dictionary of the attributes you want to modify into the `get_data` and `training` functions.
 - The attributes that can be modified are listed below with some guidance on how they can be changed.

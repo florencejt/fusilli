@@ -33,7 +33,7 @@ Why would you want to use fusilli?
 -----
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: 🌸 Table of Contents 🌸
 
    introduction

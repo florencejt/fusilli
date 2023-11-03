@@ -54,10 +54,10 @@
               <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html"><strong>fusilli</strong>: an introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Quick-Run Fusilli</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">Fusion Model Explanations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">Modifying the fusion models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User guide (installation, data requirements, etc.)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">How to quick-run Fusilli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fusion_model_explanations.html">The fusion models: diagrams and explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modifying_models.html">How to modify the fusion models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contact_me.html">Contact me</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
@@ -98,6 +98,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.KFoldDataModule.data_dims"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.data_dims</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.KFoldDataModule.train_dataset"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.train_dataset</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.KFoldDataModule.test_dataset"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.test_dataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.data.KFoldDataModule.own_early_stopping_callback"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.own_early_stopping_callback</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.KFoldDataModule.__init__"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.__init__()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.KFoldDataModule.kfold_split"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.kfold_split()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.KFoldDataModule.prepare_data"><code class="docutils literal notranslate"><span class="pre">KFoldDataModule.prepare_data()</span></code></a></li>
@@ -155,6 +156,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.TrainTestDataModule.train_dataset"><code class="docutils literal notranslate"><span class="pre">TrainTestDataModule.train_dataset</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.TrainTestDataModule.test_dataset"><code class="docutils literal notranslate"><span class="pre">TrainTestDataModule.test_dataset</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.TrainTestDataModule.subspace_method_train"><code class="docutils literal notranslate"><span class="pre">TrainTestDataModule.subspace_method_train</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fusilli.data.TrainTestDataModule.own_early_stopping_callback"><code class="docutils literal notranslate"><span class="pre">TrainTestDataModule.own_early_stopping_callback</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.TrainTestDataModule.__init__"><code class="docutils literal notranslate"><span class="pre">TrainTestDataModule.__init__()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.TrainTestDataModule.prepare_data"><code class="docutils literal notranslate"><span class="pre">TrainTestDataModule.prepare_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fusilli.data.TrainTestDataModule.setup"><code class="docutils literal notranslate"><span class="pre">TrainTestDataModule.setup()</span></code></a></li>
@@ -505,6 +507,17 @@ None if not downsampling. (default None)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.KFoldDataModule.own_early_stopping_callback">
+<span class="sig-name descname"><span class="pre">own_early_stopping_callback</span></span><a class="headerlink" href="#fusilli.data.KFoldDataModule.own_early_stopping_callback" title="Permalink to this definition"></a></dt>
+<dd><p>Early stopping callback class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pytorch_lightning.callbacks.EarlyStopping</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1156,6 +1169,17 @@ Created in prepare_data().</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fusilli.data.TrainTestDataModule.own_early_stopping_callback">
+<span class="sig-name descname"><span class="pre">own_early_stopping_callback</span></span><a class="headerlink" href="#fusilli.data.TrainTestDataModule.own_early_stopping_callback" title="Permalink to this definition"></a></dt>
+<dd><p>Early stopping callback class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pytorch_lightning.callbacks.EarlyStopping</p>
 </dd>
 </dl>
 </dd></dl>

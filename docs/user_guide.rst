@@ -1,7 +1,7 @@
 .. _user-guide:
 
-User guide
-=================
+User guide (installation, data requirements, etc.)
+===================================================
 
 Here is the guidance you need to get started with ``fusilli`` before running your experiments: how to install it, how
 to input data, and how to choose a model.

@@ -416,6 +416,8 @@ class TrainTestDataModule(pl.LightningDataModule):
         Tensor of predictive features for testing. Created in setup().
     subspace_method_train : class
         Subspace method class trained (only for subspace methods).
+    own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
+        Early stopping callback class.
 
     """
 
@@ -673,6 +675,8 @@ class KFoldDataModule(pl.LightningDataModule):
         Tensor of predictive features for training. Created in setup().
     test_dataset : tensor
         Tensor of predictive features for testing. Created in setup().
+    own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
+        Early stopping callback class.
     """
 
     def __init__(
@@ -992,6 +996,7 @@ class TrainTestGraphDataModule:
         List of indices for testing. Created in setup().
     graph_data : graph data structure
         Graph data structure. Created in setup().
+
     """
 
     def __init__(
@@ -1147,6 +1152,7 @@ class KFoldGraphDataModule:
         List of data dimensions [mod1_dim, mod2_dim, img_dim]
     folds : list
         List of tuples of (graph_data, train_idxs, test_idxs)
+
 
     """
 
