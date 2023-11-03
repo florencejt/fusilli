@@ -1,0 +1,13 @@
+protobuf==3.19.6
+sphinx
+sphinx-gallery                
+sphinx-rtd-theme             
+sphinx-wagtail-theme   
+sphinxcontrib-applehelp   
+sphinxcontrib-devhelp     
+sphinxcontrib-htmlhelp     
+sphinxcontrib-jquery    
+sphinxcontrib-jsmath      
+sphinxcontrib-qthelp        
+sphinxcontrib-serializinghtml
+renku-sphinx-theme
