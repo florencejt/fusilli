@@ -7,8 +7,6 @@ Twitter: [@FlorenceTownend](https://twitter.com/FlorenceTownend)
 
 ## Project Description
 
-<img height="150" src="/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/pink_pasta_logo.png" width="150"/>
-
 🍝 Welcome to `fusilli` 🍝, where we're cooking up something special in the world of machine learning! Fusilli is your
 go-to
 library for multi-modal data fusion methods, and it's designed to make data fusion a piece of cake 🍰
