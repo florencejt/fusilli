@@ -34,6 +34,10 @@ jobs:
       run: perl -pi -e "s/0\.0\.0/${GITHUB_REF##*/v}/g" ./pyproject.toml
     - name: Build package
       run: python -m build
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
