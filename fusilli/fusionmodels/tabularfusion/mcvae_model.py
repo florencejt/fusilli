@@ -74,6 +74,15 @@ class MCVAESubspaceMethod:
     """
     Class for creating the MCVAE (multi-channel variational autoencoder) joint latent space.
 
+    If you want to change the tolerance or patience for early stopping, you can do so by adding
+    the following to your params dictionary:
+
+    "mcvae_patience": value,
+    "mcvae_tolerance": value,
+
+    where value is the number of epochs for patience and the tolerance for tolerance.
+
+
     Attributes
     ----------
     datamodule : datamodule object
@@ -238,12 +247,24 @@ class MCVAESubspaceMethod:
         mcvae_fit.optimizer = torch.optim.Adam(mcvae_fit.parameters(), lr=0.001)
         mcvae_fit.to(self.device)
 
-        print(mcvae_training_data)
-        print(mcvae_training_data[0][0][0])
+        # if the params has key mcvae_patience, use that as the patience
+        if "mcvae_patience" in self.datamodule.params.keys():
+            print("Using mcvae_patience from params")
+            mcvae_patience = self.datamodule.params["mcvae_patience"]
+        else:
+            mcvae_patience = 10
+
+        # same with tolerance
+        if "mcvae_tolerance" in self.datamodule.params.keys():
+            print("Using mcvae_tolerance from params")
+            mcvae_tolerance = self.datamodule.params["mcvae_tolerance"]
+        else:
+            mcvae_tolerance = 3
+
         with contextlib.redirect_stdout(None):
             mcvae_fit.optimize(epochs=self.max_epochs, data=mcvae_training_data)
             ideal_epoch = mcvae_early_stopping_tol(
-                tolerance=3, patience=10, loss_logs=mcvae_fit.loss["total"]
+                tolerance=mcvae_tolerance, patience=mcvae_patience, loss_logs=mcvae_fit.loss["total"]
             )
 
         mcvae_esfit = Mcvae(**init_dict, sparse=True)

@@ -42,7 +42,7 @@ The elements in the ``params`` dictionary must be there with those specific keys
     data_module = get_data_module(fusion_model=ExampleModel, params=params)
 
     # train the model to get list of length 1 containing the trained model
-    trained_model_list = train_and_save_model(
+    trained_model_list = train_and_save_models(
         data_module=data_module,
         params=params,
         fusion_model=ExampleModel,

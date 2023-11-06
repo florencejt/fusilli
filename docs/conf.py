@@ -42,7 +42,6 @@ extensions = [
     "sphinx.ext.viewcode",  # for linking to source code
     "sphinx_gallery.gen_gallery",  # for gallery
     "sphinx_rtd_theme",  # for readthedocs theme
-    "sphinx_wagtail_theme",
     "renku_sphinx_theme",
 ]
 
