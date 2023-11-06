@@ -16,7 +16,6 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-documentation = "https://fusilli.readthedocs.io/en/latest/"
 keywords= ["multi-modal", "machine learning", "MRI", "data fusion", "multi-view", "graph neural network", "attention", "VAE"]
 
 [tool.pytest.ini_options]
