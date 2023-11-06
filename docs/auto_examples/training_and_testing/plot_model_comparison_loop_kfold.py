@@ -54,7 +54,7 @@ from fusilli.eval import RealsVsPreds, ModelComparison
 from fusilli.train import train_and_save_models
 from fusilli.utils.model_chooser import import_chosen_fusion_models
 
-from IPython.utils import io  # for hiding the tqdm progress bar
+# from IPython.utils import io  # for hiding the tqdm progress bar
 
 # %%
 # 1. Import fusion models 🔍
@@ -129,25 +129,24 @@ params = generate_sklearn_simulated_data(
 
 all_trained_models = {}
 
-with io.capture_output() as captured:
-    for i, fusion_model in enumerate(fusion_models):
-        fusion_model_name = fusion_model.__name__
-        print(f"Running model {fusion_model_name}")
+for i, fusion_model in enumerate(fusion_models):
+    fusion_model_name = fusion_model.__name__
+    print(f"Running model {fusion_model_name}")
 
-        # Get data module
-        data_module = get_data_module(fusion_model, params, batch_size=params["batch_size"])
+    # Get data module
+    data_module = get_data_module(fusion_model, params, batch_size=params["batch_size"])
 
-        # Train and test
-        single_model_list = train_and_save_models(
-            data_module=data_module,
-            params=params,
-            fusion_model=fusion_model,
-            enable_checkpointing=False,  # False for the example notebooks
-            show_loss_plot=True,  # True for the example notebooks
-        )
+    # Train and test
+    single_model_list = train_and_save_models(
+        data_module=data_module,
+        params=params,
+        fusion_model=fusion_model,
+        enable_checkpointing=False,  # False for the example notebooks
+        show_loss_plot=True,  # True for the example notebooks
+    )
 
-        # Save to all_trained_models
-        all_trained_models[fusion_model_name] = single_model_list
+    # Save to all_trained_models
+    all_trained_models[fusion_model_name] = single_model_list
 
 # %%
 # 5. Plotting the results of the individual models

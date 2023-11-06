@@ -7,12 +7,12 @@ Below are explanations and diagrams explaining the fusion models available in th
 Some of the models are inspired by papers in the literature, so links to the papers are provided
 where appropriate.
 
-.. figure:: _static/cui_diagram.jpg
-    :align: center
-    :width: 100%
+.. figure:: _static/cui_diagram.jpeg
+    :align: left
+    :width: 80%
     :alt: Model fusion diagram
 
-    The diagram above shows the categorisation of the fusion models available in this library. This image has been taken from `Cui et al. (2023) <https://iopscience.iop.org/article/10.1088/2516-1091/acc2fe>.`_
+The diagram above shows the categorisation of the fusion models available in this library. This image has been taken from `Cui et al. (2023) <https://iopscience.iop.org/article/10.1088/2516-1091/acc2fe>`_.
 
 The table below shows the categorisation of the models available in this library. It is important to note that some of the methods in this library can probably be categorised in more than one way. For example, the :class:`.ConcatImgLatentTabDoubleTrain` model can be considered both an subspace-based model and an operation-based model. This is because it uses an autoencoder to learn an image latent space, which is then concatenated with the tabular data. However, the model also uses an operation (concatenation) to combine the modalities. Therefore, it is important to understand the categorisation of the models as a guide, rather than a strict rule.
 
