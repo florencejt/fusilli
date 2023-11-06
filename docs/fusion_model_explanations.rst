@@ -11,7 +11,8 @@ where appropriate.
     :align: center
     :width: 100%
     :alt: Model fusion diagram
-    :caption: The diagram above shows the categorisation of the fusion models available in this library. This image has been taken from `Cui et al. (2023) <https://iopscience.iop.org/article/10.1088/2516-1091/acc2fe>.`_
+
+    The diagram above shows the categorisation of the fusion models available in this library. This image has been taken from `Cui et al. (2023) <https://iopscience.iop.org/article/10.1088/2516-1091/acc2fe>.`_
 
 The table below shows the categorisation of the models available in this library. It is important to note that some of the methods in this library can probably be categorised in more than one way. For example, the :class:`.ConcatImgLatentTabDoubleTrain` model can be considered both an subspace-based model and an operation-based model. This is because it uses an autoencoder to learn an image latent space, which is then concatenated with the tabular data. However, the model also uses an operation (concatenation) to combine the modalities. Therefore, it is important to understand the categorisation of the models as a guide, rather than a strict rule.
 
@@ -21,17 +22,17 @@ The table below shows the categorisation of the models available in this library
 
     * - Fusion type
       - Description
-    * - ``unimodal``
+    * - Unimodal
       - These models use only one modality (e.g. tabular data or images) to make a prediction.
-    * - ``operation``
+    * - Operation
       - Operation-based models use operations to combine the modalities. For example, concatenation, element-wise summation, and element-wise multiplication. These methods are easy to implement and are often used as baselines.
-    * - ``attention``
+    * - Attention
       - Attention-based models use attention mechanisms to combine the modalities. Attention mechanisms work by learning a weight for each modality's importance, which is then used to combine the modalities.
-    * - ``subspace``
+    * - Subspace
       - Subspace-based models try to learn a joint latent space for the modalities. This can be done simply by looking at the correlations between the modalities, or by using a variational autoencoder (VAE) to learn the latent space through trying to reconstruct the modalities using a lower-dimensional representation.
-    * - ``graph``
+    * - Graph
       - Graph-based models look at the interactions between nodes in a graph, where the edges can be learned as similarities between nodes, for example.
-    * - ``tensor``
+    * - Tensor
       - Tensor-based models use tensor operations to combine the modalities, such as outer products to find inter-modal and intra-modal interactions.
 
 
