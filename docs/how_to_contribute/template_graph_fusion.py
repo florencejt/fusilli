@@ -110,7 +110,7 @@ from torch_geometric.nn import GCNConv
 
 class TemplateGraphFusionModel(ParentFusionModel, nn.Module):
     method_name = "Template Graph Fusion Model"
-    modality_type = "both_tab"
+    modality_type = "tabular_tabular"
     fusion_type = "graph"
 
     graph_maker = TemplateGraphMaker

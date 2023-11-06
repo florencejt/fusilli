@@ -32,7 +32,7 @@ class ConcatTabularData(ParentFusionModel, nn.Module):
     # str: Name of the method.
     method_name = "Concatenating tabular data"
     # str: Type of modality.
-    modality_type = "both_tab"
+    modality_type = "tabular_tabular"
     # str: Type of fusion.
     fusion_type = "operation"
 

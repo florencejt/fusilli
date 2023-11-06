@@ -62,7 +62,7 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
     # str: Name of the method.
     method_name = "Channel-wise multiplication net (tabular)"
     # str: Type of modality.
-    modality_type = "both_tab"
+    modality_type = "tabular_tabular"
     # str: Type of fusion.
     fusion_type = "attention"
 

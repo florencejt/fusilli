@@ -6,7 +6,7 @@ from fusilli.utils.model_chooser import import_chosen_fusion_models
 from fusilli.fusionmodels.base_model import ParentFusionModel
 
 fusion_models = import_chosen_fusion_models({
-    "modality_type": ["tab_img"],
+    "modality_type": ["tabular_image"],
 })
 
 fusion_model_names = [model.__name__ for model in fusion_models]
@@ -22,7 +22,7 @@ def test_ConcatImageMapsTabularData():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "Concatenating tabular data with image feature maps"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "tab_img"
+    assert test_model.modality_type == "tabular_image"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
@@ -65,7 +65,7 @@ def test_ConcatImageMapsTabularMaps():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "Concatenating tabular and image feature maps"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "tab_img"
+    assert test_model.modality_type == "tabular_image"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
@@ -107,7 +107,7 @@ def test_ImageChannelWiseMultiAttention():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "Channel-wise Image attention"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "tab_img"
+    assert test_model.modality_type == "tabular_image"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "attention"
 
@@ -149,7 +149,7 @@ def test_CrossmodalMultiheadAttention():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "Crossmodal multi-head attention"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "tab_img"
+    assert test_model.modality_type == "tabular_image"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "attention"
 
@@ -191,7 +191,7 @@ def test_ImageDecision():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "Image decision fusion"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "tab_img"
+    assert test_model.modality_type == "tabular_image"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
@@ -238,7 +238,7 @@ def test_ConcatImgLatentTabDoubleTrain():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "Pretrained Latent Image + Tabular Data"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "tab_img"
+    assert test_model.modality_type == "tabular_image"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "subspace"
     assert hasattr(test_model, "subspace_method")
@@ -284,7 +284,7 @@ def test_ConcatImgLatentTabDoubleLoss():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "Trained Together Latent Image + Tabular Data"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "tab_img"
+    assert test_model.modality_type == "tabular_image"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "subspace"
 
@@ -333,7 +333,7 @@ def test_DAETabImgMaps():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "Denoising tabular autoencoder with image maps"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "tab_img"
+    assert test_model.modality_type == "tabular_image"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "subspace"
     assert hasattr(test_model, "subspace_method")

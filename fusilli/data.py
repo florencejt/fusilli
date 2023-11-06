@@ -316,7 +316,7 @@ class LoadDatasets:
 
         return dataset, [None, None, img_dim]
 
-    def load_both_tabular(self):
+    def load_tabular_tabularular(self):
         """
         Loads the tabular1 and tabular2 multimodal dataset
 
@@ -471,10 +471,10 @@ class TrainTestDataModule(pl.LightningDataModule):
             "tabular1": LoadDatasets(self.sources, image_downsample_size).load_tabular1,
             "tabular2": LoadDatasets(self.sources, image_downsample_size).load_tabular2,
             "img": LoadDatasets(self.sources, image_downsample_size).load_img,
-            "both_tab": LoadDatasets(
+            "tabular_tabular": LoadDatasets(
                 self.sources, image_downsample_size
-            ).load_both_tabular,
-            "tab_img": LoadDatasets(
+            ).load_tabular_tabularular,
+            "tabular_image": LoadDatasets(
                 self.sources, image_downsample_size
             ).load_tab_and_img,
         }
@@ -734,10 +734,10 @@ class KFoldDataModule(pl.LightningDataModule):
                 self.sources, self.image_downsample_size
             ).load_tabular2,
             "img": LoadDatasets(self.sources, self.image_downsample_size).load_img,
-            "both_tab": LoadDatasets(
+            "tabular_tabular": LoadDatasets(
                 self.sources, self.image_downsample_size
-            ).load_both_tabular,
-            "tab_img": LoadDatasets(
+            ).load_tabular_tabularular,
+            "tabular_image": LoadDatasets(
                 self.sources, self.image_downsample_size
             ).load_tab_and_img,
         }
@@ -1046,10 +1046,10 @@ class TrainTestGraphDataModule:
                 self.sources, self.image_downsample_size
             ).load_tabular2,
             "img": LoadDatasets(self.sources, self.image_downsample_size).load_img,
-            "both_tab": LoadDatasets(
+            "tabular_tabular": LoadDatasets(
                 self.sources, self.image_downsample_size
-            ).load_both_tabular,
-            "tab_img": LoadDatasets(
+            ).load_tabular_tabularular,
+            "tabular_image": LoadDatasets(
                 self.sources, self.image_downsample_size
             ).load_tab_and_img,
         }
@@ -1200,10 +1200,10 @@ class KFoldGraphDataModule:
                 self.sources, self.image_downsample_size
             ).load_tabular2,
             "img": LoadDatasets(self.sources, self.image_downsample_size).load_img,
-            "both_tab": LoadDatasets(
+            "tabular_tabular": LoadDatasets(
                 self.sources, self.image_downsample_size
-            ).load_both_tabular,
-            "tab_img": LoadDatasets(
+            ).load_tabular_tabularular,
+            "tabular_image": LoadDatasets(
                 self.sources, self.image_downsample_size
             ).load_tab_and_img,
         }

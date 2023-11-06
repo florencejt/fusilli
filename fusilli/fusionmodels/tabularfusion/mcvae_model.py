@@ -360,7 +360,7 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
     # str: Name of the method.
     method_name = "MCVAE Tabular"
     # str: Type of modality.
-    modality_type = "both_tab"
+    modality_type = "tabular_tabular"
     # str: Type of fusion.
     fusion_type = "subspace"
     # class: Subspace method class.

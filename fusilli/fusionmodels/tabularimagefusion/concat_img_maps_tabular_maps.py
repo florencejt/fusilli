@@ -40,7 +40,7 @@ class ConcatImageMapsTabularMaps(ParentFusionModel, nn.Module):
     # str: Name of the method.
     method_name = "Concatenating tabular and image feature maps"
     # str: Type of modality.
-    modality_type = "tab_img"
+    modality_type = "tabular_image"
     # str: Type of fusion.
     fusion_type = "operation"
 

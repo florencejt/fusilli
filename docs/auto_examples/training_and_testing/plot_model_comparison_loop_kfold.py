@@ -70,7 +70,7 @@ from IPython.utils import io  # for hiding the tqdm progress bar
 # We're importing all the fusion models that use only tabular data for this example (either uni-modal or multi-modal).
 
 model_conditions = {
-    "modality_type": ["tabular1", "tabular2", "both_tab"],
+    "modality_type": ["tabular1", "tabular2", "tabular_tabular"],
 }
 
 fusion_models = import_chosen_fusion_models(model_conditions)

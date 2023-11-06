@@ -77,7 +77,7 @@ def test_get_data_module_custom(create_test_files):
 
     fusion_model = MockFusionModel(
         fusion_type="attention",
-        modality_type="tab_img",
+        modality_type="tabular_image",
         graph_maker=None,
     )
 
@@ -108,7 +108,7 @@ def test_get_k_fold_data_module_custom(create_test_files):
 
     fusion_model = MockFusionModel(
         fusion_type="operation",
-        modality_type="both_tab",
+        modality_type="tabular_tabular",
         graph_maker=None,
     )
 
@@ -138,7 +138,7 @@ def test_get_graph_data_module(create_test_files):
 
     fusion_model = MockFusionModel(
         fusion_type="graph",
-        modality_type="both_tab",
+        modality_type="tabular_tabular",
         graph_maker=MockGraphMakerModule,
     )
 
@@ -167,7 +167,7 @@ def test_get_kfold_graph_data_module(create_test_files):
 
     fusion_model = MockFusionModel(
         fusion_type="graph",
-        modality_type="both_tab",
+        modality_type="tabular_tabular",
         graph_maker=MockGraphMakerModule,
     )
 
@@ -200,7 +200,7 @@ def test_optional_suffix(create_optional_suffix_files):
 
     fusion_model = MockFusionModel(
         fusion_type="attention",
-        modality_type="tab_img",
+        modality_type="tabular_image",
         graph_maker=None,
     )
 

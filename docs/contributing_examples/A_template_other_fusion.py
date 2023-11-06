@@ -73,7 +73,7 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
 # Each model has to have the following attributes at the class level (i.e. outside of the ``__init__()`` function and accessable without having to call ``TemplateFusionModel()``):
 #
 # * ``method_name`` : a string of the method name. This can be a better description of the method than the class name. For example, the class name might be ``ConcatTabularData`` but the method name might be ``Concatenation of tabular data``.
-# * ``modality_type`` : a string containing the type of modality, which is one of the following: ``tabular1``, ``tabular2``, ``both_tab``, ``tab_img``, ``img``.
+# * ``modality_type`` : a string containing the type of modality, which is one of the following: ``tabular1``, ``tabular2``, ``tabular_tabular``, ``tab_img``, ``img``.
 # * ``fusion_type`` : a string containing the type of fusion, which is one of the following: ``operation``, ``attention``, ``tensor``, ``graph``, ``subspace``. To find out more about the different types of fusion, please refer to the :ref:`fusion-model-explanations` section.
 #
 # .. note::
@@ -84,7 +84,7 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
     # str: name of the method
     method_name = "Template fusion model"
     # str: modality type
-    modality_type = "both_tab"  # or "tabular1", "tabular2", "both_tab", "tab_img", "img"
+    modality_type = "tabular_tabular"  # or "tabular1", "tabular2", "tabular_tabular", "tabular_image", "img"
     # str: fusion type
     fusion_type = "attention"  # or "operation", "tensor", "graph", "subspace"
 
@@ -139,7 +139,7 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
     # str: name of the method
     method_name = "Template fusion model"
     # str: modality type
-    modality_type = "both_tab"  # or "tabular1", "tabular2", "both_tab", "tab_img", "img"
+    modality_type = "tabular_tabular"  # or "tabular1", "tabular2", "tabular_tabular", "tabular_image", "img"
     # str: fusion type
     fusion_type = "attention"  # or "operation", "tensor", "graph", "subspace"
 
@@ -204,7 +204,7 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
     # str: name of the method
     method_name = "Template fusion model"
     # str: modality type
-    modality_type = "both_tab"  # or "tabular1", "tabular2", "both_tab", "tab_img", "img"
+    modality_type = "tabular_tabular"  # or "tabular1", "tabular2", "tabular_tabular", "tabular_image", "img"
     # str: fusion type
     fusion_type = "attention"  # or "operation", "tensor", "graph", "subspace"
 
@@ -368,7 +368,7 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
     # str: name of the method
     method_name = "Template fusion model"
     # str: modality type
-    modality_type = "both_tab"  # or "tabular1", "tabular2", "both_tab", "tab_img", "img"
+    modality_type = "tabular_tabular"  # or "tabular1", "tabular2", "tabular_tabular", "tabular_image", "img"
     # str: fusion type
     fusion_type = "attention"  # or "operation", "tensor", "graph", "subspace"
 

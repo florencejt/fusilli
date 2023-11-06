@@ -728,7 +728,7 @@ def model_instance_denoising_autoencoder_subspace_method_2D(create_test_files):
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     batch_size = 8
     example_fusion_model = Mock()
-    example_fusion_model.modality_type = "tab_img"
+    example_fusion_model.modality_type = "tabular_image"
 
     # Initialize the TrainTestDataModule
     dm = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
@@ -753,7 +753,7 @@ def model_instance_denoising_autoencoder_subspace_method_3D(create_test_files):
     sources = [tabular1_csv, tabular2_csv, image_torch_file_3d]
     batch_size = 8
     example_fusion_model = Mock()
-    example_fusion_model.modality_type = "tab_img"
+    example_fusion_model.modality_type = "tabular_image"
 
     # Initialize the TrainTestDataModule
     dm = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
@@ -778,7 +778,7 @@ def model_instance_concat_img_latent_tab_subspace_method_2D(create_test_files):
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     batch_size = 8
     example_fusion_model = Mock()
-    example_fusion_model.modality_type = "tab_img"
+    example_fusion_model.modality_type = "tabular_image"
 
     # Initialize the TrainTestDataModule
     dm = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
@@ -803,7 +803,7 @@ def model_instance_concat_img_latent_tab_subspace_method_3D(create_test_files):
     sources = [tabular1_csv, tabular2_csv, image_torch_file_3d]
     batch_size = 8
     example_fusion_model = Mock()
-    example_fusion_model.modality_type = "tab_img"
+    example_fusion_model.modality_type = "tabular_image"
 
     # Initialize the TrainTestDataModule
     datamodule = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
@@ -828,7 +828,7 @@ def model_instance_MCVAESubspaceMethod(create_test_files):
     sources = [tabular1_csv, tabular2_csv, image_torch_file_3d]
     batch_size = 8
     example_fusion_model = Mock()
-    example_fusion_model.modality_type = "both_tab"
+    example_fusion_model.modality_type = "tabular_tabular"
 
     # Initialize the TrainTestDataModule
     datamodule = TrainTestDataModule(params, example_fusion_model, sources, batch_size)

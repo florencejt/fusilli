@@ -115,7 +115,7 @@ def get_models(conditions_dict, fusion_model_dict=fusion_model_dict):
         Accepted features and accepted conditions:
 
         - "fusion_type": "unimodal", "operation", "attention", "subspace", "graph", or "all"
-        - "modality_type": "tabular1", "tabular2", "img", "both_tab", "tab_img", or "all"
+        - "modality_type": "tabular1", "tabular2", "img", "tabular_tabular", "tabular_image", or "all"
         - "method_name": any method name currently implemented (e.g. "Tabular decision"), or "all"
         - "class_name": any model name currently implemented (e.g. "TabularDecision"), or "all"
 
@@ -141,7 +141,7 @@ def get_models(conditions_dict, fusion_model_dict=fusion_model_dict):
 
         - "method_name": name of the model (e.g. "Tabular decision")
         - "fusion_type": type of fusion (e.g. "operation")
-        - "modality_type": type of modality (e.g. "both_tab")
+        - "modality_type": type of modality (e.g. "tabular_tabular")
         - "class_name": name of the class (e.g. "TabularDecision")
         - "method_path": path to the method's py file (e.g. "fusilli.fusionmodels.tabular_decision")
 
@@ -157,7 +157,7 @@ def get_models(conditions_dict, fusion_model_dict=fusion_model_dict):
         "graph",
         "tensor",
     ]
-    valid_modality_types = ["tabular1", "tabular2", "img", "both_tab", "tab_img"]
+    valid_modality_types = ["tabular1", "tabular2", "img", "tabular_tabular", "tabular_image"]
 
     fusion_models = all_model_importer(fusion_model_dict)
 
@@ -268,7 +268,7 @@ def import_chosen_fusion_models(model_conditions):
         Accepted features and accepted conditions:
 
         - "fusion_type": "unimodal", "operation", "attention", "subspace", "graph", or "all"
-        - "modality_type": "tabular1", "tabular2", "img", "both_tab", "tab_img", or "all"
+        - "modality_type": "tabular1", "tabular2", "img", "tabular_tabular", "tabular_image", or "all"
         - "method_name": any method name currently implemented (e.g. "Tabular decision"), or "all"
         - "class_name": any model name currently implemented (e.g. "TabularDecision"), or "all"
 

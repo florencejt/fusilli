@@ -28,7 +28,7 @@ def create_graph_data_module(create_test_files):
 
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     example_fusion_model = Mock()
-    example_fusion_model.modality_type = "both_tab"
+    example_fusion_model.modality_type = "tabular_tabular"
 
     data_module = KFoldGraphDataModule(
         params,
@@ -94,5 +94,5 @@ def test_get_lightning_module(create_graph_data_module):
         assert lightning_module is not None
         assert lightning_module.data is not None
         assert (
-            type(lightning_module) == torch_geometric.data.lightning.LightningNodeData
+                type(lightning_module) == torch_geometric.data.lightning.LightningNodeData
         )

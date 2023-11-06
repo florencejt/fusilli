@@ -26,10 +26,11 @@ def create_graph_data_module(create_test_files):
 
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     batch_size = 23
-    # modality_type = "both_tab"
+
+    # modality_type = "tabular_tabular"
 
     class example_fusion_model:
-        modality_type = "both_tab"
+        modality_type = "tabular_tabular"
 
         def __init__(self):
             pass

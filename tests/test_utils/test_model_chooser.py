@@ -51,12 +51,12 @@ def test_import_all_model_importer(mock_import_module):
 
     mock_module4 = Mock()
     mock_module4.Model4 = Mock(
-        __name__="Model4", modality_type="both_tab", fusion_type="subspace"
+        __name__="Model4", modality_type="tabular_tabular", fusion_type="subspace"
     )
 
     mock_module5 = Mock()
     mock_module5.Model5 = Mock(
-        __name__="Model5", modality_type="both_tab", fusion_type="attention"
+        __name__="Model5", modality_type="tabular_tabular", fusion_type="attention"
     )
 
     mock_import_module.side_effect = [
@@ -98,12 +98,12 @@ def test_get_models(mock_import_module):
 
     mock_module4 = Mock()
     mock_module4.Model4 = Mock(
-        __name__="Model4", modality_type="both_tab", fusion_type="subspace"
+        __name__="Model4", modality_type="tabular_tabular", fusion_type="subspace"
     )
 
     mock_module5 = Mock()
     mock_module5.Model5 = Mock(
-        __name__="Model5", modality_type="both_tab", fusion_type="attention"
+        __name__="Model5", modality_type="tabular_tabular", fusion_type="attention"
     )
 
     mock_import_module.side_effect = [
@@ -114,9 +114,9 @@ def test_get_models(mock_import_module):
         mock_module5,
     ]
 
-    # 2 models have modality type of both_tab
+    # 2 models have modality type of tabular_tabular
     conditions_dict = {
-        "modality_type": "both_tab",
+        "modality_type": "tabular_tabular",
     }
 
     filtered_models = get_models(conditions_dict, fusion_model_dict)
@@ -130,16 +130,16 @@ def test_get_models(mock_import_module):
         mock_module5,
     ]
 
-    # 1 model has modality type of both_tab and fusion type of attention
+    # 1 model has modality type of tabular_tabular and fusion type of attention
     conditions_dict = {
-        "modality_type": "both_tab",
+        "modality_type": "tabular_tabular",
         "fusion_type": "attention",
     }
 
     filtered_models = get_models(conditions_dict, fusion_model_dict)
     assert len(filtered_models) == 1
 
-    # 0 models have modality type of both_tab and fusion type of tensor
+    # 0 models have modality type of tabular_tabular and fusion type of tensor
     mock_import_module.side_effect = [
         mock_module1,
         mock_module2,
@@ -149,7 +149,7 @@ def test_get_models(mock_import_module):
     ]
 
     conditions_dict = {
-        "modality_type": "both_tab",
+        "modality_type": "tabular_tabular",
         "fusion_type": "tensor",
     }
 
@@ -165,7 +165,7 @@ def test_get_models(mock_import_module):
         mock_module5,
     ]
     conditions_dict = {
-        "modality_type": "both_tab",
+        "modality_type": "tabular_tabular",
         "fusion_type": "tensor",
         "invalid_feature": "invalid_value",
     }
@@ -182,7 +182,7 @@ def test_get_models(mock_import_module):
         mock_module5,
     ]
     conditions_dict = {
-        "modality_type": "both_tab",
+        "modality_type": "tabular_tabular",
         "fusion_type": "invalid_fusion_type",
     }
 
@@ -230,12 +230,12 @@ def test_get_models(mock_import_module):
         mock_module5,
     ]
     conditions_dict = {
-        "modality_type": "both_tab",
+        "modality_type": "tabular_tabular",
         "fusion_type": "all",
     }
 
     filtered_models = get_models(conditions_dict, fusion_model_dict)
-    assert len(filtered_models) == 2  # 2 models have modality type of both_tab
+    assert len(filtered_models) == 2  # 2 models have modality type of tabular_tabular
 
 
 if __name__ == "__main__":

@@ -13,7 +13,8 @@ from fusilli.fusionmodels.tabularfusion.mcvae_model import MCVAESubspaceMethod
 from fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps import (
     DenoisingAutoencoder,
     ImgUnimodalDAE,
-    denoising_autoencoder_subspace_method)
+    denoising_autoencoder_subspace_method
+)
 from fusilli.fusionmodels.tabularfusion.edge_corr_gnn import EdgeCorrGraphMaker
 
 from ..test_data.test_TrainTestDataModule import create_test_files
@@ -21,12 +22,13 @@ from fusilli.data import TrainTestDataModule
 # from fusilli.utils.mcvae.src.mcvae.models import Mcvae
 # from fusilli.utils.training_utils import init_trainer
 from fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain import (
-    concat_img_latent_tab_subspace_method, ImgLatentSpace)
+    concat_img_latent_tab_subspace_method, ImgLatentSpace
+)
 
 
 class MockFusionModel:
     fusion_type = "subspace"
-    modality_type = "both_tab"
+    modality_type = "tabular_tabular"
 
     def __init__(self):
         pass
@@ -69,7 +71,7 @@ def sample_datamodule(create_test_files):
 
 class MockFusionTabImgModel:
     fusion_type = "subspace"
-    modality_type = "tab_img"
+    modality_type = "tabular_image"
 
     def __init__(self):
         pass

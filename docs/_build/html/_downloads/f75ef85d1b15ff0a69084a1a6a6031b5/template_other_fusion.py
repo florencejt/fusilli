@@ -55,7 +55,7 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
     # str: name of the method
     method_name = "Template fusion model"
     # str: modality type
-    modality_type = "both_tab"  # or "tabular1", "tabular2", "both_tab", "tab_img"
+    modality_type = "tabular_tabular"  # or "tabular1", "tabular2", "tabular_tabular", "tabular_image"
     # str: fusion type
     fusion_type = "attention"  # or "operation", "tensor", "graph", "subspace"
 
@@ -112,7 +112,7 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
         # would be the sum of the number of output features.
         # The linear layer we're looking for is the last linear layer (first element in final module_dict layer list.)
         self.fused_dim = (
-            self.mod1_layers[-1][0].out_features + self.mod2_layers[-1][0].out_features
+                self.mod1_layers[-1][0].out_features + self.mod2_layers[-1][0].out_features
         )
 
         # Setting the fused layers: how do you want to fuse the modalities?

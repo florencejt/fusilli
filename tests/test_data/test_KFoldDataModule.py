@@ -21,7 +21,7 @@ def create_kfold_data_module(create_test_files):
     batch_size = 23
 
     example_fusion_model = Mock()
-    example_fusion_model.modality_type = "tab_img"
+    example_fusion_model.modality_type = "tabular_image"
 
     data_module = KFoldDataModule(
         params,

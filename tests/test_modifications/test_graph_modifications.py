@@ -31,7 +31,7 @@ def model_instance_EdgeCorrGraphMaker(create_test_files):
 
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     example_fusion_model = Mock()
-    example_fusion_model.modality_type = "both_tab"
+    example_fusion_model.modality_type = "tabular_tabular"
 
     # Initialize the TrainTestDataModule
     dm = TrainTestGraphDataModule(
@@ -112,8 +112,8 @@ def test_correct_modification(model_name, model_fixture, request):
 
     if hasattr(original_model, "final_prediction"):
         assert (
-            modified_model.final_prediction[-1].out_features
-            == original_model.final_prediction[-1].out_features
+                modified_model.final_prediction[-1].out_features
+                == original_model.final_prediction[-1].out_features
         )
 
 
@@ -121,12 +121,12 @@ def test_correct_modification(model_name, model_fixture, request):
 @pytest.mark.parametrize("model_name, model_fixture", model_instances)
 def test_incorrect_data_types_modification(model_name, model_fixture, request):
     for key, modification in incorrect_data_type_modifications.get(
-        model_name, {}
+            model_name, {}
     ).items():
         individual_modification = {model_name: {key: modification}}
 
         with pytest.raises(
-            TypeError, match="Incorrect data type for the modifications"
+                TypeError, match="Incorrect data type for the modifications"
         ):
             model_modifier.modify_model_architecture(
                 request.getfixturevalue(model_fixture),
@@ -138,7 +138,7 @@ def test_incorrect_data_types_modification(model_name, model_fixture, request):
 @pytest.mark.parametrize("model_name, model_fixture", model_instances)
 def test_incorrect_data_ranges_modification(model_name, model_fixture, request):
     for key, modification in incorrect_data_ranges_modifications.get(
-        model_name, {}
+            model_name, {}
     ).items():
         individual_modification = {model_name: {key: modification}}
 

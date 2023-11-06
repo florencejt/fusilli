@@ -112,7 +112,7 @@ def test_val_dataloader(create_test_files):
     batch_size = 23
 
     example_fusion_model = Mock()
-    example_fusion_model.modality_type = "tab_img"
+    example_fusion_model.modality_type = "tabular_image"
 
     # Initialize the TrainTestDataModule
     datamodule = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
@@ -156,7 +156,7 @@ def test_setup_calls_subspace_method(create_test_files):
     batch_size = 23
 
     example_fusion_model = Mock()
-    example_fusion_model.modality_type = "tab_img"
+    example_fusion_model.modality_type = "tabular_image"
 
     with patch(
             "fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.denoising_autoencoder_subspace_method",

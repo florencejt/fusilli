@@ -10,7 +10,7 @@ from fusilli.utils.model_chooser import import_chosen_fusion_models
 from fusilli.fusionmodels.base_model import ParentFusionModel
 
 fusion_models = import_chosen_fusion_models({
-    "modality_type": ["both_tab"],
+    "modality_type": ["tabular_tabular"],
 })
 
 fusion_model_names = [model.__name__ for model in fusion_models]
@@ -25,7 +25,7 @@ def test_ConcatTabularFeatureMaps():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "Concatenating tabular feature maps"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "both_tab"
+    assert test_model.modality_type == "tabular_tabular"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
@@ -75,7 +75,7 @@ def test_ConcatTabularData():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "Concatenating tabular data"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "both_tab"
+    assert test_model.modality_type == "tabular_tabular"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
@@ -124,7 +124,7 @@ def test_TabularChannelWiseMultiAttention():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "Channel-wise multiplication net (tabular)"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "both_tab"
+    assert test_model.modality_type == "tabular_tabular"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "attention"
 
@@ -174,7 +174,7 @@ def test_TabularCrossmodalMultiheadAttention():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "Tabular Crossmodal multi-head attention"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "both_tab"
+    assert test_model.modality_type == "tabular_tabular"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "attention"
 
@@ -224,7 +224,7 @@ def test_TabularDecision():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "Tabular decision"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "both_tab"
+    assert test_model.modality_type == "tabular_tabular"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
@@ -276,7 +276,7 @@ def test_MCVAE_tab():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "MCVAE Tabular"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "both_tab"
+    assert test_model.modality_type == "tabular_tabular"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "subspace"
     assert hasattr(test_model, "subspace_method")
@@ -316,7 +316,7 @@ def test_EdgeCorrGNN():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "Edge Correlation GNN"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "both_tab"
+    assert test_model.modality_type == "tabular_tabular"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "graph"
     assert hasattr(test_model, "graph_maker")

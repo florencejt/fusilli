@@ -46,7 +46,7 @@ class TemplateSubspaceFusionModel(ParentFusionModel):
     """
 
     method_name = "Template Subspace Fusion Model"
-    modality_type = "tab_img"
+    modality_type = "tabular_image"
     fusion_type = "subspace"
 
     def __init__(self, pred_type, data_dims, params):
@@ -351,7 +351,7 @@ def convert_to_latent(self, test_dataset):
 
 class TemplateSubspaceFusionModel(ParentFusionModel, nn.Module):
     method_name = "Template Subspace Fusion Model - with pre-trained subspace method"
-    modality_type = "both_tab"
+    modality_type = "tabular_tabular"
     fusion_type = "subspace"
 
     # class-level attribute pointing to the subspace method class
