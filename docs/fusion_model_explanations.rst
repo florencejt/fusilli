@@ -7,6 +7,14 @@ Below are explanations and diagrams explaining the fusion models available in th
 Some of the models are inspired by papers in the literature, so links to the papers are provided
 where appropriate.
 
+.. figure:: _static/cui_diagram.jpeg
+    :align: center
+    :width: 100%
+    :alt: Model fusion diagram
+    :caption: The diagram above shows the categorisation of the fusion models available in this library. This image has been taken from `Cui et al. (2023) <https://iopscience.iop.org/article/10.1088/2516-1091/acc2fe>.`_
+
+The table below shows the categorisation of the models available in this library. It is important to note that some of the methods in this library can probably be categorised in more than one way. For example, the :class:`.ConcatImgLatentTabDoubleTrain` model can be considered both an subspace-based model and an operation-based model. This is because it uses an autoencoder to learn an image latent space, which is then concatenated with the tabular data. However, the model also uses an operation (concatenation) to combine the modalities. Therefore, it is important to understand the categorisation of the models as a guide, rather than a strict rule.
+
 .. list-table::
     :widths: 20 80
     :header-rows: 1
@@ -14,20 +22,19 @@ where appropriate.
     * - Fusion type
       - Description
     * - ``unimodal``
-      -
+      - These models use only one modality (e.g. tabular data or images) to make a prediction.
     * - ``operation``
-      -
+      - Operation-based models use operations to combine the modalities. For example, concatenation, element-wise summation, and element-wise multiplication. These methods are easy to implement and are often used as baselines.
     * - ``attention``
-      -
+      - Attention-based models use attention mechanisms to combine the modalities. Attention mechanisms work by learning a weight for each modality's importance, which is then used to combine the modalities.
     * - ``subspace``
-      -
+      - Subspace-based models try to learn a joint latent space for the modalities. This can be done simply by looking at the correlations between the modalities, or by using a variational autoencoder (VAE) to learn the latent space through trying to reconstruct the modalities using a lower-dimensional representation.
     * - ``graph``
-      -
+      - Graph-based models look at the interactions between nodes in a graph, where the edges can be learned as similarities between nodes, for example.
     * - ``tensor``
-      -
+      - Tensor-based models use tensor operations to combine the modalities, such as outer products to find inter-modal and intra-modal interactions.
 
 
-The categorisation of these methods is taken from Cui et al [link to paper here].
 
 Operation-based
 ---------------
@@ -35,13 +42,17 @@ Operation-based
 :class:`.ConcatTabularFeatureMaps`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+This tabular-tabular fusion model works by passing each tabular modality through its own set of fully-connected layers, and then concatenating the outputs of these layers together. The concatenated features are then passed through another set of fully-connected layers to make a prediction.
+
 .. image:: _static/ConcatTabularFeatureMaps.png
     :align: left
 
 -----
 
 :class:`.ConcatTabularData`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This tabular-tabular fusion model works by concatenating the tabular data together, and then passing the concatenated features through a set of fully-connected layers to make a prediction.
 
 .. image:: _static/ConcatTabularData.png
     :align: left
@@ -51,6 +62,8 @@ Operation-based
 :class:`.TabularDecision`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+This tabular-tabular fusion model works by passing each tabular modality through its own set of fully-connected layers to make a prediction for each modality. The two predictions are then averaged to make a final prediction. This is known as a "decision-level fusion" method.
+
 .. image:: _static/TabularDecision.png
     :align: left
 
@@ -58,6 +71,8 @@ Operation-based
 
 :class:`.ConcatImageMapsTabularData`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This tabular-image fusion model works by passing the image through a convolutional neural network (CNN) to extract features from the image. The tabular data is then concatenated with the image features, and the concatenated features are passed through a set of fully-connected layers to make a prediction.
 
 .. image:: _static/ConcatImageMapsTabularData.png
     :align: left
@@ -67,6 +82,9 @@ Operation-based
 :class:`.ConcatImageMapsTabularMaps`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+This tabular-image fusion model works by passing the image through a CNN to extract features from the image. The tabular data is also passed through its own fully-connected layers to get tabular feature maps. The tabular features are then concatenated with the image features, and the concatenated features are passed through a set of fully-connected layers to make a prediction.
+
+
 .. image:: _static/ConcatImageMapsTabularMaps.png
     :align: left
 
@@ -74,6 +92,9 @@ Operation-based
 
 :class:`.ImageDecision`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This tabular-image fusion model works by passing each modality through its own network (fully-connected for tabular, CNN for image) to create their own predictions. The two predictions are then averaged to make a final prediction.
+This is known as a "decision-level fusion" method.
 
 .. image:: _static/ImageDecision.png
     :align: left
@@ -85,6 +106,12 @@ Attention-based
 :class:`.TabularChannelWiseMultiAttention`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+This tabular-tabular fusion model works by passing each tabular modality through its own set of fully-connected layers.
+At each layer, the feature maps from the first tabular modality are multiplied into the feature maps from the second tabular modality, effectively modulating the feature maps from the second modality with the feature maps from the first modality (an attention mechanism).
+The final second tabular feature maps are then passed through a set of fully-connected layers to make a prediction.
+
+This model is inspired by `Duanmu et al. (2020) <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9821469/#:~:text=Deep%20learning%20using%20longitudinal%20multiparametric,%2C%20and%20mid%2Dtreatment%20adjustment.>`_ :  *Deep learning prediction of pathological complete response, residual cancer burden, and progression-free survival in breast cancer patients*.
+
 .. image:: _static/TabularChannelwiseAttention.png
     :align: left
 
@@ -92,6 +119,12 @@ Attention-based
 
 :class:`.TabularCrossmodalMultiheadAttention`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This tabular-tabular fusion model works by passing each tabular modality through its own set of fully-connected layers.
+Self attention is applied to each modality, and then crossmodal attention is applied to the two modalities.
+The output of the crossmodal attention is then passed through a fully-connected layer to make a prediction.
+
+This model is inspired by MADDi - Multimodal Alzheimer's Disease Diagnosis Framework by `Golovankesky et al. (2022) <https://arxiv.org/abs/2206.08826>`_. They also have their own `code <https://github.com/rsinghlab/MADDi>`_ available.
 
 .. image:: _static/TabularCrossmodalAttention.png
     :align: left
@@ -101,6 +134,8 @@ Attention-based
 :class:`.CrossmodalMultiheadAttention`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+This tabular-image fusion model works the same as the :class:`.TabularCrossmodalMultiheadAttention` model, except that the tabular modality is passed through a fully-connected layer, and the image modality is passed through a CNN.
+
 .. image:: _static/CrossmodalMultiheadAttention.png
     :align: left
 
@@ -108,6 +143,8 @@ Attention-based
 
 :class:`.ImageChannelWiseMultiAttention`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This tabular-image model works the same as the :class:`.TabularChannelWiseMultiAttention` model, except that the tabular modality is passed through a fully-connected layer, and the image modality is passed through a CNN.
 
 .. image:: _static/ImageChannelwiseMultiheadAttention.png
     :align: left
@@ -120,6 +157,12 @@ Subspace-based
 :class:`.MCVAE_tab`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+This subspace-based model uses the Multi-channel Variational Autoencoder (MCVAE) by `Antelmi et al. (2019) <https://proceedings.mlr.press/v97/antelmi19a.html>`_.
+This model works by passing each tabular modality as a separate 'channel' into a VAE with a modified loss function, which is then used to learn a joint latent space for the modalities.
+The 1-dimensional joint latent space is then passed through a set of fully-connected layers to make a prediction.
+
+For many more examples of multi-modal VAE-based models, I *highly recommend* looking at the Python library `Multi-view-AE <https://github.com/alawryaguila/multi-view-AE>`_ by Ana Aguila-Lawry et al.
+
 .. image:: _static/MCVAE.png
     :align: left
 
@@ -127,6 +170,11 @@ Subspace-based
 
 :class:`.ConcatImgLatentTabDoubleLoss`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This tabular-image model works by passing the image through an convolutional autoencoder to learn the latent space of the image.
+The tabular data is concatenated with the image latent space, and the concatenated features are passed through a set of fully-connected layers to make a prediction.
+
+The reconstruction loss of the autoencoder is added to the loss function of the model, to encourage the model to learn a good latent space for the image. This means that the image autoencoder and the prediction model are trained at the same time.
 
 .. image:: _static/ImgLatentDoubleLoss.png
     :align: left
@@ -136,6 +184,8 @@ Subspace-based
 :class:`.ConcatImgLatentTabDoubleTrain`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Very similar to the :class:`.ConcatImgLatentTabDoubleLoss` model, except that the image autoencoder is trained separately to the prediction model.
+
 .. image:: _static/ImgLatentDoubleTrain.png
     :align: left
 
@@ -144,6 +194,13 @@ Subspace-based
 :class:`.DAETabImgMaps`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+This tabular-image fusion model is inspired by `Zhao et al. (2022) <https://pubmed.ncbi.nlm.nih.gov/36553200/>`_ : *A Multimodal Deep Learning Approach to Predicting Systemic Diseases from Oral Conditions*.
+
+The tabular data is input into a denoising autoencoder, which is upsamples the tabular data and uses dropout at the beginning of the network to make the model more robust to noise and missing data (simulating a common problem in medical data).
+The image data is passed through a CNN to make a prediction, to learn prediction-relevant features from the image. The final two convolutional layers of the CNN are then flattened and concatenated with the upsampled tabular data, and the concatenated features are passed through a set of fully-connected layers to make a prediction.
+
+The denoising autoencoder and the image CNN are trained separately from the prediction model, and the final prediction model is trained on the concatenated features.
+
 .. image:: _static/DAETabImgMaps.png
     :align: left
 
@@ -151,7 +208,7 @@ Subspace-based
 Tensor-based
 ------------
 
-
+Incoming!
 
 Graph-based
 -----------
@@ -159,9 +216,14 @@ Graph-based
 :class:`.EdgeCorrGNN`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+This graph structure of this tabular-tabular model is made by calculating the correlation between the first tabular modality's features, and using the correlation as the edge weights in a graph. If the correlations are less than a certain threshold (default of 0.8), the edge is removed from the graph.
+The node features of the graph are the second tabular modality features. The graph is then passed through a graph neural network (GNN) to make a prediction.
+
+.. note::
+    It is not possible to use this model with any evaluation with completely unseen data, such as in the method :meth:`.RealsVsPreds.from_new_data`.
+
 .. image:: _static/EdgeCorrGNN.png
     :align: left
-
 
 
 -----
@@ -172,6 +234,8 @@ Unimodal
 :class:`.Tabular1Unimodal`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+A simple tabular model that uses a fully-connected network with the first tabular modality to make a prediction.
+
 .. image:: _static/Tabular1Unimodal.png
     :align: left
 
@@ -180,6 +244,8 @@ Unimodal
 :class:`.Tabular2Unimodal`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+A simple tabular model that uses a fully-connected network with the second tabular modality to make a prediction.
+
 .. image:: _static/Tabular2Unimodal.png
     :align: left
 
@@ -187,6 +253,8 @@ Unimodal
 
 :class:`.ImgUnimodal`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A simple image model that uses a convolutional neural network (CNN) with the image modality to make a prediction.
 
 .. image:: _static/ImageUnimodal.png
     :align: left

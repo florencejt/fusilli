@@ -37,6 +37,9 @@ from fusilli.fusionmodels.base_model import ParentFusionModel
 from fusilli.utils import check_model_validity
 
 
+# sphinx_gallery_thumbnail_path = '_static/ConcatTabularFeatureMaps.png'
+
+
 # %%
 # Step 2: Creating the model structure
 # ------------------------------------

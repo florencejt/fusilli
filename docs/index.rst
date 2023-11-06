@@ -41,7 +41,6 @@ Why would you want to use fusilli?
    getting_started
    fusion_model_explanations
    modifying_models
-   contact_me
 
 -----
 

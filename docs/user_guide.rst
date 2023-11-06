@@ -15,20 +15,13 @@ How to install
 
     pip install fusilli
 
-You can also install ``fusilli`` from source:
-
-.. code-block:: bash
-
-    git clone ADDRESS GOES HERE
-    cd fusilli
-    pip install -e .
 
 -----
 
 Data requirements and formats
 ------------------------------
 
-``fusilli`` can be used to fuse tabular data with tabular, or tabular data with images. Your data must be in the
+``fusilli`` can be used to fuse **tabular data with tabular**, or **tabular data with images**. Your data must be in the
 correct format so that the function :func:`fusilli.data.get_data_module` can read it.
 
 The paths to the data source files must be in the params dictionary with the following keys:
@@ -37,9 +30,9 @@ The paths to the data source files must be in the params dictionary with the fol
 - ``tabular2_source`` : path to the second tabular data source
 - ``img_source`` : path to the image data source
 
-If you are only using models that require 1 tabular data source and 1 image data source, you can omit
-``tabular2_source``. Likewise, if you are only using models that require only the tabular data sourcs, you can omit
-``img_source``.
+.. warning::
+
+    Even if you are only using one tabular data source, you must still include the ``tabular2_source`` key in the params. You can set the value to ``""``.
 
 
 Tabular and Tabular
@@ -52,8 +45,8 @@ with the rows in the image data.
 
 Depending on the task (classification or regression), the ``pred_label`` column must contain different types of data:
 
-- ``Classification``: the ``pred_label`` column must contain integers representing the class labels.
-- ``Regression``: the ``pred_label`` column must contain floats representing the predicted values.
+- ``Classification``: the ``pred_label`` column must contain **integers** representing the class labels.
+- ``Regression``: the ``pred_label`` column must contain **floats** representing the predicted values.
 
 **Example of loading two tabular modalities:**
 
@@ -75,8 +68,8 @@ Depending on the task (classification or regression), the ``pred_label`` column 
 Tabular and Image
 ~~~~~~~~~~~~~~~~~~~
 
-The tabular data must be in the format described above. The image data must be in the format of a .pt file with the
-dimensions (num_samples, num_channels, height, width). The number of samples must be the same as the number of rows in
+The tabular data must be in the format described above. The image data must be in the format of a **.pt file** with the
+dimensions ``(num_samples, num_channels, height, width)``. The number of samples must be the same as the number of rows in
 the tabular data. The number of channels, height, and width can be anything, but they must be the same for all images.
 
 For example, for 100 2D 28x28 grey-scale images, my images.pt file would have the dimensions ``(100, 1, 28, 28)``. For
@@ -91,7 +84,7 @@ downsample your 2D images to 16x16, you can do so by calling:
 
     data_module = get_data_module(some_example_model, params, image_downsample_size=(16, 16))
 
-You don't need to specify the number of channels, as the number of channels will be the same as the original image.
+You don't need to specify the number of channels.
 
 **Example of loading tabular and image data**:
 
@@ -115,12 +108,16 @@ How to incorporate external test data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default, models in ``fusilli`` will be trained on the training data and evaluated on the validation data
-(including checkpointing with early stopping). However, if you want to evaluate your model on external test data,
+(including checkpointing with early stopping).
+
+However, if you want to evaluate your model on external test data,
 you can do so by calling the evaluation figures functions with the method ``from_new_data``. For example, you can
 evaluate the model on external test data by calling :func:`fusilli.eval.RealsVsPreds.from_new_data`.
 
 The test data must be in the same format as the training data. The paths to the test data source files must be in the
-params dictionary, like the training data. The keys for the test data must have the same names as the training data
+params dictionary, like the training data.
+
+The keys for the test data must have the same names as the training data
 but include a suffix to differentiate them. The suffix must be the same for all the test data sources. The suffix
 defaults to "_test", but you can change it by passing the ``data_file_suffix`` parameter to the evaluation function.
 
@@ -162,8 +159,8 @@ Some example keys (using ``_testing`` as the suffix) for the test data sources a
 
 -----
 
-How to structure your directories
------------------------------------
+How to structure your experiment space
+---------------------------------------
 
 Fusilli needs a few directories to be set up in order to run. This is because fusilli needs somewhere to save the checkpoints, loss logs, and evaluation figures.
 The paths to these directories will be passed into the fusilli pipeline as elements of a dictionary.

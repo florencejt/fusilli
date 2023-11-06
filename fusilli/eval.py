@@ -199,6 +199,8 @@ class ParentPlotter:
         checkpoint_file_suffix: str, optional
             Suffix that is on the trained model checkpoint files. e.g. "_firsttry". Added by the user.
             Default is None.
+        layer_mods: dict, optional
+            Dictionary of the layer modifications to make to the model.
 
         Returns
         -------
@@ -561,7 +563,7 @@ class RealsVsPreds(ParentPlotter):
 
     @classmethod
     def from_new_data(
-            cls, model_list, params, data_file_suffix="_test", checkpoint_file_suffix=None
+            cls, model_list, params, data_file_suffix="_test", checkpoint_file_suffix=None, layer_mods=None
     ):
         """
 
@@ -585,6 +587,8 @@ class RealsVsPreds(ParentPlotter):
         checkpoint_file_suffix: str, optional
             Suffix that is on the trained model checkpoint files. e.g. "_firsttry". Added by the user.
             Default is None.
+        layer_mods: dict, optional
+            Dictionary of the layer modifications to make to the model.
 
         Returns
         -------
@@ -628,7 +632,7 @@ class RealsVsPreds(ParentPlotter):
                 metrics_per_fold,
                 overall_kfold_metrics,
             ) = cls.get_new_kfold_data(
-                model_list, params, data_file_suffix, checkpoint_file_suffix
+                model_list, params, data_file_suffix, checkpoint_file_suffix, layer_mods
             )
 
             figure = cls.reals_vs_preds_kfold(
@@ -658,7 +662,7 @@ class RealsVsPreds(ParentPlotter):
                 val_preds,
                 metric_values,
             ) = cls.get_new_tt_data(
-                model_list, params, data_file_suffix, checkpoint_file_suffix
+                model_list, params, data_file_suffix, checkpoint_file_suffix, layer_mods
             )
 
             # plot the figure
@@ -1484,7 +1488,7 @@ class ModelComparison(ParentPlotter):
         return figure, df
 
     @classmethod
-    def from_new_data(cls, model_dict, params, data_file_suffix="_test", checkpoint_file_suffix=None):
+    def from_new_data(cls, model_dict, params, data_file_suffix="_test", checkpoint_file_suffix=None, layer_mods=None):
         comparing_models_metrics = {}
 
         if not isinstance(model_dict, dict):
@@ -1544,7 +1548,7 @@ class ModelComparison(ParentPlotter):
                     val_preds,
                     metrics_per_fold,
                     overall_kfold_metrics,
-                ) = cls.get_new_kfold_data(model_list, params, data_file_suffix, checkpoint_file_suffix)
+                ) = cls.get_new_kfold_data(model_list, params, data_file_suffix, checkpoint_file_suffix, layer_mods)
 
                 comparing_models_metrics[model_method_name] = metrics_per_fold
 
@@ -1587,7 +1591,7 @@ class ModelComparison(ParentPlotter):
                     val_reals,
                     val_preds,
                     metric_values,
-                ) = cls.get_new_tt_data(model_list, params, data_file_suffix, checkpoint_file_suffix)
+                ) = cls.get_new_tt_data(model_list, params, data_file_suffix, checkpoint_file_suffix, layer_mods)
 
                 comparing_models_metrics[model_method_name] = metric_values
 
