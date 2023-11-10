@@ -7,6 +7,7 @@ import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch
 # from fusilli.utils.mcvae.src.mcvae.models import Mcvae
+import fusilli.utils.mcvae as mcvae
 from mcvae.models import Mcvae
 from mcvae.models.utils import DEVICE
 # from fusilli.utils.mcvae.src.mcvae.models.utils import DEVICE
