@@ -1363,6 +1363,10 @@ def get_data_module(
         Datamodule for the specified fusion method.
     """
 
+    if params["kfold_flag"] and own_early_stopping_callback is not None:
+        raise ValueError(
+            "Cannot use own early stopping callback with kfold cross validation yet. Working on fixing this currently (Nov 2023)")
+
     data_sources = [
         params[f"tabular1_source{optional_suffix}"],
         params[f"tabular2_source{optional_suffix}"],

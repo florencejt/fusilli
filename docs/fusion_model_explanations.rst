@@ -213,6 +213,8 @@ Incoming!
 
 Graph-based
 -----------
+.. warning::
+    It is not possible to use graph-based models with any evaluation with completely unseen data, such as in the method :meth:`.RealsVsPreds.from_new_data`.
 
 :class:`.EdgeCorrGNN`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -220,10 +222,20 @@ Graph-based
 This graph structure of this tabular-tabular model is made by calculating the correlation between the first tabular modality's features, and using the correlation as the edge weights in a graph. If the correlations are less than a certain threshold (default of 0.8), the edge is removed from the graph.
 The node features of the graph are the second tabular modality features. The graph is then passed through a graph neural network (GNN) to make a prediction.
 
-.. note::
-    It is not possible to use this model with any evaluation with completely unseen data, such as in the method :meth:`.RealsVsPreds.from_new_data`.
-
 .. image:: _static/EdgeCorrGNN.png
+    :align: left
+
+:class:`.AttentionWeightedGNN`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This is a model inspired by method in `Bintsi et al. (2023) <https://arxiv.org/abs/2307.04639>`_ : *Multimodal brain age estimation using interpretable adaptive population-graph learning*.
+In the paper, the method is based on adaptive graph learning. However, the fusilli implementation changes this to a static graph because the adaptive graph learning method is not yet implementable in fusilli.
+
+The attention-weighted GNN works by pretraining a tabular-tabular fusion model, :meth:`.ConcatTabularData`, and then taking the "attention weights" from the model as the final input-sized layer output of the GNN.
+These attention weights are multiplied with the concatenated first and second tabular modalities, and the Euclidean distance between each subject's attention-weighted features is calculated. If the distance between two subjects
+is in the lowest 25% of all distances, an edge is created between the two subjects in the graph. The graph is then passed through a GNN to make a prediction.
+
+.. image:: _static/AttentionWeightedGNN.png
     :align: left
 
 

@@ -68,6 +68,10 @@ fusion_model_dict = [
         "name": "DAETabImgMaps",
         "path": "fusionmodels.tabularimagefusion.denoise_tab_img_maps",
     },
+    {
+        "name": "AttentionWeightedGNN",
+        "path": "fusionmodels.tabularfusion.attention_weighted_GNN",
+    }
 ]
 
 
