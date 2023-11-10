@@ -1,0 +1,3 @@
+[submodule "fusilli/utils/mcvae"]
+	path = fusilli/utils/mcvae
+	url = git@github.com:ggbioing/mcvae.git
