@@ -6,8 +6,10 @@ two types of tabular data.
 import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch
-from fusilli.utils.mcvae.src.mcvae.models import Mcvae
-from fusilli.utils.mcvae.src.mcvae.models.utils import DEVICE
+# from fusilli.utils.mcvae.src.mcvae.models import Mcvae
+from mcvae.models import Mcvae
+from mcvae.models.utils import DEVICE
+# from fusilli.utils.mcvae.src.mcvae.models.utils import DEVICE
 import contextlib
 import pandas as pd
 import numpy as np

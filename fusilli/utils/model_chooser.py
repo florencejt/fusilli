@@ -71,6 +71,9 @@ fusion_model_dict = [
     {
         "name": "AttentionWeightedGNN",
         "path": "fusionmodels.tabularfusion.attention_weighted_GNN",
+    },
+    {
+
     }
 ]
 
