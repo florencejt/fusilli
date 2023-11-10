@@ -20,7 +20,7 @@ keywords= ["multi-modal", "machine learning", "MRI", "data fusion", "multi-view"
 dependencies = [
     "lightning==2.1.0",
     "matplotlib==3.5.3",
-    "numpy==1.25.2",
+    "numpy==1.25.1",
     "pandas==2.0.3",
     "scikit_learn==1.1.3",
     "setuptools==68.2.2",
