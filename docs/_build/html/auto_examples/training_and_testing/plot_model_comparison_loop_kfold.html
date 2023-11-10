@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📊 Training multiple models in a loop: k-fold regression 🚀 &mdash; fusilli  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/fonts.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/florencestheme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/pink_pasta_logo.png"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="📊 Binary Classification: Training a K-Fold Model 🚀" href="plot_one_model_binary_kfold.html" />
+    <link rel="prev" title="Training and testing" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fusilli
+              <img src="../../_static/pink_pasta_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🌸 Table of Contents 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html"><strong>fusilli</strong>: an introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User guide (installation, data requirements, etc.)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">How to quick-run Fusilli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fusion_model_explanations.html">The fusion models: diagrams and explanations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modifying_models.html">How to modify the fusion models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contact_me.html">Contact me</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 Tutorials 🌸</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Training and testing</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">📊 Training multiple models in a loop: k-fold regression 🚀</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#import-fusion-models">1. Import fusion models 🔍</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-the-training-parameters">2. Set the training parameters 🎯</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generating-simulated-data">3. Generating simulated data 🔮</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#training-the-all-the-fusion-models">4. Training the all the fusion models 🏁</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plotting-the-results-of-the-individual-models">5. Plotting the results of the individual models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plotting-comparison-of-the-models">6. Plotting comparison of the models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#saving-the-results-of-the-models">7. Saving the results of the models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plot_one_model_binary_kfold.html">📊 Binary Classification: Training a K-Fold Model 🚀</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_two_models_traintest.html">📈 Regression: Comparing Two Tabular Models Trained on Simulated Data 📊</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../customising_behaviour/index.html">Customising behaviour</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 How to contribute 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing_examples/index.html">Fusion Model Templates</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🌸 API Reference 🌸</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.fusionmodels.html">fusilli.fusionmodels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.data.html">fusilli.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.train.html">fusilli.train</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.eval.html">fusilli.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autosummary/fusilli.utils.html">fusilli.utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fusilli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Training and testing</a></li>
+      <li class="breadcrumb-item active">📊 Training multiple models in a loop: k-fold regression 🚀</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/auto_examples/training_and_testing/plot_model_comparison_loop_kfold.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-training-and-testing-plot-model-comparison-loop-kfold-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="training-multiple-models-in-a-loop-k-fold-regression">
+<span id="sphx-glr-auto-examples-training-and-testing-plot-model-comparison-loop-kfold-py"></span><h1>📊 Training multiple models in a loop: k-fold regression 🚀<a class="headerlink" href="#training-multiple-models-in-a-loop-k-fold-regression" title="Permalink to this heading"></a></h1>
+<p>Welcome to the “Comparing Multiple K-Fold Trained Fusion Models” tutorial! In this tutorial, we’ll explore how to train and compare multiple fusion models for a regression task using k-fold cross-validation with multimodal tabular data. This tutorial is designed to help you understand and implement key features, including:</p>
+<ul class="simple">
+<li><p>📥 Importing fusion models based on modality types.</p></li>
+<li><p>🚲 Setting training parameters for your models</p></li>
+<li><p>🔮 Generating simulated data for experimentation.</p></li>
+<li><p>🧪 Training and evaluating multiple fusion models.</p></li>
+<li><p>📈 Visualising the results of individual models.</p></li>
+<li><p>📊 Comparing the performance of different models.</p></li>
+</ul>
+<p>Let’s dive into each of these steps in detail:</p>
+<ol class="arabic">
+<li><p><strong>Importing Fusion Models:</strong></p>
+<p>We begin by importing fusion models based on modality types. These models will be used in our regression task, and we’ll explore various fusion strategies.</p>
+</li>
+<li><p><strong>Setting the Training Parameters:</strong></p>
+<p>To ensure consistent and controlled training, we define training parameters. These parameters include enabling k-fold cross-validation, specifying the prediction type (regression), and setting the batch size for training.</p>
+</li>
+<li><p><strong>Generating Simulated Data:</strong></p>
+<p>In this step, we generate synthetic data to simulate a real-world multimodal dataset. This dataset includes two tabular modalities, but it can also incorporate image data, although we won’t use images in this example.</p>
+</li>
+<li><p><strong>Training All Fusion Models:</strong></p>
+<p>Now, we train all the selected fusion models using the generated data and the defined training parameters. We’ll monitor the performance of each model during training and store the results for later analysis.</p>
+</li>
+<li><p><strong>Plotting Individual Model Results:</strong></p>
+<p>After training, we visualise the performance of each individual model. We create plots that show loss curves and performance metrics to help us understand how each model performed.</p>
+</li>
+<li><p><strong>Comparing Model Performance:</strong></p>
+<p>To gain insights into which fusion models perform best, we compare their performance using a violin chart. This chart provides a clear overview of how each model’s performance metrics compare.</p>
+</li>
+<li><p><strong>Saving the Results:</strong></p>
+<p>Finally, we save the performance results of all the models as a structured DataFrame. This data can be further analyzed, exported to a CSV file, or used for additional experiments.</p>
+</li>
+</ol>
+<p>Now, let’s walk through each of these steps in code and detail. Let’s get started! 🌸</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">docs.examples</span> <span class="kn">import</span> <span class="n">generate_sklearn_simulated_data</span>
+<span class="kn">from</span> <span class="nn">fusilli.data</span> <span class="kn">import</span> <span class="n">get_data_module</span>
+<span class="kn">from</span> <span class="nn">fusilli.eval</span> <span class="kn">import</span> <span class="n">RealsVsPreds</span><span class="p">,</span> <span class="n">ModelComparison</span>
+<span class="kn">from</span> <span class="nn">fusilli.train</span> <span class="kn">import</span> <span class="n">train_and_save_models</span>
+<span class="kn">from</span> <span class="nn">fusilli.utils.model_chooser</span> <span class="kn">import</span> <span class="n">import_chosen_fusion_models</span>
+
+<span class="kn">from</span> <span class="nn">IPython.utils</span> <span class="kn">import</span> <span class="n">io</span>  <span class="c1"># for hiding the tqdm progress bar</span>
+</pre></div>
+</div>
+<section id="import-fusion-models">
+<h2>1. Import fusion models 🔍<a class="headerlink" href="#import-fusion-models" title="Permalink to this heading"></a></h2>
+<p>Here we import the fusion models to be compared. The models are imported using the
+<a class="reference internal" href="../../autosummary/fusilli.utils.model_chooser.html#fusilli.utils.model_chooser.get_models" title="fusilli.utils.model_chooser.get_models"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_models()</span></code></a> function, which takes a dictionary of conditions
+as an input. The conditions are the attributes of the models, e.g. the class name, the modality type, etc.</p>
+<p>The function returns a dataframe of the models that match the conditions. The dataframe contains the
+method name, the class name, the modality type, the fusion type, the path to the model, and the path to the
+model’s parent class. The paths are used to import the models with the <code class="xref py py-func docutils literal notranslate"><span class="pre">importlib.import_module()</span></code>.</p>
+<p>We’re importing all the fusion models that use only tabular data for this example (either uni-modal or multi-modal).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model_conditions</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;modality_type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;tabular1&quot;</span><span class="p">,</span> <span class="s2">&quot;tabular2&quot;</span><span class="p">,</span> <span class="s2">&quot;both_tab&quot;</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">fusion_models</span> <span class="o">=</span> <span class="n">import_chosen_fusion_models</span><span class="p">(</span><span class="n">model_conditions</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Imported methods:
+[&#39;Tabular1 uni-modal&#39; &#39;Tabular2 uni-modal&#39;
+ &#39;Concatenating tabular feature maps&#39; &#39;Concatenating tabular data&#39;
+ &#39;Channel-wise multiplication net (tabular)&#39;
+ &#39;Tabular Crossmodal multi-head attention&#39; &#39;Tabular decision&#39;
+ &#39;MCVAE Tabular&#39; &#39;Edge Correlation GNN&#39;]
+</pre></div>
+</div>
+</section>
+<section id="set-the-training-parameters">
+<h2>2. Set the training parameters 🎯<a class="headerlink" href="#set-the-training-parameters" title="Permalink to this heading"></a></h2>
+<p>Let’s configure our training parameters. The parameters are stored in a dictionary and passed to most
+of the methods in this library.
+For training and testing, the necessary parameters are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">kfold_flag</span></code>: the user sets this to True for k-fold cross validation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_k</span></code>: the number of folds to use. It can’t be k=1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">log</span></code>: a boolean of whether to log the results using Weights and Biases (True) or not (False).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pred_type</span></code>: the type of prediction to be performed. This is either <code class="docutils literal notranslate"><span class="pre">regression</span></code>, <code class="docutils literal notranslate"><span class="pre">binary</span></code>, or <code class="docutils literal notranslate"><span class="pre">classification</span></code>. For this example we’re using regression.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">loss_log_dir</span></code>: the directory to save the loss logs to. This is used for plotting the loss curves with <code class="docutils literal notranslate"><span class="pre">log=False</span></code>.</p></li>
+</ul>
+<p>We’re also setting our own batch_size for this example.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;kfold_flag&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;num_k&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;log&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;pred_type&quot;</span><span class="p">:</span> <span class="s2">&quot;regression&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+    <span class="s2">&quot;loss_log_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;loss_logs/model_comparison_loop_kfold&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;loss_log_dir&quot;</span><span class="p">]):</span>
+    <span class="c1"># remove files</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;loss_log_dir&quot;</span><span class="p">],</span> <span class="nb">dir</span><span class="p">)):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;loss_log_dir&quot;</span><span class="p">],</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">file</span><span class="p">))</span>
+    <span class="c1"># remove dir</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;loss_log_dir&quot;</span><span class="p">],</span> <span class="nb">dir</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="generating-simulated-data">
+<h2>3. Generating simulated data 🔮<a class="headerlink" href="#generating-simulated-data" title="Permalink to this heading"></a></h2>
+<p>Time to create some simulated data for our models to work their wonders on.
+This function also simulated image data which we aren’t using here.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">generate_sklearn_simulated_data</span><span class="p">(</span>
+    <span class="n">num_samples</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+    <span class="n">num_tab1_features</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">num_tab2_features</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">img_dims</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+    <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="training-the-all-the-fusion-models">
+<h2>4. Training the all the fusion models 🏁<a class="headerlink" href="#training-the-all-the-fusion-models" title="Permalink to this heading"></a></h2>
+<p>In this section, we train all the fusion models using the generated data and specified parameters.
+We store the results of each model for later analysis.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">all_trained_models</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">capture_output</span><span class="p">()</span> <span class="k">as</span> <span class="n">captured</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fusion_model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fusion_models</span><span class="p">):</span>
+        <span class="n">fusion_model_name</span> <span class="o">=</span> <span class="n">fusion_model</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Running model </span><span class="si">{</span><span class="n">fusion_model_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get data module</span>
+        <span class="n">data_module</span> <span class="o">=</span> <span class="n">get_data_module</span><span class="p">(</span><span class="n">fusion_model</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;batch_size&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Train and test</span>
+        <span class="n">single_model_list</span> <span class="o">=</span> <span class="n">train_and_save_models</span><span class="p">(</span>
+            <span class="n">data_module</span><span class="o">=</span><span class="n">data_module</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+            <span class="n">fusion_model</span><span class="o">=</span><span class="n">fusion_model</span><span class="p">,</span>
+            <span class="n">enable_checkpointing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># False for the example notebooks</span>
+            <span class="n">show_loss_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># True for the example notebooks</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Save to all_trained_models</span>
+        <span class="n">all_trained_models</span><span class="p">[</span><span class="n">fusion_model_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">single_model_list</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_001.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_001.png" alt="Loss Curves for Tabular1Unimodal_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_002.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_002.png" alt="Loss Curves for Tabular1Unimodal_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_003.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_003.png" alt="Loss Curves for Tabular1Unimodal_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_004.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_004.png" alt="Loss Curves for Tabular2Unimodal_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_005.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_005.png" alt="Loss Curves for Tabular2Unimodal_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_006.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_006.png" alt="Loss Curves for Tabular2Unimodal_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_007.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_007.png" alt="Loss Curves for ConcatTabularFeatureMaps_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_008.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_008.png" alt="Loss Curves for ConcatTabularFeatureMaps_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_009.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_009.png" alt="Loss Curves for ConcatTabularFeatureMaps_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_010.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_010.png" alt="Loss Curves for ConcatTabularData_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_011.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_011.png" alt="Loss Curves for ConcatTabularData_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_012.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_012.png" alt="Loss Curves for ConcatTabularData_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_013.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_013.png" alt="Loss Curves for TabularChannelWiseMultiAttention_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_014.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_014.png" alt="Loss Curves for TabularChannelWiseMultiAttention_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_015.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_015.png" alt="Loss Curves for TabularChannelWiseMultiAttention_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_016.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_016.png" alt="Loss Curves for TabularCrossmodalMultiheadAttention_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_017.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_017.png" alt="Loss Curves for TabularCrossmodalMultiheadAttention_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_018.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_018.png" alt="Loss Curves for TabularCrossmodalMultiheadAttention_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_019.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_019.png" alt="Loss Curves for TabularDecision_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_020.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_020.png" alt="Loss Curves for TabularDecision_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_021.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_021.png" alt="Loss Curves for TabularDecision_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_022.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_022.png" alt="Loss Curves for MCVAE_tab_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_023.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_023.png" alt="Loss Curves for MCVAE_tab_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_024.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_024.png" alt="Loss Curves for MCVAE_tab_fold_2" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_025.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_025.png" alt="Loss Curves for EdgeCorrGNN_fold_0" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_026.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_026.png" alt="Loss Curves for EdgeCorrGNN_fold_1" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_027.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_027.png" alt="Loss Curves for EdgeCorrGNN_fold_2" class = "sphx-glr-multi-img"/></li>
+</ul>
+</section>
+<section id="plotting-the-results-of-the-individual-models">
+<h2>5. Plotting the results of the individual models<a class="headerlink" href="#plotting-the-results-of-the-individual-models" title="Permalink to this heading"></a></h2>
+<p>In this section, we visualize the results of each individual model.</p>
+<p>If you want to save the figures rather than show them, you can use the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Plotter()</span></code> class.
+This will save the figures in a timestamped folder in the current working directory with the method name and plot type in the filename.
+You can add an extra suffix to the filename by passing a string to the <code class="docutils literal notranslate"><span class="pre">extra_string</span></code> argument of the <code class="xref py py-meth docutils literal notranslate"><span class="pre">save_to_local()</span></code> method.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">model_list</span> <span class="ow">in</span> <span class="n">all_trained_models</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">RealsVsPreds</span><span class="o">.</span><span class="n">from_final_val_data</span><span class="p">(</span><span class="n">model_list</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_028.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_028.png" alt="From final val data, Tabular1 uni-modal: R2=0.224, Fold 1: R2=0.244, Fold 2: R2=0.200, Fold 3: R2=0.225" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_029.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_029.png" alt="From final val data, Tabular2 uni-modal: R2=0.341, Fold 1: R2=0.197, Fold 2: R2=0.323, Fold 3: R2=0.420" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_030.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_030.png" alt="From final val data, Concatenating tabular feature maps: R2=0.453, Fold 1: R2=0.480, Fold 2: R2=0.422, Fold 3: R2=0.458" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_031.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_031.png" alt="From final val data, Concatenating tabular data: R2=0.447, Fold 1: R2=0.500, Fold 2: R2=0.409, Fold 3: R2=0.425" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_032.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_032.png" alt="From final val data, Channel-wise multiplication net (tabular): R2=0.230, Fold 1: R2=0.262, Fold 2: R2=0.262, Fold 3: R2=0.157" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_033.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_033.png" alt="From final val data, Tabular Crossmodal multi-head attention: R2=0.457, Fold 1: R2=0.447, Fold 2: R2=0.473, Fold 3: R2=0.441" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_034.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_034.png" alt="From final val data, Tabular decision: R2=0.413, Fold 1: R2=0.456, Fold 2: R2=0.335, Fold 3: R2=0.427" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_035.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_035.png" alt="From final val data, MCVAE Tabular: R2=-0.004, Fold 1: R2=-0.008, Fold 2: R2=-0.001, Fold 3: R2=-0.021" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_036.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_036.png" alt="From final val data, Edge Correlation GNN: R2=0.115, Fold 1: R2=0.168, Fold 2: R2=-0.063, Fold 3: R2=0.169" class = "sphx-glr-multi-img"/></li>
+</ul>
+</section>
+<section id="plotting-comparison-of-the-models">
+<h2>6. Plotting comparison of the models<a class="headerlink" href="#plotting-comparison-of-the-models" title="Permalink to this heading"></a></h2>
+<p>In this section, we visualize the results of each individual model.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">comparison_plot</span><span class="p">,</span> <span class="n">metrics_dataframe</span> <span class="o">=</span> <span class="n">ModelComparison</span><span class="o">.</span><span class="n">from_final_val_data</span><span class="p">(</span><span class="n">all_trained_models</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_plot_model_comparison_loop_kfold_037.png" srcset="../../_images/sphx_glr_plot_model_comparison_loop_kfold_037.png" alt="Distribution of metrics between cross-validation folds, R2, MAE" class = "sphx-glr-single-img"/></section>
+<section id="saving-the-results-of-the-models">
+<h2>7. Saving the results of the models<a class="headerlink" href="#saving-the-results-of-the-models" title="Permalink to this heading"></a></h2>
+<p>In this section, we compare the performance of all the trained models using a violin chart, providing an overview of how each model performed as a distribution over the different cross-validation folds.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metrics_dataframe</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>R2</th>
+      <th>MAE</th>
+      <th>fold1_R2</th>
+      <th>fold1_MAE</th>
+      <th>fold2_R2</th>
+      <th>fold2_MAE</th>
+      <th>fold3_R2</th>
+      <th>fold3_MAE</th>
+    </tr>
+    <tr>
+      <th>Method</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Tabular1 uni-modal</th>
+      <td>0.224208</td>
+      <td>2.989906</td>
+      <td>0.243772</td>
+      <td>2.931305</td>
+      <td>0.199562</td>
+      <td>3.134076</td>
+      <td>0.224894</td>
+      <td>2.903821</td>
+    </tr>
+    <tr>
+      <th>Tabular2 uni-modal</th>
+      <td>0.340719</td>
+      <td>2.727535</td>
+      <td>0.196505</td>
+      <td>2.722531</td>
+      <td>0.323096</td>
+      <td>2.810405</td>
+      <td>0.419581</td>
+      <td>2.649198</td>
+    </tr>
+    <tr>
+      <th>Concatenating tabular feature maps</th>
+      <td>0.453423</td>
+      <td>2.497899</td>
+      <td>0.479688</td>
+      <td>2.458402</td>
+      <td>0.421885</td>
+      <td>2.632848</td>
+      <td>0.457929</td>
+      <td>2.401871</td>
+    </tr>
+    <tr>
+      <th>Concatenating tabular data</th>
+      <td>0.447184</td>
+      <td>2.538639</td>
+      <td>0.500172</td>
+      <td>2.310274</td>
+      <td>0.409377</td>
+      <td>2.561991</td>
+      <td>0.424697</td>
+      <td>2.744888</td>
+    </tr>
+    <tr>
+      <th>Channel-wise multiplication net (tabular)</th>
+      <td>0.230294</td>
+      <td>3.026953</td>
+      <td>0.261870</td>
+      <td>2.961012</td>
+      <td>0.262466</td>
+      <td>3.084680</td>
+      <td>0.156683</td>
+      <td>3.035214</td>
+    </tr>
+    <tr>
+      <th>Tabular Crossmodal multi-head attention</th>
+      <td>0.456777</td>
+      <td>2.524265</td>
+      <td>0.446814</td>
+      <td>2.466450</td>
+      <td>0.473357</td>
+      <td>2.435274</td>
+      <td>0.440551</td>
+      <td>2.671954</td>
+    </tr>
+    <tr>
+      <th>Tabular decision</th>
+      <td>0.413223</td>
+      <td>2.618857</td>
+      <td>0.455687</td>
+      <td>2.655784</td>
+      <td>0.334698</td>
+      <td>2.609927</td>
+      <td>0.426682</td>
+      <td>2.590691</td>
+    </tr>
+    <tr>
+      <th>MCVAE Tabular</th>
+      <td>-0.004398</td>
+      <td>3.445615</td>
+      <td>-0.008009</td>
+      <td>3.450989</td>
+      <td>-0.001304</td>
+      <td>3.429603</td>
+      <td>-0.021114</td>
+      <td>3.456319</td>
+    </tr>
+    <tr>
+      <th>Edge Correlation GNN</th>
+      <td>0.114794</td>
+      <td>3.234563</td>
+      <td>0.168078</td>
+      <td>3.335965</td>
+      <td>-0.062951</td>
+      <td>3.252570</td>
+      <td>0.168877</td>
+      <td>3.114435</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<br />
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 27.196 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-training-and-testing-plot-model-comparison-loop-kfold-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/f79519df1d510a92c31e8566c5838670/plot_model_comparison_loop_kfold.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_model_comparison_loop_kfold.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/2e9e147ba11cf2f8bde90dd8e935bd18/plot_model_comparison_loop_kfold.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_model_comparison_loop_kfold.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Training and testing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plot_one_model_binary_kfold.html" class="btn btn-neutral float-right" title="📊 Binary Classification: Training a K-Fold Model 🚀" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Florence J Townend.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

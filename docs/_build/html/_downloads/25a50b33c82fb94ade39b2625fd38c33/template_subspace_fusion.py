@@ -1,0 +1,5 @@
+"""
+Subspace fusion template
+========================
+
+"""

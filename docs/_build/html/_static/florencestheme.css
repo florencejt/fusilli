@@ -1,0 +1,328 @@
+/* Top left bit */
+/* html,
+body {
+    margin: 0;
+    padding: 0;
+    border: #e737ac;
+} */
+
+/* html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+#background {
+    height: 100%;
+}
+
+html {
+    /* To make use of full height of page*/
+/* min-height: 100%;
+margin: 0;
+} */
+
+/* body {
+    min-height: 100%;
+    margin: 0;
+} */
+
+.wy-side-nav-search,
+.wy-nav-top {
+    /* background: #EFFFE9;
+    border-bottom: #eaffed; */
+    background: #ffe7fb;
+    border-bottom: #ffe7fb;
+    background-color: #ffe7fb;
+}
+
+/* override table no-wrap */
+.wy-table-responsive table td,
+.wy-table-responsive table th {
+    white-space: normal;
+}
+
+.wy-side-nav-search {
+    background-color: #ffe7fb;
+}
+
+.wy-menu-vertical li.current > a {
+    /*background-color: #ffe7fb;*/
+    background-color: #ac47a5;
+    position: relative;
+}
+
+.wy-menu-vertical li.current > a::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ac47a5; /* Your background color */
+    z-index: -1;
+}
+
+.wy-side-nav-search input[type="text"] {
+    width: 100%;
+    border-radius: 0px;
+    padding: 6px 12px;
+    border-color: #ffe7fb;
+}
+
+/* .wy-side-scroll {
+    background-color: #370034;
+} */
+
+.wy-side-nav-search {
+    background-color: #ffe7fb;
+}
+
+/* Side bar background */
+.wy-nav-side {
+    /* background: #EFFFE9;
+    background-color: #EFFFE9;
+    color: #EFFFE9;
+    padding: 0%;
+    flood-color: #eaffed;
+    outline-color: #eaffed; */
+    background: #ffe7fb;
+    background-color: #ffe7fb;
+    color: #ffe7fb;
+    padding: 0%;
+    flood-color: #ffe7fb;
+    margin: 0%;
+}
+
+.wy-menu-vertical {
+    padding-block: 0%;
+    background-color: #ffe7fb; /* Set the background color for the entire sidebar */
+
+}
+
+
+/* inline code style */
+code.literal {
+    color: #404040 !important;
+    background-color: #fbfbfb !important;
+}
+
+
+/* font colour in side bar */
+.wy-menu-vertical a {
+    color: #2f2f2f;
+    /* background-color: #EFFFE9; */
+
+    background-color: #ffe7fb;
+}
+
+
+.example a:link,
+.example a:visited {
+    color: green;
+}
+
+a:hover {
+    color: green;
+    background-color: #da9fe4;
+}
+
+a:link {
+    color: #0044B3;
+}
+
+/* unvisited link is black*/
+a:visited {
+    color: #9800B3;
+}
+
+/* visited link is black (reverse the color back to black)*/
+a:active {
+    color: #EA00E7;
+}
+
+/* selected link (blue in the split second which you loading the page.)*/
+
+
+/* all toc tree caption headers */
+/* span.caption-text {
+    color: #990092;
+} */
+
+
+.wy-menu > .caption > span.caption-text {
+    /* color: #990092;
+    background-color: #adf793; */
+    color: #ffffff;
+    background-color: #370034;
+    /* background-color: #ffe7fb; */
+}
+
+.wy-menu-vertical li.current a {
+    /* color: #990092;
+    border-right: 3px solid #cdf8be;
+    background-color: #cdf8be; */
+    color: #000000;
+    border-right: 3px solid #ffe7fb;
+    background-color: #ffe7fb;
+}
+
+
+.wy-menu-vertical li ul li a {
+    /* color: #EFFFE9; */
+    color: #ffe7fb;
+}
+
+.wy-menu-vertical li.toctree-l2 button.toctree-expand {
+    /* color: rgb(60, 168, 52); */
+    /* color: #5d0058; */
+    color: #000000;
+}
+
+.wy-menu-vertical li.current > a button.toctree-expand,
+.wy-menu-vertical li.on a button.toctree-expand {
+    /* color: rgb(60, 168, 52); */
+    /* color: #5d0058; */
+    color: #000000;
+}
+
+.wy-menu-vertical li.current > a button.toctree-expand:hover,
+.wy-menu-vertical li.on a button.toctree-expand:hover {
+    color: rgb(60, 168, 52);
+    color: #ac47a5;
+}
+
+.wy-menu-vertical li.toctree-l2.current li.toctree-l3 > a {
+    /* background: #cdf8be; */
+    background: #ffe7fb;
+    /* overflow-x: hidden; */
+}
+
+.wy-menu-vertical li.toctree-l3.current li.toctree-l4 > a {
+    /* background: #cdf8be; */
+    background: #ffe7fb;
+    display: inline-block;
+}
+
+.wy-menu-vertical {
+    overflow-x: scroll;
+    background-color: #ffe7fb; /* Background color for the side scroll */
+}
+
+.wy-menu-vertical .wy-side-scroll .wy-menu-vertical header,
+.wy-menu-vertical .wy-side-scroll .wy-menu-vertical p.caption {
+    background-color: #370034; /* Background color for headers within the side scroll */
+}
+
+html.writer-html4 .rst-content dl:not(.docutils) > dt,
+html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) > dt {
+    display: table;
+    margin: 6px 0;
+    font-size: 90%;
+    line-height: normal;
+    background: #fae7f8;
+    color: #db55c3;
+    border-top: 3px solid #e737ac;
+    border-top-width: 3px;
+    border-top-style: solid;
+    border-top-color: #e737ac;
+    padding: 6px;
+    position: relative;
+}
+
+.rst-content .note .admonition-title {
+    display: block; /* Set to 'block' to make the title show */
+}
+
+.rst-content .warning .admonition-title {
+    display: block; /* Set to 'block' to make the title show */
+}
+
+.wy-nav-content {
+    max-width: 1000px !important;
+}
+
+
+/* .wy-table-responsive {
+    background-color: #cdf8be;
+} */
+
+/*table.docutils {
+    background-color: #5eae41;
+}*/
+
+/* makes table header background purple */
+th {
+    color: white;
+    background: #ac47a5;
+}
+
+/* makes the attribute/method box background colours different */
+html.writer-html4 .rst-content dl:not(.docutils) dl:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) > dt,
+html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) dl:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) > dt {
+    /* background-color: #eaffed; */
+    background-color: #ffe7fb;
+}
+
+.wy-menu-vertical .toctree-l1 {
+    opacity: 1;
+    /* background-color: #eaffed;
+    border-color: #eaffed; */
+    background-color: #ffe7fb;
+    border-color: #ffe7fb;
+}
+
+/* .wy-menu-vertical header,
+.wy-menu-vertical p.caption {
+    /* background-color: #adf793; */
+/* column-rule-color: #eaffed; */
+/* border-color: #eaffed; */
+/* border-top-color: #eaffed; */
+/* background: #adf793; */
+/* font-size: large; */
+/* padding: 0%; */
+/* margin-block: 0%; */
+/* margin-top: 0.8em solid #eaffed;
+    margin-bottom: 0.8em solid #eaffed; */
+/* border-top: 1px solid #eaffed; */
+/* } */
+
+.wy-side-nav-search {
+    padding: 0%;
+    margin-block: 0%;
+
+}
+
+
+.wy-nav-content-wrap {
+    background: #fcfcfc;
+}
+
+
+.wy-menu-vertical header,
+.wy-menu-vertical p.caption {
+    background: #370034; /* Your background color */
+    font-size: large;
+    padding: 6px 20px; /* Adjust padding as needed */
+    margin: 0;
+    border-top: 3px solid #370034; /* Adjust border properties as needed */
+    border-top-width: 3px;
+    border-top-style: solid;
+    border-bottom: 3px solid #370034; /* Adjust border properties as needed */
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+    display: flex;
+    align-items: center; /* Center vertically within the padding */
+}
+
+/*.wy-side-scroll {*/
+/*    !* width: 100%;*/
+/*    overflow-x: auto;*/
+/*    display: inline-block; *!*/
+/*    !*background-color: #370034;*!*/
+/*    overflow-x: scroll;*/
+/*}*/
+
+/*.wy-menu-vertical .wy-side-scroll {*/
+/*    background-color: #370034; !* Background color for the side scroll *!*/
+/*}*/
