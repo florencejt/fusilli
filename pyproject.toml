@@ -18,11 +18,11 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-keywords= ["multi-modal", "machine learning", "MRI", "data fusion", "multi-view", "graph neural network", "attention", "VAE"]
+keywords = ["multi-modal", "machine learning", "MRI", "data fusion", "multi-view", "graph neural network", "attention", "VAE"]
 dependencies = [
     "lightning~=2.0",
-    "matplotlib~=3.0",
-    "numpy~=1.0",
+    "matplotlib~=3.5",
+    "numpy~=1.25",
     "pandas~=2.0",
     "scikit-learn~=1.0",
     "setuptools~=68.0",
@@ -32,7 +32,7 @@ dependencies = [
     "tqdm~=4.0",
     "wandb~=0.0",
 ]
-optional-dependencies = {docs = [
+optional-dependencies = { docs = [
     "protobuf~=3.0",
     "sphinx",
     "sphinx-gallery",
@@ -46,7 +46,7 @@ optional-dependencies = {docs = [
     "sphinxcontrib-qthelp",
     "sphinxcontrib-serializinghtml",
     "renku-sphinx-theme",
-]}
+] }
 dynamic = [
     "version",
 ]
