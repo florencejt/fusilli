@@ -1,10 +1,12 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = [
+    "setuptools",
+    "setuptools-scm",
+]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "fusilli"
-version = "0.0.0"
 authors = [
     { name = "Florence J Townend", email = "f.j.townend@live.com" },
 ]
@@ -23,7 +25,6 @@ dependencies = [
     "numpy==1.25.1",
     "pandas==2.0.3",
     "scikit_learn==1.1.3",
-    "setuptools==68.2.2",
     "torch==2.0.1",
     "torch_geometric==2.3.0",
     "torchmetrics==0.10.3",
@@ -49,13 +50,15 @@ optional-dependencies = {docs = [
     "numpy==1.25.1",
     "pandas==2.0.3",
     "scikit_learn==1.1.3",
-    "setuptools==68.2.2",
     "torch==2.0.1",
     "torch_geometric==2.3.0",
     "torchmetrics==0.10.3",
     "tqdm==4.64.1",
     "wandb==0.15.3",
 ]}
+dynamic = [
+    "version",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -73,3 +76,7 @@ omit = [
     "*__init__*",
     "fusilli/utils/mcvae/*",
 ]
+
+[tool.setuptools_scm]
+local_scheme = "no-local-version"
+write_to = "fusilli/_version.py"
