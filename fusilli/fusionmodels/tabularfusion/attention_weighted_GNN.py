@@ -27,8 +27,45 @@ from lightning.pytorch import Trainer
 
 
 class AttentionWeightMLP(pl.LightningModule):
+    """
+    MLP based on ConcatTabularData for the attention weighted GNN.
+
+    Attributes
+    ----------
+    pred_type : str
+        Type of prediction to be performed.
+    multiclass_dim : int
+        Number of classes for multiclass classification. If not multiclass classification, this is None.
+    mod1_dim : int
+        Number of features of the first modality.
+    mod2_dim : int
+        Number of features of the second modality.
+    fc1 : nn.Linear
+        First fully connected layer.
+    fc2 : nn.Linear
+        Second fully connected layer.
+    fc3 : nn.Linear
+        Third fully connected layer.
+    fc4 : nn.Linear
+        Fourth fully connected layer.
+    fc5 : nn.Linear
+        Fifth fully connected layer.
+    final_prediction : nn.Sequential
+        Sequential layer containing the final prediction layers. The final prediction layers
+    """
 
     def __init__(self, pred_type, data_dims, multiclass_dim):
+        """
+
+        Parameters
+        ----------
+       pred_type : str
+            Type of prediction to be performed.
+        data_dims : list
+            List containing the dimensions of the data.
+        params : dict
+            Dictionary containing the parameters of the model.
+        """
         super().__init__()
 
         self.pred_type = pred_type
@@ -48,6 +85,21 @@ class AttentionWeightMLP(pl.LightningModule):
         ParentFusionModel.set_final_pred_layers(self)
 
     def forward(self, x):
+        """
+
+        Parameters
+        ----------
+        x: tuple
+            Tuple containing the two modalities input data.
+
+        Returns
+        -------
+        out_pred: torch.Tensor
+            Prediction output of the model.
+        attention_weights: torch.Tensor
+            Attention weights of the model. Final layer of the model sigmoided.
+
+        """
         x = torch.cat(x, dim=1)
 
         x = F.relu(self.fc1(x))
@@ -65,6 +117,22 @@ class AttentionWeightMLP(pl.LightningModule):
         return out_pred, attention_weights
 
     def training_step(self, batch, batch_idx):
+        """
+        Training step of the model.
+
+        Parameters
+        ----------
+        batch: tuple
+            Tuple containing the two modalities input data and the labels.
+        batch_idx: int
+            Index of the batch.
+
+        Returns
+        -------
+        loss: torch.Tensor
+            Loss of the model.
+
+        """
         x1, x2, y = batch
         y_hat, weights = self.forward((x1, x2))
         loss = F.mse_loss(y_hat.squeeze(), y.squeeze())
@@ -72,6 +140,22 @@ class AttentionWeightMLP(pl.LightningModule):
         return loss
 
     def validation_step(self, batch, batch_idx):
+        """
+        Validation step of the model.
+
+        Parameters
+        ----------
+        batch: tuple
+            Tuple containing the two modalities input data and the labels.
+        batch_idx: int
+            Index of the batch.
+
+        Returns
+        -------
+        loss: torch.Tensor
+            Loss of the model.
+
+        """
         x1, x2, y = batch
         y_hat, weights = self.forward((x1, x2))
         loss = F.mse_loss(y_hat.squeeze(), y.squeeze())
@@ -79,23 +163,79 @@ class AttentionWeightMLP(pl.LightningModule):
         return loss
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
-        return optimizer
+        """
+        Configure the optimiser of the model.
+
+        Returns
+        -------
+        optimiser: torch.optim
+            Optimiser of the model.
+
+        """
+        optimiser = torch.optim.Adam(self.parameters(), lr=1e-3)
+        return optimiser
 
     def create_attention_weights(self, x):
+        """
+        Create the attention weights of the model for a given input.
+
+        Parameters
+        ----------
+        x: tuple
+            Tuple containing the two modalities input data.
+
+        Returns
+        -------
+        weights: torch.Tensor
+            Attention weights of the model. Final layer of the model sigmoided.
+
+        """
         preds, weights = self.forward(x)
         return weights
 
 
 class AttentionWeightedGraphMaker:
+    """
+    Class to make the graph structure for the attention weighted GNN.
+
+    Attributes
+    ----------
+    dataset: Dataset
+        Dataset containing the tabular data.
+    MLP_instance: AttentionWeightMLP
+        Instance of the MLP model.
+    trainer: Trainer
+        Trainer of the model.
+    train_idxs: list
+        List of the indices of the training data.
+    test_idxs: list
+        List of the indices of the test data.
+
+    """
 
     def __init__(self, dataset):
+        """
+
+        Parameters
+        ----------
+        dataset: Dataset
+            Dataset containing the tabular data.
+        """
         self.dataset = dataset
 
     def check_params(self):
         pass
 
     def make_graph(self):
+        """
+        Make the graph structure for the attention weighted GNN.
+
+        Returns
+        -------
+        data: Data
+            Data object containing the graph structure.
+
+        """
         # get out the tabular data
         all_labels = self.dataset[:][2]
 
@@ -221,22 +361,49 @@ class AttentionWeightedGraphMaker:
 
 
 class AttentionWeightedGNN(ParentFusionModel, nn.Module):
+    """
+    Graph neural network with the edge weighting as the distances between each nodes' weighted phenotypes and the node features as the second tabular modality features.
+
+    Attributes
+    ----------
+    pred_type : str
+        Type of prediction to be performed.
+    graph_conv_layers : nn.Sequential
+        Sequential layer containing the graph convolutional layers. By default ChebConv layers.
+    fused_dim : int
+        Number of features of the fused layers. This is the final output shape of the graph convolutional layers.
+    final_prediction : nn.Sequential
+        Sequential layer containing the final prediction layers. The final prediction layers
+
+    """
+
+    # str: Name of the method.
     method_name = "Attention-weighted GNN"
+
+    # str: Type of modality.
     modality_type = "tabular_tabular"
+
+    # str: Type of fusion.
     fusion_type = "graph"
+
+    # class: Graph maker class.
     graph_maker = AttentionWeightedGraphMaker
 
     def __init__(self, pred_type, data_dims, params):
+        """
+        Parameters
+        ----------
+        pred_type : str
+            Type of prediction to be performed.
+        data_dims : list
+            Dictionary containing the dimensions of the data.
+        params : dict
+            Dictionary containing the parameters of the model.
+        """
+
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
 
         self.pred_type = pred_type
-
-        # self.graph_conv_layers = nn.Sequential(
-        #     GCNConv(self.mod2_dim, 64),
-        #     GCNConv(64, 128),
-        #     GCNConv(128, 256),
-        #     GCNConv(256, 256),
-        # )
 
         self.graph_conv_layers = nn.Sequential(
             ChebConv(self.mod2_dim, 64, K=3),
@@ -251,6 +418,20 @@ class AttentionWeightedGNN(ParentFusionModel, nn.Module):
         self.dropout_prob = 0.2
 
     def forward(self, x):
+        """
+        Forward pass of the model.
+
+        Parameters
+        ----------
+        x : tuple
+            Tuple containing the tabular data and the graph data structure:
+            (node features, edge indices, edge attributes)
+
+        Returns
+        -------
+        list
+            List containing the output of the model.
+        """
         x_n, edge_index, edge_attr = x
 
         for layer in self.graph_conv_layers:

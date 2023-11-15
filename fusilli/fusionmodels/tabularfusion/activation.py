@@ -26,11 +26,11 @@ class ActivationFusion(ParentFusionModel, nn.Module):
         layers output plus the size of the tabular 2 layers output.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers. Calculated in the
-        :meth:`~ConcatTabularFeatureMaps.calc_fused_layers` method.
+        :meth:`~ActivationFusion.calc_fused_layers` method.
     final_prediction : nn.Sequential
         Sequential layer containing the final prediction layers. The final prediction layers
         take in the number of features of the fused layers as input. Calculated in the
-        :meth:`~ConcatTabularFeatureMaps.calc_fused_layers` method.
+        :meth:`~ActivationFusion.calc_fused_layers` method.
     """
 
     # str: Name of the method.

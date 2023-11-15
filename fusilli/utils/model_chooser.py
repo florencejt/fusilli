@@ -83,7 +83,7 @@ fusion_model_dict = [
 ]
 
 
-def all_model_importer(fusion_model_dict):
+def all_model_importer(fusion_model_dict, skip_models=None):
     """
     Imports all the fusion models in the fusion_model_dict.
 
@@ -94,16 +94,32 @@ def all_model_importer(fusion_model_dict):
         Names mean the name of the class, and paths mean the path to the .py file
         containing the class.
         Note: this must be updated whenever a new fusion model is added.
+    skip_models : list
+        List of models to skip when importing. Default is None.
+        The list should consist of the class names of the models to skip e.g. ["TabularDecision", "ImgUnimodal"]. You might skip models if some are not working properly for you.
 
     Returns
     -------
     fusion_models : list
         List of all the fusion models class objects
+    fusion_model_dict_copy : list
+        List of dictionaries containing all the fusion models' names and paths, without the models that were skipped.
     """
+
+    # create copy of fusion_model_dict so we can remove skip_models from it
+    fusion_model_dict_copy = fusion_model_dict.copy()
 
     fusion_models = []
     for model in fusion_model_dict:
         module_name = model["name"]
+
+        # if we're skipping importing some models
+        if skip_models is not None:
+            if module_name in skip_models:
+                # remove model from fusion_model_dict_copy
+                fusion_model_dict_copy.remove(model)
+                continue
+
         module_path = "fusilli." + model["path"]
 
         module = importlib.import_module(module_path)
@@ -111,10 +127,10 @@ def all_model_importer(fusion_model_dict):
 
         fusion_models.append(module_class)
 
-    return fusion_models
+    return fusion_models, fusion_model_dict_copy
 
 
-def get_models(conditions_dict, fusion_model_dict=fusion_model_dict):
+def get_models(conditions_dict, skip_models=None, fusion_model_dict=fusion_model_dict, ):
     """Filters the models based on the conditions specified by the user.
 
     Parameters
@@ -142,6 +158,10 @@ def get_models(conditions_dict, fusion_model_dict=fusion_model_dict):
 
     fusion_model_dict : list
         List of dictionaries containing the fusion models' names and paths. Default is fusion_model_dict.
+
+    skip_models : list
+        List of models to skip when importing. Default is None.
+        The list should consist of the class names of the models to skip e.g. ["TabularDecision", "ImgUnimodal"].  You might skip models if some are not working properly for you.
 
 
     Returns
@@ -171,24 +191,22 @@ def get_models(conditions_dict, fusion_model_dict=fusion_model_dict):
     ]
     valid_modality_types = ["tabular1", "tabular2", "img", "tabular_tabular", "tabular_image"]
 
-    fusion_models = all_model_importer(fusion_model_dict)
-
-    # get model names, fusion types, modality types
+    fusion_models, fusion_model_dict_without_skips = all_model_importer(fusion_model_dict, skip_models=skip_models)
 
     method_names = [
-        fusion_models[i].method_name for i, model in enumerate(fusion_model_dict)
+        fusion_models[i].method_name for i, model in enumerate(fusion_model_dict_without_skips)
     ]
     fusion_types = [
-        fusion_models[i].fusion_type for i, model in enumerate(fusion_model_dict)
+        fusion_models[i].fusion_type for i, model in enumerate(fusion_model_dict_without_skips)
     ]
     modality_types = [
-        fusion_models[i].modality_type for i, model in enumerate(fusion_model_dict)
+        fusion_models[i].modality_type for i, model in enumerate(fusion_model_dict_without_skips)
     ]
 
     class_names = [fusion_models[i].__name__ for i, model in enumerate(fusion_models)]
 
     method_paths = [
-        "fusilli." + model["path"] for i, model in enumerate(fusion_model_dict)
+        "fusilli." + model["path"] for i, model in enumerate(fusion_model_dict_without_skips)
     ]
 
     # create a dataframe of all the models
@@ -266,7 +284,7 @@ def get_models(conditions_dict, fusion_model_dict=fusion_model_dict):
     return filtered_models
 
 
-def import_chosen_fusion_models(model_conditions):
+def import_chosen_fusion_models(model_conditions, skip_models=None):
     """
     Imports the fusion models specified by the user.
 
@@ -293,12 +311,16 @@ def import_chosen_fusion_models(model_conditions):
                 "modality_type": "all",
                 }
 
+    skip_models : list
+        List of models to skip when importing. Default is None.
+        The list should consist of the class names of the models to skip e.g. ["TabularDecision", "ImgUnimodal"]. You might skip models if some are not working properly for you.
+
     Returns
     -------
     fusion_models : list
         List of all the fusion models class objects
     """
-    imported_models = get_models(model_conditions)
+    imported_models = get_models(model_conditions, skip_models)
     print("Imported methods:")
     print(imported_models.method_name.values)
 

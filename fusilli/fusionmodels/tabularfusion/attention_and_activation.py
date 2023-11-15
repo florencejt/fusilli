@@ -28,11 +28,11 @@ class AttentionAndActivation(ParentFusionModel, nn.Module):
         layers output plus the size of the tabular 2 layers output.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers. Calculated in the
-        :meth:`~ConcatTabularFeatureMaps.calc_fused_layers` method.
+        :meth:`~AttentionAndActivation.calc_fused_layers` method.
     final_prediction : nn.Sequential
         Sequential layer containing the final prediction layers. The final prediction layers
         take in the number of features of the fused layers as input. Calculated in the
-        :meth:`~ConcatTabularFeatureMaps.calc_fused_layers` method.
+        :meth:`~AttentionAndActivation.calc_fused_layers` method.
     """
 
     # str: Name of the method.
@@ -149,7 +149,31 @@ class AttentionAndActivation(ParentFusionModel, nn.Module):
 
 
 class ChannelAttentionModule(nn.Module):
+    """
+    Channel attention module.
+
+    Attributes
+    ----------
+    fc1 : nn.Linear
+        First fully connected layer.
+    relu : nn.ReLU
+        ReLU activation function.
+    fc2 : nn.Linear
+        Second fully connected layer.
+    sigmoid : nn.Sigmoid
+        Sigmoid activation function.
+    """
+
     def __init__(self, num_features, reduction_ratio=16):
+        """
+
+        Parameters
+        ----------
+        num_features: int
+            Number of features of the input tensor.
+        reduction_ratio: int
+            Reduction ratio of the channel attention module.
+        """
         super(ChannelAttentionModule, self).__init__()
         self.fc1 = nn.Linear(num_features, num_features // reduction_ratio, bias=False)
         self.relu = nn.ReLU()
@@ -157,6 +181,20 @@ class ChannelAttentionModule(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
+        """
+        Forward pass of the channel attention module.
+
+        Parameters
+        ----------
+        x: torch.tensor
+            Input tensor.
+
+        Returns
+        -------
+        torch.tensor
+            Output tensor after applying the channel attention module.
+
+        """
         y = self.fc1(x)
         y = self.relu(y)
         y = self.fc2(y)
