@@ -5,7 +5,7 @@ import torch
 from fusilli.utils import check_model_validity
 
 
-class MDFNet(ParentFusionModel, nn.Module):
+class ActivationFusion(ParentFusionModel, nn.Module):
     """
     Performs an element wise product of the feature maps of the two tabular modalities, 
     tanh activation function and sigmoid activation function. Afterwoods the the clinical feature
@@ -34,7 +34,7 @@ class MDFNet(ParentFusionModel, nn.Module):
     """
 
     # str: Name of the method.
-    method_name = "Fusion feature map with MDFNet"
+    method_name = "Activation function map fusion"
     # str: Type of modality.
     modality_type = "tabular_tabular"
     # str: Type of fusion.

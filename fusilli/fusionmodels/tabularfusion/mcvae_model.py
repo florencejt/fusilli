@@ -7,11 +7,17 @@ import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch
 from fusilli.utils.mcvae.src.mcvae.models import Mcvae
+
 import contextlib
 import pandas as pd
 import numpy as np
 from fusilli.utils.training_utils import get_checkpoint_filenames_for_subspace_models
+
 import sys
+
+sys.path.append("fusilli/utils/mcvae")
+from mcvae.models import Mcvae
+from mcvae.models.utils import DEVICE
 
 from fusilli.utils import check_model_validity
 
