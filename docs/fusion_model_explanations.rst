@@ -100,6 +100,24 @@ This is known as a "decision-level fusion" method.
 .. image:: _static/ImageDecision.png
     :align: left
 
+-----
+
+:class:`.ActivationFusion`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. note::
+    Description and image incoming.
+
+-----
+
+:class:`.AttentionAndActivation`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. note::
+    Description and image incoming.
+
+
+
 
 Attention-based
 ---------------
