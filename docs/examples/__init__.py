@@ -246,6 +246,6 @@ def generate_sklearn_simulated_data(
     # save to csv and pt
     tabular1_data.to_csv(params["tabular1_source"])
     tabular2_data.to_csv(params["tabular2_source"])
-    torch.save(img_data, params["img_source"])
+    # torch.save(img_data, params["img_source"])
 
     return params

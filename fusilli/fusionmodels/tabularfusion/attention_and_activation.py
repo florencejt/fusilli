@@ -1,5 +1,4 @@
 import torch.nn as nn
-import torch.nn.functional as F
 
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch
@@ -7,7 +6,7 @@ import torch
 from fusilli.utils import check_model_validity
 
 
-class MDFNet(ParentFusionModel, nn.Module):
+class AttentionAndActivation(ParentFusionModel, nn.Module):
     """
     Applies an attention mechanism on the image features and performs an element wise product of 
     the feature maps of the two tabular modalities, 
@@ -37,7 +36,7 @@ class MDFNet(ParentFusionModel, nn.Module):
     """
 
     # str: Name of the method.
-    method_name = "Fusion feature map with MDFNet"
+    method_name = "Activation function and tabular attention"
     # str: Type of modality.
     modality_type = "tabular_tabular"
     # str: Type of fusion.
@@ -122,7 +121,7 @@ class MDFNet(ParentFusionModel, nn.Module):
 
         # Channel attention
         channel_attention = ChannelAttentionModule(num_features=num_channels)
-        x_tab1 = channel_attention(x_tab1)      
+        x_tab1 = channel_attention(x_tab1)
 
         for layer in self.mod1_layers.values():
             x_tab1 = layer(x_tab1)
@@ -148,6 +147,7 @@ class MDFNet(ParentFusionModel, nn.Module):
             out,
         ]
 
+
 class ChannelAttentionModule(nn.Module):
     def __init__(self, num_features, reduction_ratio=16):
         super(ChannelAttentionModule, self).__init__()
@@ -162,6 +162,7 @@ class ChannelAttentionModule(nn.Module):
         y = self.fc2(y)
         y = self.sigmoid(y)
         return x * y.expand_as(x)
+
 
 """
 
