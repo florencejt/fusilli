@@ -6,6 +6,7 @@
 
 🌸 **Don't be silly, use fusilli for all your multi-modal data fusion needs!** 🌸
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10137292.svg)](https://doi.org/10.5281/zenodo.10137292)
 [![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white&style=flat)](https://twitter.com/florencetownend)
 [![Documentation Status](https://readthedocs.org/projects/fusilli/badge/?version=latest)](https://fusilli.readthedocs.io/en/latest/?badge=latest)
 [![version](https://img.shields.io/pypi/v/fusilli)](https://pypi.org/project/fusilli/)
