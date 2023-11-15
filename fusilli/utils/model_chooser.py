@@ -79,6 +79,7 @@ fusion_model_dict = [
     {
         "name": "ActivationFusion",
         "path": "fusionmodels.tabularfusion.activation",
+
     }
 ]
 
