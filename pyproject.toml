@@ -1,10 +1,12 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = [
+    "setuptools",
+    "setuptools-scm",
+]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "fusilli"
-version = "0.0.0"
 authors = [
     { name = "Florence J Townend", email = "f.j.townend@live.com" },
 ]
@@ -45,6 +47,9 @@ optional-dependencies = {docs = [
     "sphinxcontrib-serializinghtml",
     "renku-sphinx-theme",
 ]}
+dynamic = [
+    "version",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -62,3 +67,7 @@ omit = [
     "*__init__*",
     "fusilli/utils/mcvae/*",
 ]
+
+[tool.setuptools_scm]
+local_scheme = "no-local-version"
+write_to = "fusilli/_version.py"
