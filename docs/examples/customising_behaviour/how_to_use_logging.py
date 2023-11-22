@@ -47,4 +47,7 @@ Now I'll show you an example of specifying ``extra_log_string_dict`` into :func:
 When I train this and look at weights and biases, the run will be called ``EdgeCorrGNN_dropout_prob_0.2`` and will be tagged with ``dropout_prob_0.5``.
 
 
+**What if you're not using Weights and Biases?**
+
+If you're not using Weights and Biases, fusilli will plot loss curves and save them as png files locally. Instead of the WandB project name having the extra user-specified tags, the png file name will have the extra user-specified tags. For example, if I was running the same fusion model as above, but I wasn't using Weights and Biases, the png file name would be ``EdgeCorrGNN_dropout_prob_0.2.png`` and would be saved in ``params["loss_fig_path"]``.
 """

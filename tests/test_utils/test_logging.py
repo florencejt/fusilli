@@ -13,7 +13,7 @@ def test_set_logger_with_kfold_flag_true():
     params = {
         "log": True,
         "kfold_flag": True,
-        "timestamp": "2023-10-05",
+        "project_name": "2023-10-05",
     }
     fold = 1
 
@@ -44,7 +44,7 @@ def test_set_logger_with_kfold_flag_false():
     params = {
         "log": True,
         "kfold_flag": False,
-        "timestamp": "2023-10-05",
+        "project_name": "2023-10-05",
     }
     fold = None
 
@@ -84,3 +84,5 @@ def test_set_logger_with_log_false():
     logger = set_logger(params, fold, fusion_model, extra_log_string_dict)
 
     assert isinstance(logger, CSVLogger)
+    assert logger.version == "Mock_fold_1_param1_value1_param2_42"
+    assert logger.save_dir == "loss_log_dir"
