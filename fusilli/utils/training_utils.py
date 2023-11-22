@@ -95,9 +95,13 @@ def set_logger(params, fold, fusion_model, extra_log_string_dict=None):
         tags = [modality_type, fusion_type] + extra_tags
 
     if params["log"]:
+
+        if params["project_name"] is None:
+            params["project_name"] = "fusilli"
+        
         logger = WandbLogger(
             save_dir=os.getcwd() + "/logs",
-            project=params["timestamp"],
+            project=params["project_name"],
             name=name,
             tags=tags,
             log_model=True,

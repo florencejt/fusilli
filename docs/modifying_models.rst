@@ -25,6 +25,43 @@ How to modify the fusion models
 Modifiable attributes of the fusion models
 ------------------------------------------
 
+:class:`.ActivationFusion`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+  :widths: 40 60
+  :header-rows: 1
+  :stub-columns: 0
+
+  * - Attribute
+    - Guidance
+  * - :attr:`~.ActivationFusion.mod1_layers`
+    - ``nn.Sequential``
+  * - :attr:`~.ActivationFusion.mod2_layers`
+    - ``nn.Sequential``
+  * - :attr:`~.ActivationFusion.fused_layers`
+    - ``nn.Sequential``
+
+:class:`.AttentionAndActivation`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+  :widths: 40 60
+  :header-rows: 1
+  :stub-columns: 0
+
+  * - Attribute
+    - Guidance
+  * - :attr:`~.AttentionAndActivation.mod1_layers`
+    - ``nn.Sequential``
+  * - :attr:`~.AttentionAndActivation.mod2_layers`
+    - ``nn.Sequential``
+  * - :attr:`~.AttentionAndActivation.fused_layers`
+    - ``nn.Sequential``
+  * - :attr:`~.AttentionAndActivation.attention_reduction_ratio`
+    - int
+
+
 
 :class:`.ConcatImgLatentTabDoubleLoss`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
