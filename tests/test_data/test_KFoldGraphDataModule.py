@@ -4,6 +4,7 @@ from .test_TrainTestDataModule import create_test_files
 import torch_geometric
 import numpy as np
 from unittest.mock import patch, Mock
+from pytest_mock import mocker
 
 
 class MockGraphMakerModule:

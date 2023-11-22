@@ -1,9 +1,11 @@
 import os
 from unittest.mock import patch, Mock
 from lightning.pytorch.loggers import WandbLogger, CSVLogger
-# from pytorch_lightning.loggers import WandbLogger, CSVLogger
 from fusilli.utils.training_utils import set_logger
 import wandb
+
+# API key for throwaway WandB account
+wandb.login(key="1a4c82a7e7fa7a8f24cccca821c17d3e4b065835")
 
 
 def test_set_logger_with_kfold_flag_true():

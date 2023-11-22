@@ -2,6 +2,7 @@ import pytest
 from fusilli.data import TrainTestGraphDataModule
 from .test_TrainTestDataModule import create_test_files
 from pytest import approx
+from pytest_mock import mocker
 
 
 class MockGraphMakerModule:

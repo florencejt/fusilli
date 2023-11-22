@@ -7,6 +7,7 @@ import shutil
 import matplotlib.pyplot as plt
 import numpy as np
 import torchmetrics as tm
+from pytest_mock import mocker
 
 from .test_ParentPlotter import (
     ExampleModel,
@@ -24,14 +25,14 @@ def test_error_when_kfold_true_and_lists_of_length_1(sample_kfold_model_data):
     }
 
     with pytest.raises(
-        ValueError,
-        match="List of models in model_dict has length 1 but the kfold_flag is True",
+            ValueError,
+            match="List of models in model_dict has length 1 but the kfold_flag is True",
     ):
         ModelComparison.from_final_val_data(model_dict)
 
     with pytest.raises(
-        ValueError,
-        match="List of models in model_dict has length 1 but the kfold_flag is True",
+            ValueError,
+            match="List of models in model_dict has length 1 but the kfold_flag is True",
     ):
         ModelComparison.from_new_data(model_dict, {})
 
@@ -44,14 +45,14 @@ def test_error_when_kfold_false_and_lists_of_length_2(sample_train_test_model_da
     }
 
     with pytest.raises(
-        ValueError,
-        match="List of models in model_dict has length > 1 but the kfold_flag is False.",
+            ValueError,
+            match="List of models in model_dict has length > 1 but the kfold_flag is False.",
     ):
         ModelComparison.from_final_val_data(model_dict)
 
     with pytest.raises(
-        ValueError,
-        match="List of models in model_dict has length > 1 but the kfold_flag is False.",
+            ValueError,
+            match="List of models in model_dict has length > 1 but the kfold_flag is False.",
     ):
         ModelComparison.from_new_data(model_dict, {})
 
@@ -64,14 +65,14 @@ def test_error_when_lists_are_empty():
     }
 
     with pytest.raises(
-        ValueError,
-        match="Empty list of models has been passed into the ModelComparison.from_final_val_data.",
+            ValueError,
+            match="Empty list of models has been passed into the ModelComparison.from_final_val_data.",
     ):
         ModelComparison.from_final_val_data(model_dict)
 
     with pytest.raises(
-        ValueError,
-        match="Empty list of models has been passed into the ModelComparison.from_new_data.",
+            ValueError,
+            match="Empty list of models has been passed into the ModelComparison.from_new_data.",
     ):
         ModelComparison.from_new_data(model_dict, {})
 

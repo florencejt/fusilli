@@ -7,6 +7,7 @@ import shutil
 import matplotlib.pyplot as plt
 import numpy as np
 import torchmetrics as tm
+from pytest_mock import mocker
 
 
 class ModelParams:
@@ -56,7 +57,8 @@ def sample_kfold_model_data():
         "train_preds": [torch.tensor([1, 0, 1]), torch.tensor([0, 1, 0])],
         "val_reals": [torch.tensor([1, 0, 1]), torch.tensor([0, 1, 0])],
         "val_preds": [torch.tensor([1, 0, 1]), torch.tensor([0, 1, 0])],
-        "metrics_per_fold": {"metric1": [torch.tensor(0.85), torch.tensor(0.78)], "metric2": [torch.tensor(0.92), torch.tensor(0.88)]},
+        "metrics_per_fold": {"metric1": [torch.tensor(0.85), torch.tensor(0.78)],
+                             "metric2": [torch.tensor(0.92), torch.tensor(0.88)]},
         "overall_kfold_metrics": {"metric1": torch.tensor(0.85), "metric2": torch.tensor(0.92)},
     }
 
@@ -264,7 +266,3 @@ def test_error_when_kfold_true_with_single_model(sample_kfold_model_data):
     # confusion matrix
     with pytest.raises(ValueError, match="kfold_flag is True"):
         ConfusionMatrix.from_final_val_data(model_list)
-
-
-
-
