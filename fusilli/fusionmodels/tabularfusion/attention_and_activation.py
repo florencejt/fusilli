@@ -6,11 +6,11 @@ import torch
 from fusilli.utils import check_model_validity
 
 
-class AttentionAndActivation(ParentFusionModel, nn.Module):
+class AttentionAndSelfActivation(ParentFusionModel, nn.Module):
     """
-    Applies an attention mechanism on the image features and performs an element wise product of 
+    Applies an attention mechanism on the second tabular modality features and performs an element wise product of
     the feature maps of the two tabular modalities, 
-    tanh activation function and sigmoid activation function. Afterwoods the the clinical feature
+    tanh activation function and sigmoid activation function. Afterwards the the first tabular modality feature
     map is concatenated with the fused feature map. 
 
     Attributes
@@ -33,10 +33,12 @@ class AttentionAndActivation(ParentFusionModel, nn.Module):
         Sequential layer containing the final prediction layers. The final prediction layers
         take in the number of features of the fused layers as input. Calculated in the
         :meth:`~AttentionAndActivation.calc_fused_layers` method.
+    attention_reduction_ratio : int
+        Reduction ratio of the channel attention module.
     """
 
     # str: Name of the method.
-    method_name = "Activation function and tabular attention"
+    method_name = "Activation function and tabular self-attention"
     # str: Type of modality.
     modality_type = "tabular_tabular"
     # str: Type of fusion.
@@ -57,6 +59,7 @@ class AttentionAndActivation(ParentFusionModel, nn.Module):
 
         self.pred_type = pred_type
 
+        self.attention_reduction_ratio = 16
         self.set_mod1_layers()
         self.set_mod2_layers()
 
@@ -117,11 +120,12 @@ class AttentionAndActivation(ParentFusionModel, nn.Module):
         x_tab1 = x[0]
         x_tab2 = x[1]
 
-        num_channels = x_tab1.size(1)
+        num_channels = x_tab2.size(1)
 
         # Channel attention
-        channel_attention = ChannelAttentionModule(num_features=num_channels)
-        x_tab1 = channel_attention(x_tab1)
+        channel_attention = ChannelAttentionModule(num_features=num_channels,
+                                                   reduction_ratio=self.attention_reduction_ratio)
+        x_tab2 = channel_attention(x_tab2)
 
         for layer in self.mod1_layers.values():
             x_tab1 = layer(x_tab1)
@@ -137,7 +141,7 @@ class AttentionAndActivation(ParentFusionModel, nn.Module):
         out_fuse = torch.tanh(out_fuse)
         out_fuse = torch.sigmoid(out_fuse)
 
-        out_fuse = torch.cat((out_fuse, x_tab2), dim=1)
+        out_fuse = torch.cat((out_fuse, x_tab1), dim=1)
 
         out_fuse = self.fused_layers(out_fuse)
 
@@ -175,6 +179,11 @@ class ChannelAttentionModule(nn.Module):
             Reduction ratio of the channel attention module.
         """
         super(ChannelAttentionModule, self).__init__()
+
+        if num_features // reduction_ratio < 1:
+            raise UserWarning(
+                "first tabular modality dimensions // reduction_ratio < 1. This will cause an error in the model.")
+
         self.fc1 = nn.Linear(num_features, num_features // reduction_ratio, bias=False)
         self.relu = nn.ReLU()
         self.fc2 = nn.Linear(num_features // reduction_ratio, num_features, bias=False)
@@ -200,8 +209,3 @@ class ChannelAttentionModule(nn.Module):
         y = self.fc2(y)
         y = self.sigmoid(y)
         return x * y.expand_as(x)
-
-
-"""
-
-"""

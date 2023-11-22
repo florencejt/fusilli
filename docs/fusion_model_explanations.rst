@@ -105,17 +105,33 @@ This is known as a "decision-level fusion" method.
 :class:`.ActivationFusion`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+This is a tabular-tabular fusion model inspired by `Chen et al. (2022) <https://link.springer.com/article/10.1007/s00432-022-04180-1>`_ : *MDFNet: application of multimodal fusion method based on skin image and clinical data to skin cancer classification*.
+The feature maps from the two separate modality networks are multiplied together, passed through a tanh activation function, then a sigmoid activation function, and then concatenated with the first tabular modality feature map.
+The concatenated feature maps are then passed through a set of fully-connected layers to make a prediction.
+
 .. note::
-    Description and image incoming.
+
+    A tabular-image version is coming soon!
+
+.. image:: _static/ActivationFusion.png
+    :align: left
 
 -----
 
 :class:`.AttentionAndActivation`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. note::
-    Description and image incoming.
+Again, this is a tabular-tabular fusion model inspired by `Chen et al. (2022) <https://link.springer.com/article/10.1007/s00432-022-04180-1>`_ : *MDFNet: application of multimodal fusion method based on skin image and clinical data to skin cancer classification*.
+This one is an extension of :class:`.ActivationFusion`, where a self-attention module has been added to the second tabular modality's pipeline before its network layers.
+The second tabular modality is passed through a fully-connected layer to be downsampled (downsampling factor can be modified), then a RelU, another upsampling fully-connected layer, and then a sigmoid activation function. Then the output is multipled by the original second tabular modality input data, and passed through its own fully-connected layers.
+After this, the process is the same as :class:`.ActivationFusion`.
 
+.. note::
+
+    A tabular-image version is coming soon!
+
+.. image:: _static/ActivationandSelfAttention.png
+    :align: left
 
 
 

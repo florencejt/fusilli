@@ -8,7 +8,7 @@ from fusilli.utils import check_model_validity
 class ActivationFusion(ParentFusionModel, nn.Module):
     """
     Performs an element wise product of the feature maps of the two tabular modalities, 
-    tanh activation function and sigmoid activation function. Afterwoods the the clinical feature
+    tanh activation function and sigmoid activation function. Afterwards the the first tabular modality feature
     map is concatenated with the fused feature map. 
 
     Attributes
@@ -129,7 +129,7 @@ class ActivationFusion(ParentFusionModel, nn.Module):
         out_fuse = torch.tanh(out_fuse)
         out_fuse = torch.sigmoid(out_fuse)
 
-        out_fuse = torch.cat((out_fuse, x_tab2), dim=1)
+        out_fuse = torch.cat((out_fuse, x_tab1), dim=1)
 
         out_fuse = self.fused_layers(out_fuse)
 

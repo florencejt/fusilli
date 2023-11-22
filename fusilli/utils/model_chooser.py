@@ -73,7 +73,7 @@ fusion_model_dict = [
         "path": "fusionmodels.tabularfusion.attention_weighted_GNN",
     },
     {
-        "name": "AttentionAndActivation",
+        "name": "AttentionAndSelfActivation",
         "path": "fusionmodels.tabularfusion.attention_and_activation",
     },
     {

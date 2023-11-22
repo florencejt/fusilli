@@ -356,3 +356,107 @@ def test_EdgeCorrGNN():
     # length
     with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
         test_model.forward((torch.randn(8, 25), torch.randn(8, 25)))
+
+
+# fusilli.fusionmodels.tabularfusion.activation.ActivationFusion
+
+def test_ActivationFusion():
+    test_model = fusion_model_dict["ActivationFusion"]
+
+    # attributes available pre-initialisation
+    assert hasattr(test_model, "method_name")
+    assert test_model.method_name == "Activation function map fusion"
+    assert hasattr(test_model, "modality_type")
+    assert test_model.modality_type == "tabular_tabular"
+    assert hasattr(test_model, "fusion_type")
+    assert test_model.fusion_type == "operation"
+
+    test_model = test_model(pred_type="binary", data_dims=[10, 14, None], params={})
+
+    # initialising
+    assert isinstance(test_model, nn.Module)
+    assert isinstance(test_model, ParentFusionModel)
+    assert hasattr(test_model, "pred_type")
+    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "mod1_layers")
+    assert test_model.mod1_layers['layer 1'][0].in_features == 10
+    assert hasattr(test_model, "mod2_layers")
+    assert test_model.mod2_layers['layer 1'][0].in_features == 14
+    assert hasattr(test_model, "fused_dim")
+    assert test_model.fused_dim == test_model.mod1_layers['layer 5'][0].out_features + test_model.mod2_layers[
+        'layer 5'][0].out_features
+    assert hasattr(test_model, "fused_layers")
+    assert hasattr(test_model, "final_prediction")
+    assert hasattr(test_model, "forward")
+
+    # forward pass
+    test_input = (torch.randn(8, 10), torch.randn(8, 14))
+    test_output = test_model.forward(test_input)
+    assert isinstance(test_output, list)
+    assert test_output[0].shape == torch.Size([8, 1])
+    assert len(test_output) == 1
+
+    # wrong input
+    # - too many dimensions
+    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
+        test_model.forward((torch.randn(8, 10), torch.randn(8, 14), torch.randn(8, 10)))
+    # - too few dimensions
+    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
+        test_model.forward(())
+    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
+        test_model.forward(tuple(torch.randn(8, 10)))
+    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
+        test_model.forward(torch.randn(8, 10))
+
+
+def test_AttentionAndSelfActivation():
+    test_model = fusion_model_dict["AttentionAndSelfActivation"]
+
+    # attributes available pre-initialisation
+    assert hasattr(test_model, "method_name")
+    assert test_model.method_name == "Activation function and tabular self-attention"
+    assert hasattr(test_model, "modality_type")
+    assert test_model.modality_type == "tabular_tabular"
+    assert hasattr(test_model, "fusion_type")
+    assert test_model.fusion_type == "operation"
+
+    test_model = test_model(pred_type="binary", data_dims=[10, 14, None], params={})
+
+    # initialising
+    assert isinstance(test_model, nn.Module)
+    assert isinstance(test_model, ParentFusionModel)
+    assert hasattr(test_model, "pred_type")
+    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "mod1_layers")
+    assert test_model.mod1_layers['layer 1'][0].in_features == 10
+    assert hasattr(test_model, "mod2_layers")
+    assert test_model.mod2_layers['layer 1'][0].in_features == 14
+    assert hasattr(test_model, "fused_dim")
+    assert test_model.fused_dim == test_model.mod1_layers['layer 5'][0].out_features + test_model.mod2_layers[
+        'layer 5'][0].out_features
+    assert hasattr(test_model, "fused_layers")
+    assert hasattr(test_model, "final_prediction")
+    assert hasattr(test_model, "forward")
+
+    # forward pass
+    test_input = (torch.randn(8, 10), torch.randn(8, 14))
+    test_model.attention_reduction_ratio = 2
+    test_output = test_model.forward(test_input)
+    assert isinstance(test_output, list)
+    assert test_output[0].shape == torch.Size([8, 1])
+    assert len(test_output) == 1
+
+    # wrong input
+    # - too many dimensions
+    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
+        test_model.forward((torch.randn(8, 10), torch.randn(8, 14), torch.randn(8, 10)))
+    # - too few dimensions
+    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
+        test_model.forward(())
+    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
+        test_model.forward(tuple(torch.randn(8, 10)))
+    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
+        test_model.forward(torch.randn(8, 10))
+    with pytest.raises(UserWarning, match=r"first tabular modality dimensions // reduction_ratio < 1"):
+        test_model.attention_reduction_ratio = 16
+        test_model.forward((torch.randn(8, 10), torch.randn(8, 14)))

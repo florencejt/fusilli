@@ -60,6 +60,7 @@ filterwarnings = [
     "ignore:.*Use Resampling.*:DeprecationWarning",
     "ignore:.*The 'warn' method is deprecated*:DeprecationWarning",
     "ignore:.*np.find_common_type is deprecated*:DeprecationWarning",
+    "ignore:.*pkg_resources*:DeprecationWarning",
 ]
 
 [tool.coverage.run]
