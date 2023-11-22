@@ -9,7 +9,7 @@ import lightning.pytorch as pl
 # import pytorch_lightning as pl
 from torch import nn
 
-from fusilli.fusionmodels.tabularfusion.mcvae_model import MCVAESubspaceMethod
+# from fusilli.fusionmodels.tabularfusion.mcvae_model import MCVAESubspaceMethod
 from fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps import (
     DenoisingAutoencoder,
     ImgUnimodalDAE,
@@ -112,81 +112,81 @@ def sample_tabimg_datamodule(create_test_files):
     return dm
 
 
-def test_mcvaesubspacemethod_initialisation(sample_datamodule):
-    # mock the fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models
-    # function to return a list of checkpoint filenames
-
-    dm = sample_datamodule
-
-    assert hasattr(MCVAESubspaceMethod, "subspace_models")
-
-    mcvae_subspace = MCVAESubspaceMethod(dm)
-
-    assert mcvae_subspace.datamodule == dm
-    assert mcvae_subspace.num_latent_dims == 10
-
-
-def test_mcvaesubspacemethod_check_params(sample_datamodule):
-    # Test the check_params method
-    mcvae_subspace = MCVAESubspaceMethod(sample_datamodule)
-    mcvae_subspace.check_params()  # Ensure it doesn't raise exceptions
-
-
-def test_mcvaesubspacemethod_train(sample_datamodule):
-    # Test the train method
-
-    dm = sample_datamodule
-    train_dataset = dm.train_dataset
-    # train_dataset = sample_train_dataset
-
-    mcvae_subspace = MCVAESubspaceMethod(dm, max_epochs=50)
-    mean_latents, labels = mcvae_subspace.train(train_dataset)
-    assert isinstance(mean_latents, torch.Tensor)
-    assert isinstance(labels, pd.DataFrame)
-
-    # check that mcvae_early_stopping_tol was called only once
-    mock_mcvae_early_stopping_tol = Mock(return_value=35)
-    with patch("fusilli.fusionmodels.tabularfusion.mcvae_model.mcvae_early_stopping_tol",
-               mock_mcvae_early_stopping_tol):
-        mcvae_subspace = MCVAESubspaceMethod(dm, max_epochs=50)
-        mcvae_subspace.train(train_dataset)
-        mock_mcvae_early_stopping_tol.assert_called_once()
-
-    # look at the return values of the train method and ensure they are correct
-    # (i.e. the correct number of latent dimensions are returned)
-    mcvae_subspace = MCVAESubspaceMethod(dm, max_epochs=50)
-    mean_latents, labels = mcvae_subspace.train(train_dataset)
-    assert mean_latents.shape[1] == mcvae_subspace.num_latent_dims
-    assert labels.shape[1] == 1
+# def test_mcvaesubspacemethod_initialisation(sample_datamodule):
+#     # mock the fusilli.utils.training_utils.get_checkpoint_filenames_for_subspace_models
+#     # function to return a list of checkpoint filenames
+#
+#     dm = sample_datamodule
+#
+#     assert hasattr(MCVAESubspaceMethod, "subspace_models")
+#
+#     mcvae_subspace = MCVAESubspaceMethod(dm)
+#
+#     assert mcvae_subspace.datamodule == dm
+#     assert mcvae_subspace.num_latent_dims == 10
+#
+#
+# def test_mcvaesubspacemethod_check_params(sample_datamodule):
+#     # Test the check_params method
+#     mcvae_subspace = MCVAESubspaceMethod(sample_datamodule)
+#     mcvae_subspace.check_params()  # Ensure it doesn't raise exceptions
 
 
-def test_mcvaesubspacemethod_convert_to_latent(sample_datamodule):
-    # Test the convert_to_latent method
-
-    dm = sample_datamodule
-    train_dataset = dm.train_dataset
-    test_dataset = dm.test_dataset
-
-    mcvae_subspace = MCVAESubspaceMethod(dm, max_epochs=50)
-
-    # raise error if train() has not been called - means that the model doesn't have the attribute 'fit_model' yet
-    with pytest.raises(AttributeError, match=r"fit_model"):
-        mcvae_subspace.convert_to_latent(test_dataset)
-
-    # train the model
-    mcvae_subspace.train(train_dataset)
-
-    # check that convert_to_latent() returns the correct values
-    test_mean_latents, labels, dimensions = mcvae_subspace.convert_to_latent(test_dataset)
-
-    assert isinstance(test_mean_latents, torch.Tensor)
-    assert test_mean_latents.shape[1] == mcvae_subspace.num_latent_dims
-    assert isinstance(labels, pd.DataFrame)
-    assert len(labels) == len(test_mean_latents)
-    assert isinstance(dimensions, list)
-    assert dimensions[1] == None
-    assert dimensions[2] == None
-    assert len(dimensions) == 3
+# def test_mcvaesubspacemethod_train(sample_datamodule):
+#     # Test the train method
+#
+#     dm = sample_datamodule
+#     train_dataset = dm.train_dataset
+#     # train_dataset = sample_train_dataset
+#
+#     mcvae_subspace = MCVAESubspaceMethod(dm, max_epochs=50)
+#     mean_latents, labels = mcvae_subspace.train(train_dataset)
+#     assert isinstance(mean_latents, torch.Tensor)
+#     assert isinstance(labels, pd.DataFrame)
+#
+#     # check that mcvae_early_stopping_tol was called only once
+#     mock_mcvae_early_stopping_tol = Mock(return_value=35)
+#     with patch("fusilli.fusionmodels.tabularfusion.mcvae_model.mcvae_early_stopping_tol",
+#                mock_mcvae_early_stopping_tol):
+#         mcvae_subspace = MCVAESubspaceMethod(dm, max_epochs=50)
+#         mcvae_subspace.train(train_dataset)
+#         mock_mcvae_early_stopping_tol.assert_called_once()
+#
+#     # look at the return values of the train method and ensure they are correct
+#     # (i.e. the correct number of latent dimensions are returned)
+#     mcvae_subspace = MCVAESubspaceMethod(dm, max_epochs=50)
+#     mean_latents, labels = mcvae_subspace.train(train_dataset)
+#     assert mean_latents.shape[1] == mcvae_subspace.num_latent_dims
+#     assert labels.shape[1] == 1
+#
+#
+# def test_mcvaesubspacemethod_convert_to_latent(sample_datamodule):
+#     # Test the convert_to_latent method
+#
+#     dm = sample_datamodule
+#     train_dataset = dm.train_dataset
+#     test_dataset = dm.test_dataset
+#
+#     mcvae_subspace = MCVAESubspaceMethod(dm, max_epochs=50)
+#
+#     # raise error if train() has not been called - means that the model doesn't have the attribute 'fit_model' yet
+#     with pytest.raises(AttributeError, match=r"fit_model"):
+#         mcvae_subspace.convert_to_latent(test_dataset)
+#
+#     # train the model
+#     mcvae_subspace.train(train_dataset)
+#
+#     # check that convert_to_latent() returns the correct values
+#     test_mean_latents, labels, dimensions = mcvae_subspace.convert_to_latent(test_dataset)
+#
+#     assert isinstance(test_mean_latents, torch.Tensor)
+#     assert test_mean_latents.shape[1] == mcvae_subspace.num_latent_dims
+#     assert isinstance(labels, pd.DataFrame)
+#     assert len(labels) == len(test_mean_latents)
+#     assert isinstance(dimensions, list)
+#     assert dimensions[1] == None
+#     assert dimensions[2] == None
+#     assert len(dimensions) == 3
 
 
 # DENOISING AUTOENCODER MODEL

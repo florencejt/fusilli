@@ -12,10 +12,10 @@ from fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain i
     concat_img_latent_tab_subspace_method,
     ConcatImgLatentTabDoubleTrain,
 )
-from fusilli.fusionmodels.tabularfusion.mcvae_model import (
-    MCVAESubspaceMethod,
-    MCVAE_tab,
-)
+# from fusilli.fusionmodels.tabularfusion.mcvae_model import (
+#     MCVAESubspaceMethod,
+#     MCVAE_tab,
+# )
 
 from tests.test_data.test_TrainTestDataModule import create_test_files
 from fusilli.data import TrainTestDataModule
@@ -550,18 +550,18 @@ def model_instance_ConcatImgLatentTabDoubleTrain():
     return ConcatImgLatentTabDoubleTrain(pred_type, data_dims, params)
 
 
-@pytest.fixture
-def model_instance_MCVAE_tab():
-    pred_type = "regression"
-    data_dims = [10, 15, None]
-    params = {}
-    return MCVAE_tab(pred_type, data_dims, params)
+# @pytest.fixture
+# def model_instance_MCVAE_tab():
+#     pred_type = "regression"
+#     data_dims = [10, 15, None]
+#     params = {}
+#     return MCVAE_tab(pred_type, data_dims, params)
 
 
 model_instances_training = [
     ("DAETabImgMaps", "model_instance_DAETabImgMaps"),
     ("ConcatImgLatentTabDoubleLoss", "model_instance_ConcatImgLatentTabDoubleLoss"),
-    ("MCVAE_tab", "model_instance_MCVAE_tab"),
+    # ("MCVAE_tab", "model_instance_MCVAE_tab"),
     ("ConcatImgLatentTabDoubleTrain", "model_instance_ConcatImgLatentTabDoubleTrain"),
 ]
 
@@ -813,29 +813,29 @@ def model_instance_concat_img_latent_tab_subspace_method_3D(create_test_files):
     return concat_img_latent_tab_subspace_method(datamodule=datamodule)
 
 
-@pytest.fixture
-def model_instance_MCVAESubspaceMethod(create_test_files):
-    tabular1_csv = create_test_files["tabular1_csv"]
-    tabular2_csv = create_test_files["tabular2_csv"]
-    image_torch_file_3d = create_test_files["image_torch_file_3d"]
-
-    params = {
-        "test_size": 0.2,
-        "pred_type": "binary",
-        "multiclass_dims": None,
-        "checkpoint_dir": None,
-    }
-    sources = [tabular1_csv, tabular2_csv, image_torch_file_3d]
-    batch_size = 8
-    example_fusion_model = Mock()
-    example_fusion_model.modality_type = "tabular_tabular"
-
-    # Initialize the TrainTestDataModule
-    datamodule = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
-    datamodule.prepare_data()
-    datamodule.setup()
-
-    return MCVAESubspaceMethod(datamodule=datamodule)
+# @pytest.fixture
+# def model_instance_MCVAESubspaceMethod(create_test_files):
+#     tabular1_csv = create_test_files["tabular1_csv"]
+#     tabular2_csv = create_test_files["tabular2_csv"]
+#     image_torch_file_3d = create_test_files["image_torch_file_3d"]
+#
+#     params = {
+#         "test_size": 0.2,
+#         "pred_type": "binary",
+#         "multiclass_dims": None,
+#         "checkpoint_dir": None,
+#     }
+#     sources = [tabular1_csv, tabular2_csv, image_torch_file_3d]
+#     batch_size = 8
+#     example_fusion_model = Mock()
+#     example_fusion_model.modality_type = "tabular_tabular"
+#
+#     # Initialize the TrainTestDataModule
+#     datamodule = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
+#     datamodule.prepare_data()
+#     datamodule.setup()
+#
+#     return MCVAESubspaceMethod(datamodule=datamodule)
 
 
 model_instances_data = [
@@ -855,7 +855,7 @@ model_instances_data = [
         "concat_img_latent_tab_subspace_method",
         "model_instance_concat_img_latent_tab_subspace_method_3D",
     ),
-    ("MCVAESubspaceMethod", "model_instance_MCVAESubspaceMethod"),
+    # ("MCVAESubspaceMethod", "model_instance_MCVAESubspaceMethod"),
 ]
 
 

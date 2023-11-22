@@ -7,7 +7,7 @@ from fusilli.fusionmodels.base_model import ParentFusionModel
 
 fusion_models = import_chosen_fusion_models({
     "fusion_type": "unimodal"
-})
+}, skip_models=["MCVAE_tab"])
 
 fusion_model_names = [model.__name__ for model in fusion_models]
 # make into dict

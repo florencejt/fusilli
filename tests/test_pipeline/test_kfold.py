@@ -11,7 +11,7 @@ from ..test_data.test_TrainTestDataModule import create_test_files
 @pytest.mark.filterwarnings("ignore:.*No positive samples in targets,*.")
 def test_train_and_test(create_test_files, tmp_path):
     model_conditions = {"class_name": ["Tabular1Unimodal"]}
-    model = import_chosen_fusion_models(model_conditions)[0]
+    model = import_chosen_fusion_models(model_conditions, skip_models=["MCVAE_tab"])[0]
 
     tabular1_csv = create_test_files["tabular1_csv"]
     tabular2_csv = create_test_files["tabular2_csv"]

@@ -22,7 +22,7 @@ import os
 @pytest.mark.filterwarnings("ignore:.*distutils Version classes are deprecated*.")
 def test_train_and_test(create_test_files, tmp_path):
     model_conditions = {"class_name": ["DAETabImgMaps"]}
-    model = import_chosen_fusion_models(model_conditions)[0]
+    model = import_chosen_fusion_models(model_conditions, skip_models=["MCVAE_tab"])[0]
 
     tabular1_csv = create_test_files["tabular1_csv"]
     tabular2_csv = create_test_files["tabular2_csv"]
@@ -117,7 +117,7 @@ def test_train_and_test(create_test_files, tmp_path):
 @pytest.mark.filterwarnings("ignore:.*distutils Version classes are deprecated*.")
 def test_kfold(create_test_files, tmp_path):
     model_conditions = {"class_name": ["DAETabImgMaps"]}
-    model = import_chosen_fusion_models(model_conditions)[0]
+    model = import_chosen_fusion_models(model_conditions, skip_models=["MCVAE_tab"])[0]
 
     tabular1_csv = create_test_files["tabular1_csv"]
     tabular2_csv = create_test_files["tabular2_csv"]

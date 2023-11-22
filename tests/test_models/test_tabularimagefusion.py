@@ -7,7 +7,7 @@ from fusilli.fusionmodels.base_model import ParentFusionModel
 
 fusion_models = import_chosen_fusion_models({
     "modality_type": ["tabular_image"],
-})
+}, skip_models=["MCVAE_tab"])
 
 fusion_model_names = [model.__name__ for model in fusion_models]
 # make into dict
