@@ -44,10 +44,12 @@ The graph will probably be created with the ``PyTorch Geometric`` library, which
 
 Let's import the libraries that we need:
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-38
+.. GENERATED FROM PYTHON SOURCE LINES 27-40
 
-.. code-block:: default
+.. code-block:: Python
 
+
+    # sphinx_gallery_thumbnail_path = '_static/EdgeCorrGNN.png'
 
     import numpy as np
     import torch
@@ -60,7 +62,7 @@ Let's import the libraries that we need:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 39-48
+.. GENERATED FROM PYTHON SOURCE LINES 41-50
 
 Now let's create the graph-maker class.
 
@@ -72,9 +74,9 @@ The graph-maker class must have the following methods:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-87
+.. GENERATED FROM PYTHON SOURCE LINES 50-89
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -116,7 +118,7 @@ The graph-maker class must have the following methods:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 88-105
+.. GENERATED FROM PYTHON SOURCE LINES 90-107
 
 Creating the Fusion Model Class
 -------------------------------
@@ -136,9 +138,9 @@ Very similar to the general fusion model template in :ref:`how_to_contribute_a_t
   The graph-maker class returns a ``torch_geometric.data.Data`` object, but in :func:`~.get_data_module`, this is converted to ``torch_geometric.data.lightning.LightningNodeData`` object, which lets you use the ``torch_geometric`` library with PyTorch Lightning.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 105-154
+.. GENERATED FROM PYTHON SOURCE LINES 107-156
 
-.. code-block:: default
+.. code-block:: Python
 
 
     from torch_geometric.nn import GCNConv
@@ -146,7 +148,7 @@ Very similar to the general fusion model template in :ref:`how_to_contribute_a_t
 
     class TemplateGraphFusionModel(ParentFusionModel, nn.Module):
         method_name = "Template Graph Fusion Model"
-        modality_type = "both_tab"
+        modality_type = "tabular_tabular"
         fusion_type = "graph"
 
         graph_maker = TemplateGraphMaker
@@ -191,27 +193,19 @@ Very similar to the general fusion model template in :ref:`how_to_contribute_a_t
             ]
 
 
-.. rst-class:: sphx-glr-timing
-
-   **Total running time of the script:** (0 minutes 0.000 seconds)
-
-
 .. _sphx_glr_download_contributing_examples_template_graph_fusion.py:
 
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: template_graph_fusion.ipynb <template_graph_fusion.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: template_graph_fusion.py <template_graph_fusion.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: template_graph_fusion.ipynb <template_graph_fusion.ipynb>`
 
 
 .. only:: html

@@ -241,7 +241,7 @@ def generate_sklearn_simulated_data(
     tabular2_data.set_index("study_id", inplace=True)
     tabular2_data["pred_label"] = labels
 
-    img_data = generate_simulated_image_data(num_samples, img_dims)
+    # img_data = generate_simulated_image_data(num_samples, img_dims)
 
     # save to csv and pt
     tabular1_data.to_csv(params["tabular1_source"])

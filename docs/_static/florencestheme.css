@@ -27,14 +27,56 @@ margin: 0;
     margin: 0;
 } */
 
-.wy-side-nav-search,
-.wy-nav-top {
-    /* background: #EFFFE9;
-    border-bottom: #eaffed; */
-    background: #ffe7fb;
-    border-bottom: #ffe7fb;
-    background-color: #ffe7fb;
+/* original pink and purple vibes */
+/*:root {*/
+/*    --lightpink: #ffe7fb;*/
+/*    --white: #ffffff;*/
+/*    --black: #000000;*/
+/*    --tableheaderbg: #ac47a5;*/
+/*    --sidebardark: #370034;
+    --backgroundwhite: #fcfcfc;
+
+/*}*/
+
+/* salmon and pink vibe */
+/*:root {*/
+/*    --lightpink: #ffe5ec;*/
+/*    --white: #ffffff;*/
+/*    --black: #000000;*/
+/*    --tableheaderbg: #fb6f92;*/
+/*    --sidebardark: #fb6f92;
+    --backgroundwhite: #fcfcfc;
+/*}*/
+
+/* brighter pink vibes */
+:root {
+    --lightpink: #ffd0e5;
+    --white: #ffffff;
+    --black: #000000;
+    --tableheaderbg: #ff74b2;
+    --sidebardark: #c5227b;
+    --backgroundwhite: #fcfcfc;
 }
+
+
+/*.wy-side-nav-search,*/
+/*.wy-nav-top {*/
+/*    !* background: #EFFFE9;*/
+/*    border-bottom: #eaffed; *!*/
+/*    background: var(--lightpink);*/
+/*    border-bottom: var(--lightpink);*/
+/*    background-color: var(--lightpink);*/
+/*}*/
+
+/*.wy-side-nav-search,*/
+/*.wy-nav-top {*/
+/*    !* background: #EFFFE9;*/
+/*    border-bottom: #eaffed; *!*/
+/*    background: var(--white);*/
+/*    border-bottom: var(--white);*/
+/*    background-color: var(--white);*/
+/*}*/
+
 
 /* override table no-wrap */
 .wy-table-responsive table td,
@@ -42,13 +84,17 @@ margin: 0;
     white-space: normal;
 }
 
+/*.wy-side-nav-search {*/
+/*    background-color: var(--lightpink);*/
+/*}*/
+
 .wy-side-nav-search {
-    background-color: #ffe7fb;
+    background-color: var(--backgroundwhite);
 }
 
 .wy-menu-vertical li.current > a {
     /*background-color: #ffe7fb;*/
-    background-color: #ac47a5;
+    background-color: var(--tableheaderbg);
     position: relative;
 }
 
@@ -59,7 +105,8 @@ margin: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ac47a5; /* Your background color */
+    background-color: var(--tableheaderbg);
+    /*background-color: #ac47a5; !* Your background color *!*/
     z-index: -1;
 }
 
@@ -67,16 +114,19 @@ margin: 0;
     width: 100%;
     border-radius: 0px;
     padding: 6px 12px;
-    border-color: #ffe7fb;
+    /*border-color: #ffe7fb;*/
+    border-color: var(--lightpink);
 }
 
 /* .wy-side-scroll {
     background-color: #370034;
 } */
 
-.wy-side-nav-search {
-    background-color: #ffe7fb;
-}
+/*.wy-side-nav-search {*/
+/*    !*background-color: #ffe7fb;*!*/
+/*    background-color: var(--lightpink);*/
+
+/*}*/
 
 /* Side bar background */
 .wy-nav-side {
@@ -86,18 +136,22 @@ margin: 0;
     padding: 0%;
     flood-color: #eaffed;
     outline-color: #eaffed; */
-    background: #ffe7fb;
-    background-color: #ffe7fb;
-    color: #ffe7fb;
+    /*background: #ffe7fb;*/
+    background: var(--lightpink);
+    /*background-color: #ffe7fb;*/
+    background-color: var(--lightpink);
+    /*color: #ffe7fb;*/
+    color: var(--lightpink);
     padding: 0%;
-    flood-color: #ffe7fb;
+    /*flood-color: #ffe7fb;*/
+    flood-color: var(--lightpink);
     margin: 0%;
 }
 
 .wy-menu-vertical {
     padding-block: 0%;
-    background-color: #ffe7fb; /* Set the background color for the entire sidebar */
-
+    /*background-color: #ffe7fb; !* Set the background color for the entire sidebar *!*/
+    background-color: var(--lightpink);
 }
 
 
@@ -113,7 +167,8 @@ code.literal {
     color: #2f2f2f;
     /* background-color: #EFFFE9; */
 
-    background-color: #ffe7fb;
+    /*background-color: #ffe7fb;*/
+    background-color: var(--lightpink);
 }
 
 
@@ -153,8 +208,10 @@ a:active {
 .wy-menu > .caption > span.caption-text {
     /* color: #990092;
     background-color: #adf793; */
-    color: #ffffff;
-    background-color: #370034;
+    /*color: #ffffff;*/
+    color: var(--white);
+    /*background-color: #370034;*/
+    background-color: var(--sidebardark);
     /* background-color: #ffe7fb; */
 }
 
@@ -163,14 +220,17 @@ a:active {
     border-right: 3px solid #cdf8be;
     background-color: #cdf8be; */
     color: #000000;
-    border-right: 3px solid #ffe7fb;
-    background-color: #ffe7fb;
+    /*border-right: 3px solid #ffe7fb;*/
+    border-right: 3px solid var(--lightpink);
+    /*background-color: #ffe7fb;*/
+    background-color: var(--lightpink);
 }
 
 
 .wy-menu-vertical li ul li a {
     /* color: #EFFFE9; */
-    color: #ffe7fb;
+    /*color: #ffe7fb;*/
+    color: var(--lightpink);
 }
 
 .wy-menu-vertical li.toctree-l2 button.toctree-expand {
@@ -194,24 +254,28 @@ a:active {
 
 .wy-menu-vertical li.toctree-l2.current li.toctree-l3 > a {
     /* background: #cdf8be; */
-    background: #ffe7fb;
+    /*background: #ffe7fb;*/
+    background: var(--lightpink);
     /* overflow-x: hidden; */
 }
 
 .wy-menu-vertical li.toctree-l3.current li.toctree-l4 > a {
     /* background: #cdf8be; */
-    background: #ffe7fb;
+    /*background: #ffe7fb;*/
+    background: var(--lightpink);
     display: inline-block;
 }
 
 .wy-menu-vertical {
     overflow-x: scroll;
-    background-color: #ffe7fb; /* Background color for the side scroll */
+    /*background-color: #ffe7fb; !* Background color for the side scroll *!*/
+    background-color: var(--lightpink); /* Background color for the side scroll */
 }
 
 .wy-menu-vertical .wy-side-scroll .wy-menu-vertical header,
 .wy-menu-vertical .wy-side-scroll .wy-menu-vertical p.caption {
-    background-color: #370034; /* Background color for headers within the side scroll */
+    /*background-color: #370034; !* Background color for headers within the side scroll *!*/
+    background-color: var(--sidebardark); /* Background color for headers within the side scroll */
 }
 
 html.writer-html4 .rst-content dl:not(.docutils) > dt,
@@ -220,12 +284,12 @@ html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(
     margin: 6px 0;
     font-size: 90%;
     line-height: normal;
-    background: #fae7f8;
+    background: var(--lightpink);
     color: #db55c3;
-    border-top: 3px solid #e737ac;
+    border-top: 3px solid var(--tableheaderbg);
     border-top-width: 3px;
     border-top-style: solid;
-    border-top-color: #e737ac;
+    border-top-color: var(--tableheaderbg);
     padding: 6px;
     position: relative;
 }
@@ -254,22 +318,26 @@ html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(
 /* makes table header background purple */
 th {
     color: white;
-    background: #ac47a5;
+    /*background: #ac47a5;*/
+    background: var(--tableheaderbg);
 }
 
 /* makes the attribute/method box background colours different */
 html.writer-html4 .rst-content dl:not(.docutils) dl:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) > dt,
 html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) dl:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) > dt {
     /* background-color: #eaffed; */
-    background-color: #ffe7fb;
+    /*background-color: #ffe7fb;*/
+    background-color: var(--lightpink);
 }
 
 .wy-menu-vertical .toctree-l1 {
     opacity: 1;
     /* background-color: #eaffed;
     border-color: #eaffed; */
-    background-color: #ffe7fb;
-    border-color: #ffe7fb;
+    /*background-color: #ffe7fb;*/
+    background-color: var(--lightpink);
+    /*border-color: #ffe7fb;*/
+    border-color: var(--lightpink);
 }
 
 /* .wy-menu-vertical header,
@@ -295,20 +363,23 @@ html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(
 
 
 .wy-nav-content-wrap {
-    background: #fcfcfc;
+    background: var(--backgroundwhite);
 }
 
 
 .wy-menu-vertical header,
 .wy-menu-vertical p.caption {
-    background: #370034; /* Your background color */
+    /*background: #370034; !* Your background color *!*/
+    background: var(--sidebardark); /* Your background color */
     font-size: large;
     padding: 6px 20px; /* Adjust padding as needed */
     margin: 0;
-    border-top: 3px solid #370034; /* Adjust border properties as needed */
+    /*border-top: 3px solid #370034; !* Adjust border properties as needed *!*/
+    border-top: 3px solid var(--sidebardark); /* Adjust border properties as needed */
     border-top-width: 3px;
     border-top-style: solid;
-    border-bottom: 3px solid #370034; /* Adjust border properties as needed */
+    /*border-bottom: 3px solid #370034; !* Adjust border properties as needed *!*/
+    border-bottom: 3px solid var(--sidebardark); /* Adjust border properties as needed */
     border-bottom-width: 3px;
     border-bottom-style: solid;
     display: flex;

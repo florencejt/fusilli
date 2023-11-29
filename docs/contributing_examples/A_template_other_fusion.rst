@@ -45,9 +45,9 @@ Step 1: Importing the libraries
 Let's import the libraries we need to create our model. Because we're using PyTorch, we need to import the PyTorch libraries
 as well as the :class:`~.ParentFusionModel` class and functions to help with checking model conditions and validity in the :mod:`~.utils.check_model_validity` module.
 
-.. GENERATED FROM PYTHON SOURCE LINES 29-40
+.. GENERATED FROM PYTHON SOURCE LINES 29-43
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import torch.nn as nn
@@ -60,13 +60,16 @@ as well as the :class:`~.ParentFusionModel` class and functions to help with che
     from fusilli.utils import check_model_validity
 
 
+    # sphinx_gallery_thumbnail_path = '_static/ConcatTabularFeatureMaps.png'
 
-.. GENERATED FROM PYTHON SOURCE LINES 41-43
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 44-46
 
 Step 2: Creating the model structure
 ------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-60
+.. GENERATED FROM PYTHON SOURCE LINES 48-63
 
 **Step 2.1: Creating the class**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -84,9 +87,9 @@ PyTorch model.
 These input arguments have to be passed into the ``__init__()`` function of our fusion model. When running this library, this is done automatically for you in
 the :func:`~fusilli.train.train_and_save_models` function.
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-70
+.. GENERATED FROM PYTHON SOURCE LINES 63-73
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -99,30 +102,30 @@ the :func:`~fusilli.train.train_and_save_models` function.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-82
+.. GENERATED FROM PYTHON SOURCE LINES 74-85
 
 **Step 2.2: Setting the model attributes**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Each model has to have the following attributes at the class level (i.e. outside of the ``__init__()`` function and accessable without having to call ``TemplateFusionModel()``):
 
 * ``method_name`` : a string of the method name. This can be a better description of the method than the class name. For example, the class name might be ``ConcatTabularData`` but the method name might be ``Concatenation of tabular data``.
-* ``modality_type`` : a string containing the type of modality, which is one of the following: ``tabular1``, ``tabular2``, ``both_tab``, ``tab_img``, ``img``.
+* ``modality_type`` : a string containing the type of modality, which is one of the following: ``tabular1``, ``tabular2``, ``tabular_tabular``, ``tabular_image``, ``img``.
 * ``fusion_type`` : a string containing the type of fusion, which is one of the following: ``operation``, ``attention``, ``tensor``, ``graph``, ``subspace``. To find out more about the different types of fusion, please refer to the :ref:`fusion-model-explanations` section.
 
 .. note::
 
   The comment above the class attributes lets the attributes be documented automatically by Sphinx. This is why the comment is formatted in a specific way.
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-98
+.. GENERATED FROM PYTHON SOURCE LINES 85-101
 
-.. code-block:: default
+.. code-block:: Python
 
 
     class TemplateFusionModel(ParentFusionModel, nn.Module):
         # str: name of the method
         method_name = "Template fusion model"
         # str: modality type
-        modality_type = "both_tab"  # or "tabular1", "tabular2", "both_tab", "tab_img", "img"
+        modality_type = "tabular_tabular"  # or "tabular1", "tabular2", "tabular_tabular", "tabular_image", "img"
         # str: fusion type
         fusion_type = "attention"  # or "operation", "tensor", "graph", "subspace"
 
@@ -134,7 +137,7 @@ Each model has to have the following attributes at the class level (i.e. outside
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-137
+.. GENERATED FROM PYTHON SOURCE LINES 102-140
 
 **Step 2.3: Setting the model layers**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -175,16 +178,16 @@ This is simply done by creating a dictionary of layers and assigning it to the `
 
 Let's create our own layers for our model. We'll use the preset layers in the :class:`~.ParentFusionModel` class and make a tabular-tabular fusion model.
 
-.. GENERATED FROM PYTHON SOURCE LINES 137-171
+.. GENERATED FROM PYTHON SOURCE LINES 140-174
 
-.. code-block:: default
+.. code-block:: Python
 
 
     class TemplateFusionModel(ParentFusionModel, nn.Module):
         # str: name of the method
         method_name = "Template fusion model"
         # str: modality type
-        modality_type = "both_tab"  # or "tabular1", "tabular2", "both_tab", "tab_img", "img"
+        modality_type = "tabular_tabular"  # or "tabular1", "tabular2", "tabular_tabular", "tabular_image", "img"
         # str: fusion type
         fusion_type = "attention"  # or "operation", "tensor", "graph", "subspace"
 
@@ -214,7 +217,7 @@ Let's create our own layers for our model. We'll use the preset layers in the :c
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 172-202
+.. GENERATED FROM PYTHON SOURCE LINES 175-205
 
 Step 3: Setting up model to be modifiable
 ------------------------------------------
@@ -247,16 +250,16 @@ The function ``set_final_pred_layers()`` should be moved into this function sinc
 
   If calculating ``self.fused_dim`` is complicated, you can create a separate function called ``get_fused_dim()`` and call it in ``__init__()`` and in ``calc_fused_layers()``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 202-247
+.. GENERATED FROM PYTHON SOURCE LINES 205-250
 
-.. code-block:: default
+.. code-block:: Python
 
 
     class TemplateFusionModel(ParentFusionModel, nn.Module):
         # str: name of the method
         method_name = "Template fusion model"
         # str: modality type
-        modality_type = "both_tab"  # or "tabular1", "tabular2", "both_tab", "tab_img", "img"
+        modality_type = "tabular_tabular"  # or "tabular1", "tabular2", "tabular_tabular", "tabular_image", "img"
         # str: fusion type
         fusion_type = "attention"  # or "operation", "tensor", "graph", "subspace"
 
@@ -297,7 +300,7 @@ The function ``set_final_pred_layers()`` should be moved into this function sinc
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 248-260
+.. GENERATED FROM PYTHON SOURCE LINES 251-263
 
 Step 4: Defining the forward function
 ----------------------------------------
@@ -309,12 +312,12 @@ Let's define the forward function of our model. This is where we define how the 
 * a tensor of the original input data (if there is only one modality). This is probably not applicable to your model but it might be for a graph- or subspace-based fusion model.
 
 **The output of the forward function is a list containing the output of the model.**
-This is because some of the models in ``fusilli`` output reconstructed data as well as the prediction, and this library is designed to handle this by all outputs either being a list of length 1 or 2.
+This is because some of the models in Fusilli output reconstructed data as well as the prediction, and this library is designed to handle this by all outputs either being a list of length 1 or 2.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 260-283
+.. GENERATED FROM PYTHON SOURCE LINES 263-286
 
-.. code-block:: default
+.. code-block:: Python
 
 
     def forward(self, x):
@@ -340,7 +343,7 @@ This is because some of the models in ``fusilli`` output reconstructed data as w
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 284-296
+.. GENERATED FROM PYTHON SOURCE LINES 287-299
 
 Step 5: Adding checks
 ----------------------------
@@ -355,9 +358,9 @@ Your model might have more specific checks, such as checking that your modality 
 
 At the beginning of the ``forward()`` function, we add the following check:
 
-.. GENERATED FROM PYTHON SOURCE LINES 296-303
+.. GENERATED FROM PYTHON SOURCE LINES 299-306
 
-.. code-block:: default
+.. code-block:: Python
 
 
     def forward(self, x):
@@ -367,13 +370,13 @@ At the beginning of the ``forward()`` function, we add the following check:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 304-305
+.. GENERATED FROM PYTHON SOURCE LINES 307-308
 
 At the beginning of the ``calc_fused_layers()`` function, we add the following checks:
 
-.. GENERATED FROM PYTHON SOURCE LINES 305-311
+.. GENERATED FROM PYTHON SOURCE LINES 308-314
 
-.. code-block:: default
+.. code-block:: Python
 
 
     def calc_fused_layers(self):
@@ -382,13 +385,13 @@ At the beginning of the ``calc_fused_layers()`` function, we add the following c
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 312-313
+.. GENERATED FROM PYTHON SOURCE LINES 315-316
 
 If we were using images, we would also add the following check at the beginning of the ``calc_fused_layers()`` function which checks that the image layers are a :class:`~torch.nn.ModuleDict` and that the image dimension is correct
 
-.. GENERATED FROM PYTHON SOURCE LINES 313-318
+.. GENERATED FROM PYTHON SOURCE LINES 316-321
 
-.. code-block:: default
+.. code-block:: Python
 
 
     def calc_fused_layers(self):
@@ -396,7 +399,7 @@ If we were using images, we would also add the following check at the beginning 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 319-337
+.. GENERATED FROM PYTHON SOURCE LINES 322-340
 
 Step 6: Adding documentation
 ----------------------------
@@ -417,9 +420,9 @@ The docstring for the ``__init__()`` function and other functions in the model (
 
 Let's add documentation to our model and see it all come together!
 
-.. GENERATED FROM PYTHON SOURCE LINES 337-464
+.. GENERATED FROM PYTHON SOURCE LINES 340-467
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -455,7 +458,7 @@ Let's add documentation to our model and see it all come together!
         # str: name of the method
         method_name = "Template fusion model"
         # str: modality type
-        modality_type = "both_tab"  # or "tabular1", "tabular2", "both_tab", "tab_img", "img"
+        modality_type = "tabular_tabular"  # or "tabular1", "tabular2", "tabular_tabular", "tabular_image", "img"
         # str: fusion type
         fusion_type = "attention"  # or "operation", "tensor", "graph", "subspace"
 
@@ -549,14 +552,9 @@ Let's add documentation to our model and see it all come together!
             ]
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 465-466
+.. GENERATED FROM PYTHON SOURCE LINES 468-469
 
 I hope this template has been helpful! If you have any questions, please feel free to ask in the GitHub Discussions page.
-
-
-.. rst-class:: sphx-glr-timing
-
-   **Total running time of the script:** (0 minutes 0.000 seconds)
 
 
 .. _sphx_glr_download_contributing_examples_A_template_other_fusion.py:
@@ -565,16 +563,13 @@ I hope this template has been helpful! If you have any questions, please feel fr
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: A_template_other_fusion.ipynb <A_template_other_fusion.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: A_template_other_fusion.py <A_template_other_fusion.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: A_template_other_fusion.ipynb <A_template_other_fusion.ipynb>`
 
 
 .. only:: html

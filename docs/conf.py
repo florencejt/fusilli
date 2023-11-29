@@ -94,8 +94,8 @@ add_module_names = False
 # html_theme = "sphinx_wagtail_theme"
 html_theme = "renku"
 html_static_path = ["_static"]
-html_logo = "pink_pasta_logo.png"
-html_favicon = "pink_pasta_logo.png"
+html_logo = "_static/pink_pasta_logo.png"
+html_favicon = "_static/pink_pasta_logo.png"
 
 from sphinx_gallery.sorting import ExplicitOrder
 

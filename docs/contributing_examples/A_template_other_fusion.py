@@ -37,6 +37,9 @@ from fusilli.fusionmodels.base_model import ParentFusionModel
 from fusilli.utils import check_model_validity
 
 
+# sphinx_gallery_thumbnail_path = '_static/ConcatTabularFeatureMaps.png'
+
+
 # %%
 # Step 2: Creating the model structure
 # ------------------------------------
@@ -73,7 +76,7 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
 # Each model has to have the following attributes at the class level (i.e. outside of the ``__init__()`` function and accessable without having to call ``TemplateFusionModel()``):
 #
 # * ``method_name`` : a string of the method name. This can be a better description of the method than the class name. For example, the class name might be ``ConcatTabularData`` but the method name might be ``Concatenation of tabular data``.
-# * ``modality_type`` : a string containing the type of modality, which is one of the following: ``tabular1``, ``tabular2``, ``tabular_tabular``, ``tab_img``, ``img``.
+# * ``modality_type`` : a string containing the type of modality, which is one of the following: ``tabular1``, ``tabular2``, ``tabular_tabular``, ``tabular_image``, ``img``.
 # * ``fusion_type`` : a string containing the type of fusion, which is one of the following: ``operation``, ``attention``, ``tensor``, ``graph``, ``subspace``. To find out more about the different types of fusion, please refer to the :ref:`fusion-model-explanations` section.
 #
 # .. note::
@@ -255,7 +258,7 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
 # * a tensor of the original input data (if there is only one modality). This is probably not applicable to your model but it might be for a graph- or subspace-based fusion model.
 #
 # **The output of the forward function is a list containing the output of the model.**
-# This is because some of the models in ``fusilli`` output reconstructed data as well as the prediction, and this library is designed to handle this by all outputs either being a list of length 1 or 2.
+# This is because some of the models in Fusilli output reconstructed data as well as the prediction, and this library is designed to handle this by all outputs either being a list of length 1 or 2.
 #
 
 def forward(self, x):

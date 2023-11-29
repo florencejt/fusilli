@@ -2,10 +2,16 @@
 
 .. _sphx_glr_auto_examples_customising_behaviour:
 
-Customising behaviour: logging, modifying models, etc.
+.. _advanced-examples:
+
+Customising Fusilli
 =======================================================
 
 These are examples showing how to get more in depth with Fusilli and customise its behaviour.
+
+* Modify the fusion model structures
+* Change the training behaviour: early stopping, batch size, test set size, etc.
+* Use Fusilli for hyperparameter tuning by adding suffixes to training outputs
 
 
 .. raw:: html
@@ -15,7 +21,7 @@ These are examples showing how to get more in depth with Fusilli and customise i
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip=" Early stopping  Batch size  Number of epochs  Checkpoint suffixes">
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial will show you how to customise the training of your fusion model.">
 
 .. only:: html
 
@@ -32,23 +38,6 @@ These are examples showing how to get more in depth with Fusilli and customise i
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip=" .. note::">
-
-.. only:: html
-
-  .. image:: /auto_examples/customising_behaviour/images/thumb/sphx_glr_how_to_use_logging_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_auto_examples_customising_behaviour_how_to_use_logging.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">How to use Weights and Biases Logging with Fusilli</div>
-    </div>
-
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="This tutorial will show you how to modify the architectures of fusion models.">
 
 .. only:: html
@@ -60,7 +49,7 @@ These are examples showing how to get more in depth with Fusilli and customise i
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">How to modify architectures of fusion models</div>
+      <div class="sphx-glr-thumbnail-title">How to modify fusion model architecture</div>
     </div>
 
 
@@ -73,6 +62,5 @@ These are examples showing how to get more in depth with Fusilli and customise i
    :hidden:
 
    /auto_examples/customising_behaviour/customising_training_parameters
-   /auto_examples/customising_behaviour/how_to_use_logging
    /auto_examples/customising_behaviour/plot_modify_layer_sizes
 

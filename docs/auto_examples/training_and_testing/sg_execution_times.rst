@@ -6,12 +6,38 @@
 
 Computation times
 =================
-**01:47.816** total execution time for **auto_examples_training_and_testing** files:
+**00:00.008** total execution time for 3 files **from auto_examples/training_and_testing**:
 
-+----------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_auto_examples_training_and_testing_plot_model_comparison_loop_kfold.py` (``plot_model_comparison_loop_kfold.py``) | 01:27.196 | 0.0 MB |
-+----------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_auto_examples_training_and_testing_plot_one_model_binary_kfold.py` (``plot_one_model_binary_kfold.py``)           | 00:11.827 | 0.0 MB |
-+----------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_auto_examples_training_and_testing_plot_two_models_traintest.py` (``plot_two_models_traintest.py``)               | 00:08.793 | 0.0 MB |
-+----------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
+.. container::
+
+  .. raw:: html
+
+    <style scoped>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript" class="init">
+    $(document).ready( function () {
+        $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
+    } );
+    </script>
+
+  .. list-table::
+   :header-rows: 1
+   :class: table table-striped sg-datatable
+
+   * - Example
+     - Time
+     - Mem (MB)
+   * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_model_comparison_loop_kfold.py` (``plot_model_comparison_loop_kfold.py``)
+     - 00:00.006
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_two_models_traintest.py` (``plot_two_models_traintest.py``)
+     - 00:00.002
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_one_model_binary_kfold.py` (``plot_one_model_binary_kfold.py``)
+     - 00:00.000
+     - 0.0

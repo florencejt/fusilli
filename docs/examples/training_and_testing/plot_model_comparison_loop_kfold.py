@@ -1,5 +1,5 @@
 """
-📊 Training multiple models in a loop: k-fold regression 🚀
+Training multiple models in a loop: k-fold regression
 ====================================================================
 
 Welcome to the "Comparing Multiple K-Fold Trained Fusion Models" tutorial! In this tutorial, we'll explore how to train and compare multiple fusion models for a regression task using k-fold cross-validation with multimodal tabular data. This tutorial is designed to help you understand and implement key features, including:

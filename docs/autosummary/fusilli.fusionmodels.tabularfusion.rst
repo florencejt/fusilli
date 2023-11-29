@@ -1,4 +1,4 @@
-fusilli.fusionmodels.tabularfusion
+﻿fusilli.fusionmodels.tabularfusion
 ==================================
 
 .. automodule:: fusilli.fusionmodels.tabularfusion
@@ -27,6 +27,9 @@ fusilli.fusionmodels.tabularfusion
    :toctree:
    :recursive:
 
+   fusilli.fusionmodels.tabularfusion.activation
+   fusilli.fusionmodels.tabularfusion.attention_and_activation
+   fusilli.fusionmodels.tabularfusion.attention_weighted_GNN
    fusilli.fusionmodels.tabularfusion.channelwise_att
    fusilli.fusionmodels.tabularfusion.concat_data
    fusilli.fusionmodels.tabularfusion.concat_feature_maps

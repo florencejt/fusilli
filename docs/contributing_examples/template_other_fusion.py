@@ -253,7 +253,7 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
 # * a tensor of the original input data (if there is only one modality). This is probably not applicable to your model but it might be for a graph- or subspace-based fusion model.
 #
 # **The output of the forward function is a list containing the output of the model.**
-# This is because some of the models in ``fusilli`` output reconstructed data as well as the prediction, and this library is designed to handle this by all outputs either being a list of length 1 or 2.
+# This is because some of the models in Fusilli output reconstructed data as well as the prediction, and this library is designed to handle this by all outputs either being a list of length 1 or 2.
 #
 
 def forward(self, x):

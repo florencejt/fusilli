@@ -25,6 +25,8 @@ First, let's look at creating the graph-maker class.
 #
 # Let's import the libraries that we need:
 
+# sphinx_gallery_thumbnail_path = '_static/EdgeCorrGNN.png'
+
 import numpy as np
 import torch
 import torch.nn as nn

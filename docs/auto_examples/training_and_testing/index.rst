@@ -4,8 +4,8 @@
 
 .. _train_test_examples:
 
-Training and testing
-====================
+Running Fusilli on your own data
+==========================================
 
 These are examples of how to train and validate fusion models with Fusilli.
 
@@ -28,7 +28,7 @@ These are examples of how to train and validate fusion models with Fusilli.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">📊 Training multiple models in a loop: k-fold regression 🚀</div>
+      <div class="sphx-glr-thumbnail-title">Training multiple models in a loop: k-fold regression</div>
     </div>
 
 
@@ -45,7 +45,7 @@ These are examples of how to train and validate fusion models with Fusilli.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">📊 Binary Classification: Training a K-Fold Model 🚀</div>
+      <div class="sphx-glr-thumbnail-title">Binary Classification: Training a K-Fold Model</div>
     </div>
 
 
@@ -62,7 +62,7 @@ These are examples of how to train and validate fusion models with Fusilli.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">📈 Regression: Comparing Two Tabular Models Trained on Simulated Data 📊</div>
+      <div class="sphx-glr-thumbnail-title">Regression: Comparing Two Tabular Models Trained on Simulated Data</div>
     </div>
 
 

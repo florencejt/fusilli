@@ -1,5 +1,5 @@
 """
-📊 Binary Classification: Training a K-Fold Model 🚀
+Binary Classification: Training a K-Fold Model
 ======================================================
 
 🚀 In this tutorial, we'll explore binary classification using K-fold cross validation. 

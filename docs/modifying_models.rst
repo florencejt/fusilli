@@ -1,29 +1,65 @@
 .. _modifying-models:
 
-How to modify the fusion models
+Modify the Fusion Models
 =================================
 
-- You can modify the fusion models by passing in a dictionary of the attributes you want to modify into the `get_data` and `training` functions.
-- The attributes that can be modified are listed below with some guidance on how they can be changed.
-- You can modify the layers in various fusion models or attributes such as custom loss function or latent dimension.
-- There's an example in the examples section showing modification of the fusion models.
+The fusion models in ``fusilli`` can be customized by passing a dictionary of attributes into the :func:`fusilli.data.get_data_module` and :func:`fusilli.train.train_and_save_models` functions.
+
+Examples of how to modify the models can be found in the :ref:`advanced-examples` section.
+
+Below are the modifiable attributes with guidance on how they can be changed:
 
 .. note::
-  If you change the layers in the fusion models such as :attr:`mod1_layers` or :attr:`img_layers`, then where appropriate the attribute :attr:`fused_layers` will be changed so 
-  that the first layer has the correct number of input features (corresponding to the final output features of the modified layers). 
-
-  Following on from this, if you change the attribute :attr:`fused_layers` then the ``final_prediction`` layer will be changed to have the correct number of input features
-  (corresponding to the final output features of the modified :attr:`fused_layers`).
-
+   If modifications are made to certain layers like :attr:`~.ActivationFusion.mod1_layers` or :attr:`~.AttentionAndActivation.img_layers`, the attribute :attr:`~.ActivationFusion.fused_layers` will be updated to ensure the first layer has the correct input features corresponding to the modified layers. Similarly, altering :attr:`~.ActivationFusion.fused_layers` will adjust the `final_prediction` layer's input features accordingly.
 
 .. warning::
-  An error will occur if the input features of the some layer groups (e.g. :attr:`mod1_layers` and :attr:`img_layers`) are not the correct size.
-  For example, if you change the input features of :attr:`mod1_layers` to be 20, but the number of input features of the first tabular modality is 
-  actually 10, then a matrix multiplication error will occur from the ``forward`` method.
+   Errors may occur if the input features of certain layer groups (e.g., :attr:`~.ActivationFusion.mod1_layers` and :attr:`~.ActivationFusion.img_layers`) are incorrect. For instance, changing :attr:`~.ActivationFusion.mod1_layers` input features to 20 while the actual number for the first tabular modality is 10 will result in a matrix multiplication error during the `forward` method.
 
 
-Modifiable attributes of the fusion models
-------------------------------------------
+
+Constructing the Layer Modification Dictionary
+--------------------------------------------------------
+
+To construct the dictionary:
+
+- First keys should be the methods mentioned below.
+- Second keys should be the attributes from the tables below.
+- Value is the intended modification for the attribute.
+
+For instance, modifying models using the "all" key applies those changes to all fusion models unless specifically overridden by a modification to a specific fusion model. Here's an example demonstrating this:
+
+.. code-block:: python
+
+    layer_modifications = {
+        "all": {
+            "mod1_layers": nn.ModuleDict(
+                {
+                    "layer 1": nn.Sequential(
+                        nn.Linear(20, 32),
+                        nn.ReLU(),
+                    ),
+                    # ... (additional layer modifications)
+                }
+            ),
+        },  # end of "all" key
+        "ConcatImgMapsTabularMaps": {  # overrides modifications made to "all"
+            "mod1_layers": nn.ModuleDict(
+                {
+                    "layer 1": nn.Sequential(
+                        nn.Linear(20, 100),
+                        nn.ReLU(),
+                    ),
+                    # ... (additional layer modifications)
+                }
+            ),
+        },
+        # ... (additional fusion model modifications)
+    }
+
+------
+
+Modifiable Attributes
+---------------------
 
 :class:`.ActivationFusion`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -550,79 +586,3 @@ Modifiable attributes of the fusion models
       * Overrides modification of ``mod2_layers`` made to "all"
   * - :attr:`~.TabularDecision.fusion_operation`
     - Function (such as mean, median, etc.). Should act on the 1st dimension.
-
-------
-
-
-
-
-How to pass into get_data and training as a dictionary:
---------------------------------------------------------
-
-How to construct the dictionary:
-
-- First keys must be the methods in the table above
-- Second keys must be the attributes in the table above (e.g. autoencoder.latent_dim rather than just latent_dim)
-- Value is the value you want to change the attribute to
-
-.. note::
-
-    **Note on modifying models using the "all" key:**
-
-    Modifications under the 'all' key will be applied to all fusion models, unless specifically overwritten by a
-    modification to a specific fusion model.
-
-    For example, if you want to modify the attribute :attr:`mod1_layers` for every fusion model that uses it, then
-    you can pass the :attr:`mod1_layers` in the 'all' key.
-
-    If you want to modify the attribute :attr:`mod1_layers` for every fusion model except one, then you can pass the
-    :attr:`mod1_layers` in the 'all' key and then override the modifications for the specific fusion model.
-
-    An example on how to do this is shown below, where the modifications to :attr:`mod1_layers` under the 'all' key
-    are overridden for the fusion model :class:`.ConcatImgMapsTabularMaps`.
-
-
-.. code-block:: python
-
-    layer_modifications = {
-        "all": {
-            "mod1_layers": nn.ModuleDict(
-                {
-                    "layer 1": nn.Sequential(
-                        nn.Linear(20, 32),
-                        nn.ReLU(),
-                    ),
-                    "layer 2": nn.Sequential(
-                        nn.Linear(32, 66),
-                        nn.ReLU(),
-                    ),
-                    "layer 3": nn.Sequential(
-                        nn.Linear(66, 128),
-                        nn.ReLU(),
-                    ),
-                }
-            ),
-        }, # end of "all" key
-        "ConcatImgMapsTabularMaps": { # overrides the "mod1_layers" modifications made to "all"
-            "mod1_layers": nn.ModuleDict(
-                {
-                    "layer 1": nn.Sequential(
-                        nn.Linear(20, 100),
-                        nn.ReLU(),
-                    ),
-                    "layer 2": nn.Sequential(
-                        nn.Linear(100, 300),
-                        nn.ReLU(),
-                    ),
-                    "layer 3": nn.Sequential(
-                        nn.Linear(300, 250),
-                        nn.ReLU(),
-                    ),
-                    "layer 4": nn.Sequential(
-                        nn.Linear(250, 100),
-                        nn.ReLU(),
-                    ),
-                }
-            ),
-        },
-    }

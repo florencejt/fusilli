@@ -1,5 +1,5 @@
 """
-📈 Regression: Comparing Two Tabular Models Trained on Simulated Data 📊
+Regression: Comparing Two Tabular Models Trained on Simulated Data
 ========================================================================
 
 🚀 Welcome to this tutorial on training and comparing two fusion models on a regression task using simulated multimodal tabular data! 🎉

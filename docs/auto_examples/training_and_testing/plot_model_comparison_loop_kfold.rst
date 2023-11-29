@@ -18,7 +18,7 @@
 .. _sphx_glr_auto_examples_training_and_testing_plot_model_comparison_loop_kfold.py:
 
 
-📊 Training multiple models in a loop: k-fold regression 🚀
+Training multiple models in a loop: k-fold regression
 ====================================================================
 
 Welcome to the "Comparing Multiple K-Fold Trained Fusion Models" tutorial! In this tutorial, we'll explore how to train and compare multiple fusion models for a regression task using k-fold cross-validation with multimodal tabular data. This tutorial is designed to help you understand and implement key features, including:
@@ -64,7 +64,7 @@ Now, let's walk through each of these steps in code and detail. Let's get starte
 
 .. GENERATED FROM PYTHON SOURCE LINES 46-59
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import matplotlib.pyplot as plt
@@ -77,7 +77,7 @@ Now, let's walk through each of these steps in code and detail. Let's get starte
     from fusilli.train import train_and_save_models
     from fusilli.utils.model_chooser import import_chosen_fusion_models
 
-    from IPython.utils import io  # for hiding the tqdm progress bar
+    # from IPython.utils import io  # for hiding the tqdm progress bar
 
 
 
@@ -102,29 +102,41 @@ We're importing all the fusion models that use only tabular data for this exampl
 
 .. GENERATED FROM PYTHON SOURCE LINES 71-78
 
-.. code-block:: default
+.. code-block:: Python
 
 
     model_conditions = {
-        "modality_type": ["tabular1", "tabular2", "both_tab"],
+        "modality_type": ["tabular1", "tabular2", "tabular_tabular"],
     }
 
     fusion_models = import_chosen_fusion_models(model_conditions)
 
 
 
-
-
 .. rst-class:: sphx-glr-script-out
 
- .. code-block:: none
+.. code-block:: pytb
 
-    Imported methods:
-    ['Tabular1 uni-modal' 'Tabular2 uni-modal'
-     'Concatenating tabular feature maps' 'Concatenating tabular data'
-     'Channel-wise multiplication net (tabular)'
-     'Tabular Crossmodal multi-head attention' 'Tabular decision'
-     'MCVAE Tabular' 'Edge Correlation GNN']
+    Traceback (most recent call last):
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/training_and_testing/plot_model_comparison_loop_kfold.py", line 76, in <module>
+        fusion_models = import_chosen_fusion_models(model_conditions)
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/utils/model_chooser.py", line 323, in import_chosen_fusion_models
+        imported_models = get_models(model_conditions, skip_models)
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/utils/model_chooser.py", line 194, in get_models
+        fusion_models, fusion_model_dict_without_skips = all_model_importer(fusion_model_dict, skip_models=skip_models)
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/utils/model_chooser.py", line 125, in all_model_importer
+        module = importlib.import_module(module_path)
+      File "/Users/florencetownend/miniforge3/lib/python3.9/importlib/__init__.py", line 127, in import_module
+        return _bootstrap._gcd_import(name[level:], package, level)
+      File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+      File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+      File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+      File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+      File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+      File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/fusionmodels/tabularfusion/mcvae_model.py", line 9, in <module>
+        from fusilli.utils.mcvae.src.mcvae.models import Mcvae
+    ImportError: cannot import name 'Mcvae' from 'fusilli.utils.mcvae.src.mcvae.models' (unknown location)
 
 
 
@@ -147,7 +159,7 @@ We're also setting our own batch_size for this example.
 
 .. GENERATED FROM PYTHON SOURCE LINES 92-110
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -168,12 +180,6 @@ We're also setting our own batch_size for this example.
         os.rmdir(os.path.join(params["loss_log_dir"], dir))
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 111-115
 
 3. Generating simulated data 🔮
@@ -183,7 +189,7 @@ This function also simulated image data which we aren't using here.
 
 .. GENERATED FROM PYTHON SOURCE LINES 115-124
 
-.. code-block:: default
+.. code-block:: Python
 
 
     params = generate_sklearn_simulated_data(
@@ -195,12 +201,6 @@ This function also simulated image data which we aren't using here.
     )
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 125-129
 
 4. Training the all the fusion models 🏁
@@ -208,233 +208,34 @@ This function also simulated image data which we aren't using here.
 In this section, we train all the fusion models using the generated data and specified parameters.
 We store the results of each model for later analysis.
 
-.. GENERATED FROM PYTHON SOURCE LINES 129-152
+.. GENERATED FROM PYTHON SOURCE LINES 129-151
 
-.. code-block:: default
+.. code-block:: Python
 
 
     all_trained_models = {}
 
-    with io.capture_output() as captured:
-        for i, fusion_model in enumerate(fusion_models):
-            fusion_model_name = fusion_model.__name__
-            print(f"Running model {fusion_model_name}")
-
-            # Get data module
-            data_module = get_data_module(fusion_model, params, batch_size=params["batch_size"])
-
-            # Train and test
-            single_model_list = train_and_save_models(
-                data_module=data_module,
-                params=params,
-                fusion_model=fusion_model,
-                enable_checkpointing=False,  # False for the example notebooks
-                show_loss_plot=True,  # True for the example notebooks
-            )
-
-            # Save to all_trained_models
-            all_trained_models[fusion_model_name] = single_model_list
-
-
-
-
-.. rst-class:: sphx-glr-horizontal
-
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_001.png
-         :alt: Loss Curves for Tabular1Unimodal_fold_0
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_001.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_002.png
-         :alt: Loss Curves for Tabular1Unimodal_fold_1
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_002.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_003.png
-         :alt: Loss Curves for Tabular1Unimodal_fold_2
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_003.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_004.png
-         :alt: Loss Curves for Tabular2Unimodal_fold_0
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_004.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_005.png
-         :alt: Loss Curves for Tabular2Unimodal_fold_1
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_005.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_006.png
-         :alt: Loss Curves for Tabular2Unimodal_fold_2
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_006.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_007.png
-         :alt: Loss Curves for ConcatTabularFeatureMaps_fold_0
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_007.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_008.png
-         :alt: Loss Curves for ConcatTabularFeatureMaps_fold_1
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_008.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_009.png
-         :alt: Loss Curves for ConcatTabularFeatureMaps_fold_2
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_009.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_010.png
-         :alt: Loss Curves for ConcatTabularData_fold_0
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_010.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_011.png
-         :alt: Loss Curves for ConcatTabularData_fold_1
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_011.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_012.png
-         :alt: Loss Curves for ConcatTabularData_fold_2
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_012.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_013.png
-         :alt: Loss Curves for TabularChannelWiseMultiAttention_fold_0
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_013.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_014.png
-         :alt: Loss Curves for TabularChannelWiseMultiAttention_fold_1
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_014.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_015.png
-         :alt: Loss Curves for TabularChannelWiseMultiAttention_fold_2
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_015.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_016.png
-         :alt: Loss Curves for TabularCrossmodalMultiheadAttention_fold_0
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_016.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_017.png
-         :alt: Loss Curves for TabularCrossmodalMultiheadAttention_fold_1
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_017.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_018.png
-         :alt: Loss Curves for TabularCrossmodalMultiheadAttention_fold_2
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_018.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_019.png
-         :alt: Loss Curves for TabularDecision_fold_0
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_019.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_020.png
-         :alt: Loss Curves for TabularDecision_fold_1
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_020.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_021.png
-         :alt: Loss Curves for TabularDecision_fold_2
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_021.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_022.png
-         :alt: Loss Curves for MCVAE_tab_fold_0
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_022.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_023.png
-         :alt: Loss Curves for MCVAE_tab_fold_1
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_023.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_024.png
-         :alt: Loss Curves for MCVAE_tab_fold_2
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_024.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_025.png
-         :alt: Loss Curves for EdgeCorrGNN_fold_0
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_025.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_026.png
-         :alt: Loss Curves for EdgeCorrGNN_fold_1
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_026.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_027.png
-         :alt: Loss Curves for EdgeCorrGNN_fold_2
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_027.png
-         :class: sphx-glr-multi-img
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 153-160
+    for i, fusion_model in enumerate(fusion_models):
+        fusion_model_name = fusion_model.__name__
+        print(f"Running model {fusion_model_name}")
+
+        # Get data module
+        data_module = get_data_module(fusion_model, params, batch_size=params["batch_size"])
+
+        # Train and test
+        single_model_list = train_and_save_models(
+            data_module=data_module,
+            params=params,
+            fusion_model=fusion_model,
+            enable_checkpointing=False,  # False for the example notebooks
+            show_loss_plot=True,  # True for the example notebooks
+        )
+
+        # Save to all_trained_models
+        all_trained_models[fusion_model_name] = single_model_list
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 152-159
 
 5. Plotting the results of the individual models
 -------------------------------------------------
@@ -444,9 +245,9 @@ If you want to save the figures rather than show them, you can use the :meth:`~.
 This will save the figures in a timestamped folder in the current working directory with the method name and plot type in the filename.
 You can add an extra suffix to the filename by passing a string to the ``extra_string`` argument of the :meth:`~fusilli.eval.Plotter.save_to_local` method.
 
-.. GENERATED FROM PYTHON SOURCE LINES 160-165
+.. GENERATED FROM PYTHON SOURCE LINES 159-164
 
-.. code-block:: default
+.. code-block:: Python
 
 
     for model_name, model_list in all_trained_models.items():
@@ -454,275 +255,39 @@ You can add an extra suffix to the filename by passing a string to the ``extra_s
         plt.show()
 
 
-
-
-.. rst-class:: sphx-glr-horizontal
-
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_028.png
-         :alt: From final val data, Tabular1 uni-modal: R2=0.224, Fold 1: R2=0.244, Fold 2: R2=0.200, Fold 3: R2=0.225
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_028.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_029.png
-         :alt: From final val data, Tabular2 uni-modal: R2=0.341, Fold 1: R2=0.197, Fold 2: R2=0.323, Fold 3: R2=0.420
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_029.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_030.png
-         :alt: From final val data, Concatenating tabular feature maps: R2=0.453, Fold 1: R2=0.480, Fold 2: R2=0.422, Fold 3: R2=0.458
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_030.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_031.png
-         :alt: From final val data, Concatenating tabular data: R2=0.447, Fold 1: R2=0.500, Fold 2: R2=0.409, Fold 3: R2=0.425
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_031.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_032.png
-         :alt: From final val data, Channel-wise multiplication net (tabular): R2=0.230, Fold 1: R2=0.262, Fold 2: R2=0.262, Fold 3: R2=0.157
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_032.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_033.png
-         :alt: From final val data, Tabular Crossmodal multi-head attention: R2=0.457, Fold 1: R2=0.447, Fold 2: R2=0.473, Fold 3: R2=0.441
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_033.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_034.png
-         :alt: From final val data, Tabular decision: R2=0.413, Fold 1: R2=0.456, Fold 2: R2=0.335, Fold 3: R2=0.427
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_034.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_035.png
-         :alt: From final val data, MCVAE Tabular: R2=-0.004, Fold 1: R2=-0.008, Fold 2: R2=-0.001, Fold 3: R2=-0.021
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_035.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_036.png
-         :alt: From final val data, Edge Correlation GNN: R2=0.115, Fold 1: R2=0.168, Fold 2: R2=-0.063, Fold 3: R2=0.169
-         :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_036.png
-         :class: sphx-glr-multi-img
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 166-169
+.. GENERATED FROM PYTHON SOURCE LINES 165-168
 
 6. Plotting comparison of the models
 -------------------------------------
 In this section, we visualize the results of each individual model.
 
-.. GENERATED FROM PYTHON SOURCE LINES 169-173
+.. GENERATED FROM PYTHON SOURCE LINES 168-172
 
-.. code-block:: default
+.. code-block:: Python
 
 
     comparison_plot, metrics_dataframe = ModelComparison.from_final_val_data(all_trained_models)
     plt.show()
 
 
-
-
-.. image-sg:: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_037.png
-   :alt: Distribution of metrics between cross-validation folds, R2, MAE
-   :srcset: /auto_examples/training_and_testing/images/sphx_glr_plot_model_comparison_loop_kfold_037.png
-   :class: sphx-glr-single-img
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 174-177
+.. GENERATED FROM PYTHON SOURCE LINES 173-176
 
 7. Saving the results of the models
 -------------------------------------
 In this section, we compare the performance of all the trained models using a violin chart, providing an overview of how each model performed as a distribution over the different cross-validation folds.
 
-.. GENERATED FROM PYTHON SOURCE LINES 177-180
+.. GENERATED FROM PYTHON SOURCE LINES 176-179
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
     metrics_dataframe
 
 
-
-
-
-.. raw:: html
-
-    <div class="output_subarea output_html rendered_html output_result">
-    <div>
-    <style scoped>
-        .dataframe tbody tr th:only-of-type {
-            vertical-align: middle;
-        }
-
-        .dataframe tbody tr th {
-            vertical-align: top;
-        }
-
-        .dataframe thead th {
-            text-align: right;
-        }
-    </style>
-    <table border="1" class="dataframe">
-      <thead>
-        <tr style="text-align: right;">
-          <th></th>
-          <th>R2</th>
-          <th>MAE</th>
-          <th>fold1_R2</th>
-          <th>fold1_MAE</th>
-          <th>fold2_R2</th>
-          <th>fold2_MAE</th>
-          <th>fold3_R2</th>
-          <th>fold3_MAE</th>
-        </tr>
-        <tr>
-          <th>Method</th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>Tabular1 uni-modal</th>
-          <td>0.224208</td>
-          <td>2.989906</td>
-          <td>0.243772</td>
-          <td>2.931305</td>
-          <td>0.199562</td>
-          <td>3.134076</td>
-          <td>0.224894</td>
-          <td>2.903821</td>
-        </tr>
-        <tr>
-          <th>Tabular2 uni-modal</th>
-          <td>0.340719</td>
-          <td>2.727535</td>
-          <td>0.196505</td>
-          <td>2.722531</td>
-          <td>0.323096</td>
-          <td>2.810405</td>
-          <td>0.419581</td>
-          <td>2.649198</td>
-        </tr>
-        <tr>
-          <th>Concatenating tabular feature maps</th>
-          <td>0.453423</td>
-          <td>2.497899</td>
-          <td>0.479688</td>
-          <td>2.458402</td>
-          <td>0.421885</td>
-          <td>2.632848</td>
-          <td>0.457929</td>
-          <td>2.401871</td>
-        </tr>
-        <tr>
-          <th>Concatenating tabular data</th>
-          <td>0.447184</td>
-          <td>2.538639</td>
-          <td>0.500172</td>
-          <td>2.310274</td>
-          <td>0.409377</td>
-          <td>2.561991</td>
-          <td>0.424697</td>
-          <td>2.744888</td>
-        </tr>
-        <tr>
-          <th>Channel-wise multiplication net (tabular)</th>
-          <td>0.230294</td>
-          <td>3.026953</td>
-          <td>0.261870</td>
-          <td>2.961012</td>
-          <td>0.262466</td>
-          <td>3.084680</td>
-          <td>0.156683</td>
-          <td>3.035214</td>
-        </tr>
-        <tr>
-          <th>Tabular Crossmodal multi-head attention</th>
-          <td>0.456777</td>
-          <td>2.524265</td>
-          <td>0.446814</td>
-          <td>2.466450</td>
-          <td>0.473357</td>
-          <td>2.435274</td>
-          <td>0.440551</td>
-          <td>2.671954</td>
-        </tr>
-        <tr>
-          <th>Tabular decision</th>
-          <td>0.413223</td>
-          <td>2.618857</td>
-          <td>0.455687</td>
-          <td>2.655784</td>
-          <td>0.334698</td>
-          <td>2.609927</td>
-          <td>0.426682</td>
-          <td>2.590691</td>
-        </tr>
-        <tr>
-          <th>MCVAE Tabular</th>
-          <td>-0.004398</td>
-          <td>3.445615</td>
-          <td>-0.008009</td>
-          <td>3.450989</td>
-          <td>-0.001304</td>
-          <td>3.429603</td>
-          <td>-0.021114</td>
-          <td>3.456319</td>
-        </tr>
-        <tr>
-          <th>Edge Correlation GNN</th>
-          <td>0.114794</td>
-          <td>3.234563</td>
-          <td>0.168078</td>
-          <td>3.335965</td>
-          <td>-0.062951</td>
-          <td>3.252570</td>
-          <td>0.168877</td>
-          <td>3.114435</td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
-    </div>
-    <br />
-    <br />
-
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (1 minutes 27.196 seconds)
+   **Total running time of the script:** (0 minutes 0.006 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_and_testing_plot_model_comparison_loop_kfold.py:
@@ -731,16 +296,13 @@ In this section, we compare the performance of all the trained models using a vi
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_model_comparison_loop_kfold.ipynb <plot_model_comparison_loop_kfold.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_model_comparison_loop_kfold.py <plot_model_comparison_loop_kfold.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_model_comparison_loop_kfold.ipynb <plot_model_comparison_loop_kfold.ipynb>`
 
 
 .. only:: html

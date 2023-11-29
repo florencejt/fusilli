@@ -1,6 +1,6 @@
 """
-How to modify architectures of fusion models
-############################################
+How to modify fusion model architecture
+################################################
 
 This tutorial will show you how to modify the architectures of fusion models.
 
@@ -26,13 +26,14 @@ More guidance on what can be modified in each fusion model can be found in the :
 import matplotlib.pyplot as plt
 import os
 import torch.nn as nn
+from torch_geometric.nn import GCNConv, ChebConv
 
 from docs.examples import generate_sklearn_simulated_data
 from fusilli.data import get_data_module
 from fusilli.eval import RealsVsPreds
 from fusilli.train import train_and_save_models
 
-from fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps import DAETabImgMaps
+from fusilli.fusionmodels.tabularfusion.attention_weighted_GNN import AttentionWeightedGNN
 
 params = {
     "test_size": 0.2,
@@ -44,7 +45,7 @@ params = {
     "loss_fig_path": "loss_figures",
 }
 
-# empty the loss log directory
+# empty the loss log directory (only needed for this tutorial)
 for dir in os.listdir(params["loss_log_dir"]):
     for file in os.listdir(os.path.join(params["loss_log_dir"], dir)):
         os.remove(os.path.join(params["loss_log_dir"], dir, file))
@@ -52,9 +53,9 @@ for dir in os.listdir(params["loss_log_dir"]):
     os.rmdir(os.path.join(params["loss_log_dir"], dir))
 
 params = generate_sklearn_simulated_data(
-    num_samples=500,
+    num_samples=100,
     num_tab1_features=10,
-    num_tab2_features=10,
+    num_tab2_features=15,
     img_dims=(1, 100, 100),
     params=params,
 )
@@ -65,33 +66,11 @@ params = generate_sklearn_simulated_data(
 #
 # Now, we will specify the modifications we want to make to the model.
 #
-# We are using the :class:`~fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.DAETabImgMaps` model for this example.
-# This is a subspace-based model which has two PyTorch models that need to be pretrained (a denoising autoencoder for the tabular modality, and a convolutional neural network for the image modality).
-# The fusion model then uses the latent representations of these models to perform the fusion.
+# We are using the :class:`~fusilli.fusionmodels.tabularfusion.attention_weighted_GNN.AttentionWeightedGNN` model for this example.
+# This is a graph-based model which has a pretrained MLP (multi-layer perceptron) to get attention weights, and a graph neural network that uses the attention weights to perform the fusion.
 #
-# The following modifications can be made to the **pre-trained subspace** model :class:`~fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.denoising_autoencoder_subspace_method`:
+# The following modifications can be made to the method that makes the graph structure: :class:`~fusilli.fusionmodels.tabularfusion.attention_weighted_GNN.AttentionWeightedGraphMaker`:
 #
-# .. list-table::
-#   :widths: 40 60
-#   :header-rows: 1
-#   :stub-columns: 0
-#
-#   * - Attribute
-#     - Guidance
-#   * - :attr:`.autoencoder.latent_dim`
-#     - int
-#   * - :attr:`.autoencoder.upsampler`
-#     - ``nn.Sequential``
-#   * - :attr:`.autoencoder.downsampler`
-#     - ``nn.Sequential``
-#   * - :attr:`.img_unimodal.img_layers`
-#     -
-#       * ``nn.Sequential``
-#       * Overrides modification of ``img_layers`` made to "all"
-#   * - :attr:`.img_unimodal.fused_layers`
-#     - ``nn.Sequential``
-#
-# The following modifications can be made to the **fusion** model :class:`~fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.DAETabImgMaps`:
 #
 # .. list-table::
 #   :widths: 40 60
@@ -100,67 +79,65 @@ params = generate_sklearn_simulated_data(
 #
 #   * - Attribute
 #     - Guidance
-#   * - :attr:`~.DAETabImgMaps.fusion_layers`
+#   * - :attr:`~.AttentionWeightedGraphMaker.early_stop_callback`
+#     - ``EarlyStopping`` object from ``from lightning.pytorch.callbacks import EarlyStopping``
+#   * - :attr:`~.AttentionWeightedGraphMaker.edge_probability_threshold`
+#     - Integer between 0 and 100.
+#   * - :attr:`~.AttentionWeightedGraphMaker.attention_MLP_test_size`
+#     - Float between 0 and 1.
+#   * - :attr:`~.AttentionWeightedGraphMaker.AttentionWeightingMLPInstance.weighting_layers`
+#     - ``nn.ModuleDict``: final layer output size must be the same as the input layer input size.
+#   * - :attr:`~.AttentionWeightedGraphMaker.AttentionWeightingMLPInstance.fused_layers`
 #     - ``nn.Sequential``
 #
-# Let's change everything that we can!
+#
+# The following modifications can be made to the **fusion** model :class:`~fusilli.fusionmodels.tabularfusion.attention_weighted_GNN.AttentionWeightedGNN`:
+#
+# .. list-table::
+#   :widths: 40 60
+#   :header-rows: 1
+#   :stub-columns: 0
+#
+#   * - Attribute
+#     - Guidance
+#   * - :attr:`~.AttentionWeightedGNN.graph_conv_layers`
+#     - ``nn.Sequential`` of ``torch_geometric.nn` Layers.
+#   * - :attr:`~.AttentionWeightedGNN.dropout_prob`
+#     - Float between (not including) 0 and 1.
+#
+# Let's modify the model! More info about how to do this can be found in :ref:`modifying-models`.
 
 layer_mods = {
-    "DAETabImgMaps": {
-        "fusion_layers": nn.Sequential(
-            nn.Linear(20, 420),
-            nn.ReLU(),
-            nn.Linear(420, 100),
-            nn.ReLU(),
-            nn.Linear(100, 78),
+    "AttentionWeightedGNN": {
+        "graph_conv_layers": nn.Sequential(
+            ChebConv(15, 50, K=3),
+            ChebConv(50, 100, K=3),
+            ChebConv(100, 130, K=3),
         ),
+        "dropout_prob": 0.4,
     },
-    "denoising_autoencoder_subspace_method": {
-        "autoencoder.latent_dim": 150,  # denoising autoencoder latent dim
-        "autoencoder.upsampler": nn.Sequential(
-            nn.Linear(20, 80),
-            nn.ReLU(),
-            nn.Linear(80, 100),
-            nn.ReLU(),
-            nn.Linear(100, 150),
-            nn.ReLU(),
-        ),
-        "autoencoder.downsampler": nn.Sequential(
-            nn.Linear(150, 100),
-            nn.ReLU(),
-            nn.Linear(100, 80),
-            nn.ReLU(),
-            nn.Linear(80, 20),
-            nn.ReLU(),
-        ),
-        "img_unimodal.img_layers": nn.ModuleDict(
+    "AttentionWeightedGraphMaker": {
+        "edge_probability_threshold": 80,
+        "attention_MLP_test_size": 0.3,
+        "AttentionWeightingMLPInstance.weighting_layers": nn.ModuleDict(
             {
-                "layer 1": nn.Sequential(
-                    nn.Conv2d(1, 40, kernel_size=(3, 3), padding=0),
-                    nn.ReLU(),
-                    nn.MaxPool2d((2, 2)),
-                ),
-                "layer 2": nn.Sequential(
-                    nn.Conv2d(40, 60, kernel_size=(3, 3), padding=0),
-                    nn.ReLU(),
-                    nn.MaxPool2d((2, 2)),
-                ),
-                "layer 3": nn.Sequential(
-                    nn.Conv2d(60, 85, kernel_size=(3, 3), padding=0),
-                    nn.ReLU(),
-                    nn.MaxPool2d((2, 2)),
-                ),
+                "Layer 1": nn.Sequential(
+                    nn.Linear(25, 100),
+                    nn.ReLU()),
+                "Layer 2": nn.Sequential(
+                    nn.Linear(100, 75),
+                    nn.ReLU()),
+                "Layer 3": nn.Sequential(
+                    nn.Linear(75, 75),
+                    nn.ReLU()),
+                "Layer 4": nn.Sequential(
+                    nn.Linear(75, 100),
+                    nn.ReLU()),
+                "Layer 5": nn.Sequential(
+                    nn.Linear(100, 25),
+                    nn.ReLU()),
             }
-        ),
-        "img_unimodal.fused_layers": nn.Sequential(
-            nn.Linear(85, 150),
-            nn.ReLU(),
-            nn.Linear(150, 75),
-            nn.ReLU(),
-            nn.Linear(75, 50),
-            nn.ReLU(),
-        ),
-    },
+        )},
 }
 
 # %%
@@ -169,13 +146,13 @@ layer_mods = {
 
 
 # load data
-datamodule = get_data_module(DAETabImgMaps, params, layer_mods=layer_mods, max_epochs=5, batch_size=64)
+datamodule = get_data_module(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
 
 # train
 trained_model_list = train_and_save_models(
     data_module=datamodule,
     params=params,
-    fusion_model=DAETabImgMaps,
+    fusion_model=AttentionWeightedGNN,
     layer_mods=layer_mods,
     max_epochs=5,
 )
@@ -183,8 +160,7 @@ trained_model_list = train_and_save_models(
 # %%
 # It worked! Let's have a look at the model structure to see what changes have been made.
 
-print("Subspace Denoising Autoencoder:\n", datamodule.subspace_method_train.autoencoder)
-print("Subspace Image CNN:\n", datamodule.subspace_method_train.img_unimodal)
+print("Attention Weighted MLP:\n", datamodule.graph_maker_instance.AttentionWeightingMLPInstance)
 print("Fusion model:\n", trained_model_list[0].model)
 
 # %%
@@ -195,87 +171,140 @@ print("Fusion model:\n", trained_model_list[0].model)
 #
 
 layer_mods = {
-    "denoising_autoencoder_subspace_method": {
-        "autoencoder.fake_layers": nn.Sequential(
-            nn.Linear(20, 420),
-            nn.Linear(420, 100),
-            nn.Linear(100, 78),
+    "AttentionWeightedGraphMaker": {
+        "AttentionWeightingMLPInstance.fake_attribute": nn.Sequential(
+            nn.Linear(25, 100),
+            nn.ReLU(),
         ),
     }
 }
 
 try:
-    datamodule = get_data_module(DAETabImgMaps, params, layer_mods=layer_mods, max_epochs=5, batch_size=64)
+    datamodule = get_data_module(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
 except Exception as error:
     print(error)
 
 # %%
 # What about modifying an attribute with the **wrong data type**?
 #
-# * ``latent_dim`` should be an ``int`` and greater than 0.
-# * ``upsampler`` should be an ``nn.Sequential``
-# * ``downsampler`` should be an ``nn.Sequential``
-# * ``img_layers`` should be an ``nn.ModuleDict``
+# * ``dropout_prob`` should be an ``float`` and between 0 and 1.
+# * ``graph_conv_layers`` should be an ``nn.Sequential`` of graph convolutional layers.
+# * ``edge_probability_threshold`` should be a ``float`` between 0 and 100.
+# * ``AttentionWeightingMLPInstance.weighting_layers`` should be an ``nn.ModuleDict``
 
 layer_mods = {
-    "denoising_autoencoder_subspace_method": {
-        "autoencoder.latent_dim": 0,
+    "AttentionWeightedGraphMaker": {
+        "AttentionWeightingMLPInstance.weighting_layers": nn.Sequential(
+            nn.Linear(25, 75),
+            nn.ReLU(),
+            nn.Linear(75, 75),
+            nn.ReLU(),
+            nn.Linear(75, 25),
+            nn.ReLU()
+        ),
     }
 }
 
 try:
-    get_data_module(DAETabImgMaps, params, layer_mods=layer_mods, max_epochs=5, batch_size=64)
+    get_data_module(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
 except Exception as error:
     print(error)
 
 # %%
 
 layer_mods = {
-    "denoising_autoencoder_subspace_method": {
-        "autoencoder.upsampler": nn.Linear(10, 10),
+    "AttentionWeightedGraphMaker": {
+        "edge_probability_threshold": "two",
     }
 }
 
 try:
-    get_data_module(DAETabImgMaps, params, layer_mods=layer_mods, max_epochs=5, batch_size=64)
+    get_data_module(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
 except Exception as error:
     print(error)
 
 # %%
 # What about modifying multiple attributes with the **conflicting modifications**?
+# -------------------------------------------------------------------------------------
+
 #
-# For this, let's modify the ``latent_dim`` and the ``upsampler``. of the ``autoencoder`` model.
-# The output of the ``upsampler`` should be the same size as the ``latent_dim``.
-# If we modify both of these to be mismatched, let's see what happens.
+# For this, let's switch to looking at the :class:`~fusilli.fusionmodels.tabularfusion.concat_feature_maps.ConcatTabularFeatureMaps` model.
+# This model concatenates the feature maps of the two modalities and then passes them through a prediction layer.
+#
+# We can modify the layers that each tabular modality goes through before being concatenated, as well as the layers that come after the concatenation.
+#
+# The output features of our modified ``mod1_layers`` and ``mod2_layers`` are 100 and 128, so the input features of the ``fused_layers`` should be 228. However, we've set the input features of the ``fused_layers`` to be 25.
+#
+# Let's see what happens when we try to modify the model in this way. It should throw an error when the data is passed through the model.
 
 layer_mods = {
-    "denoising_autoencoder_subspace_method": {
-        "autoencoder.latent_dim": 450,
-        "autoencoder.upsampler": nn.Sequential(
-            nn.Linear(10, 100),
+    "ConcatTabularFeatureMaps": {
+        "mod1_layers": nn.ModuleDict(
+            {
+                "layer 1": nn.Sequential(
+                    nn.Linear(10, 32),
+                    nn.ReLU(),
+                ),
+                "layer 2": nn.Sequential(
+                    nn.Linear(32, 66),
+                    nn.ReLU(),
+                ),
+                "layer 3": nn.Sequential(
+                    nn.Linear(66, 128),
+                    nn.ReLU(),
+                ),
+            }
+        ),
+        "mod2_layers": nn.ModuleDict(
+            {
+                "layer 1": nn.Sequential(
+                    nn.Linear(15, 45),
+                    nn.ReLU(),
+                ),
+                "layer 2": nn.Sequential(
+                    nn.Linear(45, 70),
+                    nn.ReLU(),
+                ),
+                "layer 3": nn.Sequential(
+                    nn.Linear(70, 100),
+                    nn.ReLU(),
+                ),
+            }
+        ),
+        "fused_layers": nn.Sequential(
+            nn.Linear(25, 150),
             nn.ReLU(),
-            nn.Linear(100, 200),
+            nn.Linear(150, 75),
             nn.ReLU(),
-            nn.Linear(200, 300),  # this should be 450 to match the latent_dim
+            nn.Linear(75, 50),
             nn.ReLU(),
-        )
+        ),
     },
 }
 
-# get the data and train the subspace models
-datamodule = get_data_module(DAETabImgMaps, params, layer_mods=layer_mods, max_epochs=5, batch_size=64)
+# get the data and train the model
+
+from fusilli.fusionmodels.tabularfusion.concat_feature_maps import ConcatTabularFeatureMaps
+
+datamodule = get_data_module(ConcatTabularFeatureMaps, params, layer_mods=layer_mods)
+trained_model_list = train_and_save_models(
+    data_module=datamodule,
+    params=params,
+    fusion_model=ConcatTabularFeatureMaps,
+    layer_mods=layer_mods,
+    max_epochs=5,
+)
 
 # %%
 # **Wow it still works!**
 # Let's have a look at what the model structure looks like to see what changes have been made to keep the model valid.
 
-print(datamodule.subspace_method_train.autoencoder)
+print(trained_model_list[0].model)
 
 # %%
 # As you can see, a few corrections have been made to the modifications:
 #
-# * The ``upsampler`` has been modified to have the correct number of nodes in the final layer to match the ``latent_dim``.
-# * The ``downsample`` (which we didn't specify a modification for) now has the correct number of nodes in the first layer to match the ``latent_dim``.
+# * The ``fused_layers`` has been modified to have the correct number of nodes in the first layer to match the concatenated feature maps from the two modalities.
 #
 # In general, there are checks in the fusion models to make sure that the modifications are valid.
 # If the input number of nodes to a modification is not correct, then the model will automatically calculate the correct number of nodes and correct the modification.
@@ -284,6 +313,7 @@ print(datamodule.subspace_method_train.autoencoder)
 # Make sure to print out the model structure to check that the modifications have been made correctly and see what changes have been made to keep the model valid.
 
 # removing checkpoints
-os.remove(params["checkpoint_dir"] + "/DAETabImgMaps_epoch=04.ckpt")
-os.remove(params["checkpoint_dir"] + "/subspace_DAETabImgMaps_DenoisingAutoencoder.ckpt")
-os.remove(params["checkpoint_dir"] + "/subspace_DAETabImgMaps_ImgUnimodalDAE.ckpt")
+
+for file in os.listdir(params["checkpoint_dir"]):
+    # remove file
+    os.remove(os.path.join(params["checkpoint_dir"], file))

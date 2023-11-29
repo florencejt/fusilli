@@ -6,7 +6,6 @@ fusilli
 Don't be silly, use fusilli! 🍝
 ---------------------------------
 
-
 **Welcome to fusilli!**
 Have you got multimodal data but not sure how to combine them for your machine learning task? Look no further!
 This library provides a way to compare different fusion methods for your multimodal data.
@@ -37,10 +36,16 @@ Why would you want to use fusilli?
    :caption: 🌸 Table of Contents 🌸
 
    introduction
-   user_guide
-   getting_started
    fusion_model_explanations
+   installation
+   data_loading
+   experiment_setup
+   quick_start
+   choosing_model
    modifying_models
+   logging_with_wandb
+   developers_guide
+   glossary
 
 -----
 

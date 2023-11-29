@@ -982,6 +982,8 @@ class TrainTestGraphDataModule:
         Fraction of data to use for testing (default 0.2).
     graph_creation_method : class
         Graph creation method class.
+    graph_maker_instance : graph maker class
+        Graph maker class instance.
     params : dict
         Dictionary of parameters.
     layer_mods : dict
@@ -1091,15 +1093,15 @@ class TrainTestGraphDataModule:
         self.test_idxs = test_dataset.indices
 
         # get the graph data structure
-        graph_maker = self.graph_creation_method(self.dataset)
+        self.graph_maker_instance = self.graph_creation_method(self.dataset)
         if self.layer_mods is not None:
             # modify the graph maker architecture if specified
-            graph_maker = model_modifier.modify_model_architecture(
-                graph_maker,
+            self.graph_maker_instance = model_modifier.modify_model_architecture(
+                self.graph_maker_instance,
                 self.layer_mods,
             )
 
-        self.graph_data = graph_maker.make_graph()
+        self.graph_data = self.graph_maker_instance.make_graph()
 
     def get_lightning_module(self):
         """
@@ -1144,6 +1146,8 @@ class KFoldGraphDataModule:
         Fusion model class. e.g. "TabularCrossmodalAttention".
     graph_creation_method : class
         Graph creation method class.
+    graph_maker_instance : graph maker class
+        Graph maker class instance.
     layer_mods : dict
         Dictionary of layer modifications to make to the graph maker method.
     dataset : tensor
@@ -1263,17 +1267,17 @@ class KFoldGraphDataModule:
             test_idxs = test_dataset.indices  # get test node idxs from kfold_split()
 
             # get the graph data structure
-            graph_maker = self.graph_creation_method(self.dataset)
+            self.graph_maker_instance = self.graph_creation_method(self.dataset)
 
             # modify the graph maker architecture if specified
             if self.layer_mods is not None:
                 graph_maker = model_modifier.modify_model_architecture(
-                    graph_maker,
+                    self.graph_maker_instance,
                     self.layer_mods,
                 )
 
             # make the graph data structure
-            graph_data = graph_maker.make_graph()
+            graph_data = self.graph_maker_instance.make_graph()
 
             new_folds.append((graph_data, train_idxs, test_idxs))
 
@@ -1408,9 +1412,11 @@ def get_data_module(
             for dm_instance in data_module:
                 dm_instance.data_dims = graph_data_module.data_dims
                 dm_instance.own_early_stopping_callback = own_early_stopping_callback
+                dm_instance.graph_maker_instance = graph_data_module.graph_maker_instance
         else:
             data_module.data_dims = graph_data_module.data_dims
             data_module.own_early_stopping_callback = own_early_stopping_callback
+            data_module.graph_maker_instance = graph_data_module.graph_maker_instance
 
     else:
         # another other than graph fusion

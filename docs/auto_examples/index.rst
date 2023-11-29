@@ -18,10 +18,15 @@ Below is a gallery of examples on how to use this package, and scripts showing h
 
     </div>
 
-Customising behaviour
-=====================
+
+Customising Fusilli
+=======================================================
 
 These are examples showing how to get more in depth with Fusilli and customise its behaviour.
+
+* Modify the fusion model structures
+* Change the training behaviour: early stopping, batch size, test set size, etc.
+* Use Fusilli for hyperparameter tuning by adding suffixes to training outputs
 
 
 .. raw:: html
@@ -31,7 +36,7 @@ These are examples showing how to get more in depth with Fusilli and customise i
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip=" Early stopping  Batch size  Number of epochs  Checkpoint suffixes">
+    <div class="sphx-glr-thumbcontainer" tooltip="This tutorial will show you how to customise the training of your fusion model.">
 
 .. only:: html
 
@@ -48,23 +53,6 @@ These are examples showing how to get more in depth with Fusilli and customise i
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip=" .. note::">
-
-.. only:: html
-
-  .. image:: /auto_examples/customising_behaviour/images/thumb/sphx_glr_how_to_use_logging_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_auto_examples_customising_behaviour_how_to_use_logging.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">How to use Weights and Biases Logging with Fusilli</div>
-    </div>
-
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="This tutorial will show you how to modify the architectures of fusion models.">
 
 .. only:: html
@@ -76,7 +64,7 @@ These are examples showing how to get more in depth with Fusilli and customise i
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">How to modify architectures of fusion models</div>
+      <div class="sphx-glr-thumbnail-title">How to modify fusion model architecture</div>
     </div>
 
 
@@ -85,8 +73,8 @@ These are examples showing how to get more in depth with Fusilli and customise i
     </div>
 
 
-Training and testing
-====================
+Running Fusilli on your own data
+==========================================
 
 These are examples of how to train and validate fusion models with Fusilli.
 
@@ -109,7 +97,7 @@ These are examples of how to train and validate fusion models with Fusilli.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">📊 Training multiple models in a loop: k-fold regression 🚀</div>
+      <div class="sphx-glr-thumbnail-title">Training multiple models in a loop: k-fold regression</div>
     </div>
 
 
@@ -126,7 +114,7 @@ These are examples of how to train and validate fusion models with Fusilli.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">📊 Binary Classification: Training a K-Fold Model 🚀</div>
+      <div class="sphx-glr-thumbnail-title">Binary Classification: Training a K-Fold Model</div>
     </div>
 
 
@@ -143,7 +131,7 @@ These are examples of how to train and validate fusion models with Fusilli.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">📈 Regression: Comparing Two Tabular Models Trained on Simulated Data 📊</div>
+      <div class="sphx-glr-thumbnail-title">Regression: Comparing Two Tabular Models Trained on Simulated Data</div>
     </div>
 
 

@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="docs/pink_pasta_logo.png" alt="drawing" width="200"/>
+<img src="docs/_static/pink_pasta_logo.png" alt="drawing" width="200"/>
 
-# fusilli 
+# fusilli
 
 🌸 **Don't be silly, use fusilli for all your multi-modal data fusion needs!** 🌸
 
@@ -16,9 +16,8 @@
 
 ## Introduction
 
-🍝 Welcome to `fusilli` 🍝, where we're cooking up something special in the world of machine learning! Fusilli is your
-go-to
-library for multi-modal data fusion methods, and it's designed to make data fusion a piece of cake! 🍰
+🍝 Welcome to `fusilli` 🍝, the ultimate library for multi-modal data fusion in machine learning! Fusilli makes data
+fusion a piece of cake, providing a platform to combine different data types efficiently.
 
 ## What can Fusilli do?
 
@@ -36,16 +35,7 @@ Fusilli supports a range of prediction tasks, including **regression**, **binary
 classification.**
 Note that it does not currently support tasks such as clustering or segmentation.
 
-## Detailed Documentation
-
 Want to know more? Here is a link to [Read the Docs](https://fusilli.readthedocs.io/en/latest/)
-
-- Detailed descriptions of the methods included in `fusilli`
-- Examples and tutorials on how to use `fusilli`, with examples of:
-    - Loading your own data
-    - Logging experiments
-    - Modifying model structures
-- A recipe book of API documentation for the `fusilli` codebase.
 
 ## Installation
 
@@ -61,11 +51,17 @@ Coming soon...
 
 ## Contribute!
 
-We'd love to add some more multi-modal data fusion methods if you've found any! PyTorch templates and contribution guidance our in the [contributions documentation](https://fusilli.readthedocs.io/en/latest/contributing_examples/).
+If you've developed new fusion methods or want to enhance Fusilli, check our contribution guidelines to get started.
+PyTorch templates and contribution guidance our in
+the [contributions documentation](https://fusilli.readthedocs.io/en/latest/contributing_examples/).
 
 ## Authors and Acknowledgements
 
 `fusilli` is authored by Florence J Townend, James Chapman, and James H Cole.
 
-This work was funded by the EPSRC (Funding code to be added).
+Florence J Townend is supported by a UCL UKRI Centre for Doctoral Training in AI-enabled Healthcare studentship (
+EP/S021612/1).
 
+## License
+
+This project is licensed under AGPLv3. See the LICENSE file for details.

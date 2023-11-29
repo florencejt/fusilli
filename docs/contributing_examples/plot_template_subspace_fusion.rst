@@ -58,7 +58,7 @@ And here is the code for the model:
 
 .. GENERATED FROM PYTHON SOURCE LINES 39-120
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import numpy as np
@@ -74,7 +74,7 @@ And here is the code for the model:
         """
 
         method_name = "Template Subspace Fusion Model"
-        modality_type = "both_tab"
+        modality_type = "tabular_tabular"
         fusion_type = "subspace"
 
         def __init__(self, pred_type, data_dims, params):
@@ -198,7 +198,7 @@ Here's an example of a model with a simple 2-layer autoencoder to get the latent
 
 .. GENERATED FROM PYTHON SOURCE LINES 166-205
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -283,7 +283,7 @@ Here's an example of the ``__init__`` method:
 
 .. GENERATED FROM PYTHON SOURCE LINES 238-272
 
-.. code-block:: default
+.. code-block:: Python
 
 
     from fusilli.utils.training_utils import get_checkpoint_filenames_for_subspace_models, init_trainer
@@ -346,7 +346,7 @@ e.g. [tab1, tab2] -> [tab1, tab2_latent]
 
 .. GENERATED FROM PYTHON SOURCE LINES 288-337
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # imports for the train method
@@ -415,7 +415,7 @@ In our example's case, the data dimensions would be ``[tab1_dim, tab2_latent_dim
 
 .. GENERATED FROM PYTHON SOURCE LINES 344-350
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # ... continuing from the previous code snippet ...
@@ -443,12 +443,12 @@ This fusion model will use the data from ``convert_to_latent`` in Step 2, not th
 
 .. GENERATED FROM PYTHON SOURCE LINES 359-396
 
-.. code-block:: default
+.. code-block:: Python
 
 
     class TemplateSubspaceFusionModel(ParentFusionModel, nn.Module):
         method_name = "Template Subspace Fusion Model - with pre-trained subspace method"
-        modality_type = "both_tab"
+        modality_type = "tabular_tabular"
         fusion_type = "subspace"
 
         # class-level attribute pointing to the subspace method class
@@ -503,7 +503,7 @@ As with the simultaneously-trained subspace-based fusion model, we need to think
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.011 seconds)
+   **Total running time of the script:** (0 minutes 0.005 seconds)
 
 
 .. _sphx_glr_download_contributing_examples_plot_template_subspace_fusion.py:
@@ -512,16 +512,13 @@ As with the simultaneously-trained subspace-based fusion model, we need to think
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_template_subspace_fusion.ipynb <plot_template_subspace_fusion.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_template_subspace_fusion.py <plot_template_subspace_fusion.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: plot_template_subspace_fusion.ipynb <plot_template_subspace_fusion.ipynb>`
 
 
 .. only:: html

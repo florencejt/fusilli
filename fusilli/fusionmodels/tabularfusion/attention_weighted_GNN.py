@@ -301,6 +301,7 @@ class AttentionWeightedGraphMaker:
         """
 
         # check the distance threshold percentage is an int between 0 and 100
+        check_model_validity.check_dtype(self.edge_probability_threshold, int, "edge_probability_threshold")
         if self.edge_probability_threshold <= 0 or self.edge_probability_threshold > 100:
             raise ValueError(
                 (
@@ -308,7 +309,6 @@ class AttentionWeightedGraphMaker:
                     f"inclusive. The threshold is currently: {self.edge_probability_threshold}"
                 )
             )
-        check_model_validity.check_dtype(self.edge_probability_threshold, int, "distance_threshold_percentage")
 
         # check early stopping is an EarlyStopping object
         check_model_validity.check_dtype(self.early_stop_callback, EarlyStopping, "early_stop_callback")
@@ -493,6 +493,7 @@ class AttentionWeightedGNN(ParentFusionModel, nn.Module):
 
         # check graph layers are sequential
         check_model_validity.check_dtype(self.graph_conv_layers, nn.Sequential, "graph_conv_layers")
+        check_model_validity.check_dtype(self.dropout_prob, float, "dropout_prob")
 
         # check dropout probability is between 0 and 1
         if self.dropout_prob < 0 or self.dropout_prob > 1:
