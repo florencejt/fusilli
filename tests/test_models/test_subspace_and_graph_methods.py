@@ -499,7 +499,7 @@ def test_AttentionWeightedGraphMaker():
     assert hasattr(attention_weighted_graph_maker, "early_stop_callback")
 
     # Check if parameters are valid
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         attention_weighted_graph_maker.edge_probability_threshold = -0.1
         attention_weighted_graph_maker.check_params()
 
