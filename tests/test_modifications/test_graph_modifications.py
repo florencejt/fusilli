@@ -5,10 +5,15 @@ from fusilli.fusionmodels.tabularfusion.edge_corr_gnn import (
     EdgeCorrGNN,
     EdgeCorrGraphMaker,
 )
+from fusilli.fusionmodels.tabularfusion.attention_weighted_GNN import (
+    AttentionWeightedGNN,
+    AttentionWeightedGraphMaker
+)
 from tests.test_data.test_TrainTestDataModule import create_test_files
 from fusilli.data import TrainTestGraphDataModule
-from torch_geometric.nn import GCNConv
+from torch_geometric.nn import GCNConv, ChebConv
 from unittest.mock import patch, Mock
+from lightning.pytorch.callbacks import EarlyStopping
 
 
 @pytest.fixture
@@ -42,6 +47,37 @@ def model_instance_EdgeCorrGraphMaker(create_test_files):
     return EdgeCorrGraphMaker(dm.dataset)
 
 
+@pytest.fixture
+def model_instance_AttentionWeightedGNN():
+    pred_type = "regression"
+    data_dims = [10, 15, None]
+    params = {}
+    return AttentionWeightedGNN(pred_type, data_dims, params)
+
+
+@pytest.fixture
+def model_instance_AttentionWeightedGraphMaker(create_test_files):
+    tabular1_csv = create_test_files["tabular1_csv"]
+    tabular2_csv = create_test_files["tabular2_csv"]
+    image_torch_file_2d = create_test_files["image_torch_file_2d"]
+
+    params = {
+        "test_size": 0.2,
+    }
+
+    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+    example_fusion_model = Mock()
+    example_fusion_model.modality_type = "tabular_tabular"
+
+    # Initialize the TrainTestDataModule
+    dm = TrainTestGraphDataModule(
+        params, example_fusion_model, sources, EdgeCorrGraphMaker
+    )
+    dm.prepare_data()
+
+    return AttentionWeightedGraphMaker(dm.dataset)
+
+
 correct_modifications = {
     "EdgeCorrGNN": {
         "graph_conv_layers": nn.Sequential(
@@ -52,6 +88,32 @@ correct_modifications = {
         "dropout_prob": 0.4,
     },
     "EdgeCorrGraphMaker": {"threshold": 0.6},
+    "AttentionWeightedGNN": {
+        "graph_conv_layers": nn.Sequential(
+            ChebConv(23, 50, K=3),
+            ChebConv(50, 100, K=3),
+            ChebConv(100, 130, K=3),
+        ),
+        "dropout_prob": 0.4,
+    },
+    "AttentionWeightedGraphMaker": {"early_stop_callback":
+                                        EarlyStopping(monitor="val_loss", ),
+                                    "edge_probability_threshold": 80,
+                                    "attention_MLP_test_size": 0.3,
+                                    "AttentionWeightingMLPInstance.weighting_layers": nn.ModuleDict(
+                                        {
+                                            "Layer 1": nn.Sequential(nn.Linear(4, 100),
+                                                                     nn.ReLU()),
+                                            "Layer 2": nn.Sequential(nn.Linear(100, 75),
+                                                                     nn.ReLU()),
+                                            "Layer 3": nn.Sequential(nn.Linear(75, 75),
+                                                                     nn.ReLU()),
+                                            "Layer 4": nn.Sequential(nn.Linear(75, 100),
+                                                                     nn.ReLU()),
+                                            "Layer 5": nn.Sequential(nn.Linear(100, 4),
+                                                                     nn.ReLU()),
+                                        }
+                                    )},
 }
 
 incorrect_data_type_modifications = {
@@ -66,6 +128,26 @@ incorrect_data_type_modifications = {
         "dropout_prob": 1,
     },
     "EdgeCorrGraphMaker": {"threshold": 0},
+    "AttentionWeightedGNN": {
+        "graph_conv_layers": nn.ModuleDict(
+            {"conv1": ChebConv(23, 50, K=3),
+             "conv2": ChebConv(50, 100, K=3),
+             "conv3": ChebConv(100, 130, K=3), }
+        ),
+        "dropout_prob": 1,
+    },
+    "AttentionWeightedGraphMaker": {"early_stop_callback":
+                                        "earlystopping",
+                                    "edge_probability_threshold": 80.3,
+                                    "attention_MLP_test_size": 1,
+                                    "AttentionWeightingMLPInstance.weighting_layers": nn.Sequential(
+                                        nn.Linear(4, 100),
+                                        nn.ReLU(), nn.Linear(100, 75),
+                                        nn.ReLU(), nn.Linear(75, 75),
+                                        nn.ReLU(), nn.Linear(75, 100),
+                                        nn.ReLU(), nn.Linear(100, 4),
+                                        nn.ReLU())
+                                    },
 }
 
 incorrect_data_ranges_modifications = {
@@ -73,11 +155,19 @@ incorrect_data_ranges_modifications = {
         "dropout_prob": 1.5,
     },
     "EdgeCorrGraphMaker": {"threshold": -0.4},
+    "AttentionWeightedGNN": {
+        "dropout_prob": 1.5,
+    },
+    "AttentionWeightedGraphMaker": {
+        "edge_probability_threshold": 120,
+        "attention_MLP_test_size": 1.5, },
 }
 
 model_instances = [
     ("EdgeCorrGNN", "model_instance_EdgeCorrGNN"),
     ("EdgeCorrGraphMaker", "model_instance_EdgeCorrGraphMaker"),
+    ("AttentionWeightedGNN", "model_instance_AttentionWeightedGNN"),
+    ("AttentionWeightedGraphMaker", "model_instance_AttentionWeightedGraphMaker"),
 ]
 
 

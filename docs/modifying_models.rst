@@ -36,9 +36,9 @@ Modifiable attributes of the fusion models
   * - Attribute
     - Guidance
   * - :attr:`~.ActivationFusion.mod1_layers`
-    - ``nn.Sequential``
+    - ``nn.ModuleDict``
   * - :attr:`~.ActivationFusion.mod2_layers`
-    - ``nn.Sequential``
+    - ``nn.ModuleDict``
   * - :attr:`~.ActivationFusion.fused_layers`
     - ``nn.Sequential``
 
@@ -53,13 +53,51 @@ Modifiable attributes of the fusion models
   * - Attribute
     - Guidance
   * - :attr:`~.AttentionAndActivation.mod1_layers`
-    - ``nn.Sequential``
+    - ``nn.ModuleDict``
   * - :attr:`~.AttentionAndActivation.mod2_layers`
-    - ``nn.Sequential``
+    - ``nn.ModuleDict``
   * - :attr:`~.AttentionAndActivation.fused_layers`
     - ``nn.Sequential``
   * - :attr:`~.AttentionAndActivation.attention_reduction_ratio`
     - int
+
+
+:class:`.AttentionWeightedGNN`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+  :widths: 40 60
+  :header-rows: 1
+  :stub-columns: 0
+
+  * - Attribute
+    - Guidance
+  * - :attr:`~.AttentionWeightedGNN.graph_conv_layers`
+    - ``nn.Sequential`` of ``torch_geometric.nn` Layers.
+  * - :attr:`~.AttentionWeightedGNN.dropout_prob`
+    - Float between (not including) 0 and 1.
+
+
+:class:`.AttentionWeightedGraphMaker`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+  :widths: 40 60
+  :header-rows: 1
+  :stub-columns: 0
+
+  * - Attribute
+    - Guidance
+  * - :attr:`~.AttentionWeightedGraphMaker.early_stop_callback`
+    - ``EarlyStopping`` object from ``from lightning.pytorch.callbacks import EarlyStopping``
+  * - :attr:`~.AttentionWeightedGraphMaker.edge_probability_threshold`
+    - Integer between 0 and 100.
+  * - :attr:`~.AttentionWeightedGraphMaker.attention_MLP_test_size`
+    - Float between 0 and 1.
+  * - :attr:`~.AttentionWeightedGraphMaker.AttentionWeightingMLPInstance.weighting_layers`
+    - ``nn.ModuleDict``: final layer output size must be the same as the input layer input size.
+  * - :attr:`~.AttentionWeightedGraphMaker.AttentionWeightingMLPInstance.fused_layers`
+    - ``nn.Sequential``
 
 
 
@@ -135,7 +173,7 @@ Modifiable attributes of the fusion models
   * - Attribute
     - Guidance
   * - :attr:`~.ConcatImageMapsTabularData.img_layers`
-    - ``nn.Sequential``
+    - ``nn.ModuleDict``
   * - :attr:`~.ConcatImageMapsTabularData.fused_layers`
     - ``nn.Sequential``
 
@@ -153,9 +191,9 @@ Modifiable attributes of the fusion models
   * - Attribute
     - Guidance
   * - :attr:`~.ConcatImageMapsTabularMaps.mod1_layers`
-    - ``nn.Sequential``
+    - ``nn.ModuleDict``
   * - :attr:`~.ConcatImageMapsTabularMaps.img_layers`
-    - ``nn.Sequential``
+    - ``nn.ModuleDict``
   * - :attr:`~.ConcatImageMapsTabularMaps.fused_layers`
     - ``nn.Sequential``
 
@@ -189,9 +227,9 @@ Modifiable attributes of the fusion models
   * - Attribute
     - Guidance
   * - :attr:`~.ConcatTabularFeatureMaps.mod1_layers`
-    - ``nn.Sequential``
+    - ``nn.ModuleDict``
   * - :attr:`~.ConcatTabularFeatureMaps.mod2_layers`
-    - ``nn.Sequential``
+    - ``nn.ModuleDict``
   * - :attr:`~.ConcatTabularFeatureMaps.fused_layers`
     - ``nn.Sequential``
 
@@ -211,9 +249,9 @@ Modifiable attributes of the fusion models
   * - :attr:`~.CrossmodalMultiheadAttention.attention_embed_dim`
     - int
   * - :attr:`~.CrossmodalMultiheadAttention.mod1_layers`
-    - ``nn.Sequential``
+    - ``nn.ModuleDict``
   * - :attr:`~.CrossmodalMultiheadAttention.img_layers`
-    - ``nn.Sequential``
+    - ``nn.ModuleDict``
 
 ------
   
@@ -252,7 +290,7 @@ Modifiable attributes of the fusion models
     - ``nn.Sequential``
   * - :attr:`.img_unimodal.img_layers`
     - 
-      * ``nn.Sequential``
+      * ``nn.ModuleDict``
       * Overrides modification of ``img_layers`` made to "all"
   * - :attr:`.img_unimodal.fused_layers`
     - ``nn.Sequential``

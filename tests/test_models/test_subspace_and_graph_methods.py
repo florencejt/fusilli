@@ -6,8 +6,11 @@ import pandas as pd
 from unittest.mock import patch, Mock
 from unittest import mock
 import lightning.pytorch as pl
-# import pytorch_lightning as pl
+# from lightning.pytorch.callbacks import EarlyStopping
 from torch import nn
+from torch_geometric.data import Data
+
+from fusilli.data import CustomDataset
 
 # from fusilli.fusionmodels.tabularfusion.mcvae_model import MCVAESubspaceMethod
 from fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps import (
@@ -24,6 +27,8 @@ from fusilli.data import TrainTestDataModule
 from fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain import (
     concat_img_latent_tab_subspace_method, ImgLatentSpace
 )
+
+from fusilli.fusionmodels.tabularfusion.attention_weighted_GNN import AttentionWeightedGraphMaker
 
 
 class MockFusionModel:
@@ -449,15 +454,16 @@ class Subspace:
 #
 
 # GRAPH MAKER
-from torch_geometric.data import Data
 
-# Define a dummy dataset for testing
-dummy_data = (torch.randn(5, 3), torch.randn(5, 3), torch.tensor([0, 1, 0, 1, 1]))
+data1 = torch.randn(100, 15)
+data2 = torch.randn(100, 25)
+labels = pd.DataFrame({"pred_label": [0] * 100})
+dummy_dataset = CustomDataset([data1, data2], labels)
 
 
 def test_edge_corr_graph_maker():
     # Create an instance of EdgeCorrGraphMaker
-    edge_corr_graph_maker = EdgeCorrGraphMaker(dummy_data)
+    edge_corr_graph_maker = EdgeCorrGraphMaker(dummy_dataset)
 
     # Check the default threshold
     assert edge_corr_graph_maker.threshold == 0.8
@@ -467,19 +473,65 @@ def test_edge_corr_graph_maker():
         edge_corr_graph_maker.threshold = -0.1
         edge_corr_graph_maker.check_params()
 
-    edge_corr_graph_maker.threshold = 0.8
+    edge_corr_graph_maker.threshold = 0.5
 
     # Create a graph
     graph_data = edge_corr_graph_maker.make_graph()
 
     # Assertions
     assert isinstance(graph_data, Data)
-    assert graph_data.x.shape == dummy_data[1].shape
+    assert graph_data.x.shape == dummy_dataset[:][1].shape
     assert graph_data.edge_index.shape[1] > 0
     assert graph_data.edge_attr.shape[0] == graph_data.edge_index.shape[1]
 
     # assert that all the edge weights are above the threshold
     assert (abs(graph_data.edge_attr - 1) >= edge_corr_graph_maker.threshold).all()
+
+
+@pytest.mark.filterwarnings("ignore:.*does not have many workers which may be a bottleneck*.", )
+def test_AttentionWeightedGraphMaker():
+    # Create an instance of EdgeCorrGraphMaker
+    attention_weighted_graph_maker = AttentionWeightedGraphMaker(dummy_dataset)
+
+    # Check the default threshold
+    assert attention_weighted_graph_maker.edge_probability_threshold == 75
+    assert attention_weighted_graph_maker.attention_MLP_test_size == 0.2
+    assert hasattr(attention_weighted_graph_maker, "early_stop_callback")
+
+    # Check if parameters are valid
+    with pytest.raises(ValueError):
+        attention_weighted_graph_maker.edge_probability_threshold = -0.1
+        attention_weighted_graph_maker.check_params()
+
+    with pytest.raises(ValueError):
+        attention_weighted_graph_maker.edge_probability_threshold = 110
+        attention_weighted_graph_maker.check_params()
+
+    with pytest.raises(ValueError):
+        attention_weighted_graph_maker.attention_MLP_test_size = -0.1
+        attention_weighted_graph_maker.check_params()
+
+    with pytest.raises(ValueError):
+        attention_weighted_graph_maker.attention_MLP_test_size = 1.1
+        attention_weighted_graph_maker.check_params()
+
+    with pytest.raises(ValueError):
+        attention_weighted_graph_maker.early_stop_callback = 1
+        attention_weighted_graph_maker.check_params()
+
+    new_instance = AttentionWeightedGraphMaker(dummy_dataset)
+
+    new_instance.edge_probability_threshold = 85
+    new_instance.attention_MLP_test_size = 0.4
+
+    # Create a graph
+    graph_data = new_instance.make_graph()
+
+    # Assertions
+    assert isinstance(graph_data, Data)
+    assert graph_data.x.shape == dummy_dataset[:][1].shape
+    assert graph_data.edge_index.shape[1] > 0
+    assert graph_data.edge_attr.shape[0] == graph_data.edge_index.shape[1]
 
 
 # concat img and tabular data latent space double train

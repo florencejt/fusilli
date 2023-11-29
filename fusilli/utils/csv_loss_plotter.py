@@ -39,7 +39,8 @@ def plot_loss_curve(params, logger, show=False):
     # keep epoch, train_loss, and val_loss columns
     df = df[["epoch", "train_loss", "val_loss"]]
     # replace train_loss NaNs with value from row with same epoch
-    df["train_loss"] = df["train_loss"].fillna(method="backfill")
+    df["train_loss"] = df["train_loss"].bfill()
+    # fillna(method="backfill")
     # remove rows where val_loss is NaN
     df = df[df["val_loss"].notna()]
 

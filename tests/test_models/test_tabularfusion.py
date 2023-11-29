@@ -457,6 +457,55 @@ def test_AttentionAndSelfActivation():
         test_model.forward(tuple(torch.randn(8, 10)))
     with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
         test_model.forward(torch.randn(8, 10))
-    with pytest.raises(UserWarning, match=r"first tabular modality dimensions // reduction_ratio < 1"):
+    with pytest.raises(UserWarning, match=r"first tabular modality dimensions // attention_reduction_ratio < 1"):
         test_model.attention_reduction_ratio = 16
         test_model.forward((torch.randn(8, 10), torch.randn(8, 14)))
+
+
+def test_AttentionWeightedGNN():
+    test_model = fusion_model_dict["AttentionWeightedGNN"]
+
+    # attributes available pre-initialisation
+    assert hasattr(test_model, "method_name")
+    assert test_model.method_name == "Attention-weighted GNN"
+    assert hasattr(test_model, "modality_type")
+    assert test_model.modality_type == "tabular_tabular"
+    assert hasattr(test_model, "fusion_type")
+    assert test_model.fusion_type == "graph"
+    assert hasattr(test_model, "graph_maker")
+
+    node_features_dim = 14  # dimensions of modality 2
+    num_nodes = 8
+    num_edges = 20
+    edge_attr_dim = 1  # Adjust as needed
+
+    node_features = torch.randn(num_nodes, node_features_dim)
+    edge_index = torch.randint(0, num_nodes, (2, num_edges), dtype=torch.long)
+    edge_attr = torch.randn(num_edges, edge_attr_dim)
+    test_graph_data = (node_features, edge_index, edge_attr)
+
+    test_model = test_model(pred_type="binary", data_dims=[10, 14, None], params={})
+
+    # initialising
+    assert isinstance(test_model, nn.Module)
+    assert isinstance(test_model, ParentFusionModel)
+    assert hasattr(test_model, "pred_type")
+    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "graph_conv_layers")
+    assert hasattr(test_model, "dropout_prob")
+    assert hasattr(test_model, "final_prediction")
+    assert hasattr(test_model, "forward")
+
+    # forward pass
+    test_output = test_model.forward(test_graph_data)
+    assert isinstance(test_output, list)
+    assert test_output[0].shape == torch.Size([8, 1])
+    assert len(test_output) == 1
+
+    # wrong input
+    # type
+    with pytest.raises(TypeError, match=r"Wrong input type for model!"):
+        test_model.forward([torch.randn(8, 25)])
+    # length
+    with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
+        test_model.forward((torch.randn(8, 25), torch.randn(8, 25)))

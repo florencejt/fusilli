@@ -19,6 +19,9 @@ from fusilli.fusionmodels.tabularfusion.concat_feature_maps import (
 from fusilli.fusionmodels.tabularimagefusion.decision import ImageDecision
 from fusilli.fusionmodels.tabularfusion.decision import TabularDecision
 
+from fusilli.fusionmodels.tabularfusion.activation import ActivationFusion
+from fusilli.fusionmodels.tabularfusion.attention_and_activation import AttentionAndSelfActivation
+
 import torch
 
 correct_modifications_2D = {
@@ -221,6 +224,91 @@ correct_modifications_2D = {
             }
         ),
     },
+    "ActivationFusion": {
+        "mod1_layers": nn.ModuleDict(
+            {
+                "layer 1": nn.Sequential(
+                    nn.Linear(10, 32),
+                    nn.ReLU(),
+                ),
+                "layer 2": nn.Sequential(
+                    nn.Linear(32, 66),
+                    nn.ReLU(),
+                ),
+                "layer 3": nn.Sequential(
+                    nn.Linear(66, 128),
+                    nn.ReLU(),
+                ),
+            }
+        ),
+        "mod2_layers": nn.ModuleDict(
+            {
+                "layer 1": nn.Sequential(
+                    nn.Linear(20, 45),
+                    nn.ReLU(),
+                ),
+                "layer 2": nn.Sequential(
+                    nn.Linear(45, 70),
+                    nn.ReLU(),
+                ),
+                "layer 3": nn.Sequential(
+                    nn.Linear(70, 128),
+                    nn.ReLU(),
+                ),
+            }
+        ),
+        "fused_layers": nn.Sequential(
+            nn.Linear(25, 150),
+            nn.ReLU(),
+            nn.Linear(150, 75),
+            nn.ReLU(),
+            nn.Linear(75, 50),
+            nn.ReLU(),
+        ),
+    },
+    "AttentionAndSelfActivation": {
+        "mod1_layers": nn.ModuleDict(
+            {
+                "layer 1": nn.Sequential(
+                    nn.Linear(10, 32),
+                    nn.ReLU(),
+                ),
+                "layer 2": nn.Sequential(
+                    nn.Linear(32, 66),
+                    nn.ReLU(),
+                ),
+                "layer 3": nn.Sequential(
+                    nn.Linear(66, 128),
+                    nn.ReLU(),
+                ),
+            }
+        ),
+        "mod2_layers": nn.ModuleDict(
+            {
+                "layer 1": nn.Sequential(
+                    nn.Linear(20, 45),
+                    nn.ReLU(),
+                ),
+                "layer 2": nn.Sequential(
+                    nn.Linear(45, 70),
+                    nn.ReLU(),
+                ),
+                "layer 3": nn.Sequential(
+                    nn.Linear(70, 128),
+                    nn.ReLU(),
+                ),
+            }
+        ),
+        "fused_layers": nn.Sequential(
+            nn.Linear(25, 150),
+            nn.ReLU(),
+            nn.Linear(150, 75),
+            nn.ReLU(),
+            nn.Linear(75, 50),
+            nn.ReLU(),
+        ),
+        "attention_reduction_ratio": 2,
+    }
 }
 
 correct_modifications_3D = {
@@ -561,6 +649,63 @@ wrong_dtype_modifications = {
             nn.ReLU(),
         ),
     },
+    "ActivationFusion": {
+        "mod1_layers": nn.Sequential(
+            nn.Linear(10, 32),
+            nn.ReLU(),
+            nn.Linear(32, 66),
+            nn.ReLU(),
+            nn.Linear(66, 128),
+            nn.ReLU(),
+        ),
+        "mod2_layers": nn.Sequential(
+            nn.Linear(20, 45),
+            nn.ReLU(),
+            nn.Linear(45, 70),
+            nn.ReLU(),
+            nn.Linear(70, 100),
+            nn.ReLU(),
+        ),
+        "fused_layers": nn.ModuleDict(
+            {
+                "layer1": nn.Linear(25, 150),
+                "relu1": nn.ReLU(),
+                "layer2": nn.Linear(150, 75),
+                "relu2": nn.ReLU(),
+                "layer3": nn.Linear(75, 50),
+                "relu3": nn.ReLU(),
+            }
+        ),
+    },
+    "AttentionAndSelfActivation": {
+        "mod1_layers": nn.Sequential(
+            nn.Linear(10, 32),
+            nn.ReLU(),
+            nn.Linear(32, 66),
+            nn.ReLU(),
+            nn.Linear(66, 128),
+            nn.ReLU(),
+        ),
+        "mod2_layers": nn.Sequential(
+            nn.Linear(20, 45),
+            nn.ReLU(),
+            nn.Linear(45, 70),
+            nn.ReLU(),
+            nn.Linear(70, 100),
+            nn.ReLU(),
+        ),
+        "fused_layers": nn.ModuleDict(
+            {
+                "layer1": nn.Linear(25, 150),
+                "relu1": nn.ReLU(),
+                "layer2": nn.Linear(150, 75),
+                "relu2": nn.ReLU(),
+                "layer3": nn.Linear(75, 50),
+                "relu3": nn.ReLU(),
+            }
+        ),
+        "attention_reduction_ratio": "two",
+    }
 }
 
 
@@ -636,6 +781,22 @@ def model_instance_ConcatTabularFeatureMaps():
     return ConcatTabularFeatureMaps(pred_type, data_dims, params)
 
 
+@pytest.fixture
+def model_instance_ActivationFusion():
+    pred_type = "regression"
+    data_dims = [10, 15, None]
+    params = {}
+    return ActivationFusion(pred_type, data_dims, params)
+
+
+@pytest.fixture
+def model_instance_AttentionAndSelfActivation():
+    pred_type = "regression"
+    data_dims = [10, 15, None]
+    params = {}
+    return AttentionAndSelfActivation(pred_type, data_dims, params)
+
+
 model_instances = [
     ("ConcatImageMapsTabularData", "model_instance_ConcatImageMapsTabularData_2D"),
     ("ConcatImageMapsTabularData", "model_instance_ConcatImageMapsTabularData_3D"),
@@ -646,6 +807,8 @@ model_instances = [
     ("TabularDecision", "model_instance_TabularDecision"),
     ("ConcatTabularData", "model_instance_ConcatTabularData"),
     ("ConcatTabularFeatureMaps", "model_instance_ConcatTabularFeatureMaps"),
+    ("ActivationFusion", "model_instance_ActivationFusion"),
+    ("AttentionAndSelfActivation", "model_instance_AttentionAndSelfActivation"),
 ]
 
 

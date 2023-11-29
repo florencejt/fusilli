@@ -86,6 +86,12 @@ class ActivationFusion(ParentFusionModel, nn.Module):
         check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
         check_model_validity.check_dtype(self.mod2_layers, nn.ModuleDict, "mod2_layers")
 
+        mod1_output_dim = list(self.mod1_layers.values())[-1][0].out_features
+        mod2_output_dim = list(self.mod2_layers.values())[-1][0].out_features
+        if mod1_output_dim != mod2_output_dim:
+            raise UserWarning(
+                "The number of output features of mod1_layers and mod2_layers must be the same for Activation fusion. Please change the final layers in the modality layers to have the same number of output features as each other.")
+
         self.get_fused_dim()
         self.fused_layers, out_dim = check_model_validity.check_fused_layers(
             self.fused_layers, self.fused_dim

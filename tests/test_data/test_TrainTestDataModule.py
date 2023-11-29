@@ -56,6 +56,72 @@ def create_test_files(tmp_path_factory):
     shutil.rmtree(tmp_dir)
 
 
+@pytest.fixture(scope="module")
+def create_test_files_more_features(tmp_path_factory):
+    # Create a temporary directory
+    tmp_dir = tmp_path_factory.mktemp("test_data")
+
+    num_people = 36
+
+    # Create sample CSV files with different index and label column names
+    tabular1_csv = tmp_dir / "tabular1.csv"
+    tabular1_data = pd.DataFrame(
+        {
+            "study_id": range(num_people),  # Different index column name
+            "feature1": [1.0] * num_people,
+            "feature2": [2.0] * num_people,
+            "feature3": [3.0] * num_people,
+            "feature4": [4.0] * num_people,
+            "feature5": [5.0] * num_people,
+            "feature6": [6.0] * num_people,
+            "feature7": [7.0] * num_people,
+            "feature8": [8.0] * num_people,
+            "feature9": [9.0] * num_people,
+            "feature10": [10.0] * num_people,
+            "pred_label": [0] * num_people,  # Different label column name
+        }
+    )
+    tabular1_data.to_csv(tabular1_csv, index=False)
+
+    tabular2_csv = tmp_dir / "tabular2.csv"
+    tabular2_data = pd.DataFrame(
+        {
+            "study_id": range(num_people),
+            "feature1": [1.0] * num_people,
+            "feature2": [2.0] * num_people,
+            "feature3": [3.0] * num_people,
+            "feature4": [4.0] * num_people,
+            "feature5": [5.0] * num_people,
+            "feature6": [6.0] * num_people,
+            "feature7": [7.0] * num_people,
+            "feature8": [8.0] * num_people,
+            "feature9": [9.0] * num_people,
+            "feature10": [10.0] * num_people,
+            "feature11": [11.0] * num_people,
+            "feature12": [12.0] * num_people,
+            "feature13": [13.0] * num_people,
+            "feature14": [14.0] * num_people,
+            "feature15": [15.0] * num_people,
+            "pred_label": [1] * num_people,
+        }
+    )
+    tabular2_data.to_csv(tabular2_csv, index=False)
+
+    # Create a sample Torch file for image data
+    image_data_2d = torch.randn(num_people, 1, 100, 100)
+    image_torch_file_2d = tmp_dir / "image_data_2d.pt"
+    torch.save(image_data_2d, image_torch_file_2d)
+
+    yield {
+        "tabular1_csv": tabular1_csv,
+        "tabular2_csv": tabular2_csv,
+        "image_torch_file_2d": image_torch_file_2d,
+    }
+
+    # Clean up temporary files and directories
+    shutil.rmtree(tmp_dir)
+
+
 # Mocked class for DataLoader
 class MockedDataLoader:
     def __init__(self, dataset, batch_size, shuffle, num_workers):

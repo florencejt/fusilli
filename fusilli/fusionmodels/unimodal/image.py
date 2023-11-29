@@ -67,6 +67,7 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
         dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
         for layer in self.img_layers.values():
             dummy_conv_output = layer(dummy_conv_output)
+
         flattened_img_output_size = dummy_conv_output.data.view(1, -1).size(1)
 
         self.fused_dim = flattened_img_output_size
@@ -79,14 +80,16 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
         -------
         None
         """
-        # check fused layers
-        self.fused_layers, out_dim = check_model_validity.check_fused_layers(
-            self.fused_layers, self.fused_dim
-        )
 
         # check img layers
         check_model_validity.check_dtype(self.img_layers, nn.ModuleDict, "img_layers")
         check_model_validity.check_img_dim(self.img_layers, self.img_dim, "img_layers")
+
+        # check fused layers
+        self.get_fused_dim()
+        self.fused_layers, out_dim = check_model_validity.check_fused_layers(
+            self.fused_layers, self.fused_dim
+        )
 
         self.set_final_pred_layers(out_dim)
 

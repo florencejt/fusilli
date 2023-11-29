@@ -65,7 +65,6 @@ class EdgeCorrGraphMaker:
         """
 
         self.check_params()
-
         tab1 = self.dataset[:][0]
         tab2 = self.dataset[:][1]
         labels = self.dataset[:][2]
