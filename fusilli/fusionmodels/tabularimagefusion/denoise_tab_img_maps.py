@@ -711,11 +711,11 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         Final prediction layers.
     """
 
-    # str: Name of the method.
+    #: str: Name of the method.
     method_name = "Denoising tabular autoencoder with image maps"
-    # str: Type of modality.
+    #: str: Type of modality.
     modality_type = "tabular_image"
-    # str: Type of fusion.
+    #: str: Type of fusion.
     fusion_type = "subspace"
     # class: Subspace method.
     subspace_method = denoising_autoencoder_subspace_method

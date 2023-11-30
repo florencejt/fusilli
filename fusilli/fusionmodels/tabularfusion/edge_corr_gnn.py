@@ -1,5 +1,5 @@
 """
-Edge correlation GNN model.
+Edge correlation GNN model: edges are weighted by the correlation between the nodes' first tabular modality features.
 """
 
 import torch.nn as nn
@@ -108,11 +108,11 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
         take in 256 features.
     """
 
-    # str: Name of the method.
+    #: str: Name of the method.
     method_name = "Edge Correlation GNN"
-    # str: Type of modality.
+    #: str: Type of modality.
     modality_type = "tabular_tabular"
-    # str: Type of fusion.
+    #: str: Type of fusion.
     fusion_type = "graph"
     # class: Graph maker class.
     graph_maker = EdgeCorrGraphMaker

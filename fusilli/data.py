@@ -316,7 +316,7 @@ class LoadDatasets:
 
         return dataset, [None, None, img_dim]
 
-    def load_tabular_tabularular(self):
+    def load_tabular_tabular(self):
         """
         Loads the tabular1 and tabular2 multimodal dataset
 
@@ -473,7 +473,7 @@ class TrainTestDataModule(pl.LightningDataModule):
             "img": LoadDatasets(self.sources, image_downsample_size).load_img,
             "tabular_tabular": LoadDatasets(
                 self.sources, image_downsample_size
-            ).load_tabular_tabularular,
+            ).load_tabular_tabular,
             "tabular_image": LoadDatasets(
                 self.sources, image_downsample_size
             ).load_tab_and_img,
@@ -736,7 +736,7 @@ class KFoldDataModule(pl.LightningDataModule):
             "img": LoadDatasets(self.sources, self.image_downsample_size).load_img,
             "tabular_tabular": LoadDatasets(
                 self.sources, self.image_downsample_size
-            ).load_tabular_tabularular,
+            ).load_tabular_tabular,
             "tabular_image": LoadDatasets(
                 self.sources, self.image_downsample_size
             ).load_tab_and_img,
@@ -1050,7 +1050,7 @@ class TrainTestGraphDataModule:
             "img": LoadDatasets(self.sources, self.image_downsample_size).load_img,
             "tabular_tabular": LoadDatasets(
                 self.sources, self.image_downsample_size
-            ).load_tabular_tabularular,
+            ).load_tabular_tabular,
             "tabular_image": LoadDatasets(
                 self.sources, self.image_downsample_size
             ).load_tab_and_img,
@@ -1206,7 +1206,7 @@ class KFoldGraphDataModule:
             "img": LoadDatasets(self.sources, self.image_downsample_size).load_img,
             "tabular_tabular": LoadDatasets(
                 self.sources, self.image_downsample_size
-            ).load_tabular_tabularular,
+            ).load_tabular_tabular,
             "tabular_image": LoadDatasets(
                 self.sources, self.image_downsample_size
             ).load_tab_and_img,

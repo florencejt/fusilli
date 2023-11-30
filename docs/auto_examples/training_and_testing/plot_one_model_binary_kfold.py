@@ -24,6 +24,8 @@ from fusilli.data import get_data_module
 from fusilli.eval import ConfusionMatrix
 from fusilli.train import train_and_save_models
 
+# sphinx_gallery_thumbnail_number = -1
+
 # %%
 # 1. Import the fusion model 🔍
 # --------------------------------
@@ -124,5 +126,4 @@ single_model_list = train_and_save_models(
 confusion_matrix_fig = ConfusionMatrix.from_final_val_data(
     single_model_list
 )
-
 plt.show()

@@ -27,6 +27,8 @@ from fusilli.eval import RealsVsPreds, ModelComparison
 from fusilli.train import train_and_save_models
 from fusilli.utils.model_chooser import import_chosen_fusion_models
 
+# sphinx_gallery_thumbnail_number = -1
+
 # %%
 # 1. Import fusion models 🔍
 # --------------------------------

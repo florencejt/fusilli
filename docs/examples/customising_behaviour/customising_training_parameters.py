@@ -153,3 +153,4 @@ The checkpoint name would then be (if the model trained for 100 epochs):
 
     The ``extra_log_string_dict`` argument is also used to modify the logging behaviour of the model. For more information, see :ref:`wandb`.
 """
+# sphinx_gallery_thumbnail_path = '_static/pink_pasta_logo.png'

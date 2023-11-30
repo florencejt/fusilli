@@ -18,9 +18,9 @@ class ImageDecision(ParentFusionModel, nn.Module):
 
     Attributes
     ----------
-    mod1_layers : dict
+    mod1_layers : nn.ModuleDict
         Dictionary containing the layers of the 1st type of tabular data.
-    img_layers : dict
+    img_layers : nn.ModuleDict
         Dictionary containing the layers of the image data.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers.
@@ -40,11 +40,11 @@ class ImageDecision(ParentFusionModel, nn.Module):
 
     """
 
-    # str: Name of the method.
+    #: str: Name of the method.
     method_name = "Image decision fusion"
-    # str: Type of modality.
+    #: str: Type of modality.
     modality_type = "tabular_image"
-    # str: Type of fusion.
+    #: str: Type of fusion.
     fusion_type = "operation"
 
     def __init__(self, pred_type, data_dims, params):

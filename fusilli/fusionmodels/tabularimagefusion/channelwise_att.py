@@ -33,15 +33,14 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
     Springer International Publishing. https://doi.org/10.1007/978-3-030-59713-9_24
 
     Accompanying code: (our model is inspired by the work of Duanmu et al. (2020) [1])
-    https://github.com/HongyiDuanmu26/Prediction-of-pCR-with-Integrative-Deep-Learning/
-    blob/main/CustomNet.py
+    https://github.com/HongyiDuanmu26/Prediction-of-pCR-with-Integrative-Deep-Learning/blob/main/CustomNet.py
 
 
     Attributes
     ----------
-    mod1_layers : dict
+    mod1_layers : nn.ModuleDict
         Dictionary containing the layers of the 1st type of tabular data.
-    img_layers : dict
+    img_layers : nn.ModuleDict
         Dictionary containing the layers of the image data.
     match_dim_layers : nn.ModuleDict
         Module dictionary containing the linear layers to make the dimensions of the two types of
@@ -56,11 +55,11 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         Sequential layer containing the final prediction layers.
     """
 
-    # str: Name of the method.
+    #: str: Name of the method.
     method_name = "Channel-wise Image attention"
-    # str: Type of modality.
+    #: str: Type of modality.
     modality_type = "tabular_image"
-    # str: Type of fusion.
+    #: str: Type of fusion.
     fusion_type = "attention"
 
     def __init__(self, pred_type, data_dims, params):

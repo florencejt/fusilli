@@ -266,6 +266,13 @@ a:active {
     display: inline-block;
 }
 
+.wy-menu-vertical li.toctree-l4.current li.toctree-l5 > a {
+    /* background: #cdf8be; */
+    /*background: #ffe7fb;*/
+    background: var(--lightpink);
+    display: inline-block;
+}
+
 .wy-menu-vertical {
     overflow-x: scroll;
     /*background-color: #ffe7fb; !* Background color for the side scroll *!*/

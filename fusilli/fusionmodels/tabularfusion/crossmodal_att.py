@@ -33,9 +33,9 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
         Type of prediction to be performed.
     attention_embed_dim : int
         Number of features of the multihead attention layer.
-    mod1_layers : dict
+    mod1_layers : nn.ModuleDict
         Dictionary containing the layers of the first modality.
-    mod2_layers : dict
+    mod2_layers : nn.ModuleDict
         Dictionary containing the layers of the second modality.
     fused_dim : int
         Number of features of the fused layers. This is the flattened output size of the
@@ -55,11 +55,11 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
 
     """
 
-    # str: Name of the method.
+    #: str: Name of the method.
     method_name = "Tabular Crossmodal multi-head attention"
-    # str: Type of modality.
+    #: str: Type of modality.
     modality_type = "tabular_tabular"
-    # str: Type of fusion.
+    #: str: Type of fusion.
     fusion_type = "attention"
 
     def __init__(self, pred_type, data_dims, params):

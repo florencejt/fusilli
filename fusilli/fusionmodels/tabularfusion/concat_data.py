@@ -29,11 +29,11 @@ class ConcatTabularData(ParentFusionModel, nn.Module):
         Calculated in the :meth:`~ParentFusionModel.set_final_pred_layers` method.
     """
 
-    # str: Name of the method.
+    #: str: Name of the method.
     method_name = "Concatenating tabular data"
-    # str: Type of modality.
+    #: str: Type of modality.
     modality_type = "tabular_tabular"
-    # str: Type of fusion.
+    #: str: Type of fusion.
     fusion_type = "operation"
 
     def __init__(self, pred_type, data_dims, params):

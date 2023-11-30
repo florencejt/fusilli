@@ -58,9 +58,9 @@ Tabular and Image Data
 Tabular data should follow the format specified above. Image data should be in a ``.pt`` file format with dimensions
 ``(num_samples, num_channels, height, width)``.
 
-For example, for 100 2D 28x28 grey-scale images, my images.pt file would have the dimensions ``(100, 1, 28, 28)``.
+For example, for 100 2D 28x28 grey-scale images, my images.pt file would have the dimensions ``(100, 1, 28, 28)`` when I use ``torch.load()``.
 
-For 100 3D 32x32x32 RGB images, my images.pt file would have the dimensions ``(100, 3, 32, 32, 32)``.
+For 100 3D 32x32x32 RGB images, my images.pt file would have the dimensions ``(100, 3, 32, 32, 32)`` when I use ``torch.load()``.
 
 **Example of loading tabular and image data:**
 
@@ -122,12 +122,12 @@ If you use a different suffix than the default "_test", you must pass the suffix
     }
 
     # Using the training data (params["tabular1_source"], params["tabular2_source"], and params["img_source"])
-    data_module = get_data_module(params)
+    data_module = get_data_module(fusion_model=some_example_model, params=params)
 
     # Train the model on params["tabular1_source"], params["tabular2_source"], and params["img_source"]
-    trained_model_dict = train_and_save_models(data_module, params, some_example_model)
+    trained_model= train_and_save_models(data_module, params, some_example_model)
 
     # Evaluate the model on the external test data:
     # params["tabular1_source_testing"], params["tabular2_source_testing"], and params["img_source_testing"]
-    RealsVsPreds.from_new_data(model, params, data_file_suffix="_testing")
+    RealsVsPreds.from_new_data(trained_model, params, data_file_suffix="_testing")
 

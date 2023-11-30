@@ -109,7 +109,7 @@ Modifiable Attributes
   * - Attribute
     - Guidance
   * - :attr:`~.AttentionWeightedGNN.graph_conv_layers`
-    - ``nn.Sequential`` of ``torch_geometric.nn` Layers.
+    - ``nn.Sequential`` of ``torch_geometric.nn`` Layers.
   * - :attr:`~.AttentionWeightedGNN.dropout_prob`
     - Float between (not including) 0 and 1.
 

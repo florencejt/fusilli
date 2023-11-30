@@ -25,7 +25,7 @@ Here is the dictionary structure for defining necessary directories:
 
 .. warning::
 
-    Fusilli utilizes predetermined file names to save files in these directories. Overwriting may occur if files with the same names exist. It's highly recommended to maintain separate directories for each Fusilli run to manage files belonging to each run effectively.
+    Fusilli utilises predetermined file names to save files in these directories. Overwriting may occur if files with the same names exist. **It's highly recommended to maintain separate directories for each Fusilli experiment** to manage files belonging to each run effectively.
 
 
 Example for Creating Directory Structure
@@ -36,7 +36,6 @@ Here's an example block to set up the necessary directory structure:
 .. code-block:: python
 
     import os
-    from datetime import datetime
 
     # Create a timestamp for the run
     run_name = "Run1"

@@ -250,7 +250,7 @@ Incoming!
 Graph-based
 -----------
 .. warning::
-    It is not possible to use graph-based models with any evaluation with completely unseen data, such as in the method :meth:`.RealsVsPreds.from_new_data`.
+    ⚠️ It is not possible to use external test set data with graph-based fusion models. Trying to use a "from new data" method such as :meth:`.RealsVsPreds.from_new_data` will result in an error.
 
 :class:`.EdgeCorrGNN`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -208,10 +208,12 @@ This function also simulated image data which we aren't using here.
 In this section, we train all the fusion models using the generated data and specified parameters.
 We store the results of each model for later analysis.
 
-.. GENERATED FROM PYTHON SOURCE LINES 129-151
+.. GENERATED FROM PYTHON SOURCE LINES 129-155
 
 .. code-block:: Python
 
+
+    # Using %%capture to hide the progress bar and plots (there are a lot of them!)
 
     all_trained_models = {}
 
@@ -234,8 +236,10 @@ We store the results of each model for later analysis.
         # Save to all_trained_models
         all_trained_models[fusion_model_name] = single_model_list
 
+        plt.close("all")
 
-.. GENERATED FROM PYTHON SOURCE LINES 152-159
+
+.. GENERATED FROM PYTHON SOURCE LINES 156-163
 
 5. Plotting the results of the individual models
 -------------------------------------------------
@@ -245,7 +249,7 @@ If you want to save the figures rather than show them, you can use the :meth:`~.
 This will save the figures in a timestamped folder in the current working directory with the method name and plot type in the filename.
 You can add an extra suffix to the filename by passing a string to the ``extra_string`` argument of the :meth:`~fusilli.eval.Plotter.save_to_local` method.
 
-.. GENERATED FROM PYTHON SOURCE LINES 159-164
+.. GENERATED FROM PYTHON SOURCE LINES 163-168
 
 .. code-block:: Python
 
@@ -255,13 +259,13 @@ You can add an extra suffix to the filename by passing a string to the ``extra_s
         plt.show()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 165-168
+.. GENERATED FROM PYTHON SOURCE LINES 169-172
 
 6. Plotting comparison of the models
 -------------------------------------
 In this section, we visualize the results of each individual model.
 
-.. GENERATED FROM PYTHON SOURCE LINES 168-172
+.. GENERATED FROM PYTHON SOURCE LINES 172-176
 
 .. code-block:: Python
 
@@ -270,13 +274,13 @@ In this section, we visualize the results of each individual model.
     plt.show()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 173-176
+.. GENERATED FROM PYTHON SOURCE LINES 177-180
 
 7. Saving the results of the models
 -------------------------------------
 In this section, we compare the performance of all the trained models using a violin chart, providing an overview of how each model performed as a distribution over the different cross-validation folds.
 
-.. GENERATED FROM PYTHON SOURCE LINES 176-179
+.. GENERATED FROM PYTHON SOURCE LINES 180-183
 
 .. code-block:: Python
 
@@ -287,7 +291,7 @@ In this section, we compare the performance of all the trained models using a vi
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.006 seconds)
+   **Total running time of the script:** (0 minutes 0.080 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_and_testing_plot_model_comparison_loop_kfold.py:

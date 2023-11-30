@@ -54,6 +54,8 @@ from fusilli.eval import RealsVsPreds, ModelComparison
 from fusilli.train import train_and_save_models
 from fusilli.utils.model_chooser import import_chosen_fusion_models
 
+# sphinx_gallery_thumbnail_number = -1
+
 # from IPython.utils import io  # for hiding the tqdm progress bar
 
 # %%
@@ -127,6 +129,8 @@ params = generate_sklearn_simulated_data(
 # In this section, we train all the fusion models using the generated data and specified parameters.
 # We store the results of each model for later analysis.
 
+# Using %%capture to hide the progress bar and plots (there are a lot of them!)
+
 all_trained_models = {}
 
 for i, fusion_model in enumerate(fusion_models):
@@ -147,6 +151,8 @@ for i, fusion_model in enumerate(fusion_models):
 
     # Save to all_trained_models
     all_trained_models[fusion_model_name] = single_model_list
+
+    plt.close("all")
 
 # %%
 # 5. Plotting the results of the individual models

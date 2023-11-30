@@ -1,3 +1,7 @@
+"""
+Activation-function fusion model for tabular data.
+"""
+
 import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch
@@ -15,10 +19,10 @@ class ActivationFusion(ParentFusionModel, nn.Module):
     ----------
     pred_type : str
         Type of prediction to be performed.
-    mod1_layers : dict
+    mod1_layers : nn.ModuleDict
         Dictionary containing the layers of the first modality. Calculated in the
         :meth:`~ParentFusionModel.set_mod1_layers` method.
-    mod2_layers : dict
+    mod2_layers : nn.ModuleDict
         Dictionary containing the layers of the second modality. Calculated in the
         :meth:`~ParentFusionModel.set_mod2_layers` method.
     fused_dim : int
@@ -33,11 +37,11 @@ class ActivationFusion(ParentFusionModel, nn.Module):
         :meth:`~ActivationFusion.calc_fused_layers` method.
     """
 
-    # str: Name of the method.
+    #: str: Name of the method.
     method_name = "Activation function map fusion"
-    # str: Type of modality.
+    #: str: Type of modality.
     modality_type = "tabular_tabular"
-    # str: Type of fusion.
+    #: str: Type of fusion.
     fusion_type = "operation"
 
     def __init__(self, pred_type, data_dims, params):
@@ -49,7 +53,7 @@ class ActivationFusion(ParentFusionModel, nn.Module):
         data_dims : list
             Dictionary containing the dimensions of the data.
         params : dict
-            Dictionary containing the parameters of the model.
+            Dictionary containing the user-specified parameters.
         """
         ParentFusionModel.__init__(self, pred_type, data_dims, params)
 

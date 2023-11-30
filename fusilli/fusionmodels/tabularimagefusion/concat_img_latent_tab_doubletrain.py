@@ -441,13 +441,13 @@ class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
 
     """
 
-    # str: Name of the method.
+    #: str: Name of the method.
     method_name = "Pretrained Latent Image + Tabular Data"
-    # str: Type of modality.
+    #: str: Type of modality.
     modality_type = "tabular_image"
-    # str: Type of fusion.
+    #: str: Type of fusion.
     fusion_type = "subspace"
-    # class: Class containing the method to train the latent image space.
+    #: class: Class containing the method to train the latent image space.
     subspace_method = concat_img_latent_tab_subspace_method
 
     def __init__(self, pred_type, data_dims, params):

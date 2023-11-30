@@ -14,7 +14,7 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
 
     Attributes
     ----------
-    mod1_layers : dict
+    mod1_layers : nn.ModuleDict
         Dictionary containing the layers of the 1st type of tabular data.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers.

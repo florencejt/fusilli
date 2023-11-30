@@ -1,10 +1,5 @@
 """
-Inspired by the multi-modal brain age paper:
-- Pretraining a model on concatenated tabular modalities
-- Getting out the attention weights from the model: what does this mean?
-- Make the graph structure:
-- node features are second modality,
-- edges are based on the attention weights: get weighted phenotypes by multiplying the attention weights by the multiple-
+Attention weighted GNN model: the edge weights are the attention weights from a pre-trained MLP and the node features are the second modality.
 """
 import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
@@ -434,6 +429,9 @@ class AttentionWeightedGNN(ParentFusionModel, nn.Module):
     """
     Graph neural network with the edge weighting as the distances between each nodes' weighted phenotypes and the node features as the second tabular modality features.
 
+    This is a model inspired by method in `Bintsi et al. (2023) <https://arxiv.org/abs/2307.04639>`_ : *Multimodal brain age estimation using interpretable adaptive population-graph learning*.
+
+
     Attributes
     ----------
     pred_type : str
@@ -447,13 +445,13 @@ class AttentionWeightedGNN(ParentFusionModel, nn.Module):
 
     """
 
-    # str: Name of the method.
+    #: str: Name of the method.
     method_name = "Attention-weighted GNN"
 
-    # str: Type of modality.
+    #: str: Type of modality.
     modality_type = "tabular_tabular"
 
-    # str: Type of fusion.
+    #: str: Type of fusion.
     fusion_type = "graph"
 
     # class: Graph maker class.

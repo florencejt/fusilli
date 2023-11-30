@@ -1,7 +1,7 @@
 """
 This module contains classes and functions for evaluating trained models (i.e. plotting results from training).
 The setup for this module has been inspired by the scikit-learn API for plotting results, which involves each plot
-being a class with a ``from_model`` method that takes in a trained model and returns a plot with the validation data,
+being a class with a ``from_final_val_data`` method that takes in a trained model and returns a plot with the validation data,
 and a ``from_new_data`` method that takes in a trained model and new data and returns a plot.
 """
 
@@ -643,7 +643,7 @@ class RealsVsPreds(ParentPlotter):
                 overall_kfold_metrics,
             )
 
-            figure.suptitle("From new data")
+            figure.suptitle("Evaluation: External Test Data")
 
         elif len(model_list) == 1:
             # isinstance(model, nn.Module):  # train/test model
@@ -675,7 +675,7 @@ class RealsVsPreds(ParentPlotter):
                 metric_values,
             )
 
-            figure.suptitle("From new data")
+            figure.suptitle("Evaluation: External Test Data")
 
         else:
             raise ValueError("Argument 'model_list' is an empty list. ")
@@ -746,7 +746,7 @@ class RealsVsPreds(ParentPlotter):
                 overall_kfold_metrics,
             )
 
-            figure.suptitle("From final val data")
+            figure.suptitle("Evaluation: Validation Data")
 
         elif len(model_list) == 1:
             # isinstance(model[0], nn.Module):  # train/test model
@@ -777,7 +777,7 @@ class RealsVsPreds(ParentPlotter):
                 metric_values,
             )
 
-            figure.suptitle("From final val data")
+            figure.suptitle("Evaluation: Validation Data")
 
         else:
             raise ValueError(("Argument 'model_list' is an empty list. "))

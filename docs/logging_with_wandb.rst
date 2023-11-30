@@ -49,4 +49,4 @@ Upon training and inspecting Weights and Biases, the run will be labeled as ``Ed
 
 **What if you're not using Weights and Biases?**
 
-When not utilizing Weights and Biases, Fusilli plots loss curves and saves them locally as PNG files. In this scenario, the WandB project name is replaced by user-specified tags in the PNG file name. For instance, running the same fusion model without using Weights and Biases will produce a PNG file named ``EdgeCorrGNN_dropout_prob_0.2.png``, saved in ``params["loss_fig_path"]``.
+When not using Weights and Biases, Fusilli plots loss curves and saves them locally as PNG files. In this scenario, the WandB project name is replaced by user-specified tags in the PNG file name. For instance, running the same fusion model without using Weights and Biases will produce a PNG file named ``EdgeCorrGNN_dropout_prob_0.2.png``, saved in ``params["loss_fig_path"]``.

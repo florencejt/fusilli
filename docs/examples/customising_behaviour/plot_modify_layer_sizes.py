@@ -20,9 +20,10 @@ More guidance on what can be modified in each fusion model can be found in the :
 #
 # First, we will set up the experiment by importing the necessary packages, creating the simulated data, and setting the parameters for the experiment.
 #
-# For a more detailed explanation of this process, please see the :ref:`train_test_examples` tutorials.
+# For a more detailed explanation of this process, please see the example tutorials.
 #
 
+# sphinx_gallery_thumbnail_path = '_static/modify_thumbnail.png'
 import matplotlib.pyplot as plt
 import os
 import torch.nn as nn
@@ -101,7 +102,7 @@ params = generate_sklearn_simulated_data(
 #   * - Attribute
 #     - Guidance
 #   * - :attr:`~.AttentionWeightedGNN.graph_conv_layers`
-#     - ``nn.Sequential`` of ``torch_geometric.nn` Layers.
+#     - ``nn.Sequential`` of ``torch_geometric.nn`` Layers.
 #   * - :attr:`~.AttentionWeightedGNN.dropout_prob`
 #     - Float between (not including) 0 and 1.
 #
@@ -164,6 +165,8 @@ print("Attention Weighted MLP:\n", datamodule.graph_maker_instance.AttentionWeig
 print("Fusion model:\n", trained_model_list[0].model)
 
 # %%
+# You can see that the input features to the ``final_prediction`` layer changed to fit with our modification to the ``graph_conv_layers`` output features!
+#
 # What happens when the modifications are incorrect?
 # ----------------------------------------------------
 #
@@ -226,7 +229,7 @@ except Exception as error:
 # %%
 # What about modifying multiple attributes with the **conflicting modifications**?
 # -------------------------------------------------------------------------------------
-
+#
 #
 # For this, let's switch to looking at the :class:`~fusilli.fusionmodels.tabularfusion.concat_feature_maps.ConcatTabularFeatureMaps` model.
 # This model concatenates the feature maps of the two modalities and then passes them through a prediction layer.

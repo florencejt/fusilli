@@ -1,3 +1,7 @@
+"""
+Using activation functions to fuse tabular data, with self-attention on the second tabular modality.
+"""
+
 import torch.nn as nn
 
 from fusilli.fusionmodels.base_model import ParentFusionModel
@@ -17,10 +21,10 @@ class AttentionAndSelfActivation(ParentFusionModel, nn.Module):
     ----------
     pred_type : str
         Type of prediction to be performed.
-    mod1_layers : dict
+    mod1_layers : nn.ModuleDict
         Dictionary containing the layers of the first modality. Calculated in the
         :meth:`~ParentFusionModel.set_mod1_layers` method.
-    mod2_layers : dict
+    mod2_layers : nn.ModuleDict
         Dictionary containing the layers of the second modality. Calculated in the
         :meth:`~ParentFusionModel.set_mod2_layers` method.
     fused_dim : int
@@ -37,11 +41,11 @@ class AttentionAndSelfActivation(ParentFusionModel, nn.Module):
         Reduction ratio of the channel attention module.
     """
 
-    # str: Name of the method.
+    #: str: Name of the method.
     method_name = "Activation function and tabular self-attention"
-    # str: Type of modality.
+    #: str: Type of modality.
     modality_type = "tabular_tabular"
-    # str: Type of fusion.
+    #: str: Type of fusion.
     fusion_type = "operation"
 
     def __init__(self, pred_type, data_dims, params):

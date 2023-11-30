@@ -172,6 +172,12 @@ The checkpoint name would then be (if the model trained for 100 epochs):
 
     The ``extra_log_string_dict`` argument is also used to modify the logging behaviour of the model. For more information, see :ref:`wandb`.
 
+.. GENERATED FROM PYTHON SOURCE LINES 156-157
+
+.. code-block:: Python
+
+    # sphinx_gallery_thumbnail_path = '_static/pink_pasta_logo.png'
+
 
 .. _sphx_glr_download_auto_examples_customising_behaviour_customising_training_parameters.py:
 

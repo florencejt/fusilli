@@ -14,7 +14,7 @@ class Tabular2Unimodal(ParentFusionModel, nn.Module):
 
     Attributes
     ----------
-    mod2_layers : dict
+    mod2_layers : nn.ModuleDict
         Dictionary containing the layers of the 2nd type of tabular data.
     fused_dim : int
         Dimension of the fused layer.
@@ -27,11 +27,11 @@ class Tabular2Unimodal(ParentFusionModel, nn.Module):
 
     """
 
-    # str: Name of the method.
+    #: str: Name of the method.
     method_name = "Tabular2 uni-modal"
-    # str: Modality type.
+    #: str: Modality type.
     modality_type = "tabular2"
-    # str: Fusion type.
+    #: str: Fusion type.
     fusion_type = "unimodal"
 
     def __init__(self, pred_type, data_dims, params):

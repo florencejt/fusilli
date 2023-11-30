@@ -16,9 +16,9 @@ class TabularDecision(ParentFusionModel, nn.Module):
 
     Attributes
     ----------
-    mod1_layers : dict
+    mod1_layers : nn.ModuleDict
         Dictionary containing the layers of the 1st type of tabular data.
-    mod2_layers : dict
+    mod2_layers : nn.ModuleDict
         Dictionary containing the layers of the 2nd type of tabular data.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers.
@@ -31,11 +31,11 @@ class TabularDecision(ParentFusionModel, nn.Module):
 
     """
 
-    # str: Name of the method.
+    #: str: Name of the method.
     method_name = "Tabular decision"
-    # str: Type of modality.
+    #: str: Type of modality.
     modality_type = "tabular_tabular"
-    # str: Type of fusion.
+    #: str: Type of fusion.
     fusion_type = "operation"
 
     def __init__(self, pred_type, data_dims, params):

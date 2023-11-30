@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:07.276** total execution time for 8 files **from all galleries**:
+**00:12.208** total execution time for 8 files **from all galleries**:
 
 .. container::
 
@@ -32,19 +32,19 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_auto_examples_customising_behaviour_plot_modify_layer_sizes.py` (``examples/customising_behaviour/plot_modify_layer_sizes.py``)
-     - 00:07.268
+   * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_one_model_binary_kfold.py` (``examples/training_and_testing/plot_one_model_binary_kfold.py``)
+     - 00:12.125
      - 0.0
    * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_model_comparison_loop_kfold.py` (``examples/training_and_testing/plot_model_comparison_loop_kfold.py``)
-     - 00:00.006
+     - 00:00.080
      - 0.0
    * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_two_models_traintest.py` (``examples/training_and_testing/plot_two_models_traintest.py``)
-     - 00:00.002
+     - 00:00.003
      - 0.0
    * - :ref:`sphx_glr_auto_examples_customising_behaviour_customising_training_parameters.py` (``examples/customising_behaviour/customising_training_parameters.py``)
      - 00:00.000
      - 0.0
-   * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_one_model_binary_kfold.py` (``examples/training_and_testing/plot_one_model_binary_kfold.py``)
+   * - :ref:`sphx_glr_auto_examples_customising_behaviour_plot_modify_layer_sizes.py` (``examples/customising_behaviour/plot_modify_layer_sizes.py``)
      - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_contributing_examples_A_template_other_fusion.py` (``how_to_contribute/A_template_other_fusion.py``)

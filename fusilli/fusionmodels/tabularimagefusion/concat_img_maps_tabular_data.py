@@ -20,7 +20,7 @@ class ConcatImageMapsTabularData(ParentFusionModel, nn.Module):
     ----------
     pred_type : str
         Type of prediction to be performed.
-    img_layers : dict
+    img_layers : nn.ModuleDict
         Dictionary containing the layers of the image data.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers. Calculated in the

@@ -32,7 +32,7 @@ Regression: Comparing Two Tabular Models Trained on Simulated Data
 - 📈 Plotting the results of multiple models as a bar chart.
 - 💾 Saving the results of multiple models as a CSV file.
 
-.. GENERATED FROM PYTHON SOURCE LINES 17-30
+.. GENERATED FROM PYTHON SOURCE LINES 17-32
 
 .. code-block:: Python
 
@@ -49,6 +49,7 @@ Regression: Comparing Two Tabular Models Trained on Simulated Data
     from fusilli.train import train_and_save_models
     from fusilli.utils.model_chooser import import_chosen_fusion_models
 
+    # sphinx_gallery_thumbnail_number = 5
 
 
 
@@ -56,7 +57,8 @@ Regression: Comparing Two Tabular Models Trained on Simulated Data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 31-40
+
+.. GENERATED FROM PYTHON SOURCE LINES 33-42
 
 1. Import fusion models 🔍
 --------------------------------
@@ -68,7 +70,7 @@ The function returns list of class objects that match the conditions. If no cond
 
 We're importing ConcatTabularData and TabularChannelWiseMultiAttention models for this example. Both are multimodal tabular models.
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-47
+.. GENERATED FROM PYTHON SOURCE LINES 42-49
 
 .. code-block:: Python
 
@@ -86,7 +88,7 @@ We're importing ConcatTabularData and TabularChannelWiseMultiAttention models fo
 .. code-block:: pytb
 
     Traceback (most recent call last):
-      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/training_and_testing/plot_two_models_traintest.py", line 45, in <module>
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/training_and_testing/plot_two_models_traintest.py", line 47, in <module>
         fusion_models = import_chosen_fusion_models(model_conditions)
       File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/utils/model_chooser.py", line 323, in import_chosen_fusion_models
         imported_models = get_models(model_conditions, skip_models)
@@ -109,7 +111,7 @@ We're importing ConcatTabularData and TabularChannelWiseMultiAttention models fo
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-59
+.. GENERATED FROM PYTHON SOURCE LINES 50-61
 
 2. Set the training parameters 🎯
 -----------------------------------
@@ -123,7 +125,7 @@ For training and testing, the necessary parameters are:
 - ``pred_type``: the type of prediction to be performed. This is either ``regression``, ``binary``, or ``classification``. For this example we're using regression.
 - ``loss_log_dir``: the directory to save the loss logs to. This is used for plotting the loss curves.
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-75
+.. GENERATED FROM PYTHON SOURCE LINES 61-77
 
 .. code-block:: Python
 
@@ -144,14 +146,14 @@ For training and testing, the necessary parameters are:
         os.rmdir(os.path.join(params["loss_log_dir"], dir))
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 76-80
+.. GENERATED FROM PYTHON SOURCE LINES 78-82
 
 3. Generating simulated data 🔮
 --------------------------------
 Time to create some simulated data for our models to work their wonders on.
 This function also simulated image data which we aren't using here.
 
-.. GENERATED FROM PYTHON SOURCE LINES 80-89
+.. GENERATED FROM PYTHON SOURCE LINES 82-91
 
 .. code-block:: Python
 
@@ -165,7 +167,7 @@ This function also simulated image data which we aren't using here.
     )
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 90-101
+.. GENERATED FROM PYTHON SOURCE LINES 92-103
 
 4. Training the first fusion model 🏁
 --------------------------------------
@@ -179,14 +181,14 @@ This function takes the following inputs:
 
 First we'll create a dictionary to store both the trained models so we can compare them later.
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-103
+.. GENERATED FROM PYTHON SOURCE LINES 103-105
 
 .. code-block:: Python
 
     all_trained_models = {}  # create dictionary to store trained models
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 104-111
+.. GENERATED FROM PYTHON SOURCE LINES 106-113
 
 To train the first model we need to:
 
@@ -196,7 +198,7 @@ To train the first model we need to:
 4. *Train and test the model*: This is done with the :func:`~fusilli.train.train_and_save_models` function. This function takes the datamodule, the parameters, the fusion model, and the initialised model as inputs. It returns a list of the trained models (in this case, only one model).
 5. *Add the trained model to the ``all_trained_models`` dictionary*: This is so we can compare the results of the two models later.
 
-.. GENERATED FROM PYTHON SOURCE LINES 111-133
+.. GENERATED FROM PYTHON SOURCE LINES 113-135
 
 .. code-block:: Python
 
@@ -223,7 +225,7 @@ To train the first model we need to:
     all_trained_models[fusion_model.__name__] = model_1_list
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 134-139
+.. GENERATED FROM PYTHON SOURCE LINES 136-141
 
 5. Plotting the results of the first model 📊
 -----------------------------------------------
@@ -231,7 +233,7 @@ Let's unveil the results of our first model's hard work. We're using the :class:
 This class takes the trained model as an input and returns a plot of the real values vs the predicted values from the final validation data (when using from_final_val_data).
 If you want to plot the results from the test data, you can use from_new_data instead. See the example notebook on plotting with new data for more detail.
 
-.. GENERATED FROM PYTHON SOURCE LINES 139-144
+.. GENERATED FROM PYTHON SOURCE LINES 141-146
 
 .. code-block:: Python
 
@@ -241,17 +243,17 @@ If you want to plot the results from the test data, you can use from_new_data in
     plt.show()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 145-148
+.. GENERATED FROM PYTHON SOURCE LINES 147-150
 
 6. Training the second fusion model 🏁
 ---------------------------------------
  It's time for our second fusion model to shine! Here we train the second fusion model: TabularChannelWiseMultiAttention. We're using the same steps as before, but this time we're using the second model in the ``fusion_models`` list.
 
-.. GENERATED FROM PYTHON SOURCE LINES 151-152
+.. GENERATED FROM PYTHON SOURCE LINES 153-154
 
 Choose the model
 
-.. GENERATED FROM PYTHON SOURCE LINES 152-173
+.. GENERATED FROM PYTHON SOURCE LINES 154-175
 
 .. code-block:: Python
 
@@ -277,12 +279,12 @@ Choose the model
     all_trained_models[fusion_model.__name__] = model_2_list
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 174-176
+.. GENERATED FROM PYTHON SOURCE LINES 176-178
 
 7. Plotting the results of the second model 📊
 -----------------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 176-181
+.. GENERATED FROM PYTHON SOURCE LINES 178-183
 
 .. code-block:: Python
 
@@ -292,7 +294,7 @@ Choose the model
     plt.show()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 182-187
+.. GENERATED FROM PYTHON SOURCE LINES 184-189
 
 8. Comparing the results of the two models 📈
 ----------------------------------------------
@@ -300,7 +302,7 @@ Let the ultimate showdown begin! We're comparing the results of our two models.
 We're using the :class:`~fusilli.eval.ModelComparison` class to compare the results of the two models.
 This class takes the trained models as an input and returns a plot of the results of the two models and a Pandas DataFrame of the metrics of the two models.
 
-.. GENERATED FROM PYTHON SOURCE LINES 187-194
+.. GENERATED FROM PYTHON SOURCE LINES 189-196
 
 .. code-block:: Python
 
@@ -312,13 +314,13 @@ This class takes the trained models as an input and returns a plot of the result
     plt.show()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 195-198
+.. GENERATED FROM PYTHON SOURCE LINES 197-200
 
 9. Saving the metrics of the two models 💾
 -------------------------------------------
 Time to archive our models' achievements. We're using the :class:`~fusilli.eval.ModelComparison` class to save the metrics of the two models.
 
-.. GENERATED FROM PYTHON SOURCE LINES 198-200
+.. GENERATED FROM PYTHON SOURCE LINES 200-202
 
 .. code-block:: Python
 
@@ -328,7 +330,7 @@ Time to archive our models' achievements. We're using the :class:`~fusilli.eval.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.002 seconds)
+   **Total running time of the script:** (0 minutes 0.003 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_and_testing_plot_two_models_traintest.py:

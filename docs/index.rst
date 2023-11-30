@@ -10,6 +10,9 @@ Don't be silly, use fusilli! 🍝
 Have you got multimodal data but not sure how to combine them for your machine learning task? Look no further!
 This library provides a way to compare different fusion methods for your multimodal data.
 
+.. image:: _static/fusilli_pipeline_diagram.png
+    :align: left
+
 -----
 
 Why would you want to use fusilli?
@@ -33,7 +36,7 @@ Why would you want to use fusilli?
 
 .. toctree::
    :maxdepth: 1
-   :caption: 🌸 Table of Contents 🌸
+   :caption: 🌸 Getting Started 🌸
 
    introduction
    fusion_model_explanations
@@ -41,10 +44,16 @@ Why would you want to use fusilli?
    data_loading
    experiment_setup
    quick_start
+
+-----
+
+.. toctree::
+   :maxdepth: 1
+   :caption: 🌸 Further Guidance 🌸
+
    choosing_model
    modifying_models
    logging_with_wandb
-   developers_guide
    glossary
 
 -----
@@ -60,8 +69,9 @@ Why would you want to use fusilli?
 
 .. toctree::
    :maxdepth: 2
-   :caption: 🌸 How to contribute 🌸
+   :caption: 🌸 Contributing 🌸
 
+   developers_guide
    contributing_examples/index
 
 -----

@@ -1,5 +1,5 @@
 """
-unimodal model using only the image data.
+Unimodal model using only the image data.
 """
 
 import torch.nn as nn
@@ -11,11 +11,11 @@ from fusilli.utils import check_model_validity
 
 class ImgUnimodal(ParentFusionModel, nn.Module):
     """
-    This class implements a uni-modal model using only the image data.
+    A uni-modal model using only the image data.
 
     Attributes
     ----------
-    img_layers : dict
+    img_layers : nn.ModuleDict
         Dictionary containing the layers of the image data.
     fused_dim : int
         Number of features of the fused layers. This is the flattened output size of the
@@ -26,11 +26,11 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
         Sequential layer containing the final prediction layers.
     """
 
-    # str: Name of the method.
+    #: str: Name of the method.
     method_name = "Image unimodal"
-    # str: Type of modality.
+    #: str: Type of modality.
     modality_type = "img"
-    # str: Type of fusion.
+    #: str: Type of fusion.
     fusion_type = "unimodal"
 
     def __init__(self, pred_type, data_dims, params):

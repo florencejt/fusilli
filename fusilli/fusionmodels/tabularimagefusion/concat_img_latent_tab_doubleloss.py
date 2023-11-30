@@ -68,13 +68,13 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         Size of the fused layers: latent dimension size + tabular data dimension size.
     """
 
-    # str: Name of the method.
+    #: str: Name of the method.
     method_name = (
         "Trained Together Latent Image + Tabular Data"
     )
-    # str: Type of modality.
+    #: str: Type of modality.
     modality_type = "tabular_image"
-    # str: Type of fusion.
+    #: str: Type of fusion.
     fusion_type = "subspace"
 
     def __init__(self, pred_type, data_dims, params):

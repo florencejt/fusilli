@@ -5,7 +5,7 @@ This script provides a simple setup to train a model using ``fusilli`` on a sing
 
 .. note::
 
-    For a more detailed guide on using Fusilli, refer to the :ref:`example_notebooks`.
+    For a more detailed guide on using Fusilli, refer to the :ref:`train_test_examples`.
 
 This code showcases the necessary steps to execute Fusilli on a single dataset.
 
@@ -27,7 +27,7 @@ Ensure the elements in the ``params`` dictionary contain specific keys; you can 
     # Import the example fusion model
     from fusilli.fusionmodels.tabularfusion.example_model import ExampleModel
 
-    # Set paths to your tabular datasets (CSV files with study_id and pred_label columns)
+    # Set paths to the data
     tabular_1_path = "path/to/tabular_1.csv"
     tabular_2_path = "path/to/tabular_2.csv"
     image_path = "path/to/image_file.pt"

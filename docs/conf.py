@@ -115,6 +115,7 @@ sphinx_gallery_conf = {
         ],
     ),
     "within_subsection_order": FileNameSortKey,
+    'default_thumb_file': '_static/pink_pasta_logo.png',
 }
 
 
