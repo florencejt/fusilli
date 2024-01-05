@@ -20,7 +20,7 @@ from tqdm.auto import tqdm
 import os
 
 from docs.examples import generate_sklearn_simulated_data
-from fusilli.data import get_data_module
+from fusilli.data import prepare_fusion_data
 from fusilli.eval import ConfusionMatrix
 from fusilli.train import train_and_save_models
 
@@ -86,7 +86,7 @@ params = generate_sklearn_simulated_data(
 # --------------------------------------
 # Now we're ready to train our model. We're using the :func:`~fusilli.train.train_and_save_models` function to train our model.
 #
-# First we need to create a data module using the :func:`~fusilli.data.get_data_module` function.
+# First we need to create a data module using the :func:`~fusilli.data.prepare_fusion_data` function.
 # This function takes the following parameters:
 #
 # - ``fusion_model``: the fusion model to be trained.
@@ -103,7 +103,7 @@ print("method_name:", fusion_model.method_name)
 print("modality_type:", fusion_model.modality_type)
 print("fusion_type:", fusion_model.fusion_type)
 
-dm = get_data_module(
+dm = prepare_fusion_data(
     fusion_model=fusion_model, params=params, batch_size=params["batch_size"]
 )
 

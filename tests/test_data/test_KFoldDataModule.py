@@ -24,10 +24,14 @@ def create_kfold_data_module(create_test_files):
     example_fusion_model.modality_type = "tabular_image"
 
     data_module = KFoldDataModule(
-        params,
-        example_fusion_model,
-        sources,
-        batch_size,
+        fusion_model=example_fusion_model,
+        sources=sources,
+        output_paths={},
+        prediction_task=params["pred_type"],
+        multiclass_dimensions=params["multiclass_dims"],
+        num_folds=params["num_k"],
+        batch_size=batch_size,
+        test_size=0.2
     )
 
     return data_module
@@ -38,8 +42,8 @@ def test_data_module_initialization(create_kfold_data_module):
 
     assert data_module.num_folds == 5
     assert data_module.batch_size == 23
-    assert data_module.pred_type == "binary"
-    assert data_module.multiclass_dims is None
+    assert data_module.prediction_task == "binary"
+    assert data_module.multiclass_dimensions is None
     assert data_module.subspace_method is None
     assert data_module.layer_mods is None
     assert data_module.max_epochs == 1000

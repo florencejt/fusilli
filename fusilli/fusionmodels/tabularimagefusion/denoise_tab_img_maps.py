@@ -235,7 +235,7 @@ class ImgUnimodalDAE(pl.LightningModule):
     ----------
     img_dim : int
         Dimension of the input image data.
-    multiclass_dims : int
+    multiclass_dimensions : int
         Number of classes for multiclass classification.
     img_layers : nn.ModuleDict
         Image layers.
@@ -244,7 +244,7 @@ class ImgUnimodalDAE(pl.LightningModule):
     fused_dim : int
         Dimension of the fused layers.
         Final dimension of the image data after image layers.
-    pred_type : str
+    prediction_task : str
         Type of prediction.
     loss : function
         Loss function. Depends on the prediction type.
@@ -259,7 +259,7 @@ class ImgUnimodalDAE(pl.LightningModule):
 
     """
 
-    def __init__(self, data_dims, pred_type, multiclass_dims):
+    def __init__(self, data_dims, prediction_task, multiclass_dimensions):
         """
         Initialise the model.
 
@@ -267,31 +267,31 @@ class ImgUnimodalDAE(pl.LightningModule):
         ----------
         data_dims : list
             List containing the dimensions of the data.
-        pred_type : str
+        prediction_task : str
             Type of prediction.
-        multiclass_dims : int
+        multiclass_dimensions : int
             Number of classes for multiclass classification.
         """
         super().__init__()
 
         self.img_dim = data_dims[2]
         # needed for ParentFusionModel
-        self.multiclass_dim = multiclass_dims
-        self.pred_type = pred_type
+        self.multiclass_dimensions = multiclass_dimensions
+        self.prediction_task = prediction_task
 
         # get the img layers from ParentFusionModel
         ParentFusionModel.set_img_layers(self)  # this will set the img_layers
 
-        if self.pred_type == "regression":
+        if self.prediction_task == "regression":
             self.loss = lambda logits, y: nn.MSELoss()(logits, y.unsqueeze(dim=1))
             self.activation = lambda x: x
-        elif self.pred_type == "binary":
+        elif self.prediction_task == "binary":
             self.loss = lambda logits, y: F.binary_cross_entropy_with_logits(
                 logits, y.unsqueeze(dim=1).float()
             )
             self.activation = lambda x: torch.round(x).to(torch.int)
 
-        elif self.pred_type == "multiclass":
+        elif self.prediction_task == "multiclass":
             self.loss = lambda logits, y: F.cross_entropy(
                 BaseModel.safe_squeeze(logits),
                 BaseModel.safe_squeeze(y).long(),
@@ -529,24 +529,24 @@ class denoising_autoencoder_subspace_method:
 
         self.img_unimodal = self.subspace_models[1](
             self.datamodule.data_dims,
-            self.datamodule.pred_type,
-            self.datamodule.multiclass_dims,
+            self.datamodule.prediction_task,
+            self.datamodule.multiclass_dimensions,
         )
 
         # if train_subspace is True, then we are training the model.
         # else, we are loading the model for plotting with from_new_data
         if train_subspace:
             self.dae_trainer = init_trainer(
-                None,
-                params=self.datamodule.params,
+                logger=None,
+                output_paths=self.datamodule.output_paths,
                 max_epochs=max_epochs,
                 checkpoint_filename=checkpoint_filenames[0],
                 own_early_stopping_callback=self.datamodule.own_early_stopping_callback,
 
             )
             self.img_unimodal_trainer = init_trainer(
-                None,
-                params=self.datamodule.params,
+                logger=None,
+                output_paths=self.datamodule.output_paths,
                 max_epochs=max_epochs,
                 checkpoint_filename=checkpoint_filenames[1],
                 own_early_stopping_callback=self.datamodule.own_early_stopping_callback,
@@ -700,7 +700,7 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
 
     Attributes
     ----------
-    pred_type : str
+    prediction_task : str
         Type of prediction.
     subspace_method : class
         Subspace method:
@@ -720,22 +720,19 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
     # class: Subspace method.
     subspace_method = denoising_autoencoder_subspace_method
 
-    def __init__(self, pred_type, data_dims, params):
+    def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
-        Initialise the model.
-
         Parameters
         ----------
-        pred_type : str
-            Type of prediction.
+        prediction_task : str
+            Type of prediction to be performed.
         data_dims : list
             List containing the dimensions of the data.
-        params : dict
-            Dictionary containing the parameters.
+        multiclass_dimensions : int
+            Number of classes in the multiclass classification task.
         """
-
-        ParentFusionModel.__init__(self, pred_type, data_dims, params)
-        self.pred_type = pred_type
+        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        self.prediction_task = prediction_task
 
         self.fusion_layers = nn.Sequential(
             nn.Linear(self.mod1_dim, 500),

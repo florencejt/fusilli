@@ -17,12 +17,6 @@ class MockGraphMakerModule:
 
 @pytest.fixture
 def create_graph_data_module(create_test_files):
-    params = {
-        "num_k": 5,
-        "pred_type": "binary",
-        "multiclass_dims": None,
-    }
-
     tabular1_csv = create_test_files["tabular1_csv"]
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_2d = create_test_files["image_torch_file_2d"]
@@ -32,9 +26,9 @@ def create_graph_data_module(create_test_files):
     example_fusion_model.modality_type = "tabular_tabular"
 
     data_module = KFoldGraphDataModule(
-        params,
-        example_fusion_model,
-        sources,
+        num_folds=5,
+        fusion_model=example_fusion_model,
+        sources=sources,
         graph_creation_method=MockGraphMakerModule,
     )
 

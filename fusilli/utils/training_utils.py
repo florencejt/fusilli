@@ -52,17 +52,24 @@ def get_file_suffix_from_dict(extra_log_string_dict):
     return extra_name_string, extra_tags
 
 
-def set_logger(params, fold, fusion_model, extra_log_string_dict=None):
+def set_logger(fold,
+               project_name,
+               output_paths,
+               fusion_model,
+               extra_log_string_dict=None,
+               wandb_logging=False):
     """
-    Set the logger for the current run. If params["log"] is True, then the logger is set to
-    WandbLogger, otherwise it is set to CSVLogger and the logs are saved to params["loss_log_dir"].
+    Set the logger for the current run. If wandb_logging is True, then the logger is set to
+    WandbLogger, otherwise it is set to CSVLogger and the logs are saved to output_paths["losses"].
 
     Parameters
     ----------
-    params : dict
-        Dictionary of parameters.
     fold : int or None
         Fold number. None if not using kfold.
+    project_name : str or None
+        Name of the project. Used for wandb logging. If None, then the project name is set to "fusilli".
+    output_paths : dict
+        Dictionary of output paths for checkpoints, logs, and figures.
     fusion_model : class
         Fusion model class.
     extra_log_string_dict : dict
@@ -71,37 +78,42 @@ def set_logger(params, fold, fusion_model, extra_log_string_dict=None):
         Input format {"name": "value"}. In the run name, the extra string will be added
         as "name_value". And a tag will be added as "name_value".
         Default None.
+    wandb_logging : bool
+        Whether to use wandb logging. If True, then the logger is set to WandbLogger,
+        otherwise it is set to CSVLogger and the logs are saved to output_paths["losses"].
+        Default False.
 
     Returns
     -------
     logger : object
-        Pytorch lightning logger object or CSVLogger object if params["log"] is False.
+        Pytorch lightning logger object or CSVLogger object if wandb_logging is False.
     """
 
     if hasattr(fusion_model, "__name__"):
         method_name = fusion_model.__name__
     else:
         method_name = fusion_model.__class__.__name__
+
     modality_type = fusion_model.modality_type
     fusion_type = fusion_model.fusion_type
 
     extra_name_string, extra_tags = get_file_suffix_from_dict(extra_log_string_dict)
 
-    if params["kfold_flag"]:
+    if fold is not None:
         name = f"{method_name}_fold_{fold}{extra_name_string}"
         tags = [modality_type, fusion_type, f"fold_{str(fold)}"] + extra_tags
     else:
         name = f"{method_name}{extra_name_string}"
         tags = [modality_type, fusion_type] + extra_tags
 
-    if params["log"]:
+    if wandb_logging:
 
-        if params["project_name"] is None:
-            params["project_name"] = "fusilli"
-        
+        if project_name is None:
+            project_name = "fusilli"
+
         logger = WandbLogger(
             save_dir=os.getcwd() + "/logs",
-            project=params["project_name"],
+            project=project_name,
             name=name,
             tags=tags,
             log_model=True,
@@ -113,9 +125,9 @@ def set_logger(params, fold, fusion_model, extra_log_string_dict=None):
             for key, value in extra_log_string_dict.items():
                 logger.experiment.config[key] = value
 
-    else:  # if params["log"] is False
+    else:  # if wandb_logging is False
         logger = CSVLogger(
-            save_dir=params["loss_log_dir"],
+            save_dir=output_paths["losses"],
             name='',
             version=name,
         )
@@ -123,14 +135,12 @@ def set_logger(params, fold, fusion_model, extra_log_string_dict=None):
     return logger
 
 
-def set_checkpoint_name(params, fusion_model, fold=None, extra_log_string_dict=None):
+def set_checkpoint_name(fusion_model, fold=None, extra_log_string_dict=None):
     """
     Set the checkpoint name for the current run of the main fusion model.
 
     Parameters
     ----------
-    params : dict
-        Dictionary of parameters.
     fusion_model : class
         Fusion model class.
     fold : int
@@ -220,7 +230,7 @@ def get_checkpoint_filenames_for_subspace_models(subspace_method, k=None):
 
 
 def get_checkpoint_filename_for_trained_fusion_model(
-        params, model, checkpoint_file_suffix, fold=None
+        checkpoint_dir, model, checkpoint_file_suffix, fold=None
 ):
     """
     Gets the checkpoint filename for the trained fusion model using the model object.
@@ -232,8 +242,8 @@ def get_checkpoint_filename_for_trained_fusion_model(
 
     Parameters
     ----------
-    params : dict
-        Dictionary of parameters.
+    checkpoint_dir : str
+        Path to the directory containing the checkpoints.
     model : BaseModel
         BaseModel model object instance.
     checkpoint_file_suffix : str
@@ -262,25 +272,25 @@ def get_checkpoint_filename_for_trained_fusion_model(
 
     result = [
         filename
-        for filename in os.listdir(params["checkpoint_dir"])
+        for filename in os.listdir(checkpoint_dir)
         if filename.startswith(ckpt_path_beginning)
     ]
 
     if len(result) == 0:
         raise ValueError(
-            f"Could not find checkpoint file with name {ckpt_path_beginning} in {params['checkpoint_dir']}."
+            f"Could not find checkpoint file with name {ckpt_path_beginning} in {checkpoint_dir}."
         )
     elif len(result) > 1:
         # if the model is a subspace method, then we need to check if the checkpoint file is for the subspace model
         # or the big fusion model
         # TODO add this check
         raise ValueError(
-            f"Found multiple checkpoint files with name {ckpt_path_beginning} in {params['checkpoint_dir']}."
+            f"Found multiple checkpoint files with name {ckpt_path_beginning} in {checkpoint_dir}."
         )
     else:
         checkpoint_filename = result[0]
         checkpoint_filename = os.path.join(
-            params["checkpoint_dir"], checkpoint_filename
+            checkpoint_dir, checkpoint_filename
         )
 
         return checkpoint_filename
@@ -306,11 +316,12 @@ class LitProgressBar(TQDMProgressBar):
 
 def init_trainer(
         logger,
-        params,
+        output_paths,
         max_epochs=1000,
         enable_checkpointing=True,
         checkpoint_filename=None,
         own_early_stopping_callback=None,
+        training_modifications=None,
 ):
     """
     Initialise the pytorch lightning trainer object.
@@ -319,8 +330,8 @@ def init_trainer(
     ----------
     logger : object
         Pytorch lightning logger object.
-    params : dict
-        Dictionary of parameters.
+    output_paths : dict
+        Dictionary of output paths for checkpoints, losses, and figures.
     max_epochs : int
         Maximum number of epochs.
         Default 1000.
@@ -337,6 +348,10 @@ def init_trainer(
         Default None to use default early stopping callback. If you want to use your own early stopping callback,
         then you need to define it in the main training script and pass it here or pass into the datamodule object
         and then it will read it from there.
+    training_modifications : dict
+        Dictionary of training modifications. Used to modify the training process.
+        Keys could be "accelerator", "devices", "learning_rate"
+
 
     Returns
     -------
@@ -363,18 +378,20 @@ def init_trainer(
     if checkpoint_filename is not None:
         checkpoint_callback = ModelCheckpoint(
             filename=checkpoint_filename,
-            dirpath=params["checkpoint_dir"],
+            dirpath=output_paths["checkpoints"],
             enable_version_counter=False  # overwrites files with same name
         )
         callbacks_list.append(checkpoint_callback)
 
-    # check if accelerator and devices are in params given by user
+    # check if accelerator and devices are in training_modifications given by user
     accelerator = "cpu"  # default
     devices = 1  # default
-    if "accelerator" in params.keys():
-        accelerator = params["accelerator"]
-    if "devices" in params.keys():
-        devices = params["devices"]
+
+    if training_modifications is not None:
+        if "accelerator" in training_modifications.keys():
+            accelerator = training_modifications["accelerator"]
+        if "devices" in training_modifications.keys():
+            devices = training_modifications["devices"]
 
     if logger is None:
         # if logger is None (not even a CSVLogger), then we don't want to log anything

@@ -25,9 +25,9 @@ class AttentionWeightMLP(pl.LightningModule):
 
     Attributes
     ----------
-    pred_type : str
+    prediction_task : str
         Type of prediction to be performed.
-    multiclass_dim : int
+    multiclass_dimensions : int
         Number of classes for multiclass classification. If not multiclass classification, this is None.
     mod1_dim : int
         Number of features of the first modality.
@@ -46,22 +46,22 @@ class AttentionWeightMLP(pl.LightningModule):
         features of the fused layers as input. Calculated in the :meth:`~ParentFusionModel.set_final_pred_layers` method.
     """
 
-    def __init__(self, pred_type, data_dims, multiclass_dim):
+    def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
 
         Parameters
         ----------
-        pred_type : str
+        prediction_task : str
             Type of prediction to be performed.
         data_dims : list
             List containing the dimensions of the data.
-        params : dict
-            Dictionary containing the parameters of the model.
+        multiclass_dimensions : int
+            Number of classes for multiclass classification. If not multiclass classification, this is None.
         """
         super().__init__()
 
-        self.pred_type = pred_type
-        self.multiclass_dim = multiclass_dim
+        self.prediction_task = prediction_task
+        self.multiclass_dimensions = multiclass_dimensions
 
         self.mod1_dim = data_dims[0]
         self.mod2_dim = data_dims[1]
@@ -275,17 +275,17 @@ class AttentionWeightedGraphMaker:
         data_dims = [self.dataset[:][0].shape[1], self.dataset[:][1].shape[1]]
 
         if torch.is_floating_point(self.dataset[:][2][0]):
-            pred_type = "regression"
+            prediction_task = "regression"
             multiclass_dim = None
         else:
             if len(np.unique(self.dataset[:][2])) == 2:
-                pred_type = "binary"
+                prediction_task = "binary"
                 multiclass_dim = None
             else:
-                pred_type = "multiclass"
+                prediction_task = "multiclass"
                 multiclass_dim = len(np.unique(self.dataset[:][2]))
 
-        self.AttentionWeightingMLPInstance = AttentionWeightMLP(pred_type, data_dims, multiclass_dim)
+        self.AttentionWeightingMLPInstance = AttentionWeightMLP(prediction_task, data_dims, multiclass_dim)
 
         self.max_epochs = -1
 
@@ -434,7 +434,7 @@ class AttentionWeightedGNN(ParentFusionModel, nn.Module):
 
     Attributes
     ----------
-    pred_type : str
+    prediction_task : str
         Type of prediction to be performed.
     graph_conv_layers : nn.Sequential
         Sequential layer containing the graph convolutional layers. By default ChebConv layers.
@@ -457,21 +457,21 @@ class AttentionWeightedGNN(ParentFusionModel, nn.Module):
     # class: Graph maker class.
     graph_maker = AttentionWeightedGraphMaker
 
-    def __init__(self, pred_type, data_dims, params):
+    def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
         Parameters
         ----------
-        pred_type : str
+        prediction_task : str
             Type of prediction to be performed.
         data_dims : list
-            Dictionary containing the dimensions of the data.
-        params : dict
-            Dictionary containing the parameters of the model.
+            List containing the dimensions of the data.
+        multiclass_dimensions : int
+            Number of classes for multiclass classification. If not multiclass classification, this is None.
         """
 
-        ParentFusionModel.__init__(self, pred_type, data_dims, params)
+        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
 
-        self.pred_type = pred_type
+        self.prediction_task = prediction_task
 
         self.graph_conv_layers = nn.Sequential(
             ChebConv(self.mod2_dim, 64, K=3),

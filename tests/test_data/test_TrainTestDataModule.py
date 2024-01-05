@@ -138,19 +138,24 @@ def test_train_dataloader(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_2d = create_test_files["image_torch_file_2d"]
 
-    params = {
-        "test_size": 0.2,
-        "pred_type": "binary",
-        "multiclass_dims": None,
-    }
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     batch_size = 8
+    test_size = 0.2
+    prediction_task = "binary"
 
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular1"
 
     # Initialize the TrainTestDataModule
-    datamodule = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
+    datamodule = TrainTestDataModule(fusion_model=example_fusion_model,
+                                     sources=sources,
+                                     output_paths=None,
+                                     prediction_task=prediction_task,
+                                     batch_size=batch_size,
+                                     test_size=test_size,
+                                     multiclass_dimensions=None,
+                                     num_folds=None)
+
     datamodule.prepare_data()
     datamodule.setup()
 
@@ -168,11 +173,9 @@ def test_val_dataloader(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_2d = create_test_files["image_torch_file_2d"]
 
-    params = {
-        "test_size": 0.2,
-        "pred_type": "binary",
-        "multiclass_dims": None,
-    }
+    test_size = 0.2
+    prediction_task = "binary"
+    multiclass_dimensions = None
 
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     batch_size = 23
@@ -181,7 +184,14 @@ def test_val_dataloader(create_test_files):
     example_fusion_model.modality_type = "tabular_image"
 
     # Initialize the TrainTestDataModule
-    datamodule = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
+    datamodule = TrainTestDataModule(fusion_model=example_fusion_model,
+                                     sources=sources,
+                                     output_paths=None,
+                                     prediction_task=prediction_task,
+                                     batch_size=batch_size,
+                                     test_size=test_size,
+                                     multiclass_dimensions=multiclass_dimensions,
+                                     num_folds=None)
     datamodule.prepare_data()
     datamodule.setup()
 
@@ -212,11 +222,9 @@ def test_setup_calls_subspace_method(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_2d = create_test_files["image_torch_file_2d"]
 
-    params = {
-        "test_size": 0.2,
-        "pred_type": "binary",
-        "multiclass_dims": None,
-    }
+    test_size = 0.2
+    prediction_task = "binary"
+    multiclass_dimensions = None
 
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     batch_size = 23
@@ -229,13 +237,15 @@ def test_setup_calls_subspace_method(create_test_files):
             return_value=MockSubspaceMethod(),
     ) as mock_subspace_method:
         # Initialize the TrainTestDataModule
-        datamodule = TrainTestDataModule(
-            params,
-            example_fusion_model,
-            sources,
-            batch_size,
-            subspace_method=mock_subspace_method,
-        )
+        datamodule = TrainTestDataModule(fusion_model=example_fusion_model,
+                                         sources=sources,
+                                         output_paths=None,
+                                         prediction_task=prediction_task,
+                                         batch_size=batch_size,
+                                         test_size=test_size,
+                                         multiclass_dimensions=multiclass_dimensions,
+                                         num_folds=None,
+                                         subspace_method=mock_subspace_method)
         datamodule.prepare_data()
         datamodule.setup()
 

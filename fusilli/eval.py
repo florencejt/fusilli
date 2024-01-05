@@ -77,7 +77,7 @@ class ParentPlotter:
         val_logits = []
 
         metric_names = [
-            model_list[0].metrics[model_list[0].model.pred_type][i]["name"]
+            model_list[0].metrics[model_list[0].model.prediction_task][i]["name"]
             for i in range(2)
         ]
 
@@ -106,7 +106,7 @@ class ParentPlotter:
         overall_kfold_metrics = {}
 
         for metric in model_list[0].metrics[
-            model_list[0].model.pred_type
+            model_list[0].model.prediction_task
         ]:  # loop through the metrics
             if "auroc" in metric["name"]:
                 predicted = all_val_logits  # AUROC needs logits
@@ -173,15 +173,15 @@ class ParentPlotter:
 
         # metrics
         metric_values = {
-            model.metrics[model.model.pred_type][0]["name"]: model.metric1,
-            model.metrics[model.model.pred_type][1]["name"]: model.metric2,
+            model.metrics[model.model.prediction_task][0]["name"]: model.metric1,
+            model.metrics[model.model.prediction_task][1]["name"]: model.metric2,
         }
 
         return train_reals, train_preds, val_reals, val_preds, metric_values
 
     @classmethod
     def get_new_kfold_data(
-            cls, model_list, params, data_file_suffix, checkpoint_file_suffix=None, layer_mods=None
+            cls, model_list, output_paths, test_data_paths, checkpoint_file_suffix=None, layer_mods=None
     ):
         """
         Get new data by running through trained model for a kfold model.
@@ -191,11 +191,10 @@ class ParentPlotter:
         model_list: list
             List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2,
             where the first element is the k=1 model and the second element is the k=2 model, etc.
-        params: dict
-            Additional parameters. Used for knowing where the checkpoint files are stored and
-            creating the pytorch lightning data_module for the new data.
-        data_file_suffix: str
-            Suffix that is on the new data csv and pt files. e.g. "_new_data" or "_test"
+        output_paths: dict
+            Dictionary of the output paths. Used for knowing where the checkpoint files are stored and where to save the plots.
+        test_data_paths: dict
+            Dictionary of the paths to the new data. The keys are the names of the data types (e.g. "tabular1", "image").
         checkpoint_file_suffix: str, optional
             Suffix that is on the trained model checkpoint files. e.g. "_firsttry". Added by the user.
             Default is None.
@@ -239,14 +238,16 @@ class ParentPlotter:
         val_logits = []
 
         metric_names = [
-            model_list[0].metrics[model_list[0].model.pred_type][i]["name"]
+            model_list[0].metrics[model_list[0].model.prediction_task][i]["name"]
             for i in range(2)
         ]
 
         # dictionary to store the metrics for each fold
         metrics_per_fold = {metric_names[0]: [], metric_names[1]: []}
 
-        params_copy = params.copy()
+        output_paths_copy = output_paths.copy()
+
+        num_folds = len(model_list)
 
         # loop through the folds and get the predictions for each fold
         for k, fold_model in enumerate(model_list):
@@ -266,7 +267,7 @@ class ParentPlotter:
                 subspace_ckpts = []
                 for subspace_model in model.model.subspace_method.subspace_models:
                     subspace_ckpts.append(
-                        params["checkpoint_dir"]
+                        output_paths["checkpoints"]
                         + "/"
                         + "subspace_"
                         + model.model.__class__.__name__
@@ -281,10 +282,13 @@ class ParentPlotter:
             else:
                 subspace_ckpts = None
 
-            dm = data.get_data_module(
-                model.model,
-                params_copy,
-                optional_suffix=data_file_suffix,
+            dm = data.prepare_fusion_data(
+                prediction_task=model.model.prediction_task,
+                fusion_model=model.model,
+                data_paths=test_data_paths,
+                output_paths=output_paths_copy,
+                kfold=True,
+                num_folds=num_folds,
                 checkpoint_path=subspace_ckpts,
                 layer_mods=layer_mods,
             )
@@ -299,18 +303,19 @@ class ParentPlotter:
 
             trained_fusion_model_checkpoint = (
                 get_checkpoint_filename_for_trained_fusion_model(
-                    params, model, checkpoint_file_suffix, fold=k
+                    checkpoint_dir=output_paths["checkpoints"],
+                    model=model,
+                    checkpoint_file_suffix=checkpoint_file_suffix,
+                    fold=k
                 )
             )
 
             # init model
             new_model = BaseModel(
                 model=model.model.__class__(
-                    pred_type=params[
-                        "pred_type"
-                    ],  # pred_type is a string (binary, regression, multiclass)
+                    prediction_task=model.model.prediction_task,
                     data_dims=dm.data_dims,  # data_dims is a list of tuples
-                    params=params,  # params is a dict
+                    multiclass_dimensions=dm.multiclass_dimensions,
                 ),
             )
 
@@ -348,7 +353,7 @@ class ParentPlotter:
             train_reals.append(model.train_reals.cpu().detach())
             train_preds.append(model.train_preds.cpu().detach())
 
-            for metric in model.metrics[model.model.pred_type]:  # loop
+            for metric in model.metrics[model.model.prediction_task]:  # loop
                 if "auroc" in metric["name"]:
                     predicted = fold_val_logits
                 else:
@@ -370,7 +375,7 @@ class ParentPlotter:
         overall_kfold_metrics = {}
 
         for metric in model_list[0].metrics[
-            model_list[0].model.pred_type
+            model_list[0].model.prediction_task
         ]:  # loop through the metrics
             if "auroc" in metric["name"]:
                 predicted = all_val_logits
@@ -395,7 +400,7 @@ class ParentPlotter:
 
     @classmethod
     def get_new_tt_data(
-            cls, model_list, params, data_file_suffix, checkpoint_file_suffix=None, layer_mods=None
+            cls, model_list, output_paths, test_data_paths, checkpoint_file_suffix=None, layer_mods=None
     ):
         """
         Get new data by running through trained model for a train/test model.
@@ -404,11 +409,10 @@ class ParentPlotter:
         ----------
         model_list: list
             A list of length 1 containing the trained pytorch_lightning model.
-        params: dict
-            Additional parameters. Used for knowing where the checkpoint files are stored and
-            creating the pytorch lightning data_module for the new data.
-        data_file_suffix: str
-            Suffix that is on the new data csv and pt files. e.g. "_new_data" or "_test"
+        output_paths: dict
+            Dictionary of the output paths. Used for knowing where the checkpoint files are stored and where to save the plots.
+        test_data_paths: dict
+            Dictionary of the paths to the new data. The keys are the names of the data types (e.g. "tabular1", "image").
         checkpoint_file_suffix: str, optional
             Suffix that is on the trained model checkpoint files. e.g. "_firsttry". Added by the user.
             Default is None.
@@ -456,7 +460,7 @@ class ParentPlotter:
             subspace_ckpts = []
             for subspace_model in model.model.subspace_method.subspace_models:
                 subspace_ckpts.append(
-                    params["checkpoint_dir"]
+                    output_paths["checkpoints"]
                     + "/"
                     + "subspace_"
                     + model.model.__class__.__name__
@@ -470,13 +474,15 @@ class ParentPlotter:
             subspace_ckpts = None
 
         # get data module (potentially will need to be trained with a subspace method or graph-maker)
-        dm = data.get_data_module(
-            model.model.__class__,
-            params,
-            optional_suffix=data_file_suffix,
+        dm = data.prepare_fusion_data(
+            prediction_task=model.model.prediction_task,
+            fusion_model=model.model.__class__,
+            data_paths=test_data_paths,
+            output_paths=output_paths,
             checkpoint_path=subspace_ckpts,
             layer_mods=layer_mods,
         )
+
         # concatenating the train and test datasets because we want to get the predictions for all the data
         dataset = ConcatDataset([dm.train_dataset, dm.test_dataset])
         dataloader = DataLoader(dataset, batch_size=len(dataset))
@@ -484,18 +490,17 @@ class ParentPlotter:
         # get ckpt_path from fusion name
         trained_fusion_model_checkpoint = (
             get_checkpoint_filename_for_trained_fusion_model(
-                params, model, checkpoint_file_suffix, fold=None
+                output_paths["checkpoints"], model, checkpoint_file_suffix, fold=None
             )
         )
 
         # init model
         new_model = BaseModel(
             model=model.model.__class__(
-                pred_type=params[
-                    "pred_type"
-                ],  # pred_type is a string (binary, regression, multiclass)
+                prediction_task=model.model.prediction_task,
+                # prediction_task is a string (binary, regression, multiclass)
                 data_dims=dm.data_dims,  # data_dims is a list of tuples
-                params=params,  # params is a dict
+                multiclass_dimensions=dm.multiclass_dimensions,
             ),
         )
 
@@ -534,7 +539,7 @@ class ParentPlotter:
         metric_values = {}
 
         for metric in new_model.metrics[
-            new_model.model.pred_type
+            new_model.model.prediction_task
         ]:  # loop through the metrics
             if "auroc" in metric["name"]:
                 predicted = val_logits  # AUROC needs logits
@@ -563,7 +568,7 @@ class RealsVsPreds(ParentPlotter):
 
     @classmethod
     def from_new_data(
-            cls, model_list, params, data_file_suffix="_test", checkpoint_file_suffix=None, layer_mods=None
+            cls, model_list, output_paths, test_data_paths, checkpoint_file_suffix=None, layer_mods=None
     ):
         """
 
@@ -575,15 +580,10 @@ class RealsVsPreds(ParentPlotter):
             List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2,
             where the first element is the k=1 model and the second element is the k=2 model, etc.
             For train/test models, this is a list of length 1.
-        params: dict
-            Additional parameters. Used for knowing where the checkpoint files are stored and
-            creating the pytorch lightning data_module for the new data.
-        data_file_suffix: str
-            Suffix for the data file e.g. _test means that the source files are
-            ``params["tabular1_source_test]``, ``params["tabular2_source_test]``,
-            ``params["img_source_test]``.
-            Change this to whatever suffix you have chosen for your new data files.
-            Default is "_test".
+        output_paths : dict
+            Dictionary of the output paths. Used for knowing where the checkpoint files are stored and where to save the plots.
+        test_data_paths: dict
+            Dictionary of the paths to the new data. The keys are the names of the data types (e.g. "tabular1", "image").
         checkpoint_file_suffix: str, optional
             Suffix that is on the trained model checkpoint files. e.g. "_firsttry". Added by the user.
             Default is None.
@@ -615,14 +615,6 @@ class RealsVsPreds(ParentPlotter):
             )
 
         if len(model_list) > 1:
-            # if isinstance(model, list):  # kfold model
-            if not model_list[0].model.params["kfold_flag"]:
-                raise ValueError(
-                    (
-                        "Argument 'model_list' is a list but kfold_flag is False. "
-                        "Please check the model and the function input."
-                    )
-                )
 
             (
                 train_reals,
@@ -632,7 +624,7 @@ class RealsVsPreds(ParentPlotter):
                 metrics_per_fold,
                 overall_kfold_metrics,
             ) = cls.get_new_kfold_data(
-                model_list, params, data_file_suffix, checkpoint_file_suffix, layer_mods
+                model_list, output_paths, test_data_paths, checkpoint_file_suffix, layer_mods
             )
 
             figure = cls.reals_vs_preds_kfold(
@@ -646,14 +638,6 @@ class RealsVsPreds(ParentPlotter):
             figure.suptitle("Evaluation: External Test Data")
 
         elif len(model_list) == 1:
-            # isinstance(model, nn.Module):  # train/test model
-            if model_list[0].model.params["kfold_flag"]:
-                raise ValueError(
-                    (
-                        "Argument 'model_list' is a list of one model but kfold_flag is True. "
-                        "Please check the model and the function input (k must be larger than 1)."
-                    )
-                )
 
             (
                 train_reals,
@@ -662,7 +646,7 @@ class RealsVsPreds(ParentPlotter):
                 val_preds,
                 metric_values,
             ) = cls.get_new_tt_data(
-                model_list, params, data_file_suffix, checkpoint_file_suffix, layer_mods
+                model_list, output_paths, test_data_paths, checkpoint_file_suffix, layer_mods
             )
 
             # plot the figure
@@ -720,14 +704,6 @@ class RealsVsPreds(ParentPlotter):
             )
 
         if len(model_list) > 1:  # kfold model (list of models and their checkpoints)
-            # if isinstance(model[0], list):  # kfold model
-            if not model_list[0].model.params["kfold_flag"]:
-                raise ValueError(
-                    (
-                        "Argument 'model_list' is a list of length > 1 but kfold_flag is False. "
-                        "Please check the model and the function input."
-                    )
-                )
 
             (
                 train_reals,
@@ -749,15 +725,7 @@ class RealsVsPreds(ParentPlotter):
             figure.suptitle("Evaluation: Validation Data")
 
         elif len(model_list) == 1:
-            # isinstance(model[0], nn.Module):  # train/test model
 
-            if model_list[0].model.params["kfold_flag"]:
-                raise ValueError(
-                    (
-                        "Argument 'model_list' is a list of one model+checkpoint but kfold_flag is True. "
-                        "Please check the model and the function input."
-                    )
-                )
             # get the data
             (
                 train_reals,
@@ -822,7 +790,7 @@ class RealsVsPreds(ParentPlotter):
 
         first_fold_model = model_list[0]
         metric_names = list(metrics_per_fold.keys())
-        N = first_fold_model.model.params["num_k"]
+        N = len(model_list)
 
         cols = 3
         rows = int(math.ceil(N / cols))
@@ -988,7 +956,7 @@ class ConfusionMatrix(ParentPlotter):
         super().__init__()
 
     @classmethod
-    def from_new_data(cls, model_list, params, data_file_suffix="_test",
+    def from_new_data(cls, model_list, output_paths, test_data_paths,
                       checkpoint_file_suffix=None, layer_mods=None):
         """
         Confusion matrix using new data (i.e. data that was not used to train or validate the model).
@@ -999,15 +967,10 @@ class ConfusionMatrix(ParentPlotter):
             List of trained pytorch_lightning models. For kfold models, this is a list of at least length 2,
             where the first element is the k=1 model and the second element is the k=2 model, etc.
             For train/test models, this is a list of length 1.
-        params: dict
-            Additional parameters. Used for knowing where the checkpoint files are stored and
-            creating the pytorch lightning data_module for the new data.
-        data_file_suffix: str
-            Suffix for the data file e.g. _test means that the source files are
-            ``params["tabular1_source_test]``, ``params["tabular2_source_test]``,
-            ``params["img_source_test]``.
-            Change this to whatever suffix you have chosen for your new data files.
-            Default is "_test".
+        output_paths: dict
+            Dictionary of the output paths. Used for knowing where the checkpoint files are stored and where to save the plots.
+        test_data_paths: dict
+            Dictionary of the paths to the new data. The keys are the names of the data types (e.g. "tabular1", "image").
         checkpoint_file_suffix: str, optional
             Suffix that is on the trained model checkpoint files. e.g. "_firsttry". Added by the user.
 
@@ -1036,13 +999,6 @@ class ConfusionMatrix(ParentPlotter):
             )
 
         if len(model_list) > 1:  # kfold model
-            if not model_list[0].model.params["kfold_flag"]:
-                raise ValueError(
-                    (
-                        "Argument 'model_list' is a list but kfold_flag is False. "
-                        "Please check the model and the function input."
-                    )
-                )
 
             (
                 train_reals,
@@ -1051,7 +1007,7 @@ class ConfusionMatrix(ParentPlotter):
                 val_preds,
                 metrics_per_fold,
                 overall_kfold_metrics,
-            ) = cls.get_new_kfold_data(model_list, params, data_file_suffix, checkpoint_file_suffix, layer_mods)
+            ) = cls.get_new_kfold_data(model_list, output_paths, test_data_paths, checkpoint_file_suffix, layer_mods)
 
             figure = cls.confusion_matrix_kfold(
                 model_list,
@@ -1062,13 +1018,6 @@ class ConfusionMatrix(ParentPlotter):
             )
 
         elif len(model_list) == 1:  # train/test model
-            if model_list[0].model.params["kfold_flag"]:
-                raise ValueError(
-                    (
-                        "Argument 'model_list' is a list of one model but kfold_flag is True. "
-                        "Please check the model and the function input (k must be larger than 1)."
-                    )
-                )
 
             (
                 train_reals,
@@ -1076,7 +1025,7 @@ class ConfusionMatrix(ParentPlotter):
                 val_reals,
                 val_preds,
                 metric_values,
-            ) = cls.get_new_tt_data(model_list, params, data_file_suffix, checkpoint_file_suffix,
+            ) = cls.get_new_tt_data(model_list, output_paths, test_data_paths, checkpoint_file_suffix,
                                     layer_mods)
 
             # plot the figure
@@ -1125,13 +1074,6 @@ class ConfusionMatrix(ParentPlotter):
             )
 
         if len(model_list) > 1:  # kfold model
-            if not model_list[0].model.params["kfold_flag"]:
-                raise ValueError(
-                    (
-                        "Argument 'model_list' is a list but kfold_flag is False. "
-                        "Please check the model and the function input."
-                    )
-                )
 
             (
                 train_reals,
@@ -1151,13 +1093,6 @@ class ConfusionMatrix(ParentPlotter):
             )
 
         elif len(model_list) == 1:  # train/test model
-            if model_list[0].model.params["kfold_flag"]:
-                raise ValueError(
-                    (
-                        "Argument 'model_list' is a list of one model but kfold_flag is True. "
-                        "Please check the model and the function input (k must be larger than 1)."
-                    )
-                )
 
             (
                 train_reals,
@@ -1269,7 +1204,7 @@ class ConfusionMatrix(ParentPlotter):
         """
         first_fold_model = model_list[0]
         metric_names = list(metrics_per_fold.keys())
-        N = first_fold_model.model.params["num_k"]
+        N = len(model_list)
 
         cols = 3
         rows = int(math.ceil(N / cols))
@@ -1418,9 +1353,13 @@ class ModelComparison(ParentPlotter):
 
         # get kfold_flag from first model in model_dict
         first_model = list(model_dict.values())[0][0]
-        kfold_flag = first_model.model.params["kfold_flag"]
+        first_list_of_models = list(model_dict.values())[0]
+        if len(first_list_of_models) > 1:
+            kfold = True
+        else:
+            kfold = False
 
-        if kfold_flag:
+        if kfold:
             overall_kfold_metrics_dict = {}
             for model in model_dict:
                 model_list = model_dict[model]  # list of length k of trained models
@@ -1453,7 +1392,7 @@ class ModelComparison(ParentPlotter):
             figure = cls.kfold_comparison_plot(comparing_models_metrics)
 
             df = cls.get_performance_dataframe(
-                comparing_models_metrics, overall_kfold_metrics_dict, kfold_flag
+                comparing_models_metrics, overall_kfold_metrics_dict, kfold
             )
 
         else:
@@ -1482,13 +1421,42 @@ class ModelComparison(ParentPlotter):
 
             figure = cls.train_test_comparison_plot(comparing_models_metrics)
             df = cls.get_performance_dataframe(
-                comparing_models_metrics, None, kfold_flag
+                comparing_models_metrics, None, kfold
             )
 
         return figure, df
 
     @classmethod
-    def from_new_data(cls, model_dict, params, data_file_suffix="_test", checkpoint_file_suffix=None, layer_mods=None):
+    def from_new_data(cls, model_dict, output_paths, test_data_paths, checkpoint_file_suffix=None,
+                      layer_mods=None):
+        """
+        Plotting function for comparing models on metrics using new data (i.e. data that was not used to train or validate the model).
+        Produces a violin plot if kfold_flag is True and a bar plot if kfold_flag is False.
+
+        Parameters
+        ----------
+        model_dict: dict
+            Dictionary of trained pytorch_lightning models.
+            Keys are the names of the models and values are lists of the trained pytorch_lightning models.
+            If kfold_flag is True, the lists must be of length > 1 (and the length of num_k)
+            If kfold_flag is False, the lists must be of length 1 (meaning there is only one model for each key).
+        output_paths: dict
+            Dictionary of the output paths. Used for knowing where the checkpoint files are stored and where to save the plots.
+        test_data_paths: dict
+            Dictionary of the paths to the new data. The keys are the names of the data types (e.g. "tabular1", "image").
+        checkpoint_file_suffix: str, optional
+            Suffix that is on the trained model checkpoint files. e.g. "_firsttry". Added by the user.
+            Default is None.
+        layer_mods: dict, optional
+            Dictionary of the layer modifications to make to the model.
+
+        Returns
+        -------
+        fig: matplotlib.pyplot.figure
+            The figure of the plot.
+        df: pandas.DataFrame
+            The dataframe of the metrics.
+        """
         comparing_models_metrics = {}
 
         if not isinstance(model_dict, dict):
@@ -1512,9 +1480,13 @@ class ModelComparison(ParentPlotter):
 
         # get kfold_flag from first model in model_dict
         first_model = list(model_dict.values())[0][0]
-        kfold_flag = first_model.model.params["kfold_flag"]
+        first_model_list = list(model_dict.values())[0]
+        if len(first_model_list) > 1:
+            kfold = True
+        else:
+            kfold = False
 
-        if kfold_flag:
+        if kfold:
             overall_kfold_metrics_dict = {}
 
             for model in model_dict:
@@ -1548,7 +1520,8 @@ class ModelComparison(ParentPlotter):
                     val_preds,
                     metrics_per_fold,
                     overall_kfold_metrics,
-                ) = cls.get_new_kfold_data(model_list, params, data_file_suffix, checkpoint_file_suffix, layer_mods)
+                ) = cls.get_new_kfold_data(model_list, output_paths, test_data_paths, checkpoint_file_suffix,
+                                           layer_mods)
 
                 comparing_models_metrics[model_method_name] = metrics_per_fold
 
@@ -1557,7 +1530,7 @@ class ModelComparison(ParentPlotter):
             figure = cls.kfold_comparison_plot(comparing_models_metrics)
 
             df = cls.get_performance_dataframe(
-                comparing_models_metrics, overall_kfold_metrics_dict, kfold_flag
+                comparing_models_metrics, overall_kfold_metrics_dict, kfold
             )
 
         else:
@@ -1591,13 +1564,13 @@ class ModelComparison(ParentPlotter):
                     val_reals,
                     val_preds,
                     metric_values,
-                ) = cls.get_new_tt_data(model_list, params, data_file_suffix, checkpoint_file_suffix, layer_mods)
+                ) = cls.get_new_tt_data(model_list, output_paths, test_data_paths, checkpoint_file_suffix, layer_mods)
 
                 comparing_models_metrics[model_method_name] = metric_values
 
             figure = cls.train_test_comparison_plot(comparing_models_metrics)
             df = cls.get_performance_dataframe(
-                comparing_models_metrics, None, kfold_flag
+                comparing_models_metrics, None, kfold
             )
 
         return figure, df

@@ -30,7 +30,7 @@ import torch.nn as nn
 from torch_geometric.nn import GCNConv, ChebConv
 
 from docs.examples import generate_sklearn_simulated_data
-from fusilli.data import get_data_module
+from fusilli.data import prepare_fusion_data
 from fusilli.eval import RealsVsPreds
 from fusilli.train import train_and_save_models
 
@@ -147,7 +147,7 @@ layer_mods = {
 
 
 # load data
-datamodule = get_data_module(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
+datamodule = prepare_fusion_data(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
 
 # train
 trained_model_list = train_and_save_models(
@@ -183,7 +183,7 @@ layer_mods = {
 }
 
 try:
-    datamodule = get_data_module(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
+    datamodule = prepare_fusion_data(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
 except Exception as error:
     print(error)
 
@@ -209,7 +209,7 @@ layer_mods = {
 }
 
 try:
-    get_data_module(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
+    prepare_fusion_data(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
 except Exception as error:
     print(error)
 
@@ -222,7 +222,7 @@ layer_mods = {
 }
 
 try:
-    get_data_module(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
+    prepare_fusion_data(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
 except Exception as error:
     print(error)
 
@@ -289,7 +289,7 @@ layer_mods = {
 
 from fusilli.fusionmodels.tabularfusion.concat_feature_maps import ConcatTabularFeatureMaps
 
-datamodule = get_data_module(ConcatTabularFeatureMaps, params, layer_mods=layer_mods)
+datamodule = prepare_fusion_data(ConcatTabularFeatureMaps, params, layer_mods=layer_mods)
 trained_model_list = train_and_save_models(
     data_module=datamodule,
     params=params,

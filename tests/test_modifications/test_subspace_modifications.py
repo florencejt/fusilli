@@ -528,34 +528,34 @@ wrong_layer_type_modifications = {
 # ~~~~~~~~~~ FIXTURES ~~~~~~~~~~ #
 @pytest.fixture
 def model_instance_DAETabImgMaps():
-    pred_type = "regression"
+    prediction_task = "regression"
     data_dims = [10, 15, [100, 100]]
-    params = {}
-    return DAETabImgMaps(pred_type, data_dims, params)
+    multiclass_dimensions = None
+    return DAETabImgMaps(prediction_task, data_dims, multiclass_dimensions)
 
 
 @pytest.fixture
 def model_instance_ConcatImgLatentTabDoubleLoss():
-    pred_type = "regression"
+    prediction_task = "regression"
     data_dims = [10, None, [100, 100]]
-    params = {}
-    return ConcatImgLatentTabDoubleLoss(pred_type, data_dims, params)
+    multiclass_dimensions = None
+    return ConcatImgLatentTabDoubleLoss(prediction_task, data_dims, multiclass_dimensions)
 
 
 @pytest.fixture
 def model_instance_ConcatImgLatentTabDoubleTrain():
-    pred_type = "regression"
+    prediction_task = "regression"
     data_dims = [10, 15, None]  # represents mod1 dim and img latent space dim
-    params = {}
-    return ConcatImgLatentTabDoubleTrain(pred_type, data_dims, params)
+    multiclass_dimensions = None
+    return ConcatImgLatentTabDoubleTrain(prediction_task, data_dims, multiclass_dimensions)
 
 
 # @pytest.fixture
 # def model_instance_MCVAE_tab():
-#     pred_type = "regression"
+#     prediction_task = "regression"
 #     data_dims = [10, 15, None]
-#     params = {}
-#     return MCVAE_tab(pred_type, data_dims, params)
+#     multiclass_dimensions = None
+#     return MCVAE_tab(prediction_task, data_dims, params)
 
 
 model_instances_training = [
@@ -719,19 +719,20 @@ def model_instance_denoising_autoencoder_subspace_method_2D(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_2d = create_test_files["image_torch_file_2d"]
 
-    params = {
-        "test_size": 0.2,
-        "pred_type": "binary",
-        "multiclass_dims": None,
-        "checkpoint_dir": None,
-    }
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     batch_size = 8
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular_image"
 
     # Initialize the TrainTestDataModule
-    dm = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
+    dm = TrainTestDataModule(example_fusion_model,
+                             sources,
+                             output_paths={"checkpoints": None},
+                             prediction_task="binary",
+                             batch_size=batch_size,
+                             test_size=0.2,
+                             multiclass_dimensions=None,
+                             num_folds=None)
     dm.prepare_data()
     dm.setup()
 
@@ -744,19 +745,20 @@ def model_instance_denoising_autoencoder_subspace_method_3D(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_3d = create_test_files["image_torch_file_3d"]
 
-    params = {
-        "test_size": 0.2,
-        "pred_type": "binary",
-        "multiclass_dims": None,
-        "checkpoint_dir": None,
-    }
     sources = [tabular1_csv, tabular2_csv, image_torch_file_3d]
     batch_size = 8
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular_image"
 
     # Initialize the TrainTestDataModule
-    dm = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
+    dm = TrainTestDataModule(example_fusion_model,
+                             sources,
+                             output_paths={"checkpoints": None},
+                             prediction_task="binary",
+                             batch_size=batch_size,
+                             test_size=0.2,
+                             multiclass_dimensions=None,
+                             num_folds=None)
     dm.prepare_data()
     dm.setup()
 
@@ -769,19 +771,19 @@ def model_instance_concat_img_latent_tab_subspace_method_2D(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_2d = create_test_files["image_torch_file_2d"]
 
-    params = {
-        "test_size": 0.2,
-        "pred_type": "binary",
-        "multiclass_dims": None,
-        "checkpoint_dir": None,
-    }
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     batch_size = 8
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular_image"
 
     # Initialize the TrainTestDataModule
-    dm = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
+    dm = TrainTestDataModule(example_fusion_model,
+                             sources,
+                             output_paths={"checkpoints": None},
+                             prediction_task="binary",
+                             batch_size=batch_size,
+                             test_size=0.2,
+                             multiclass_dimensions=None, num_folds=None)
     dm.prepare_data()
     dm.setup()
 
@@ -794,19 +796,19 @@ def model_instance_concat_img_latent_tab_subspace_method_3D(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_3d = create_test_files["image_torch_file_3d"]
 
-    params = {
-        "test_size": 0.2,
-        "pred_type": "binary",
-        "multiclass_dims": None,
-        "checkpoint_dir": None,
-    }
     sources = [tabular1_csv, tabular2_csv, image_torch_file_3d]
     batch_size = 8
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular_image"
 
     # Initialize the TrainTestDataModule
-    datamodule = TrainTestDataModule(params, example_fusion_model, sources, batch_size)
+    datamodule = TrainTestDataModule(example_fusion_model,
+                                     sources,
+                                     output_paths={"checkpoints": None},
+                                     prediction_task="binary",
+                                     batch_size=batch_size,
+                                     test_size=0.2,
+                                     multiclass_dimensions=None, num_folds=None)
     datamodule.prepare_data()
     datamodule.setup()
 
@@ -821,8 +823,8 @@ def model_instance_concat_img_latent_tab_subspace_method_3D(create_test_files):
 #
 #     params = {
 #         "test_size": 0.2,
-#         "pred_type": "binary",
-#         "multiclass_dims": None,
+#         "prediction_task": "binary",
+#         "multiclass_dimensions": None,
 #         "checkpoint_dir": None,
 #     }
 #     sources = [tabular1_csv, tabular2_csv, image_torch_file_3d]

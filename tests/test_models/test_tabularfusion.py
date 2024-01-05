@@ -29,13 +29,13 @@ def test_ConcatTabularFeatureMaps():
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
-    test_model = test_model(pred_type="binary", data_dims=[10, 14, None], params={})
+    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
 
     # initialising
     assert isinstance(test_model, nn.Module)
     assert isinstance(test_model, ParentFusionModel)
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
     assert test_model.mod1_layers['layer 1'][0].in_features == 10
     assert hasattr(test_model, "mod2_layers")
@@ -79,13 +79,13 @@ def test_ConcatTabularData():
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
-    test_model = test_model(pred_type="binary", data_dims=[10, 14, None], params={})
+    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
 
     # initialising
     assert isinstance(test_model, nn.Module)
     assert isinstance(test_model, ParentFusionModel)
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers") == False
     assert hasattr(test_model, "mod2_layers") == False
     assert hasattr(test_model, "fused_dim")
@@ -128,13 +128,13 @@ def test_TabularChannelWiseMultiAttention():
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "attention"
 
-    test_model = test_model(pred_type="binary", data_dims=[10, 14, None], params={})
+    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
 
     # initialising
     assert isinstance(test_model, nn.Module)
     assert isinstance(test_model, ParentFusionModel)
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
     assert test_model.mod1_layers['layer 1'][0].in_features == 10
     assert hasattr(test_model, "mod2_layers")
@@ -178,13 +178,13 @@ def test_TabularCrossmodalMultiheadAttention():
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "attention"
 
-    test_model = test_model(pred_type="binary", data_dims=[10, 14, None], params={})
+    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
 
     # initialising
     assert isinstance(test_model, nn.Module)
     assert isinstance(test_model, ParentFusionModel)
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
     assert test_model.mod1_layers['layer 1'][0].in_features == 10
     assert hasattr(test_model, "mod2_layers")
@@ -228,13 +228,13 @@ def test_TabularDecision():
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
-    test_model = test_model(pred_type="binary", data_dims=[10, 14, None], params={})
+    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
 
     # initialising
     assert isinstance(test_model, nn.Module)
     assert isinstance(test_model, ParentFusionModel)
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
     assert test_model.mod1_layers['layer 1'][0].in_features == 10
     assert hasattr(test_model, "mod2_layers")
@@ -281,13 +281,13 @@ def test_TabularDecision():
 #     assert test_model.fusion_type == "subspace"
 #     assert hasattr(test_model, "subspace_method")
 #
-#     test_model = test_model(pred_type="binary", data_dims=[25, None, None], params={})
+#     test_model = test_model(prediction_task="binary", data_dims=[25, None, None], multiclass_dimensions=None)
 #
 #     # initialising
 #     assert isinstance(test_model, nn.Module)
 #     assert isinstance(test_model, ParentFusionModel)
-#     assert hasattr(test_model, "pred_type")
-#     assert test_model.pred_type == "binary"
+#     assert hasattr(test_model, "prediction_task")
+#     assert test_model.prediction_task == "binary"
 #     assert hasattr(test_model, "latent_space_layers")
 #     assert test_model.latent_space_layers['layer 1'][0].in_features == 25
 #     assert hasattr(test_model, "fused_dim")
@@ -331,13 +331,13 @@ def test_EdgeCorrGNN():
     edge_attr = torch.randn(num_edges, edge_attr_dim)
     test_graph_data = (node_features, edge_index, edge_attr)
 
-    test_model = test_model(pred_type="binary", data_dims=[10, 14, None], params={})
+    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
 
     # initialising
     assert isinstance(test_model, nn.Module)
     assert isinstance(test_model, ParentFusionModel)
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "graph_conv_layers")
     assert hasattr(test_model, "dropout_prob")
     assert hasattr(test_model, "final_prediction")
@@ -371,13 +371,13 @@ def test_ActivationFusion():
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
-    test_model = test_model(pred_type="binary", data_dims=[10, 14, None], params={})
+    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
 
     # initialising
     assert isinstance(test_model, nn.Module)
     assert isinstance(test_model, ParentFusionModel)
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
     assert test_model.mod1_layers['layer 1'][0].in_features == 10
     assert hasattr(test_model, "mod2_layers")
@@ -420,13 +420,13 @@ def test_AttentionAndSelfActivation():
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
-    test_model = test_model(pred_type="binary", data_dims=[10, 14, None], params={})
+    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
 
     # initialising
     assert isinstance(test_model, nn.Module)
     assert isinstance(test_model, ParentFusionModel)
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
     assert test_model.mod1_layers['layer 1'][0].in_features == 10
     assert hasattr(test_model, "mod2_layers")
@@ -484,13 +484,13 @@ def test_AttentionWeightedGNN():
     edge_attr = torch.randn(num_edges, edge_attr_dim)
     test_graph_data = (node_features, edge_index, edge_attr)
 
-    test_model = test_model(pred_type="binary", data_dims=[10, 14, None], params={})
+    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
 
     # initialising
     assert isinstance(test_model, nn.Module)
     assert isinstance(test_model, ParentFusionModel)
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "graph_conv_layers")
     assert hasattr(test_model, "dropout_prob")
     assert hasattr(test_model, "final_prediction")

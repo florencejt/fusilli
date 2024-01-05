@@ -50,7 +50,7 @@ from fusilli.utils import check_model_validity
 # :class:`~.ParentFusionModel` has 3 input arguments:
 #
 # * ``pred_type`` : a string telling the model what type of prediction to perform. This is specified by the user in their python script or notebook.
-# * ``data_dims`` : a list of the dimensions of the input data. This is calculated by :func:`~fusilli.data.get_data_module`.
+# * ``data_dims`` : a list of the dimensions of the input data. This is calculated by :func:`~fusilli.data.prepare_fusion_data`.
 # * ``params`` : a dictionary containing the parameters of the model. This is specified by the user in their python script or notebook.
 #
 # These input arguments have to be passed into the ``__init__()`` function of our fusion model. When running this library, this is done automatically for you in
@@ -380,7 +380,7 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
         pred_type : str
             Type of prediction to be performed.
         data_dims : list
-            List containing the dimensions of the data. This is calculated by :func:`~fusilli.data.get_data_module`.
+            List containing the dimensions of the data. This is calculated by :func:`~fusilli.data.prepare_fusion_data`.
         params : dict
             Dictionary containing the parameters of the model. This is specified by the user in their python script or notebook.
         """

@@ -386,17 +386,17 @@ class TrainTestDataModule(pl.LightningDataModule):
         List of source csv files. [Tabular1, Tabular2, Image]
     modality_methods : dict
         Dictionary of methods for loading the different modalities.
-    params : dict
-        Dictionary of parameters.
     fusion_model : class
         fusion model class. e.g. TabularCrossmodalAttention.
+    output_paths : dict
+        Dictionary of output paths for saving the checkpoints, figures, and the losses.
     batch_size : int
         Batch size (default 8).
     test_size : float
         Fraction of data to use for testing (default 0.2).
-    pred_type : str
+    prediction_task : str
         Prediction type (binary, multiclass, or regression).
-    multiclass_dims : int
+    multiclass_dimensions : int
         Number of classes for multiclass prediction (default None).
     subspace_method : class
         Subspace method class (default None) (only for subspace methods).
@@ -418,34 +418,48 @@ class TrainTestDataModule(pl.LightningDataModule):
         Subspace method class trained (only for subspace methods).
     own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
         Early stopping callback class.
-
+    kwargs : dict
+        Dictionary of extra arguments for the subspace method class.
     """
 
     def __init__(
             self,
-            params,
             fusion_model,
             sources,
+            output_paths,
+            prediction_task,
             batch_size,
+            test_size,
+            num_folds,  # not needed for train/test split
+            multiclass_dimensions,
             subspace_method=None,
             image_downsample_size=None,
             layer_mods=None,
             max_epochs=1000,
             extra_log_string_dict=None,
             own_early_stopping_callback=None,
+            kwargs=None,
     ):
         """
         Parameters
         ----------
 
-        params : dict
-            Dictionary of parameters.
         fusion_model : class
             Fusion model class. e.g. "TabularCrossmodalAttention".
         sources : list
             List of source csv files.
+        output_paths : dict
+            Dictionary of output paths for saving the checkpoints, figures, and the losses.
+        prediction_task : str
+            Prediction task (binary, multiclass, regression).
         batch_size : int
             Batch size (default 8).
+        test_size : float
+            Fraction of data to use for testing (default 0.2).
+        num_folds : int
+            Total number of folds. Not needed for this class for train/test split but it's here to be consistent with KFoldDataModule.
+        multiclass_dimensions : int
+            Number of classes for multiclass prediction (default None).
         subspace_method : class
             Subspace method class (default None) (only for subspace methods).
         image_downsample_size : tuple
@@ -461,11 +475,13 @@ class TrainTestDataModule(pl.LightningDataModule):
             Dictionary of extra strings to add to the log.
         own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
             Early stopping callback class (default None).
-
+        kwargs : dict
+            Dictionary of extra arguments for the subspace method class.
         """
         super().__init__()
 
         self.sources = sources
+        self.output_paths = output_paths
         self.extra_log_string_dict = extra_log_string_dict
         self.modality_methods = {
             "tabular1": LoadDatasets(self.sources, image_downsample_size).load_tabular1,
@@ -478,20 +494,20 @@ class TrainTestDataModule(pl.LightningDataModule):
                 self.sources, image_downsample_size
             ).load_tab_and_img,
         }
-        self.params = params
         self.fusion_model = fusion_model
         self.modality_type = self.fusion_model.modality_type
         self.batch_size = batch_size
-        self.test_size = params["test_size"]
-        self.pred_type = params["pred_type"]
-        if self.pred_type == "multiclass":
-            self.multiclass_dims = params["multiclass_dims"]
+        self.test_size = test_size
+        self.prediction_task = prediction_task
+        if self.prediction_task == "multiclass":
+            self.multiclass_dimensions = multiclass_dimensions
         else:
-            self.multiclass_dims = None
+            self.multiclass_dimensions = None
         self.subspace_method = subspace_method
         self.layer_mods = layer_mods
         self.max_epochs = max_epochs
         self.own_early_stopping_callback = own_early_stopping_callback
+        self.kwargs = kwargs
 
     def prepare_data(self):
         """
@@ -646,6 +662,8 @@ class KFoldDataModule(pl.LightningDataModule):
         Total number of folds.
     sources : list
         List of source csv files. [Tabular1, Tabular2, Image]
+    output_paths : dict
+        Dictionary of output paths for saving the checkpoints, figures, and the losses.
     image_downsample_size : tuple
         Size to downsample the images to (height, width, depth) or (height, width) for 2D
         images.
@@ -656,9 +674,9 @@ class KFoldDataModule(pl.LightningDataModule):
         Fusion model class. e.g. "TabularCrossmodalAttention".
     batch_size : int
         Batch size (default 8).
-    pred_type : str
+    prediction_task : str
         Prediction type (binary, multiclass, regression).
-    multiclass_dims : int
+    multiclass_dimensions : int
         Number of classes for multiclass prediction (default None).
     subspace_method : class
         Subspace method class (default None) (only for subspace methods).
@@ -677,33 +695,49 @@ class KFoldDataModule(pl.LightningDataModule):
         Tensor of predictive features for testing. Created in setup().
     own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
         Early stopping callback class.
+    kwargs : dict
+        Dictionary of extra arguments for the subspace method class.
     """
 
     def __init__(
             self,
-            params,
             fusion_model,
             sources,
+            output_paths,
+            prediction_task,
             batch_size,
+            num_folds,
+            test_size,  # not needed for k-fold
+            multiclass_dimensions,
             subspace_method=None,
             image_downsample_size=None,
             layer_mods=None,
             max_epochs=1000,
             extra_log_string_dict=None,
             own_early_stopping_callback=None,
+            kwargs=None,
     ):
         """
         Parameters
         ----------
 
-        params : dict
-            Dictionary of parameters.
         fusion_model : class
             Fusion model class. e.g. "TabularCrossmodalAttention".
         sources : list
-            List of source csv files.
+            List of source data files: csv or torch files.
+        output_paths : dict
+            Dictionary of output paths for saving the checkpoints, figures, and the losses.
+        prediction_task : str
+            Prediction task (binary, multiclass, regression).
         batch_size : int
             Batch size.
+        num_folds : int
+            Total number of folds.
+        test_size : float
+            Fraction of data to use for testing (default 0.2).
+            Not needed for this class for k-fold cross validation but it's here to be consistent with TrainTestDataModule.
+        multiclass_dimensions : int
+            Number of classes for multiclass prediction (default None).
         subspace_method : class
             Subspace method class (default None) (only for subspace methods).
         image_downsample_size : tuple
@@ -718,12 +752,14 @@ class KFoldDataModule(pl.LightningDataModule):
             Dictionary of extra strings to add to the log.
         own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
             Early stopping callback class (default None).
-
+        kwargs : dict
+            Dictionary of extra arguments for the subspace method class.
         """
         super().__init__()
 
-        self.num_folds = params["num_k"]  # total number of folds
+        self.num_folds = num_folds  # total number of folds
         self.sources = sources
+        self.output_paths = output_paths
         self.image_downsample_size = image_downsample_size
         self.extra_log_string_dict = extra_log_string_dict
         self.modality_methods = {
@@ -741,21 +777,21 @@ class KFoldDataModule(pl.LightningDataModule):
                 self.sources, self.image_downsample_size
             ).load_tab_and_img,
         }
-        self.params = params
-        self.pred_type = params["pred_type"]
+        self.prediction_task = prediction_task
         self.fusion_model = fusion_model
         self.modality_type = self.fusion_model.modality_type
         self.batch_size = batch_size
         self.subspace_method = (
             subspace_method  # subspace method class (only for subspace methods)
         )
-        if self.pred_type == "multiclass":
-            self.multiclass_dims = params["multiclass_dims"]
+        if self.prediction_task == "multiclass":
+            self.multiclass_dimensions = multiclass_dimensions
         else:
-            self.multiclass_dims = None
+            self.multiclass_dimensions = None
         self.layer_mods = layer_mods
         self.max_epochs = max_epochs
         self.own_early_stopping_callback = own_early_stopping_callback
+        self.kwargs = kwargs
 
     def prepare_data(self):
         """
@@ -984,8 +1020,6 @@ class TrainTestGraphDataModule:
         Graph creation method class.
     graph_maker_instance : graph maker class
         Graph maker class instance.
-    params : dict
-        Dictionary of parameters.
     layer_mods : dict
         Dictionary of layer modifications to make to the graph maker method.
     dataset : tensor
@@ -1003,10 +1037,10 @@ class TrainTestGraphDataModule:
 
     def __init__(
             self,
-            params,
             fusion_model,
             sources,
             graph_creation_method,
+            test_size,
             image_downsample_size=None,
             layer_mods=None,
             extra_log_string_dict=None,
@@ -1015,14 +1049,14 @@ class TrainTestGraphDataModule:
         Parameters
         ----------
 
-        params : dict
-            Dictionary of parameters.
         fusion_model : class
             Fusion model class. e.g. "TabularCrossmodalAttention".
         sources : list
             List of source csv files.
         graph_creation_method : class
             Graph creation method class.
+        test_size : float
+            Fraction of data to use for testing (default 0.2).
         image_downsample_size : tuple
             Size to downsample the images to (height, width, depth) or (height, width) for 2D
             images. None if not downsampling. (default None)
@@ -1038,7 +1072,6 @@ class TrainTestGraphDataModule:
 
         self.sources = sources
         self.image_downsample_size = image_downsample_size
-        self.params = params
         self.extra_log_string_dict = extra_log_string_dict
         self.modality_methods = {
             "tabular1": LoadDatasets(
@@ -1057,7 +1090,7 @@ class TrainTestGraphDataModule:
         }
         self.fusion_model = fusion_model
         self.modality_type = self.fusion_model.modality_type
-        self.test_size = params["test_size"]
+        self.test_size = test_size
         self.graph_creation_method = graph_creation_method
         self.layer_mods = layer_mods
 
@@ -1162,7 +1195,7 @@ class KFoldGraphDataModule:
 
     def __init__(
             self,
-            params,
+            num_folds,
             fusion_model,
             sources,
             graph_creation_method,
@@ -1173,8 +1206,8 @@ class KFoldGraphDataModule:
         """
         Parameters
         ----------
-        params : dict
-            Dictionary of parameters.
+        num_folds : int
+            Total number of folds.
         fusion_model : class
             Fusion model class. e.g. "TabularCrossmodalAttention".
         sources : list
@@ -1191,10 +1224,9 @@ class KFoldGraphDataModule:
             Dictionary of extra strings to add to the log.
         """
         super().__init__()
-        self.num_folds = params["num_k"]  # total number of folds
+        self.num_folds = num_folds  # total number of folds
         self.image_downsample_size = image_downsample_size
         self.sources = sources
-        self.params = params
         self.extra_log_string_dict = extra_log_string_dict
         self.modality_methods = {
             "tabular1": LoadDatasets(
@@ -1315,29 +1347,48 @@ class KFoldGraphDataModule:
         return lightning_modules  # list of lightning modules for each fold
 
 
-def get_data_module(
+def prepare_fusion_data(
+        prediction_task,
         fusion_model,
-        params,
+        data_paths,
+        output_paths,
+        kfold=False,
+        num_folds=None,
+        test_size=0.2,
         batch_size=8,
+        multiclass_dimensions=None,
         image_downsample_size=None,
         layer_mods=None,
         max_epochs=1000,
-        optional_suffix="",
         checkpoint_path=None,
         extra_log_string_dict=None,
         own_early_stopping_callback=None,
+        **kwargs,
 ):
     """
     Gets the data module for a specific fusion model and training protocol.
 
     Parameters
     ----------
+
+    prediction_task : str
+        Prediction task (binary, multiclass, regression).
     fusion_model : class
         Fusion model class.
-    params : dict
-        Dictionary of parameters.
+    data_paths : dict
+        Dictionary of data paths with keys "tabular1", "tabular2", "image".
+    output_paths : dict
+        Dictionary of output paths with keys "checkpoints", "figures", "losses".
+    kfold : bool
+        Whether to use kfold cross validation (default False means train/test split).
+    num_folds : int or None
+        Number of folds for kfold cross validation (default None).
+    test_size : float
+        Fraction of data to use for testing when using train/test split (default 0.2).
     batch_size : int
         Batch size (default 8).
+    multiclass_dimensions : int
+        Number of classes for multiclass prediction (default None).
     image_downsample_size : tuple
         Tuple of image dimensions to downsample to (default None).
         e.g. (100, 100, 100) for 3D images, (100, 100) for 2D images.
@@ -1345,8 +1396,6 @@ def get_data_module(
         Dictionary of layer modifications (default None).
     max_epochs : int
         Maximum number of epochs to train subspace methods for. (default 1000)
-    optional_suffix : str
-        Optional suffix added to data source file names (default None).
     checkpoint_path : list
         List containing paths to call checkpoint file. Length of the list is the number of trainable subspace models
         in the fusion model (e.g., DAETabImgMaps requires two models to be pre-trained, so we'd pass 2 checkpoint
@@ -1359,6 +1408,8 @@ def get_data_module(
         Default None.
     own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
         Early stopping callback class (default None).
+    **kwargs : dict
+        Extra keyword arguments. Usable for extra arguments for the subspace method MCVAE's early stopping callback: "mcvae_patience" and "mcvae_tolerance".
 
 
     Returns
@@ -1367,24 +1418,28 @@ def get_data_module(
         Datamodule for the specified fusion method.
     """
 
-    if params["kfold_flag"] and own_early_stopping_callback is not None:
+    kwargs = {k: v for k, v in kwargs.items() if v is not None}
+
+    if kfold and own_early_stopping_callback is not None:
         raise ValueError(
             "Cannot use own early stopping callback with kfold cross validation yet. Working on fixing this currently (Nov 2023)")
 
+    # Getting the data paths from the data_paths dictionary into a list
+    print("data_paths", data_paths)
     data_sources = [
-        params[f"tabular1_source{optional_suffix}"],
-        params[f"tabular2_source{optional_suffix}"],
-        params[f"img_source{optional_suffix}"],
+        data_paths["tabular1"],
+        data_paths["tabular2"],
+        data_paths["image"],
     ]
 
     if not hasattr(fusion_model, "subspace_method"):
         fusion_model.subspace_method = None
 
     if fusion_model.fusion_type == "graph":
-        if params["kfold_flag"]:
+        if kfold:
             graph_data_module = KFoldGraphDataModule(
-                params,
-                fusion_model,
+                num_folds=num_folds,
+                fusion_model=fusion_model,
                 sources=data_sources,
                 graph_creation_method=fusion_model.graph_maker,
                 image_downsample_size=image_downsample_size,
@@ -1393,10 +1448,10 @@ def get_data_module(
             )
         else:
             graph_data_module = TrainTestGraphDataModule(
-                params,
                 fusion_model,
                 sources=data_sources,
                 graph_creation_method=fusion_model.graph_maker,
+                test_size=test_size,
                 image_downsample_size=image_downsample_size,
                 layer_mods=layer_mods,
                 extra_log_string_dict=extra_log_string_dict,
@@ -1406,36 +1461,48 @@ def get_data_module(
         graph_data_module.setup()
         data_module = graph_data_module.get_lightning_module()
 
-        if params["kfold_flag"]:
+        if kfold:
             # if kfold, then we have a list of lightning modules
             # so we need to set the data dimensions for each lightning module
             for dm_instance in data_module:
                 dm_instance.data_dims = graph_data_module.data_dims
                 dm_instance.own_early_stopping_callback = own_early_stopping_callback
                 dm_instance.graph_maker_instance = graph_data_module.graph_maker_instance
+                dm_instance.output_paths = output_paths
+                dm_instance.num_folds = num_folds
+                dm_instance.prediction_task = prediction_task
+                dm_instance.multiclass_dimensions = multiclass_dimensions
         else:
             data_module.data_dims = graph_data_module.data_dims
             data_module.own_early_stopping_callback = own_early_stopping_callback
             data_module.graph_maker_instance = graph_data_module.graph_maker_instance
+            data_module.output_paths = output_paths
+            data_module.prediction_task = prediction_task
+            data_module.multiclass_dimensions = multiclass_dimensions
 
     else:
         # another other than graph fusion
-        if params["kfold_flag"]:
+        if kfold:
             datamodule_func = KFoldDataModule
         else:
             datamodule_func = TrainTestDataModule
 
         data_module = datamodule_func(
-            params,
             fusion_model,
             sources=data_sources,
-            subspace_method=fusion_model.subspace_method,
+            output_paths=output_paths,
+            prediction_task=prediction_task,
             batch_size=batch_size,
+            test_size=test_size,
+            num_folds=num_folds,
+            multiclass_dimensions=multiclass_dimensions,
+            subspace_method=fusion_model.subspace_method,
             image_downsample_size=image_downsample_size,
             layer_mods=layer_mods,
             max_epochs=max_epochs,
             extra_log_string_dict=extra_log_string_dict,
             own_early_stopping_callback=own_early_stopping_callback,
+            kwargs=kwargs,
         )
         data_module.prepare_data()
         data_module.setup(checkpoint_path=checkpoint_path)

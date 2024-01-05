@@ -50,7 +50,7 @@ For a more detailed explanation of this process, please see the :ref:`train_test
     import os
 
     from docs.examples import generate_sklearn_simulated_data
-    from fusilli.data import get_data_module
+    from fusilli.data import prepare_fusion_data
     from fusilli.eval import RealsVsPreds
     from fusilli.train import train_and_save_models
 

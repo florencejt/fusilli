@@ -49,7 +49,7 @@ from tqdm.auto import tqdm
 import os
 
 from docs.examples import generate_sklearn_simulated_data
-from fusilli.data import get_data_module
+from fusilli.data import prepare_fusion_data
 from fusilli.eval import RealsVsPreds, ModelComparison
 from fusilli.train import train_and_save_models
 from fusilli.utils.model_chooser import import_chosen_fusion_models
@@ -138,7 +138,7 @@ for i, fusion_model in enumerate(fusion_models):
     print(f"Running model {fusion_model_name}")
 
     # Get data module
-    data_module = get_data_module(fusion_model, params, batch_size=params["batch_size"])
+    data_module = prepare_fusion_data(fusion_model, params, batch_size=params["batch_size"])
 
     # Train and test
     single_model_list = train_and_save_models(

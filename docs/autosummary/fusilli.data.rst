@@ -14,7 +14,7 @@
    .. autosummary::
    
       downsample_img_batch
-      get_data_module
+      prepare_fusion_data
    
    
 

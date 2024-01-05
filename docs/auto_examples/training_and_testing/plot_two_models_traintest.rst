@@ -44,7 +44,7 @@ Regression: Comparing Two Tabular Models Trained on Simulated Data
     import os
 
     from docs.examples import generate_sklearn_simulated_data
-    from fusilli.data import get_data_module
+    from fusilli.data import prepare_fusion_data
     from fusilli.eval import RealsVsPreds, ModelComparison
     from fusilli.train import train_and_save_models
     from fusilli.utils.model_chooser import import_chosen_fusion_models
@@ -194,7 +194,7 @@ To train the first model we need to:
 
 1. *Choose the model*: We're using the first model in the ``fusion_models`` list we made earlier.
 2. *Print the attributes of the model*: To check it's been initialised correctly.
-3. *Create the datamodule*: This is done with the :func:`~fusilli.data.get_data_module` function. This function takes the initialised model and the parameters as inputs. It returns the datamodule.
+3. *Create the datamodule*: This is done with the :func:`~fusilli.data.prepare_fusion_data` function. This function takes the initialised model and the parameters as inputs. It returns the datamodule.
 4. *Train and test the model*: This is done with the :func:`~fusilli.train.train_and_save_models` function. This function takes the datamodule, the parameters, the fusion model, and the initialised model as inputs. It returns a list of the trained models (in this case, only one model).
 5. *Add the trained model to the ``all_trained_models`` dictionary*: This is so we can compare the results of the two models later.
 
@@ -210,7 +210,7 @@ To train the first model we need to:
     print("Fusion type:", fusion_model.fusion_type)
 
     # Create the data module
-    dm = get_data_module(fusion_model=fusion_model, params=params)
+    dm = prepare_fusion_data(fusion_model=fusion_model, params=params)
 
     # Train and test
     model_1_list = train_and_save_models(
@@ -264,7 +264,7 @@ Choose the model
     print("Fusion type:", fusion_model.fusion_type)
 
     # Create the data module
-    dm = get_data_module(fusion_model=fusion_model, params=params)
+    dm = prepare_fusion_data(fusion_model=fusion_model, params=params)
 
     # Train and test
     model_2_list = train_and_save_models(

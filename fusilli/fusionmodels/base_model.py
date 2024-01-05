@@ -77,8 +77,8 @@ class BaseModel(pl.LightningModule):
         """
         super().__init__()
         self.model = model
-        # self.pred_type = model.pred_type
-        if self.model.pred_type == "multiclass":
+        # self.prediction_task = model.prediction_task
+        if self.model.prediction_task == "multiclass":
             self.multiclass_dim = model.multiclass_dim
         else:
             self.multiclass_dim = 3  # default value so metrics dict can be built
@@ -139,11 +139,11 @@ class BaseModel(pl.LightningModule):
                 {"metric": tm.MeanAbsoluteError(), "name": "MAE"},
             ],
         }
-        if self.model.pred_type not in self.metrics:
-            raise ValueError(f"Unsupported pred_type: {self.model.pred_type}")
+        if self.model.prediction_task not in self.metrics:
+            raise ValueError(f"Unsupported prediction_task: {self.model.prediction_task}")
 
         self.metric_names_list = [
-            metric["name"] for metric in self.metrics[self.model.pred_type]
+            metric["name"] for metric in self.metrics[self.model.prediction_task]
         ]
 
         # storing the final validation reals and preds
@@ -269,7 +269,7 @@ class BaseModel(pl.LightningModule):
         """
         logits, reconstructions = self.get_model_outputs(x)
 
-        end_output = self.output_activation_functions[self.model.pred_type](logits)
+        end_output = self.output_activation_functions[self.model.prediction_task](logits)
 
         # if we're doing graph-based fusion and train/test doesn't work the same as normal
         if hasattr(self, "train_mask"):
@@ -282,7 +282,7 @@ class BaseModel(pl.LightningModule):
                 y = y[self.val_mask]
                 end_output = end_output[self.val_mask]
 
-        loss = self.loss_functions[self.model.pred_type](logits, y)
+        loss = self.loss_functions[self.model.prediction_task](logits, y)
 
         if reconstructions != [] and self.model.custom_loss is not None:
             added_loss = self.model.custom_loss(
@@ -324,7 +324,7 @@ class BaseModel(pl.LightningModule):
             batch_size=x[0].shape[0],
         )
 
-        for metric in self.metrics[self.model.pred_type]:
+        for metric in self.metrics[self.model.prediction_task]:
             if "auroc" in metric["name"]:
                 predicted = logits
             else:
@@ -419,7 +419,7 @@ class BaseModel(pl.LightningModule):
         except RuntimeError:  # if we're doing graph-based fusion and train/test doesn't work the same as normal
             pass
 
-        for i, metric in enumerate(self.metrics[self.model.pred_type]):
+        for i, metric in enumerate(self.metrics[self.model.prediction_task]):
             if "auroc" in metric["name"]:
                 predicted = self.val_logits
             else:
@@ -471,7 +471,7 @@ class ParentFusionModel:
 
     Attributes
     ----------
-    pred_type : str
+    prediction_task : str
         Type of prediction to be made. Options: binary, multiclass, regression.
     mod1_dim : int
         Dimension of modality 1.
@@ -480,9 +480,7 @@ class ParentFusionModel:
     img_dim : tuple
         Dimensions of image modality. If using 2D images, then the dimensions will be (x, y). If using 3D images, then
         the dimensions will be (x, y, z).
-    params : dict
-        Dictionary of parameters.
-    multiclass_dim : int
+    multiclass_dimensions : int
         Number of classes for multiclass prediction.
     final_prediction: nn.Sequential
         Final prediction layers.
@@ -496,25 +494,24 @@ class ParentFusionModel:
         Fused layers.
     """
 
-    def __init__(self, pred_type, data_dims, params):
+    def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
         Parameters
         ----------
-        pred_type : str
+        prediction_task : str
             Type of prediction to be made. Options: binary, multiclass, regression.
         data_dims : list
             List of data dimensions.
-        params : dict
-            Dictionary of parameters.
+        multiclass_dimensions : int
+            Number of classes for multiclass prediction.
         """
         super().__init__()
-        self.pred_type = pred_type
+        self.prediction_task = prediction_task
         self.mod1_dim = data_dims[0]
         self.mod2_dim = data_dims[1]
         self.img_dim = data_dims[2]
-        self.params = params
-        if self.pred_type == "multiclass":
-            self.multiclass_dim = params["multiclass_dims"]
+        if self.prediction_task == "multiclass":
+            self.multiclass_dimensions = multiclass_dimensions
 
     def set_final_pred_layers(self, input_dim=64):
         """
@@ -530,15 +527,15 @@ class ParentFusionModel:
         None
         """
         # final predictions
-        if self.pred_type == "binary":
+        if self.prediction_task == "binary":
             self.final_prediction = nn.Sequential(nn.Linear(input_dim, 1), nn.Sigmoid())
 
-        elif self.pred_type == "multiclass":
+        elif self.prediction_task == "multiclass":
             self.final_prediction = nn.Sequential(
-                nn.Linear(input_dim, self.multiclass_dim)
+                nn.Linear(input_dim, self.multiclass_dimensions)
             )
 
-        elif self.pred_type == "regression":
+        elif self.prediction_task == "regression":
             self.final_prediction = nn.Sequential(nn.Linear(input_dim, 1))
 
     def set_mod1_layers(self):

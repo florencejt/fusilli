@@ -8,7 +8,7 @@ Loading your Data
 Data Format Requirements
 ----------------------------
 
-Your data must adhere to specific formats for ``fusilli`` to read it correctly with the :func:`fusilli.data.get_data_module` function.
+Your data must adhere to specific formats for ``fusilli`` to read it correctly with the :func:`fusilli.data.prepare_fusion_data` function.
 
 
 The paths to the data source files must be in a parameters dictionary:
@@ -42,7 +42,7 @@ Columns named ``study_id`` and ``pred_label`` are required:
 
 .. code-block:: python
 
-    from fusilli.data import get_data_module
+    from fusilli.data import prepare_fusion_data
 
     params = {
         "tabular1_source": "path/to/tabular1_data.csv",
@@ -50,7 +50,7 @@ Columns named ``study_id`` and ``pred_label`` are required:
         "img_source": "",
     }
 
-    data_module = get_data_module(some_example_model, params)
+    data_module = prepare_fusion_data(some_example_model, params)
 
 Tabular and Image Data
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -66,7 +66,7 @@ For 100 3D 32x32x32 RGB images, my images.pt file would have the dimensions ``(1
 
 .. code-block:: python
 
-    from fusilli.data import get_data_module
+    from fusilli.data import prepare_fusion_data
 
     params = {
         "tabular1_source": "path/to/tabular1_data.csv",
@@ -74,19 +74,19 @@ For 100 3D 32x32x32 RGB images, my images.pt file would have the dimensions ``(1
         "img_source": "path/to/image_data.pt",
     }
 
-    data_module = get_data_module(some_example_model, params)
+    data_module = prepare_fusion_data(some_example_model, params)
 
 Downsampling Images
 *********************
 
-To downsample images before model input, use the ``image_downsample_size`` parameter in the :func:`fusilli.data.get_data_module` function.
+To downsample images before model input, use the ``image_downsample_size`` parameter in the :func:`fusilli.data.prepare_fusion_data` function.
 
 **Example of downsampling 2D images to 16x16:**
 
 .. code-block:: python
 
 
-    data_module = get_data_module(some_example_model, params, image_downsample_size=(16, 16))
+    data_module = prepare_fusion_data(some_example_model, params, image_downsample_size=(16, 16))
 
 
 -----
@@ -108,7 +108,7 @@ If you use a different suffix than the default "_test", you must pass the suffix
 
 .. code-block:: python
 
-    from fusilli.data import get_data_module
+    from fusilli.data import prepare_fusion_data
     from fusilli.train import train_and_save_models
     from fusilli.eval import RealsVsPreds
 
@@ -122,7 +122,7 @@ If you use a different suffix than the default "_test", you must pass the suffix
     }
 
     # Using the training data (params["tabular1_source"], params["tabular2_source"], and params["img_source"])
-    data_module = get_data_module(fusion_model=some_example_model, params=params)
+    data_module = prepare_fusion_data(fusion_model=some_example_model, params=params)
 
     # Train the model on params["tabular1_source"], params["tabular2_source"], and params["img_source"]
     trained_model= train_and_save_models(data_module, params, some_example_model)

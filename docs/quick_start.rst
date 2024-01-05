@@ -19,7 +19,7 @@ Ensure the elements in the ``params`` dictionary contain specific keys; you can 
 .. code-block:: python
 
 
-    from fusilli.data import get_data_module
+    from fusilli.data import prepare_fusion_data
     from fusilli.train import train_and_save_models
     from fusilli.eval import RealsVsPreds
     import matplotlib.pyplot as plt
@@ -45,7 +45,7 @@ Ensure the elements in the ``params`` dictionary contain specific keys; you can 
     }
 
     # Get the data module (PyTorch Lightning-compatible data structure)
-    data_module = get_data_module(fusion_model=ExampleModel, params=params)
+    data_module = prepare_fusion_data(fusion_model=ExampleModel, params=params)
 
     # Train the model and receive a list with the trained model
     trained_model_list = train_and_save_models(

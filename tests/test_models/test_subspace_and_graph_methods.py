@@ -51,23 +51,18 @@ def sample_datamodule(create_test_files):
     # MCVAESubspaceMethod class in isolation
     fusion_model = MockFusionModel()
 
-    params = {
-        "pred_type": "binary",
-        "multiclass_dims": None,
-        "tabular1_source": tabular1_csv,
-        "tabular2_source": tabular2_csv,
-        "img_source": image_torch_file_2d,
-        "kfold_flag": False,
-        "test_size": 0.3,
-    }
-
-    # Call the get_data_module function with custom fusion type (non-graph)
-    dm = TrainTestDataModule(params=params,
-                             fusion_model=MockFusionModel,
+    # Call the prepare_fusion_data function with custom fusion type (non-graph)
+    dm = TrainTestDataModule(fusion_model=MockFusionModel,
                              sources=[tabular1_csv, tabular2_csv, image_torch_file_2d],
-                             batch_size=8, )
+                             output_paths=None,
+                             prediction_task="binary",
+                             batch_size=8,
+                             test_size=0.3,
+                             num_folds=None,
+                             multiclass_dimensions=None,
+                             )
 
-    # dm = get_data_module(fusion_model, params)
+    # dm = prepare_fusion_data(fusion_model, params)
     dm.prepare_data()
     dm.setup()
 
@@ -94,23 +89,18 @@ def sample_tabimg_datamodule(create_test_files):
     # MCVAESubspaceMethod class in isolation
     fusion_model = MockFusionTabImgModel()
 
-    params = {
-        "pred_type": "binary",
-        "multiclass_dims": None,
-        "tabular1_source": tabular1_csv,
-        "tabular2_source": tabular2_csv,
-        "img_source": image_torch_file_2d,
-        "kfold_flag": False,
-        "test_size": 0.3,
-    }
-
-    # Call the get_data_module function with custom fusion type (non-graph)
-    dm = TrainTestDataModule(params=params,
-                             fusion_model=MockFusionTabImgModel,
+    # Call the prepare_fusion_data function with custom fusion type (non-graph)
+    dm = TrainTestDataModule(fusion_model=MockFusionTabImgModel,
                              sources=[tabular1_csv, tabular2_csv, image_torch_file_2d],
-                             batch_size=8, )
+                             output_paths=None,
+                             prediction_task="binary",
+                             batch_size=8,
+                             test_size=0.3,
+                             num_folds=None,
+                             multiclass_dimensions=None,
+                             )
 
-    # dm = get_data_module(fusion_model, params)
+    # dm = prepare_fusion_data(fusion_model, params)
     dm.prepare_data()
     dm.setup()
 
@@ -254,10 +244,10 @@ def test_img_unimodal_dae_initialisation():
     assert isinstance(model.img_layers, nn.ModuleDict)
     assert hasattr(model, "loss")
     assert hasattr(model, "activation")
-    assert hasattr(model, "pred_type")
-    assert model.pred_type == pred_type
-    assert hasattr(model, "multiclass_dim")
-    assert model.multiclass_dim == multiclass_dims
+    assert hasattr(model, "prediction_task")
+    assert model.prediction_task == pred_type
+    assert hasattr(model, "multiclass_dimensions")
+    assert model.multiclass_dimensions == multiclass_dims
 
 
 def test_img_unimodal_dae_forward():

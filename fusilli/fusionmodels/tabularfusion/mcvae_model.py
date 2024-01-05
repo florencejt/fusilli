@@ -73,7 +73,7 @@ class MCVAESubspaceMethod:
     Class for creating the MCVAE (multi-channel variational autoencoder) joint latent space.
 
     If you want to change the tolerance or patience for early stopping, you can do so by adding
-    the following to your params dictionary:
+    extra keyword arguments to the function prepare_fusion_data. For example:
 
     "mcvae_patience": value,
     "mcvae_tolerance": value,
@@ -108,7 +108,6 @@ class MCVAESubspaceMethod:
             Whether to train the subspace model, by default True.
         """
         self.datamodule = datamodule
-        # self.device = torch.device(self.datamodule.params["accelerator"])
         self.device = torch.device("cpu")
 
         self.num_latent_dims = 10
@@ -245,17 +244,17 @@ class MCVAESubspaceMethod:
         mcvae_fit.optimizer = torch.optim.Adam(mcvae_fit.parameters(), lr=0.001)
         mcvae_fit.to(self.device)
 
-        # if the params has key mcvae_patience, use that as the patience
-        if "mcvae_patience" in self.datamodule.params.keys():
-            print("Using mcvae_patience from params")
-            mcvae_patience = self.datamodule.params["mcvae_patience"]
+        # if the kwargs has key mcvae_patience, use that as the patience
+        if "mcvae_patience" in self.datamodule.kwargs.keys():
+            print("Using mcvae_patience from prepare_fusion_data kwargs")
+            mcvae_patience = self.datamodule.kwargs["mcvae_patience"]
         else:
             mcvae_patience = 10
 
         # same with tolerance
-        if "mcvae_tolerance" in self.datamodule.params.keys():
-            print("Using mcvae_tolerance from params")
-            mcvae_tolerance = self.datamodule.params["mcvae_tolerance"]
+        if "mcvae_tolerance" in self.datamodule.kwargs.keys():
+            print("Using mcvae_tolerance from prepare_fusion_data kwargs")
+            mcvae_tolerance = self.datamodule.kwargs["mcvae_tolerance"]
         else:
             mcvae_tolerance = 3
 
@@ -275,13 +274,12 @@ class MCVAESubspaceMethod:
         self.fit_model = mcvae_esfit
 
         # save .ckpt file
-        if "checkpoint_dir" in self.datamodule.params.keys():
-            torch.save(
-                self.fit_model.state_dict(),
-                self.datamodule.params["checkpoint_dir"]
-                + "/"
-                + self.checkpoint_filenames[0],
-            )
+        torch.save(
+            self.fit_model.state_dict(),
+            self.datamodule.output_paths["checkpoints"]
+            + "/"
+            + self.checkpoint_filenames[0],
+        )
 
         # getting mean latent space
         mean_latents = self.get_latents(mcvae_training_data)
@@ -364,20 +362,20 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
     # class: Subspace method class.
     subspace_method = MCVAESubspaceMethod
 
-    def __init__(self, pred_type, data_dims, params):
+    def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
         Parameters
         ----------
-        pred_type : str
+        prediction_task : str
             Type of prediction to be performed.
         data_dims : list
-            Dictionary containing the dimensions of the data.
-        params : dict
-            Dictionary containing the parameters of the model.
+            List containing the dimensions of the data.
+        multiclass_dimensions : int
+            Number of classes in the multiclass classification task.
         """
-        ParentFusionModel.__init__(self, pred_type, data_dims, params)
+        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
 
-        self.pred_type = pred_type
+        self.prediction_task = prediction_task
 
         self.latent_space_layers = nn.ModuleDict(
             {

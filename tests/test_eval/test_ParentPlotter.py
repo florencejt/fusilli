@@ -28,8 +28,7 @@ class ExampleModel:
         }
 
     def set_model_params(self, params):
-        self.model.params = params
-        self.model.pred_type = params["pred_type"]
+        self.model.prediction_task = params["prediction_task"]
 
     def set_params(self, params):
         for key, value in params.items():
@@ -46,13 +45,13 @@ def sample_kfold_model_data():
     model.set_model_params(
         {
             "kfold_flag": True,
-            "pred_type": "binary",
+            "prediction_task": "binary",
             "num_k": 2,
         }
     )
 
     model_data = {
-        "pred_type": "binary",
+        "prediction_task": "binary",
         "train_reals": [torch.tensor([1, 0, 1]), torch.tensor([0, 1, 0])],
         "train_preds": [torch.tensor([1, 0, 1]), torch.tensor([0, 1, 0])],
         "val_reals": [torch.tensor([1, 0, 1]), torch.tensor([0, 1, 0])],
@@ -75,12 +74,12 @@ def sample_train_test_model_data():
     model.set_model_params(
         {
             "kfold_flag": False,
-            "pred_type": "binary",
+            "prediction_task": "binary",
         }
     )
 
     model_data = {
-        "pred_type": "binary",
+        "prediction_task": "binary",
         "train_reals": torch.tensor([1, 0, 1]),
         "train_preds": torch.tensor([1, 0, 1]),
         "val_reals": torch.tensor([1, 0, 1]),
@@ -170,28 +169,14 @@ def test_get_new_kfold_data_called(sample_kfold_model_data, mocker):
     model_list = [sample_kfold_model_data, sample_kfold_model_data]
 
     # Call the method
-    RealsVsPreds.from_new_data(model_list, sample_kfold_model_data.val_reals[0])
+    RealsVsPreds.from_new_data(model_list, output_paths={}, test_data_paths={})
     ParentPlotter.get_new_kfold_data.assert_called()
 
     # Confusion Matrix
-    ConfusionMatrix.from_new_data(model_list, sample_kfold_model_data.val_reals[0])
+    ConfusionMatrix.from_new_data(model_list, output_paths={}, test_data_paths={})
     ParentPlotter.get_new_kfold_data.assert_called()
 
     assert ParentPlotter.get_new_kfold_data.call_count == 2
-
-
-# Test case for an error when model_list has more than 1 entry but kfold is False
-def test_error_when_kfold_false_with_multiple_models(sample_train_test_model_data):
-    # Create a sample model_list with kfold_flag as False
-    model_list = [sample_train_test_model_data, sample_train_test_model_data]
-
-    # Use pytest.raises to check if a ValueError is raised
-    with pytest.raises(ValueError, match="kfold_flag is False"):
-        RealsVsPreds.from_final_val_data(model_list)
-
-    # Confusion Matrix
-    with pytest.raises(ValueError, match="kfold_flag is False"):
-        ConfusionMatrix.from_final_val_data(model_list)
 
 
 # Test case for calling get_new_tt_data when len(model) == 1
@@ -243,26 +228,12 @@ def test_get_new_tt_data_called(sample_train_test_model_data, mocker):
     model_list = [sample_train_test_model_data]
 
     # Call the method
-    RealsVsPreds.from_new_data(model_list, sample_train_test_model_data.val_reals[0])
+    RealsVsPreds.from_new_data(model_list, output_paths={}, test_data_paths={})
     ParentPlotter.get_new_tt_data.assert_called()
 
     # Confusion Matrix
-    ConfusionMatrix.from_new_data(model_list, sample_train_test_model_data.val_reals[0])
+    ConfusionMatrix.from_new_data(model_list, output_paths={}, test_data_paths={})
     ParentPlotter.get_new_tt_data.assert_called()
 
     # Assert called twice
     assert ParentPlotter.get_new_tt_data.call_count == 2
-
-
-# Test case for an error when model_list has length 1 but kfold flag is true
-def test_error_when_kfold_true_with_single_model(sample_kfold_model_data):
-    # Create a sample model_list with kfold_flag as True
-    model_list = [sample_kfold_model_data]
-
-    # Use pytest.raises to check if a ValueError is raised
-    with pytest.raises(ValueError, match="kfold_flag is True"):
-        RealsVsPreds.from_final_val_data(model_list)
-
-    # confusion matrix
-    with pytest.raises(ValueError, match="kfold_flag is True"):
-        ConfusionMatrix.from_final_val_data(model_list)

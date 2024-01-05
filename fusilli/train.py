@@ -17,14 +17,17 @@ from fusilli.utils.csv_loss_plotter import plot_loss_curve
 
 def train_and_test(
         data_module,
-        params,
         k,
         fusion_model,
+        kfold,
         extra_log_string_dict=None,
         layer_mods=None,
         max_epochs=1000,
         enable_checkpointing=True,
         show_loss_plot=False,
+        wandb_logging=False,
+        project_name=None,
+        training_modifications=None,
 ):
     """
     Trains and tests a model and, if k_fold trained, a fold.
@@ -34,12 +37,12 @@ def train_and_test(
     data_module : pytorch lightning data module
         Data module.
         Contains the train and val dataloaders.
-    params : dict
-        Dictionary of parameters.
     k : int
         Fold number.
     fusion_model : class
         Fusion model class.
+    kfold : bool
+        Whether to train a kfold model.
     extra_log_string_dict : dict
         Dictionary of extra log strings. Extra string to add to the run name during logging.
             e.g. if you're running the same model with different hyperparameters, you can add
@@ -59,6 +62,13 @@ def train_and_test(
         Whether to show the loss plot. Default False.
         If True, the loss plot will be shown after training with ``plt.show()``
         If False, the loss plot will be saved to the log directory.
+    wandb_logging : bool
+        Whether to log to Weights and Biases. Default False.
+    project_name : str or None
+        Name of the project to log to in Weights and Biases. Default None.
+        If None, the project name will be called "fusilli".
+    training_modifications : dict
+        Dictionary of training modifications. Used to modify the training process. Keys could be "accelerator", "devices", "learning_rate"
 
     Returns
     -------
@@ -67,9 +77,9 @@ def train_and_test(
     trainer : pytorch lightning trainer
         Trained trainer.
     metric_1 : float
-        Metric 1 (depends on metric_name_list and params["pred_type"]).
+        Metric 1 (depends on metric_name_list and prediction_task.
     metric_2 : float
-        Metric 2 (depends on metric_name_list and params["pred_type"]).
+        Metric 2 (depends on metric_name_list and prediction_task.
     val_reals : list
         List of validation real values.
     val_preds : list
@@ -77,10 +87,9 @@ def train_and_test(
     """
 
     # define checkpoint filename
-    if params["kfold_flag"]:
+    if kfold:
         if enable_checkpointing:
             checkpoint_filename = set_checkpoint_name(
-                params,
                 fusion_model,
                 fold=k,
                 extra_log_string_dict=extra_log_string_dict,
@@ -90,16 +99,17 @@ def train_and_test(
 
         if fusion_model.fusion_type == "graph":
             data_module = data_module[k]
+            output_paths = data_module.output_paths
             train_dataloader = data_module.train_dataloader()
             val_dataloader = data_module.val_dataloader()
         else:
+            output_paths = data_module.output_paths
             train_dataloader = data_module.train_dataloader(fold_idx=k)
             val_dataloader = data_module.val_dataloader(fold_idx=k)
 
     else:
         if enable_checkpointing:
             checkpoint_filename = set_checkpoint_name(
-                params=params,
                 fusion_model=fusion_model,
                 extra_log_string_dict=extra_log_string_dict,
             )
@@ -108,24 +118,32 @@ def train_and_test(
 
         train_dataloader = data_module.train_dataloader()
         val_dataloader = data_module.val_dataloader()
+        output_paths = data_module.output_paths
 
-    logger = set_logger(params, k, fusion_model, extra_log_string_dict)  # set logger
+    logger = set_logger(fold=k,
+                        project_name=project_name,
+                        output_paths=output_paths,
+                        fusion_model=fusion_model,
+                        extra_log_string_dict=extra_log_string_dict,
+                        wandb_logging=wandb_logging,
+                        )  # set logger
 
     trainer = init_trainer(
         logger,
-        params=params,
+        output_paths=output_paths,
         max_epochs=max_epochs,
         enable_checkpointing=enable_checkpointing,
         checkpoint_filename=checkpoint_filename,
         own_early_stopping_callback=data_module.own_early_stopping_callback,
+        training_modifications=training_modifications,
     )  # init trainer
 
     # initialise model with pytorch lightning framework, hence pl_model
     pl_model = BaseModel(
         fusion_model(
-            pred_type=params["pred_type"],
+            prediction_task=data_module.prediction_task,
             data_dims=data_module.data_dims,  # data_dims is a list of tuples
-            params=params,  # params is a dict
+            multiclass_dimensions=data_module.multiclass_dimensions,
         )
     )
 
@@ -157,7 +175,7 @@ def train_and_test(
 
     # if logger is CSVLogger, plot loss curve
     if isinstance(logger, CSVLogger):
-        plot_loss_curve(params, logger, show=show_loss_plot)
+        plot_loss_curve(figures_path=output_paths["figures"], logger=logger, show=show_loss_plot)
 
     return pl_model
 
@@ -208,13 +226,14 @@ def _store_trained_model(trained_model, trained_models_dict):
 
 def train_and_save_models(
         data_module,
-        params,
         fusion_model,
+        wandb_logging=False,
         extra_log_string_dict=None,
         layer_mods=None,
         max_epochs=1000,
         enable_checkpointing=True,
         show_loss_plot=False,
+        project_name=None,
 ):
     """
     Trains/tests the model and saves the trained model to a dictionary for further analysis.
@@ -225,10 +244,10 @@ def train_and_save_models(
     ----------
     data_module : pytorch lightning data module
         Data module.
-    params : dict
-        Dictionary of parameters.
     fusion_model : class
         Fusion model class.
+    wandb_logging : bool
+        Whether to log to wandb. Default False.
     extra_log_string_dict : dict
         Dictionary of extra log strings. Extra string to add to the run name during logging.
         e.g. if you're running the same model with different hyperparameters, you can add
@@ -246,6 +265,9 @@ def train_and_save_models(
         Whether to enable checkpointing. Default True.
     show_loss_plot : bool
         Whether to show the loss plot. Default False.
+    project_name : str or None
+        Name of the project to log to in Weights and Biases. Default None.
+        If None, the project name will be called "fusilli".
 
     Returns
     -------
@@ -258,41 +280,58 @@ def train_and_save_models(
     # trained_models_dict = {}
     trained_models_list = []
 
-    if params["kfold_flag"]:
-        for k in range(params["num_k"]):
+    # checking to see if our model is a kfold model
+
+    if hasattr(data_module, "num_folds") and data_module.num_folds is not None:
+        kfold = True
+        num_folds = data_module.num_folds
+    elif isinstance(data_module, list):
+        if hasattr(data_module[0], "num_folds") and data_module[0].num_folds is not None:
+            kfold = True
+            num_folds = data_module[0].num_folds
+    else:
+        kfold = False
+        num_folds = None
+
+    if kfold:
+        for k in range(num_folds):
             trained_model = train_and_test(
                 data_module=data_module,
-                params=params,
                 k=k,
                 fusion_model=fusion_model,
+                kfold=kfold,
                 extra_log_string_dict=extra_log_string_dict,
                 layer_mods=layer_mods,
                 max_epochs=max_epochs,
                 enable_checkpointing=enable_checkpointing,
                 show_loss_plot=show_loss_plot,
+                wandb_logging=wandb_logging,
+                project_name=project_name,
             )
 
             trained_models_list.append(trained_model)
 
-            if params["log"]:
+            if wandb_logging:
                 wandb.finish()
 
     else:
         trained_model = train_and_test(
             data_module=data_module,
-            params=params,
             k=None,
             fusion_model=fusion_model,
+            kfold=kfold,
             extra_log_string_dict=extra_log_string_dict,
             layer_mods=layer_mods,
             max_epochs=max_epochs,
             enable_checkpointing=enable_checkpointing,
             show_loss_plot=show_loss_plot,
+            wandb_logging=wandb_logging,
+            project_name=project_name,
         )
 
         trained_models_list.append(trained_model)
 
-        if params["log"]:
+        if wandb_logging:
             wandb.finish()
 
     return trained_models_list

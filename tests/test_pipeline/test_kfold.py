@@ -1,5 +1,5 @@
 import pytest
-from fusilli.data import get_data_module
+from fusilli.data import prepare_fusion_data
 from fusilli.train import train_and_save_models
 from fusilli.utils.model_chooser import import_chosen_fusion_models
 from fusilli.eval import ConfusionMatrix
@@ -13,8 +13,7 @@ import matplotlib.pyplot as plt
 @pytest.mark.filterwarnings("ignore:.*No negative samples in targets,*.")
 @pytest.mark.filterwarnings("ignore:.*exists and is not empty*.")
 def test_train_and_test(create_test_files, tmp_path):
-    model_conditions = {"modality_type": "all"}
-    fusion_models = import_chosen_fusion_models(model_conditions, skip_models=["MCVAE_tab"])
+    model_conditions = {"modality_type": "all", }
 
     tabular1_csv = create_test_files["tabular1_csv"]
     tabular2_csv = create_test_files["tabular2_csv"]
@@ -28,6 +27,8 @@ def test_train_and_test(create_test_files, tmp_path):
 
     local_fig_path = tmp_path / "local_fig_path"
     local_fig_path.mkdir()
+    loss_fig_path = local_fig_path / "losses"
+    loss_fig_path.mkdir()
 
     checkpoint_dir = tmp_path / "checkpoint_dir"
     checkpoint_dir.mkdir()
@@ -38,33 +39,44 @@ def test_train_and_test(create_test_files, tmp_path):
 
     params = {
         # "test_size": 0.2,
-        "pred_type": "binary",
-        "multiclass_dims": None,
-        "kfold_flag": True,
-        "num_k": 5,
-        "tabular1_source": tabular1_csv,
-        "tabular2_source": tabular2_csv,
-        "img_source": image_torch_file_2d,
-        "log": False,
-        "loss_fig_path": str(loss_fig_path),
-        "loss_log_dir": str(loss_log_dir),
-        "local_fig_path": str(local_fig_path),
-        "checkpoint_dir": str(checkpoint_dir),
+        "prediction_task": "binary",
+        "multiclass_dimensions": None,
+        "kfold": True,
+        "num_folds": 5,
+        "wandb_logging": False,
     }
 
+    data_paths = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
+
+    output_paths = {
+        "checkpoints": str(checkpoint_dir),
+        "figures": str(local_fig_path),
+        "losses": str(loss_log_dir),
+    }
+
+    fusion_models = import_chosen_fusion_models(model_conditions, skip_models=["MCVAE_tab"])
+
     for model in fusion_models:
-        dm = get_data_module(fusion_model=model, params=params, layer_mods=modifications, max_epochs=2)
+        print("model", model)
+        dm = prepare_fusion_data(fusion_model=model,
+                                 data_paths=data_paths,
+                                 output_paths=output_paths,
+                                 layer_mods=modifications,
+                                 max_epochs=2,
+                                 **params)
 
         single_model_list = train_and_save_models(
             data_module=dm,
-            params=params,
             fusion_model=model,
             max_epochs=2,
             enable_checkpointing=False,
             layer_mods=modifications,
+            wandb_logging=False,
         )
-
-        # trained_model = list(single_model_dict.values())[0]
 
         assert single_model_list is not None
         assert len(single_model_list) == 5

@@ -37,10 +37,10 @@ def create_graph_data_module(create_test_files):
             pass
 
     data_module = TrainTestGraphDataModule(
-        params,
-        example_fusion_model,
-        sources,
+        fusion_model=example_fusion_model,
+        sources=sources,
         graph_creation_method=MockGraphMakerModule,
+        test_size=params["test_size"],
     )
 
     return data_module

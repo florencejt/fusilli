@@ -17,7 +17,7 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
 
     Attributes
     ----------
-    pred_type : str
+    prediction_task : str
         Type of prediction to be performed. Binary, regression or multiclass.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers defined with :func:`calc_fused_layers()`.
@@ -77,20 +77,20 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
     #: str: Type of fusion.
     fusion_type = "subspace"
 
-    def __init__(self, pred_type, data_dims, params):
+    def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
         Parameters
         ----------
-        pred_type : str
+        prediction_task : str
             Type of prediction to be performed.
         data_dims : list
-            Dictionary containing the dimensions of the data.
-        params : dict
-            Dictionary containing the parameters of the model.
+            List containing the dimensions of the data.
+        multiclass_dimensions : int
+            Number of classes in the multiclass classification task.
         """
-        ParentFusionModel.__init__(self, pred_type, data_dims, params)
+        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
 
-        self.pred_type = pred_type
+        self.prediction_task = prediction_task
         self.custom_loss = nn.MSELoss()
         self.img_dim = data_dims[-1]
 

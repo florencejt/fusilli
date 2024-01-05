@@ -135,7 +135,7 @@ Very similar to the general fusion model template in :ref:`how_to_contribute_a_t
 
 .. note::
 
-  The graph-maker class returns a ``torch_geometric.data.Data`` object, but in :func:`~.get_data_module`, this is converted to ``torch_geometric.data.lightning.LightningNodeData`` object, which lets you use the ``torch_geometric`` library with PyTorch Lightning.
+  The graph-maker class returns a ``torch_geometric.data.Data`` object, but in :func:`~.prepare_fusion_data`, this is converted to ``torch_geometric.data.lightning.LightningNodeData`` object, which lets you use the ``torch_geometric`` library with PyTorch Lightning.
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 107-156

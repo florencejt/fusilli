@@ -102,7 +102,7 @@ class TemplateGraphMaker:
 #
 # .. note::
 #
-#   The graph-maker class returns a ``torch_geometric.data.Data`` object, but in :func:`~.get_data_module`, this is converted to ``torch_geometric.data.lightning.LightningNodeData`` object, which lets you use the ``torch_geometric`` library with PyTorch Lightning.
+#   The graph-maker class returns a ``torch_geometric.data.Data`` object, but in :func:`~.prepare_fusion_data`, this is converted to ``torch_geometric.data.lightning.LightningNodeData`` object, which lets you use the ``torch_geometric`` library with PyTorch Lightning.
 #
 
 from torch_geometric.nn import GCNConv

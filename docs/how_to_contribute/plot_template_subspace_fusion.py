@@ -136,7 +136,7 @@ class TemplateSubspaceFusionModel(ParentFusionModel):
 # The ``.py`` file that contains the whole fusion model must have the following three things:
 #
 # 1. A PyTorch Lightning module which contains the subspace model architecture, e.g. ``class TemplateSubspaceModel(pl.LightningModule):``
-# 2. A class with the methods ``load_ckpt``, ``train``, and ``convert_to_latent``, which are used to load the pre-trained model, train a latent space, and convert data to a latent space respectively. These are called when the data for the fusion model is loaded in :func:`~.get_data_module`.
+# 2. A class with the methods ``load_ckpt``, ``train``, and ``convert_to_latent``, which are used to load the pre-trained model, train a latent space, and convert data to a latent space respectively. These are called when the data for the fusion model is loaded in :func:`~.prepare_fusion_data`.
 # 3. The fusion model class which contains the main prediction model architecture, e.g. ``class TemplateSubspaceFusionModel(ParentFusionModel, nn.Module):`` Similar to a general fusion model, this must have the methods ``__init__``, ``calc_fused_layers``, and ``forward``.
 #
 # This is a diagram of an example of a pre-trained subspace-based fusion model:
@@ -221,9 +221,9 @@ class TemplateSubspaceModel(pl.LightningModule):
 #
 # .. note::
 #
-#    The ``datamodule`` parameter is the data module that is created in :func:`~.get_data_module`. This is used to get the data for the subspace method.
+#    The ``datamodule`` parameter is the data module that is created in :func:`~.prepare_fusion_data`. This is used to get the data for the subspace method.
 #
-#  The input arguments that we need are ``datamodule``, ``k``, ``max_epochs``, and ``train_subspace``. These are all passed to this method during :func:`~.get_data_module`, so we need to make sure that we have these as input arguments.
+#  The input arguments that we need are ``datamodule``, ``k``, ``max_epochs``, and ``train_subspace``. These are all passed to this method during :func:`~.prepare_fusion_data`, so we need to make sure that we have these as input arguments.
 #
 # A couple things need to happen in the ``__init__`` method:
 #
