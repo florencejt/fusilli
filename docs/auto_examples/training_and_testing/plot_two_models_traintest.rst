@@ -134,7 +134,7 @@ Some optional parameters are:
 - ``multiclass_dimensions``: the number of classes to use for multiclass classification. Default is None unless ``prediction_task`` is ``multiclass``.
 - ``max_epochs``: the maximum number of epochs to train for. Default is 1000.
 
-.. GENERATED FROM PYTHON SOURCE LINES 70-96
+.. GENERATED FROM PYTHON SOURCE LINES 70-99
 
 .. code-block:: Python
 
@@ -156,6 +156,9 @@ Some optional parameters are:
         "figures": "figures/two_models_traintest",
     }
 
+    for path in output_paths.values():
+        os.makedirs(path, exist_ok=True)
+
     # Clearing the loss logs directory (only for the example notebooks)
     for dir in os.listdir(output_paths["losses"]):
         # remove files
@@ -165,14 +168,14 @@ Some optional parameters are:
         os.rmdir(os.path.join(output_paths["losses"], dir))
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 97-101
+.. GENERATED FROM PYTHON SOURCE LINES 100-104
 
 3. Generating simulated data 🔮
 --------------------------------
 Time to create some simulated data for our models to work their wonders on.
 This function also simulated image data which we aren't using here.
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-113
+.. GENERATED FROM PYTHON SOURCE LINES 104-116
 
 .. code-block:: Python
 
@@ -189,7 +192,7 @@ This function also simulated image data which we aren't using here.
     }
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 114-125
+.. GENERATED FROM PYTHON SOURCE LINES 117-128
 
 4. Training the first fusion model 🏁
 --------------------------------------
@@ -203,14 +206,14 @@ This function takes the following inputs:
 
 First we'll create a dictionary to store both the trained models so we can compare them later.
 
-.. GENERATED FROM PYTHON SOURCE LINES 125-127
+.. GENERATED FROM PYTHON SOURCE LINES 128-130
 
 .. code-block:: Python
 
     all_trained_models = {}  # create dictionary to store trained models
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 128-135
+.. GENERATED FROM PYTHON SOURCE LINES 131-138
 
 To train the first model we need to:
 
@@ -220,7 +223,7 @@ To train the first model we need to:
 4. *Train and test the model*: This is done with the :func:`~fusilli.train.train_and_save_models` function. This function takes the datamodule and the fusion model as inputs, as well as optional training modifications. It returns the trained model.
 5. *Add the trained model to the ``all_trained_models`` dictionary*: This is so we can compare the results of the two models later.
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-161
+.. GENERATED FROM PYTHON SOURCE LINES 138-164
 
 .. code-block:: Python
 
@@ -251,7 +254,7 @@ To train the first model we need to:
     all_trained_models[fusion_model.__name__] = model_1_list
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 162-167
+.. GENERATED FROM PYTHON SOURCE LINES 165-170
 
 5. Plotting the results of the first model 📊
 -----------------------------------------------
@@ -259,7 +262,7 @@ Let's unveil the results of our first model's hard work. We're using the :class:
 This class takes the trained model as an input and returns a plot of the real values vs the predicted values from the final validation data (when using from_final_val_data).
 If you want to plot the results from the test data, you can use from_new_data instead. See the example notebook on plotting with new data for more detail.
 
-.. GENERATED FROM PYTHON SOURCE LINES 167-172
+.. GENERATED FROM PYTHON SOURCE LINES 170-175
 
 .. code-block:: Python
 
@@ -269,17 +272,17 @@ If you want to plot the results from the test data, you can use from_new_data in
     plt.show()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 173-176
+.. GENERATED FROM PYTHON SOURCE LINES 176-179
 
 6. Training the second fusion model 🏁
 ---------------------------------------
  It's time for our second fusion model to shine! Here we train the second fusion model: TabularChannelWiseMultiAttention. We're using the same steps as before, but this time we're using the second model in the ``fusion_models`` list.
 
-.. GENERATED FROM PYTHON SOURCE LINES 179-180
+.. GENERATED FROM PYTHON SOURCE LINES 182-183
 
 Choose the model
 
-.. GENERATED FROM PYTHON SOURCE LINES 180-205
+.. GENERATED FROM PYTHON SOURCE LINES 183-208
 
 .. code-block:: Python
 
@@ -309,12 +312,12 @@ Choose the model
     all_trained_models[fusion_model.__name__] = model_2_list
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 206-208
+.. GENERATED FROM PYTHON SOURCE LINES 209-211
 
 7. Plotting the results of the second model 📊
 -----------------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 208-213
+.. GENERATED FROM PYTHON SOURCE LINES 211-216
 
 .. code-block:: Python
 
@@ -324,7 +327,7 @@ Choose the model
     plt.show()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 214-219
+.. GENERATED FROM PYTHON SOURCE LINES 217-222
 
 8. Comparing the results of the two models 📈
 ----------------------------------------------
@@ -332,7 +335,7 @@ Let the ultimate showdown begin! We're comparing the results of our two models.
 We're using the :class:`~fusilli.eval.ModelComparison` class to compare the results of the two models.
 This class takes the trained models as an input and returns a plot of the results of the two models and a Pandas DataFrame of the metrics of the two models.
 
-.. GENERATED FROM PYTHON SOURCE LINES 219-226
+.. GENERATED FROM PYTHON SOURCE LINES 222-229
 
 .. code-block:: Python
 
@@ -344,13 +347,13 @@ This class takes the trained models as an input and returns a plot of the result
     plt.show()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 227-230
+.. GENERATED FROM PYTHON SOURCE LINES 230-233
 
 9. Saving the metrics of the two models 💾
 -------------------------------------------
 Time to archive our models' achievements. We're using the :class:`~fusilli.eval.ModelComparison` class to save the metrics of the two models.
 
-.. GENERATED FROM PYTHON SOURCE LINES 230-232
+.. GENERATED FROM PYTHON SOURCE LINES 233-235
 
 .. code-block:: Python
 
@@ -360,7 +363,7 @@ Time to archive our models' achievements. We're using the :class:`~fusilli.eval.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.005 seconds)
+   **Total running time of the script:** (0 minutes 0.003 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_and_testing_plot_two_models_traintest.py:

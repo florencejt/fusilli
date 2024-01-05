@@ -115,7 +115,7 @@ data_paths = {
 layer_mods = {
     "AttentionWeightedGNN": {
         "graph_conv_layers": nn.Sequential(
-            ChebConv(15, 50, K=3),
+            ChebConv(20, 50, K=3),
             ChebConv(50, 100, K=3),
             ChebConv(100, 130, K=3),
         ),
@@ -127,7 +127,7 @@ layer_mods = {
         "AttentionWeightingMLPInstance.weighting_layers": nn.ModuleDict(
             {
                 "Layer 1": nn.Sequential(
-                    nn.Linear(25, 100),
+                    nn.Linear(30, 100),
                     nn.ReLU()),
                 "Layer 2": nn.Sequential(
                     nn.Linear(100, 75),
@@ -139,7 +139,7 @@ layer_mods = {
                     nn.Linear(75, 100),
                     nn.ReLU()),
                 "Layer 5": nn.Sequential(
-                    nn.Linear(100, 25),
+                    nn.Linear(100, 30),
                     nn.ReLU()),
             }
         )},
@@ -184,7 +184,7 @@ print("Fusion model:\n", trained_model_list[0].model)
 layer_mods = {
     "AttentionWeightedGraphMaker": {
         "AttentionWeightingMLPInstance.fake_attribute": nn.Sequential(
-            nn.Linear(25, 100),
+            nn.Linear(30, 100),
             nn.ReLU(),
         ),
     }
@@ -211,11 +211,11 @@ except Exception as error:
 layer_mods = {
     "AttentionWeightedGraphMaker": {
         "AttentionWeightingMLPInstance.weighting_layers": nn.Sequential(
-            nn.Linear(25, 75),
+            nn.Linear(30, 75),
             nn.ReLU(),
             nn.Linear(75, 75),
             nn.ReLU(),
-            nn.Linear(75, 25),
+            nn.Linear(75, 30),
             nn.ReLU()
         ),
     }
@@ -284,7 +284,7 @@ layer_mods = {
         "mod2_layers": nn.ModuleDict(
             {
                 "layer 1": nn.Sequential(
-                    nn.Linear(15, 45),
+                    nn.Linear(20, 45),
                     nn.ReLU(),
                 ),
                 "layer 2": nn.Sequential(
@@ -298,7 +298,7 @@ layer_mods = {
             }
         ),
         "fused_layers": nn.Sequential(
-            nn.Linear(25, 150),
+            nn.Linear(30, 150),
             nn.ReLU(),
             nn.Linear(150, 75),
             nn.ReLU(),

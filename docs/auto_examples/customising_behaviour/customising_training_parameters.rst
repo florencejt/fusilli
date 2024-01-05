@@ -55,14 +55,15 @@ callback. This callback can be passed to the
     )
 
     datamodule = prepare_fusion_data(
+            prediction_task="binanry",
             fusion_model=example_model,
-            params=params,
+            data_paths=data_paths,
+            output_paths=output_path,
             own_early_stopping_callback=modified_early_stopping_callback,
         )
 
     trained_model_list = train_and_save_models(
         data_module=datamodule,
-        params=params,
         fusion_model=example_model,
         )
 
@@ -82,14 +83,15 @@ The batch size can be set using the ``batch_size`` argument in the :func:`~.fusi
     from fusilli.train import train_and_save_models
 
     datamodule = prepare_fusion_data(
+            prediction_task="binary",
             fusion_model=example_model,
-            params=params,
-            batch_size=32,
+            data_paths=data_paths,
+            output_paths=output_path,
+            batch_size=32
         )
 
     trained_model_list = train_and_save_models(
             data_module=datamodule,
-            params=params,
             fusion_model=example_model,
             batch_size=32,
         )
@@ -112,14 +114,15 @@ Changing the ``max_epochs`` parameter is especially useful when wanting to run a
     from fusilli.train import train_and_save_models
 
     datamodule = prepare_fusion_data(
+            prediction_task="binary",
             fusion_model=example_model,
-            params=params,
+            data_paths=data_paths,
+            output_paths=output_path,
             max_epochs=5,
         )
 
     trained_model_list = train_and_save_models(
             data_module=datamodule,
-            params=params,
             fusion_model=example_model,
             max_epochs=5,
         )
@@ -149,15 +152,16 @@ You can add suffixes to the checkpoint names by passing a string to the ``extra_
     extra_suffix_dict = {"batchsize": 32}
 
     datamodule = prepare_fusion_data(
+            prediction_task="binary",
             fusion_model=example_model,
-            params=params,
+            data_paths=data_paths,
+            output_paths=output_path,
             batch_size=32,
             extra_log_string_dict=extra_suffix_dict,
         )
 
     trained_model_list = train_and_save_models(
             data_module=datamodule,
-            params=params,
             fusion_model=example_model,
             batch_size=32,
             extra_log_string_dict=extra_suffix_dict,
@@ -172,7 +176,7 @@ The checkpoint name would then be (if the model trained for 100 epochs):
 
     The ``extra_log_string_dict`` argument is also used to modify the logging behaviour of the model. For more information, see :ref:`wandb`.
 
-.. GENERATED FROM PYTHON SOURCE LINES 156-157
+.. GENERATED FROM PYTHON SOURCE LINES 160-161
 
 .. code-block:: Python
 

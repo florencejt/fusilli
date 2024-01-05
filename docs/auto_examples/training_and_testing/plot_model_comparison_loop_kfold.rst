@@ -164,7 +164,7 @@ Some optional parameters are:
 - ``multiclass_dimensions``: the number of classes to use for multiclass classification. Default is None unless ``prediction_task`` is ``multiclass``.
 - ``max_epochs``: the maximum number of epochs to train for. Default is 1000.
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-125
+.. GENERATED FROM PYTHON SOURCE LINES 99-129
 
 .. code-block:: Python
 
@@ -186,6 +186,10 @@ Some optional parameters are:
         "figures": "figures/model_comparison_loop_kfold",
     }
 
+    os.makedirs(output_paths["losses"], exist_ok=True)
+    os.makedirs(output_paths["checkpoints"], exist_ok=True)
+    os.makedirs(output_paths["figures"], exist_ok=True)
+
     # Clearing the loss logs directory (only for the example notebooks)
     for dir in os.listdir(output_paths["losses"]):
         # remove files
@@ -195,14 +199,14 @@ Some optional parameters are:
         os.rmdir(os.path.join(output_paths["losses"], dir))
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 126-130
+.. GENERATED FROM PYTHON SOURCE LINES 130-134
 
 3. Generating simulated data 🔮
 --------------------------------
 Time to create some simulated data for our models to work their wonders on.
 This function also simulated image data which we aren't using here.
 
-.. GENERATED FROM PYTHON SOURCE LINES 130-142
+.. GENERATED FROM PYTHON SOURCE LINES 134-146
 
 .. code-block:: Python
 
@@ -219,14 +223,14 @@ This function also simulated image data which we aren't using here.
     }
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 143-147
+.. GENERATED FROM PYTHON SOURCE LINES 147-151
 
 4. Training the all the fusion models 🏁
 -----------------------------------------
 In this section, we train all the fusion models using the generated data and specified parameters.
 We store the results of each model for later analysis.
 
-.. GENERATED FROM PYTHON SOURCE LINES 147-178
+.. GENERATED FROM PYTHON SOURCE LINES 151-182
 
 .. code-block:: Python
 
@@ -262,14 +266,14 @@ We store the results of each model for later analysis.
         plt.close("all")
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 179-183
+.. GENERATED FROM PYTHON SOURCE LINES 183-187
 
 5. Plotting the results of the individual models
 -------------------------------------------------
 In this section, we visualize the results of each individual model.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 183-188
+.. GENERATED FROM PYTHON SOURCE LINES 187-192
 
 .. code-block:: Python
 
@@ -279,13 +283,13 @@ In this section, we visualize the results of each individual model.
         plt.show()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 189-192
+.. GENERATED FROM PYTHON SOURCE LINES 193-196
 
 6. Plotting comparison of the models
 -------------------------------------
 In this section, we visualize the results of each individual model.
 
-.. GENERATED FROM PYTHON SOURCE LINES 192-196
+.. GENERATED FROM PYTHON SOURCE LINES 196-200
 
 .. code-block:: Python
 
@@ -294,13 +298,13 @@ In this section, we visualize the results of each individual model.
     plt.show()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 197-200
+.. GENERATED FROM PYTHON SOURCE LINES 201-204
 
 7. Saving the results of the models
 -------------------------------------
 In this section, we compare the performance of all the trained models using a violin chart, providing an overview of how each model performed as a distribution over the different cross-validation folds.
 
-.. GENERATED FROM PYTHON SOURCE LINES 200-202
+.. GENERATED FROM PYTHON SOURCE LINES 204-206
 
 .. code-block:: Python
 

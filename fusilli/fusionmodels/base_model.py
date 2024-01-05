@@ -23,7 +23,7 @@ class BaseModel(pl.LightningModule):
     ----------
     model : class
         Fusion model class.
-    multiclass_dim : int
+    multiclass_dimensions : int
         Number of classes for multiclass prediction. Default is 3 for making the metrics dictionary.
     train_mask : tensor
         Mask for training data, used for the graph fusion methods instead of train/val split.
@@ -79,9 +79,9 @@ class BaseModel(pl.LightningModule):
         self.model = model
         # self.prediction_task = model.prediction_task
         if self.model.prediction_task == "multiclass":
-            self.multiclass_dim = model.multiclass_dim
+            self.multiclass_dimensions = model.multiclass_dimensions
         else:
-            self.multiclass_dim = 3  # default value so metrics dict can be built
+            self.multiclass_dimensions = 3  # default value so metrics dict can be built
 
         if not hasattr(model, "subspace_method"):
             self.model.subspace_method = None
@@ -118,13 +118,13 @@ class BaseModel(pl.LightningModule):
             "multiclass": [
                 {
                     "metric": tm.AUROC(
-                        task="multiclass", num_classes=self.multiclass_dim
+                        task="multiclass", num_classes=self.multiclass_dimensions
                     ),
                     "name": "multiclass_auroc",  # needs logits
                 },
                 {
                     "metric": tm.Accuracy(
-                        task="multiclass", num_classes=self.multiclass_dim, top_k=1
+                        task="multiclass", num_classes=self.multiclass_dimensions, top_k=1
                     ),
                     "name": "multiclass_accuracy"
                     # Add additional metrics for multiclass classification if needed

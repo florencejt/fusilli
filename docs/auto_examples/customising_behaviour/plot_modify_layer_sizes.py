@@ -36,30 +36,34 @@ from fusilli.train import train_and_save_models
 
 from fusilli.fusionmodels.tabularfusion.attention_weighted_GNN import AttentionWeightedGNN
 
-params = {
-    "test_size": 0.2,
-    "kfold_flag": False,
-    "log": False,
-    "pred_type": "regression",
-    "loss_log_dir": "loss_logs/modify_layers",  # where the csv of the loss is saved for plotting later
-    "checkpoint_dir": "checkpoints",
-    "loss_fig_path": "loss_figures",
+prediction_task = "regression"
+
+output_paths = {
+    "checkpoints": "checkpoints",
+    "losses": "loss_logs/modify_layers",
+    "figures": "loss_figures",
 }
 
-# empty the loss log directory (only needed for this tutorial)
-for dir in os.listdir(params["loss_log_dir"]):
-    for file in os.listdir(os.path.join(params["loss_log_dir"], dir)):
-        os.remove(os.path.join(params["loss_log_dir"], dir, file))
-    # remove dir
-    os.rmdir(os.path.join(params["loss_log_dir"], dir))
+for dir in output_paths.values():
+    os.makedirs(dir, exist_ok=True)
 
-params = generate_sklearn_simulated_data(
-    num_samples=100,
-    num_tab1_features=10,
-    num_tab2_features=15,
-    img_dims=(1, 100, 100),
-    params=params,
-)
+# empty the loss log directory (only needed for this tutorial)
+for dir in os.listdir(output_paths["losses"]):
+    for file in os.listdir(os.path.join(output_paths["losses"], dir)):
+        os.remove(os.path.join(output_paths["losses"], dir, file))
+    # remove dir
+    os.rmdir(os.path.join(output_paths["losses"], dir))
+
+tabular1_path, tabular2_path = generate_sklearn_simulated_data(prediction_task,
+                                                               num_samples=500,
+                                                               num_tab1_features=10,
+                                                               num_tab2_features=20)
+
+data_paths = {
+    "tabular1": tabular1_path,
+    "tabular2": tabular2_path,
+    "image": "",
+}
 
 # %%
 # Specifying the model modifications
@@ -135,7 +139,7 @@ layer_mods = {
                     nn.Linear(75, 100),
                     nn.ReLU()),
                 "Layer 5": nn.Sequential(
-                    nn.Linear(100, 25),
+                    nn.Linear(100, 30),
                     nn.ReLU()),
             }
         )},
@@ -147,12 +151,16 @@ layer_mods = {
 
 
 # load data
-datamodule = prepare_fusion_data(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
+datamodule = prepare_fusion_data(prediction_task=prediction_task,
+                                 fusion_model=AttentionWeightedGNN,
+                                 data_paths=data_paths,
+                                 output_paths=output_paths,
+                                 layer_mods=layer_mods,
+                                 max_epochs=5)
 
 # train
 trained_model_list = train_and_save_models(
     data_module=datamodule,
-    params=params,
     fusion_model=AttentionWeightedGNN,
     layer_mods=layer_mods,
     max_epochs=5,
@@ -183,7 +191,12 @@ layer_mods = {
 }
 
 try:
-    datamodule = prepare_fusion_data(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
+    datamodule = prepare_fusion_data(prediction_task=prediction_task,
+                                     fusion_model=AttentionWeightedGNN,
+                                     data_paths=data_paths,
+                                     output_paths=output_paths,
+                                     layer_mods=layer_mods,
+                                     max_epochs=5)
 except Exception as error:
     print(error)
 
@@ -209,7 +222,12 @@ layer_mods = {
 }
 
 try:
-    prepare_fusion_data(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
+    prepare_fusion_data(prediction_task=prediction_task,
+                        fusion_model=AttentionWeightedGNN,
+                        data_paths=data_paths,
+                        output_paths=output_paths,
+                        layer_mods=layer_mods,
+                        max_epochs=5)
 except Exception as error:
     print(error)
 
@@ -222,7 +240,12 @@ layer_mods = {
 }
 
 try:
-    prepare_fusion_data(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
+    prepare_fusion_data(prediction_task=prediction_task,
+                        fusion_model=AttentionWeightedGNN,
+                        data_paths=data_paths,
+                        output_paths=output_paths,
+                        layer_mods=layer_mods,
+                        max_epochs=5)
 except Exception as error:
     print(error)
 
@@ -289,10 +312,14 @@ layer_mods = {
 
 from fusilli.fusionmodels.tabularfusion.concat_feature_maps import ConcatTabularFeatureMaps
 
-datamodule = prepare_fusion_data(ConcatTabularFeatureMaps, params, layer_mods=layer_mods)
+datamodule = prepare_fusion_data(prediction_task=prediction_task,
+                                 fusion_model=ConcatTabularFeatureMaps,
+                                 data_paths=data_paths,
+                                 output_paths=output_paths,
+                                 layer_mods=layer_mods,
+                                 max_epochs=5)
 trained_model_list = train_and_save_models(
     data_module=datamodule,
-    params=params,
     fusion_model=ConcatTabularFeatureMaps,
     layer_mods=layer_mods,
     max_epochs=5,
@@ -317,6 +344,6 @@ print(trained_model_list[0].model)
 
 # removing checkpoints
 
-for file in os.listdir(params["checkpoint_dir"]):
+for file in os.listdir(output_paths["checkpoints"]):
     # remove file
-    os.remove(os.path.join(params["checkpoint_dir"], file))
+    os.remove(os.path.join(output_paths["checkpoints"], file))

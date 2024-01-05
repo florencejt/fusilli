@@ -41,7 +41,7 @@ First, we will set up the experiment by importing the necessary packages, creati
 For a more detailed explanation of this process, please see the example tutorials.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-64
+.. GENERATED FROM PYTHON SOURCE LINES 25-68
 
 .. code-block:: Python
 
@@ -59,46 +59,43 @@ For a more detailed explanation of this process, please see the example tutorial
 
     from fusilli.fusionmodels.tabularfusion.attention_weighted_GNN import AttentionWeightedGNN
 
-    params = {
-        "test_size": 0.2,
-        "kfold_flag": False,
-        "log": False,
-        "pred_type": "regression",
-        "loss_log_dir": "loss_logs/modify_layers",  # where the csv of the loss is saved for plotting later
-        "checkpoint_dir": "checkpoints",
-        "loss_fig_path": "loss_figures",
+    prediction_task = "regression"
+
+    output_paths = {
+        "checkpoints": "checkpoints",
+        "losses": "loss_logs/modify_layers",
+        "figures": "loss_figures",
     }
 
+    for dir in output_paths.values():
+        os.makedirs(dir, exist_ok=True)
+
     # empty the loss log directory (only needed for this tutorial)
-    for dir in os.listdir(params["loss_log_dir"]):
-        for file in os.listdir(os.path.join(params["loss_log_dir"], dir)):
-            os.remove(os.path.join(params["loss_log_dir"], dir, file))
+    for dir in os.listdir(output_paths["losses"]):
+        for file in os.listdir(os.path.join(output_paths["losses"], dir)):
+            os.remove(os.path.join(output_paths["losses"], dir, file))
         # remove dir
-        os.rmdir(os.path.join(params["loss_log_dir"], dir))
+        os.rmdir(os.path.join(output_paths["losses"], dir))
 
-    params = generate_sklearn_simulated_data(
-        num_samples=100,
-        num_tab1_features=10,
-        num_tab2_features=15,
-        img_dims=(1, 100, 100),
-        params=params,
-    )
+    tabular1_path, tabular2_path = generate_sklearn_simulated_data(prediction_task,
+                                                                   num_samples=500,
+                                                                   num_tab1_features=10,
+                                                                   num_tab2_features=20)
 
-
-
-.. rst-class:: sphx-glr-script-out
-
-.. code-block:: pytb
-
-    Traceback (most recent call last):
-      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/customising_behaviour/plot_modify_layer_sizes.py", line 56, in <module>
-        params = generate_sklearn_simulated_data(
-    TypeError: generate_sklearn_simulated_data() got an unexpected keyword argument 'img_dims'
+    data_paths = {
+        "tabular1": tabular1_path,
+        "tabular2": tabular2_path,
+        "image": "",
+    }
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 65-110
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 69-114
 
 Specifying the model modifications
 ----------------------------------
@@ -146,7 +143,7 @@ The following modifications can be made to the **fusion** model :class:`~fusilli
 
 Let's modify the model! More info about how to do this can be found in :ref:`modifying-models`.
 
-.. GENERATED FROM PYTHON SOURCE LINES 110-144
+.. GENERATED FROM PYTHON SOURCE LINES 114-148
 
 .. code-block:: Python
 
@@ -178,42 +175,139 @@ Let's modify the model! More info about how to do this can be found in :ref:`mod
                         nn.Linear(75, 100),
                         nn.ReLU()),
                     "Layer 5": nn.Sequential(
-                        nn.Linear(100, 25),
+                        nn.Linear(100, 30),
                         nn.ReLU()),
                 }
             )},
     }
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 145-147
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 149-151
 
 Loading the data and training the model
 ---------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 147-161
+.. GENERATED FROM PYTHON SOURCE LINES 151-169
 
 .. code-block:: Python
 
 
 
     # load data
-    datamodule = prepare_fusion_data(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
+    datamodule = prepare_fusion_data(prediction_task=prediction_task,
+                                     fusion_model=AttentionWeightedGNN,
+                                     data_paths=data_paths,
+                                     output_paths=output_paths,
+                                     layer_mods=layer_mods,
+                                     max_epochs=5)
 
     # train
     trained_model_list = train_and_save_models(
         data_module=datamodule,
-        params=params,
         fusion_model=AttentionWeightedGNN,
         layer_mods=layer_mods,
         max_epochs=5,
     )
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 162-163
+
+.. rst-class:: sphx-glr-script-out
+
+.. code-block:: pytb
+
+    Traceback (most recent call last):
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/customising_behaviour/plot_modify_layer_sizes.py", line 154, in <module>
+        datamodule = prepare_fusion_data(prediction_task=prediction_task,
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/data.py", line 1460, in prepare_fusion_data
+        graph_data_module.setup()
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/data.py", line 1137, in setup
+        self.graph_data = self.graph_maker_instance.make_graph()
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/fusionmodels/tabularfusion/attention_weighted_GNN.py", line 374, in make_graph
+        self.trainer.fit(self.AttentionWeightingMLPInstance, train_dataloader, val_dataloader)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/trainer/trainer.py", line 544, in fit
+        call._call_and_handle_interrupt(
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/trainer/call.py", line 44, in _call_and_handle_interrupt
+        return trainer_fn(*args, **kwargs)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/trainer/trainer.py", line 580, in _fit_impl
+        self._run(model, ckpt_path=ckpt_path)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/trainer/trainer.py", line 989, in _run
+        results = self._run_stage()
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/trainer/trainer.py", line 1035, in _run_stage
+        self.fit_loop.run()
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/loops/fit_loop.py", line 202, in run
+        self.advance()
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/loops/fit_loop.py", line 359, in advance
+        self.epoch_loop.run(self._data_fetcher)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 136, in run
+        self.advance(data_fetcher)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 240, in advance
+        batch_output = self.automatic_optimization.run(trainer.optimizers[0], batch_idx, kwargs)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 187, in run
+        self._optimizer_step(batch_idx, closure)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 265, in _optimizer_step
+        call._call_lightning_module_hook(
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/trainer/call.py", line 157, in _call_lightning_module_hook
+        output = fn(*args, **kwargs)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/core/module.py", line 1282, in optimizer_step
+        optimizer.step(closure=optimizer_closure)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/core/optimizer.py", line 151, in step
+        step_output = self._strategy.optimizer_step(self._optimizer, closure, **kwargs)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/strategies/strategy.py", line 230, in optimizer_step
+        return self.precision_plugin.optimizer_step(optimizer, model=model, closure=closure, **kwargs)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/plugins/precision/precision.py", line 117, in optimizer_step
+        return optimizer.step(closure=closure, **kwargs)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/torch/optim/optimizer.py", line 373, in wrapper
+        out = func(*args, **kwargs)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/torch/optim/optimizer.py", line 76, in _use_grad
+        ret = func(self, *args, **kwargs)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/torch/optim/adam.py", line 143, in step
+        loss = closure()
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/plugins/precision/precision.py", line 104, in _wrap_closure
+        closure_result = closure()
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 140, in __call__
+        self._result = self.closure(*args, **kwargs)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+        return func(*args, **kwargs)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 126, in closure
+        step_output = self._step_fn()
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/loops/optimization/automatic.py", line 315, in _training_step
+        training_step_output = call._call_strategy_hook(trainer, "training_step", *kwargs.values())
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/trainer/call.py", line 309, in _call_strategy_hook
+        output = fn(*args, **kwargs)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/lightning/pytorch/strategies/strategy.py", line 382, in training_step
+        return self.lightning_module.training_step(*args, **kwargs)
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/fusionmodels/tabularfusion/attention_weighted_GNN.py", line 164, in training_step
+        y_hat, weights = self.forward((x1, x2))
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/fusionmodels/tabularfusion/attention_weighted_GNN.py", line 135, in forward
+        x = layer(x)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+        return self._call_impl(*args, **kwargs)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+        return forward_call(*args, **kwargs)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/torch/nn/modules/container.py", line 215, in forward
+        input = module(input)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+        return self._call_impl(*args, **kwargs)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+        return forward_call(*args, **kwargs)
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/site-packages/torch/nn/modules/linear.py", line 114, in forward
+        return F.linear(input, self.weight, self.bias)
+    RuntimeError: linear(): input and weight.T shapes cannot be multiplied (32x30 and 25x100)
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 170-171
 
 It worked! Let's have a look at the model structure to see what changes have been made.
 
-.. GENERATED FROM PYTHON SOURCE LINES 163-167
+.. GENERATED FROM PYTHON SOURCE LINES 171-175
 
 .. code-block:: Python
 
@@ -222,7 +316,7 @@ It worked! Let's have a look at the model structure to see what changes have bee
     print("Fusion model:\n", trained_model_list[0].model)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 168-175
+.. GENERATED FROM PYTHON SOURCE LINES 176-183
 
 You can see that the input features to the ``final_prediction`` layer changed to fit with our modification to the ``graph_conv_layers`` output features!
 
@@ -232,7 +326,7 @@ What happens when the modifications are incorrect?
 Let's see what happens when we try to modify an **attribute that doesn't exist**.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 175-190
+.. GENERATED FROM PYTHON SOURCE LINES 183-203
 
 .. code-block:: Python
 
@@ -247,12 +341,17 @@ Let's see what happens when we try to modify an **attribute that doesn't exist**
     }
 
     try:
-        datamodule = prepare_fusion_data(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
+        datamodule = prepare_fusion_data(prediction_task=prediction_task,
+                                         fusion_model=AttentionWeightedGNN,
+                                         data_paths=data_paths,
+                                         output_paths=output_paths,
+                                         layer_mods=layer_mods,
+                                         max_epochs=5)
     except Exception as error:
         print(error)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 191-197
+.. GENERATED FROM PYTHON SOURCE LINES 204-210
 
 What about modifying an attribute with the **wrong data type**?
 
@@ -261,7 +360,7 @@ What about modifying an attribute with the **wrong data type**?
 * ``edge_probability_threshold`` should be a ``float`` between 0 and 100.
 * ``AttentionWeightingMLPInstance.weighting_layers`` should be an ``nn.ModuleDict``
 
-.. GENERATED FROM PYTHON SOURCE LINES 197-216
+.. GENERATED FROM PYTHON SOURCE LINES 210-234
 
 .. code-block:: Python
 
@@ -280,12 +379,17 @@ What about modifying an attribute with the **wrong data type**?
     }
 
     try:
-        prepare_fusion_data(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
+        prepare_fusion_data(prediction_task=prediction_task,
+                            fusion_model=AttentionWeightedGNN,
+                            data_paths=data_paths,
+                            output_paths=output_paths,
+                            layer_mods=layer_mods,
+                            max_epochs=5)
     except Exception as error:
         print(error)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 217-229
+.. GENERATED FROM PYTHON SOURCE LINES 235-252
 
 .. code-block:: Python
 
@@ -297,12 +401,17 @@ What about modifying an attribute with the **wrong data type**?
     }
 
     try:
-        prepare_fusion_data(AttentionWeightedGNN, params, layer_mods=layer_mods, max_epochs=5)
+        prepare_fusion_data(prediction_task=prediction_task,
+                            fusion_model=AttentionWeightedGNN,
+                            data_paths=data_paths,
+                            output_paths=output_paths,
+                            layer_mods=layer_mods,
+                            max_epochs=5)
     except Exception as error:
         print(error)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 230-242
+.. GENERATED FROM PYTHON SOURCE LINES 253-265
 
 What about modifying multiple attributes with the **conflicting modifications**?
 -------------------------------------------------------------------------------------
@@ -317,7 +426,7 @@ The output features of our modified ``mod1_layers`` and ``mod2_layers`` are 100 
 
 Let's see what happens when we try to modify the model in this way. It should throw an error when the data is passed through the model.
 
-.. GENERATED FROM PYTHON SOURCE LINES 242-301
+.. GENERATED FROM PYTHON SOURCE LINES 265-328
 
 .. code-block:: Python
 
@@ -371,22 +480,26 @@ Let's see what happens when we try to modify the model in this way. It should th
 
     from fusilli.fusionmodels.tabularfusion.concat_feature_maps import ConcatTabularFeatureMaps
 
-    datamodule = prepare_fusion_data(ConcatTabularFeatureMaps, params, layer_mods=layer_mods)
+    datamodule = prepare_fusion_data(prediction_task=prediction_task,
+                                     fusion_model=ConcatTabularFeatureMaps,
+                                     data_paths=data_paths,
+                                     output_paths=output_paths,
+                                     layer_mods=layer_mods,
+                                     max_epochs=5)
     trained_model_list = train_and_save_models(
         data_module=datamodule,
-        params=params,
         fusion_model=ConcatTabularFeatureMaps,
         layer_mods=layer_mods,
         max_epochs=5,
     )
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 302-304
+.. GENERATED FROM PYTHON SOURCE LINES 329-331
 
 **Wow it still works!**
 Let's have a look at what the model structure looks like to see what changes have been made to keep the model valid.
 
-.. GENERATED FROM PYTHON SOURCE LINES 304-307
+.. GENERATED FROM PYTHON SOURCE LINES 331-334
 
 .. code-block:: Python
 
@@ -394,7 +507,7 @@ Let's have a look at what the model structure looks like to see what changes hav
     print(trained_model_list[0].model)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 308-317
+.. GENERATED FROM PYTHON SOURCE LINES 335-344
 
 As you can see, a few corrections have been made to the modifications:
 
@@ -406,21 +519,21 @@ If the input number of nodes to a modification is not correct, then the model wi
 This is the case for quite a few modifications, but potentially not all of them so please be careful!
 Make sure to print out the model structure to check that the modifications have been made correctly and see what changes have been made to keep the model valid.
 
-.. GENERATED FROM PYTHON SOURCE LINES 317-323
+.. GENERATED FROM PYTHON SOURCE LINES 344-350
 
 .. code-block:: Python
 
 
     # removing checkpoints
 
-    for file in os.listdir(params["checkpoint_dir"]):
+    for file in os.listdir(output_paths["checkpoints"]):
         # remove file
-        os.remove(os.path.join(params["checkpoint_dir"], file))
+        os.remove(os.path.join(output_paths["checkpoints"], file))
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.357 seconds)
+   **Total running time of the script:** (0 minutes 0.796 seconds)
 
 
 .. _sphx_glr_download_auto_examples_customising_behaviour_plot_modify_layer_sizes.py:

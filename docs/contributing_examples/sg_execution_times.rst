@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.004** total execution time for 3 files **from contributing_examples**:
+**00:00.005** total execution time for 3 files **from contributing_examples**:
 
 .. container::
 
@@ -33,7 +33,7 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_contributing_examples_plot_template_subspace_fusion.py` (``plot_template_subspace_fusion.py``)
-     - 00:00.004
+     - 00:00.005
      - 0.0
    * - :ref:`sphx_glr_contributing_examples_A_template_other_fusion.py` (``A_template_other_fusion.py``)
      - 00:00.000

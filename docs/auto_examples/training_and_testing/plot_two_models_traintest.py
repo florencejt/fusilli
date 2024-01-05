@@ -85,6 +85,9 @@ output_paths = {
     "figures": "figures/two_models_traintest",
 }
 
+for path in output_paths.values():
+    os.makedirs(path, exist_ok=True)
+
 # Clearing the loss logs directory (only for the example notebooks)
 for dir in os.listdir(output_paths["losses"]):
     # remove files
