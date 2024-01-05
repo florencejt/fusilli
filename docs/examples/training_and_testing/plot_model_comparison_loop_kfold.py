@@ -80,34 +80,47 @@ fusion_models = import_chosen_fusion_models(model_conditions)
 # %%
 # 2. Set the training parameters 🎯
 # ---------------------------------
-# Let's configure our training parameters. The parameters are stored in a dictionary and passed to most
-# of the methods in this library.
+# Let's configure our training parameters.
 # For training and testing, the necessary parameters are:
 #
-# - ``kfold_flag``: the user sets this to True for k-fold cross validation.
-# - ``num_k``: the number of folds to use. It can't be k=1.
-# - ``log``: a boolean of whether to log the results using Weights and Biases (True) or not (False).
-# - ``pred_type``: the type of prediction to be performed. This is either ``regression``, ``binary``, or ``classification``. For this example we're using regression.
-# - ``loss_log_dir``: the directory to save the loss logs to. This is used for plotting the loss curves with ``log=False``.
+# - Paths to the input data files.
+# - Paths to the output directories.
+# - ``prediction_task``: the type of prediction to be performed. This is either ``regression``, ``binary``, or ``classification``.
 #
-# We're also setting our own batch_size for this example.
+# Some optional parameters are:
+#
+# - ``kfold``: a boolean of whether to use k-fold cross-validation (True) or not (False). By default, this is set to False.
+# - ``num_folds``: the number of folds to use. It can't be ``k=1``.
+# - ``wandb_logging``: a boolean of whether to log the results using Weights and Biases (True) or not (False). Default is False.
+# - ``test_size``: the proportion of the dataset to include in the test split. Default is 0.2.
+# - ``batch_size``: the batch size to use for training. Default is 8.
+# - ``multiclass_dimensions``: the number of classes to use for multiclass classification. Default is None unless ``prediction_task`` is ``multiclass``.
+# - ``max_epochs``: the maximum number of epochs to train for. Default is 1000.
 
+# Regression task (predicting a continuous variable)
+prediction_task = "regression"
 
-params = {
-    "kfold_flag": True,
-    "num_k": 3,
-    "log": False,
-    "pred_type": "regression",
-    "batch_size": 32,
-    "loss_log_dir": "loss_logs/model_comparison_loop_kfold",
+# Set the batch size
+batch_size = 32
+
+# Enable k-fold cross-validation with k=3
+kfold = True
+num_folds = 3
+
+# Setting output directories
+output_paths = {
+    "losses": "loss_logs/model_comparison_loop_kfold",
+    "checkpoints": "checkpoints/model_comparison_loop_kfold",
+    "figures": "figures/model_comparison_loop_kfold",
 }
 
-for dir in os.listdir(params["loss_log_dir"]):
+# Clearing the loss logs directory (only for the example notebooks)
+for dir in os.listdir(output_paths["losses"]):
     # remove files
-    for file in os.listdir(os.path.join(params["loss_log_dir"], dir)):
-        os.remove(os.path.join(params["loss_log_dir"], dir, file))
+    for file in os.listdir(os.path.join(output_paths["losses"], dir)):
+        os.remove(os.path.join(output_paths["losses"], dir, file))
     # remove dir
-    os.rmdir(os.path.join(params["loss_log_dir"], dir))
+    os.rmdir(os.path.join(output_paths["losses"], dir))
 
 # %%
 # 3. Generating simulated data 🔮
@@ -115,13 +128,16 @@ for dir in os.listdir(params["loss_log_dir"]):
 # Time to create some simulated data for our models to work their wonders on.
 # This function also simulated image data which we aren't using here.
 
-params = generate_sklearn_simulated_data(
-    num_samples=500,
-    num_tab1_features=10,
-    num_tab2_features=20,
-    img_dims=(1, 100, 100),
-    params=params,
-)
+tabular1_path, tabular2_path = generate_sklearn_simulated_data(prediction_task,
+                                                               num_samples=500,
+                                                               num_tab1_features=10,
+                                                               num_tab2_features=20)
+
+data_paths = {
+    "tabular1": tabular1_path,
+    "tabular2": tabular2_path,
+    "image": "",
+}
 
 # %%
 # 4. Training the all the fusion models 🏁
@@ -138,15 +154,20 @@ for i, fusion_model in enumerate(fusion_models):
     print(f"Running model {fusion_model_name}")
 
     # Get data module
-    data_module = prepare_fusion_data(fusion_model, params, batch_size=params["batch_size"])
+    data_module = prepare_fusion_data(prediction_task=prediction_task,
+                                      fusion_model=fusion_model,
+                                      data_paths=data_paths,
+                                      output_paths=output_paths,
+                                      kfold=kfold,
+                                      num_folds=num_folds,
+                                      batch_size=batch_size)
 
     # Train and test
     single_model_list = train_and_save_models(
         data_module=data_module,
-        params=params,
         fusion_model=fusion_model,
-        enable_checkpointing=False,  # False for the example notebooks
-        show_loss_plot=True,  # True for the example notebooks
+        enable_checkpointing=False,  # We're not saving the trained models for this example
+        show_loss_plot=True,  # We'll show the loss plot for each model instead of saving it
     )
 
     # Save to all_trained_models
@@ -159,9 +180,6 @@ for i, fusion_model in enumerate(fusion_models):
 # -------------------------------------------------
 # In this section, we visualize the results of each individual model.
 #
-# If you want to save the figures rather than show them, you can use the :meth:`~.save_to_local' method of the :class:`~fusilli.eval.Plotter` class.
-# This will save the figures in a timestamped folder in the current working directory with the method name and plot type in the filename.
-# You can add an extra suffix to the filename by passing a string to the ``extra_string`` argument of the :meth:`~fusilli.eval.Plotter.save_to_local` method.
 
 for model_name, model_list in all_trained_models.items():
     fig = RealsVsPreds.from_final_val_data(model_list)
@@ -179,6 +197,5 @@ plt.show()
 # 7. Saving the results of the models
 # -------------------------------------
 # In this section, we compare the performance of all the trained models using a violin chart, providing an overview of how each model performed as a distribution over the different cross-validation folds.
-
 
 metrics_dataframe
