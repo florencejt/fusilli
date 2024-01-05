@@ -5,6 +5,7 @@ logging is set to False. (If set to True, then a weights and biases logger is us
 
 import matplotlib.pyplot as plt
 import pandas as pd
+import os
 
 
 def plot_loss_curve(figures_path, logger, show=False):
@@ -83,5 +84,8 @@ def plot_loss_curve(figures_path, logger, show=False):
     if show:
         plt.show()
     else:
+        # if figures_path/losses does not exist, create it
+        if not os.path.exists(figures_path + "/losses"):
+            os.makedirs(figures_path + "/losses")
         plt.savefig(figures_path + "/losses/" + csv_name + ".png")
         plt.close()

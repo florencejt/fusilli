@@ -15,11 +15,10 @@ Here is the dictionary structure for defining necessary directories:
 
 .. code-block:: python
 
-    parameters_dictionary = {
-        "loss_fig_path": "{path to save loss figures}",
-        "loss_log_dir": "{path to save loss logs used for creating loss figures}",
-        "local_fig_path": "{path to save evaluation figures}",
-        "checkpoint_dir": "{path to save checkpoints}",
+    output_paths = {
+        "losses": "{path to save loss logs used for creating loss figures}",
+        "figures": "{path to save evaluation figures}",
+        "checkpoints": "{path to save checkpoints}",
     }
 
 
@@ -44,15 +43,14 @@ Here's an example block to set up the necessary directory structure:
     os.mkdir(f"local_figures/{run_name}") # local_figures
     os.mkdir(f"checkpoints/{run_name}") # checkpoints
     os.mkdir(f"loss_logs/{run_name}") # loss_log csvs
-    os.mkdir(f"local_figures/{run_name}/losses") # loss_figures dir within local_figures
 
     # Define paths in the dictionary
-    parameters_dictionary = {
-        "loss_fig_path": f"local_figures/{run_name}/losses",
-        "loss_log_dir": f"loss_logs/{run_name}",
-        "local_fig_path": f"local_figures/{run_name}",
-        "checkpoint_dir": f"checkpoints/{run_name}",
+    output_paths = {
+        "losses": f"loss_logs/{run_name}",
+        "figures": f"local_figures/{run_name}",
+        "checkpoints": f"checkpoints/{run_name}",
     }
+
 
 You could also use timestamps to create a unique directory for each run:
 
