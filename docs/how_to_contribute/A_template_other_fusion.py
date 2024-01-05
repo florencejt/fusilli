@@ -54,17 +54,17 @@ from fusilli.utils import check_model_validity
 #
 # :class:`~.ParentFusionModel` has 3 input arguments:
 #
-# * ``pred_type`` : a string telling the model what type of prediction to perform. This is specified by the user in their python script or notebook.
+# * ``prediction_task`` : a string telling the model what type of prediction to perform. This is specified by the user in their python script or notebook.
 # * ``data_dims`` : a list of the dimensions of the input data. This is calculated by :func:`~fusilli.data.prepare_fusion_data`.
-# * ``params`` : a dictionary containing the parameters of the model. This is specified by the user in their python script or notebook.
+# * ``multiclass_dimensions`` : the number of classes in a multiclass classification task. This is specified by the user in their python script or notebook. It is ``None`` if the task is not a multiclass classification task.
 #
 # These input arguments have to be passed into the ``__init__()`` function of our fusion model. When running this library, this is done automatically for you in
 # the :func:`~fusilli.train.train_and_save_models` function.
 
 
 class TemplateFusionModel(ParentFusionModel, nn.Module):
-    def __init__(self, pred_type, data_dims, params):
-        ParentFusionModel.__init__(self, pred_type, data_dims, params)
+    def __init__(self, prediction_task, data_dims, multiclass_dimensions):
+        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
 
     def forward(self, x):
         pass
@@ -91,8 +91,8 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
     # str: fusion type
     fusion_type = "attention"  # or "operation", "tensor", "graph", "subspace"
 
-    def __init__(self, pred_type, data_dims, params):
-        ParentFusionModel.__init__(self, pred_type, data_dims, params)
+    def __init__(self, prediction_task, data_dims, multiclass_dimensions):
+        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
 
     def forward(self, x):
         pass
@@ -118,7 +118,7 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
 # * :func:`~.set_mod2_layers` : sets the layers for the second tabular modality as ``self.mod2_layers``.
 # * :func:`~.set_img_layers` : sets the layers for the image modality as ``self.img_layers``.
 # * :func:`~.set_fused_layers` : sets some layers that take place after the fusion of the modalities (may not be applicable for all fusion models) as ``self.fused_layers``. For example, if you're concatenating feature maps from multiple modalities, the fused layers would be the layers after the concatenation and before the prediction.
-# * :func:`~.set_final_pred_layers` : sets the layers for the final prediction as ``self.final_predction``. We must set ``self.pred_type`` to the ``pred_type`` input argument of the ``__init__()`` function before calling this function. This is because the final prediction layers depend on the type of prediction we want to perform.
+# * :func:`~.set_final_pred_layers` : sets the layers for the final prediction as ``self.final_predction``. We must set ``self.prediction_task`` to the ``prediction_task`` input argument of the ``__init__()`` function before calling this function. This is because the final prediction layers depend on the type of prediction we want to perform.
 #
 # .. note::
 #   Calling ``self.set_mod1_layers()`` by itself is equivalent to calling ``self.mod1_layers = self.set_mod1_layers()``. This is because the ``set_mod1_layers()`` function assigns the layers to the ``mod1_layers`` attribute in :class:`~.ParentFusionModel`, which our model inherits from.
@@ -146,10 +146,10 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
     # str: fusion type
     fusion_type = "attention"  # or "operation", "tensor", "graph", "subspace"
 
-    def __init__(self, pred_type, data_dims, params):
-        ParentFusionModel.__init__(self, pred_type, data_dims, params)
+    def __init__(self, prediction_task, data_dims, multiclass_dimensions):
+        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
 
-        self.pred_type = pred_type
+        self.prediction_task = prediction_task
 
         self.set_mod1_layers()  # set the layers for the first tabular modality
         self.set_mod2_layers()  # set the layers for the second tabular modality
@@ -211,10 +211,10 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
     # str: fusion type
     fusion_type = "attention"  # or "operation", "tensor", "graph", "subspace"
 
-    def __init__(self, pred_type, data_dims, params):
-        ParentFusionModel.__init__(self, pred_type, data_dims, params)
+    def __init__(self, prediction_task, data_dims, multiclass_dimensions):
+        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
 
-        self.pred_type = pred_type
+        self.prediction_task = prediction_task
 
         self.set_mod1_layers()  # set the layers for the first tabular modality
         self.set_mod2_layers()  # set the layers for the second tabular modality
@@ -352,7 +352,7 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
         Type of modality.
     fusion_type : str
         Type of fusion.
-    pred_type : str
+    prediction_task : str
         Type of prediction to be performed.
     mod1_layers : dict
         Dictionary containing the layers of the first modality.
@@ -375,22 +375,22 @@ class TemplateFusionModel(ParentFusionModel, nn.Module):
     # str: fusion type
     fusion_type = "attention"  # or "operation", "tensor", "graph", "subspace"
 
-    def __init__(self, pred_type, data_dims, params):
+    def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
         Initialising the model.
 
         Parameters
         ----------
 
-        pred_type : str
+        prediction_task : str
             Type of prediction to be performed.
         data_dims : list
             List containing the dimensions of the data. This is calculated by :func:`~fusilli.data.prepare_fusion_data`.
-        params : dict
+        multiclass_dimensions : dict
             Dictionary containing the parameters of the model. This is specified by the user in their python script or notebook.
         """
-        ParentFusionModel.__init__(self, pred_type, data_dims, params)
-        self.pred_type = pred_type
+        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        self.prediction_task = prediction_task
 
         self.set_mod1_layers()  # set the layers for the first tabular modality
         self.set_mod2_layers()  # set the layers for the second tabular modality

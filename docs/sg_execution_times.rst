@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:12.208** total execution time for 8 files **from all galleries**:
+**00:18.671** total execution time for 9 files **from all galleries**:
 
 .. container::
 
@@ -33,24 +33,27 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_one_model_binary_kfold.py` (``examples/training_and_testing/plot_one_model_binary_kfold.py``)
-     - 00:12.125
+     - 00:18.299
      - 0.0
-   * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_model_comparison_loop_kfold.py` (``examples/training_and_testing/plot_model_comparison_loop_kfold.py``)
-     - 00:00.080
+   * - :ref:`sphx_glr_auto_examples_customising_behaviour_plot_modify_layer_sizes.py` (``examples/customising_behaviour/plot_modify_layer_sizes.py``)
+     - 00:00.357
      - 0.0
    * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_two_models_traintest.py` (``examples/training_and_testing/plot_two_models_traintest.py``)
+     - 00:00.005
+     - 0.0
+   * - :ref:`sphx_glr_contributing_examples_plot_template_subspace_fusion.py` (``how_to_contribute/plot_template_subspace_fusion.py``)
+     - 00:00.004
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_model_comparison_loop_kfold.py` (``examples/training_and_testing/plot_model_comparison_loop_kfold.py``)
+     - 00:00.003
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_using_external_data.py` (``examples/training_and_testing/plot_using_external_data.py``)
      - 00:00.003
      - 0.0
    * - :ref:`sphx_glr_auto_examples_customising_behaviour_customising_training_parameters.py` (``examples/customising_behaviour/customising_training_parameters.py``)
      - 00:00.000
      - 0.0
-   * - :ref:`sphx_glr_auto_examples_customising_behaviour_plot_modify_layer_sizes.py` (``examples/customising_behaviour/plot_modify_layer_sizes.py``)
-     - 00:00.000
-     - 0.0
    * - :ref:`sphx_glr_contributing_examples_A_template_other_fusion.py` (``how_to_contribute/A_template_other_fusion.py``)
-     - 00:00.000
-     - 0.0
-   * - :ref:`sphx_glr_contributing_examples_plot_template_subspace_fusion.py` (``how_to_contribute/plot_template_subspace_fusion.py``)
      - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_contributing_examples_template_graph_fusion.py` (``how_to_contribute/template_graph_fusion.py``)

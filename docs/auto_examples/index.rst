@@ -140,6 +140,23 @@ These are examples of how to train and validate fusion models with Fusilli.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Let&#x27;s learn how to use external test data with Fusilli! Some guidance can also be found in the ...">
+
+.. only:: html
+
+  .. image:: /auto_examples/training_and_testing/images/thumb/sphx_glr_plot_using_external_data_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_training_and_testing_plot_using_external_data.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Using External Test Data</div>
+    </div>
+
+
+.. raw:: html
+
     </div>
 
 

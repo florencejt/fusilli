@@ -391,7 +391,7 @@ e.g. [tab1, tab2] -> [tab1, tab2_latent]
         # returning the new train data
         new_pred_features = [tabular1_train_features, tabular2_train_features_latent]
         label_dataframe = pd.DataFrame(
-            train_labels, columns=["pred_label"]
+            train_labels, columns=["prediction_label"]
         )
 
         return [new_pred_features, label_dataframe]
@@ -503,7 +503,7 @@ As with the simultaneously-trained subspace-based fusion model, we need to think
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.005 seconds)
+   **Total running time of the script:** (0 minutes 0.004 seconds)
 
 
 .. _sphx_glr_download_contributing_examples_plot_template_subspace_fusion.py:

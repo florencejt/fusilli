@@ -49,7 +49,7 @@ Regression: Comparing Two Tabular Models Trained on Simulated Data
     from fusilli.train import train_and_save_models
     from fusilli.utils.model_chooser import import_chosen_fusion_models
 
-    # sphinx_gallery_thumbnail_number = 5
+    # sphinx_gallery_thumbnail_number = -1
 
 
 
@@ -96,7 +96,7 @@ We're importing ConcatTabularData and TabularChannelWiseMultiAttention models fo
         fusion_models, fusion_model_dict_without_skips = all_model_importer(fusion_model_dict, skip_models=skip_models)
       File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/utils/model_chooser.py", line 125, in all_model_importer
         module = importlib.import_module(module_path)
-      File "/Users/florencetownend/miniforge3/lib/python3.9/importlib/__init__.py", line 127, in import_module
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/importlib/__init__.py", line 127, in import_module
         return _bootstrap._gcd_import(name[level:], package, level)
       File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
       File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
@@ -111,94 +111,116 @@ We're importing ConcatTabularData and TabularChannelWiseMultiAttention models fo
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-61
+.. GENERATED FROM PYTHON SOURCE LINES 50-70
 
 2. Set the training parameters 🎯
 -----------------------------------
 Now, let's configure our training parameters. The parameters are stored in a dictionary and passed to most
 of the methods in this library.
+
 For training and testing, the necessary parameters are:
 
-- ``test_size``: the proportion of the data to be used for testing.
-- ``kfold_flag``: the user sets this to False for train/test protocol.
-- ``log``: a boolean of whether to log the results using Weights and Biases (True) or not (False).
-- ``pred_type``: the type of prediction to be performed. This is either ``regression``, ``binary``, or ``classification``. For this example we're using regression.
-- ``loss_log_dir``: the directory to save the loss logs to. This is used for plotting the loss curves.
+- Paths to the input data files.
+- Paths to the output directories.
+- ``prediction_task``: the type of prediction to be performed. This is either ``regression``, ``binary``, or ``classification``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-77
+Some optional parameters are:
+
+- ``kfold``: a boolean of whether to use k-fold cross-validation (True) or not (False). By default, this is set to False.
+- ``num_folds``: the number of folds to use. It can't be ``k=1``.
+- ``wandb_logging``: a boolean of whether to log the results using Weights and Biases (True) or not (False). Default is False.
+- ``test_size``: the proportion of the dataset to include in the test split. Default is 0.2.
+- ``batch_size``: the batch size to use for training. Default is 8.
+- ``multiclass_dimensions``: the number of classes to use for multiclass classification. Default is None unless ``prediction_task`` is ``multiclass``.
+- ``max_epochs``: the maximum number of epochs to train for. Default is 1000.
+
+.. GENERATED FROM PYTHON SOURCE LINES 70-96
 
 .. code-block:: Python
 
 
-    params = {
-        "test_size": 0.2,
-        "kfold_flag": False,
-        "log": False,
-        "pred_type": "regression",
-        "loss_log_dir": "loss_logs/two_models_traintest",  # where the csv of the loss is saved for plotting later
+
+    # Regression task (predicting a binary variable - 0 or 1)
+    prediction_task = "regression"
+
+    # Set the batch size
+    batch_size = 48
+
+    # Set the test_size
+    test_size = 0.3
+
+    # Setting output directories
+    output_paths = {
+        "losses": "loss_logs/two_models_traintest",
+        "checkpoints": "checkpoints/two_models_traintest",
+        "figures": "figures/two_models_traintest",
     }
 
-    # empty the loss log directory
-    for dir in os.listdir(params["loss_log_dir"]):
-        for file in os.listdir(os.path.join(params["loss_log_dir"], dir)):
-            os.remove(os.path.join(params["loss_log_dir"], dir, file))
+    # Clearing the loss logs directory (only for the example notebooks)
+    for dir in os.listdir(output_paths["losses"]):
+        # remove files
+        for file in os.listdir(os.path.join(output_paths["losses"], dir)):
+            os.remove(os.path.join(output_paths["losses"], dir, file))
         # remove dir
-        os.rmdir(os.path.join(params["loss_log_dir"], dir))
+        os.rmdir(os.path.join(output_paths["losses"], dir))
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 78-82
+.. GENERATED FROM PYTHON SOURCE LINES 97-101
 
 3. Generating simulated data 🔮
 --------------------------------
 Time to create some simulated data for our models to work their wonders on.
 This function also simulated image data which we aren't using here.
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-91
+.. GENERATED FROM PYTHON SOURCE LINES 101-113
 
 .. code-block:: Python
 
 
-    params = generate_sklearn_simulated_data(
-        num_samples=500,
-        num_tab1_features=10,
-        num_tab2_features=10,
-        img_dims=(1, 100, 100),
-        params=params,
-    )
+    tabular1_path, tabular2_path = generate_sklearn_simulated_data(prediction_task,
+                                                                   num_samples=500,
+                                                                   num_tab1_features=10,
+                                                                   num_tab2_features=20)
+
+    data_paths = {
+        "tabular1": tabular1_path,
+        "tabular2": tabular2_path,
+        "image": "",
+    }
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-103
+.. GENERATED FROM PYTHON SOURCE LINES 114-125
 
 4. Training the first fusion model 🏁
 --------------------------------------
 Here we train the first fusion model. We're using the ``train_and_save_models`` function to train and test the models.
 This function takes the following inputs:
 
-- ``trained_models_dict``: a dictionary to store the trained models.
-- ``data_module``: the data module containing the data.
-- ``params``: the parameters for training and testing.
+- ``prediction_task``: the type of prediction to be performed.
 - ``fusion_model``: the fusion model to be trained.
+- ``data_paths``: the paths to the input data files.
+- ``output_paths``: the paths to the output directories.
 
 First we'll create a dictionary to store both the trained models so we can compare them later.
 
-.. GENERATED FROM PYTHON SOURCE LINES 103-105
+.. GENERATED FROM PYTHON SOURCE LINES 125-127
 
 .. code-block:: Python
 
     all_trained_models = {}  # create dictionary to store trained models
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 106-113
+.. GENERATED FROM PYTHON SOURCE LINES 128-135
 
 To train the first model we need to:
 
 1. *Choose the model*: We're using the first model in the ``fusion_models`` list we made earlier.
 2. *Print the attributes of the model*: To check it's been initialised correctly.
-3. *Create the datamodule*: This is done with the :func:`~fusilli.data.prepare_fusion_data` function. This function takes the initialised model and the parameters as inputs. It returns the datamodule.
-4. *Train and test the model*: This is done with the :func:`~fusilli.train.train_and_save_models` function. This function takes the datamodule, the parameters, the fusion model, and the initialised model as inputs. It returns a list of the trained models (in this case, only one model).
+3. *Create the datamodule*: This is done with the :func:`~fusilli.data.prepare_fusion_data` function. This function takes the initialised model and some parameters as inputs. It returns the datamodule.
+4. *Train and test the model*: This is done with the :func:`~fusilli.train.train_and_save_models` function. This function takes the datamodule and the fusion model as inputs, as well as optional training modifications. It returns the trained model.
 5. *Add the trained model to the ``all_trained_models`` dictionary*: This is so we can compare the results of the two models later.
 
-.. GENERATED FROM PYTHON SOURCE LINES 113-135
+.. GENERATED FROM PYTHON SOURCE LINES 135-161
 
 .. code-block:: Python
 
@@ -210,12 +232,16 @@ To train the first model we need to:
     print("Fusion type:", fusion_model.fusion_type)
 
     # Create the data module
-    dm = prepare_fusion_data(fusion_model=fusion_model, params=params)
+    dm = prepare_fusion_data(prediction_task=prediction_task,
+                             fusion_model=fusion_model,
+                             data_paths=data_paths,
+                             output_paths=output_paths,
+                             batch_size=batch_size,
+                             test_size=test_size)
 
-    # Train and test
+    # train and test
     model_1_list = train_and_save_models(
         data_module=dm,
-        params=params,
         fusion_model=fusion_model,
         enable_checkpointing=False,  # False for the example notebooks
         show_loss_plot=True,
@@ -225,7 +251,7 @@ To train the first model we need to:
     all_trained_models[fusion_model.__name__] = model_1_list
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 136-141
+.. GENERATED FROM PYTHON SOURCE LINES 162-167
 
 5. Plotting the results of the first model 📊
 -----------------------------------------------
@@ -233,7 +259,7 @@ Let's unveil the results of our first model's hard work. We're using the :class:
 This class takes the trained model as an input and returns a plot of the real values vs the predicted values from the final validation data (when using from_final_val_data).
 If you want to plot the results from the test data, you can use from_new_data instead. See the example notebook on plotting with new data for more detail.
 
-.. GENERATED FROM PYTHON SOURCE LINES 141-146
+.. GENERATED FROM PYTHON SOURCE LINES 167-172
 
 .. code-block:: Python
 
@@ -243,17 +269,17 @@ If you want to plot the results from the test data, you can use from_new_data in
     plt.show()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 147-150
+.. GENERATED FROM PYTHON SOURCE LINES 173-176
 
 6. Training the second fusion model 🏁
 ---------------------------------------
  It's time for our second fusion model to shine! Here we train the second fusion model: TabularChannelWiseMultiAttention. We're using the same steps as before, but this time we're using the second model in the ``fusion_models`` list.
 
-.. GENERATED FROM PYTHON SOURCE LINES 153-154
+.. GENERATED FROM PYTHON SOURCE LINES 179-180
 
 Choose the model
 
-.. GENERATED FROM PYTHON SOURCE LINES 154-175
+.. GENERATED FROM PYTHON SOURCE LINES 180-205
 
 .. code-block:: Python
 
@@ -264,12 +290,16 @@ Choose the model
     print("Fusion type:", fusion_model.fusion_type)
 
     # Create the data module
-    dm = prepare_fusion_data(fusion_model=fusion_model, params=params)
+    dm = prepare_fusion_data(prediction_task=prediction_task,
+                             fusion_model=fusion_model,
+                             data_paths=data_paths,
+                             output_paths=output_paths,
+                             batch_size=batch_size,
+                             test_size=test_size)
 
-    # Train and test
+    # train and test
     model_2_list = train_and_save_models(
         data_module=dm,
-        params=params,
         fusion_model=fusion_model,
         enable_checkpointing=False,  # False for the example notebooks
         show_loss_plot=True,
@@ -279,12 +309,12 @@ Choose the model
     all_trained_models[fusion_model.__name__] = model_2_list
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 176-178
+.. GENERATED FROM PYTHON SOURCE LINES 206-208
 
 7. Plotting the results of the second model 📊
 -----------------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 178-183
+.. GENERATED FROM PYTHON SOURCE LINES 208-213
 
 .. code-block:: Python
 
@@ -294,7 +324,7 @@ Choose the model
     plt.show()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 184-189
+.. GENERATED FROM PYTHON SOURCE LINES 214-219
 
 8. Comparing the results of the two models 📈
 ----------------------------------------------
@@ -302,7 +332,7 @@ Let the ultimate showdown begin! We're comparing the results of our two models.
 We're using the :class:`~fusilli.eval.ModelComparison` class to compare the results of the two models.
 This class takes the trained models as an input and returns a plot of the results of the two models and a Pandas DataFrame of the metrics of the two models.
 
-.. GENERATED FROM PYTHON SOURCE LINES 189-196
+.. GENERATED FROM PYTHON SOURCE LINES 219-226
 
 .. code-block:: Python
 
@@ -314,13 +344,13 @@ This class takes the trained models as an input and returns a plot of the result
     plt.show()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 197-200
+.. GENERATED FROM PYTHON SOURCE LINES 227-230
 
 9. Saving the metrics of the two models 💾
 -------------------------------------------
 Time to archive our models' achievements. We're using the :class:`~fusilli.eval.ModelComparison` class to save the metrics of the two models.
 
-.. GENERATED FROM PYTHON SOURCE LINES 200-202
+.. GENERATED FROM PYTHON SOURCE LINES 230-232
 
 .. code-block:: Python
 
@@ -330,7 +360,7 @@ Time to archive our models' achievements. We're using the :class:`~fusilli.eval.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.003 seconds)
+   **Total running time of the script:** (0 minutes 0.005 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_and_testing_plot_two_models_traintest.py:

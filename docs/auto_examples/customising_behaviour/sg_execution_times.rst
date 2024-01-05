@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:04.777** total execution time for 2 files **from auto_examples/customising_behaviour**:
+**00:00.357** total execution time for 2 files **from auto_examples/customising_behaviour**:
 
 .. container::
 
@@ -33,7 +33,7 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_auto_examples_customising_behaviour_plot_modify_layer_sizes.py` (``plot_modify_layer_sizes.py``)
-     - 00:04.777
+     - 00:00.357
      - 0.0
    * - :ref:`sphx_glr_auto_examples_customising_behaviour_customising_training_parameters.py` (``customising_training_parameters.py``)
      - 00:00.000

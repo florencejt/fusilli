@@ -27,7 +27,7 @@ from fusilli.eval import RealsVsPreds, ModelComparison
 from fusilli.train import train_and_save_models
 from fusilli.utils.model_chooser import import_chosen_fusion_models
 
-# sphinx_gallery_thumbnail_number = 5
+# sphinx_gallery_thumbnail_number = -1
 
 # %%
 # 1. Import fusion models 🔍
@@ -51,28 +51,47 @@ fusion_models = import_chosen_fusion_models(model_conditions)
 # -----------------------------------
 # Now, let's configure our training parameters. The parameters are stored in a dictionary and passed to most
 # of the methods in this library.
+#
 # For training and testing, the necessary parameters are:
 #
-# - ``test_size``: the proportion of the data to be used for testing.
-# - ``kfold_flag``: the user sets this to False for train/test protocol.
-# - ``log``: a boolean of whether to log the results using Weights and Biases (True) or not (False).
-# - ``pred_type``: the type of prediction to be performed. This is either ``regression``, ``binary``, or ``classification``. For this example we're using regression.
-# - ``loss_log_dir``: the directory to save the loss logs to. This is used for plotting the loss curves.
+# - Paths to the input data files.
+# - Paths to the output directories.
+# - ``prediction_task``: the type of prediction to be performed. This is either ``regression``, ``binary``, or ``classification``.
+#
+# Some optional parameters are:
+#
+# - ``kfold``: a boolean of whether to use k-fold cross-validation (True) or not (False). By default, this is set to False.
+# - ``num_folds``: the number of folds to use. It can't be ``k=1``.
+# - ``wandb_logging``: a boolean of whether to log the results using Weights and Biases (True) or not (False). Default is False.
+# - ``test_size``: the proportion of the dataset to include in the test split. Default is 0.2.
+# - ``batch_size``: the batch size to use for training. Default is 8.
+# - ``multiclass_dimensions``: the number of classes to use for multiclass classification. Default is None unless ``prediction_task`` is ``multiclass``.
+# - ``max_epochs``: the maximum number of epochs to train for. Default is 1000.
 
-params = {
-    "test_size": 0.2,
-    "kfold_flag": False,
-    "log": False,
-    "pred_type": "regression",
-    "loss_log_dir": "loss_logs/two_models_traintest",  # where the csv of the loss is saved for plotting later
+
+# Regression task (predicting a binary variable - 0 or 1)
+prediction_task = "regression"
+
+# Set the batch size
+batch_size = 48
+
+# Set the test_size
+test_size = 0.3
+
+# Setting output directories
+output_paths = {
+    "losses": "loss_logs/two_models_traintest",
+    "checkpoints": "checkpoints/two_models_traintest",
+    "figures": "figures/two_models_traintest",
 }
 
-# empty the loss log directory
-for dir in os.listdir(params["loss_log_dir"]):
-    for file in os.listdir(os.path.join(params["loss_log_dir"], dir)):
-        os.remove(os.path.join(params["loss_log_dir"], dir, file))
+# Clearing the loss logs directory (only for the example notebooks)
+for dir in os.listdir(output_paths["losses"]):
+    # remove files
+    for file in os.listdir(os.path.join(output_paths["losses"], dir)):
+        os.remove(os.path.join(output_paths["losses"], dir, file))
     # remove dir
-    os.rmdir(os.path.join(params["loss_log_dir"], dir))
+    os.rmdir(os.path.join(output_paths["losses"], dir))
 
 # %%
 # 3. Generating simulated data 🔮
@@ -80,13 +99,16 @@ for dir in os.listdir(params["loss_log_dir"]):
 # Time to create some simulated data for our models to work their wonders on.
 # This function also simulated image data which we aren't using here.
 
-params = generate_sklearn_simulated_data(
-    num_samples=500,
-    num_tab1_features=10,
-    num_tab2_features=10,
-    img_dims=(1, 100, 100),
-    params=params,
-)
+tabular1_path, tabular2_path = generate_sklearn_simulated_data(prediction_task,
+                                                               num_samples=500,
+                                                               num_tab1_features=10,
+                                                               num_tab2_features=20)
+
+data_paths = {
+    "tabular1": tabular1_path,
+    "tabular2": tabular2_path,
+    "image": "",
+}
 
 # %%
 # 4. Training the first fusion model 🏁
@@ -94,10 +116,10 @@ params = generate_sklearn_simulated_data(
 # Here we train the first fusion model. We're using the ``train_and_save_models`` function to train and test the models.
 # This function takes the following inputs:
 #
-# - ``trained_models_dict``: a dictionary to store the trained models.
-# - ``data_module``: the data module containing the data.
-# - ``params``: the parameters for training and testing.
+# - ``prediction_task``: the type of prediction to be performed.
 # - ``fusion_model``: the fusion model to be trained.
+# - ``data_paths``: the paths to the input data files.
+# - ``output_paths``: the paths to the output directories.
 #
 # First we'll create a dictionary to store both the trained models so we can compare them later.
 all_trained_models = {}  # create dictionary to store trained models
@@ -107,8 +129,8 @@ all_trained_models = {}  # create dictionary to store trained models
 #
 # 1. *Choose the model*: We're using the first model in the ``fusion_models`` list we made earlier.
 # 2. *Print the attributes of the model*: To check it's been initialised correctly.
-# 3. *Create the datamodule*: This is done with the :func:`~fusilli.data.prepare_fusion_data` function. This function takes the initialised model and the parameters as inputs. It returns the datamodule.
-# 4. *Train and test the model*: This is done with the :func:`~fusilli.train.train_and_save_models` function. This function takes the datamodule, the parameters, the fusion model, and the initialised model as inputs. It returns a list of the trained models (in this case, only one model).
+# 3. *Create the datamodule*: This is done with the :func:`~fusilli.data.prepare_fusion_data` function. This function takes the initialised model and some parameters as inputs. It returns the datamodule.
+# 4. *Train and test the model*: This is done with the :func:`~fusilli.train.train_and_save_models` function. This function takes the datamodule and the fusion model as inputs, as well as optional training modifications. It returns the trained model.
 # 5. *Add the trained model to the ``all_trained_models`` dictionary*: This is so we can compare the results of the two models later.
 
 fusion_model = fusion_models[0]
@@ -118,12 +140,16 @@ print("Modality type:", fusion_model.modality_type)
 print("Fusion type:", fusion_model.fusion_type)
 
 # Create the data module
-dm = prepare_fusion_data(fusion_model=fusion_model, params=params)
+dm = prepare_fusion_data(prediction_task=prediction_task,
+                         fusion_model=fusion_model,
+                         data_paths=data_paths,
+                         output_paths=output_paths,
+                         batch_size=batch_size,
+                         test_size=test_size)
 
-# Train and test
+# train and test
 model_1_list = train_and_save_models(
     data_module=dm,
-    params=params,
     fusion_model=fusion_model,
     enable_checkpointing=False,  # False for the example notebooks
     show_loss_plot=True,
@@ -158,12 +184,16 @@ print("Modality type:", fusion_model.modality_type)
 print("Fusion type:", fusion_model.fusion_type)
 
 # Create the data module
-dm = prepare_fusion_data(fusion_model=fusion_model, params=params)
+dm = prepare_fusion_data(prediction_task=prediction_task,
+                         fusion_model=fusion_model,
+                         data_paths=data_paths,
+                         output_paths=output_paths,
+                         batch_size=batch_size,
+                         test_size=test_size)
 
-# Train and test
+# train and test
 model_2_list = train_and_save_models(
     data_module=dm,
-    params=params,
     fusion_model=fusion_model,
     enable_checkpointing=False,  # False for the example notebooks
     show_loss_plot=True,

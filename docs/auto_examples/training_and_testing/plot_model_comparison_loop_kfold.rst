@@ -62,7 +62,7 @@ Let's dive into each of these steps in detail:
 
 Now, let's walk through each of these steps in code and detail. Let's get started! 🌸
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-59
+.. GENERATED FROM PYTHON SOURCE LINES 46-61
 
 .. code-block:: Python
 
@@ -77,6 +77,8 @@ Now, let's walk through each of these steps in code and detail. Let's get starte
     from fusilli.train import train_and_save_models
     from fusilli.utils.model_chooser import import_chosen_fusion_models
 
+    # sphinx_gallery_thumbnail_number = -1
+
     # from IPython.utils import io  # for hiding the tqdm progress bar
 
 
@@ -86,7 +88,7 @@ Now, let's walk through each of these steps in code and detail. Let's get starte
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-71
+.. GENERATED FROM PYTHON SOURCE LINES 62-73
 
 1. Import fusion models 🔍
 ---------------------------
@@ -100,7 +102,7 @@ model's parent class. The paths are used to import the models with the :func:`im
 
 We're importing all the fusion models that use only tabular data for this example (either uni-modal or multi-modal).
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-78
+.. GENERATED FROM PYTHON SOURCE LINES 73-80
 
 .. code-block:: Python
 
@@ -118,7 +120,7 @@ We're importing all the fusion models that use only tabular data for this exampl
 .. code-block:: pytb
 
     Traceback (most recent call last):
-      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/training_and_testing/plot_model_comparison_loop_kfold.py", line 76, in <module>
+      File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/docs/examples/training_and_testing/plot_model_comparison_loop_kfold.py", line 78, in <module>
         fusion_models = import_chosen_fusion_models(model_conditions)
       File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/utils/model_chooser.py", line 323, in import_chosen_fusion_models
         imported_models = get_models(model_conditions, skip_models)
@@ -126,7 +128,7 @@ We're importing all the fusion models that use only tabular data for this exampl
         fusion_models, fusion_model_dict_without_skips = all_model_importer(fusion_model_dict, skip_models=skip_models)
       File "/Users/florencetownend/Library/CloudStorage/OneDrive-UniversityCollegeLondon/Projects/fusilli/fusilli/utils/model_chooser.py", line 125, in all_model_importer
         module = importlib.import_module(module_path)
-      File "/Users/florencetownend/miniforge3/lib/python3.9/importlib/__init__.py", line 127, in import_module
+      File "/Users/florencetownend/miniforge3/envs/fusion_eval/lib/python3.9/importlib/__init__.py", line 127, in import_module
         return _bootstrap._gcd_import(name[level:], package, level)
       File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
       File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
@@ -141,74 +143,90 @@ We're importing all the fusion models that use only tabular data for this exampl
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 79-92
+.. GENERATED FROM PYTHON SOURCE LINES 81-99
 
 2. Set the training parameters 🎯
 ---------------------------------
-Let's configure our training parameters. The parameters are stored in a dictionary and passed to most
-of the methods in this library.
+Let's configure our training parameters.
 For training and testing, the necessary parameters are:
 
-- ``kfold_flag``: the user sets this to True for k-fold cross validation.
-- ``num_k``: the number of folds to use. It can't be k=1.
-- ``log``: a boolean of whether to log the results using Weights and Biases (True) or not (False).
-- ``pred_type``: the type of prediction to be performed. This is either ``regression``, ``binary``, or ``classification``. For this example we're using regression.
-- ``loss_log_dir``: the directory to save the loss logs to. This is used for plotting the loss curves with ``log=False``.
+- Paths to the input data files.
+- Paths to the output directories.
+- ``prediction_task``: the type of prediction to be performed. This is either ``regression``, ``binary``, or ``classification``.
 
-We're also setting our own batch_size for this example.
+Some optional parameters are:
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-110
+- ``kfold``: a boolean of whether to use k-fold cross-validation (True) or not (False). By default, this is set to False.
+- ``num_folds``: the number of folds to use. It can't be ``k=1``.
+- ``wandb_logging``: a boolean of whether to log the results using Weights and Biases (True) or not (False). Default is False.
+- ``test_size``: the proportion of the dataset to include in the test split. Default is 0.2.
+- ``batch_size``: the batch size to use for training. Default is 8.
+- ``multiclass_dimensions``: the number of classes to use for multiclass classification. Default is None unless ``prediction_task`` is ``multiclass``.
+- ``max_epochs``: the maximum number of epochs to train for. Default is 1000.
+
+.. GENERATED FROM PYTHON SOURCE LINES 99-125
 
 .. code-block:: Python
 
 
+    # Regression task (predicting a continuous variable)
+    prediction_task = "regression"
 
-    params = {
-        "kfold_flag": True,
-        "num_k": 3,
-        "log": False,
-        "pred_type": "regression",
-        "batch_size": 32,
-        "loss_log_dir": "loss_logs/model_comparison_loop_kfold",
+    # Set the batch size
+    batch_size = 32
+
+    # Enable k-fold cross-validation with k=3
+    kfold = True
+    num_folds = 3
+
+    # Setting output directories
+    output_paths = {
+        "losses": "loss_logs/model_comparison_loop_kfold",
+        "checkpoints": "checkpoints/model_comparison_loop_kfold",
+        "figures": "figures/model_comparison_loop_kfold",
     }
 
-    for dir in os.listdir(params["loss_log_dir"]):
+    # Clearing the loss logs directory (only for the example notebooks)
+    for dir in os.listdir(output_paths["losses"]):
         # remove files
-        for file in os.listdir(os.path.join(params["loss_log_dir"], dir)):
-            os.remove(os.path.join(params["loss_log_dir"], dir, file))
+        for file in os.listdir(os.path.join(output_paths["losses"], dir)):
+            os.remove(os.path.join(output_paths["losses"], dir, file))
         # remove dir
-        os.rmdir(os.path.join(params["loss_log_dir"], dir))
+        os.rmdir(os.path.join(output_paths["losses"], dir))
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 111-115
+.. GENERATED FROM PYTHON SOURCE LINES 126-130
 
 3. Generating simulated data 🔮
 --------------------------------
 Time to create some simulated data for our models to work their wonders on.
 This function also simulated image data which we aren't using here.
 
-.. GENERATED FROM PYTHON SOURCE LINES 115-124
+.. GENERATED FROM PYTHON SOURCE LINES 130-142
 
 .. code-block:: Python
 
 
-    params = generate_sklearn_simulated_data(
-        num_samples=500,
-        num_tab1_features=10,
-        num_tab2_features=20,
-        img_dims=(1, 100, 100),
-        params=params,
-    )
+    tabular1_path, tabular2_path = generate_sklearn_simulated_data(prediction_task,
+                                                                   num_samples=500,
+                                                                   num_tab1_features=10,
+                                                                   num_tab2_features=20)
+
+    data_paths = {
+        "tabular1": tabular1_path,
+        "tabular2": tabular2_path,
+        "image": "",
+    }
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 125-129
+.. GENERATED FROM PYTHON SOURCE LINES 143-147
 
 4. Training the all the fusion models 🏁
 -----------------------------------------
 In this section, we train all the fusion models using the generated data and specified parameters.
 We store the results of each model for later analysis.
 
-.. GENERATED FROM PYTHON SOURCE LINES 129-155
+.. GENERATED FROM PYTHON SOURCE LINES 147-178
 
 .. code-block:: Python
 
@@ -222,15 +240,20 @@ We store the results of each model for later analysis.
         print(f"Running model {fusion_model_name}")
 
         # Get data module
-        data_module = prepare_fusion_data(fusion_model, params, batch_size=params["batch_size"])
+        data_module = prepare_fusion_data(prediction_task=prediction_task,
+                                          fusion_model=fusion_model,
+                                          data_paths=data_paths,
+                                          output_paths=output_paths,
+                                          kfold=kfold,
+                                          num_folds=num_folds,
+                                          batch_size=batch_size)
 
         # Train and test
         single_model_list = train_and_save_models(
             data_module=data_module,
-            params=params,
             fusion_model=fusion_model,
-            enable_checkpointing=False,  # False for the example notebooks
-            show_loss_plot=True,  # True for the example notebooks
+            enable_checkpointing=False,  # We're not saving the trained models for this example
+            show_loss_plot=True,  # We'll show the loss plot for each model instead of saving it
         )
 
         # Save to all_trained_models
@@ -239,17 +262,14 @@ We store the results of each model for later analysis.
         plt.close("all")
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 156-163
+.. GENERATED FROM PYTHON SOURCE LINES 179-183
 
 5. Plotting the results of the individual models
 -------------------------------------------------
 In this section, we visualize the results of each individual model.
 
-If you want to save the figures rather than show them, you can use the :meth:`~.save_to_local' method of the :class:`~fusilli.eval.Plotter` class.
-This will save the figures in a timestamped folder in the current working directory with the method name and plot type in the filename.
-You can add an extra suffix to the filename by passing a string to the ``extra_string`` argument of the :meth:`~fusilli.eval.Plotter.save_to_local` method.
 
-.. GENERATED FROM PYTHON SOURCE LINES 163-168
+.. GENERATED FROM PYTHON SOURCE LINES 183-188
 
 .. code-block:: Python
 
@@ -259,13 +279,13 @@ You can add an extra suffix to the filename by passing a string to the ``extra_s
         plt.show()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 169-172
+.. GENERATED FROM PYTHON SOURCE LINES 189-192
 
 6. Plotting comparison of the models
 -------------------------------------
 In this section, we visualize the results of each individual model.
 
-.. GENERATED FROM PYTHON SOURCE LINES 172-176
+.. GENERATED FROM PYTHON SOURCE LINES 192-196
 
 .. code-block:: Python
 
@@ -274,16 +294,15 @@ In this section, we visualize the results of each individual model.
     plt.show()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 177-180
+.. GENERATED FROM PYTHON SOURCE LINES 197-200
 
 7. Saving the results of the models
 -------------------------------------
 In this section, we compare the performance of all the trained models using a violin chart, providing an overview of how each model performed as a distribution over the different cross-validation folds.
 
-.. GENERATED FROM PYTHON SOURCE LINES 180-183
+.. GENERATED FROM PYTHON SOURCE LINES 200-202
 
 .. code-block:: Python
-
 
 
     metrics_dataframe
@@ -291,7 +310,7 @@ In this section, we compare the performance of all the trained models using a vi
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.080 seconds)
+   **Total running time of the script:** (0 minutes 0.003 seconds)
 
 
 .. _sphx_glr_download_auto_examples_training_and_testing_plot_model_comparison_loop_kfold.py:
