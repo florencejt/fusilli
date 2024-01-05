@@ -74,6 +74,10 @@ output_paths = {
     "figures": "figures/one_model_binary_kfold",
 }
 
+# Create the output directories if they don't exist
+for path in output_paths.values():
+    os.makedirs(path, exist_ok=True)
+
 # Clearing the loss logs directory (only for the example notebooks)
 for dir in os.listdir(output_paths["losses"]):
     # remove files

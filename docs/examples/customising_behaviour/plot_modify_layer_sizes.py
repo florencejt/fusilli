@@ -44,6 +44,9 @@ output_paths = {
     "figures": "loss_figures",
 }
 
+for dir in output_paths.values():
+    os.makedirs(dir, exist_ok=True)
+
 # empty the loss log directory (only needed for this tutorial)
 for dir in os.listdir(output_paths["losses"]):
     for file in os.listdir(os.path.join(output_paths["losses"], dir)):

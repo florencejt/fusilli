@@ -114,6 +114,10 @@ output_paths = {
     "figures": "figures/model_comparison_loop_kfold",
 }
 
+os.makedirs(output_paths["losses"], exist_ok=True)
+os.makedirs(output_paths["checkpoints"], exist_ok=True)
+os.makedirs(output_paths["figures"], exist_ok=True)
+
 # Clearing the loss logs directory (only for the example notebooks)
 for dir in os.listdir(output_paths["losses"]):
     # remove files

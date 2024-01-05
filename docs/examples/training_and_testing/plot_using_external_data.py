@@ -48,6 +48,9 @@ output_paths = {
     "figures": "figures/external_data",
 }
 
+for dir in output_paths.values():
+    os.makedirs(dir, exist_ok=True)
+
 # Clearing the loss logs directory (only for the example notebooks)
 for dir in os.listdir(output_paths["losses"]):
     # remove files
