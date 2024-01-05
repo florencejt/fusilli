@@ -373,7 +373,7 @@ class concat_img_latent_tab_subspace_method:
         # .unsqueeze(1)) removed
 
         return [tab_train, encoded_imgs.detach()], pd.DataFrame(
-            labels_train, columns=["pred_label"]
+            labels_train, columns=["prediction_label"]
         )
 
     def convert_to_latent(self, test_dataset):
@@ -405,7 +405,7 @@ class concat_img_latent_tab_subspace_method:
 
         return (
             [tab_val, encoded_imgs.detach()],
-            pd.DataFrame(label_val, columns=["pred_label"]),
+            pd.DataFrame(label_val, columns=["prediction_label"]),
             [tab_val.shape[1], encoded_imgs.shape[1], None],
         )
 

@@ -426,10 +426,10 @@ class Subspace:
 #             pass
 #
 #         def fit(self, *args, **kwargs):
-#             return torch.randn(10, 7), pd.DataFrame([0] * 10, columns=["pred_label"])
+#             return torch.randn(10, 7), pd.DataFrame([0] * 10, columns=["prediction_label"])
 #
 #         def validate(self, *args, **kwargs):
-#             return torch.randn(10, 3), pd.DataFrame([0] * 10, columns=["pred_label"])
+#             return torch.randn(10, 3), pd.DataFrame([0] * 10, columns=["prediction_label"])
 #
 #     with patch(mock_patch) as mck:
 #         mck.side_effect = mock_init_trainer
@@ -447,7 +447,7 @@ class Subspace:
 
 data1 = torch.randn(100, 15)
 data2 = torch.randn(100, 25)
-labels = pd.DataFrame({"pred_label": [0] * 100})
+labels = pd.DataFrame({"prediction_label": [0] * 100})
 dummy_dataset = CustomDataset([data1, data2], labels)
 
 
@@ -644,10 +644,10 @@ def test_concat_img_latent_tab_subspace_method_train(sample_tabimg_datamodule, m
             pass
 
         def fit(self, *args, **kwargs):
-            return torch.randn(10, 7), pd.DataFrame([0] * 10, columns=["pred_label"])
+            return torch.randn(10, 7), pd.DataFrame([0] * 10, columns=["prediction_label"])
 
         def validate(self, *args, **kwargs):
-            return torch.randn(10, 3), pd.DataFrame([0] * 10, columns=["pred_label"])
+            return torch.randn(10, 3), pd.DataFrame([0] * 10, columns=["prediction_label"])
 
     with patch(mock_patch) as mck:
         mck.side_effect = mock_init_trainer

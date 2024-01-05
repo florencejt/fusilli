@@ -10,32 +10,31 @@ Data Format Requirements
 
 Your data must adhere to specific formats for ``fusilli`` to read it correctly with the :func:`fusilli.data.prepare_fusion_data` function.
 
-
-The paths to the data source files must be in a parameters dictionary:
+The paths to the data source files must be in a dictionary before being passed to the :func:`fusilli.data.prepare_fusion_data` function.
 
 .. code-block:: python
 
-    params = {
-        "tabular1_source": "path/to/tabular1_data.csv",
-        "tabular2_source": "path/to/tabular2_data.csv",
-        "img_source": "path/to/image_data.pt",
+    data_paths = {
+        "tabular1": "path/to/tabular1_data.csv",
+        "tabular2": "path/to/tabular2_data.csv",
+        "image": "path/to/image_data.pt",
     }
 
 .. warning::
 
     If you are not using a particular data source, set the value to ``""``.
 
-    For example, if you are not using ``tabular2``, set ``tabular2_source`` in the dictionary to ``""``.
+    For example, if you are not using ``tabular2``, set ``tabular2`` in the dictionary to ``""``.
 
 Tabular and Tabular Data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 All tabular data must be in CSV format.
 
-Columns named ``study_id`` and ``pred_label`` are required:
+Columns named ``ID`` and ``prediction_label`` are required:
 
-- ``study_id``: Unique identifiers for each row.
-- ``pred_label``: Labels (integers for classification or floats for regression).
+- ``ID``: Unique identifiers for each row.
+- ``prediction_label``: Labels (integers for classification or floats for regression).
 
 
 **Example of loading two tabular modalities:**
@@ -44,13 +43,16 @@ Columns named ``study_id`` and ``pred_label`` are required:
 
     from fusilli.data import prepare_fusion_data
 
-    params = {
-        "tabular1_source": "path/to/tabular1_data.csv",
-        "tabular2_source": "path/to/tabular2_data.csv",
-        "img_source": "",
+    data_paths = {
+        "tabular1": "path/to/tabular1_data.csv",
+        "tabular2": "path/to/tabular2_data.csv",
+        "image": "",
     }
 
-    data_module = prepare_fusion_data(some_example_model, params)
+    data_module = prepare_fusion_data(prediction_task=...,
+                                      fusion_model=some_example_model,
+                                      data_paths=data_paths,
+                                      output_paths=...)
 
 Tabular and Image Data
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,14 +70,16 @@ For 100 3D 32x32x32 RGB images, my images.pt file would have the dimensions ``(1
 
     from fusilli.data import prepare_fusion_data
 
-    params = {
-        "tabular1_source": "path/to/tabular1_data.csv",
-        "tabular2_source": "",
-        "img_source": "path/to/image_data.pt",
+    data_paths = {
+        "tabular1": "path/to/tabular1_data.csv",
+        "tabular2": "",
+        "image": "path/to/image_data.pt",
     }
 
-    data_module = prepare_fusion_data(some_example_model, params)
-
+    data_module = prepare_fusion_data(prediction_task=...,
+                                      fusion_model=some_example_model,
+                                      data_paths=data_paths,
+                                      output_paths=...)
 Downsampling Images
 *********************
 
@@ -86,7 +90,11 @@ To downsample images before model input, use the ``image_downsample_size`` param
 .. code-block:: python
 
 
-    data_module = prepare_fusion_data(some_example_model, params, image_downsample_size=(16, 16))
+    data_module = prepare_fusion_data(prediction_task=...,
+                                      fusion_model=some_example_model,
+                                      data_paths=data_paths,
+                                      output_paths=...,
+                                      image_downsample_size=(16, 16))
 
 
 -----
@@ -96,13 +104,10 @@ Incorporating External Test Data
 
 For evaluating models with external test data:
 
-- Provide paths to test data sources in the ``params`` dictionary and add suffixes to the dictionary keys (default test suffix is "_test").
+- Provide paths to test data sources in another dictionary like ``data_paths`` with the same keys ``tabular1``, ``tabular2``, and ``image``.
 - Use the same data format as the training data.
 
 Calling the evaluation figures functions with the method ``from_new_data`` will evaluate the model on the external test data and plot the results.
-
-If you use a different suffix than the default "_test", you must pass the suffix to the evaluation function with the ``data_file_suffix`` parameter.
-
 
 **Example of training and evaluating a model with external test data:**
 
@@ -112,22 +117,28 @@ If you use a different suffix than the default "_test", you must pass the suffix
     from fusilli.train import train_and_save_models
     from fusilli.eval import RealsVsPreds
 
-    params = {
-        "tabular1_source": "path/to/tabular1_training_data.csv",
-        "tabular2_source": "path/to/tabular2_training_data.csv",
-        "img_source": "path/to/image_training_data.pt",
-        "tabular1_source_testing": "path/to/tabular1_test_data.csv",
-        "tabular2_source_testing": "path/to/tabular1_test_data.csv",
-        "img_source_testing": "path/to/image_test_data.pt",
+    data_paths = {
+        "tabular1": "path/to/tabular1_data.csv",
+        "tabular2": "path/to/tabular2_data.csv",
+        "image": "path/to/image_data.pt",
     }
 
-    # Using the training data (params["tabular1_source"], params["tabular2_source"], and params["img_source"])
-    data_module = prepare_fusion_data(fusion_model=some_example_model, params=params)
+    external_test_data_paths = {
+        "tabular1": "path/to/tabular1_test_data.csv",
+        "tabular2": "path/to/tabular2_test_data.csv",
+        "image": "path/to/image_test_data.pt",
+    }
 
-    # Train the model on params["tabular1_source"], params["tabular2_source"], and params["img_source"]
-    trained_model= train_and_save_models(data_module, params, some_example_model)
+    # Using the training data
+    data_module = prepare_fusion_data(prediction_task=...,
+                                      fusion_model=some_example_model,
+                                      data_paths=data_paths,
+                                      output_paths=...)
 
-    # Evaluate the model on the external test data:
-    # params["tabular1_source_testing"], params["tabular2_source_testing"], and params["img_source_testing"]
-    RealsVsPreds.from_new_data(trained_model, params, data_file_suffix="_testing")
+    # Train the model on the training data
+    trained_model= train_and_save_models(data_module=data_module,
+                                        fusion_model=some_example_model)
+
+    # Evaluate the model on the external test data
+    RealsVsPreds.from_new_data(trained_model, output_paths=..., test_data_paths=external_test_data_paths)
 

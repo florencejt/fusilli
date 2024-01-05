@@ -115,7 +115,7 @@ class CustomDataset(Dataset):
             List of tensors or tensor of predictive features
             (i.e. tabular or image data without labels).
         labels : dataframe
-            Dataframe of labels (column name must be "pred_label").
+            Dataframe of labels (column name must be "prediction_label").
 
         Raises
         ------
@@ -142,8 +142,8 @@ class CustomDataset(Dataset):
             )
 
         # convert labels to tensor and correct dtype
-        label_type = labels[["pred_label"]].values.dtype
-        self.labels = torch.tensor(labels[["pred_label"]].to_numpy().reshape(-1))
+        label_type = labels[["prediction_label"]].values.dtype
+        self.labels = torch.tensor(labels[["prediction_label"]].to_numpy().reshape(-1))
         if label_type == "int64":
             self.labels = self.labels.long()
         else:
@@ -214,7 +214,7 @@ class LoadDatasets:
             If sources is not a list.
         ValueError
             If the CSVs do not have the right columns or if the index column is not named
-            "study_id".
+            "ID".
 
         """
         self.tabular1_source, self.tabular2_source, self.img_source = sources
@@ -223,18 +223,18 @@ class LoadDatasets:
         )
 
         # read in the csv files and raise errors if they don't have the right columns
-        # or if the index column is not named "study_id"
+        # or if the index column is not named "ID"
         tab1_df = pd.read_csv(self.tabular1_source)
         tab2_df = pd.read_csv(self.tabular2_source)
 
-        if "study_id" not in tab1_df.columns:
-            raise ValueError("The CSV must have an index column named 'study_id'.")
-        if "pred_label" not in tab1_df.columns:
-            raise ValueError("The CSV must have a label column named 'pred_label'.")
-        if "study_id" not in tab2_df.columns:
-            raise ValueError("The CSV must have an index column named 'study_id'.")
-        if "pred_label" not in tab2_df.columns:
-            raise ValueError("The CSV must have a label column named 'pred_label'.")
+        if "ID" not in tab1_df.columns:
+            raise ValueError("The CSV must have an index column named 'ID'.")
+        if "prediction_label" not in tab1_df.columns:
+            raise ValueError("The CSV must have a label column named 'prediction_label'.")
+        if "ID" not in tab2_df.columns:
+            raise ValueError("The CSV must have an index column named 'ID'.")
+        if "prediction_label" not in tab2_df.columns:
+            raise ValueError("The CSV must have a label column named 'prediction_label'.")
 
     def load_tabular1(self):
         """
@@ -251,12 +251,12 @@ class LoadDatasets:
         """
         tab_df = pd.read_csv(self.tabular1_source)
 
-        tab_df.set_index("study_id", inplace=True)
+        tab_df.set_index("ID", inplace=True)
 
-        pred_features = torch.Tensor(tab_df.drop(columns=["pred_label"]).values)
-        pred_label = tab_df[["pred_label"]]
+        pred_features = torch.Tensor(tab_df.drop(columns=["prediction_label"]).values)
+        prediction_label = tab_df[["prediction_label"]]
 
-        dataset = CustomDataset(pred_features, pred_label)
+        dataset = CustomDataset(pred_features, prediction_label)
 
         mod1_dim = pred_features.shape[1]
 
@@ -277,12 +277,12 @@ class LoadDatasets:
 
         tab_df = pd.read_csv(self.tabular2_source)
 
-        tab_df.set_index("study_id", inplace=True)
+        tab_df.set_index("ID", inplace=True)
 
-        pred_features = torch.Tensor(tab_df.drop(columns=["pred_label"]).values)
-        pred_label = tab_df[["pred_label"]]
+        pred_features = torch.Tensor(tab_df.drop(columns=["prediction_label"]).values)
+        prediction_label = tab_df[["prediction_label"]]
 
-        dataset = CustomDataset(pred_features, pred_label)
+        dataset = CustomDataset(pred_features, prediction_label)
         mod2_dim = pred_features.shape[1]
 
         return dataset, [None, mod2_dim, None]
@@ -306,11 +306,11 @@ class LoadDatasets:
         # get the labels from the tabular1 dataset
         label_df = pd.read_csv(self.tabular1_source)
 
-        label_df.set_index("study_id", inplace=True)
+        label_df.set_index("ID", inplace=True)
 
-        pred_label = label_df[["pred_label"]]
+        prediction_label = label_df[["prediction_label"]]
 
-        dataset = CustomDataset(all_scans_ds, pred_label)
+        dataset = CustomDataset(all_scans_ds, prediction_label)
 
         img_dim = list(all_scans_ds.shape[2:])  # not including batch size or channels
 
@@ -332,14 +332,14 @@ class LoadDatasets:
         tab1_df = pd.read_csv(self.tabular1_source)
         tab2_df = pd.read_csv(self.tabular2_source)
 
-        tab1_df.set_index("study_id", inplace=True)
-        tab2_df.set_index("study_id", inplace=True)
+        tab1_df.set_index("ID", inplace=True)
+        tab2_df.set_index("ID", inplace=True)
 
-        tab1_pred_features = torch.Tensor(tab1_df.drop(columns=["pred_label"]).values)
-        tab2_pred_features = torch.Tensor(tab2_df.drop(columns=["pred_label"]).values)
+        tab1_pred_features = torch.Tensor(tab1_df.drop(columns=["prediction_label"]).values)
+        tab2_pred_features = torch.Tensor(tab2_df.drop(columns=["prediction_label"]).values)
 
-        pred_label = tab1_df[["pred_label"]]
-        dataset = CustomDataset([tab1_pred_features, tab2_pred_features], pred_label)
+        prediction_label = tab1_df[["prediction_label"]]
+        dataset = CustomDataset([tab1_pred_features, tab2_pred_features], prediction_label)
 
         mod1_dim = tab1_pred_features.shape[1]
         mod2_dim = tab2_pred_features.shape[1]
@@ -361,10 +361,10 @@ class LoadDatasets:
 
         tab1_df = pd.read_csv(self.tabular1_source)
 
-        tab1_df.set_index("study_id", inplace=True)
+        tab1_df.set_index("ID", inplace=True)
 
-        tab1_features = torch.Tensor(tab1_df.drop(columns=["pred_label"]).values)
-        label_df = tab1_df[["pred_label"]]
+        tab1_features = torch.Tensor(tab1_df.drop(columns=["prediction_label"]).values)
+        label_df = tab1_df[["prediction_label"]]
 
         imgs = torch.load(self.img_source)
         imgs = downsample_img_batch(imgs, self.image_downsample_size)

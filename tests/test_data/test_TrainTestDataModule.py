@@ -16,10 +16,10 @@ def create_test_files(tmp_path_factory):
     tabular1_csv = tmp_dir / "tabular1.csv"
     tabular1_data = pd.DataFrame(
         {
-            "study_id": range(10),  # Different index column name
+            "ID": range(10),  # Different index column name
             "feature1": [1.0] * 10,
             "feature2": [2.0] * 10,
-            "pred_label": [0] * 10,  # Different label column name
+            "prediction_label": [0] * 10,  # Different label column name
         }
     )
     tabular1_data.to_csv(tabular1_csv, index=False)
@@ -27,10 +27,10 @@ def create_test_files(tmp_path_factory):
     tabular2_csv = tmp_dir / "tabular2.csv"
     tabular2_data = pd.DataFrame(
         {
-            "study_id": range(10),
+            "ID": range(10),
             "feature3": [3.0] * 10,
             "feature4": [4.0] * 10,
-            "pred_label": [1] * 10,
+            "prediction_label": [1] * 10,
         }
     )
     tabular2_data.to_csv(tabular2_csv, index=False)
@@ -67,7 +67,7 @@ def create_test_files_more_features(tmp_path_factory):
     tabular1_csv = tmp_dir / "tabular1.csv"
     tabular1_data = pd.DataFrame(
         {
-            "study_id": range(num_people),  # Different index column name
+            "ID": range(num_people),  # Different index column name
             "feature1": [1.0] * num_people,
             "feature2": [2.0] * num_people,
             "feature3": [3.0] * num_people,
@@ -78,7 +78,7 @@ def create_test_files_more_features(tmp_path_factory):
             "feature8": [8.0] * num_people,
             "feature9": [9.0] * num_people,
             "feature10": [10.0] * num_people,
-            "pred_label": [0] * num_people,  # Different label column name
+            "prediction_label": [0] * num_people,  # Different label column name
         }
     )
     tabular1_data.to_csv(tabular1_csv, index=False)
@@ -86,7 +86,7 @@ def create_test_files_more_features(tmp_path_factory):
     tabular2_csv = tmp_dir / "tabular2.csv"
     tabular2_data = pd.DataFrame(
         {
-            "study_id": range(num_people),
+            "ID": range(num_people),
             "feature1": [1.0] * num_people,
             "feature2": [2.0] * num_people,
             "feature3": [3.0] * num_people,
@@ -102,7 +102,7 @@ def create_test_files_more_features(tmp_path_factory):
             "feature13": [13.0] * num_people,
             "feature14": [14.0] * num_people,
             "feature15": [15.0] * num_people,
-            "pred_label": [1] * num_people,
+            "prediction_label": [1] * num_people,
         }
     )
     tabular2_data.to_csv(tabular2_csv, index=False)
@@ -206,13 +206,13 @@ class MockSubspaceMethod:
     def train(self, train_dataset, test_dataset):
         # Simulate the behavior of the train method here
         train_latents = torch.Tensor([[0.1, 0.2, 0.3]])
-        train_labels = pd.DataFrame([0.3], columns=["pred_label"])
+        train_labels = pd.DataFrame([0.3], columns=["prediction_label"])
         return train_latents, train_labels
 
     def convert_to_latent(self, test_dataset):
         return (
             torch.Tensor([[0.1, 0.2, 0.3]]),
-            pd.DataFrame([0.3], columns=["pred_label"]),
+            pd.DataFrame([0.3], columns=["prediction_label"]),
             [3, None, None],
         )
 

@@ -284,7 +284,7 @@ class MCVAESubspaceMethod:
         # getting mean latent space
         mean_latents = self.get_latents(mcvae_training_data)
 
-        return torch.Tensor(mean_latents), pd.DataFrame(labels, columns=["pred_label"])
+        return torch.Tensor(mean_latents), pd.DataFrame(labels, columns=["prediction_label"])
 
     def convert_to_latent(self, test_dataset):
         """
@@ -313,7 +313,7 @@ class MCVAESubspaceMethod:
 
         return (
             torch.Tensor(test_mean_latents),
-            pd.DataFrame(labels, columns=["pred_label"]),
+            pd.DataFrame(labels, columns=["prediction_label"]),
             [self.num_latent_dims, None, None],
         )
 

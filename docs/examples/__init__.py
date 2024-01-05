@@ -7,7 +7,7 @@ import os
 
 # def generate_simulated_tabular_data(num_samples, num_features):
 #     """
-#     Generate simulated tabular data with a study_id column and num_features columns of random values
+#     Generate simulated tabular data with a ID column and num_features columns of random values
 
 #     Parameters
 #     ----------
@@ -23,7 +23,7 @@ import os
 #     """
 #     data = pd.DataFrame()
 
-#     data["study_id"] = [f"{i}" for i in range(num_samples)]
+#     data["ID"] = [f"{i}" for i in range(num_samples)]
 
 #     for i in range(num_features):
 #         feature_name = f"feature{i + 1}"
@@ -55,24 +55,24 @@ import os
 #     num_samples = len(data1)
 
 #     if pred_type == "binary":
-#         data1["pred_label"] = np.random.choice(
+#         data1["prediction_label"] = np.random.choice(
 #             [0, 1], num_samples
 #         )  # Example binary prediction label
 #     elif pred_type == "multiclass":
-#         data1["pred_label"] = np.random.choice(
+#         data1["prediction_label"] = np.random.choice(
 #             [i for i in range(params["num_classes"])], num_samples
 #         )
 #     elif pred_type == "regression":
-#         data1["pred_label"] = np.random.rand(num_samples)
+#         data1["prediction_label"] = np.random.rand(num_samples)
 #     else:
 #         raise ValueError(
 #             f"pred_type must be one of 'binary', 'multiclass' or 'regression', not {pred_type}"
 #         )
 
-#     data2["pred_label"] = data1["pred_label"]
+#     data2["prediction_label"] = data1["prediction_label"]
 
-#     data1.set_index("study_id", inplace=True)
-#     data2.set_index("study_id", inplace=True)
+#     data1.set_index("ID", inplace=True)
+#     data2.set_index("ID", inplace=True)
 
 #     return data1, data2
 
@@ -226,20 +226,20 @@ def generate_sklearn_simulated_data(
         )
 
     tabular1_data = pd.DataFrame()
-    tabular1_data["study_id"] = [f"{i}" for i in range(num_samples)]
+    tabular1_data["ID"] = [f"{i}" for i in range(num_samples)]
     for i in range(num_tab1_features):
         feature_name = f"feature{i + 1}"
         tabular1_data[feature_name] = all_tab_features[:, i]
-    tabular1_data.set_index("study_id", inplace=True)
-    tabular1_data["pred_label"] = labels
+    tabular1_data.set_index("ID", inplace=True)
+    tabular1_data["prediction_label"] = labels
 
     tabular2_data = pd.DataFrame()
-    tabular2_data["study_id"] = [f"{i}" for i in range(num_samples)]
+    tabular2_data["ID"] = [f"{i}" for i in range(num_samples)]
     for i in range(num_tab2_features):
         feature_name = f"feature{i + 1}"
         tabular2_data[feature_name] = all_tab_features[:, num_tab1_features + i]
-    tabular2_data.set_index("study_id", inplace=True)
-    tabular2_data["pred_label"] = labels
+    tabular2_data.set_index("ID", inplace=True)
+    tabular2_data["prediction_label"] = labels
 
     # img_data = generate_simulated_image_data(num_samples, img_dims)
 

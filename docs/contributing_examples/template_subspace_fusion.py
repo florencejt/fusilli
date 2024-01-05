@@ -320,7 +320,7 @@ def train(self, train_dataset, val_dataset):
     # returning the new train data
     new_pred_features = [tabular1_train_features, tabular2_train_features_latent]
     label_dataframe = pd.DataFrame(
-        train_labels, columns=["pred_label"]
+        train_labels, columns=["prediction_label"]
     )
 
     return [new_pred_features, label_dataframe]

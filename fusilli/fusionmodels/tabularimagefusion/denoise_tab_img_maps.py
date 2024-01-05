@@ -645,7 +645,7 @@ class denoising_autoencoder_subspace_method:
             train_latent_image_space,
             pd.DataFrame(
                 labels_train,
-                columns=["pred_label"],
+                columns=["prediction_label"],
             ),
         )
 
@@ -687,7 +687,7 @@ class denoising_autoencoder_subspace_method:
         # make the training dataset out of them
         return (
             val_latent_image_space,
-            pd.DataFrame(label_val, columns=["pred_label"]),
+            pd.DataFrame(label_val, columns=["prediction_label"]),
             [val_latent_image_space.shape[1], None, None],
         )
 
