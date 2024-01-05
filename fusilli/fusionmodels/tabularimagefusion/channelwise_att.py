@@ -62,20 +62,20 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
     #: str: Type of fusion.
     fusion_type = "attention"
 
-    def __init__(self, pred_type, data_dims, params):
+    def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
         Parameters
         ----------
-        pred_type : str
+        prediction_task : str
             Type of prediction to be performed.
         data_dims : list
-            Dictionary containing the dimensions of the data.
-        params : dict
-            Dictionary containing the parameters of the model.
+            List containing the dimensions of the data.
+        multiclass_dimensions : int
+            Number of classes in the multiclass classification task.
         """
-        ParentFusionModel.__init__(self, pred_type, data_dims, params)
+        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
 
-        self.pred_type = pred_type
+        self.prediction_task = prediction_task
 
         self.set_mod1_layers()
         self.set_img_layers()

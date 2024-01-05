@@ -29,7 +29,7 @@ class ImgLatentSpace(pl.LightningModule):
     Attributes
     ----------
     data_dims : dict
-        Dictionary containing the dimensions of the data.
+        List containing the dimensions of the data.
     img_dim : tuple
         Dimensions of the image data.
     latent_dim: int
@@ -53,7 +53,7 @@ class ImgLatentSpace(pl.LightningModule):
         Parameters
         ----------
         data_dims : list
-            Dictionary containing the dimensions of the data.
+            List containing the dimensions of the data.
         """
         super(ImgLatentSpace, self).__init__()
 
@@ -315,13 +315,11 @@ class concat_img_latent_tab_subspace_method:
             checkpoint_filenames = get_checkpoint_filenames_for_subspace_models(self, k)
 
             self.trainer = init_trainer(
-                None,
-                params=self.datamodule.params,
+                logger=None,
+                output_paths=self.datamodule.output_paths,
                 max_epochs=max_epochs,
                 checkpoint_filename=checkpoint_filenames[0],
             )
-
-            # self.autoencoder = ImgLatentSpace(self.datamodule.data_dims)
 
     def load_ckpt(self, checkpoint_path):
         """
@@ -375,7 +373,7 @@ class concat_img_latent_tab_subspace_method:
         # .unsqueeze(1)) removed
 
         return [tab_train, encoded_imgs.detach()], pd.DataFrame(
-            labels_train, columns=["pred_label"]
+            labels_train, columns=["prediction_label"]
         )
 
     def convert_to_latent(self, test_dataset):
@@ -407,7 +405,7 @@ class concat_img_latent_tab_subspace_method:
 
         return (
             [tab_val, encoded_imgs.detach()],
-            pd.DataFrame(label_val, columns=["pred_label"]),
+            pd.DataFrame(label_val, columns=["prediction_label"]),
             [tab_val.shape[1], encoded_imgs.shape[1], None],
         )
 
@@ -420,7 +418,7 @@ class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
 
     Attributes
     ----------
-    pred_type : str
+    prediction_task : str
         Type of prediction to be performed.
     latent_dim : int
         Dimension of the latent image space once we encode it down. Taken from the
@@ -450,18 +448,18 @@ class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
     #: class: Class containing the method to train the latent image space.
     subspace_method = concat_img_latent_tab_subspace_method
 
-    def __init__(self, pred_type, data_dims, params):
+    def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
         Parameters
         ----------
-        pred_type : str
+        prediction_task : str
             Type of prediction to be performed.
         data_dims : list
-            Dictionary containing the dimensions of the data.
-        params : dict
-            Dictionary containing the parameters of the model.
+            List containing the dimensions of the data.
+        multiclass_dimensions : int
+            Number of classes in the multiclass classification task.
         """
-        ParentFusionModel.__init__(self, pred_type, data_dims, params)
+        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
 
         self.get_fused_dim()
         self.set_fused_layers(self.fused_dim)

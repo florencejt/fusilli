@@ -25,10 +25,10 @@ def create_test_files(tmp_path_factory):
     tabular2_csv = tmp_dir / "tabular2.csv"
     tabular2_data = pd.DataFrame(
         {
-            "study_id": range(10),
+            "ID": range(10),
             "feature3": [3.0] * 10,
             "feature4": [4.0] * 10,
-            "pred_label": [1] * 10,
+            "prediction_label": [1] * 10,
         }
     )
     tabular2_data.to_csv(tabular2_csv, index=False)
@@ -36,10 +36,10 @@ def create_test_files(tmp_path_factory):
     bad_tabular2_csv = tmp_dir / "bad_tabular2.csv"
     bad_tabular2_data = pd.DataFrame(
         {
-            "study_id": range(10),
+            "ID": range(10),
             "feature3": [3.0] * 10,
             "feature4": [4.0] * 10,
-            "prediction_label": [1] * 10,
+            "label_feature": [1] * 10,
         }
     )
     bad_tabular2_data.to_csv(bad_tabular2_csv, index=False)
@@ -76,7 +76,7 @@ def test_load_datasets_with_incorrect_column_names(create_test_files):
 
     # Initialize the LoadDatasets class with incorrect column names
     with pytest.raises(
-        ValueError, match="The CSV must have an index column named 'study_id'."
+            ValueError, match="The CSV must have an index column named 'ID'."
     ):
         data_loader_2d = LoadDatasets([tabular1_csv, tabular2_csv, image_torch_file_2d])
 
@@ -90,7 +90,7 @@ def test_load_datasets_with_incorrect_column_names(create_test_files):
 
     # Load 3D image dataset with incorrect label column name
     with pytest.raises(
-        ValueError, match="The CSV must have a label column named 'pred_label'."
+            ValueError, match="The CSV must have a label column named 'prediction_label'."
     ):
         data_loader_3d = LoadDatasets(
             [bad_tabular2_csv, tabular2_csv, image_torch_file_3d]

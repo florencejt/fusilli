@@ -3,7 +3,7 @@
 Modify the Fusion Models
 =================================
 
-The fusion models in ``fusilli`` can be customized by passing a dictionary of attributes into the :func:`fusilli.data.get_data_module` and :func:`fusilli.train.train_and_save_models` functions.
+The fusion models in ``fusilli`` can be customized by passing a dictionary of attributes into the :func:`fusilli.data.prepare_fusion_data` and :func:`fusilli.train.train_and_save_models` functions.
 
 Examples of how to modify the models can be found in the :ref:`advanced-examples` section.
 
@@ -15,6 +15,8 @@ Below are the modifiable attributes with guidance on how they can be changed:
 .. warning::
    Errors may occur if the input features of certain layer groups (e.g., :attr:`~.ActivationFusion.mod1_layers` and :attr:`~.ActivationFusion.img_layers`) are incorrect. For instance, changing :attr:`~.ActivationFusion.mod1_layers` input features to 20 while the actual number for the first tabular modality is 10 will result in a matrix multiplication error during the `forward` method.
 
+.. warning::
+   If you're using external test data, don't forget to pass the layer modifications into your evaluation figure function (like :func:`fusilli.eval.RealsVsPreds.from_new_data`).
 
 
 Constructing the Layer Modification Dictionary

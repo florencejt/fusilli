@@ -33,24 +33,20 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
     #: str: Fusion type.
     fusion_type = "unimodal"
 
-    def __init__(self, pred_type, data_dims, params):
+    def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
         Parameters
         ----------
-        pred_type : str
+        prediction_task : str
             Type of prediction to be performed.
         data_dims : list
-            Dictionary containing the dimensions of the data.
-            [number of features in tabular modality 1, number of features in tabular modality 2, dimension of the image
-            modality]. For example, [10, 20, (100,100,100)] means that the tabular modality 1 has 10 features,
-            tabular modality 2 has 20 features and the image modality has 100x100x100 voxels.
-        params : dict
-            Dictionary containing the parameters of the model.
+            List containing the dimensions of the data.
+        multiclass_dimensions : int
+            Number of classes in the multiclass classification task.
         """
+        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
 
-        ParentFusionModel.__init__(self, pred_type, data_dims, params)
-
-        self.pred_type = pred_type
+        self.prediction_task = prediction_task
 
         self.set_mod1_layers()
 

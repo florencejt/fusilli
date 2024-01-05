@@ -18,10 +18,10 @@ from lightning.pytorch.callbacks import EarlyStopping
 
 @pytest.fixture
 def model_instance_EdgeCorrGNN():
-    pred_type = "regression"
+    prediction_task = "regression"
     data_dims = [10, 15, None]
-    params = {}
-    return EdgeCorrGNN(pred_type, data_dims, params)
+    multiclass_dimensions = None
+    return EdgeCorrGNN(prediction_task, data_dims, multiclass_dimensions)
 
 
 @pytest.fixture
@@ -30,17 +30,16 @@ def model_instance_EdgeCorrGraphMaker(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_2d = create_test_files["image_torch_file_2d"]
 
-    params = {
-        "test_size": 0.2,
-    }
-
     sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular_tabular"
 
     # Initialize the TrainTestDataModule
     dm = TrainTestGraphDataModule(
-        params, example_fusion_model, sources, EdgeCorrGraphMaker
+        example_fusion_model,
+        sources,
+        EdgeCorrGraphMaker,
+        test_size=0.3
     )
     dm.prepare_data()
 
@@ -49,10 +48,10 @@ def model_instance_EdgeCorrGraphMaker(create_test_files):
 
 @pytest.fixture
 def model_instance_AttentionWeightedGNN():
-    pred_type = "regression"
+    prediction_task = "regression"
     data_dims = [10, 15, None]
-    params = {}
-    return AttentionWeightedGNN(pred_type, data_dims, params)
+    multiclass_dimensions = None
+    return AttentionWeightedGNN(prediction_task, data_dims, multiclass_dimensions)
 
 
 @pytest.fixture
@@ -71,7 +70,10 @@ def model_instance_AttentionWeightedGraphMaker(create_test_files):
 
     # Initialize the TrainTestDataModule
     dm = TrainTestGraphDataModule(
-        params, example_fusion_model, sources, EdgeCorrGraphMaker
+        example_fusion_model,
+        sources,
+        AttentionWeightedGraphMaker,
+        test_size=0.3
     )
     dm.prepare_data()
 

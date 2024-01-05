@@ -17,46 +17,6 @@ from .test_ParentPlotter import (
 )
 
 
-# check it throws an error if lists are of length 1 but kfold is true
-def test_error_when_kfold_true_and_lists_of_length_1(sample_kfold_model_data):
-    model_dict = {
-        "model1": [sample_kfold_model_data],
-        "model2": [sample_kfold_model_data],
-    }
-
-    with pytest.raises(
-            ValueError,
-            match="List of models in model_dict has length 1 but the kfold_flag is True",
-    ):
-        ModelComparison.from_final_val_data(model_dict)
-
-    with pytest.raises(
-            ValueError,
-            match="List of models in model_dict has length 1 but the kfold_flag is True",
-    ):
-        ModelComparison.from_new_data(model_dict, {})
-
-
-# check it throws an error if lists are of length > 1 but kfold is false
-def test_error_when_kfold_false_and_lists_of_length_2(sample_train_test_model_data):
-    model_dict = {
-        "model1": [sample_train_test_model_data, sample_train_test_model_data],
-        "model2": [sample_train_test_model_data, sample_train_test_model_data],
-    }
-
-    with pytest.raises(
-            ValueError,
-            match="List of models in model_dict has length > 1 but the kfold_flag is False.",
-    ):
-        ModelComparison.from_final_val_data(model_dict)
-
-    with pytest.raises(
-            ValueError,
-            match="List of models in model_dict has length > 1 but the kfold_flag is False.",
-    ):
-        ModelComparison.from_new_data(model_dict, {})
-
-
 # check it throws an error if the lists are empty
 def test_error_when_lists_are_empty():
     model_dict = {
@@ -74,7 +34,7 @@ def test_error_when_lists_are_empty():
             ValueError,
             match="Empty list of models has been passed into the ModelComparison.from_new_data.",
     ):
-        ModelComparison.from_new_data(model_dict, {})
+        ModelComparison.from_new_data(model_dict, output_paths={}, test_data_paths={})
 
 
 # check it throws an error if model_dict input is not a dict
@@ -82,7 +42,7 @@ def test_error_when_model_dict_not_dict():
     with pytest.raises(ValueError, match="Argument 'model_dict' is not a dict"):
         ModelComparison.from_final_val_data("model_dict")
     with pytest.raises(ValueError, match="Argument 'model_dict' is not a dict"):
-        ModelComparison.from_new_data("model_dict", {})
+        ModelComparison.from_new_data("model_dict", output_paths={}, test_data_paths={})
 
 
 # check it calls get_kfold_data_from_model if kfold is true

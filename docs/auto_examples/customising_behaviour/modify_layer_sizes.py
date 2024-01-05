@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 import os
 
 from docs.examples import generate_sklearn_simulated_data
-from fusilli.data import get_data_module
+from fusilli.data import prepare_fusion_data
 from fusilli.eval import RealsVsPreds
 from fusilli.train import train_and_save_models
 

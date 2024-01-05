@@ -17,9 +17,6 @@ This glossary provides definitions and explanations for key terms used in the Fu
    tabular1 and tabular2
         In the context of Fusilli, tabular1 and tabular2 refer to two tabular datasets that are to be fused together. The two tabular datasets must have the same number of rows, but can have different numbers of columns.
 
-   params dictionary
-       The params dictionary is a Python dictionary that contains the parameters that are used to run Fusilli. The dictionary includes the source file paths for the data, information on how the models should be trained (train/test or kfold, batch size, test size), and paths to directories for storing results/checkpoints/losses.
-
    WeightsAndBiases
         WeightsAndBiases is a machine learning experiment tracking tool that is used to track the performance of the models trained by Fusilli. It is used to log the training and validation losses, as well as the test metrics for the fusion models. For more information, see :ref:`wandb`.
 

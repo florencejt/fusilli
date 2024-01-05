@@ -41,7 +41,7 @@ callback. This callback can be passed to the
 
 .. code-block:: python
 
-    from fusilli.data import get_data_module
+    from fusilli.data import prepare_fusion_data
     from fusilli.train import train_and_save_models
 
     from lightning.pytorch.callbacks import EarlyStopping
@@ -54,19 +54,20 @@ callback. This callback can be passed to the
         mode="min",
     )
 
-    datamodule = get_data_module(
+    datamodule = prepare_fusion_data(
+            prediction_task="binanry",
             fusion_model=example_model,
-            params=params,
+            data_paths=data_paths,
+            output_paths=output_path,
             own_early_stopping_callback=modified_early_stopping_callback,
         )
 
     trained_model_list = train_and_save_models(
         data_module=datamodule,
-        params=params,
         fusion_model=example_model,
         )
 
-Note that you only need to pass the callback to the :func:`~.fusilli.data.get_data_module` and **not** to the :func:`~.fusilli.train.train_and_save_models` function. The new early stopping measure will be saved within the data module and accessed during training.
+Note that you only need to pass the callback to the :func:`~.fusilli.data.prepare_fusion_data` and **not** to the :func:`~.fusilli.train.train_and_save_models` function. The new early stopping measure will be saved within the data module and accessed during training.
 
 
 -----
@@ -74,22 +75,23 @@ Note that you only need to pass the callback to the :func:`~.fusilli.data.get_da
 Batch size
 ----------
 
-The batch size can be set using the ``batch_size`` argument in the :func:`~.fusilli.data.get_data_module` function. By default, the batch size is 8.
+The batch size can be set using the ``batch_size`` argument in the :func:`~.fusilli.data.prepare_fusion_data` function. By default, the batch size is 8.
 
 .. code-block:: python
 
-    from fusilli.data import get_data_module
+    from fusilli.data import prepare_fusion_data
     from fusilli.train import train_and_save_models
 
-    datamodule = get_data_module(
+    datamodule = prepare_fusion_data(
+            prediction_task="binary",
             fusion_model=example_model,
-            params=params,
-            batch_size=32,
+            data_paths=data_paths,
+            output_paths=output_path,
+            batch_size=32
         )
 
     trained_model_list = train_and_save_models(
             data_module=datamodule,
-            params=params,
             fusion_model=example_model,
             batch_size=32,
         )
@@ -100,26 +102,27 @@ The batch size can be set using the ``batch_size`` argument in the :func:`~.fusi
 Number of epochs
 -------------------
 
-You can change the maximum number of epochs using the ``max_epochs`` argument in the :func:`~.fusilli.data.get_data_module` and :func:`~.fusilli.train.train_and_save_models` functions. By default, the maximum number of epochs is 1000.
+You can change the maximum number of epochs using the ``max_epochs`` argument in the :func:`~.fusilli.data.prepare_fusion_data` and :func:`~.fusilli.train.train_and_save_models` functions. By default, the maximum number of epochs is 1000.
 
-You also pass it to the :func:`~.fusilli.data.get_data_module` function because some of the fusion models require pre-training.
+You also pass it to the :func:`~.fusilli.data.prepare_fusion_data` function because some of the fusion models require pre-training.
 
 Changing the ``max_epochs`` parameter is especially useful when wanting to run a quick test of your model. For example, you can set ``max_epochs=5`` to run a quick test of your model.
 
 .. code-block:: python
 
-    from fusilli.data import get_data_module
+    from fusilli.data import prepare_fusion_data
     from fusilli.train import train_and_save_models
 
-    datamodule = get_data_module(
+    datamodule = prepare_fusion_data(
+            prediction_task="binary",
             fusion_model=example_model,
-            params=params,
+            data_paths=data_paths,
+            output_paths=output_path,
             max_epochs=5,
         )
 
     trained_model_list = train_and_save_models(
             data_module=datamodule,
-            params=params,
             fusion_model=example_model,
             max_epochs=5,
         )
@@ -139,25 +142,26 @@ If the checkpoint is for a pre-trained model, then the following format is used:
 
     ``subspace_{fusion_model.__name__}_{pretrained_model.__name__}.ckpt``
 
-You can add suffixes to the checkpoint names by passing a string to the ``extra_log_string_dict`` argument in the :func:`~.fusilli.data.get_data_module` and :func:`~.fusilli.train.train_and_save_models` functions. For example, I could add a suffix to denote that I've changed the batch size for this particular run:
+You can add suffixes to the checkpoint names by passing a string to the ``extra_log_string_dict`` argument in the :func:`~.fusilli.data.prepare_fusion_data` and :func:`~.fusilli.train.train_and_save_models` functions. For example, I could add a suffix to denote that I've changed the batch size for this particular run:
 
 .. code-block:: python
 
-    from fusilli.data import get_data_module
+    from fusilli.data import prepare_fusion_data
     from fusilli.train import train_and_save_models
 
     extra_suffix_dict = {"batchsize": 32}
 
-    datamodule = get_data_module(
+    datamodule = prepare_fusion_data(
+            prediction_task="binary",
             fusion_model=example_model,
-            params=params,
+            data_paths=data_paths,
+            output_paths=output_path,
             batch_size=32,
             extra_log_string_dict=extra_suffix_dict,
         )
 
     trained_model_list = train_and_save_models(
             data_module=datamodule,
-            params=params,
             fusion_model=example_model,
             batch_size=32,
             extra_log_string_dict=extra_suffix_dict,
@@ -172,7 +176,7 @@ The checkpoint name would then be (if the model trained for 100 epochs):
 
     The ``extra_log_string_dict`` argument is also used to modify the logging behaviour of the model. For more information, see :ref:`wandb`.
 
-.. GENERATED FROM PYTHON SOURCE LINES 156-157
+.. GENERATED FROM PYTHON SOURCE LINES 160-161
 
 .. code-block:: Python
 

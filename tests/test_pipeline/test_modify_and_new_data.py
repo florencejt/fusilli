@@ -4,7 +4,7 @@ and the subspace model structure and the from_new_data methods will still work w
 """
 
 import pytest
-from fusilli.data import get_data_module
+from fusilli.data import prepare_fusion_data
 from fusilli.train import train_and_save_models
 from fusilli.utils.model_chooser import import_chosen_fusion_models
 from fusilli.eval import ConfusionMatrix
@@ -680,50 +680,60 @@ def test_train_and_test(create_test_files_more_features, tmp_path):
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-    loss_fig_path = tmp_path / f"loss_fig_path_{timestamp}"
-    loss_fig_path.mkdir()
-
     loss_log_dir = tmp_path / f"loss_log_dir_{timestamp}"
     loss_log_dir.mkdir()
 
     local_fig_path = tmp_path / f"local_fig_path_{timestamp}"
     local_fig_path.mkdir()
+    loss_fig_path = local_fig_path / "losses"
+    loss_fig_path.mkdir()
 
     checkpoint_dir = tmp_path / f"checkpoint_dir_{timestamp}"
     checkpoint_dir.mkdir()
 
     params = {
         "test_size": 0.2,
-        "pred_type": "binary",
-        "multiclass_dims": None,
-        "kfold_flag": False,
-        "tabular1_source": tabular1_csv,
-        "tabular2_source": tabular2_csv,
-        "img_source": image_torch_file_2d,
-        "tabular1_source_test": tabular1_csv_test,
-        "tabular2_source_test": tabular2_csv_test,
-        "img_source_test": image_torch_file_2d_test,
-        "log": False,
-        "loss_fig_path": str(loss_fig_path),
-        "loss_log_dir": str(loss_log_dir),
-        "local_fig_path": str(local_fig_path),
-        "checkpoint_dir": str(checkpoint_dir),
+        "prediction_task": "binary",
+        "multiclass_dimensions": None,
+        "kfold": False,
+        "wandb_logging": False,
+    }
 
+    data_paths = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
+
+    test_data_paths = {
+        "tabular1": tabular1_csv_test,
+        "tabular2": tabular2_csv_test,
+        "image": image_torch_file_2d_test,
+    }
+
+    output_paths = {
+        "checkpoints": str(checkpoint_dir),
+        "figures": str(local_fig_path),
+        "losses": str(loss_log_dir),
     }
 
     for model in fusion_models:
-        dm = get_data_module(fusion_model=model,
-                             params=params,
-                             layer_mods=layer_mods,
-                             max_epochs=2,
-                             )
+        dm = prepare_fusion_data(fusion_model=model,
+                                 data_paths=data_paths,
+                                 output_paths=output_paths,
+                                 params=params,
+                                 layer_mods=layer_mods,
+                                 max_epochs=2,
+                                 **params
+                                 )
 
         single_model_list = train_and_save_models(
             data_module=dm,
-            params=params,
             fusion_model=model,
             max_epochs=2,
+            enable_checkpointing=True,
             layer_mods=layer_mods,
+            wandb_logging=False,
         )
 
         trained_model = single_model_list[0]
@@ -735,7 +745,7 @@ def test_train_and_test(create_test_files_more_features, tmp_path):
         assert fig is not None
 
         if trained_model.model.fusion_type != "graph":
-            fig_new_data = ConfusionMatrix.from_new_data([trained_model], params, "_test",
+            fig_new_data = ConfusionMatrix.from_new_data([trained_model], output_paths, test_data_paths,
                                                          layer_mods=layer_mods)
             assert fig_new_data is not None
 
@@ -765,52 +775,62 @@ def test_kfold(create_test_files_more_features, tmp_path):
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-    loss_fig_path = tmp_path / f"loss_fig_path_{timestamp}"
-    loss_fig_path.mkdir()
-
     loss_log_dir = tmp_path / f"loss_log_dir_{timestamp}"
     loss_log_dir.mkdir()
 
     local_fig_path = tmp_path / f"local_fig_path_{timestamp}"
     local_fig_path.mkdir()
+    loss_fig_path = local_fig_path / "losses"
+    loss_fig_path.mkdir()
 
     checkpoint_dir = tmp_path / f"checkpoint_dir_{timestamp}"
     checkpoint_dir.mkdir()
 
     params = {
         "test_size": 0.2,
-        "pred_type": "binary",
-        "multiclass_dims": None,
-        "kfold_flag": True,
-        "num_k": 3,
-        "tabular1_source": tabular1_csv,
-        "tabular2_source": tabular2_csv,
-        "img_source": image_torch_file_2d,
-        "tabular1_source_test": tabular1_csv_test,
-        "tabular2_source_test": tabular2_csv_test,
-        "img_source_test": image_torch_file_2d_test,
-        "log": False,
-        "loss_fig_path": str(loss_fig_path),
-        "loss_log_dir": str(loss_log_dir),
-        "local_fig_path": str(local_fig_path),
-        "checkpoint_dir": str(checkpoint_dir),
+        "prediction_task": "binary",
+        "multiclass_dimensions": None,
+        "kfold": True,
+        "num_folds": 3,
+        "wandb_logging": False,
+    }
 
+    data_paths = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
+
+    test_data_paths = {
+        "tabular1": tabular1_csv_test,
+        "tabular2": tabular2_csv_test,
+        "image": image_torch_file_2d_test,
+    }
+
+    output_paths = {
+        "checkpoints": str(checkpoint_dir),
+        "figures": str(local_fig_path),
+        "losses": str(loss_log_dir),
     }
 
     for model in fusion_models:
 
-        dm = get_data_module(fusion_model=model,
-                             params=params,
-                             layer_mods=layer_mods,
-                             max_epochs=3,
-                             )
+        dm = prepare_fusion_data(fusion_model=model,
+                                 data_paths=data_paths,
+                                 output_paths=output_paths,
+                                 params=params,
+                                 layer_mods=layer_mods,
+                                 max_epochs=2,
+                                 **params
+                                 )
 
         single_model_list = train_and_save_models(
             data_module=dm,
-            params=params,
             fusion_model=model,
-            max_epochs=3,
+            max_epochs=2,
+            enable_checkpointing=True,
             layer_mods=layer_mods,
+            wandb_logging=False,
         )
 
         # trained_model = list(single_model_dict.values())[0]
@@ -823,7 +843,7 @@ def test_kfold(create_test_files_more_features, tmp_path):
         assert fig is not None
 
         if single_model_list[0].model.fusion_type != "graph":
-            fig_new_data = ConfusionMatrix.from_new_data(single_model_list, params, "_test",
+            fig_new_data = ConfusionMatrix.from_new_data(single_model_list, output_paths, test_data_paths,
                                                          layer_mods=layer_mods)
             assert fig_new_data is not None
 

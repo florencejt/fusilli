@@ -43,10 +43,6 @@ def test_get_file_suffix_from_dict_with_none():
 
 # test set_checkpoint_name
 def test_set_checkpoint_name_with_fold():
-    params = {
-        "timestamp": "2023-10-05",
-    }
-
     class SomeFusionModelClass:
         pass
 
@@ -55,7 +51,7 @@ def test_set_checkpoint_name_with_fold():
     extra_log_string_dict = {"param1": "value1", "param2": 42}
 
     checkpoint_name = set_checkpoint_name(
-        params, fusion_model, fold, extra_log_string_dict
+        fusion_model, fold, extra_log_string_dict
     )
 
     assert (
@@ -65,10 +61,6 @@ def test_set_checkpoint_name_with_fold():
 
 
 def test_set_checkpoint_name_without_fold():
-    params = {
-        "timestamp": "2023-10-05",
-    }
-
     class SomeFusionModelClass:
         pass
 
@@ -77,17 +69,13 @@ def test_set_checkpoint_name_without_fold():
     extra_log_string_dict = {"param1": "value1", "param2": 42}
 
     checkpoint_name = set_checkpoint_name(
-        params, fusion_model, fold, extra_log_string_dict
+        fusion_model, fold, extra_log_string_dict
     )
 
     assert checkpoint_name == "SomeFusionModelClass_param1_value1_param2_42_{epoch:02d}"
 
 
 def test_set_checkpoint_name_without_extra_log_string_dict():
-    params = {
-        "timestamp": "2023-10-05",
-    }
-
     class SomeFusionModelClass:
         pass
 
@@ -96,7 +84,7 @@ def test_set_checkpoint_name_without_extra_log_string_dict():
     extra_log_string_dict = None
 
     checkpoint_name = set_checkpoint_name(
-        params, fusion_model, fold, extra_log_string_dict
+        fusion_model, fold, extra_log_string_dict
     )
 
     assert checkpoint_name == "SomeFusionModelClass_fold_2_{epoch:02d}"
@@ -161,8 +149,7 @@ def test_get_checkpoint_filenames_for_subspace_models_without_fold():
     k = None
 
     checkpoint_filenames = get_checkpoint_filenames_for_subspace_models(
-        subspace_method, k
-    )
+        subspace_method, k)
 
     expected_filenames = [
         "subspace_SomeFusionModelClass_SubspaceModel1_key_value",
@@ -207,7 +194,7 @@ def test_get_checkpoint_filename_for_trained_fusion_model_with_fold(params, mode
     open(mock_checkpoint_path, "w").close()
 
     checkpoint_filename = get_checkpoint_filename_for_trained_fusion_model(
-        params, model, checkpoint_file_suffix, fold
+        params["checkpoint_dir"], model, checkpoint_file_suffix, fold
     )
 
     assert checkpoint_filename == mock_checkpoint_path
@@ -227,7 +214,7 @@ def test_get_checkpoint_filename_for_trained_fusion_model_without_fold(params, m
     open(mock_checkpoint_path, "w").close()
 
     checkpoint_filename = get_checkpoint_filename_for_trained_fusion_model(
-        params, model, checkpoint_file_suffix
+        params["checkpoint_dir"], model, checkpoint_file_suffix
     )
 
     assert checkpoint_filename == mock_checkpoint_path
@@ -244,7 +231,7 @@ def test_get_checkpoint_filename_for_trained_fusion_model_not_found(params, mode
             ValueError, match=r"Could not find checkpoint file with name .*"
     ):
         get_checkpoint_filename_for_trained_fusion_model(
-            params, model, checkpoint_file_suffix
+            params['checkpoint_dir'], model, checkpoint_file_suffix
         )
 
 
@@ -269,7 +256,7 @@ def test_get_checkpoint_filename_for_trained_fusion_model_multiple_files(params,
             ValueError, match=r"Found multiple checkpoint files with name .*"
     ):
         get_checkpoint_filename_for_trained_fusion_model(
-            params, model, checkpoint_file_suffix
+            params["checkpoint_dir"], model, checkpoint_file_suffix
         )
 
     # Clean up the mock checkpoint files
@@ -292,7 +279,7 @@ def mock_logger():
 
 def test_init_trainer_default(mock_logger):
     # Test initializing trainer with default parameters
-    trainer = init_trainer(mock_logger, params={})
+    trainer = init_trainer(mock_logger, output_paths={}, )
     assert trainer is not None
     assert isinstance(trainer, Trainer)
     assert trainer.max_epochs == 1000
@@ -311,7 +298,7 @@ def test_init_trainer_custom_early_stopping(mock_logger):
                                           verbose=True,
                                           mode="max", )
     trainer = init_trainer(
-        mock_logger, params={}, own_early_stopping_callback=custom_early_stopping
+        mock_logger, output_paths={}, own_early_stopping_callback=custom_early_stopping
     )
     assert trainer is not None
     assert isinstance(trainer, Trainer)
@@ -334,7 +321,7 @@ def test_init_trainer_with_checkpointing(mock_logger):
 
     trainer = init_trainer(
         mock_logger,
-        params={"checkpoint_dir": tempfile.mkdtemp()},
+        output_paths={"checkpoints": tempfile.mkdtemp()},
         enable_checkpointing=True,
         checkpoint_filename="model_checkpoint.pth",
     )
@@ -352,7 +339,7 @@ def test_init_trainer_with_accelerator_and_devices(mock_logger):
     # Test initializing trainer with custom accelerator and devices
 
     params = {"accelerator": "cpu", "devices": 3}
-    trainer = init_trainer(mock_logger, params=params)
+    trainer = init_trainer(mock_logger, output_paths={}, training_modifications={"accelerator": "cpu", "devices": 3})
 
     assert trainer is not None
     assert isinstance(trainer, Trainer)
@@ -367,7 +354,7 @@ def test_init_trainer_with_accelerator_and_devices(mock_logger):
 
 def test_init_trainer_without_checkpointing(mock_logger):
     # Test initializing trainer with checkpointing disabled
-    trainer = init_trainer(mock_logger, params={}, enable_checkpointing=False)
+    trainer = init_trainer(mock_logger, output_paths={}, enable_checkpointing=False)
     assert trainer is not None
     assert isinstance(trainer, Trainer)
     assert trainer.max_epochs == 1000

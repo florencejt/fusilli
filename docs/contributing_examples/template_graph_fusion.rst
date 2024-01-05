@@ -129,13 +129,13 @@ In addition to the class-level attributes for every fusion model, a graph-based 
 
 Very similar to the general fusion model template in :ref:`how_to_contribute_a_template_other_fusion`, the fusion model class must have the following methods:
 
-- ``__init__``: initialising with input parameters ``pred_type``, ``data_dims``, and ``params``.
+- ``__init__``: initialising with input parameters ``prediction_task``, ``data_dims``, and ``multiclass_dimensions``.
 - ``calc_fused_layers``: checking the parameters of the fusion model if they're modified and recalculate the layers of the fusion model where necessary.
 - ``forward``: the forward pass of the fusion model. Takes ``x`` as input but in this example, this is a tuple of the node features, edge indices, and edge attributes.
 
 .. note::
 
-  The graph-maker class returns a ``torch_geometric.data.Data`` object, but in :func:`~.get_data_module`, this is converted to ``torch_geometric.data.lightning.LightningNodeData`` object, which lets you use the ``torch_geometric`` library with PyTorch Lightning.
+  The graph-maker class returns a ``torch_geometric.data.Data`` object, but in :func:`~.prepare_fusion_data`, this is converted to ``torch_geometric.data.lightning.LightningNodeData`` object, which lets you use the ``torch_geometric`` library with PyTorch Lightning.
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 107-156
@@ -153,10 +153,10 @@ Very similar to the general fusion model template in :ref:`how_to_contribute_a_t
 
         graph_maker = TemplateGraphMaker
 
-        def __init__(self, pred_type, data_dims, params):
-            ParentFusionModel.__init__(self, pred_type, data_dims, params)
+        def __init__(self, prediction_task, data_dims, multiclass_dimensions):
+            ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
 
-            self.pred_type = pred_type
+            self.prediction_task = prediction_task
 
             # create some graph convolutional layers here. For example, GCNConv from PyTorch Geometric
             self.graph_layers = nn.Sequential(

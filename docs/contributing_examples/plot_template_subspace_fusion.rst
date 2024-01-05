@@ -77,8 +77,8 @@ And here is the code for the model:
         modality_type = "tabular_tabular"
         fusion_type = "subspace"
 
-        def __init__(self, pred_type, data_dims, params):
-            super().__init__(pred_type, data_dims, params)
+        def __init__(self, prediction_task, data_dims, multiclass_dimensions):
+            super().__init__(prediction_task, data_dims, multiclass_dimensions)
 
             # nn.Module: Subspace method for the second modality
             self.subspace_method_downsample = nn.Sequential(
@@ -168,7 +168,7 @@ This section will show how to create susbapce-based fusion model which involves 
 The ``.py`` file that contains the whole fusion model must have the following three things:
 
 1. A PyTorch Lightning module which contains the subspace model architecture, e.g. ``class TemplateSubspaceModel(pl.LightningModule):``
-2. A class with the methods ``load_ckpt``, ``train``, and ``convert_to_latent``, which are used to load the pre-trained model, train a latent space, and convert data to a latent space respectively. These are called when the data for the fusion model is loaded in :func:`~.get_data_module`.
+2. A class with the methods ``load_ckpt``, ``train``, and ``convert_to_latent``, which are used to load the pre-trained model, train a latent space, and convert data to a latent space respectively. These are called when the data for the fusion model is loaded in :func:`~.prepare_fusion_data`.
 3. The fusion model class which contains the main prediction model architecture, e.g. ``class TemplateSubspaceFusionModel(ParentFusionModel, nn.Module):`` Similar to a general fusion model, this must have the methods ``__init__``, ``calc_fused_layers``, and ``forward``.
 
 This is a diagram of an example of a pre-trained subspace-based fusion model:
@@ -184,7 +184,7 @@ Might be useful to familiarise yourself with the pytorch lightning module first.
 
 Methods that must have specific names:
 
-* ``__init__``: initialising with input parameters ``data_dims`` and any other parameters that are needed for the model and accessible from the ``params`` dictionary.
+* ``__init__``: initialising with input parameters ``data_dims``, which is a list of the data dimensions of the input data.
 * ``forward``: the forward pass of the model. Takes ``x`` as input. Must be modifiable (see Step 3 in :ref:`how_to_contribute_a_template_other_fusion`) for details.
 * ``training_step``: the training step of the model. Takes ``batch`` and ``batch_idx`` as input.
 * ``validation_step``: the validation step of the model. Takes ``batch`` and ``batch_idx`` as input.
@@ -257,7 +257,7 @@ For our example, ``subspace_methods = [TemplateSubspaceModel]``.
 
 Must have the following methods:
 
-* ``__init__``: initialising with input parameters ``datamodule``, ``k``, ``max_epochs``, and ``train_subspace``. For detailed documentation, see :class:`~.concat_img_latent_tab_subspace_method`.
+* ``__init__``: initialising with input parameters ``datamodule``, ``k``, ``max_epochs``, and ``train_subspace``. For more detailed documentation, see :class:`~.concat_img_latent_tab_subspace_method`.
 * ``load_ckpt``: loading the pre-trained model. Takes ``checkpoint_path`` as input.
 * ``train``: training the latent space. Takes ``train_dataset`` and ``val_dataset`` as input.
 * ``convert_to_latent``: converting the data to a latent space. Takes ``test_dataset`` as input.
@@ -266,9 +266,9 @@ Let's create the ``__init__`` method first.
 
 .. note::
 
-   The ``datamodule`` parameter is the data module that is created in :func:`~.get_data_module`. This is used to get the data for the subspace method.
+   The ``datamodule`` parameter is the data module that is created in :func:`~.prepare_fusion_data`. This is used to get the data for the subspace method.
 
- The input arguments that we need are ``datamodule``, ``k``, ``max_epochs``, and ``train_subspace``. These are all passed to this method during :func:`~.get_data_module`, so we need to make sure that we have these as input arguments.
+ The input arguments that we need are ``datamodule``, ``k``, ``max_epochs``, and ``train_subspace``. These are all passed to this method during :func:`~.prepare_fusion_data`, so we need to make sure that we have these as input arguments.
 
 A couple things need to happen in the ``__init__`` method:
 
@@ -303,7 +303,7 @@ Here's an example of the ``__init__`` method:
 
                 self.trainer = init_trainer(
                     logger=None,  # no logger for the subspace models
-                    params=self.datamodule.params,  # pass in the params dictionary stored in the datamodule
+                    output_paths=self.datamodule.output_paths,  # pass in the output paths dict stored in the datamodule
                     max_epochs=max_epochs,  # max_epochs is an input argument
                     checkpoint_filename=autoencoder_ckpt_list[0],  # checkpoint_filename is the first element of the list
                 )
@@ -391,7 +391,7 @@ e.g. [tab1, tab2] -> [tab1, tab2_latent]
         # returning the new train data
         new_pred_features = [tabular1_train_features, tabular2_train_features_latent]
         label_dataframe = pd.DataFrame(
-            train_labels, columns=["pred_label"]
+            train_labels, columns=["prediction_label"]
         )
 
         return [new_pred_features, label_dataframe]
@@ -454,8 +454,8 @@ This fusion model will use the data from ``convert_to_latent`` in Step 2, not th
         # class-level attribute pointing to the subspace method class
         subspace_method = TemplateSubspaceMethod
 
-        def __init__(self, pred_type, data_dims, params):
-            ParentFusionModel.__init__(self, pred_type, data_dims, params)
+        def __init__(self, prediction_task, data_dims, multiclass_dimensions):
+            ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
 
             # nn.Module: Prediction layers concatenating the latent space with the tabular data
             self.pred_model = nn.Sequential(

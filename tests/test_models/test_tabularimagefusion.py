@@ -28,10 +28,10 @@ def test_ConcatImageMapsTabularData():
 
     # attributes after initialising
     # modality 1 with 15 features, no modality 2, image with 100x100 2D
-    test_model = test_model("binary", [15, None, (100, 100)], {})
+    test_model = test_model("binary", [15, None, (100, 100)], None)
 
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "img_layers")
     assert hasattr(test_model, "fused_layers")
     assert hasattr(test_model, "final_prediction")
@@ -69,10 +69,10 @@ def test_ConcatImageMapsTabularMaps():
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
-    test_model = test_model("binary", [15, None, (100, 100)], {})
+    test_model = test_model("binary", [15, None, (100, 100)], None)
 
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "img_layers")
     assert hasattr(test_model, "mod1_layers")
     assert hasattr(test_model, "fused_layers")
@@ -112,10 +112,10 @@ def test_ImageChannelWiseMultiAttention():
     assert test_model.fusion_type == "attention"
 
     # attributes after initialising
-    test_model = test_model("binary", [15, None, (100, 100)], {})
+    test_model = test_model("binary", [15, None, (100, 100)], None)
 
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
     assert hasattr(test_model, "img_layers")
     assert hasattr(test_model, "fused_layers")
@@ -154,10 +154,10 @@ def test_CrossmodalMultiheadAttention():
     assert test_model.fusion_type == "attention"
 
     # attributes after initialising
-    test_model = test_model("binary", [15, None, (100, 100)], {})
+    test_model = test_model("binary", [15, None, (100, 100)], None)
 
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
     assert hasattr(test_model, "img_layers")
     assert hasattr(test_model, "attention")
@@ -196,10 +196,10 @@ def test_ImageDecision():
     assert test_model.fusion_type == "operation"
 
     # attributes after initialising
-    test_model = test_model("binary", [15, None, (100, 100)], {})
+    test_model = test_model("binary", [15, None, (100, 100)], None)
 
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
     assert test_model.mod1_layers['layer 1'][0].in_features == 15
     assert hasattr(test_model, "img_layers")
@@ -246,10 +246,10 @@ def test_ConcatImgLatentTabDoubleTrain():
     # attributes after initialising
     # modality 1: tabular 15 features
     # modality 2: image latent space 64 features
-    test_model = test_model("binary", [15, 64, None], {})
+    test_model = test_model("binary", [15, 64, None], None)
 
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "fused_layers")
     assert hasattr(test_model, "fused_dim")
     assert test_model.fused_dim == 15 + 64  # 15 from tabular data, rest from image after layers and flattening
@@ -292,10 +292,10 @@ def test_ConcatImgLatentTabDoubleLoss():
     # modality 1: tabular data 15 features
     # modality 2: image data 100x100 2D
 
-    test_model = test_model("binary", [15, None, (100, 100)], {})
+    test_model = test_model("binary", [15, None, (100, 100)], None)
 
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "fused_layers")
     assert hasattr(test_model, "final_prediction")
     assert hasattr(test_model, "fused_dim")
@@ -341,10 +341,10 @@ def test_DAETabImgMaps():
     # attributes after initialising
     # 1 modality: concatenated denoise tabular data and image maps
 
-    test_model = test_model("binary", [850, None, None], {})
+    test_model = test_model("binary", [850, None, None], None)
 
-    assert hasattr(test_model, "pred_type")
-    assert test_model.pred_type == "binary"
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "fusion_layers")
     assert hasattr(test_model, "final_prediction")
 

@@ -51,23 +51,18 @@ def sample_datamodule(create_test_files):
     # MCVAESubspaceMethod class in isolation
     fusion_model = MockFusionModel()
 
-    params = {
-        "pred_type": "binary",
-        "multiclass_dims": None,
-        "tabular1_source": tabular1_csv,
-        "tabular2_source": tabular2_csv,
-        "img_source": image_torch_file_2d,
-        "kfold_flag": False,
-        "test_size": 0.3,
-    }
-
-    # Call the get_data_module function with custom fusion type (non-graph)
-    dm = TrainTestDataModule(params=params,
-                             fusion_model=MockFusionModel,
+    # Call the prepare_fusion_data function with custom fusion type (non-graph)
+    dm = TrainTestDataModule(fusion_model=MockFusionModel,
                              sources=[tabular1_csv, tabular2_csv, image_torch_file_2d],
-                             batch_size=8, )
+                             output_paths=None,
+                             prediction_task="binary",
+                             batch_size=8,
+                             test_size=0.3,
+                             num_folds=None,
+                             multiclass_dimensions=None,
+                             )
 
-    # dm = get_data_module(fusion_model, params)
+    # dm = prepare_fusion_data(fusion_model, params)
     dm.prepare_data()
     dm.setup()
 
@@ -94,23 +89,18 @@ def sample_tabimg_datamodule(create_test_files):
     # MCVAESubspaceMethod class in isolation
     fusion_model = MockFusionTabImgModel()
 
-    params = {
-        "pred_type": "binary",
-        "multiclass_dims": None,
-        "tabular1_source": tabular1_csv,
-        "tabular2_source": tabular2_csv,
-        "img_source": image_torch_file_2d,
-        "kfold_flag": False,
-        "test_size": 0.3,
-    }
-
-    # Call the get_data_module function with custom fusion type (non-graph)
-    dm = TrainTestDataModule(params=params,
-                             fusion_model=MockFusionTabImgModel,
+    # Call the prepare_fusion_data function with custom fusion type (non-graph)
+    dm = TrainTestDataModule(fusion_model=MockFusionTabImgModel,
                              sources=[tabular1_csv, tabular2_csv, image_torch_file_2d],
-                             batch_size=8, )
+                             output_paths=None,
+                             prediction_task="binary",
+                             batch_size=8,
+                             test_size=0.3,
+                             num_folds=None,
+                             multiclass_dimensions=None,
+                             )
 
-    # dm = get_data_module(fusion_model, params)
+    # dm = prepare_fusion_data(fusion_model, params)
     dm.prepare_data()
     dm.setup()
 
@@ -254,10 +244,10 @@ def test_img_unimodal_dae_initialisation():
     assert isinstance(model.img_layers, nn.ModuleDict)
     assert hasattr(model, "loss")
     assert hasattr(model, "activation")
-    assert hasattr(model, "pred_type")
-    assert model.pred_type == pred_type
-    assert hasattr(model, "multiclass_dim")
-    assert model.multiclass_dim == multiclass_dims
+    assert hasattr(model, "prediction_task")
+    assert model.prediction_task == pred_type
+    assert hasattr(model, "multiclass_dimensions")
+    assert model.multiclass_dimensions == multiclass_dims
 
 
 def test_img_unimodal_dae_forward():
@@ -436,10 +426,10 @@ class Subspace:
 #             pass
 #
 #         def fit(self, *args, **kwargs):
-#             return torch.randn(10, 7), pd.DataFrame([0] * 10, columns=["pred_label"])
+#             return torch.randn(10, 7), pd.DataFrame([0] * 10, columns=["prediction_label"])
 #
 #         def validate(self, *args, **kwargs):
-#             return torch.randn(10, 3), pd.DataFrame([0] * 10, columns=["pred_label"])
+#             return torch.randn(10, 3), pd.DataFrame([0] * 10, columns=["prediction_label"])
 #
 #     with patch(mock_patch) as mck:
 #         mck.side_effect = mock_init_trainer
@@ -457,7 +447,7 @@ class Subspace:
 
 data1 = torch.randn(100, 15)
 data2 = torch.randn(100, 25)
-labels = pd.DataFrame({"pred_label": [0] * 100})
+labels = pd.DataFrame({"prediction_label": [0] * 100})
 dummy_dataset = CustomDataset([data1, data2], labels)
 
 
@@ -654,10 +644,10 @@ def test_concat_img_latent_tab_subspace_method_train(sample_tabimg_datamodule, m
             pass
 
         def fit(self, *args, **kwargs):
-            return torch.randn(10, 7), pd.DataFrame([0] * 10, columns=["pred_label"])
+            return torch.randn(10, 7), pd.DataFrame([0] * 10, columns=["prediction_label"])
 
         def validate(self, *args, **kwargs):
-            return torch.randn(10, 3), pd.DataFrame([0] * 10, columns=["pred_label"])
+            return torch.randn(10, 3), pd.DataFrame([0] * 10, columns=["prediction_label"])
 
     with patch(mock_patch) as mck:
         mck.side_effect = mock_init_trainer

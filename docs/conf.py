@@ -41,7 +41,7 @@ extensions = [
     "sphinx.ext.napoleon",  # for google style docstrings
     "sphinx.ext.viewcode",  # for linking to source code
     "sphinx_gallery.gen_gallery",  # for gallery
-    "sphinx_rtd_theme",  # for readthedocs theme
+    # "sphinx_rtd_theme",  # for readthedocs theme
     "renku_sphinx_theme",
 ]
 
