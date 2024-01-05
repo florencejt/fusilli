@@ -1425,7 +1425,6 @@ def prepare_fusion_data(
             "Cannot use own early stopping callback with kfold cross validation yet. Working on fixing this currently (Nov 2023)")
 
     # Getting the data paths from the data_paths dictionary into a list
-    print("data_paths", data_paths)
     data_sources = [
         data_paths["tabular1"],
         data_paths["tabular2"],

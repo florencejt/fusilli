@@ -68,7 +68,7 @@ def train_and_test(
         Name of the project to log to in Weights and Biases. Default None.
         If None, the project name will be called "fusilli".
     training_modifications : dict
-        Dictionary of training modifications. Used to modify the training process. Keys could be "accelerator", "devices", "learning_rate"
+        Dictionary of training modifications. Used to modify the training process. Keys could be "accelerator", "devices"
 
     Returns
     -------
