@@ -13,9 +13,6 @@ This code showcases the necessary steps to execute Fusilli on a single dataset.
 Usage Example
 -------------
 
-Ensure the elements in the ``params`` dictionary contain specific keys; you can modify the values to match your requirements.
-
-
 .. code-block:: python
 
 
@@ -27,35 +24,30 @@ Ensure the elements in the ``params`` dictionary contain specific keys; you can 
     # Import the example fusion model
     from fusilli.fusionmodels.tabularfusion.example_model import ExampleModel
 
-    # Set paths to the data
-    tabular_1_path = "path/to/tabular_1.csv"
-    tabular_2_path = "path/to/tabular_2.csv"
-    image_path = "path/to/image_file.pt"
+    data_paths = {
+        "tabular1": "path/to/tabular_1.csv",  # Path to tabular dataset 1
+        "tabular2": "path/to/tabular_2.csv",  # Path to tabular dataset 2
+        "image": "path/to/image_file.pt",  # Path to image dataset
+    }
 
-    params = {
-        "kfold_flag": False, # Train/test set split
-        "log": False, # Use CSV to log losses
-        "pred_type": "regression",  # Type: regression, binary, or multiclass classification
-        "checkpoint_dir": "path/to/checkpoint/dir",  # Unique dir for each experiment
-        "loss_log_dir": "path/to/loss/log/dir",  # Unique dir for each experiment
-        "loss_fig_path": "path/to/loss/fig",  # Unique dir for each experiment
-        "tabular1_source": tabular_1_path,  # Path to tabular dataset 1
-        "tabular2_source": tabular_2_path,  # Path to tabular dataset 2
-        "img_source": image_path,  # Path to image dataset
+    output_paths = {
+        "checkpoints": "path/to/checkpoints/dir",  # Unique dir for each experiment
+        "losses": "path/to/losses/dir",  # Unique dir for each experiment
+        "figures": "path/to/figures/dir",  # Unique dir for each experiment
     }
 
     # Get the data module (PyTorch Lightning-compatible data structure)
-    data_module = prepare_fusion_data(fusion_model=ExampleModel, params=params)
+    data_module = prepare_fusion_data(prediction_task="regression",
+                                      fusion_model=ExampleModel,
+                                      data_paths=data_paths,
+                                      output_paths=output_paths)
 
     # Train the model and receive a list with the trained model
-    trained_model_list = train_and_save_models(
-        data_module=data_module,
-        params=params,
-        fusion_model=ExampleModel,
-    )
+    trained_model = train_and_save_models(data_module=data_module,
+                                          fusion_model=ExampleModel)
 
     # Evaluate the model by plotting the real values vs. predicted values
-    RealsVsPreds_figure = RealsVsPreds.from_final_val_data(trained_model_list)
+    RealsVsPreds_figure = RealsVsPreds.from_final_val_data(trained_model)
     plt.show()
 
 
