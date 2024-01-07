@@ -47,7 +47,9 @@ pip install fusilli
 
 ## How to Cite
 
-Coming soon...
+
+Florence Townend, Patrick J. Roddy, & Philipp Goebl. (2024). florencejt/fusilli: Fusilli v1.1.0 (v1.1.0). Zenodo. https://doi.org/10.5281/zenodo.10463697
+
 
 ## Contribute!
 
