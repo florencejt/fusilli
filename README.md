@@ -45,11 +45,52 @@ To savour the flavours of `fusilli`, you can install it using pip:
 pip install fusilli
 ```
 
+## Quick Start
+
+Here is a quick example of how to use `fusilli` to train a regression model and plot the real values vs. predicted
+values.
+
+```
+    from fusilli.data import prepare_fusion_data
+    from fusilli.train import train_and_save_models
+    from fusilli.eval import RealsVsPreds
+    import matplotlib.pyplot as plt
+
+    # Import the example fusion model
+    from fusilli.fusionmodels.tabularfusion.example_model import ExampleModel
+
+    data_paths = {
+        "tabular1": "path/to/tabular_1.csv",  
+        "tabular2": "path/to/tabular_2.csv",  
+        "image": "path/to/image_file.pt",  
+    }
+
+    output_paths = {
+        "checkpoints": "path/to/checkpoints/dir",  
+        "losses": "path/to/losses/dir",  
+        "figures": "path/to/figures/dir",  
+    }
+
+    # Get the data ready
+    data_module = prepare_fusion_data(prediction_task="regression",
+                                      fusion_model=ExampleModel,
+                                      data_paths=data_paths,
+                                      output_paths=output_paths)
+
+    # Train the model
+    trained_model = train_and_save_models(data_module=data_module,
+                                          fusion_model=ExampleModel)
+
+    # Evaluate the model by plotting the real values vs. predicted values
+    RealsVsPreds_figure = RealsVsPreds.from_final_val_data(trained_model)
+    plt.show()
+
+```
+
 ## How to Cite
 
-
-Florence Townend, Patrick J. Roddy, & Philipp Goebl. (2024). florencejt/fusilli: Fusilli v1.1.0 (v1.1.0). Zenodo. https://doi.org/10.5281/zenodo.10463697
-
+Florence Townend, Patrick J. Roddy, & Philipp Goebl. (2024). florencejt/fusilli: Fusilli v1.1.0 (v1.1.0).
+Zenodo. https://doi.org/10.5281/zenodo.10463697
 
 ## Contribute!
 
