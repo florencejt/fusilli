@@ -436,17 +436,15 @@ def get_final_val_metrics(trainer):
     if len(trainer.callback_metrics) == 0:
         raise ValueError("trainer.callback_metrics is empty.")
 
-    # raise error if metric_names[0]_val or metric_names[1]_val is not in trainer.callback_metrics
-    if f"{metric_names[0]}_val" not in trainer.callback_metrics.keys():
-        raise ValueError(
-            f"{metric_names[0]}_val not in trainer.callback_metrics.keys()."
-        )
-    if f"{metric_names[1]}_val" not in trainer.callback_metrics.keys():
-        raise ValueError(
-            f"{metric_names[1]}_val not in trainer.callback_metrics.keys()."
-        )
+    metrics = []
 
-    metric1 = trainer.callback_metrics[f"{metric_names[0]}_val"].item()
-    metric2 = trainer.callback_metrics[f"{metric_names[1]}_val"].item()
+    # raise error if any of the metric_names are not in trainer.callback_metrics
+    for metric_name in metric_names:
+        if f"{metric_name}_val" not in trainer.callback_metrics.keys():
+            raise ValueError(
+                f"{metric_name}_val not in trainer.callback_metrics.keys()."
+            )
 
-    return metric1, metric2
+        metrics.append(trainer.callback_metrics[f"{metric_name}_val"].item())
+
+    return metrics

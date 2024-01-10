@@ -162,7 +162,7 @@ def test_get_performance_dataframe_train_test():
     # Check that the resulting DataFrame has the expected structure
     assert isinstance(df, pd.DataFrame)
     assert "Method" in df.index.name
-    assert "Metric1" in df.columns
+    assert "Metric1" in df.columns  # because of the .lower()s
     assert "Metric2" in df.columns
 
     # Check that the values in the DataFrame match the input data

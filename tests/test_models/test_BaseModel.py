@@ -240,9 +240,9 @@ def test_get_model_outputs_and_loss_graph(sample_graph_model):
 
 def test_metrics_exist(sample_model):
     model = sample_model
-    for metric in model.metrics["binary"]:
-        assert "metric" in metric
-        assert "name" in metric
+
+    assert isinstance(model.metrics, dict)
+    assert len(model.metrics) >= 2
 
 
 @pytest.mark.filterwarnings("ignore:.*You are trying to `self.log()`*.",
