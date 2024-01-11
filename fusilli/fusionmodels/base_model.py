@@ -26,8 +26,12 @@ class BaseModel(pl.LightningModule):
         Fusion model class.
     multiclass_dimensions : int
         Number of classes for multiclass prediction. Default is 3 for making the metrics dictionary.
-    self.metrics : dict
+    metrics : dict
         Dictionary of metrics, at least two. Key is the name and value is the function from MetricsCalculator.
+    metrics_list : list
+        List of strings of names of metrics to use for model evaluation. Default None. If None, the metrics will be
+        automatically selected based on the prediction task (AUROC, accuracy for binary/multiclass, R2 and MAE for
+        regression).
     train_mask : tensor
         Mask for training data, used for the graph fusion methods instead of train/val split.
         Indicates which nodes are training nodes.
@@ -38,8 +42,6 @@ class BaseModel(pl.LightningModule):
         Dictionary of loss functions, one for each prediction type.
     output_activation_functions : dict
         Dictionary of output activation functions, one for each prediction type.
-    metrics : dict
-        Dictionary of metrics, two for each prediction type.
     batch_val_reals : list
         List of validation reals for each batch. Stored for later concatenation with rest of
         batches and access by Plotter class for plotting.

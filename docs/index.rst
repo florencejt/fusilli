@@ -64,6 +64,7 @@ Why would you want to use fusilli?
    :caption: 🌸 Tutorials 🌸
 
    auto_examples/training_and_testing/index
+   auto_examples/model_comparison/index
    auto_examples/customising_behaviour/index
 
 -----
