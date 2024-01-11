@@ -523,8 +523,6 @@ class ParentPlotter:
         metric_values = {}
 
         for metric_name, metric_func in new_model.metrics.items():
-            print("metric_name", metric_name)
-            print("metric_func", metric_func)
             val_step_metric = metric_func(
                 preds=new_model.safe_squeeze(val_preds),
                 labels=new_model.safe_squeeze(val_reals),
