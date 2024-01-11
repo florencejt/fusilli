@@ -200,7 +200,7 @@ class BaseModel(pl.LightningModule):
                 supported_metrics = [func for func in dir(self.MetricsCalculator) if
                                      callable(getattr(self.MetricsCalculator, func)) and not func.startswith("__")]
                 if metric_string.lower() not in supported_metrics:  # change this to be accurate
-                    raise ValueError(f"Unsupported metric: {metric_string}")
+                    raise ValueError(f"Unsupported metric: {metric_string}. Please choose from: {supported_metrics}")
 
                 # Set the new metrics
                 self.metrics[metric_string] = getattr(self.MetricsCalculator, metric_string.lower())

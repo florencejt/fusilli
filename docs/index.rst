@@ -53,6 +53,7 @@ Why would you want to use fusilli?
 
    choosing_model
    modifying_models
+   customising_training
    logging_with_wandb
    glossary
 

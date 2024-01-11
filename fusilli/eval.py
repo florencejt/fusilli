@@ -1756,8 +1756,6 @@ class ModelComparison(ParentPlotter):
             comparing_models_metrics.keys()
         )  # [method1name, method2name,...]
         metric_names = list(comparing_models_metrics[method_names[0]].keys())
-        # metric1name = list(comparing_models_metrics[method_names[0]].keys())[0]
-        # metric2name = list(comparing_models_metrics[method_names[0]].keys())[1]
 
         if kfold_flag:
             overall_kfold_metrics_copy = overall_kfold_metrics_dict.copy()
@@ -1779,21 +1777,6 @@ class ModelComparison(ParentPlotter):
                     folds_df[fold_columns[i]] = folds_df[metric_name].apply(
                         lambda x: x[i] if len(x) > i else None
                     )
-
-            # fold_columns_metric1 = [
-            #     f"fold{i + 1}_{metric1name}" for i in range(num_folds)
-            # ]
-            # fold_columns_metric2 = [
-            #     f"fold{i + 1}_{metric2name}" for i in range(num_folds)
-            # ]
-
-            # for i, col in enumerate(fold_columns_metric1):
-            #     folds_df[fold_columns_metric1[i]] = folds_df[metric1name].apply(
-            #         lambda x: x[i] if len(x) > i else None
-            #     )
-            #     folds_df[fold_columns_metric2[i]] = folds_df[metric2name].apply(
-            #         lambda x: x[i] if len(x) > i else None
-            #     )
 
             folds_df.drop(columns=metric_names, inplace=True)
             folds_df.set_index("Method", inplace=True)
