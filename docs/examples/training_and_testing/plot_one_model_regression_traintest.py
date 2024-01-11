@@ -1,18 +1,17 @@
 """
-K-Fold Cross-Validation: Binary Classification
+Train/Test split: Regression
 ======================================================
 
-🚀 In this tutorial, we'll explore binary classification using K-fold cross validation. 
-We'll show you how to train a fusion model using K-Fold cross-validation with multimodal tabular data. 
+🚀 In this tutorial, we'll explore regression using a train/test split.
 Specifically, we're using the :class:`~.TabularCrossmodalMultiheadAttention` model.
 
 
 Key Features:
 
 - 📥 Importing a model based on its path.
-- 🧪 Training and testing a model with k-fold cross validation.
+- 🧪 Training and testing a model with train/test split.
 - 📈 Plotting the loss curves of each fold.
-- 📊 Visualising the results of a single K-Fold model using the :class:`~.ConfusionMatrix` class.
+- 📊 Visualising the results of a single train/test model using the :class:`~.RealsVsPreds` class.
 """
 
 import matplotlib.pyplot as plt
@@ -21,7 +20,7 @@ import os
 
 from docs.examples import generate_sklearn_simulated_data
 from fusilli.data import prepare_fusion_data
-from fusilli.eval import ConfusionMatrix
+from fusilli.eval import RealsVsPreds
 from fusilli.train import train_and_save_models
 
 # sphinx_gallery_thumbnail_number = -1
@@ -57,21 +56,17 @@ from fusilli.fusionmodels.tabularfusion.crossmodal_att import (
 # - ``multiclass_dimensions``: the number of classes to use for multiclass classification. Default is None unless ``prediction_task`` is ``multiclass``.
 # - ``max_epochs``: the maximum number of epochs to train for. Default is 1000.
 
-# Binary task (predicting a binary variable - 0 or 1)
-prediction_task = "binary"
+# Regression task
+prediction_task = "regression"
 
 # Set the batch size
 batch_size = 32
 
-# Enable k-fold cross-validation with k=5
-kfold = True
-num_folds = 5
-
 # Setting output directories
 output_paths = {
-    "losses": "loss_logs/one_model_binary_kfold",
-    "checkpoints": "checkpoints/one_model_binary_kfold",
-    "figures": "figures/one_model_binary_kfold",
+    "losses": "loss_logs/one_model_regression_traintest",
+    "checkpoints": "checkpoints/one_model_regression_traintest",
+    "figures": "figures/one_model_regression_traintest",
 }
 
 # Create the output directories if they don't exist
@@ -117,7 +112,7 @@ data_paths = {
 # - ``output_paths``: the paths to the output directories.
 #
 # Then we pass the data module and the fusion model to the :func:`~fusilli.train.train_and_save_models` function.
-# We're not using checkpointing for this example, so we set ``enable_checkpointing=False``. We're also setting ``show_loss_plot=True`` to plot the loss curves for each fold.
+# We're not using checkpointing for this example, so we set ``enable_checkpointing=False``. We're also setting ``show_loss_plot=True`` to plot the loss curve.
 
 
 fusion_model = TabularCrossmodalMultiheadAttention
@@ -130,8 +125,6 @@ dm = prepare_fusion_data(prediction_task=prediction_task,
                          fusion_model=fusion_model,
                          data_paths=data_paths,
                          output_paths=output_paths,
-                         kfold=kfold,
-                         num_folds=num_folds,
                          batch_size=batch_size)
 
 # train and test
@@ -140,16 +133,16 @@ single_model_list = train_and_save_models(
     fusion_model=fusion_model,
     enable_checkpointing=False,  # False for the example notebooks
     show_loss_plot=True,
+    metrics_list=["r2", "mae", "mse"]
 )
 
 # %%
 # 6. Plotting the results 📊
 # ----------------------------
 # Now we're ready to plot the results of our model.
-# We're using the :class:`~.ConfusionMatrix` class to plot the confusion matrix.
-# We're seeing each fold's confusion matrices separately on the right, and the confusion matrix created from the concatenated validation sets from each fold on the left.
+# We're using the :class:`~.RealsVsPreds` class to plot the confusion matrix.
 
-confusion_matrix_fig = ConfusionMatrix.from_final_val_data(
+reals_preds_fig = RealsVsPreds.from_final_val_data(
     single_model_list
 )
 plt.show()

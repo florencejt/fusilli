@@ -28,6 +28,7 @@ def train_and_test(
         wandb_logging=False,
         project_name=None,
         training_modifications=None,
+        metrics_list=None,
 ):
     """
     Trains and tests a model and, if k_fold trained, a fold.
@@ -69,6 +70,12 @@ def train_and_test(
         If None, the project name will be called "fusilli".
     training_modifications : dict
         Dictionary of training modifications. Used to modify the training process. Keys could be "accelerator", "devices"
+    metrics_list : list
+        List of metrics to use for model evaluation. Default None.
+        If None, the metrics will be automatically selected based on the prediction task
+        (AUROC, accuracy for binary/multiclass, R2 and MAE for regression).
+        The first metric in the list will be used in the comparison evaluation figures to rank the models' performances.
+        Length must be 2 or more.
 
     Returns
     -------
@@ -144,7 +151,8 @@ def train_and_test(
             prediction_task=data_module.prediction_task,
             data_dims=data_module.data_dims,  # data_dims is a list of tuples
             multiclass_dimensions=data_module.multiclass_dimensions,
-        )
+        ),
+        metrics_list=metrics_list,
     )
 
     # modify model architecture if layer_mods is not None
@@ -169,9 +177,8 @@ def train_and_test(
     trainer.validate(pl_model, val_dataloader)
 
     # get final validation metrics
-    metric_1, metric_2 = get_final_val_metrics(trainer)
-    pl_model.metric1 = metric_1
-    pl_model.metric2 = metric_2
+    final_val_metrics = get_final_val_metrics(trainer)
+    pl_model.final_val_metrics = final_val_metrics
 
     # if logger is CSVLogger, plot loss curve
     if isinstance(logger, CSVLogger):
@@ -234,6 +241,7 @@ def train_and_save_models(
         enable_checkpointing=True,
         show_loss_plot=False,
         project_name=None,
+        metrics_list=None,
 ):
     """
     Trains/tests the model and saves the trained model to a dictionary for further analysis.
@@ -268,6 +276,12 @@ def train_and_save_models(
     project_name : str or None
         Name of the project to log to in Weights and Biases. Default None.
         If None, the project name will be called "fusilli".
+    metrics_list : list
+        List of metrics to use for model evaluation. Default None.
+        If None, the metrics will be automatically selected based on the prediction task
+        (AUROC, accuracy for binary/multiclass, R2 and MAE for regression).
+        The first metric in the list will be used in the comparison evaluation figures to rank the models' performances.
+        Length must be 2 or more.
 
     Returns
     -------
@@ -307,6 +321,7 @@ def train_and_save_models(
                 show_loss_plot=show_loss_plot,
                 wandb_logging=wandb_logging,
                 project_name=project_name,
+                metrics_list=metrics_list,
             )
 
             trained_models_list.append(trained_model)
@@ -327,6 +342,7 @@ def train_and_save_models(
             show_loss_plot=show_loss_plot,
             wandb_logging=wandb_logging,
             project_name=project_name,
+            metrics_list=metrics_list,
         )
 
         trained_models_list.append(trained_model)

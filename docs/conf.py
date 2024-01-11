@@ -112,6 +112,7 @@ sphinx_gallery_conf = {
         [
             "examples/customising_behaviour",
             "examples/training_and_testing",
+            "examples/model_comparison",
         ],
     ),
     "within_subsection_order": FileNameSortKey,

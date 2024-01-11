@@ -9,6 +9,12 @@ This script provides a simple setup to train a model using ``fusilli`` on a sing
 
 This code showcases the necessary steps to execute Fusilli on a single dataset.
 
+**Before you run this, you need to:**
+
+1. Install ``fusilli`` (see :ref:`install_instructions`).
+2. Prepare your data and specify the paths to your data (see :ref:`data-loading`).
+3. Specify output file paths (see :ref:`experiment-set-up`).
+
 
 Usage Example
 -------------
@@ -22,7 +28,7 @@ Usage Example
     import matplotlib.pyplot as plt
 
     # Import the example fusion model
-    from fusilli.fusionmodels.tabularfusion.example_model import ExampleModel
+    from fusilli.fusionmodels.tabularfusion.concat_data import ConcatTabularData
 
     data_paths = {
         "tabular1": "path/to/tabular_1.csv",  # Path to tabular dataset 1
@@ -38,13 +44,13 @@ Usage Example
 
     # Get the data module (PyTorch Lightning-compatible data structure)
     data_module = prepare_fusion_data(prediction_task="regression",
-                                      fusion_model=ExampleModel,
+                                      fusion_model=ConcatTabularData,
                                       data_paths=data_paths,
                                       output_paths=output_paths)
 
     # Train the model and receive a list with the trained model
     trained_model = train_and_save_models(data_module=data_module,
-                                          fusion_model=ExampleModel)
+                                          fusion_model=ConcatTabularData)
 
     # Evaluate the model by plotting the real values vs. predicted values
     RealsVsPreds_figure = RealsVsPreds.from_final_val_data(trained_model)

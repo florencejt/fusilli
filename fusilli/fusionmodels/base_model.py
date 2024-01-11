@@ -5,9 +5,10 @@ Base lightning module for all fusion models and parent class for all fusion mode
 from typing import Any
 import lightning.pytorch as pl
 import torch
-import torchmetrics as tm
 from torch import nn
 from torch.nn import functional as F
+
+from fusilli.utils.metrics_utils import MetricsCalculator
 
 
 class BaseModel(pl.LightningModule):
@@ -25,6 +26,12 @@ class BaseModel(pl.LightningModule):
         Fusion model class.
     multiclass_dimensions : int
         Number of classes for multiclass prediction. Default is 3 for making the metrics dictionary.
+    metrics : dict
+        Dictionary of metrics, at least two. Key is the name and value is the function from MetricsCalculator.
+    metrics_list : list
+        List of strings of names of metrics to use for model evaluation. Default None. If None, the metrics will be
+        automatically selected based on the prediction task (AUROC, accuracy for binary/multiclass, R2 and MAE for
+        regression).
     train_mask : tensor
         Mask for training data, used for the graph fusion methods instead of train/val split.
         Indicates which nodes are training nodes.
@@ -35,8 +42,6 @@ class BaseModel(pl.LightningModule):
         Dictionary of loss functions, one for each prediction type.
     output_activation_functions : dict
         Dictionary of output activation functions, one for each prediction type.
-    metrics : dict
-        Dictionary of metrics, two for each prediction type.
     batch_val_reals : list
         List of validation reals for each batch. Stored for later concatenation with rest of
         batches and access by Plotter class for plotting.
@@ -64,12 +69,18 @@ class BaseModel(pl.LightningModule):
         Concatenated training preds for all batches. Accessed by Plotter class for plotting.
     """
 
-    def __init__(self, model):
+    def __init__(self, model, metrics_list=None):
         """
         Parameters
         ----------
         model : class
             Fusion model class.
+        metrics_list : list or None
+            List of metrics to use for model evaluation. Default None.
+            If None, the metrics will be automatically selected based on the prediction task
+            (AUROC, accuracy for binary/multiclass, R2 and MAE for regression).
+            The first metric in the list will be used in the comparison evaluation figures to rank the models' performances.
+            Length must be 2 or more.
 
         Returns
         -------
@@ -77,7 +88,11 @@ class BaseModel(pl.LightningModule):
         """
         super().__init__()
         self.model = model
-        # self.prediction_task = model.prediction_task
+
+        self.MetricsCalculator = MetricsCalculator(self)
+        self.metrics_list = metrics_list
+        self.set_metrics(metrics_list=metrics_list)
+
         if self.model.prediction_task == "multiclass":
             self.multiclass_dimensions = model.multiclass_dimensions
         else:
@@ -106,45 +121,10 @@ class BaseModel(pl.LightningModule):
             "regression": lambda x: x,
         }
 
-        # metrics
-        self.metrics = {
-            "binary": [
-                {
-                    "metric": tm.AUROC(task="binary"),
-                    "name": "binary_auroc",
-                },  # needs logits
-                {"metric": tm.Accuracy(task="binary"), "name": "binary_accuracy"},
-            ],
-            "multiclass": [
-                {
-                    "metric": tm.AUROC(
-                        task="multiclass", num_classes=self.multiclass_dimensions
-                    ),
-                    "name": "multiclass_auroc",  # needs logits
-                },
-                {
-                    "metric": tm.Accuracy(
-                        task="multiclass", num_classes=self.multiclass_dimensions, top_k=1
-                    ),
-                    "name": "multiclass_accuracy"
-                    # Add additional metrics for multiclass classification if needed
-                },
-            ],
-            "regression": [
-                {
-                    "metric": tm.R2Score(),
-                    "name": "R2"
-                    # Add additional metrics for regression if needed
-                },
-                {"metric": tm.MeanAbsoluteError(), "name": "MAE"},
-            ],
-        }
-        if self.model.prediction_task not in self.metrics:
+        if self.model.prediction_task not in ["binary", "multiclass", "regression"]:
             raise ValueError(f"Unsupported prediction_task: {self.model.prediction_task}")
 
-        self.metric_names_list = [
-            metric["name"] for metric in self.metrics[self.model.prediction_task]
-        ]
+        self.metric_names_list = list(self.metrics.keys())
 
         # storing the final validation reals and preds
         self.batch_val_reals = []
@@ -182,6 +162,50 @@ class BaseModel(pl.LightningModule):
         # Otherwise, remove the first dimension
         else:
             return tensor.squeeze(dim=0)
+
+    def set_metrics(self, metrics_list):
+        """
+        Set what metrics will be used to log and plot.
+        If no metrics are passed, then the default metrics for the prediction task will be used.
+
+        Parameters
+        ----------
+        metrics_list : list or None
+            List of metrics to use for model evaluation. Default None.
+            If None, the metrics will be automatically selected based on the prediction task
+            (AUROC, accuracy for binary/multiclass, R2 and MAE for regression).
+            The first metric in the list will be used in the comparison evaluation figures to rank the models' performances.
+            Length must be 2 or more.
+        """
+
+        # If the list is None, use the default metrics
+        if metrics_list is None:
+            if self.model.prediction_task == "binary":
+                self.metrics = {"AUROC": self.MetricsCalculator.auroc,
+                                "Accuracy": self.MetricsCalculator.accuracy}
+            elif self.model.prediction_task == "multiclass":
+                self.metrics = {"AUROC": self.MetricsCalculator.auroc,
+                                "Accuracy": self.MetricsCalculator.accuracy}
+            elif self.model.prediction_task == "regression":
+                self.metrics = {"R2": self.MetricsCalculator.r2,
+                                "MAE": self.MetricsCalculator.mae}
+
+        # Error if list length is less than 2
+        else:
+            if len(metrics_list) < 2:
+                raise ValueError("Length of metrics list must be 2 or more.")
+
+            self.metrics = {}
+
+            # Error if any of the metrics are not supported
+            for metric_string in metrics_list:
+                supported_metrics = [func for func in dir(self.MetricsCalculator) if
+                                     callable(getattr(self.MetricsCalculator, func)) and not func.startswith("__")]
+                if metric_string.lower() not in supported_metrics:  # change this to be accurate
+                    raise ValueError(f"Unsupported metric: {metric_string}. Please choose from: {supported_metrics}")
+
+                # Set the new metrics
+                self.metrics[metric_string] = getattr(self.MetricsCalculator, metric_string.lower())
 
     def get_data_from_batch(self, batch):
         """
@@ -324,35 +348,30 @@ class BaseModel(pl.LightningModule):
             batch_size=x[0].shape[0],
         )
 
-        for metric in self.metrics[self.model.prediction_task]:
-            if "auroc" in metric["name"]:
-                predicted = logits
-            else:
-                predicted = end_output
-
-            if self.safe_squeeze(predicted).shape[0] == 1:
+        for metric_name, metric_func in self.metrics.items():
+            if (self.safe_squeeze(end_output).shape[0] == 1) or (self.safe_squeeze(logits).shape[0] == 1):
                 # if it's a single value, we can't calculate a metric
                 pass
+
             else:
-                train_step_acc = metric["metric"].to(self.device)(
-                    self.safe_squeeze(predicted),
-                    self.safe_squeeze(y[self.train_mask])
-                    # .squeeze(),  # we can do self.train_mask even if it's None bc y is a tensor
+                train_step_metric = metric_func(
+                    preds=self.safe_squeeze(end_output),
+                    labels=self.safe_squeeze(y[self.train_mask]),
+                    logits=self.safe_squeeze(logits),
                 )
 
                 self.log(
-                    metric["name"] + "_train",
-                    train_step_acc,
+                    metric_name + "_train",
+                    train_step_metric,
                     logger=True,
                     on_epoch=True,
                     on_step=False,
                     batch_size=x[0].shape[0],
                 )
-
         # Store real and predicted values for training
 
         self.batch_train_reals.append(self.safe_squeeze(y[self.train_mask]).detach())
-        self.batch_train_preds.append(predicted.detach())
+        self.batch_train_preds.append(end_output.detach())
         self.batch_train_logits.append(logits.detach())
 
         return loss
@@ -419,20 +438,16 @@ class BaseModel(pl.LightningModule):
         except RuntimeError:  # if we're doing graph-based fusion and train/test doesn't work the same as normal
             pass
 
-        for i, metric in enumerate(self.metrics[self.model.prediction_task]):
-            if "auroc" in metric["name"]:
-                predicted = self.val_logits
-            else:
-                predicted = self.val_preds
-
-            val_step_acc = metric["metric"].to(self.device)(
-                self.safe_squeeze(predicted),
-                self.safe_squeeze(self.val_reals),
-            )
+        for metric_name, metric_func in self.metrics.items():
+            val_step_metric = metric_func(
+                preds=self.safe_squeeze(self.val_preds),
+                labels=self.safe_squeeze(self.val_reals),
+                logits=self.safe_squeeze(self.val_logits),
+            ).to(self.device)
 
             self.log(
-                metric["name"] + "_val",
-                val_step_acc,
+                metric_name + "_val",
+                val_step_metric,
                 logger=True,
                 on_epoch=True,
                 batch_size=self.val_reals.shape[0],

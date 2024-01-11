@@ -1,8 +1,12 @@
 .. _train_test_examples:
 
-Running Fusilli on your own data
+Training and Testing
 ==========================================
 
 These are examples of how to train and validate fusion models with Fusilli.
+
+.. contents:: **Contents**
+    :local:
+    :depth: 1
 
 

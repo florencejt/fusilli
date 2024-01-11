@@ -62,6 +62,8 @@ def test_train_and_test(create_test_files, tmp_path):
         "AttentionAndSelfActivation": {"attention_reduction_ratio": 2}
     }
 
+    new_metrics = ["accuracy", "precision", "recall", "f1", "auroc", "auprc", "balanced_accuracy"]
+
     for model in fusion_models:
         dm = prepare_fusion_data(fusion_model=model,
                                  data_paths=data_paths,
@@ -79,6 +81,7 @@ def test_train_and_test(create_test_files, tmp_path):
             enable_checkpointing=False,
             wandb_logging=False,
             layer_mods=modifications,
+            metrics_list=new_metrics,
         )
 
         trained_model = single_model_list[0]

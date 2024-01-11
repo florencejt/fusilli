@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 @pytest.mark.filterwarnings("ignore:.*No positive samples in targets,*.")
 @pytest.mark.filterwarnings("ignore:.*No negative samples in targets,*.")
 @pytest.mark.filterwarnings("ignore:.*exists and is not empty*.")
-def test_train_and_test(create_test_files, tmp_path):
+def test_5fold_cv(create_test_files, tmp_path):
     model_conditions = {"modality_type": "all", }
 
     tabular1_csv = create_test_files["tabular1_csv"]
@@ -58,6 +58,8 @@ def test_train_and_test(create_test_files, tmp_path):
         "losses": str(loss_log_dir),
     }
 
+    new_metrics = ["accuracy", "precision", "recall", "f1", "auroc", "auprc", "balanced_accuracy"]
+
     fusion_models = import_chosen_fusion_models(model_conditions, skip_models=["MCVAE_tab"])
 
     for model in fusion_models:
@@ -76,6 +78,7 @@ def test_train_and_test(create_test_files, tmp_path):
             enable_checkpointing=False,
             layer_mods=modifications,
             wandb_logging=False,
+            metrics_list=new_metrics,
         )
 
         assert single_model_list is not None

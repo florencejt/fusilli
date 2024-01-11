@@ -1,12 +1,12 @@
-"""
-How to customise the training in Fusilli
-#########################################
+Customising Training
+=========================================
 
-This tutorial will show you how to customise the training of your fusion model.
+This page will show you how to customise the training and evaluation of your fusion models.
 
 We will cover the following topics:
 
 * Early stopping
+* Valildation metrics
 * Batch size
 * Number of epochs
 * Checkpoint suffix modification
@@ -52,6 +52,70 @@ Note that you only need to pass the callback to the :func:`~.fusilli.data.prepar
 
 
 -----
+
+Choosing metrics
+-----------------
+
+By default, Fusilli uses the following metrics for each prediction task:
+
+* Binary classification: `Area under the ROC curve <https://lightning.ai/docs/torchmetrics/stable/classification/auroc.html>`_ and `accuracy <https://lightning.ai/docs/torchmetrics/stable/classification/accuracy.html>`_
+* Multiclass classification: `Area under the ROC curve <https://lightning.ai/docs/torchmetrics/stable/classification/auroc.html>`_ and `accuracy <https://lightning.ai/docs/torchmetrics/stable/classification/accuracy.html>`_
+* Regression: `R2 score <https://lightning.ai/docs/torchmetrics/stable/regression/r2_score.html>`_ and `mean absolute error <https://lightning.ai/docs/torchmetrics/stable/regression/mean_absolute_error.html>`_
+
+You can change the metrics used by passing a list of metrics to the ``metrics_list`` argument in the :func:`~.fusilli.train.train_and_save_models` function.
+For example, if you wanted to change the metrics used for a binary classification task to precision, recall, and area under the precision-recall curve, you could do the following:
+
+.. code-block:: python
+
+    new_metrics_list = ["precision", "recall", "auprc"]
+
+    trained_model = train_and_save_models(
+        data_module=datamodule,
+        fusion_model=example_model,
+        metrics_list=new_metrics_list,
+        )
+
+Here are the supported metrics as of Fusilli v1.2.0:
+
+**Regression**:
+
+* `R2 score <https://lightning.ai/docs/torchmetrics/stable/regression/r2_score.html>`_: ``r2``
+* `Mean absolute error <https://lightning.ai/docs/torchmetrics/stable/regression/mean_absolute_error.html>`_: ``mae``
+* `Mean squared error <https://lightning.ai/docs/torchmetrics/stable/regression/mean_squared_error.html>`_: ``mse``
+
+**Binary or multiclass classification**:
+
+* `Area under the ROC curve <https://lightning.ai/docs/torchmetrics/stable/classification/auroc.html>`_: ``auroc``
+* `Accuracy <https://lightning.ai/docs/torchmetrics/stable/classification/accuracy.html>`_: ``accuracy``
+* `Recall <https://lightning.ai/docs/torchmetrics/stable/classification/recall.html>`_: ``recall``
+* `Specificity <https://lightning.ai/docs/torchmetrics/stable/classification/specificity.html>`_: ``specificity``
+* `Precision <https://lightning.ai/docs/torchmetrics/stable/classification/precision.html>`_: ``precision``
+* `F1 score <https://lightning.ai/docs/torchmetrics/stable/classification/f1_score.html>`_: ``f1``
+* `Area under the precision-recall curve <https://lightning.ai/docs/torchmetrics/stable/classification/average_precision.html>`_: ``auprc``
+* `Balanced accuracy <https://lightning.ai/docs/torchmetrics/stable/classification/accuracy.html>`_: ``balanced_accuracy``
+
+If you'd like to add more metrics to fusilli, then please open an issue on the `Fusilli GitHub repository issues page <https://github.com/florencejt/fusilli/issues>`_ or submit a pull request.
+The metrics are calculated in :class:`~.fusilli.utils.metrics_utils.MetricsCalculator`, with a separate method for each metric.
+
+**Using your own custom metric:**
+
+If you'd like to use your own custom metric without adding it to fusilli, then you can calculate it using the validation labels and predictions/probabilities.
+You can access the validation labels and validation predictions/probabilities from the trained model that is returned by the :func:`~.fusilli.train.train_and_save_models` function.
+Look at :class:`~.fusilli.fusionmodels.base_model.BaseModel` for a list of attributes that are available to you to access.
+
+
+.. note::
+
+    The first metric in the metrics list is used to rank the models in the model comparison evaluation figures.
+    Only the first two metrics will be shown in the model comparison figures.
+    The rest of the metrics will be shown in the model evaluation dataframe and printed out to the console during training.
+
+.. warning::
+
+    There must be at least two metrics in the metrics list.
+
+-----
+
 
 Batch size
 ----------
@@ -112,7 +176,7 @@ Setting ``max_epochs`` to -1 will train the model until early stopping is trigge
 
 -----
 
-Checkpoint suffix modification
+Checkpoint file names
 ------------------------------
 
 By default, Fusilli saves the model checkpoints in the following format:
@@ -156,5 +220,4 @@ The checkpoint name would then be (if the model trained for 100 epochs):
 .. note::
 
     The ``extra_log_string_dict`` argument is also used to modify the logging behaviour of the model. For more information, see :ref:`wandb`.
-"""
-# sphinx_gallery_thumbnail_path = '_static/pink_pasta_logo.png'
+

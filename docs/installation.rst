@@ -1,3 +1,6 @@
+.. _install_instructions:
+
+
 How to Install
 ==============
 

@@ -76,13 +76,11 @@ class ParentPlotter:
         val_preds = []
         val_logits = []
 
-        metric_names = [
-            model_list[0].metrics[model_list[0].model.prediction_task][i]["name"]
-            for i in range(2)
-        ]
+        metric_names = list(model_list[0].metrics.keys())
 
-        # dictionary to store the metrics for each fold
-        metrics_per_fold = {metric_names[0]: [], metric_names[1]: []}
+        metrics_per_fold = {}
+        for metric_name in metric_names:
+            metrics_per_fold[metric_name.lower()] = []
 
         # loop through the folds
         for fold in model_list:  # 0 is the model, 1 is the ckpt path
@@ -94,8 +92,8 @@ class ParentPlotter:
             val_logits.append(fold.val_logits.cpu())
 
             # get the metrics
-            metrics_per_fold[metric_names[0]].append(fold.metric1)
-            metrics_per_fold[metric_names[1]].append(fold.metric2)
+            for i, metric in enumerate(fold.final_val_metrics):
+                metrics_per_fold[metric_names[i].lower()].append(metric)
 
         # concatenate the validation data points for the overall kfold performance
         all_val_reals = torch.cat(val_reals, dim=-1)
@@ -105,20 +103,14 @@ class ParentPlotter:
         # get the overall kfold metrics
         overall_kfold_metrics = {}
 
-        for metric in model_list[0].metrics[
-            model_list[0].model.prediction_task
-        ]:  # loop through the metrics
-            if "auroc" in metric["name"]:
-                predicted = all_val_logits  # AUROC needs logits
-            else:
-                predicted = all_val_preds
-
-            val_step_acc = metric["metric"](
-                model_list[0].safe_squeeze(predicted),
-                model_list[0].safe_squeeze(all_val_reals),
+        for metric_name, metric_func in model_list[0].metrics.items():
+            val_metric = metric_func(
+                preds=model_list[0].safe_squeeze(all_val_preds),
+                labels=model_list[0].safe_squeeze(all_val_reals),
+                logits=model_list[0].safe_squeeze(all_val_logits),
             )
 
-            overall_kfold_metrics[metric["name"]] = val_step_acc.cpu().detach().item()
+            overall_kfold_metrics[metric_name.lower()] = val_metric.cpu().detach().item()
 
         return (
             train_reals,
@@ -172,10 +164,9 @@ class ParentPlotter:
         val_preds = model.val_preds.cpu()
 
         # metrics
-        metric_values = {
-            model.metrics[model.model.prediction_task][0]["name"]: model.metric1,
-            model.metrics[model.model.prediction_task][1]["name"]: model.metric2,
-        }
+        metric_values = {}
+        for i, metric in enumerate(model.metrics):
+            metric_values[metric] = model.final_val_metrics[i]
 
         return train_reals, train_preds, val_reals, val_preds, metric_values
 
@@ -237,13 +228,12 @@ class ParentPlotter:
         val_preds = []
         val_logits = []
 
-        metric_names = [
-            model_list[0].metrics[model_list[0].model.prediction_task][i]["name"]
-            for i in range(2)
-        ]
+        metric_names = list(model_list[0].metrics.keys())
 
         # dictionary to store the metrics for each fold
-        metrics_per_fold = {metric_names[0]: [], metric_names[1]: []}
+        metrics_per_fold = {}
+        for metric_name in metric_names:
+            metrics_per_fold[metric_name.lower()] = []
 
         output_paths_copy = output_paths.copy()
 
@@ -317,6 +307,7 @@ class ParentPlotter:
                     data_dims=dm.data_dims,  # data_dims is a list of tuples
                     multiclass_dimensions=dm.multiclass_dimensions,
                 ),
+                metrics_list=model.metrics_list,
             )
 
             # modify layers if needed
@@ -350,21 +341,19 @@ class ParentPlotter:
             val_reals.append(fold_val_reals)
             val_preds.append(fold_val_preds)
             val_logits.append(fold_val_logits)
+
+            # training data points from the old trained BaseModel
             train_reals.append(model.train_reals.cpu().detach())
             train_preds.append(model.train_preds.cpu().detach())
 
-            for metric in model.metrics[model.model.prediction_task]:  # loop
-                if "auroc" in metric["name"]:
-                    predicted = fold_val_logits
-                else:
-                    predicted = fold_val_preds
-
-                val_step_acc = metric["metric"](
-                    model.safe_squeeze(predicted),
-                    model.safe_squeeze(fold_val_reals),
+            for metric_name, metric_func in new_model.metrics.items():
+                val_step_metric = metric_func(
+                    preds=model_list[0].safe_squeeze(fold_val_preds),
+                    labels=model_list[0].safe_squeeze(fold_val_reals),
+                    logits=model_list[0].safe_squeeze(fold_val_logits),
                 )
 
-                metrics_per_fold[metric["name"]].append(val_step_acc)
+                metrics_per_fold[metric_name.lower()].append(val_step_metric)
 
         # concatenate the validation data points for the overall kfold performance
         all_val_reals = torch.cat(val_reals, dim=-1)
@@ -374,20 +363,14 @@ class ParentPlotter:
         # get the overall kfold metrics
         overall_kfold_metrics = {}
 
-        for metric in model_list[0].metrics[
-            model_list[0].model.prediction_task
-        ]:  # loop through the metrics
-            if "auroc" in metric["name"]:
-                predicted = all_val_logits
-            else:
-                predicted = all_val_preds
-
-            val_step_acc = metric["metric"](
-                model_list[0].safe_squeeze(predicted),
-                model_list[0].safe_squeeze(all_val_reals),
+        for metric_name, metric_func in new_model.metrics.items():
+            val_metric = metric_func(
+                preds=model_list[0].safe_squeeze(all_val_preds),
+                labels=model_list[0].safe_squeeze(all_val_reals),
+                logits=model_list[0].safe_squeeze(all_val_logits),
             )
 
-            overall_kfold_metrics[metric["name"]] = val_step_acc.cpu().detach().item()
+            overall_kfold_metrics[metric_name.lower()] = val_metric.cpu().detach().item()
 
         return (
             train_reals,
@@ -502,6 +485,7 @@ class ParentPlotter:
                 data_dims=dm.data_dims,  # data_dims is a list of tuples
                 multiclass_dimensions=dm.multiclass_dimensions,
             ),
+            metrics_list=model.metrics_list,
         )
 
         # modify layers if needed
@@ -535,23 +519,18 @@ class ParentPlotter:
         val_reals = torch.cat(reals_list, dim=-1)
         val_logits = torch.cat(logits_list, dim=0)
 
-        # metrics
+        # get the metrics
         metric_values = {}
 
-        for metric in new_model.metrics[
-            new_model.model.prediction_task
-        ]:  # loop through the metrics
-            if "auroc" in metric["name"]:
-                predicted = val_logits  # AUROC needs logits
-            else:
-                predicted = val_preds
-
-            metric_val = metric["metric"](
-                new_model.safe_squeeze(predicted),
-                new_model.safe_squeeze(val_reals),
+        for metric_name, metric_func in new_model.metrics.items():
+            print("metric_name", metric_name)
+            print("metric_func", metric_func)
+            val_step_metric = metric_func(
+                preds=new_model.safe_squeeze(val_preds),
+                labels=new_model.safe_squeeze(val_reals),
+                logits=new_model.safe_squeeze(val_logits),
             )
-
-            metric_values[metric["name"]] = metric_val
+            metric_values[metric_name.lower()] = val_step_metric
 
         return train_reals, train_preds, val_reals, val_preds, metric_values
 
@@ -834,7 +813,7 @@ class RealsVsPreds(ParentPlotter):
 
             # set title of plot to the metric for the current fold
             ax1.set_title(
-                f"Fold {n + 1}: {metric_names[0]}={float(metrics_per_fold[metric_names[0]][n]):.3f}"
+                f"Fold {n + 1}: {metric_names[0]}={float(metrics_per_fold[metric_names[0].lower()][n]):.3f}"
             )
 
             # set x and y labels
@@ -1251,7 +1230,7 @@ class ConfusionMatrix(ParentPlotter):
             ax1.set_ylabel("Actuals", fontsize=10)
 
             ax1.set_title(
-                f"Fold {n + 1}:\n{metric_names[0]}={float(metrics_per_fold[metric_names[0]][n]):.3f}"
+                f"Fold {n + 1}:\n{metric_names[0]}={float(metrics_per_fold[metric_names[0].lower()][n]):.3f}"
             )
 
         # gs.tight_layout(fig)
@@ -1618,6 +1597,7 @@ class ModelComparison(ParentPlotter):
         metric_2_values = np.array(metric_2_values)[sorted_indices].transpose()
 
         # create figure 1x2 subplots
+        # create figure 1x2 subplots
         fig, ax = plt.subplots(1, 2)
         ax[0].grid()
         ax[1].grid()
@@ -1775,8 +1755,7 @@ class ModelComparison(ParentPlotter):
         method_names = list(
             comparing_models_metrics.keys()
         )  # [method1name, method2name,...]
-        metric1name = list(comparing_models_metrics[method_names[0]].keys())[0]
-        metric2name = list(comparing_models_metrics[method_names[0]].keys())[1]
+        metric_names = list(comparing_models_metrics[method_names[0]].keys())
 
         if kfold_flag:
             overall_kfold_metrics_copy = overall_kfold_metrics_dict.copy()
@@ -1787,23 +1766,19 @@ class ModelComparison(ParentPlotter):
             folds_df = pd.DataFrame(comparing_models_metrics).T.reset_index()
             folds_df.rename(columns={"index": "Method"}, inplace=True)
 
-            num_folds = len(folds_df[metric1name][0])
-            fold_columns_metric1 = [
-                f"fold{i + 1}_{metric1name}" for i in range(num_folds)
-            ]
-            fold_columns_metric2 = [
-                f"fold{i + 1}_{metric2name}" for i in range(num_folds)
-            ]
+            num_folds = len(folds_df[metric_names[0]][0])
 
-            for i, col in enumerate(fold_columns_metric1):
-                folds_df[fold_columns_metric1[i]] = folds_df[metric1name].apply(
-                    lambda x: x[i] if len(x) > i else None
-                )
-                folds_df[fold_columns_metric2[i]] = folds_df[metric2name].apply(
-                    lambda x: x[i] if len(x) > i else None
-                )
+            for metric_name in metric_names:
+                fold_columns = [
+                    f"fold{i + 1}_{metric_name}" for i in range(num_folds)
+                ]
 
-            folds_df.drop(columns=[metric1name, metric2name], inplace=True)
+                for i, col in enumerate(fold_columns):
+                    folds_df[fold_columns[i]] = folds_df[metric_name].apply(
+                        lambda x: x[i] if len(x) > i else None
+                    )
+
+            folds_df.drop(columns=metric_names, inplace=True)
             folds_df.set_index("Method", inplace=True)
 
             final_df = pd.concat([df, folds_df], axis=1)
