@@ -1,6 +1,6 @@
 .. _train_test_examples:
 
-Training and Testing Examples
+Training and Testing
 ==========================================
 
 These are examples of how to train and validate fusion models with Fusilli.

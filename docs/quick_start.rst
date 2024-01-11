@@ -9,6 +9,12 @@ This script provides a simple setup to train a model using ``fusilli`` on a sing
 
 This code showcases the necessary steps to execute Fusilli on a single dataset.
 
+**Before you run this, you need to:**
+
+1. Install ``fusilli`` (see :ref:`install_instructions`).
+2. Prepare your data and specify the paths to your data (see :ref:`data-loading`).
+3. Specify output file paths (see :ref:`experiment-set-up`).
+
 
 Usage Example
 -------------
