@@ -418,6 +418,8 @@ class TrainTestDataModule(pl.LightningDataModule):
         Subspace method class trained (only for subspace methods).
     own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
         Early stopping callback class.
+    num_workers : int
+        Number of workers for the dataloader (default 0).
     kwargs : dict
         Dictionary of extra arguments for the subspace method class.
     """
@@ -438,6 +440,7 @@ class TrainTestDataModule(pl.LightningDataModule):
             max_epochs=1000,
             extra_log_string_dict=None,
             own_early_stopping_callback=None,
+            num_workers=0,
             kwargs=None,
     ):
         """
@@ -475,6 +478,8 @@ class TrainTestDataModule(pl.LightningDataModule):
             Dictionary of extra strings to add to the log.
         own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
             Early stopping callback class (default None).
+        num_workers : int
+            Number of workers for the dataloader (default 0).
         kwargs : dict
             Dictionary of extra arguments for the subspace method class.
         """
@@ -507,6 +512,7 @@ class TrainTestDataModule(pl.LightningDataModule):
         self.layer_mods = layer_mods
         self.max_epochs = max_epochs
         self.own_early_stopping_callback = own_early_stopping_callback
+        self.num_workers = num_workers
         self.kwargs = kwargs
 
     def prepare_data(self):
@@ -634,7 +640,7 @@ class TrainTestDataModule(pl.LightningDataModule):
             Dataloader for training.
         """
         return DataLoader(
-            self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=0
+            self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.num_workers
         )
 
     def val_dataloader(self):
@@ -647,7 +653,7 @@ class TrainTestDataModule(pl.LightningDataModule):
             Dataloader for validation.
         """
         return DataLoader(
-            self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=0
+            self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=self.num_workers
         )
 
 
@@ -695,6 +701,8 @@ class KFoldDataModule(pl.LightningDataModule):
         Tensor of predictive features for testing. Created in setup().
     own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
         Early stopping callback class.
+    num_workers : int
+        Number of workers for the dataloader (default 0).
     kwargs : dict
         Dictionary of extra arguments for the subspace method class.
     """
@@ -715,6 +723,7 @@ class KFoldDataModule(pl.LightningDataModule):
             max_epochs=1000,
             extra_log_string_dict=None,
             own_early_stopping_callback=None,
+            num_workers=0,
             kwargs=None,
     ):
         """
@@ -752,6 +761,8 @@ class KFoldDataModule(pl.LightningDataModule):
             Dictionary of extra strings to add to the log.
         own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
             Early stopping callback class (default None).
+        num_workers : int
+            Number of workers for the dataloader (default 0).
         kwargs : dict
             Dictionary of extra arguments for the subspace method class.
         """
@@ -791,6 +802,7 @@ class KFoldDataModule(pl.LightningDataModule):
         self.layer_mods = layer_mods
         self.max_epochs = max_epochs
         self.own_early_stopping_callback = own_early_stopping_callback
+        self.num_workers = num_workers
         self.kwargs = kwargs
 
     def prepare_data(self):
@@ -974,7 +986,7 @@ class KFoldDataModule(pl.LightningDataModule):
         self.train_dataset, self.test_dataset = self.folds[fold_idx]
 
         return DataLoader(
-            self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=0
+            self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.num_workers
         )
 
     def val_dataloader(self, fold_idx):
@@ -994,7 +1006,7 @@ class KFoldDataModule(pl.LightningDataModule):
         self.train_dataset, self.test_dataset = self.folds[fold_idx]
 
         return DataLoader(
-            self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=0
+            self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=self.num_workers
         )
 
 
@@ -1363,6 +1375,7 @@ def prepare_fusion_data(
         checkpoint_path=None,
         extra_log_string_dict=None,
         own_early_stopping_callback=None,
+        num_workers=0,
         **kwargs,
 ):
     """
@@ -1408,6 +1421,8 @@ def prepare_fusion_data(
         Default None.
     own_early_stopping_callback : pytorch_lightning.callbacks.EarlyStopping
         Early stopping callback class (default None).
+    num_workers : int
+        Number of workers for the dataloader (default 0).
     **kwargs : dict
         Extra keyword arguments. Usable for extra arguments for the subspace method MCVAE's early stopping callback: "mcvae_patience" and "mcvae_tolerance".
 
@@ -1501,6 +1516,7 @@ def prepare_fusion_data(
             max_epochs=max_epochs,
             extra_log_string_dict=extra_log_string_dict,
             own_early_stopping_callback=own_early_stopping_callback,
+            num_workers=num_workers,
             kwargs=kwargs,
         )
         data_module.prepare_data()
