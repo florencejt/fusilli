@@ -18,7 +18,7 @@ More guidance on what can be modified in each fusion model can be found in the :
 # Setting up the experiment
 # -------------------------
 #
-# First, we will set up the experiment by importing the necessary packages, creating the simulated data, and setting the parameters for the experiment.
+# First, we will set up the experiment by importing the necessary packages, specifying MNIST data paths, and setting the parameters for the experiment.
 #
 # For a more detailed explanation of this process, please see the example tutorials.
 #
@@ -29,9 +29,7 @@ import os
 import torch.nn as nn
 from torch_geometric.nn import GCNConv, ChebConv
 
-from docs.examples import generate_sklearn_simulated_data
 from fusilli.data import prepare_fusion_data
-from fusilli.eval import RealsVsPreds
 from fusilli.train import train_and_save_models
 
 from fusilli.fusionmodels.tabularfusion.attention_weighted_GNN import AttentionWeightedGNN
@@ -54,14 +52,9 @@ for dir in os.listdir(output_paths["losses"]):
     # remove dir
     os.rmdir(os.path.join(output_paths["losses"], dir))
 
-tabular1_path, tabular2_path = generate_sklearn_simulated_data(prediction_task,
-                                                               num_samples=500,
-                                                               num_tab1_features=10,
-                                                               num_tab2_features=20)
-
 data_paths = {
-    "tabular1": tabular1_path,
-    "tabular2": tabular2_path,
+    "tabular1": "../../_static/mnist_data/mnist1_regression.csv",
+    "tabular2": "../../_static/mnist_data/mnist2_regression.csv",
     "image": "",
 }
 
@@ -115,7 +108,7 @@ data_paths = {
 layer_mods = {
     "AttentionWeightedGNN": {
         "graph_conv_layers": nn.Sequential(
-            ChebConv(20, 50, K=3),
+            ChebConv(392, 50, K=3),
             ChebConv(50, 100, K=3),
             ChebConv(100, 130, K=3),
         ),
@@ -127,19 +120,19 @@ layer_mods = {
         "AttentionWeightingMLPInstance.weighting_layers": nn.ModuleDict(
             {
                 "Layer 1": nn.Sequential(
-                    nn.Linear(30, 100),
+                    nn.Linear(784, 500),
                     nn.ReLU()),
                 "Layer 2": nn.Sequential(
-                    nn.Linear(100, 75),
+                    nn.Linear(500, 128),
                     nn.ReLU()),
                 "Layer 3": nn.Sequential(
-                    nn.Linear(75, 75),
+                    nn.Linear(128, 128),
                     nn.ReLU()),
                 "Layer 4": nn.Sequential(
-                    nn.Linear(75, 100),
+                    nn.Linear(128, 500),
                     nn.ReLU()),
                 "Layer 5": nn.Sequential(
-                    nn.Linear(100, 30),
+                    nn.Linear(500, 784),
                     nn.ReLU()),
             }
         )},
@@ -211,7 +204,7 @@ except Exception as error:
 layer_mods = {
     "AttentionWeightedGraphMaker": {
         "AttentionWeightingMLPInstance.weighting_layers": nn.Sequential(
-            nn.Linear(30, 75),
+            nn.Linear(392, 75),
             nn.ReLU(),
             nn.Linear(75, 75),
             nn.ReLU(),
@@ -268,15 +261,15 @@ layer_mods = {
         "mod1_layers": nn.ModuleDict(
             {
                 "layer 1": nn.Sequential(
-                    nn.Linear(10, 32),
+                    nn.Linear(392, 300),
                     nn.ReLU(),
                 ),
                 "layer 2": nn.Sequential(
-                    nn.Linear(32, 66),
+                    nn.Linear(300, 128),
                     nn.ReLU(),
                 ),
                 "layer 3": nn.Sequential(
-                    nn.Linear(66, 128),
+                    nn.Linear(128, 128),
                     nn.ReLU(),
                 ),
             }
@@ -284,21 +277,21 @@ layer_mods = {
         "mod2_layers": nn.ModuleDict(
             {
                 "layer 1": nn.Sequential(
-                    nn.Linear(20, 45),
+                    nn.Linear(392, 300),
                     nn.ReLU(),
                 ),
                 "layer 2": nn.Sequential(
-                    nn.Linear(45, 70),
+                    nn.Linear(300, 128),
                     nn.ReLU(),
                 ),
                 "layer 3": nn.Sequential(
-                    nn.Linear(70, 100),
+                    nn.Linear(128, 100),
                     nn.ReLU(),
                 ),
             }
         ),
         "fused_layers": nn.Sequential(
-            nn.Linear(30, 150),
+            nn.Linear(25, 150),
             nn.ReLU(),
             nn.Linear(150, 75),
             nn.ReLU(),
