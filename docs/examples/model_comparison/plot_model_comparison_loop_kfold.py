@@ -2,11 +2,11 @@
 Comparing All Fusion Models
 ====================================================================
 
-Welcome to the "Comparing All Fusion Models" tutorial! In this tutorial, we'll explore how to train and compare multiple fusion models for a regression task using k-fold cross-validation with multimodal tabular data. This tutorial is designed to help you understand and implement key features, including:
+Welcome to the "Comparing All Fusion Models" tutorial! In this tutorial, we'll explore how to train and compare multiple fusion models for a multiclass classification task using k-fold cross-validation with multimodal tabular data. This tutorial is designed to help you understand and implement key features, including:
 
 - 📥 Importing fusion models based on modality types.
 - 🚲 Setting training parameters for your models
-- 🔮 Generating simulated data for experimentation.
+- 🔮 Specifying the data to be used for training and testing.
 - 🧪 Training and evaluating multiple fusion models.
 - 📈 Visualising the results of individual models.
 - 📊 Comparing the performance of different models.
@@ -15,19 +15,19 @@ Let's dive into each of these steps in detail:
 
 1. **Importing Fusion Models:**
 
-   We begin by importing fusion models based on modality types. These models will be used in our regression task, and we'll explore various fusion strategies.
+   We begin by importing fusion models based on modality types. These models will be used in our multiclass classification task, and we'll explore various fusion strategies.
 
 2. **Setting the Training Parameters:**
 
-   To ensure consistent and controlled training, we define training parameters. These parameters include enabling k-fold cross-validation, specifying the prediction type (regression), and setting the batch size for training.
+   To ensure consistent and controlled training, we define training parameters. These parameters include enabling k-fold cross-validation, specifying the prediction type, and setting the batch size for training.
 
-3. **Generating Simulated Data:**
+3. **Specify data to be used:**
 
-   In this step, we generate synthetic data to simulate a real-world multimodal dataset. This dataset includes two tabular modalities, but it can also incorporate image data, although we won't use images in this example.
+   In this step, we specify the data to be used for training and testing. We will be using MNIST data for this, split into top and bottom halves for our two tabular modalities.
 
 4. **Training All Fusion Models:**
 
-   Now, we train all the selected fusion models using the generated data and the defined training parameters. We'll monitor the performance of each model during training and store the results for later analysis.
+   Now, we train all the selected fusion models using the data and the defined training parameters. We'll monitor the performance of each model during training and store the results for later analysis.
 
 5. **Plotting Individual Model Results:**
 
@@ -48,9 +48,8 @@ import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
 import os
 
-from docs.examples import generate_sklearn_simulated_data
 from fusilli.data import prepare_fusion_data
-from fusilli.eval import RealsVsPreds, ModelComparison
+from fusilli.eval import ConfusionMatrix, ModelComparison
 from fusilli.train import train_and_save_models
 from fusilli.utils.model_chooser import import_chosen_fusion_models
 
@@ -97,8 +96,9 @@ fusion_models = import_chosen_fusion_models(model_conditions)
 # - ``multiclass_dimensions``: the number of classes to use for multiclass classification. Default is None unless ``prediction_task`` is ``multiclass``.
 # - ``max_epochs``: the maximum number of epochs to train for. Default is 1000.
 
-# Regression task (predicting a continuous variable)
-prediction_task = "regression"
+# Multiclass classification task (predicting one of 10 classes)
+prediction_task = "multiclass"
+number_of_classes = 10
 
 # Set the batch size
 batch_size = 32
@@ -127,26 +127,20 @@ for dir in os.listdir(output_paths["losses"]):
     os.rmdir(os.path.join(output_paths["losses"], dir))
 
 # %%
-# 3. Generating simulated data 🔮
+# 3. Specifying input file paths 🔮
 # --------------------------------
-# Time to create some simulated data for our models to work their wonders on.
-# This function also simulated image data which we aren't using here.
-
-tabular1_path, tabular2_path = generate_sklearn_simulated_data(prediction_task,
-                                                               num_samples=500,
-                                                               num_tab1_features=10,
-                                                               num_tab2_features=20)
+# We're using the MNIST dataset for this example, and the CSV files are stored in the ``_static/mnist_data`` directory with the documentation files.
 
 data_paths = {
-    "tabular1": tabular1_path,
-    "tabular2": tabular2_path,
+    "tabular1": "../../_static/mnist_data/mnist1.csv",
+    "tabular2": "../../_static/mnist_data/mnist2.csv",
     "image": "",
 }
 
 # %%
 # 4. Training the all the fusion models 🏁
 # -----------------------------------------
-# In this section, we train all the fusion models using the generated data and specified parameters.
+# In this section, we train all the fusion models using the data and specified parameters.
 # We store the results of each model for later analysis.
 
 # Using %%capture to hide the progress bar and plots (there are a lot of them!)
@@ -159,6 +153,7 @@ for i, fusion_model in enumerate(fusion_models):
 
     # Get data module
     data_module = prepare_fusion_data(prediction_task=prediction_task,
+                                      multiclass_dimensions=number_of_classes,
                                       fusion_model=fusion_model,
                                       data_paths=data_paths,
                                       output_paths=output_paths,
@@ -186,7 +181,7 @@ for i, fusion_model in enumerate(fusion_models):
 #
 
 for model_name, model_list in all_trained_models.items():
-    fig = RealsVsPreds.from_final_val_data(model_list)
+    fig = ConfusionMatrix.from_final_val_data(model_list)
     plt.show()
 
 # %% [markdown]

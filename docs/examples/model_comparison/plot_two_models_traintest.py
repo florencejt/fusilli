@@ -4,6 +4,13 @@ Regression: Comparing Two Tabular Models Trained on Simulated Data
 
 🚀 Welcome to this tutorial on training and comparing two fusion models on a regression task using simulated multimodal tabular data! 🎉
 
+Data:
+The data we are using is 500 rows of the MNIST dataset, split into top and bottom halves as our two tabular modalities.
+The bottom half's values have been inverted to make the task more difficult.
+The prediction labels (the number shown in the image) has been changed into a continuous variable (1.0, 2.0, 3.0, etc.) and had some noise added to it.
+So the labels look more like 1.05, 2.02, 3.01, etc.
+
+
 🌟 Key Features:
 
 - 📥 Importing models based on name.
@@ -21,7 +28,6 @@ import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
 import os
 
-from docs.examples import generate_sklearn_simulated_data
 from fusilli.data import prepare_fusion_data
 from fusilli.eval import RealsVsPreds, ModelComparison
 from fusilli.train import train_and_save_models
@@ -38,10 +44,10 @@ from fusilli.utils.model_chooser import import_chosen_fusion_models
 #
 # The function returns list of class objects that match the conditions. If no conditions are specified, then all the models are returned.
 #
-# We're importing ConcatTabularData and TabularChannelWiseMultiAttention models for this example. Both are multimodal tabular models.
+# We're importing :class:`~.Tabular1Unimodal` and :class:`~.ConcatTabularFeatureMaps` `models for this example, so we have one unimodal benchmark and one multimodal model.
 
 model_conditions = {
-    "class_name": ["ConcatTabularData", "TabularChannelWiseMultiAttention"],
+    "class_name": ["Tabular1Unimodal", "ConcatTabularFeatureMaps"],
 }
 
 fusion_models = import_chosen_fusion_models(model_conditions)
@@ -97,19 +103,14 @@ for dir in os.listdir(output_paths["losses"]):
     os.rmdir(os.path.join(output_paths["losses"], dir))
 
 # %%
-# 3. Generating simulated data 🔮
+# 3. Specifying input file paths 🔮
 # --------------------------------
-# Time to create some simulated data for our models to work their wonders on.
-# This function also simulated image data which we aren't using here.
+# We're using MNIST data for this example, and the CSV files are stored in the ``_static/mnist_data`` directory with the documentation files.
 
-tabular1_path, tabular2_path = generate_sklearn_simulated_data(prediction_task,
-                                                               num_samples=500,
-                                                               num_tab1_features=10,
-                                                               num_tab2_features=20)
 
 data_paths = {
-    "tabular1": tabular1_path,
-    "tabular2": tabular2_path,
+    "tabular1": "../../_static/mnist_data/mnist1_regression.csv",
+    "tabular2": "../../_static/mnist_data/mnist2_regression.csv",
     "image": "",
 }
 
@@ -175,7 +176,7 @@ plt.show()
 # %% [markdown]
 # 6. Training the second fusion model 🏁
 # ---------------------------------------
-#  It's time for our second fusion model to shine! Here we train the second fusion model: TabularChannelWiseMultiAttention. We're using the same steps as before, but this time we're using the second model in the ``fusion_models`` list.
+#  It's time for our second fusion model to shine! Here we train the second fusion model: ConcatTabularFeatureMaps. We're using the same steps as before, but this time we're using the second model in the ``fusion_models`` list.
 
 
 # %%
