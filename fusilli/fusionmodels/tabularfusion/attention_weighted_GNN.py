@@ -163,6 +163,10 @@ class AttentionWeightMLP(pl.LightningModule):
 
         y_hat, weights = self.forward((x1, x2))
 
+        if self.prediction_task == "multiclass":
+            # turn the labels into one hot vectors
+            y = F.one_hot(y, num_classes=self.multiclass_dimensions).to(torch.float32)
+
         loss = F.mse_loss(y_hat.squeeze(), y.to(torch.float32).squeeze())
         self.log('train_loss', loss, logger=None)
         return loss
@@ -186,6 +190,11 @@ class AttentionWeightMLP(pl.LightningModule):
         """
         x1, x2, y = batch
         y_hat, weights = self.forward((x1, x2))
+
+        if self.prediction_task == "multiclass":
+            # turn the labels into one hot vectors
+            y = F.one_hot(y, num_classes=self.multiclass_dimensions).to(torch.float32)
+
         loss = F.mse_loss(y_hat.squeeze(), y.to(torch.float32).squeeze())
         self.log('val_loss', loss, logger=None)
         return loss
