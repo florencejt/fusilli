@@ -6,6 +6,11 @@ K-Fold Cross-Validation: Binary Classification
 We'll show you how to train a fusion model using K-Fold cross-validation with multimodal tabular data. 
 Specifically, we're using the :class:`~.TabularCrossmodalMultiheadAttention` model.
 
+Data:
+
+The data we are using is 500 rows of the MNIST dataset, split into top and bottom halves as our two tabular modalities.
+The bottom half's values have been inverted to make the task more difficult.
+The prediction label will be whether the number is odd or even.
 
 Key Features:
 
@@ -19,7 +24,6 @@ import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
 import os
 
-from docs.examples import generate_sklearn_simulated_data
 from fusilli.data import prepare_fusion_data
 from fusilli.eval import ConfusionMatrix
 from fusilli.train import train_and_save_models
@@ -87,19 +91,13 @@ for dir in os.listdir(output_paths["losses"]):
     os.rmdir(os.path.join(output_paths["losses"], dir))
 
 # %%
-# 3. Generating simulated data 🔮
+# 3. Specifying input file paths 🔮
 # --------------------------------
-# Time to create some simulated data for our models to work their wonders on.
-# This function also simulated image data which we aren't using here.
-
-tabular1_path, tabular2_path = generate_sklearn_simulated_data(prediction_task,
-                                                               num_samples=500,
-                                                               num_tab1_features=10,
-                                                               num_tab2_features=20)
+# We're using the MNIST dataset for this example, and the CSV files are stored in the ``_static/mnist_data`` directory with the documentation files.
 
 data_paths = {
-    "tabular1": tabular1_path,
-    "tabular2": tabular2_path,
+    "tabular1": "../_static/mnist_data/mnist1_binary.csv",
+    "tabular2": "../_static/mnist_data/mnist2_binary.csv",
     "image": "",
 }
 
