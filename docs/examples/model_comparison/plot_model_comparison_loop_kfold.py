@@ -132,8 +132,8 @@ for dir in os.listdir(output_paths["losses"]):
 # We're using the MNIST dataset for this example, and the CSV files are stored in the ``_static/mnist_data`` directory with the documentation files.
 
 data_paths = {
-    "tabular1": "../_static/mnist_data/mnist1.csv",
-    "tabular2": "../_static/mnist_data/mnist2.csv",
+    "tabular1": "../../_static/mnist_data/mnist1.csv",
+    "tabular2": "../../_static/mnist_data/mnist2.csv",
     "image": "",
 }
 

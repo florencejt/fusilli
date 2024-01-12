@@ -59,14 +59,14 @@ for dir in os.listdir(output_paths["losses"]):
     os.rmdir(os.path.join(output_paths["losses"], dir))
 
 data_paths = {
-    "tabular1": "../_static/mnist_data/mnist1_regression.csv",
-    "tabular2": "../_static/mnist_data/mnist2_regression.csv",
+    "tabular1": "../../_static/mnist_data/mnist1_regression.csv",
+    "tabular2": "../../_static/mnist_data/mnist2_regression.csv",
     "image": "",
 }
 
 external_data_paths = {
-    "tabular1": "../_static/mnist_data/mnist1_regression_test.csv",
-    "tabular2": "../_static/mnist_data/mnist2_regression_test.csv",
+    "tabular1": "../../_static/mnist_data/mnist1_regression_test.csv",
+    "tabular2": "../../_static/mnist_data/mnist2_regression_test.csv",
     "image": "",
 }
 
