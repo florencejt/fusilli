@@ -107,7 +107,7 @@ Instead of using ``plt.show()``, we can also save the figures to a file using ``
                                               fusion_model=model,)
 
         # Evaluate the model by plotting the confusion matrix
-        RealsVsPreds_figure = ConfusionMatrix.from_final_val_data(trained_model)
+        ConfusionMatrix_figure = ConfusionMatrix.from_final_val_data(trained_model)
         plt.savefig(f"{output_paths['figures']}/{model_name}_confusion_matrix.png")
 
         # save trained model

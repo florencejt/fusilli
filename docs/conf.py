@@ -23,6 +23,7 @@ warnings.filterwarnings("ignore", ".*GPU available but not used.*")
 warnings.filterwarnings(
     "ignore", message="Checkpoint directory.*exists and is not empty."
 )
+warnings.filterwarnings("ignore", ".*samples in targets.*")
 
 project = "fusilli"
 copyright = "2023, Florence J Townend"

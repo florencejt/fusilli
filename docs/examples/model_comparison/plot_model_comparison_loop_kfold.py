@@ -27,7 +27,7 @@ Let's dive into each of these steps in detail:
 
 4. **Training All Fusion Models:**
 
-   Now, we train all the selected fusion models using the generated data and the defined training parameters. We'll monitor the performance of each model during training and store the results for later analysis.
+   Now, we train all the selected fusion models using the data and the defined training parameters. We'll monitor the performance of each model during training and store the results for later analysis.
 
 5. **Plotting Individual Model Results:**
 
@@ -140,7 +140,7 @@ data_paths = {
 # %%
 # 4. Training the all the fusion models 🏁
 # -----------------------------------------
-# In this section, we train all the fusion models using the generated data and specified parameters.
+# In this section, we train all the fusion models using the data and specified parameters.
 # We store the results of each model for later analysis.
 
 # Using %%capture to hide the progress bar and plots (there are a lot of them!)

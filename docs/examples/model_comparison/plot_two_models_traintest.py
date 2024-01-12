@@ -44,10 +44,10 @@ from fusilli.utils.model_chooser import import_chosen_fusion_models
 #
 # The function returns list of class objects that match the conditions. If no conditions are specified, then all the models are returned.
 #
-# We're importing ConcatTabularData and TabularChannelWiseMultiAttention models for this example. Both are multimodal tabular models.
+# We're importing :class:`~.Tabular1Unimodal` and :class:`~.ConcatTabularFeatureMaps` `models for this example, so we have one unimodal benchmark and one multimodal model.
 
 model_conditions = {
-    "class_name": ["ConcatTabularData", "TabularChannelWiseMultiAttention"],
+    "class_name": ["Tabular1Unimodal", "ConcatTabularFeatureMaps"],
 }
 
 fusion_models = import_chosen_fusion_models(model_conditions)
@@ -176,7 +176,7 @@ plt.show()
 # %% [markdown]
 # 6. Training the second fusion model 🏁
 # ---------------------------------------
-#  It's time for our second fusion model to shine! Here we train the second fusion model: TabularChannelWiseMultiAttention. We're using the same steps as before, but this time we're using the second model in the ``fusion_models`` list.
+#  It's time for our second fusion model to shine! Here we train the second fusion model: ConcatTabularFeatureMaps. We're using the same steps as before, but this time we're using the second model in the ``fusion_models`` list.
 
 
 # %%

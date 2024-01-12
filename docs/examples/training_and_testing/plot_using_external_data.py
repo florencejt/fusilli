@@ -5,7 +5,7 @@ Using External Test Data
 Let's learn how to use external test data with Fusilli!
 Some guidance can also be found in the :ref:`Data Loading <data-loading>` section of the documentation.
 
-The extra step that we need to take is to provide the paths to the test data files to the functions that create evaluation figures: :class:`~fusilli.eval.RealsVsPreds.from_new_data`, :class:`~fusilli.eval.ConfusionMatrix.from_new_data`, :class:`~fusilli.eval.ModelComparison.from_new_data`.
+The extra step that we need to take is to provide the paths to the test data files to the functions that create evaluation figures: :class:`~.fusilli.eval.RealsVsPreds.from_new_data`, :class:`~.fusilli.eval.ConfusionMatrix.from_new_data`, :class:`~.fusilli.eval.ModelComparison.from_new_data`.
 
 .. note::
 
@@ -29,7 +29,7 @@ from fusilli.utils.model_chooser import import_chosen_fusion_models
 
 
 model_conditions = {
-    "class_name": ["ConcatTabularData"],
+    "class_name": ["ConcatTabularFeatureMaps"],
 }
 
 fusion_models = import_chosen_fusion_models(model_conditions)
