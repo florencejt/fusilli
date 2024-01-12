@@ -10,6 +10,7 @@ We will cover the following topics:
 * Batch size
 * Number of epochs
 * Checkpoint suffix modification
+* Number of workers in PyTorch DataLoader
 
 Early stopping
 --------------
@@ -220,4 +221,30 @@ The checkpoint name would then be (if the model trained for 100 epochs):
 .. note::
 
     The ``extra_log_string_dict`` argument is also used to modify the logging behaviour of the model. For more information, see :ref:`wandb`.
+
+
+-----
+
+Number of workers in PyTorch DataLoader
+-----------------------------------------
+
+You can change the number of workers in the PyTorch DataLoader using the ``num_workers`` argument in the :func:`~.fusilli.data.prepare_fusion_data` function. By default, the number of workers is 0.
+
+.. code-block:: python
+
+    from fusilli.data import prepare_fusion_data
+    from fusilli.train import train_and_save_models
+
+    datamodule = prepare_fusion_data(
+            prediction_task="binary",
+            fusion_model=example_model,
+            data_paths=data_paths,
+            output_paths=output_path,
+            num_workers=4,
+        )
+
+    trained_model_list = train_and_save_models(
+            data_module=datamodule,
+            fusion_model=example_model,
+        )
 
