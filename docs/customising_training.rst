@@ -11,6 +11,7 @@ We will cover the following topics:
 * Number of epochs
 * Checkpoint suffix modification
 * Number of workers in PyTorch DataLoader
+* Train/test and cross-validation splitting yourself
 
 Early stopping
 --------------
@@ -247,4 +248,66 @@ You can change the number of workers in the PyTorch DataLoader using the ``num_w
             data_module=datamodule,
             fusion_model=example_model,
         )
+
+
+
+-----
+
+Train/test and cross-validation splitting yourself
+---------------------------------------------------
+
+By default, fusilli will split your data into train/test or cross-validation splits for you randomly based on a test size or a number of folds you specify in the :func:`~.fusilli.data.prepare_fusion_data` function.
+
+You can remove the randomness and specify the data indices for train and test, or for the different cross validation folds yourself by passing in optional arguments to :func:`~.fusilli.data.prepare_fusion_data`.
+
+
+For train/test splitting, the argument `test_indices` should be a list of indices for the test set. To make the test set the first 6 data points in the overall dataset, follow the example below:
+
+.. code-block:: python
+
+    from fusilli.data import prepare_fusion_data
+    from fusilli.train import train_and_save_models
+
+    test_indices = [0, 1, 2, 3, 4, 5]
+
+    datamodule = prepare_fusion_data(
+            prediction_task="binary",
+            fusion_model=example_model,
+            data_paths=data_paths,
+            output_paths=output_path,
+            test_indices=test_indices,
+        )
+
+For specifying your own cross validation folds, the argument `own_kfold_indices` should be a list of lists of indices for each fold.
+
+If you wanted to have non-random cross validation folds through your data, you can either specify the folds like so for 3 folds:
+
+.. code-block:: python
+
+    own_kfold_indices = [
+        ([ 4,  5,  6,  7,  8,  9, 10, 11], [0, 1, 2, 3]), # first fold
+        ([ 0,  1,  2,  3,  8,  9, 10, 11], [4, 5, 6, 7]), # second fold
+        ([ 0,  1,  2,  3,  4,  5,  6,  7], [8, 9, 10, 11]) # third fold
+    ]
+
+Or to do this automatically, use the Scikit-Learn `KFold functionality <https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html>`_ to generate the folds outside of the fusilli functions, like so:
+
+.. code-block:: python
+
+    from sklearn.model_selection import KFold
+
+    num_folds = 5
+
+    own_kfold_indices = [(train_index, test_index) for train_index, test_index in KFold(n_splits=num_folds).split(range(len(dataset)))]
+
+
+    datamodule = prepare_fusion_data(
+        kfold=True,
+        prediction_task="binary",
+        fusion_model=example_model,
+        data_paths=data_paths,
+        output_paths=output_path,
+        own_kfold_indices=own_kfold_indices,
+        num_folds=num_folds,
+    )
 

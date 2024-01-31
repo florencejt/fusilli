@@ -731,8 +731,7 @@ def model_instance_denoising_autoencoder_subspace_method_2D(create_test_files):
                              prediction_task="binary",
                              batch_size=batch_size,
                              test_size=0.2,
-                             multiclass_dimensions=None,
-                             num_folds=None)
+                             multiclass_dimensions=None, )
     dm.prepare_data()
     dm.setup()
 
@@ -757,8 +756,7 @@ def model_instance_denoising_autoencoder_subspace_method_3D(create_test_files):
                              prediction_task="binary",
                              batch_size=batch_size,
                              test_size=0.2,
-                             multiclass_dimensions=None,
-                             num_folds=None)
+                             multiclass_dimensions=None, )
     dm.prepare_data()
     dm.setup()
 
@@ -783,7 +781,7 @@ def model_instance_concat_img_latent_tab_subspace_method_2D(create_test_files):
                              prediction_task="binary",
                              batch_size=batch_size,
                              test_size=0.2,
-                             multiclass_dimensions=None, num_folds=None)
+                             multiclass_dimensions=None, )
     dm.prepare_data()
     dm.setup()
 
@@ -808,7 +806,7 @@ def model_instance_concat_img_latent_tab_subspace_method_3D(create_test_files):
                                      prediction_task="binary",
                                      batch_size=batch_size,
                                      test_size=0.2,
-                                     multiclass_dimensions=None, num_folds=None)
+                                     multiclass_dimensions=None, )
     datamodule.prepare_data()
     datamodule.setup()
 
