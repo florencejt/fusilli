@@ -255,6 +255,49 @@ def test_setup_calls_subspace_method(create_test_files):
         )
 
 
+# Testing that the test indices are correctly input and used instead of a random split
+def test_owntestindices(create_test_files_more_features):
+    tabular1_csv = create_test_files_more_features["tabular1_csv"]
+    tabular2_csv = create_test_files_more_features["tabular2_csv"]
+    image_torch_file_2d = create_test_files_more_features["image_torch_file_2d"]
+
+    test_size = 0.2
+    prediction_task = "binary"
+    multiclass_dimensions = None
+
+    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+    batch_size = 23
+
+    example_fusion_model = Mock()
+    example_fusion_model.modality_type = "tabular_image"
+
+    # make test indices people 30 to 36
+    test_indices = list(range(25, 36))
+
+    datamodule = TrainTestDataModule(fusion_model=example_fusion_model,
+                                     sources=sources,
+                                     output_paths=None,
+                                     prediction_task=prediction_task,
+                                     batch_size=batch_size,
+                                     test_size=test_size,
+                                     multiclass_dimensions=multiclass_dimensions,
+                                     num_folds=None,
+                                     test_indices=test_indices)
+    datamodule.prepare_data()
+    datamodule.setup()
+
+    # check that the test indices are correctly input
+    assert datamodule.test_indices == test_indices
+    # look at the test dataset
+    test_dataset = datamodule.test_dataset
+    # check that the test dataset has the correct number of people
+    assert len(test_dataset) == len(test_indices)
+    # check train dataset
+    train_dataset = datamodule.train_dataset
+    # check that the train dataset has the correct number of people
+    assert len(train_dataset) == 25
+
+
 # Run pytest
 if __name__ == "__main__":
     pytest.main()

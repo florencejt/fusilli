@@ -571,6 +571,7 @@ class TrainTestDataModule(pl.LightningDataModule):
             self.test_dataset = torch.utils.data.Subset(
                 self.dataset, self.test_indices
             )
+
             self.train_dataset = torch.utils.data.Subset(
                 self.dataset, list(set(range(len(self.dataset))) - set(self.test_indices))
             )
