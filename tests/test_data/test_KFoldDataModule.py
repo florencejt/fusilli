@@ -1,8 +1,9 @@
 import pytest
 import torch
 from fusilli.data import KFoldDataModule
-from .test_TrainTestDataModule import create_test_files, MockSubspaceMethod
+from .test_TrainTestDataModule import create_test_files, MockSubspaceMethod, create_test_files_more_features
 from unittest.mock import patch, Mock
+from sklearn.model_selection import KFold
 
 
 @pytest.fixture
@@ -64,6 +65,44 @@ def test_kfold_split(create_kfold_data_module):
     folds = data_module.kfold_split()
 
     assert len(folds) == 5  # Check if the correct number of folds is generated
+
+
+def test_kfold_split_own_indices(create_test_files_more_features):
+    tabular1_csv = create_test_files_more_features["tabular1_csv"]
+    tabular2_csv = create_test_files_more_features["tabular2_csv"]
+    image_torch_file_2d = create_test_files_more_features["image_torch_file_2d"]
+
+    test_size = 0.2
+    prediction_task = "binary"
+    multiclass_dimensions = None
+
+    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+
+    # specifying own kfold indices using a non random split
+    own_folds = [(train_index, test_index) for train_index, test_index in KFold(n_splits=5).split(range(36))]
+
+    example_fusion_model = Mock()
+    example_fusion_model.modality_type = "tabular_image"
+
+    datamodule = KFoldDataModule(
+        fusion_model=example_fusion_model,
+        sources=sources,
+        output_paths={},
+        prediction_task=prediction_task,
+        multiclass_dimensions=multiclass_dimensions,
+        num_folds=5,
+        test_size=test_size,
+        own_kfold_indices=own_folds,
+        batch_size=9,
+    )
+
+    datamodule.prepare_data()
+    folds = datamodule.kfold_split()  # returns list of tuples of datasets
+
+    assert len(folds) == 5  # Check if the correct number of folds is generated
+
+    # check if the correct number of samples is in each fold
+    assert len(folds[0][0]) == len(own_folds[0][0])
 
 
 def test_train_dataloader(create_kfold_data_module):

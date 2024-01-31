@@ -722,6 +722,10 @@ class KFoldDataModule(pl.LightningDataModule):
         Early stopping callback class.
     num_workers : int
         Number of workers for the dataloader (default 0).
+    own_kfold_indices : list
+        List of indices to use for k-fold cross validation (default None). If None, the k-fold
+        indices are randomly selected. Structure is a list of tuples of (train_indices,
+        test_indices). Must be the same length as num_folds.
     kwargs : dict
         Dictionary of extra arguments for the subspace method class.
     """
@@ -743,6 +747,7 @@ class KFoldDataModule(pl.LightningDataModule):
             extra_log_string_dict=None,
             own_early_stopping_callback=None,
             num_workers=0,
+            own_kfold_indices=None,
             kwargs=None,
     ):
         """
@@ -782,6 +787,10 @@ class KFoldDataModule(pl.LightningDataModule):
             Early stopping callback class (default None).
         num_workers : int
             Number of workers for the dataloader (default 0).
+        own_kfold_indices : list
+            List of indices to use for k-fold cross validation (default None). If None, the k-fold
+            indices are randomly selected. Structure is a list of tuples of (train_indices,
+            test_indices). Must be the same length as num_folds.
         kwargs : dict
             Dictionary of extra arguments for the subspace method class.
         """
@@ -822,6 +831,7 @@ class KFoldDataModule(pl.LightningDataModule):
         self.max_epochs = max_epochs
         self.own_early_stopping_callback = own_early_stopping_callback
         self.num_workers = num_workers
+        self.own_kfold_indices = own_kfold_indices
         self.kwargs = kwargs
 
     def prepare_data(self):
@@ -849,16 +859,18 @@ class KFoldDataModule(pl.LightningDataModule):
         folds : list
             List of tuples of (train_dataset, test_dataset)
         """
-
-        # split the dataset into k folds
-        # TODO change this into a function which takes in indices or random split directives
-        kf = KFold(n_splits=self.num_folds, shuffle=True)
-
         # get the indices of the dataset
         indices = list(range(len(self.dataset)))
 
+        # split the dataset into k folds
+        if self.own_kfold_indices is None:
+            kf = KFold(n_splits=self.num_folds, shuffle=True)
+            split_kf = kf.split(indices)
+        else:
+            split_kf = self.own_kfold_indices
+
         folds = []
-        for train_indices, val_indices in kf.split(indices):
+        for train_indices, val_indices in split_kf:
             # split the dataset into train and test sets for each fold
             train_dataset = torch.utils.data.Subset(self.dataset, train_indices)
             test_dataset = torch.utils.data.Subset(self.dataset, val_indices)
