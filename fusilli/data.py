@@ -422,6 +422,9 @@ class TrainTestDataModule(pl.LightningDataModule):
         Early stopping callback class.
     num_workers : int
         Number of workers for the dataloader (default 0).
+    test_indices : list
+        List of indices to use for testing (default None). If None, the test indices are
+        randomly selected using the test_size parameter.
     kwargs : dict
         Dictionary of extra arguments for the subspace method class.
     """
@@ -443,6 +446,7 @@ class TrainTestDataModule(pl.LightningDataModule):
             extra_log_string_dict=None,
             own_early_stopping_callback=None,
             num_workers=0,
+            test_indices=None,
             kwargs=None,
     ):
         """
@@ -482,6 +486,9 @@ class TrainTestDataModule(pl.LightningDataModule):
             Early stopping callback class (default None).
         num_workers : int
             Number of workers for the dataloader (default 0).
+        test_indices : list
+            List of indices to use for testing (default None). If None, the test indices are
+            randomly selected using the test_size parameter.
         kwargs : dict
             Dictionary of extra arguments for the subspace method class.
         """
@@ -515,6 +522,7 @@ class TrainTestDataModule(pl.LightningDataModule):
         self.max_epochs = max_epochs
         self.own_early_stopping_callback = own_early_stopping_callback
         self.num_workers = num_workers
+        self.test_indices = test_indices
         self.kwargs = kwargs
 
     def prepare_data(self):
@@ -555,9 +563,17 @@ class TrainTestDataModule(pl.LightningDataModule):
         """
 
         # split the dataset into train and test sets
-        [self.train_dataset, self.test_dataset] = torch.utils.data.random_split(
-            self.dataset, [1 - self.test_size, self.test_size]
-        )
+        if self.test_indices is None:
+            [self.train_dataset, self.test_dataset] = torch.utils.data.random_split(
+                self.dataset, [1 - self.test_size, self.test_size]
+            )
+        else:
+            self.test_dataset = torch.utils.data.Subset(
+                self.dataset, self.test_indices
+            )
+            self.train_dataset = torch.utils.data.Subset(
+                self.dataset, list(set(range(len(self.dataset))) - set(self.test_indices))
+            )
 
         if self.subspace_method is not None:  # if subspace method is specified
             if (
@@ -834,6 +850,7 @@ class KFoldDataModule(pl.LightningDataModule):
         """
 
         # split the dataset into k folds
+        # TODO change this into a function which takes in indices or random split directives
         kf = KFold(n_splits=self.num_folds, shuffle=True)
 
         # get the indices of the dataset
@@ -1046,7 +1063,9 @@ class TrainTestGraphDataModule:
         List of indices for testing. Created in setup().
     graph_data : graph data structure
         Graph data structure. Created in setup().
-
+    own_test_indices : list
+        List of indices to use for testing (default None). If None, the test indices are
+        randomly selected using the test_size parameter.
     """
 
     def __init__(
@@ -1058,6 +1077,7 @@ class TrainTestGraphDataModule:
             image_downsample_size=None,
             layer_mods=None,
             extra_log_string_dict=None,
+            own_test_indices=None,
     ):
         """
         Parameters
@@ -1079,6 +1099,9 @@ class TrainTestGraphDataModule:
             (default None)
         extra_log_string_dict : dict
             Dictionary of extra strings to add to the log.
+        own_test_indices : list
+            List of indices to use for testing (default None). If None, the test indices are
+            randomly selected using the test_size parameter.
 
         """
 
@@ -1107,6 +1130,7 @@ class TrainTestGraphDataModule:
         self.test_size = test_size
         self.graph_creation_method = graph_creation_method
         self.layer_mods = layer_mods
+        self.own_test_indices = own_test_indices
 
     def prepare_data(self):
         """
@@ -1133,11 +1157,17 @@ class TrainTestGraphDataModule:
         None
         """
         # get random train and test idxs
-        [train_dataset, test_dataset] = torch.utils.data.random_split(
-            self.dataset, [1 - self.test_size, self.test_size]
-        )
-        self.train_idxs = train_dataset.indices
-        self.test_idxs = test_dataset.indices
+        if self.own_test_indices is not None:
+            [train_dataset, test_dataset] = torch.utils.data.random_split(
+                self.dataset, [1 - self.test_size, self.test_size]
+            )
+            self.train_idxs = train_dataset.indices
+            self.test_idxs = test_dataset.indices
+        else:
+            self.test_idxs = self.own_test_indices
+            self.train_idxs = list(
+                set(range(len(self.dataset))) - set(self.test_idxs)
+            )
 
         # get the graph data structure
         self.graph_maker_instance = self.graph_creation_method(self.dataset)
@@ -1378,6 +1408,7 @@ def prepare_fusion_data(
         extra_log_string_dict=None,
         own_early_stopping_callback=None,
         num_workers=0,
+        test_indices=None,
         **kwargs,
 ):
     """
@@ -1425,6 +1456,8 @@ def prepare_fusion_data(
         Early stopping callback class (default None).
     num_workers : int
         Number of workers for the dataloader (default 0).
+    test_indices : list or None
+        List of indices to use for testing (default None). If None, then random split is used.
     **kwargs : dict
         Extra keyword arguments. Usable for extra arguments for the subspace method MCVAE's early stopping callback: "mcvae_patience" and "mcvae_tolerance".
 
@@ -1461,6 +1494,7 @@ def prepare_fusion_data(
                 image_downsample_size=image_downsample_size,
                 layer_mods=layer_mods,
                 extra_log_string_dict=extra_log_string_dict,
+                # here is where the kfold split will go
             )
         else:
             graph_data_module = TrainTestGraphDataModule(
@@ -1471,6 +1505,7 @@ def prepare_fusion_data(
                 image_downsample_size=image_downsample_size,
                 layer_mods=layer_mods,
                 extra_log_string_dict=extra_log_string_dict,
+                own_test_indices=test_indices,
             )
 
         graph_data_module.prepare_data()
@@ -1519,6 +1554,7 @@ def prepare_fusion_data(
             extra_log_string_dict=extra_log_string_dict,
             own_early_stopping_callback=own_early_stopping_callback,
             num_workers=num_workers,
+            test_indices=test_indices,
             kwargs=kwargs,
         )
         data_module.prepare_data()
