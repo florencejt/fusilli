@@ -1,10 +1,11 @@
 import pytest
 from fusilli.data import KFoldGraphDataModule
-from .test_TrainTestDataModule import create_test_files
+from .test_TrainTestDataModule import create_test_files, create_test_files_more_features
 import torch_geometric
 import numpy as np
 from unittest.mock import patch, Mock
 from pytest_mock import mocker
+from sklearn.model_selection import KFold
 
 
 class MockGraphMakerModule:
@@ -52,6 +53,39 @@ def test_kfold_split(create_graph_data_module):
     # assert that each fold has one train and one val dataset
     for fold in folds:
         assert len(fold) == 2
+
+
+def test_kfold_split_own_indices(create_test_files_more_features):
+    tabular1_csv = create_test_files_more_features["tabular1_csv"]
+    tabular2_csv = create_test_files_more_features["tabular2_csv"]
+    image_torch_file_2d = create_test_files_more_features["image_torch_file_2d"]
+
+    prediction_task = "binary"
+    multiclass_dimensions = None
+
+    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+
+    # specifying own kfold indices using a non random split
+    own_folds = [(train_index, test_index) for train_index, test_index in KFold(n_splits=5).split(range(36))]
+
+    example_fusion_model = Mock()
+    example_fusion_model.modality_type = "tabular_image"
+
+    datamodule = KFoldGraphDataModule(
+        num_folds=5,
+        fusion_model=example_fusion_model,
+        sources=sources,
+        graph_creation_method=MockGraphMakerModule,
+        own_kfold_indices=own_folds,
+    )
+
+    datamodule.prepare_data()
+    folds = datamodule.kfold_split()  # returns list of tuples of datasets
+
+    assert len(folds) == 5  # Check if the correct number of folds is generated
+
+    # check if the correct number of samples is in each fold
+    assert len(folds[0][0]) == len(own_folds[0][0])
 
 
 def test_setup(create_graph_data_module, mocker):

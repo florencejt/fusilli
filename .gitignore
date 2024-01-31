@@ -164,3 +164,8 @@ cython_debug/
 
 # tracks the version
 _version.py
+
+# rogue directories from example notebooks running in local space
+checkpoints/
+loss_figures/
+loss_logs/

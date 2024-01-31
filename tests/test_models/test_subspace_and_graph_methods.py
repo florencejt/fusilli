@@ -58,7 +58,6 @@ def sample_datamodule(create_test_files):
                              prediction_task="binary",
                              batch_size=8,
                              test_size=0.3,
-                             num_folds=None,
                              multiclass_dimensions=None,
                              )
 
@@ -96,7 +95,6 @@ def sample_tabimg_datamodule(create_test_files):
                              prediction_task="binary",
                              batch_size=8,
                              test_size=0.3,
-                             num_folds=None,
                              multiclass_dimensions=None,
                              )
 
