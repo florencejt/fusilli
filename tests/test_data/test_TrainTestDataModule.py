@@ -271,7 +271,7 @@ def test_owntestindices(create_test_files_more_features):
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular_image"
 
-    # make test indices people 30 to 36
+    # make test indices people 25 to 36
     test_indices = list(range(25, 36))
 
     datamodule = TrainTestDataModule(fusion_model=example_fusion_model,

@@ -1158,7 +1158,7 @@ class TrainTestGraphDataModule:
         None
         """
         # get random train and test idxs
-        if self.own_test_indices is not None:
+        if self.own_test_indices is None:
             [train_dataset, test_dataset] = torch.utils.data.random_split(
                 self.dataset, [1 - self.test_size, self.test_size]
             )
