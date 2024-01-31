@@ -437,7 +437,6 @@ class TrainTestDataModule(pl.LightningDataModule):
             prediction_task,
             batch_size,
             test_size,
-            num_folds,  # not needed for train/test split
             multiclass_dimensions,
             subspace_method=None,
             image_downsample_size=None,
@@ -465,8 +464,6 @@ class TrainTestDataModule(pl.LightningDataModule):
             Batch size (default 8).
         test_size : float
             Fraction of data to use for testing (default 0.2).
-        num_folds : int
-            Total number of folds. Not needed for this class for train/test split but it's here to be consistent with KFoldDataModule.
         multiclass_dimensions : int
             Number of classes for multiclass prediction (default None).
         subspace_method : class
@@ -738,7 +735,6 @@ class KFoldDataModule(pl.LightningDataModule):
             prediction_task,
             batch_size,
             num_folds,
-            test_size,  # not needed for k-fold
             multiclass_dimensions,
             subspace_method=None,
             image_downsample_size=None,
@@ -1259,6 +1255,7 @@ class KFoldGraphDataModule:
             image_downsample_size=None,
             layer_mods=None,
             extra_log_string_dict=None,
+            own_kfold_indices=None,
     ):
         """
         Parameters
@@ -1279,6 +1276,10 @@ class KFoldGraphDataModule:
             (default None)
         extra_log_string_dict : dict
             Dictionary of extra strings to add to the log.
+        own_kfold_indices : list
+            List of indices to use for k-fold cross validation (default None). If None, the k-fold
+            indices are randomly selected. Structure is a list of tuples of (train_indices,
+            test_indices). Must be the same length as num_folds.
         """
         super().__init__()
         self.num_folds = num_folds  # total number of folds
@@ -1304,6 +1305,7 @@ class KFoldGraphDataModule:
         self.modality_type = self.fusion_model.modality_type
         self.graph_creation_method = graph_creation_method
         self.layer_mods = layer_mods
+        self.own_kfold_indices = own_kfold_indices
 
     def prepare_data(self):
         """
@@ -1322,21 +1324,28 @@ class KFoldGraphDataModule:
         Returns
         ------
         folds : list
-            List of tuples of (graph_data, train_idxs, test_idxs)
+            List of tuples of (train_dataset, test_dataset)
         """
-        # splits the dataset into k folds
-        kf = KFold(n_splits=self.num_folds, shuffle=True)
-        indices = list(range(len(self.dataset)))  # get the indices of the dataset
+        # get the indices of the dataset
+        indices = list(range(len(self.dataset)))
+
+        # split the dataset into k folds
+        if self.own_kfold_indices is None:
+            kf = KFold(n_splits=self.num_folds, shuffle=True)
+            split_kf = kf.split(indices)
+        else:
+            split_kf = self.own_kfold_indices
 
         folds = []
-        for train_indices, val_indices in kf.split(indices):
+        for train_indices, val_indices in split_kf:
             # split the dataset into train and test sets for each fold
             train_dataset = torch.utils.data.Subset(self.dataset, train_indices)
             test_dataset = torch.utils.data.Subset(self.dataset, val_indices)
-            folds.append(
-                (train_dataset, test_dataset)
-            )  # list of tuples of (train_dataset, test_dataset)
-        return folds
+
+            # append the train and test datasets to the folds list
+            folds.append((train_dataset, test_dataset))
+
+        return folds  # list of tuples of (train_dataset, test_dataset)
 
     def setup(self):
         """
@@ -1422,6 +1431,7 @@ def prepare_fusion_data(
         own_early_stopping_callback=None,
         num_workers=0,
         test_indices=None,
+        own_kfold_indices=None,
         **kwargs,
 ):
     """
@@ -1471,6 +1481,8 @@ def prepare_fusion_data(
         Number of workers for the dataloader (default 0).
     test_indices : list or None
         List of indices to use for testing (default None). If None, then random split is used.
+    own_kfold_indices : list or None
+        List of indices to use for k-fold cross validation (default None). If None, then random split is used.
     **kwargs : dict
         Extra keyword arguments. Usable for extra arguments for the subspace method MCVAE's early stopping callback: "mcvae_patience" and "mcvae_tolerance".
 
@@ -1547,29 +1559,43 @@ def prepare_fusion_data(
     else:
         # another other than graph fusion
         if kfold:
-            datamodule_func = KFoldDataModule
+            data_module = KFoldDataModule(
+                fusion_model,
+                sources=data_sources,
+                output_paths=output_paths,
+                prediction_task=prediction_task,
+                batch_size=batch_size,
+                num_folds=num_folds,
+                multiclass_dimensions=multiclass_dimensions,
+                subspace_method=fusion_model.subspace_method,
+                image_downsample_size=image_downsample_size,
+                layer_mods=layer_mods,
+                max_epochs=max_epochs,
+                extra_log_string_dict=extra_log_string_dict,
+                own_early_stopping_callback=own_early_stopping_callback,
+                num_workers=num_workers,
+                own_kfold_indices=own_kfold_indices,
+                kwargs=kwargs,
+            )
         else:
-            datamodule_func = TrainTestDataModule
-
-        data_module = datamodule_func(
-            fusion_model,
-            sources=data_sources,
-            output_paths=output_paths,
-            prediction_task=prediction_task,
-            batch_size=batch_size,
-            test_size=test_size,
-            num_folds=num_folds,
-            multiclass_dimensions=multiclass_dimensions,
-            subspace_method=fusion_model.subspace_method,
-            image_downsample_size=image_downsample_size,
-            layer_mods=layer_mods,
-            max_epochs=max_epochs,
-            extra_log_string_dict=extra_log_string_dict,
-            own_early_stopping_callback=own_early_stopping_callback,
-            num_workers=num_workers,
-            test_indices=test_indices,
-            kwargs=kwargs,
-        )
+            data_module = TrainTestDataModule(
+                fusion_model,
+                sources=data_sources,
+                output_paths=output_paths,
+                prediction_task=prediction_task,
+                batch_size=batch_size,
+                test_size=test_size,
+                multiclass_dimensions=multiclass_dimensions,
+                subspace_method=fusion_model.subspace_method,
+                image_downsample_size=image_downsample_size,
+                layer_mods=layer_mods,
+                max_epochs=max_epochs,
+                extra_log_string_dict=extra_log_string_dict,
+                own_early_stopping_callback=own_early_stopping_callback,
+                num_workers=num_workers,
+                test_indices=test_indices,
+                kwargs=kwargs,
+            )
         data_module.prepare_data()
         data_module.setup(checkpoint_path=checkpoint_path)
 

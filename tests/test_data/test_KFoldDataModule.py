@@ -32,7 +32,6 @@ def create_kfold_data_module(create_test_files):
         multiclass_dimensions=params["multiclass_dims"],
         num_folds=params["num_k"],
         batch_size=batch_size,
-        test_size=0.2
     )
 
     return data_module
@@ -72,7 +71,6 @@ def test_kfold_split_own_indices(create_test_files_more_features):
     tabular2_csv = create_test_files_more_features["tabular2_csv"]
     image_torch_file_2d = create_test_files_more_features["image_torch_file_2d"]
 
-    test_size = 0.2
     prediction_task = "binary"
     multiclass_dimensions = None
 
@@ -91,7 +89,6 @@ def test_kfold_split_own_indices(create_test_files_more_features):
         prediction_task=prediction_task,
         multiclass_dimensions=multiclass_dimensions,
         num_folds=5,
-        test_size=test_size,
         own_kfold_indices=own_folds,
         batch_size=9,
     )

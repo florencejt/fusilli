@@ -153,8 +153,7 @@ def test_train_dataloader(create_test_files):
                                      prediction_task=prediction_task,
                                      batch_size=batch_size,
                                      test_size=test_size,
-                                     multiclass_dimensions=None,
-                                     num_folds=None)
+                                     multiclass_dimensions=None, )
 
     datamodule.prepare_data()
     datamodule.setup()
@@ -190,8 +189,7 @@ def test_val_dataloader(create_test_files):
                                      prediction_task=prediction_task,
                                      batch_size=batch_size,
                                      test_size=test_size,
-                                     multiclass_dimensions=multiclass_dimensions,
-                                     num_folds=None)
+                                     multiclass_dimensions=multiclass_dimensions, )
     datamodule.prepare_data()
     datamodule.setup()
 
@@ -244,7 +242,6 @@ def test_setup_calls_subspace_method(create_test_files):
                                          batch_size=batch_size,
                                          test_size=test_size,
                                          multiclass_dimensions=multiclass_dimensions,
-                                         num_folds=None,
                                          subspace_method=mock_subspace_method)
         datamodule.prepare_data()
         datamodule.setup()
@@ -281,7 +278,6 @@ def test_owntestindices(create_test_files_more_features):
                                      batch_size=batch_size,
                                      test_size=test_size,
                                      multiclass_dimensions=multiclass_dimensions,
-                                     num_folds=None,
                                      test_indices=test_indices)
     datamodule.prepare_data()
     datamodule.setup()
