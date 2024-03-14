@@ -10,7 +10,7 @@ Examples of how to modify the models can be found in the :ref:`advanced-examples
 Below are the modifiable attributes with guidance on how they can be changed:
 
 .. note::
-   If modifications are made to certain layers like :attr:`~.ActivationFusion.mod1_layers` or :attr:`~.AttentionAndActivation.img_layers`, the attribute :attr:`~.ActivationFusion.fused_layers` will be updated to ensure the first layer has the correct input features corresponding to the modified layers. Similarly, altering :attr:`~.ActivationFusion.fused_layers` will adjust the `final_prediction` layer's input features accordingly.
+   If modifications are made to certain layers like :attr:`~.ActivationFusion.mod1_layers` or :attr:`~.AttentionAndSelfActivation.img_layers`, the attribute :attr:`~.ActivationFusion.fused_layers` will be updated to ensure the first layer has the correct input features corresponding to the modified layers. Similarly, altering :attr:`~.ActivationFusion.fused_layers` will adjust the `final_prediction` layer's input features accordingly.
 
 .. warning::
    Errors may occur if the input features of certain layer groups (e.g., :attr:`~.ActivationFusion.mod1_layers` and :attr:`~.ActivationFusion.img_layers`) are incorrect. For instance, changing :attr:`~.ActivationFusion.mod1_layers` input features to 20 while the actual number for the first tabular modality is 10 will result in a matrix multiplication error during the `forward` method.
@@ -80,7 +80,7 @@ Modifiable Attributes
   * - :attr:`~.ActivationFusion.fused_layers`
     - ``nn.Sequential``
 
-:class:`.AttentionAndActivation`
+:class:`.AttentionAndSelfActivation`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -90,13 +90,13 @@ Modifiable Attributes
 
   * - Attribute
     - Guidance
-  * - :attr:`~.AttentionAndActivation.mod1_layers`
+  * - :attr:`~.AttentionAndSelfActivation.mod1_layers`
     - ``nn.ModuleDict``
-  * - :attr:`~.AttentionAndActivation.mod2_layers`
+  * - :attr:`~.AttentionAndSelfActivation.mod2_layers`
     - ``nn.ModuleDict``
-  * - :attr:`~.AttentionAndActivation.fused_layers`
+  * - :attr:`~.AttentionAndSelfActivation.fused_layers`
     - ``nn.Sequential``
-  * - :attr:`~.AttentionAndActivation.attention_reduction_ratio`
+  * - :attr:`~.AttentionAndSelfActivation.attention_reduction_ratio`
     - int
 
 
