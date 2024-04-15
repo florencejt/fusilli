@@ -122,7 +122,9 @@ class BaseModel(pl.LightningModule):
         }
 
         if self.model.prediction_task not in ["binary", "multiclass", "regression"]:
-            raise ValueError(f"Unsupported prediction_task: {self.model.prediction_task}")
+            raise ValueError(
+                f"Unsupported prediction_task: {self.model.prediction_task}"
+            )
 
         self.metric_names_list = list(self.metrics.keys())
 
@@ -181,14 +183,20 @@ class BaseModel(pl.LightningModule):
         # If the list is None, use the default metrics
         if metrics_list is None:
             if self.model.prediction_task == "binary":
-                self.metrics = {"AUROC": self.MetricsCalculator.auroc,
-                                "Accuracy": self.MetricsCalculator.accuracy}
+                self.metrics = {
+                    "AUROC": self.MetricsCalculator.auroc,
+                    "Accuracy": self.MetricsCalculator.accuracy,
+                }
             elif self.model.prediction_task == "multiclass":
-                self.metrics = {"AUROC": self.MetricsCalculator.auroc,
-                                "Accuracy": self.MetricsCalculator.accuracy}
+                self.metrics = {
+                    "AUROC": self.MetricsCalculator.auroc,
+                    "Accuracy": self.MetricsCalculator.accuracy,
+                }
             elif self.model.prediction_task == "regression":
-                self.metrics = {"R2": self.MetricsCalculator.r2,
-                                "MAE": self.MetricsCalculator.mae}
+                self.metrics = {
+                    "R2": self.MetricsCalculator.r2,
+                    "MAE": self.MetricsCalculator.mae,
+                }
 
         # Error if list length is less than 2
         else:
@@ -199,13 +207,23 @@ class BaseModel(pl.LightningModule):
 
             # Error if any of the metrics are not supported
             for metric_string in metrics_list:
-                supported_metrics = [func for func in dir(self.MetricsCalculator) if
-                                     callable(getattr(self.MetricsCalculator, func)) and not func.startswith("__")]
-                if metric_string.lower() not in supported_metrics:  # change this to be accurate
-                    raise ValueError(f"Unsupported metric: {metric_string}. Please choose from: {supported_metrics}")
+                supported_metrics = [
+                    func
+                    for func in dir(self.MetricsCalculator)
+                    if callable(getattr(self.MetricsCalculator, func))
+                    and not func.startswith("__")
+                ]
+                if (
+                    metric_string.lower() not in supported_metrics
+                ):  # change this to be accurate
+                    raise ValueError(
+                        f"Unsupported metric: {metric_string}. Please choose from: {supported_metrics}"
+                    )
 
                 # Set the new metrics
-                self.metrics[metric_string] = getattr(self.MetricsCalculator, metric_string.lower())
+                self.metrics[metric_string] = getattr(
+                    self.MetricsCalculator, metric_string.lower()
+                )
 
     def get_data_from_batch(self, batch):
         """
@@ -231,7 +249,7 @@ class BaseModel(pl.LightningModule):
                 x, y = batch
             elif len(batch) == 3:
                 x1, x2, y = batch
-                x = (x1, x2)
+                x = [x1, x2]
             else:
                 raise ValueError(
                     (
@@ -255,19 +273,22 @@ class BaseModel(pl.LightningModule):
         -------
         logits : tensor
             Logits.
-        reconstructions : tensor
-            Reconstructions (returned if the model has a custom loss function such as a subspace method)
+        reconstructions : tensor or None
+            Reconstructions (returned if the model has a custom loss function such as a subspace method). None if not provided.
 
         Note
         ----
-        if you get an error here, check that the forward output in fusion model is [out,] or [out, reconstructions]
+        If you get an error here, check that the forward output in fusion model is [out,] or [out, reconstructions].
         """
         model_outputs = self.model(x)
 
-        logits, *reconstructions = model_outputs
-        logits = logits.squeeze(dim=1)
-
-        return logits, reconstructions
+        if isinstance(model_outputs, list):
+            logits, *reconstructions = model_outputs
+            logits = logits.squeeze(dim=1)
+            return logits, reconstructions[0] if reconstructions else []
+        else:
+            logits = model_outputs.squeeze(dim=1)
+            return logits, []
 
     def get_model_outputs_and_loss(self, x, y, train=True):
         """
@@ -293,7 +314,9 @@ class BaseModel(pl.LightningModule):
         """
         logits, reconstructions = self.get_model_outputs(x)
 
-        end_output = self.output_activation_functions[self.model.prediction_task](logits)
+        end_output = self.output_activation_functions[self.model.prediction_task](
+            logits
+        )
 
         # if we're doing graph-based fusion and train/test doesn't work the same as normal
         if hasattr(self, "train_mask"):
@@ -349,7 +372,9 @@ class BaseModel(pl.LightningModule):
         )
 
         for metric_name, metric_func in self.metrics.items():
-            if (self.safe_squeeze(end_output).shape[0] == 1) or (self.safe_squeeze(logits).shape[0] == 1):
+            if (self.safe_squeeze(end_output).shape[0] == 1) or (
+                self.safe_squeeze(logits).shape[0] == 1
+            ):
                 # if it's a single value, we can't calculate a metric
                 pass
 
@@ -435,7 +460,9 @@ class BaseModel(pl.LightningModule):
         try:
             self.train_reals = torch.cat(self.batch_train_reals, dim=-1)
             self.train_preds = torch.cat(self.batch_train_preds, dim=-1)
-        except RuntimeError:  # if we're doing graph-based fusion and train/test doesn't work the same as normal
+        except (
+            RuntimeError
+        ):  # if we're doing graph-based fusion and train/test doesn't work the same as normal
             pass
 
         for metric_name, metric_func in self.metrics.items():
