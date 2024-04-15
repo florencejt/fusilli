@@ -27,8 +27,8 @@ def check_dtype(attribute, correct_dtype, attribute_name):
 
     """
     if not isinstance(
-            attribute,
-            correct_dtype,
+        attribute,
+        correct_dtype,
     ):
         raise TypeError(
             (
@@ -166,7 +166,7 @@ def check_fused_layers(fused_layers, fused_dim):
     return fused_layers, out_dim
 
 
-def check_model_input(x, uni_modal_flag=False, correct_length=2):
+def check_model_input(x, tuple_flag=False, correct_length=2):
     """
     Check that the input to the model is of the correct length.
 
@@ -175,15 +175,14 @@ def check_model_input(x, uni_modal_flag=False, correct_length=2):
     x : tuple or torch.Tensor
         Input to the model's forward function. Should either be a tuple of length 2 for multi-modal methods or a
         torch tensor for uni-modal methods.
-    uni_modal_flag : bool
-        Flag to indicate whether the model is uni-modal or multi-modal. If True, the input should be a torch tensor.
-        If False, the input should be a tuple of length 2. Default is False.
+    tuple_flag : bool
+        Flag to indicate whether the input is supposed to be a tuple (for graph based models mainly).
     correct_length : int
         Correct length of the input to the model if it is multi-modal. Default is 2.
         Could be 3 for the graph methods.
     """
 
-    if uni_modal_flag:
+    if tuple_flag is False:
         if not isinstance(x, torch.Tensor):
             raise TypeError(
                 f"Wrong input type for model! Expected torch.Tensor, not {type(x)}."

@@ -49,7 +49,9 @@ class TabularDecision(ParentFusionModel, nn.Module):
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
-        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        ParentFusionModel.__init__(
+            self, prediction_task, data_dims, multiclass_dimensions
+        )
 
         self.prediction_task = prediction_task
 
@@ -82,25 +84,29 @@ class TabularDecision(ParentFusionModel, nn.Module):
         self.set_final_pred_layers(tab2_fused_dim)
         self.final_prediction_tab2 = self.final_prediction
 
-    def forward(self, x):
+    def forward(self, x1, x2):
         """
         Forward pass of the model.
 
         Parameters
         ----------
-        x : tuple
-            Tuple containing the two types of tabular data. (tab1, tab2)
+        x1 : torch.Tensor
+            Input tensor for the first modality.
+        x2 : torch.Tensor
+            Input tensor for the second modality.
 
         Returns
         -------
-        list
-            List containing the fused prediction."""
+        torch.Tensor
+            Output tensor.
+        """
 
         # ~~ Checks ~~
-        check_model_validity.check_model_input(x)
+        check_model_validity.check_model_input(x1)
+        check_model_validity.check_model_input(x2)
 
-        x_tab1 = x[0]
-        x_tab2 = x[1]
+        x_tab1 = x1
+        x_tab2 = x2
 
         for i, (k, layer) in enumerate(self.mod1_layers.items()):
             x_tab1 = layer(x_tab1)
@@ -116,6 +122,4 @@ class TabularDecision(ParentFusionModel, nn.Module):
         out_fuse = self.fusion_operation(pred_tab1, pred_tab2)
         # out_fuse = torch.mean(torch.stack([pred_tab1, pred_tab2]), dim=0)
 
-        return [
-            out_fuse,
-        ]
+        return out_fuse

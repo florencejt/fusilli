@@ -1,6 +1,7 @@
 """
 Attention weighted GNN model: the edge weights are the attention weights from a pre-trained MLP and the node features are the second modality.
 """
+
 import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch
@@ -68,16 +69,15 @@ class AttentionWeightMLP(pl.LightningModule):
 
         self.weighting_layers = nn.ModuleDict(
             {
-                "Layer 1": nn.Sequential(nn.Linear(self.mod1_dim + self.mod2_dim, 256),
-                                         nn.ReLU()),
-                "Layer 2": nn.Sequential(nn.Linear(256, 128),
-                                         nn.ReLU()),
-                "Layer 3": nn.Sequential(nn.Linear(128, 128),
-                                         nn.ReLU()),
-                "Layer 4": nn.Sequential(nn.Linear(128, 256),
-                                         nn.ReLU()),
-                "Layer 5": nn.Sequential(nn.Linear(256, self.mod1_dim + self.mod2_dim),
-                                         nn.ReLU()),
+                "Layer 1": nn.Sequential(
+                    nn.Linear(self.mod1_dim + self.mod2_dim, 256), nn.ReLU()
+                ),
+                "Layer 2": nn.Sequential(nn.Linear(256, 128), nn.ReLU()),
+                "Layer 3": nn.Sequential(nn.Linear(128, 128), nn.ReLU()),
+                "Layer 4": nn.Sequential(nn.Linear(128, 256), nn.ReLU()),
+                "Layer 5": nn.Sequential(
+                    nn.Linear(256, self.mod1_dim + self.mod2_dim), nn.ReLU()
+                ),
             }
         )
 
@@ -91,12 +91,16 @@ class AttentionWeightMLP(pl.LightningModule):
         Checks the parameters of the model, sets the final prediction layers and calculates the fused layers based on
         any modifications to the model.
         """
-        check_model_validity.check_dtype(self.weighting_layers, nn.ModuleDict, "weighting_layers")
+        check_model_validity.check_dtype(
+            self.weighting_layers, nn.ModuleDict, "weighting_layers"
+        )
 
         self.fused_dim = self.mod1_dim + self.mod2_dim
 
         # check final layer output size is the same as the fused dim
-        final_weighting_layer = self.weighting_layers[list(self.weighting_layers.keys())[-1]][0]
+        final_weighting_layer = self.weighting_layers[
+            list(self.weighting_layers.keys())[-1]
+        ][0]
 
         if final_weighting_layer.out_features != self.fused_dim:
             raise ValueError(
@@ -112,7 +116,7 @@ class AttentionWeightMLP(pl.LightningModule):
 
         ParentFusionModel.set_final_pred_layers(self, out_dim)
 
-    def forward(self, x):
+    def forward(self, x1, x2):
         """
 
         Parameters
@@ -129,7 +133,7 @@ class AttentionWeightMLP(pl.LightningModule):
 
         """
 
-        x = torch.cat(x, dim=1).to(torch.float32)
+        x = torch.cat((x1, x2), dim=1).to(torch.float32)
 
         for layer in self.weighting_layers.values():
             x = layer(x)
@@ -161,14 +165,14 @@ class AttentionWeightMLP(pl.LightningModule):
         """
         x1, x2, y = batch
 
-        y_hat, weights = self.forward((x1, x2))
+        y_hat, weights = self.forward(x1, x2)
 
         if self.prediction_task == "multiclass":
             # turn the labels into one hot vectors
             y = F.one_hot(y, num_classes=self.multiclass_dimensions).to(torch.float32)
 
         loss = F.mse_loss(y_hat.squeeze(), y.to(torch.float32).squeeze())
-        self.log('train_loss', loss, logger=None)
+        self.log("train_loss", loss, logger=None)
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -189,14 +193,14 @@ class AttentionWeightMLP(pl.LightningModule):
 
         """
         x1, x2, y = batch
-        y_hat, weights = self.forward((x1, x2))
+        y_hat, weights = self.forward(x1, x2)
 
         if self.prediction_task == "multiclass":
             # turn the labels into one hot vectors
             y = F.one_hot(y, num_classes=self.multiclass_dimensions).to(torch.float32)
 
         loss = F.mse_loss(y_hat.squeeze(), y.to(torch.float32).squeeze())
-        self.log('val_loss', loss, logger=None)
+        self.log("val_loss", loss, logger=None)
         return loss
 
     def configure_optimizers(self):
@@ -212,14 +216,16 @@ class AttentionWeightMLP(pl.LightningModule):
         optimiser = torch.optim.Adam(self.parameters(), lr=1e-3)
         return optimiser
 
-    def create_attention_weights(self, x):
+    def create_attention_weights(self, x1, x2):
         """
         Create the attention weights of the model for a given input.
 
         Parameters
         ----------
-        x: tuple
-            Tuple containing the two modalities input data.
+        x1: torch.Tensor
+            First modality input data.
+        x2: torch.Tensor
+            Second modality input data.
 
         Returns
         -------
@@ -227,7 +233,7 @@ class AttentionWeightMLP(pl.LightningModule):
             Attention weights of the model. Final layer of the model sigmoided.
 
         """
-        preds, weights = self.forward(x)
+        preds, weights = self.forward(x1, x2)
         return weights
 
 
@@ -294,7 +300,9 @@ class AttentionWeightedGraphMaker:
                 prediction_task = "multiclass"
                 multiclass_dim = len(np.unique(self.dataset[:][2]))
 
-        self.AttentionWeightingMLPInstance = AttentionWeightMLP(prediction_task, data_dims, multiclass_dim)
+        self.AttentionWeightingMLPInstance = AttentionWeightMLP(
+            prediction_task, data_dims, multiclass_dim
+        )
 
         self.max_epochs = -1
 
@@ -305,8 +313,13 @@ class AttentionWeightedGraphMaker:
         """
 
         # check the distance threshold percentage is an int between 0 and 100
-        check_model_validity.check_dtype(self.edge_probability_threshold, int, "edge_probability_threshold")
-        if self.edge_probability_threshold <= 0 or self.edge_probability_threshold > 100:
+        check_model_validity.check_dtype(
+            self.edge_probability_threshold, int, "edge_probability_threshold"
+        )
+        if (
+            self.edge_probability_threshold <= 0
+            or self.edge_probability_threshold > 100
+        ):
             raise ValueError(
                 (
                     "Incorrect attribute range: The distance_threshold_percentage must be between 0 and 100, "
@@ -315,7 +328,9 @@ class AttentionWeightedGraphMaker:
             )
 
         # check early stopping is an EarlyStopping object
-        check_model_validity.check_dtype(self.early_stop_callback, EarlyStopping, "early_stop_callback")
+        check_model_validity.check_dtype(
+            self.early_stop_callback, EarlyStopping, "early_stop_callback"
+        )
 
         # check attention MLP test size is a float between 0 and 1
         if self.attention_MLP_test_size <= 0 or self.attention_MLP_test_size > 1:
@@ -325,7 +340,9 @@ class AttentionWeightedGraphMaker:
                     f"inclusive. The threshold is currently: {self.attention_MLP_test_size}"
                 )
             )
-        check_model_validity.check_dtype(self.attention_MLP_test_size, float, "attention_MLP_test_size")
+        check_model_validity.check_dtype(
+            self.attention_MLP_test_size, float, "attention_MLP_test_size"
+        )
 
     def make_graph(self):
         """
@@ -346,7 +363,8 @@ class AttentionWeightedGraphMaker:
 
         # split the dataset
         [train_dataset, test_dataset] = torch.utils.data.random_split(
-            self.dataset, [1 - self.attention_MLP_test_size, self.attention_MLP_test_size]
+            self.dataset,
+            [1 - self.attention_MLP_test_size, self.attention_MLP_test_size],
         )
 
         self.train_idxs = train_dataset.indices
@@ -380,20 +398,28 @@ class AttentionWeightedGraphMaker:
         )
 
         # fit the MLP model
-        self.trainer.fit(self.AttentionWeightingMLPInstance, train_dataloader, val_dataloader)
+        self.trainer.fit(
+            self.AttentionWeightingMLPInstance, train_dataloader, val_dataloader
+        )
         self.trainer.validate(self.AttentionWeightingMLPInstance, val_dataloader)
 
         # get out the train attention weights
-        train_attention_weights = self.AttentionWeightingMLPInstance.create_attention_weights(
-            (train_dataset[:][0], train_dataset[:][1])
+        train_attention_weights = (
+            self.AttentionWeightingMLPInstance.create_attention_weights(
+                train_dataset[:][0], train_dataset[:][1]
+            )
         )
         # get out the validation attention weights
-        val_attention_weights = self.AttentionWeightingMLPInstance.create_attention_weights(
-            (test_dataset[:][0], test_dataset[:][1])
+        val_attention_weights = (
+            self.AttentionWeightingMLPInstance.create_attention_weights(
+                test_dataset[:][0], test_dataset[:][1]
+            )
         )
 
         # normalise the attention weights
-        train_attention_weights = train_attention_weights / torch.sum(train_attention_weights)
+        train_attention_weights = train_attention_weights / torch.sum(
+            train_attention_weights
+        )
 
         val_attention_weights = val_attention_weights / torch.sum(val_attention_weights)
 
@@ -405,7 +431,9 @@ class AttentionWeightedGraphMaker:
         val_weighted_phenotypes = all_tab_val * val_attention_weights
 
         # concatenate the weighted phenotypes
-        all_weighted_phenotypes = torch.cat((train_weighted_phenotypes, val_weighted_phenotypes), dim=0)
+        all_weighted_phenotypes = torch.cat(
+            (train_weighted_phenotypes, val_weighted_phenotypes), dim=0
+        )
 
         # get probability of each edge from weighted phenotypes
         distances = torch.cdist(all_weighted_phenotypes, all_weighted_phenotypes) ** 2
@@ -429,7 +457,9 @@ class AttentionWeightedGraphMaker:
 
         edge_attr = torch.tensor(distances[edge_indices[0], edge_indices[1]])
 
-        data = Data(x=node_features, edge_index=edge_index, edge_attr=edge_attr, y=all_labels)
+        data = Data(
+            x=node_features, edge_index=edge_index, edge_attr=edge_attr, y=all_labels
+        )
 
         return data
 
@@ -478,7 +508,9 @@ class AttentionWeightedGNN(ParentFusionModel, nn.Module):
             Number of classes for multiclass classification. If not multiclass classification, this is None.
         """
 
-        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        ParentFusionModel.__init__(
+            self, prediction_task, data_dims, multiclass_dimensions
+        )
 
         self.prediction_task = prediction_task
 
@@ -499,7 +531,9 @@ class AttentionWeightedGNN(ParentFusionModel, nn.Module):
         """
 
         # check graph layers are sequential
-        check_model_validity.check_dtype(self.graph_conv_layers, nn.Sequential, "graph_conv_layers")
+        check_model_validity.check_dtype(
+            self.graph_conv_layers, nn.Sequential, "graph_conv_layers"
+        )
         check_model_validity.check_dtype(self.dropout_prob, float, "dropout_prob")
 
         # check dropout probability is between 0 and 1
@@ -525,11 +559,11 @@ class AttentionWeightedGNN(ParentFusionModel, nn.Module):
 
         Returns
         -------
-        list
-            List containing the output of the model.
+        out : torch.Tensor
+            Prediction output of the model.
         """
 
-        check_model_validity.check_model_input(x, correct_length=3)
+        check_model_validity.check_model_input(x, tuple_flag=True, correct_length=3)
 
         x_n, edge_index, edge_attr = x
 
@@ -540,6 +574,4 @@ class AttentionWeightedGNN(ParentFusionModel, nn.Module):
 
         out = self.final_prediction(x_n)
 
-        return [
-            out,
-        ]
+        return out

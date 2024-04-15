@@ -249,7 +249,7 @@ class BaseModel(pl.LightningModule):
                 x, y = batch
             elif len(batch) == 3:
                 x1, x2, y = batch
-                x = [x1, x2]
+                x = (x1, x2)
             else:
                 raise ValueError(
                     (
@@ -280,7 +280,13 @@ class BaseModel(pl.LightningModule):
         ----
         If you get an error here, check that the forward output in fusion model is [out,] or [out, reconstructions].
         """
-        model_outputs = self.model(x)
+
+        # changing for shap implementation
+        if isinstance(x, tuple) and self.model.fusion_type != "graph":
+            x1, x2 = x
+            model_outputs = self.model(x1, x2)
+        else:
+            model_outputs = self.model(x)
 
         if isinstance(model_outputs, list):
             logits, *reconstructions = model_outputs
@@ -332,8 +338,9 @@ class BaseModel(pl.LightningModule):
         loss = self.loss_functions[self.model.prediction_task](logits, y)
 
         if reconstructions != [] and self.model.custom_loss is not None:
+            # changing reconstructions[0] to just reconstructions after changing the model inputs from tuple to two tensors
             added_loss = self.model.custom_loss(
-                reconstructions[0], x[-1]
+                reconstructions, x[-1]
             )  # x[-1] bc img is always last
 
             loss += added_loss

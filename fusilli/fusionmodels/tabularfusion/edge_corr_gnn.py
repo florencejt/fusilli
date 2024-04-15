@@ -82,7 +82,7 @@ class EdgeCorrGraphMaker:
         x = tab2
         edge_index = torch.tensor(edge_indices, dtype=torch.long)
         edge_attr = (
-                corr_matrix[edge_indices[0], edge_indices[1]] + 1
+            corr_matrix[edge_indices[0], edge_indices[1]] + 1
         )  # add 1 to make all edge_attr positive
 
         data = Data(x=x, edge_index=edge_index, edge_attr=edge_attr, y=labels)
@@ -128,7 +128,9 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
-        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        ParentFusionModel.__init__(
+            self, prediction_task, data_dims, multiclass_dimensions
+        )
 
         self.prediction_task = prediction_task
 
@@ -185,13 +187,13 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
 
         Returns
         -------
-        list
-            List containing the output of the model.
+        out : torch.Tensor
+            Output tensor of the model.
         """
 
         # ~~ Checks ~~
         # check x is a tuple of length 3
-        check_model_validity.check_model_input(x, correct_length=3)
+        check_model_validity.check_model_input(x, tuple_flag=True, correct_length=3)
 
         x_n, edge_index, edge_attr = x
 
@@ -202,6 +204,4 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
 
         out = self.final_prediction(x_n)
 
-        return [
-            out,
-        ]
+        return out

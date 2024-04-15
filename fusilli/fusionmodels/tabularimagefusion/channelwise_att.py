@@ -1,6 +1,7 @@
 """
 Image-channel-wise attention fusion model.
 """
+
 import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch
@@ -73,7 +74,9 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
-        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        ParentFusionModel.__init__(
+            self, prediction_task, data_dims, multiclass_dimensions
+        )
 
         self.prediction_task = prediction_task
 
@@ -151,26 +154,29 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
             else:
                 self.match_dim_layers[key] = nn.Identity()
 
-    def forward(self, x):
+    def forward(self, x1, x2):
         """
         Forward pass of the model.
 
         Parameters
         ----------
-        x : torch.Tensor
-            Tensor containing the image data.
+        x1 : torch.Tensor
+            Input tensor for the tabular data.
+        x2 : torch.Tensor
+            Input tensor for the image data.
 
         Returns
         -------
-        list
-            List containing the output of the model.
+        torch.Tensor
+            Output tensor.
         """
 
         # ~~ Checks ~~
-        check_model_validity.check_model_input(x)
+        check_model_validity.check_model_input(x1)
+        check_model_validity.check_model_input(x2)
 
-        x_tab1 = x[0].squeeze(dim=1)
-        x_img = x[1]
+        x_tab1 = x1.squeeze(dim=1)
+        x_img = x2
 
         for i, (k, layer) in enumerate(self.mod1_layers.items()):
             x_tab1 = layer(x_tab1)
@@ -196,6 +202,4 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
 
         out = self.final_prediction(out_fuse)
 
-        return [
-            out,
-        ]
+        return out

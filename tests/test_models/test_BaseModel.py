@@ -17,7 +17,7 @@ class SampleGraphFusionModel(nn.Module):
         self.graph_maker = Mock()
 
     def forward(self, x):
-        return [torch.rand((x[0].shape[0], 1)), ]
+        return torch.rand((x[0].shape[0], 1))
 
 
 class SampleFusionModel(nn.Module):
@@ -28,11 +28,8 @@ class SampleFusionModel(nn.Module):
         self.fusion_type = "attention"  # Sample fusion_type
         self.subspace_method = None
 
-    def forward(self, x):
-        if isinstance(x, tuple):
-            return [torch.rand((x[0].shape[0], 1)), ]
-        else:
-            return [torch.rand((x.shape[0], 1)), ]
+    def forward(self, x1, x2):
+        return torch.rand((x1.shape[0], 1))
 
 
 class SampleFusionModelReconstructions(nn.Module):
@@ -44,11 +41,8 @@ class SampleFusionModelReconstructions(nn.Module):
         self.subspace_method = None
         self.custom_loss = Mock(return_value=0.5)
 
-    def forward(self, x):
-        if isinstance(x, tuple):
-            return [torch.rand((x[0].shape[0], 1)), torch.rand(x[0].shape)]
-        else:
-            return [torch.rand((x.shape[0], 1)), torch.rand(x.shape)]
+    def forward(self, x1, x2):
+        return [torch.rand((x1.shape[0], 1)), torch.rand(x2.shape)]
 
 
 @pytest.fixture
@@ -111,23 +105,36 @@ def test_get_data_from_batch(sample_model):
     assert y.shape == torch.Size([10])
 
     # more than 2 modalities
-    batch = (torch.rand((10, 12)), torch.rand((10, 15)), torch.rand((10, 18)), torch.randint(1, (10,)))
-    with pytest.raises(ValueError, match=re.escape("Batch size is not 2 (preds and labels) or 3 (2 pred data types "
-                                                   "and "
-                                                   "labels) modalities long")):
+    batch = (
+        torch.rand((10, 12)),
+        torch.rand((10, 15)),
+        torch.rand((10, 18)),
+        torch.randint(1, (10,)),
+    )
+    with pytest.raises(
+        ValueError,
+        match=re.escape(
+            "Batch size is not 2 (preds and labels) or 3 (2 pred data types "
+            "and "
+            "labels) modalities long"
+        ),
+    ):
         x, y = model.get_data_from_batch(batch)
 
 
 def test_get_data_from_batch_graph(sample_graph_model):
     model = sample_graph_model
 
-    class GraphDataClass():
+    class GraphDataClass:
         def __init__(self, x, y):
             self.x = x
             self.y = y
-            self.edge_index = torch.tensor([[0, 1, 1, 2],
-                                            [1, 0, 2, 1]], dtype=torch.long)
-            self.edge_attr = torch.tensor([[1.0], [2.0], [3.0], [4.0]], dtype=torch.float)
+            self.edge_index = torch.tensor(
+                [[0, 1, 1, 2], [1, 0, 2, 1]], dtype=torch.long
+            )
+            self.edge_attr = torch.tensor(
+                [[1.0], [2.0], [3.0], [4.0]], dtype=torch.float
+            )
 
     batch = GraphDataClass(torch.rand((12, 10)), torch.randint(1, (10,)))
 
@@ -160,20 +167,19 @@ def test_get_model_outputs(sample_model, sample_model_recon):
 
     # with reconstructions
     model2 = sample_model_recon
-    preds, reconstructions = model2.get_model_outputs(batch)
+    batch = ((torch.rand((10, 12)), torch.rand((10, 15))), torch.randint(1, (10,)))
+    preds, reconstructions = model2.get_model_outputs(batch[0])
 
     assert isinstance(preds, torch.Tensor)
     assert preds.shape == torch.Size([10])
-    assert isinstance(reconstructions, list)
-    assert len(reconstructions) == 1
-    assert isinstance(reconstructions[0], torch.Tensor)
-    assert reconstructions[0].shape == torch.Size([10, 12])
+    assert isinstance(reconstructions, torch.Tensor)
+    assert reconstructions.shape == torch.Size([10, 15])
 
 
 # get model outputs and loss
 def test_get_model_outputs_and_loss(sample_model, sample_model_recon):
     model = sample_model
-    x = torch.rand((10, 12))
+    x = (torch.rand((10, 12)), torch.rand((10, 15)))
     y = torch.randint(1, (10,))
 
     loss, end_output, logits = model.get_model_outputs_and_loss(x, y)
@@ -188,7 +194,7 @@ def test_get_model_outputs_and_loss(sample_model, sample_model_recon):
 
     # with reconstructions
     model2 = sample_model_recon
-    x = torch.rand((10, 12))
+    x = (torch.rand((10, 12)), torch.rand((10, 15)))
     y = torch.randint(1, (10,))
 
     loss, end_output, logits = model2.get_model_outputs_and_loss(x, y)
@@ -207,12 +213,20 @@ def test_get_model_outputs_and_loss(sample_model, sample_model_recon):
 def test_get_model_outputs_and_loss_graph(sample_graph_model):
     model = sample_graph_model
 
-    model.train_mask = torch.tensor([True, True, True, True, True, True, True, False, False, False], dtype=torch.bool)
-    model.val_mask = torch.tensor([False, False, False, False, False, False, False, True, True, True], dtype=torch.bool)
+    model.train_mask = torch.tensor(
+        [True, True, True, True, True, True, True, False, False, False],
+        dtype=torch.bool,
+    )
+    model.val_mask = torch.tensor(
+        [False, False, False, False, False, False, False, True, True, True],
+        dtype=torch.bool,
+    )
 
-    x = (torch.rand((10, 12)), torch.tensor([[0, 1, 1, 2],
-                                             [1, 0, 2, 1]], dtype=torch.long),
-         torch.tensor([[1.0], [2.0], [3.0], [4.0]], dtype=torch.float))
+    x = (
+        torch.rand((10, 12)),
+        torch.tensor([[0, 1, 1, 2], [1, 0, 2, 1]], dtype=torch.long),
+        torch.tensor([[1.0], [2.0], [3.0], [4.0]], dtype=torch.float),
+    )
 
     y = torch.randint(1, (10,))
 
@@ -245,11 +259,13 @@ def test_metrics_exist(sample_model):
     assert len(model.metrics) >= 2
 
 
-@pytest.mark.filterwarnings("ignore:.*You are trying to `self.log()`*.",
-                            "ignore:.*No positive samples in targets*.")
+@pytest.mark.filterwarnings(
+    "ignore:.*You are trying to `self.log()`*.",
+    "ignore:.*No positive samples in targets*.",
+)
 def test_training_step(sample_model):
     model = sample_model
-    batch = (torch.rand((10, 10)), torch.randint(1, (10,)))
+    batch = ((torch.rand((10, 12)), torch.rand((10, 15))), torch.randint(1, (10,)))
     loss = model.training_step(batch, batch_idx=0)
     assert isinstance(loss, torch.Tensor)
     assert loss.shape == torch.Size([])  # scalar
@@ -258,14 +274,14 @@ def test_training_step(sample_model):
 @pytest.mark.filterwarnings("ignore:.*You are trying to `self.log()`*.")
 def test_validation_step(sample_model):
     model = sample_model
-    batch = (torch.rand((10, 10)), torch.randint(2, (10,)))
+    batch = ((torch.rand((10, 12)), torch.rand((10, 15))), torch.randint(2, (10,)))
     model.validation_step(batch, batch_idx=0)
 
 
 @pytest.mark.filterwarnings("ignore:.*You are trying to `self.log()`*.")
 def test_predict_step(sample_model):
     model = sample_model
-    batch = (torch.rand((10, 10)), torch.randint(2, (10,)))
+    batch = ((torch.rand((10, 12)), torch.rand((10, 15))), torch.randint(2, (10,)))
     end_output, logits = model.predict_step(batch, batch_idx=0)
     assert isinstance(end_output, torch.Tensor)
     assert isinstance(logits, torch.Tensor)

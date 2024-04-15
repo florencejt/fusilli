@@ -44,7 +44,9 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
-        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        ParentFusionModel.__init__(
+            self, prediction_task, data_dims, multiclass_dimensions
+        )
 
         self.prediction_task = prediction_task
 
@@ -91,11 +93,12 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
 
         Returns
         -------
-        list
-            List containing the output of the model.
+        torch.Tensor
+            Output tensor.
+
         """
 
-        check_model_validity.check_model_input(x, uni_modal_flag=True)
+        check_model_validity.check_model_input(x)
 
         x_tab1 = x
         for layer in self.mod1_layers.values():
@@ -105,6 +108,4 @@ class Tabular1Unimodal(ParentFusionModel, nn.Module):
 
         out_pred = self.final_prediction(out_fuse)
 
-        return [
-            out_pred,
-        ]
+        return out_pred

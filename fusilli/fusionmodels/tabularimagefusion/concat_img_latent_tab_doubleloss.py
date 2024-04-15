@@ -69,9 +69,7 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
     """
 
     #: str: Name of the method.
-    method_name = (
-        "Trained Together Latent Image + Tabular Data"
-    )
+    method_name = "Trained Together Latent Image + Tabular Data"
     #: str: Type of modality.
     modality_type = "tabular_image"
     #: str: Type of fusion.
@@ -88,7 +86,9 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
-        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        ParentFusionModel.__init__(
+            self, prediction_task, data_dims, multiclass_dimensions
+        )
 
         self.prediction_task = prediction_task
         self.custom_loss = nn.MSELoss()
@@ -235,14 +235,16 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
 
         self.set_final_pred_layers(out_dim)
 
-    def forward(self, x):
+    def forward(self, x1, x2):
         """
         Forward pass of the model.
 
         Parameters
         ----------
-        x : tuple
-            Tuple containing the input data.
+        x1 : torch.Tensor
+            Input tensor for the tabular data.
+        x2 : torch.Tensor
+            Input tensor for the image data.
 
         Returns
         -------
@@ -251,10 +253,11 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
             [ [prediction], [reconstructed_image] ]
         """
 
-        check_model_validity.check_model_input(x)
+        check_model_validity.check_model_input(x1)
+        check_model_validity.check_model_input(x2)
 
-        x_tab = x[0].squeeze(dim=1)
-        x_img = x[1]
+        x_tab = x1
+        x_img = x2
 
         # encoder
         encoded_img = self.new_encoder(x_img)
