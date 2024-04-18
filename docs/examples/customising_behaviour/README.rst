@@ -1,4 +1,4 @@
-.. _advanced-examples:
+.. _customising-examples:
 
 Customising Fusilli
 =======================================================
