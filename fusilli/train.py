@@ -16,19 +16,19 @@ from fusilli.utils.csv_loss_plotter import plot_loss_curve
 
 
 def train_and_test(
-        data_module,
-        k,
-        fusion_model,
-        kfold,
-        extra_log_string_dict=None,
-        layer_mods=None,
-        max_epochs=1000,
-        enable_checkpointing=True,
-        show_loss_plot=False,
-        wandb_logging=False,
-        project_name=None,
-        training_modifications=None,
-        metrics_list=None,
+    data_module,
+    k,
+    fusion_model,
+    kfold,
+    extra_log_string_dict=None,
+    layer_mods=None,
+    max_epochs=1000,
+    enable_checkpointing=True,
+    show_loss_plot=False,
+    wandb_logging=False,
+    project_name=None,
+    training_modifications=None,
+    metrics_list=None,
 ):
     """
     Trains and tests a model and, if k_fold trained, a fold.
@@ -127,13 +127,14 @@ def train_and_test(
         val_dataloader = data_module.val_dataloader()
         output_paths = data_module.output_paths
 
-    logger = set_logger(fold=k,
-                        project_name=project_name,
-                        output_paths=output_paths,
-                        fusion_model=fusion_model,
-                        extra_log_string_dict=extra_log_string_dict,
-                        wandb_logging=wandb_logging,
-                        )  # set logger
+    logger = set_logger(
+        fold=k,
+        project_name=project_name,
+        output_paths=output_paths,
+        fusion_model=fusion_model,
+        extra_log_string_dict=extra_log_string_dict,
+        wandb_logging=wandb_logging,
+    )  # set logger
 
     trainer = init_trainer(
         logger,
@@ -145,7 +146,6 @@ def train_and_test(
         training_modifications=training_modifications,
     )  # init trainer
 
-    # initialise model with pytorch lightning framework, hence pl_model
     pl_model = BaseModel(
         fusion_model(
             prediction_task=data_module.prediction_task,
@@ -157,6 +157,7 @@ def train_and_test(
 
     # modify model architecture if layer_mods is not None
     if layer_mods is not None:
+        print("LAYERS MODIFYING")
         pl_model.model = model_modifier.modify_model_architecture(
             pl_model.model, layer_mods
         )
@@ -182,7 +183,9 @@ def train_and_test(
 
     # if logger is CSVLogger, plot loss curve
     if isinstance(logger, CSVLogger):
-        plot_loss_curve(figures_path=output_paths["figures"], logger=logger, show=show_loss_plot)
+        plot_loss_curve(
+            figures_path=output_paths["figures"], logger=logger, show=show_loss_plot
+        )
 
     return pl_model
 
@@ -232,16 +235,16 @@ def _store_trained_model(trained_model, trained_models_dict):
 
 
 def train_and_save_models(
-        data_module,
-        fusion_model,
-        wandb_logging=False,
-        extra_log_string_dict=None,
-        layer_mods=None,
-        max_epochs=1000,
-        enable_checkpointing=True,
-        show_loss_plot=False,
-        project_name=None,
-        metrics_list=None,
+    data_module,
+    fusion_model,
+    wandb_logging=False,
+    extra_log_string_dict=None,
+    layer_mods=None,
+    max_epochs=1000,
+    enable_checkpointing=True,
+    show_loss_plot=False,
+    project_name=None,
+    metrics_list=None,
 ):
     """
     Trains/tests the model and saves the trained model to a dictionary for further analysis.
@@ -300,7 +303,10 @@ def train_and_save_models(
         kfold = True
         num_folds = data_module.num_folds
     elif isinstance(data_module, list):
-        if hasattr(data_module[0], "num_folds") and data_module[0].num_folds is not None:
+        if (
+            hasattr(data_module[0], "num_folds")
+            and data_module[0].num_folds is not None
+        ):
             kfold = True
             num_folds = data_module[0].num_folds
     else:
