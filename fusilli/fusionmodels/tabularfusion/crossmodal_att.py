@@ -2,6 +2,9 @@
 Crossmodal multi-head attention for tabular data.
 """
 
+# TODO make 3-tabular data work
+
+
 import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch

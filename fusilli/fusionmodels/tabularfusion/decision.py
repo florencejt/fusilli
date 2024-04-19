@@ -2,6 +2,9 @@
 Decision fusion of two types of tabular data.
 """
 
+# TODO make 3-tabular data work
+
+
 import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch
@@ -37,6 +40,8 @@ class TabularDecision(ParentFusionModel, nn.Module):
     modality_type = "tabular_tabular"
     #: str: Type of fusion.
     fusion_type = "operation"
+    #: str: Available for three tabular modalities.
+    three_modalities = True
 
     def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
@@ -44,8 +49,8 @@ class TabularDecision(ParentFusionModel, nn.Module):
         ----------
         prediction_task : str
             Type of prediction to be performed.
-        data_dims : list
-            List containing the dimensions of the data.
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
@@ -55,10 +60,14 @@ class TabularDecision(ParentFusionModel, nn.Module):
 
         self.prediction_task = prediction_task
 
-        self.fusion_operation = lambda x, y: torch.mean(torch.stack([x, y]), dim=0)
+        self.fusion_operation = lambda x: torch.mean(torch.stack(x), dim=0)
 
         self.set_mod1_layers()
         self.set_mod2_layers()
+
+        if self.data_dims["mod3_dim"] is not None:
+            self.set_mod3_layers()
+
         self.calc_fused_layers()
 
     def calc_fused_layers(self):
@@ -76,15 +85,27 @@ class TabularDecision(ParentFusionModel, nn.Module):
         check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
         check_model_validity.check_dtype(self.mod2_layers, nn.ModuleDict, "mod2_layers")
 
+        # Set the final prediction layers for each modality: tab1
         tab1_fused_dim = list(self.mod1_layers.values())[-1][0].out_features
         self.set_final_pred_layers(tab1_fused_dim)
         self.final_prediction_tab1 = self.final_prediction
 
+        # Set the final prediction layers for each modality: tab2
         tab2_fused_dim = list(self.mod2_layers.values())[-1][0].out_features
         self.set_final_pred_layers(tab2_fused_dim)
         self.final_prediction_tab2 = self.final_prediction
 
-    def forward(self, x1, x2):
+        if self.data_dims["mod3_dim"] is not None:
+            # Check if the mod3_layers attribute is a ModuleDict
+            check_model_validity.check_dtype(
+                self.mod3_layers, nn.ModuleDict, "mod3_layers"
+            )
+            # Set the final prediction layers for each modality: tab3
+            tab3_fused_dim = list(self.mod3_layers.values())[-1][0].out_features
+            self.set_final_pred_layers(tab3_fused_dim)
+            self.final_prediction_tab3 = self.final_prediction
+
+    def forward(self, x1, x2, x3=None):
         """
         Forward pass of the model.
 
@@ -94,6 +115,8 @@ class TabularDecision(ParentFusionModel, nn.Module):
             Input tensor for the first modality.
         x2 : torch.Tensor
             Input tensor for the second modality.
+        x3 : torch.Tensor
+            Input tensor for the third modality. Default is None.
 
         Returns
         -------
@@ -104,22 +127,28 @@ class TabularDecision(ParentFusionModel, nn.Module):
         # ~~ Checks ~~
         check_model_validity.check_model_input(x1)
         check_model_validity.check_model_input(x2)
-
-        x_tab1 = x1
-        x_tab2 = x2
+        if x3 is not None:
+            check_model_validity.check_model_input(x3)
 
         for i, (k, layer) in enumerate(self.mod1_layers.items()):
-            x_tab1 = layer(x_tab1)
+            x1 = layer(x1)
 
         for i, (k, layer) in enumerate(self.mod2_layers.items()):
-            x_tab2 = layer(x_tab2)
+            x2 = layer(x2)
+
+        if x3 is not None:
+            for i, (k, layer) in enumerate(self.mod3_layers.items()):
+                x3 = layer(x3)
 
         # predictions for each method
-        pred_tab1 = self.final_prediction_tab1(x_tab1)
-        pred_tab2 = self.final_prediction_tab2(x_tab2)
+        pred_tab1 = self.final_prediction_tab1(x1)
+        pred_tab2 = self.final_prediction_tab2(x2)
+        preds = [pred_tab1, pred_tab2]
+        if x3 is not None:
+            pred_tab3 = self.final_prediction_tab3(x3)
+            preds.append(pred_tab3)
 
         # Combine predictions by averaging them together
-        out_fuse = self.fusion_operation(pred_tab1, pred_tab2)
-        # out_fuse = torch.mean(torch.stack([pred_tab1, pred_tab2]), dim=0)
+        out_fuse = self.fusion_operation(preds)
 
         return out_fuse

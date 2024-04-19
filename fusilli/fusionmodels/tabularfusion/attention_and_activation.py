@@ -2,6 +2,11 @@
 Using activation functions to fuse tabular data, with self-attention on the second tabular modality.
 """
 
+# TODO make 3-tabular data work
+
+# TODO add argument to say which tabular modality is the best one
+
+
 import torch.nn as nn
 
 from fusilli.fusionmodels.base_model import ParentFusionModel

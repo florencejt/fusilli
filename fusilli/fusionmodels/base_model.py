@@ -245,19 +245,15 @@ class BaseModel(pl.LightningModule):
             x = (batch.x, batch.edge_index, batch.edge_attr)
             y = batch.y
         else:
-            if len(batch) == 2:
-                x, y = batch
-            elif len(batch) == 3:
-                x1, x2, y = batch
-                x = (x1, x2)
-            # TODO add support for 3 tabular modalities by adding another elif statement for 4
-            else:
+            if len(batch) < 2 or len(batch) > 4:
                 raise ValueError(
-                    (
-                        "Batch size is not 2 (preds and labels) or 3 (2 pred data types and labels) "
-                        "modalities long"
-                    )
+                    "Batch size must be 2 (preds and labels), 3 (2 pred data types and labels), or 4 (3 pred data types and labels)."
                 )
+
+            print("length of batch", len(batch))
+
+            x = tuple(batch[:-1])
+            y = batch[-1]
 
         return x, y
 
@@ -284,9 +280,7 @@ class BaseModel(pl.LightningModule):
 
         # changing for shap implementation
         if isinstance(x, tuple) and self.model.fusion_type != "graph":
-            # TODO check if there are 3 modalities and change this to x1, x2, x3
-            x1, x2 = x
-            model_outputs = self.model(x1, x2)
+            model_outputs = self.model(*x)
         else:
             model_outputs = self.model(x)
 
@@ -551,17 +545,21 @@ class ParentFusionModel:
         ----------
         prediction_task : str
             Type of prediction to be made. Options: binary, multiclass, regression.
-        data_dims : list
-            List of data dimensions.
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
+            i.e. {"mod1_dim": None, "mod2_dim": None, "mod3_dim": None, "img_dim": [100, 100, 100]}
+            for image only (image dimensions 100 x 100 x 100)
+            i.e. {"mod1_dim": 8, "mod2_dim": 32, "mod3_dim": None, "img_dim": None}
+            for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has 32 features), and no image or tabular3
         multiclass_dimensions : int
             Number of classes for multiclass prediction.
         """
         super().__init__()
         self.prediction_task = prediction_task
-        # TODO change for 3 modalities, make data dims a dictionary
-        self.mod1_dim = data_dims[0]
-        self.mod2_dim = data_dims[1]
-        self.img_dim = data_dims[2]
+        self.data_dims = data_dims
+        # self.mod1_dim = data_dims[0]
+        # self.mod2_dim = data_dims[1]
+        # self.img_dim = data_dims[2]
         if self.prediction_task == "multiclass":
             self.multiclass_dimensions = multiclass_dimensions
 
@@ -592,7 +590,7 @@ class ParentFusionModel:
 
     def set_mod1_layers(self):
         """
-        Sets layers for modality 1
+        Sets layers for tabular modality 1
 
         Returns
         -------
@@ -601,7 +599,7 @@ class ParentFusionModel:
         self.mod1_layers = nn.ModuleDict(
             {
                 "layer 1": nn.Sequential(
-                    nn.Linear(self.mod1_dim, 32),
+                    nn.Linear(self.data_dims["mod1_dim"], 32),
                     nn.ReLU(),
                 ),
                 "layer 2": nn.Sequential(
@@ -625,7 +623,7 @@ class ParentFusionModel:
 
     def set_mod2_layers(self):
         """
-        Sets layers for modality 2
+        Sets layers for tabular modality 2
 
         Returns
         -------
@@ -634,7 +632,7 @@ class ParentFusionModel:
         self.mod2_layers = nn.ModuleDict(
             {
                 "layer 1": nn.Sequential(
-                    nn.Linear(self.mod2_dim, 32),
+                    nn.Linear(self.data_dims["mod2_dim"], 32),
                     nn.ReLU(),
                 ),
                 "layer 2": nn.Sequential(
@@ -656,7 +654,38 @@ class ParentFusionModel:
             }
         )
 
-    # TODO add mod3 layers for 3 tabular modalities
+    def set_mod3_layers(self):
+        """
+        Sets layers for tabular modality 3
+
+        Returns
+        -------
+        None
+        """
+        self.mod3_layers = nn.ModuleDict(
+            {
+                "layer 1": nn.Sequential(
+                    nn.Linear(self.data_dims["mod3_dim"], 32),
+                    nn.ReLU(),
+                ),
+                "layer 2": nn.Sequential(
+                    nn.Linear(32, 64),
+                    nn.ReLU(),
+                ),
+                "layer 3": nn.Sequential(
+                    nn.Linear(64, 128),
+                    nn.ReLU(),
+                ),
+                "layer 4": nn.Sequential(
+                    nn.Linear(128, 256),
+                    nn.ReLU(),
+                ),
+                "layer 5": nn.Sequential(
+                    nn.Linear(256, 256),
+                    nn.ReLU(),
+                ),
+            }
+        )
 
     def set_img_layers(self):
         """
@@ -668,7 +697,7 @@ class ParentFusionModel:
         None
         """
 
-        if len(self.img_dim) == 2:  # 2D images
+        if len(self.data_dims["img_dim"]) == 2:  # 2D images
             self.img_layers = nn.ModuleDict(
                 {
                     "layer 1": nn.Sequential(
@@ -699,7 +728,7 @@ class ParentFusionModel:
                 }
             )
 
-        elif len(self.img_dim) == 3:  # 3D images
+        elif len(self.data_dims["img_dim"]) == 3:  # 3D images
             self.img_layers = nn.ModuleDict(
                 {
                     "layer 1": nn.Sequential(

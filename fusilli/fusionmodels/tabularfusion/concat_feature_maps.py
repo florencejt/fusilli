@@ -2,6 +2,9 @@
 Concatenating the feature maps of the two tabular modalities.
 """
 
+# TODO make 3-tabular data work
+
+
 import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch

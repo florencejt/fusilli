@@ -2,6 +2,9 @@
 Concatenating the two tabular modalities at the data-level (early fusion)
 """
 
+# TODO make 3-tabular data work
+
+
 from fusilli.fusionmodels.base_model import ParentFusionModel
 from fusilli.utils import check_model_validity
 

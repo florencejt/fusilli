@@ -564,15 +564,53 @@ class LoadDatasets:
         dict
             Dictionary of methods for loading the different modalities.
         """
-        return {
-            "tabular1": self.load_tabular1,
-            "tabular2": self.load_tabular2,
-            "tabular3": self.load_tabular3,
-            "image": self.load_img,
-            "tabular_tabular": self.load_tabular_tabular,
-            "tabular_tabular_tabular": self.load_tabular_tabular_tabular,
-            "tabular_image": self.load_tab_and_img,
-        }
+
+        # if there are 3 tabular modalities, make the tabular fusion loading include the 3rd modality
+        if self.tabular3_source != "":
+            return {
+                "tabular1": self.load_tabular1,
+                "tabular2": self.load_tabular2,
+                "tabular3": self.load_tabular3,
+                "image": self.load_img,
+                "tabular_tabular": self.load_tabular_tabular_tabular,
+                "tabular_image": self.load_tab_and_img,
+            }
+        else:
+            # keep the tabular fusion loading as 2 modalities
+            return {
+                "tabular1": self.load_tabular1,
+                "tabular2": self.load_tabular2,
+                "tabular3": self.load_tabular3,
+                "image": self.load_img,
+                "tabular_tabular": self.load_tabular_tabular,
+                "tabular_image": self.load_tab_and_img,
+            }
+
+
+def _check_three_modalities_supported(fusion_model, sources):
+    """
+    Checks if the fusion model supports three tabular modalities.
+
+    Parameters
+    ----------
+    fusion_model : class
+        Fusion model class.
+    sources : dict
+        Dictionary of source csv files with keys the possible keys "tabular1", "tabular2", "tabular3", and "image".
+
+    Raises
+    ------
+    ValueError
+        If the fusion model does not support three tabular modalities.
+    """
+    if (
+        hasattr(fusion_model, "three_modalities")
+        and fusion_model.three_modalities == False
+    ):
+        if sources.get("tabular3", "") != "":
+            raise ValueError(
+                f"The fusion model {fusion_model.method_name} does not support three tabular modalities."
+            )
 
 
 class TrainTestDataModule(pl.LightningDataModule):
@@ -699,22 +737,12 @@ class TrainTestDataModule(pl.LightningDataModule):
         dataset_loader = LoadDatasets(self.sources, image_downsample_size)
         self.modality_methods = dataset_loader.get_methods_dict()
 
-        # self.modality_methods = {
-        #     "tabular1": LoadDatasets(self.sources, image_downsample_size).load_tabular1,
-        #     "tabular2": LoadDatasets(self.sources, image_downsample_size).load_tabular2,
-        #     "img": LoadDatasets(self.sources, image_downsample_size).load_img,
-        #     "tabular_tabular": LoadDatasets(
-        #         self.sources, image_downsample_size
-        #     ).load_tabular_tabular,
-        #     "tabular_tabular_tabular": LoadDatasets(
-        #         self.sources, image_downsample_size
-        #     ).load_tabular_tabular_tabular,
-        #     "tabular_image": LoadDatasets(
-        #         self.sources, image_downsample_size
-        #     ).load_tab_and_img,
-        # }
         self.fusion_model = fusion_model
         self.modality_type = self.fusion_model.modality_type
+
+        # check if there are three tabular modalities and if the fusion model supports it
+        _check_three_modalities_supported(self.fusion_model, self.sources)
+
         self.batch_size = batch_size
         self.test_size = test_size
         self.prediction_task = prediction_task
@@ -1022,6 +1050,10 @@ class KFoldDataModule(pl.LightningDataModule):
         self.prediction_task = prediction_task
         self.fusion_model = fusion_model
         self.modality_type = self.fusion_model.modality_type
+
+        # check if there are three tabular modalities and if the fusion model supports it
+        _check_three_modalities_supported(self.fusion_model, self.sources)
+
         self.batch_size = batch_size
         self.subspace_method = (
             subspace_method  # subspace method class (only for subspace methods)
@@ -1342,6 +1374,10 @@ class TrainTestGraphDataModule:
         self.modality_methods = dataset_loader.get_methods_dict()
         self.fusion_model = fusion_model
         self.modality_type = self.fusion_model.modality_type
+
+        # check if there are three tabular modalities and if the fusion model supports it
+        _check_three_modalities_supported(self.fusion_model, self.sources)
+
         self.test_size = test_size
         self.graph_creation_method = graph_creation_method
         self.layer_mods = layer_mods
@@ -1499,6 +1535,10 @@ class KFoldGraphDataModule:
         self.modality_methods = dataset_loader.get_methods_dict()
         self.fusion_model = fusion_model
         self.modality_type = self.fusion_model.modality_type
+
+        # check if there are three tabular modalities and if the fusion model supports it
+        _check_three_modalities_supported(self.fusion_model, self.sources)
+
         self.graph_creation_method = graph_creation_method
         self.layer_mods = layer_mods
         self.own_kfold_indices = own_kfold_indices
@@ -1709,7 +1749,6 @@ def prepare_fusion_data(
                 image_downsample_size=image_downsample_size,
                 layer_mods=layer_mods,
                 extra_log_string_dict=extra_log_string_dict,
-                # here is where the kfold split will go
             )
         else:
             graph_data_module = TrainTestGraphDataModule(
