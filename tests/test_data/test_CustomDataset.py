@@ -5,12 +5,24 @@ from fusilli.data import CustomDataset  # Import your CustomDataset class
 
 
 # Test initialization with multimodal data (list of tensors)
-def test_init_multimodal_data():
+def test_init_multimodal_tab_data():
     data1 = torch.randn(10, 3, 32, 32)
     data2 = torch.randn(10, 5)
     labels = pd.DataFrame({"prediction_label": [0] * 10})
     dataset = CustomDataset([data1, data2], labels)
     assert dataset.multimodal_flag
+    assert not dataset.three_modalities
+    assert len(dataset) == 10
+
+
+def test_init_multimodal_3tab_data():
+    data1 = torch.randn(10, 3, 32, 32)
+    data2 = torch.randn(10, 5)
+    data3 = torch.randn(10, 8)
+    labels = pd.DataFrame({"prediction_label": [0] * 10})
+    dataset = CustomDataset([data1, data2, data3], labels)
+    assert dataset.multimodal_flag
+    assert dataset.three_modalities
     assert len(dataset) == 10
 
 
@@ -57,6 +69,17 @@ def test_getitem_multimodal_data():
 
     sample = dataset[0]
     assert len(sample) == 3  # Should return a tuple of 3 elements
+
+
+def test_getitem_multimodal_3tab_data():
+    data1 = torch.randn(10, 3, 32, 32)
+    data2 = torch.randn(10, 5)
+    data3 = torch.randn(10, 8)
+    labels = pd.DataFrame({"prediction_label": [0] * 10})
+    dataset = CustomDataset([data1, data2, data3], labels)
+
+    sample = dataset[0]
+    assert len(sample) == 4  # Should return a tuple of 4 elements, 3 data 1 label
 
 
 # Test __getitem__ method for unimodal data

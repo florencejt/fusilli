@@ -250,6 +250,7 @@ class BaseModel(pl.LightningModule):
             elif len(batch) == 3:
                 x1, x2, y = batch
                 x = (x1, x2)
+            # TODO add support for 3 tabular modalities by adding another elif statement for 4
             else:
                 raise ValueError(
                     (
@@ -283,6 +284,7 @@ class BaseModel(pl.LightningModule):
 
         # changing for shap implementation
         if isinstance(x, tuple) and self.model.fusion_type != "graph":
+            # TODO check if there are 3 modalities and change this to x1, x2, x3
             x1, x2 = x
             model_outputs = self.model(x1, x2)
         else:
@@ -556,6 +558,7 @@ class ParentFusionModel:
         """
         super().__init__()
         self.prediction_task = prediction_task
+        # TODO change for 3 modalities, make data dims a dictionary
         self.mod1_dim = data_dims[0]
         self.mod2_dim = data_dims[1]
         self.img_dim = data_dims[2]
@@ -652,6 +655,8 @@ class ParentFusionModel:
                 ),
             }
         )
+
+    # TODO add mod3 layers for 3 tabular modalities
 
     def set_img_layers(self):
         """

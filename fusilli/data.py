@@ -99,6 +99,10 @@ class CustomDataset(Dataset):
         Tensor of predictive features for modality 1.
     dataset2 : tensor
         Tensor of predictive features for modality 2.
+    three_modalities : bool
+        Flag for three modalities. True if three modalities, False if two modalities.
+    dataset3 : tensor
+        Tensor of predictive features for modality 3 if three modalities.
     dataset : tensor
         Tensor of predictive features for uni-modal data.
     labels : tensor
@@ -128,8 +132,16 @@ class CustomDataset(Dataset):
         # only 2 modalities are supported currently
         if isinstance(pred_features, list):
             self.multimodal_flag = True
+
             self.dataset1 = pred_features[0].float()
             self.dataset2 = pred_features[1].float()
+
+            # if there is a third tabular modality
+            if len(pred_features) > 2:
+                self.three_modalities = True
+                self.dataset3 = pred_features[2].float()
+            else:
+                self.three_modalities = False
 
         # if pred_features is a tensor: it's unimodal data
         elif isinstance(pred_features, torch.Tensor):
@@ -173,7 +185,15 @@ class CustomDataset(Dataset):
             Index of the item to return.
         """
         if self.multimodal_flag:
-            return self.dataset1[idx], self.dataset2[idx], self.labels[idx]
+            if self.three_modalities:
+                return (
+                    self.dataset1[idx],
+                    self.dataset2[idx],
+                    self.dataset3[idx],
+                    self.labels[idx],
+                )
+            else:
+                return self.dataset1[idx], self.dataset2[idx], self.labels[idx]
         else:
             return self.dataset[idx], self.labels[idx]
 
@@ -200,9 +220,8 @@ class LoadDatasets:
         """
         Parameters
         ----------
-        sources : list
-            List of source csv files.
-            [tabular1_source, tabular2_source, img_source]
+        sources : dict
+            Dictionary of source csv files with keys the possible keys "tabular1", "tabular2", "tabular3", and "image".
         img_downsample_dims : tuple
             Size to downsample the images to (height, width, depth) or (height, width) for 2D
             images.
@@ -217,26 +236,49 @@ class LoadDatasets:
             "ID".
 
         """
-        self.tabular1_source, self.tabular2_source, self.img_source = sources
+
+        # get the source files into attributes, returns empty string if not present
+        self.tabular1_source = sources.get("tabular1", "")
+        self.tabular2_source = sources.get("tabular2", "")
+        self.tabular3_source = sources.get("tabular3", "")
+        self.img_source = sources.get("image", "")
+
+        # set the image downsample size
         self.image_downsample_size = (
             img_downsample_dims  # can choose own image size here
         )
 
-        # read in the csv files and raise errors if they don't have the right columns
-        # or if the index column is not named "ID"
-        tab1_df = pd.read_csv(self.tabular1_source)
-        if "ID" not in tab1_df.columns:
-            raise ValueError("The CSV must have an index column named 'ID'.")
-        if "prediction_label" not in tab1_df.columns:
-            raise ValueError("The CSV must have a label column named 'prediction_label'.")
+        def check_csv_columns(source_path):
+            """
+            Checks the columns of the CSV files.
 
-        # if tabular2_source exists, check it has the right columns
-        if self.tabular2_source != "":
-            tab2_df = pd.read_csv(self.tabular2_source)
-            if "ID" not in tab2_df.columns:
-                raise ValueError("The CSV must have an index column named 'ID'.")
-            if "prediction_label" not in tab2_df.columns:
-                raise ValueError("The CSV must have a label column named 'prediction_label'.")
+            Parameters
+            ----------
+            source_path : str
+                Path to the CSV file.
+
+            Raises
+            ------
+            ValueError
+                If the CSV does not have the right columns or if the index column is not named
+                "ID".
+            """
+
+            if source_path != "":
+
+                tab_df = pd.read_csv(source_path)
+
+                if "ID" not in tab_df.columns:
+                    raise ValueError("The CSV must have an index column named 'ID'.")
+                if "prediction_label" not in tab_df.columns:
+                    raise ValueError(
+                        "The CSV must have a label column named 'prediction_label'."
+                    )
+
+        # check the columns of the CSV files
+        check_csv_columns(self.tabular1_source)
+        check_csv_columns(self.tabular2_source)
+        check_csv_columns(self.tabular3_source)
 
     def load_tabular1(self):
         """
@@ -244,11 +286,14 @@ class LoadDatasets:
 
         Returns
         ------
-        dataset (tensor): tensor of predictive features
-        data_dims (list): list of data dimensions [mod1_dim, mod2_dim, img_dim]
-            i.e. [None, None, [100, 100, 100]] for image only (image dimensions 100 x 100 x 100)
-            i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has
-            32 features), and no image
+        dataset : torch.Tensor
+            Tensor of predictive features
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
+            i.e. {"mod1_dim": None, "mod2_dim": None, "mod3_dim": None, "img_dim": [100, 100, 100]}
+            for image only (image dimensions 100 x 100 x 100)
+            i.e. {"mod1_dim": 8, "mod2_dim": 32, "mod3_dim": None, "img_dim": None}
+            for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has 32 features), and no image or tabular3
 
         """
         tab_df = pd.read_csv(self.tabular1_source)
@@ -260,9 +305,14 @@ class LoadDatasets:
 
         dataset = CustomDataset(pred_features, prediction_label)
 
-        mod1_dim = pred_features.shape[1]
+        data_dims = {
+            "mod1_dim": pred_features.shape[1],
+            "mod2_dim": None,
+            "mod3_dim": None,
+            "img_dim": None,
+        }
 
-        return dataset, [mod1_dim, None, None]
+        return dataset, data_dims
 
     def load_tabular2(self):
         """
@@ -270,11 +320,15 @@ class LoadDatasets:
 
         Returns
         ------
-        dataset (tensor): tensor of predictive features
-        data_dims (list): list of data dimensions [mod1_dim, mod2_dim, img_dim]
-            i.e. [None, None, [100, 100, 100]] for image only (image dimensions 100 x 100 x 100)
-            i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has
-            32 features), and no image
+        dataset : torch.Tensor
+            Tensor of predictive features
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
+            i.e. {"mod1_dim": None, "mod2_dim": None, "mod3_dim": None, "img_dim": [100, 100, 100]}
+            for image only (image dimensions 100 x 100 x 100)
+            i.e. {"mod1_dim": 8, "mod2_dim": 32, "mod3_dim": None, "img_dim": None}
+            for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has 32 features), and no image or tabular3
+
         """
 
         tab_df = pd.read_csv(self.tabular2_source)
@@ -285,9 +339,50 @@ class LoadDatasets:
         prediction_label = tab_df[["prediction_label"]]
 
         dataset = CustomDataset(pred_features, prediction_label)
-        mod2_dim = pred_features.shape[1]
 
-        return dataset, [None, mod2_dim, None]
+        data_dims = {
+            "mod1_dim": None,
+            "mod2_dim": pred_features.shape[1],
+            "mod3_dim": None,
+            "img_dim": None,
+        }
+
+        return dataset, data_dims
+
+    def load_tabular3(self):
+        """
+        Loads the tabular3-only dataset
+
+        Returns
+        ------
+        dataset : torch.Tensor
+            Tensor of predictive features
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
+            i.e. {"mod1_dim": None, "mod2_dim": None, "mod3_dim": None, "img_dim": [100, 100, 100]}
+            for image only (image dimensions 100 x 100 x 100)
+            i.e. {"mod1_dim": 8, "mod2_dim": 32, "mod3_dim": None, "img_dim": None}
+            for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has 32 features), and no image or tabular3
+
+        """
+
+        tab_df = pd.read_csv(self.tabular3_source)
+
+        tab_df.set_index("ID", inplace=True)
+
+        pred_features = torch.Tensor(tab_df.drop(columns=["prediction_label"]).values)
+        prediction_label = tab_df[["prediction_label"]]
+
+        dataset = CustomDataset(pred_features, prediction_label)
+
+        data_dims = {
+            "mod1_dim": None,
+            "mod2_dim": None,
+            "mod3_dim": pred_features.shape[1],
+            "img_dim": None,
+        }
+
+        return dataset, data_dims
 
     def load_img(self):
         """
@@ -295,11 +390,15 @@ class LoadDatasets:
 
         Returns
         ------
-        dataset (tensor): tensor of predictive features
-        data_dims (list): list of data dimensions [mod1_dim, mod2_dim, img_dim]
-            i.e. [None, None, [100, 100, 100]] for image only (image dimensions 100 x 100 x 100)
-            i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has
-            32 features), and no image
+        dataset : torch.Tensor
+            Tensor of predictive features
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
+            i.e. {"mod1_dim": None, "mod2_dim": None, "mod3_dim": None, "img_dim": [100, 100, 100]}
+            for image only (image dimensions 100 x 100 x 100)
+            i.e. {"mod1_dim": 8, "mod2_dim": 32, "mod3_dim": None, "img_dim": None}
+            for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has 32 features), and no image or tabular3
+
         """
 
         all_scans = torch.load(self.img_source)
@@ -316,7 +415,14 @@ class LoadDatasets:
 
         img_dim = list(all_scans_ds.shape[2:])  # not including batch size or channels
 
-        return dataset, [None, None, img_dim]
+        data_dims = {
+            "mod1_dim": None,
+            "mod2_dim": None,
+            "mod3_dim": None,
+            "img_dim": img_dim,
+        }
+
+        return dataset, data_dims
 
     def load_tabular_tabular(self):
         """
@@ -324,11 +430,15 @@ class LoadDatasets:
 
         Returns
         ------
-        dataset (tensor): tensor of predictive features
-        data_dims (list): list of data dimensions [mod1_dim, mod2_dim, img_dim]
-            i.e. [None, None, [100, 100, 100]] for image only (image dimensions 100 x 100 x 100)
-            i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has
-            32 features), and no image
+        dataset : torch.Tensor
+            Tensor of predictive features
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
+            i.e. {"mod1_dim": None, "mod2_dim": None, "mod3_dim": None, "img_dim": [100, 100, 100]}
+            for image only (image dimensions 100 x 100 x 100)
+            i.e. {"mod1_dim": 8, "mod2_dim": 32, "mod3_dim": None, "img_dim": None}
+            for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has 32 features), and no image or tabular3
+
         """
 
         tab1_df = pd.read_csv(self.tabular1_source)
@@ -337,16 +447,76 @@ class LoadDatasets:
         tab1_df.set_index("ID", inplace=True)
         tab2_df.set_index("ID", inplace=True)
 
-        tab1_pred_features = torch.Tensor(tab1_df.drop(columns=["prediction_label"]).values)
-        tab2_pred_features = torch.Tensor(tab2_df.drop(columns=["prediction_label"]).values)
+        tab1_pred_features = torch.Tensor(
+            tab1_df.drop(columns=["prediction_label"]).values
+        )
+        tab2_pred_features = torch.Tensor(
+            tab2_df.drop(columns=["prediction_label"]).values
+        )
 
         prediction_label = tab1_df[["prediction_label"]]
-        dataset = CustomDataset([tab1_pred_features, tab2_pred_features], prediction_label)
+        dataset = CustomDataset(
+            [tab1_pred_features, tab2_pred_features], prediction_label
+        )
 
-        mod1_dim = tab1_pred_features.shape[1]
-        mod2_dim = tab2_pred_features.shape[1]
+        data_dims = {
+            "mod1_dim": tab1_pred_features.shape[1],
+            "mod2_dim": tab2_pred_features.shape[1],
+            "mod3_dim": None,
+            "img_dim": None,
+        }
 
-        return dataset, [mod1_dim, mod2_dim, None]
+        return dataset, data_dims
+
+    def load_tabular_tabular_tabular(self):
+        """
+        Loads the tabular1 and tabular2 multimodal dataset
+
+        Returns
+        ------
+        dataset : torch.Tensor
+            Tensor of predictive features
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
+            i.e. {"mod1_dim": None, "mod2_dim": None, "mod3_dim": None, "img_dim": [100, 100, 100]}
+            for image only (image dimensions 100 x 100 x 100)
+            i.e. {"mod1_dim": 8, "mod2_dim": 32, "mod3_dim": None, "img_dim": None}
+            for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has 32 features), and no image or tabular3
+
+        """
+
+        tab1_df = pd.read_csv(self.tabular1_source)
+        tab2_df = pd.read_csv(self.tabular2_source)
+        tab3_df = pd.read_csv(self.tabular3_source)
+
+        tab1_df.set_index("ID", inplace=True)
+        tab2_df.set_index("ID", inplace=True)
+        tab3_df.set_index("ID", inplace=True)
+
+        tab1_pred_features = torch.Tensor(
+            tab1_df.drop(columns=["prediction_label"]).values
+        )
+        tab2_pred_features = torch.Tensor(
+            tab2_df.drop(columns=["prediction_label"]).values
+        )
+        tab3_pred_features = torch.Tensor(
+            tab3_df.drop(columns=["prediction_label"]).values
+        )
+
+        prediction_label = tab1_df[["prediction_label"]]
+        dataset = CustomDataset(
+            [tab1_pred_features, tab2_pred_features, tab3_pred_features],
+            prediction_label,
+        )
+
+        data_dims = {
+            "mod1_dim": tab1_pred_features.shape[1],
+            "mod2_dim": tab2_pred_features.shape[1],
+            "mod3_dim": tab3_pred_features.shape[1],
+            "img_dim": None,
+        }
+
+        return dataset, data_dims
 
     def load_tab_and_img(self):
         """
@@ -354,11 +524,14 @@ class LoadDatasets:
 
         Returns
         ------
-        dataset (tensor): tensor of predictive features
-        data_dims (list): list of data dimensions [mod1_dim, mod2_dim, img_dim]
-            i.e. [None, None, [100, 100, 100]] for image only (image dimensions 100 x 100 x 100)
-            i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has
-            32 features), and no image
+        dataset : torch.Tensor
+            Tensor of predictive features
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
+            i.e. {"mod1_dim": None, "mod2_dim": None, "mod3_dim": None, "img_dim": [100, 100, 100]}
+            for image only (image dimensions 100 x 100 x 100)
+            i.e. {"mod1_dim": 8, "mod2_dim": 32, "mod3_dim": None, "img_dim": None}
+            for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has 32 features), and no image or tabular3
         """
 
         tab1_df = pd.read_csv(self.tabular1_source)
@@ -372,10 +545,34 @@ class LoadDatasets:
         imgs = downsample_img_batch(imgs, self.image_downsample_size)
 
         dataset = CustomDataset([tab1_features, imgs], label_df)
-        mod1_dim = tab1_features.shape[1]
-        img_dim = list(imgs.shape[2:])  # not including batch size or channels
 
-        return dataset, [mod1_dim, None, img_dim]
+        data_dims = {
+            "mod1_dim": tab1_features.shape[1],
+            "mod2_dim": None,
+            "mod3_dim": None,
+            "img_dim": list(imgs.shape[2:]),  # not including batch size or channels
+        }
+
+        return dataset, data_dims
+
+    def get_methods_dict(self):
+        """
+        Returns the dictionary of methods for loading the different modalities.
+
+        Returns
+        -------
+        dict
+            Dictionary of methods for loading the different modalities.
+        """
+        return {
+            "tabular1": self.load_tabular1,
+            "tabular2": self.load_tabular2,
+            "tabular3": self.load_tabular3,
+            "image": self.load_img,
+            "tabular_tabular": self.load_tabular_tabular,
+            "tabular_tabular_tabular": self.load_tabular_tabular_tabular,
+            "tabular_image": self.load_tab_and_img,
+        }
 
 
 class TrainTestDataModule(pl.LightningDataModule):
@@ -409,8 +606,12 @@ class TrainTestDataModule(pl.LightningDataModule):
         Maximum number of epochs to train subspace methods for. (default 1000)
     dataset : tensor
         Tensor of predictive features. Created in prepare_data().
-    data_dims : list
-        List of data dimensions [mod1_dim, mod2_dim, img_dim].
+    data_dims : dict
+        Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
+        i.e. {"mod1_dim": None, "mod2_dim": None, "mod3_dim": None, "img_dim": [100, 100, 100]}
+        for image only (image dimensions 100 x 100 x 100)
+        i.e. {"mod1_dim": 8, "mod2_dim": 32, "mod3_dim": None, "img_dim": None}
+        for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has 32 features), and no image or tabular3.
         Created in prepare_data().
     train_dataset : tensor
         Tensor of predictive features for training. Created in setup().
@@ -430,23 +631,23 @@ class TrainTestDataModule(pl.LightningDataModule):
     """
 
     def __init__(
-            self,
-            fusion_model,
-            sources,
-            output_paths,
-            prediction_task,
-            batch_size,
-            test_size,
-            multiclass_dimensions,
-            subspace_method=None,
-            image_downsample_size=None,
-            layer_mods=None,
-            max_epochs=1000,
-            extra_log_string_dict=None,
-            own_early_stopping_callback=None,
-            num_workers=0,
-            test_indices=None,
-            kwargs=None,
+        self,
+        fusion_model,
+        sources,
+        output_paths,
+        prediction_task,
+        batch_size,
+        test_size,
+        multiclass_dimensions,
+        subspace_method=None,
+        image_downsample_size=None,
+        layer_mods=None,
+        max_epochs=1000,
+        extra_log_string_dict=None,
+        own_early_stopping_callback=None,
+        num_workers=0,
+        test_indices=None,
+        kwargs=None,
     ):
         """
         Parameters
@@ -494,17 +695,24 @@ class TrainTestDataModule(pl.LightningDataModule):
         self.sources = sources
         self.output_paths = output_paths
         self.extra_log_string_dict = extra_log_string_dict
-        self.modality_methods = {
-            "tabular1": LoadDatasets(self.sources, image_downsample_size).load_tabular1,
-            "tabular2": LoadDatasets(self.sources, image_downsample_size).load_tabular2,
-            "img": LoadDatasets(self.sources, image_downsample_size).load_img,
-            "tabular_tabular": LoadDatasets(
-                self.sources, image_downsample_size
-            ).load_tabular_tabular,
-            "tabular_image": LoadDatasets(
-                self.sources, image_downsample_size
-            ).load_tab_and_img,
-        }
+
+        dataset_loader = LoadDatasets(self.sources, image_downsample_size)
+        self.modality_methods = dataset_loader.get_methods_dict()
+
+        # self.modality_methods = {
+        #     "tabular1": LoadDatasets(self.sources, image_downsample_size).load_tabular1,
+        #     "tabular2": LoadDatasets(self.sources, image_downsample_size).load_tabular2,
+        #     "img": LoadDatasets(self.sources, image_downsample_size).load_img,
+        #     "tabular_tabular": LoadDatasets(
+        #         self.sources, image_downsample_size
+        #     ).load_tabular_tabular,
+        #     "tabular_tabular_tabular": LoadDatasets(
+        #         self.sources, image_downsample_size
+        #     ).load_tabular_tabular_tabular,
+        #     "tabular_image": LoadDatasets(
+        #         self.sources, image_downsample_size
+        #     ).load_tab_and_img,
+        # }
         self.fusion_model = fusion_model
         self.modality_type = self.fusion_model.modality_type
         self.batch_size = batch_size
@@ -530,17 +738,18 @@ class TrainTestDataModule(pl.LightningDataModule):
         ------
         dataset : tensor
             Tensor of predictive features.
-        data_dims : list
-            List of data dimensions [mod1_dim, mod2_dim, img_dim]
-            i.e. [None, None, [100, 100, 100]] for image only (image dimensions 100 x 100 x 100)
-            i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has
-            32 features), and no image
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
+            i.e. {"mod1_dim": None, "mod2_dim": None, "mod3_dim": None, "img_dim": [100, 100, 100]}
+            for image only (image dimensions 100 x 100 x 100)
+            i.e. {"mod1_dim": 8, "mod2_dim": 32, "mod3_dim": None, "img_dim": None}
+            for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has 32 features), and no image or tabular3
         """
         self.dataset, self.data_dims = self.modality_methods[self.modality_type]()
 
     def setup(
-            self,
-            checkpoint_path=None,
+        self,
+        checkpoint_path=None,
     ):
         """
         Splits the data into train and test sets, and runs the subspace method if specified.
@@ -565,30 +774,31 @@ class TrainTestDataModule(pl.LightningDataModule):
                 self.dataset, [1 - self.test_size, self.test_size]
             )
         else:
-            self.test_dataset = torch.utils.data.Subset(
-                self.dataset, self.test_indices
-            )
+            self.test_dataset = torch.utils.data.Subset(self.dataset, self.test_indices)
 
             self.train_dataset = torch.utils.data.Subset(
-                self.dataset, list(set(range(len(self.dataset))) - set(self.test_indices))
+                self.dataset,
+                list(set(range(len(self.dataset))) - set(self.test_indices)),
             )
 
         if self.subspace_method is not None:  # if subspace method is specified
             if (
-                    checkpoint_path is None
+                checkpoint_path is None
             ):  # if no checkpoint path specified, train the subspace method
                 self.subspace_method_train = self.subspace_method(
                     datamodule=self,
                     max_epochs=self.max_epochs,
                     k=None,
-                    train_subspace=True
+                    train_subspace=True,
                 )
 
                 # modify the subspace method architecture if specified
                 if self.layer_mods is not None:
-                    self.subspace_method_train = model_modifier.modify_model_architecture(
-                        self.subspace_method_train,
-                        self.layer_mods,
+                    self.subspace_method_train = (
+                        model_modifier.modify_model_architecture(
+                            self.subspace_method_train,
+                            self.layer_mods,
+                        )
                     )
 
                 # train the subspace method and convert train dataset to the latent space
@@ -612,17 +822,16 @@ class TrainTestDataModule(pl.LightningDataModule):
                 # we have already trained the subspace method, so load it from the checkpoint
 
                 self.subspace_method_train = self.subspace_method(
-                    self,
-                    max_epochs=self.max_epochs,
-                    k=None,
-                    train_subspace=False
+                    self, max_epochs=self.max_epochs, k=None, train_subspace=False
                 )  # will return a init subspace method with the subspace models as instance attributes
 
                 # modify the subspace method architecture if specified
                 if self.layer_mods is not None:
-                    self.subspace_method_train = model_modifier.modify_model_architecture(
-                        self.subspace_method_train,
-                        self.layer_mods,
+                    self.subspace_method_train = (
+                        model_modifier.modify_model_architecture(
+                            self.subspace_method_train,
+                            self.layer_mods,
+                        )
                     )
 
                 # load checkpoint state dict
@@ -656,7 +865,10 @@ class TrainTestDataModule(pl.LightningDataModule):
             Dataloader for training.
         """
         return DataLoader(
-            self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.num_workers
+            self.train_dataset,
+            batch_size=self.batch_size,
+            shuffle=True,
+            num_workers=self.num_workers,
         )
 
     def val_dataloader(self):
@@ -669,7 +881,10 @@ class TrainTestDataModule(pl.LightningDataModule):
             Dataloader for validation.
         """
         return DataLoader(
-            self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=self.num_workers
+            self.test_dataset,
+            batch_size=self.batch_size,
+            shuffle=False,
+            num_workers=self.num_workers,
         )
 
 
@@ -709,8 +924,13 @@ class KFoldDataModule(pl.LightningDataModule):
         Maximum number of epochs to train subspace methods for. (default 1000)
     dataset : tensor
         Tensor of predictive features. Created in prepare_data().
-    data_dims : list
-        List of data dimensions [mod1_dim, mod2_dim, img_dim]. Created in prepare_data().
+    data_dims : dict
+        Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
+        i.e. {"mod1_dim": None, "mod2_dim": None, "mod3_dim": None, "img_dim": [100, 100, 100]}
+        for image only (image dimensions 100 x 100 x 100)
+        i.e. {"mod1_dim": 8, "mod2_dim": 32, "mod3_dim": None, "img_dim": None}
+        for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has 32 features), and no image or tabular3.
+        Created in prepare_data().
     train_dataset : tensor
         Tensor of predictive features for training. Created in setup().
     test_dataset : tensor
@@ -728,23 +948,23 @@ class KFoldDataModule(pl.LightningDataModule):
     """
 
     def __init__(
-            self,
-            fusion_model,
-            sources,
-            output_paths,
-            prediction_task,
-            batch_size,
-            num_folds,
-            multiclass_dimensions,
-            subspace_method=None,
-            image_downsample_size=None,
-            layer_mods=None,
-            max_epochs=1000,
-            extra_log_string_dict=None,
-            own_early_stopping_callback=None,
-            num_workers=0,
-            own_kfold_indices=None,
-            kwargs=None,
+        self,
+        fusion_model,
+        sources,
+        output_paths,
+        prediction_task,
+        batch_size,
+        num_folds,
+        multiclass_dimensions,
+        subspace_method=None,
+        image_downsample_size=None,
+        layer_mods=None,
+        max_epochs=1000,
+        extra_log_string_dict=None,
+        own_early_stopping_callback=None,
+        num_workers=0,
+        own_kfold_indices=None,
+        kwargs=None,
     ):
         """
         Parameters
@@ -797,21 +1017,8 @@ class KFoldDataModule(pl.LightningDataModule):
         self.output_paths = output_paths
         self.image_downsample_size = image_downsample_size
         self.extra_log_string_dict = extra_log_string_dict
-        self.modality_methods = {
-            "tabular1": LoadDatasets(
-                self.sources, self.image_downsample_size
-            ).load_tabular1,
-            "tabular2": LoadDatasets(
-                self.sources, self.image_downsample_size
-            ).load_tabular2,
-            "img": LoadDatasets(self.sources, self.image_downsample_size).load_img,
-            "tabular_tabular": LoadDatasets(
-                self.sources, self.image_downsample_size
-            ).load_tabular_tabular,
-            "tabular_image": LoadDatasets(
-                self.sources, self.image_downsample_size
-            ).load_tab_and_img,
-        }
+        dataset_loader = LoadDatasets(self.sources, image_downsample_size)
+        self.modality_methods = dataset_loader.get_methods_dict()
         self.prediction_task = prediction_task
         self.fusion_model = fusion_model
         self.modality_type = self.fusion_model.modality_type
@@ -838,11 +1045,12 @@ class KFoldDataModule(pl.LightningDataModule):
         ------
         dataset : tensor
             Tensor of predictive features.
-        data_dims : list
-            List of data dimensions [mod1_dim, mod2_dim, img_dim]
-            i.e. [None, None, [100, 100, 100]] for image only (image dimensions 100 x 100 x 100)
-            i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has
-            32 features), and no image
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
+            i.e. {"mod1_dim": None, "mod2_dim": None, "mod3_dim": None, "img_dim": [100, 100, 100]}
+            for image only (image dimensions 100 x 100 x 100)
+            i.e. {"mod1_dim": 8, "mod2_dim": 32, "mod3_dim": None, "img_dim": None}
+            for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has 32 features), and no image or tabular3.
         """
         self.dataset, self.data_dims = self.modality_methods[self.modality_type]()
 
@@ -877,8 +1085,8 @@ class KFoldDataModule(pl.LightningDataModule):
         return folds  # list of tuples of (train_dataset, test_dataset)
 
     def setup(
-            self,
-            checkpoint_path=None,
+        self,
+        checkpoint_path=None,
     ):
         """
         Splits the data into train and test sets, and runs the subspace method if specified
@@ -1014,7 +1222,10 @@ class KFoldDataModule(pl.LightningDataModule):
         self.train_dataset, self.test_dataset = self.folds[fold_idx]
 
         return DataLoader(
-            self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.num_workers
+            self.train_dataset,
+            batch_size=self.batch_size,
+            shuffle=True,
+            num_workers=self.num_workers,
         )
 
     def val_dataloader(self, fold_idx):
@@ -1034,7 +1245,10 @@ class KFoldDataModule(pl.LightningDataModule):
         self.train_dataset, self.test_dataset = self.folds[fold_idx]
 
         return DataLoader(
-            self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=self.num_workers
+            self.test_dataset,
+            batch_size=self.batch_size,
+            shuffle=False,
+            num_workers=self.num_workers,
         )
 
 
@@ -1064,8 +1278,13 @@ class TrainTestGraphDataModule:
         Dictionary of layer modifications to make to the graph maker method.
     dataset : tensor
         Tensor of predictive features. Created in prepare_data().
-    data_dims : list
-        List of data dimensions [mod1_dim, mod2_dim, img_dim]. Created in prepare_data().
+    data_dims : dict
+        Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
+        i.e. {"mod1_dim": None, "mod2_dim": None, "mod3_dim": None, "img_dim": [100, 100, 100]}
+        for image only (image dimensions 100 x 100 x 100)
+        i.e. {"mod1_dim": 8, "mod2_dim": 32, "mod3_dim": None, "img_dim": None}
+        for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has 32 features), and no image or tabular3.
+        Created in prepare_data().
     train_idxs : list
         List of indices for training. Created in setup().
     test_idxs : list
@@ -1078,15 +1297,15 @@ class TrainTestGraphDataModule:
     """
 
     def __init__(
-            self,
-            fusion_model,
-            sources,
-            graph_creation_method,
-            test_size,
-            image_downsample_size=None,
-            layer_mods=None,
-            extra_log_string_dict=None,
-            own_test_indices=None,
+        self,
+        fusion_model,
+        sources,
+        graph_creation_method,
+        test_size,
+        image_downsample_size=None,
+        layer_mods=None,
+        extra_log_string_dict=None,
+        own_test_indices=None,
     ):
         """
         Parameters
@@ -1119,21 +1338,8 @@ class TrainTestGraphDataModule:
         self.sources = sources
         self.image_downsample_size = image_downsample_size
         self.extra_log_string_dict = extra_log_string_dict
-        self.modality_methods = {
-            "tabular1": LoadDatasets(
-                self.sources, self.image_downsample_size
-            ).load_tabular1,
-            "tabular2": LoadDatasets(
-                self.sources, self.image_downsample_size
-            ).load_tabular2,
-            "img": LoadDatasets(self.sources, self.image_downsample_size).load_img,
-            "tabular_tabular": LoadDatasets(
-                self.sources, self.image_downsample_size
-            ).load_tabular_tabular,
-            "tabular_image": LoadDatasets(
-                self.sources, self.image_downsample_size
-            ).load_tab_and_img,
-        }
+        dataset_loader = LoadDatasets(self.sources, image_downsample_size)
+        self.modality_methods = dataset_loader.get_methods_dict()
         self.fusion_model = fusion_model
         self.modality_type = self.fusion_model.modality_type
         self.test_size = test_size
@@ -1149,11 +1355,12 @@ class TrainTestGraphDataModule:
         ------
         dataset : tensor
             Tensor of predictive features.
-        data_dims : list
-            List of data dimensions [mod1_dim, mod2_dim, img_dim]
-            i.e. [None, None, [100, 100, 100]] for image only (image dimensions 100 x 100 x 100)
-            i.e. [8, 32, None] for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has
-            32 features), and no image
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
+            i.e. {"mod1_dim": None, "mod2_dim": None, "mod3_dim": None, "img_dim": [100, 100, 100]}
+            for image only (image dimensions 100 x 100 x 100)
+            i.e. {"mod1_dim": 8, "mod2_dim": 32, "mod3_dim": None, "img_dim": None}
+            for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has 32 features), and no image or tabular3.
         """
         self.dataset, self.data_dims = self.modality_methods[self.modality_type]()
 
@@ -1174,9 +1381,7 @@ class TrainTestGraphDataModule:
             self.test_idxs = test_dataset.indices
         else:
             self.test_idxs = self.own_test_indices
-            self.train_idxs = list(
-                set(range(len(self.dataset))) - set(self.test_idxs)
-            )
+            self.train_idxs = list(set(range(len(self.dataset))) - set(self.test_idxs))
 
         # get the graph data structure
         self.graph_maker_instance = self.graph_creation_method(self.dataset)
@@ -1238,8 +1443,12 @@ class KFoldGraphDataModule:
         Dictionary of layer modifications to make to the graph maker method.
     dataset : tensor
         Tensor of predictive features.
-    data_dims : list
-        List of data dimensions [mod1_dim, mod2_dim, img_dim]
+    data_dims : dict
+        Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
+        i.e. {"mod1_dim": None, "mod2_dim": None, "mod3_dim": None, "img_dim": [100, 100, 100]}
+        for image only (image dimensions 100 x 100 x 100)
+        i.e. {"mod1_dim": 8, "mod2_dim": 32, "mod3_dim": None, "img_dim": None}
+        for tabular1 and tabular2 (tabular1 has 8 features, tabular2 has 32 features), and no image or tabular3.
     folds : list
         List of tuples of (graph_data, train_idxs, test_idxs)
 
@@ -1247,15 +1456,15 @@ class KFoldGraphDataModule:
     """
 
     def __init__(
-            self,
-            num_folds,
-            fusion_model,
-            sources,
-            graph_creation_method,
-            image_downsample_size=None,
-            layer_mods=None,
-            extra_log_string_dict=None,
-            own_kfold_indices=None,
+        self,
+        num_folds,
+        fusion_model,
+        sources,
+        graph_creation_method,
+        image_downsample_size=None,
+        layer_mods=None,
+        extra_log_string_dict=None,
+        own_kfold_indices=None,
     ):
         """
         Parameters
@@ -1286,21 +1495,8 @@ class KFoldGraphDataModule:
         self.image_downsample_size = image_downsample_size
         self.sources = sources
         self.extra_log_string_dict = extra_log_string_dict
-        self.modality_methods = {
-            "tabular1": LoadDatasets(
-                self.sources, self.image_downsample_size
-            ).load_tabular1,
-            "tabular2": LoadDatasets(
-                self.sources, self.image_downsample_size
-            ).load_tabular2,
-            "img": LoadDatasets(self.sources, self.image_downsample_size).load_img,
-            "tabular_tabular": LoadDatasets(
-                self.sources, self.image_downsample_size
-            ).load_tabular_tabular,
-            "tabular_image": LoadDatasets(
-                self.sources, self.image_downsample_size
-            ).load_tab_and_img,
-        }
+        dataset_loader = LoadDatasets(self.sources, image_downsample_size)
+        self.modality_methods = dataset_loader.get_methods_dict()
         self.fusion_model = fusion_model
         self.modality_type = self.fusion_model.modality_type
         self.graph_creation_method = graph_creation_method
@@ -1414,25 +1610,25 @@ class KFoldGraphDataModule:
 
 
 def prepare_fusion_data(
-        prediction_task,
-        fusion_model,
-        data_paths,
-        output_paths,
-        kfold=False,
-        num_folds=None,
-        test_size=0.2,
-        batch_size=8,
-        multiclass_dimensions=None,
-        image_downsample_size=None,
-        layer_mods=None,
-        max_epochs=1000,
-        checkpoint_path=None,
-        extra_log_string_dict=None,
-        own_early_stopping_callback=None,
-        num_workers=0,
-        test_indices=None,
-        own_kfold_indices=None,
-        **kwargs,
+    prediction_task,
+    fusion_model,
+    data_paths,
+    output_paths,
+    kfold=False,
+    num_folds=None,
+    test_size=0.2,
+    batch_size=8,
+    multiclass_dimensions=None,
+    image_downsample_size=None,
+    layer_mods=None,
+    max_epochs=1000,
+    checkpoint_path=None,
+    extra_log_string_dict=None,
+    own_early_stopping_callback=None,
+    num_workers=0,
+    test_indices=None,
+    own_kfold_indices=None,
+    **kwargs,
 ):
     """
     Gets the data module for a specific fusion model and training protocol.
@@ -1445,7 +1641,7 @@ def prepare_fusion_data(
     fusion_model : class
         Fusion model class.
     data_paths : dict
-        Dictionary of data paths with keys "tabular1", "tabular2", "image".
+        Dictionary of data paths with keys "tabular1", "tabular2", "tabular3", "image".
     output_paths : dict
         Dictionary of output paths with keys "checkpoints", "figures", "losses".
     kfold : bool
@@ -1497,14 +1693,8 @@ def prepare_fusion_data(
 
     if kfold and own_early_stopping_callback is not None:
         raise ValueError(
-            "Cannot use own early stopping callback with kfold cross validation yet. Working on fixing this currently (Nov 2023)")
-
-    # Getting the data paths from the data_paths dictionary into a list
-    data_sources = [
-        data_paths["tabular1"],
-        data_paths["tabular2"],
-        data_paths["image"],
-    ]
+            "Cannot use own early stopping callback with kfold cross validation yet. Working on fixing this currently (Nov 2023)"
+        )
 
     if not hasattr(fusion_model, "subspace_method"):
         fusion_model.subspace_method = None
@@ -1514,7 +1704,7 @@ def prepare_fusion_data(
             graph_data_module = KFoldGraphDataModule(
                 num_folds=num_folds,
                 fusion_model=fusion_model,
-                sources=data_sources,
+                sources=data_paths,
                 graph_creation_method=fusion_model.graph_maker,
                 image_downsample_size=image_downsample_size,
                 layer_mods=layer_mods,
@@ -1524,7 +1714,7 @@ def prepare_fusion_data(
         else:
             graph_data_module = TrainTestGraphDataModule(
                 fusion_model,
-                sources=data_sources,
+                sources=data_paths,
                 graph_creation_method=fusion_model.graph_maker,
                 test_size=test_size,
                 image_downsample_size=image_downsample_size,
@@ -1543,7 +1733,9 @@ def prepare_fusion_data(
             for dm_instance in data_module:
                 dm_instance.data_dims = graph_data_module.data_dims
                 dm_instance.own_early_stopping_callback = own_early_stopping_callback
-                dm_instance.graph_maker_instance = graph_data_module.graph_maker_instance
+                dm_instance.graph_maker_instance = (
+                    graph_data_module.graph_maker_instance
+                )
                 dm_instance.output_paths = output_paths
                 dm_instance.num_folds = num_folds
                 dm_instance.prediction_task = prediction_task
@@ -1561,7 +1753,7 @@ def prepare_fusion_data(
         if kfold:
             data_module = KFoldDataModule(
                 fusion_model,
-                sources=data_sources,
+                sources=data_paths,
                 output_paths=output_paths,
                 prediction_task=prediction_task,
                 batch_size=batch_size,
@@ -1580,7 +1772,7 @@ def prepare_fusion_data(
         else:
             data_module = TrainTestDataModule(
                 fusion_model,
-                sources=data_sources,
+                sources=data_paths,
                 output_paths=output_paths,
                 prediction_task=prediction_task,
                 batch_size=batch_size,
