@@ -139,7 +139,10 @@ class MCVAESubspaceMethod:
             "n_channels": 2,
             "lat_dim": self.num_latent_dims,
             "n_feats": tuple(
-                [self.datamodule.data_dims[0], self.datamodule.data_dims[1]]
+                [
+                    self.datamodule.data_dims["mod1_dim"],
+                    self.datamodule.data_dims["mod2_dim"],
+                ]
             ),
         }
 
@@ -376,8 +379,8 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
         ----------
         prediction_task : str
             Type of prediction to be performed.
-        data_dims : list
-            List containing the dimensions of the data.
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
@@ -390,7 +393,7 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
         self.latent_space_layers = nn.ModuleDict(
             {
                 "layer 1": nn.Sequential(
-                    nn.Linear(self.mod1_dim, 32),
+                    nn.Linear(data_dims["mod1_dim"], 32),
                     nn.ReLU(),
                 ),
                 "layer 2": nn.Sequential(

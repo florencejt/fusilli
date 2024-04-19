@@ -55,8 +55,8 @@ class ActivationFusion(ParentFusionModel, nn.Module):
         ----------
         prediction_task : str
             Type of prediction to be performed.
-        data_dims : list
-            List containing the dimensions of the data.
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
         multiclass_dimensions : int
             Number of classes in the multiclass classification problem.
         """

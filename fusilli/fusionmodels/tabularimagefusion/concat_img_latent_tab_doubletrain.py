@@ -52,13 +52,13 @@ class ImgLatentSpace(pl.LightningModule):
         """
         Parameters
         ----------
-        data_dims : list
-            List containing the dimensions of the data.
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
         """
         super(ImgLatentSpace, self).__init__()
 
         self.data_dims = data_dims
-        self.img_dim = data_dims[2]
+        self.img_dim = data_dims["img_dim"]
         self.latent_dim = 64
 
         if len(self.img_dim) == 2:  # 2D images
@@ -453,8 +453,8 @@ class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
         ----------
         prediction_task : str
             Type of prediction to be performed.
-        data_dims : list
-            List containing the dimensions of the data.
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """

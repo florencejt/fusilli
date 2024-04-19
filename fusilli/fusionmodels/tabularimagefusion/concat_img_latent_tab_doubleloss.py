@@ -81,8 +81,8 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         ----------
         prediction_task : str
             Type of prediction to be performed.
-        data_dims : list
-            List containing the dimensions of the data.
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
@@ -92,7 +92,7 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
 
         self.prediction_task = prediction_task
         self.custom_loss = nn.MSELoss()
-        self.img_dim = data_dims[-1]
+        self.img_dim = data_dims["img_dim"]
 
         self.latent_dim = 256  # You can adjust the latent space size
 

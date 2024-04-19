@@ -54,8 +54,8 @@ class AttentionWeightMLP(pl.LightningModule):
         ----------
         prediction_task : str
             Type of prediction to be performed.
-        data_dims : list
-            List containing the dimensions of the data.
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
         multiclass_dimensions : int
             Number of classes for multiclass classification. If not multiclass classification, this is None.
         """
@@ -64,8 +64,8 @@ class AttentionWeightMLP(pl.LightningModule):
         self.prediction_task = prediction_task
         self.multiclass_dimensions = multiclass_dimensions
 
-        self.mod1_dim = data_dims[0]
-        self.mod2_dim = data_dims[1]
+        self.mod1_dim = data_dims["mod1_dim"]
+        self.mod2_dim = data_dims["mod2_dim"]
 
         self.weighting_layers = nn.ModuleDict(
             {
@@ -502,8 +502,8 @@ class AttentionWeightedGNN(ParentFusionModel, nn.Module):
         ----------
         prediction_task : str
             Type of prediction to be performed.
-        data_dims : list
-            List containing the dimensions of the data.
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
         multiclass_dimensions : int
             Number of classes for multiclass classification. If not multiclass classification, this is None.
         """

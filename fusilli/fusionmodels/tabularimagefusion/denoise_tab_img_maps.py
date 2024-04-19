@@ -41,13 +41,13 @@ class DenoisingAutoencoder(pl.LightningModule):
 
         Parameters
         ----------
-        data_dims : list
-            List containing the dimensions of the data.
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
 
         """
         super().__init__()
 
-        self.tab_dims = data_dims[0]
+        self.tab_dims = data_dims["mod1_dim"]
         self.latent_dim = 28 * 28
 
         self.upsampler = nn.Sequential(
@@ -266,8 +266,8 @@ class ImgUnimodalDAE(pl.LightningModule):
 
         Parameters
         ----------
-        data_dims : list
-            List containing the dimensions of the data.
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
         prediction_task : str
             Type of prediction.
         multiclass_dimensions : int
@@ -275,7 +275,7 @@ class ImgUnimodalDAE(pl.LightningModule):
         """
         super().__init__()
 
-        self.img_dim = data_dims[2]
+        self.img_dim = data_dims["img_dim"]
         # needed for ParentFusionModel
         self.multiclass_dimensions = multiclass_dimensions
         self.prediction_task = prediction_task
@@ -726,8 +726,8 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         ----------
         prediction_task : str
             Type of prediction to be performed.
-        data_dims : list
-            List containing the dimensions of the data.
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """

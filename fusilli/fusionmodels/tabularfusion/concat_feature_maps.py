@@ -26,6 +26,9 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
     mod2_layers : nn.ModuleDict
         Dictionary containing the layers of the second modality. Calculated in the
         :meth:`~ParentFusionModel.set_mod2_layers` method.
+    mod3_layers : nn.ModuleDict
+        Dictionary containing the layers of the third modality. Calculated in the
+        :meth:`~ParentFusionModel.set_mod3_layers` method. None if three modalities are not provided.
     fused_dim : int
         Number of features of the fused layers. In this method, it's the size of the tabular 1
         layers output plus the size of the tabular 2 layers output.
@@ -44,6 +47,8 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
     modality_type = "tabular_tabular"
     #: str: Type of fusion.
     fusion_type = "operation"
+    #: str: Available for three tabular modalities.
+    three_modalities = True
 
     def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
@@ -51,8 +56,8 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
         ----------
         prediction_task : str
             Type of prediction to be performed.
-        data_dims : list
-            List containing the dimensions of the data.
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
@@ -64,6 +69,8 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
 
         self.set_mod1_layers()
         self.set_mod2_layers()
+        if self.data_dims["mod3_dim"] is not None:
+            self.set_mod3_layers()
 
         self.get_fused_dim()
         self.set_fused_layers(self.fused_dim)
@@ -83,6 +90,8 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
             list(self.mod1_layers.values())[-1][0].out_features
             + list(self.mod2_layers.values())[-1][0].out_features
         )
+        if self.data_dims["mod3_dim"] is not None:
+            self.fused_dim += list(self.mod3_layers.values())[-1][0].out_features
 
     def calc_fused_layers(self):
         """
@@ -96,6 +105,10 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
         # ~~ Checks ~~
         check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
         check_model_validity.check_dtype(self.mod2_layers, nn.ModuleDict, "mod2_layers")
+        if self.data_dims["mod3_dim"] is not None:
+            check_model_validity.check_dtype(
+                self.mod3_layers, nn.ModuleDict, "mod3_layers"
+            )
 
         self.get_fused_dim()
         self.fused_layers, out_dim = check_model_validity.check_fused_layers(
@@ -105,7 +118,7 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
         # setting final prediction layers with final out features of fused layers
         self.set_final_pred_layers(out_dim)
 
-    def forward(self, x1, x2):
+    def forward(self, x1, x2, x3=None):
         """
         Forward pass of the model.
 
@@ -115,6 +128,8 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
             Input tensor for the first modality.
         x2 : torch.Tensor
             Input tensor for the second modality.
+        x3 : torch.Tensor or None
+            Input tensor for the third modality. Default is None.
 
         Returns
         -------
@@ -125,17 +140,24 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
         # ~~ Checks ~~
         check_model_validity.check_model_input(x1)
         check_model_validity.check_model_input(x2)
-
-        x_tab1 = x1
-        x_tab2 = x2
+        if x3 is not None:
+            check_model_validity.check_model_input(x3)
 
         for layer in self.mod1_layers.values():
-            x_tab1 = layer(x_tab1)
+            x1 = layer(x1)
 
         for layer in self.mod2_layers.values():
-            x_tab2 = layer(x_tab2)
+            x2 = layer(x2)
 
-        out_fuse = torch.cat((x_tab1, x_tab2), dim=-1)
+        # x1 and x2 to a tuple
+        x_tuple = (x1, x2)
+
+        if x3 is not None:
+            for layer in self.mod3_layers.values():
+                x3 = layer(x3)
+            x_tuple = (x1, x2, x3)
+
+        out_fuse = torch.cat(x_tuple, dim=-1)
 
         out_fuse = self.fused_layers(out_fuse)
 
