@@ -2,9 +2,6 @@
 Decision fusion of two types of tabular data.
 """
 
-# TODO make 3-tabular data work
-
-
 import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch
@@ -23,6 +20,8 @@ class TabularDecision(ParentFusionModel, nn.Module):
         Dictionary containing the layers of the 1st type of tabular data.
     mod2_layers : nn.ModuleDict
         Dictionary containing the layers of the 2nd type of tabular data.
+    mod3_layers : nn.ModuleDict
+        Dictionary containing the layers of the 3rd type of tabular data. If 3 tabular data are not provided, this is None.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers.
     final_prediction_tab1 : nn.Sequential

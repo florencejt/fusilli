@@ -2,9 +2,6 @@
 Concatenating the two tabular modalities at the data-level (early fusion)
 """
 
-# TODO make 3-tabular data work
-
-
 from fusilli.fusionmodels.base_model import ParentFusionModel
 from fusilli.utils import check_model_validity
 
@@ -38,6 +35,8 @@ class ConcatTabularData(ParentFusionModel, nn.Module):
     modality_type = "tabular_tabular"
     #: str: Type of fusion.
     fusion_type = "operation"
+    #: str: Available for three tabular modalities.
+    three_modalities = True
 
     def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
@@ -45,8 +44,8 @@ class ConcatTabularData(ParentFusionModel, nn.Module):
         ----------
         prediction_task : str
             Type of prediction to be performed.
-        data_dims : list
-            List containing the dimensions of the data.
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
@@ -70,7 +69,9 @@ class ConcatTabularData(ParentFusionModel, nn.Module):
         -------
         None
         """
-        self.fused_dim = self.mod1_dim + self.mod2_dim
+        self.fused_dim = self.data_dims["mod1_dim"] + self.data_dims["mod2_dim"]
+        if self.data_dims["mod3_dim"] is not None:
+            self.fused_dim += self.data_dims["mod3_dim"]
 
     def calc_fused_layers(self):
         """
@@ -89,14 +90,18 @@ class ConcatTabularData(ParentFusionModel, nn.Module):
 
         self.set_final_pred_layers(out_dim)
 
-    def forward(self, x1, x2):
+    def forward(self, x1, x2, x3=None):
         """
         Forward pass of the model.
 
         Parameters
         ----------
-        x : tuple
-            Tuple containing the data of the two modalities.
+        x1 : torch.Tensor
+            Input tensor of the first tabular modality.
+        x2 : torch.Tensor
+            Input tensor of the second tabular modality.
+        x3 : torch.Tensor or None
+            Input tensor of the third tabular modality. Default is None.
 
         Returns
         -------
@@ -104,16 +109,19 @@ class ConcatTabularData(ParentFusionModel, nn.Module):
             Prediction of the model.
         """
 
-        # print("List input", isinstance(x, list))
-        # print("x data type", type(x))
-        # print("x length", len(x))
-
-        # x = tuple(x) if isinstance(x, list) else x
-
         # ~~ Checks ~~
-        # check_model_validity.check_model_input(x)
+        check_model_validity.check_model_input(x1)
+        check_model_validity.check_model_input(x2)
+        if x3 is not None:
+            check_model_validity.check_model_input(x3)
 
-        x_fuse = torch.cat((x1, x2), -1)
+        # make the x1 x2 and x3 into a tuple
+        if x3 is not None:
+            x_fuse = (x1, x2, x3)
+        else:
+            x_fuse = (x1, x2)
+
+        x_fuse = torch.cat(x_fuse, -1)
 
         out_fuse = self.fused_layers(x_fuse)
 
