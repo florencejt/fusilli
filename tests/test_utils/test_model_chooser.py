@@ -56,7 +56,9 @@ def test_import_all_model_importer(mock_import_module):
 
     mock_module5 = Mock()
     mock_module5.Model5 = Mock(
-        __name__="Model5", modality_type="tabular_tabular", fusion_type="attention"
+        __name__="Model5",
+        modality_type="tabular_tabular",
+        fusion_type="attention",
     )
 
     mock_import_module.side_effect = [
@@ -103,7 +105,9 @@ def test_skip_model_in_all_import(mock_import_module):
 
     mock_module5 = Mock()
     mock_module5.Model5 = Mock(
-        __name__="Model5", modality_type="tabular_tabular", fusion_type="attention"
+        __name__="Model5",
+        modality_type="tabular_tabular",
+        fusion_type="attention",
     )
 
     mock_import_module.side_effect = [
@@ -114,7 +118,9 @@ def test_skip_model_in_all_import(mock_import_module):
         mock_module5,
     ]
 
-    fusion_models, new_fusion_model_dict = all_model_importer(fusion_model_dict, skip_models=["Model1"])
+    fusion_models, new_fusion_model_dict = all_model_importer(
+        fusion_model_dict, skip_models=["Model1"]
+    )
 
     assert len(fusion_models) == 4
 
@@ -149,7 +155,9 @@ def test_get_models(mock_import_module):
 
     mock_module5 = Mock()
     mock_module5.Model5 = Mock(
-        __name__="Model5", modality_type="tabular_tabular", fusion_type="attention"
+        __name__="Model5",
+        modality_type="tabular_tabular",
+        fusion_type="attention",
     )
 
     mock_import_module.side_effect = [
@@ -200,7 +208,9 @@ def test_get_models(mock_import_module):
     }
 
     with pytest.warns(UserWarning, match="No models match the specified conditions."):
-        filtered_models = get_models(conditions_dict, fusion_model_dict=fusion_model_dict)
+        filtered_models = get_models(
+            conditions_dict, fusion_model_dict=fusion_model_dict
+        )
 
     # with invalid features
     mock_import_module.side_effect = [
@@ -217,7 +227,9 @@ def test_get_models(mock_import_module):
     }
 
     with pytest.raises(ValueError, match=r"Invalid feature"):
-        filtered_models = get_models(conditions_dict, fusion_model_dict=fusion_model_dict)
+        filtered_models = get_models(
+            conditions_dict, fusion_model_dict=fusion_model_dict
+        )
 
     # invalid fusion_type
     mock_import_module.side_effect = [
@@ -233,7 +245,9 @@ def test_get_models(mock_import_module):
     }
 
     with pytest.raises(ValueError, match=r"Invalid fusion type for feature"):
-        filtered_models = get_models(conditions_dict, fusion_model_dict=fusion_model_dict)
+        filtered_models = get_models(
+            conditions_dict, fusion_model_dict=fusion_model_dict
+        )
 
     # invalid modality_type
     mock_import_module.side_effect = [
@@ -249,7 +263,9 @@ def test_get_models(mock_import_module):
     }
 
     with pytest.raises(ValueError, match=r"Invalid modality type for feature"):
-        filtered_models = get_models(conditions_dict, fusion_model_dict=fusion_model_dict)
+        filtered_models = get_models(
+            conditions_dict, fusion_model_dict=fusion_model_dict
+        )
 
     # check it works for "all"
     mock_import_module.side_effect = [

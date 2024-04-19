@@ -1,5 +1,5 @@
 """
-Tabular1 uni-modal model.
+Tabular3 uni-modal model.
 """
 
 import torch.nn as nn
@@ -8,15 +8,14 @@ from fusilli.utils import check_model_validity
 
 
 class Tabular3Unimodal(ParentFusionModel, nn.Module):
-    # TODO complete as a tabular3 unimodal method
     """unimodal model for tabular data.
 
     This class implements a uni-modal model using only the 3rd type of tabular data.
 
     Attributes
     ----------
-    mod1_layers : nn.ModuleDict
-        Dictionary containing the layers of the 1st type of tabular data.
+    mod3_layers : nn.ModuleDict
+        Dictionary containing the layers of the 3rd type of tabular data.
     fused_layers : nn.Sequential
         Sequential layer containing the fused layers.
     final_prediction : nn.Sequential
@@ -40,8 +39,8 @@ class Tabular3Unimodal(ParentFusionModel, nn.Module):
         ----------
         prediction_task : str
             Type of prediction to be performed.
-        data_dims : list
-            List containing the dimensions of the data.
+        data_dims : dict
+            Dictionary of data dimensions with keys "mod1_dim", "mod2_dim", "mod3_dim", and "img_dim".
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
@@ -51,7 +50,7 @@ class Tabular3Unimodal(ParentFusionModel, nn.Module):
 
         self.prediction_task = prediction_task
 
-        self.set_mod1_layers()
+        self.set_mod3_layers()
 
         self.get_fused_dim()
         self.set_fused_layers(self.fused_dim)
@@ -66,7 +65,7 @@ class Tabular3Unimodal(ParentFusionModel, nn.Module):
         None
         """
 
-        self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
+        self.fused_dim = list(self.mod3_layers.values())[-1][0].out_features
 
     def calc_fused_layers(self):
         """Calculate the fused layers.
@@ -74,7 +73,7 @@ class Tabular3Unimodal(ParentFusionModel, nn.Module):
         If the mod1_layers are modified, this function will recalculate the fused layers.
         """
 
-        check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
+        check_model_validity.check_dtype(self.mod3_layers, nn.ModuleDict, "mod3_layers")
 
         self.get_fused_dim()
         self.fused_layers, out_dim = check_model_validity.check_fused_layers(
@@ -101,11 +100,11 @@ class Tabular3Unimodal(ParentFusionModel, nn.Module):
 
         check_model_validity.check_model_input(x)
 
-        x_tab1 = x
-        for layer in self.mod1_layers.values():
-            x_tab1 = layer(x_tab1)
+        x_tab3 = x
+        for layer in self.mod3_layers.values():
+            x_tab3 = layer(x_tab3)
 
-        out_fuse = self.fused_layers(x_tab1)
+        out_fuse = self.fused_layers(x_tab3)
 
         out_pred = self.final_prediction(out_fuse)
 

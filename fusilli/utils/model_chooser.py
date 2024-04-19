@@ -13,6 +13,7 @@ import warnings
 fusion_model_dict = [
     {"name": "Tabular1Unimodal", "path": "fusionmodels.unimodal.tabular1"},
     {"name": "Tabular2Unimodal", "path": "fusionmodels.unimodal.tabular2"},
+    {"name": "Tabular3Unimodal", "path": "fusionmodels.unimodal.tabular3"},
     {"name": "ImgUnimodal", "path": "fusionmodels.unimodal.image"},
     {
         "name": "ConcatTabularFeatureMaps",
@@ -79,7 +80,7 @@ fusion_model_dict = [
     {
         "name": "ActivationFusion",
         "path": "fusionmodels.tabularfusion.activation",
-    }
+    },
 ]
 
 
@@ -130,7 +131,11 @@ def all_model_importer(fusion_model_dict, skip_models=None):
     return fusion_models, fusion_model_dict_copy
 
 
-def get_models(conditions_dict, skip_models=None, fusion_model_dict=fusion_model_dict, ):
+def get_models(
+    conditions_dict,
+    skip_models=None,
+    fusion_model_dict=fusion_model_dict,
+):
     """Filters the models based on the conditions specified by the user.
 
     Parameters
@@ -146,6 +151,12 @@ def get_models(conditions_dict, skip_models=None, fusion_model_dict=fusion_model
         - "modality_type": "tabular1", "tabular2", "img", "tabular_tabular", "tabular_image", or "all"
         - "method_name": any method name currently implemented (e.g. "Tabular decision"), or "all"
         - "class_name": any model name currently implemented (e.g. "TabularDecision"), or "all"
+        - "three_tabular_modalities": True (for models that are available for three tabular modalities)
+
+        .. note::
+
+            The condition ``{"three tabular modalities": True}`` will return the tabular models that are available for three tabular modalities.
+            It will also return the tabular unimodal models. If you don't want the tabular unimodal models, you can filter them out by setting the condition ``modality_type`` as ``tabular_tabular``.
 
         Example: To get all the models that are uni-modal and attention-based, the dictionary would be:
 
@@ -155,6 +166,7 @@ def get_models(conditions_dict, skip_models=None, fusion_model_dict=fusion_model
                 "fusion_type": ["unimodal", "operation"],
                 "modality_type": "all",
                 }
+
 
     fusion_model_dict : list
         List of dictionaries containing the fusion models' names and paths. Default is fusion_model_dict.
@@ -174,13 +186,20 @@ def get_models(conditions_dict, skip_models=None, fusion_model_dict=fusion_model
         - "method_name": name of the model (e.g. "Tabular decision")
         - "fusion_type": type of fusion (e.g. "operation")
         - "modality_type": type of modality (e.g. "tabular_tabular")
+        - "three_tabular_modalities": True if the model is available for three tabular modalities or unimodal, False otherwise
         - "class_name": name of the class (e.g. "TabularDecision")
         - "method_path": path to the method's py file (e.g. "fusilli.fusionmodels.tabular_decision")
 
     """
 
     # raise error if condition is not "all" and feature is not one of the options
-    valid_features = ["fusion_type", "modality_type", "method_name", "class_name"]
+    valid_features = [
+        "fusion_type",
+        "modality_type",
+        "method_name",
+        "class_name",
+        "three_tabular_modalities",
+    ]
     valid_fusion_types = [
         "unimodal",
         "operation",
@@ -189,24 +208,48 @@ def get_models(conditions_dict, skip_models=None, fusion_model_dict=fusion_model
         "graph",
         "tensor",
     ]
-    valid_modality_types = ["tabular1", "tabular2", "img", "tabular_tabular", "tabular_image"]
+    valid_modality_types = [
+        "tabular1",
+        "tabular2",
+        "img",
+        "tabular_tabular",
+        "tabular_image",
+    ]
 
-    fusion_models, fusion_model_dict_without_skips = all_model_importer(fusion_model_dict, skip_models=skip_models)
+    fusion_models, fusion_model_dict_without_skips = all_model_importer(
+        fusion_model_dict, skip_models=skip_models
+    )
 
     method_names = [
-        fusion_models[i].method_name for i, model in enumerate(fusion_model_dict_without_skips)
+        fusion_models[i].method_name
+        for i, model in enumerate(fusion_model_dict_without_skips)
     ]
     fusion_types = [
-        fusion_models[i].fusion_type for i, model in enumerate(fusion_model_dict_without_skips)
+        fusion_models[i].fusion_type
+        for i, model in enumerate(fusion_model_dict_without_skips)
     ]
     modality_types = [
-        fusion_models[i].modality_type for i, model in enumerate(fusion_model_dict_without_skips)
+        fusion_models[i].modality_type
+        for i, model in enumerate(fusion_model_dict_without_skips)
+    ]
+
+    three_tabular_modalities = [
+        (
+            fusion_models[i].three_modalities
+            if hasattr(fusion_models[i], "three_modalities")
+            else (
+                fusion_models[i].fusion_type == "unimodal"
+                and fusion_models[i].modality_type != "img"
+            )
+        )
+        for i, model in enumerate(fusion_model_dict_without_skips)
     ]
 
     class_names = [fusion_models[i].__name__ for i, model in enumerate(fusion_models)]
 
     method_paths = [
-        "fusilli." + model["path"] for i, model in enumerate(fusion_model_dict_without_skips)
+        "fusilli." + model["path"]
+        for i, model in enumerate(fusion_model_dict_without_skips)
     ]
 
     # create a dataframe of all the models
@@ -215,6 +258,7 @@ def get_models(conditions_dict, skip_models=None, fusion_model_dict=fusion_model
             "method_name": method_names,
             "fusion_type": fusion_types,
             "modality_type": modality_types,
+            "three_tabular_modalities": three_tabular_modalities,
             "class_name": class_names,
             "method_path": method_paths,
         }
@@ -301,6 +345,13 @@ def import_chosen_fusion_models(model_conditions, skip_models=None):
         - "modality_type": "tabular1", "tabular2", "img", "tabular_tabular", "tabular_image", or "all"
         - "method_name": any method name currently implemented (e.g. "Tabular decision"), or "all"
         - "class_name": any model name currently implemented (e.g. "TabularDecision"), or "all"
+        - "three_tabular_modalities": True (for models that are available for three tabular modalities or unimodal)
+
+        .. note::
+
+            The condition ``{"three_tabular_modalities": True}`` will return the tabular models that are available for three tabular modalities.
+            It will also return the tabular unimodal models. If you don't want the tabular unimodal models, you can filter them out by setting the condition ``modality_type`` as ``tabular_tabular``.
+
 
         Example: To get all the models that are uni-modal and attention-based, the dictionary would be:
 

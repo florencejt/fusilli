@@ -250,8 +250,6 @@ class BaseModel(pl.LightningModule):
                     "Batch size must be 2 (preds and labels), 3 (2 pred data types and labels), or 4 (3 pred data types and labels)."
                 )
 
-            print("length of batch", len(batch))
-
             x = tuple(batch[:-1])
             y = batch[-1]
 
