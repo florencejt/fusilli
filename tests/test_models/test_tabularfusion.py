@@ -648,6 +648,10 @@ def test_AttentionAndSelfActivation():
     assert hasattr(test_model, "fused_layers")
     assert hasattr(test_model, "final_prediction")
     assert hasattr(test_model, "forward")
+    assert hasattr(test_model, "main_modality")
+    assert test_model.main_modality == 1
+    assert hasattr(test_model, "attention_modality")
+    assert test_model.attention_modality == 2
 
     # forward pass
     test_model.attention_reduction_ratio = 2
@@ -659,10 +663,50 @@ def test_AttentionAndSelfActivation():
     # wrong input
     with pytest.raises(
         UserWarning,
-        match=r"first tabular modality dimensions // attention_reduction_ratio < 1",
+        match=r"Modality dimensions // attention_reduction_ratio < 1",
     ):
         test_model.attention_reduction_ratio = 16
         test_model.forward(torch.randn(8, 10), torch.randn(8, 14))
+
+    # Three modalities
+    test_model = fusion_model_dict["AttentionAndSelfActivation"]
+    test_model = test_model(
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": 20, "img_dim": None},
+        multiclass_dimensions=None,
+    )
+
+    # initialising
+    assert isinstance(test_model, nn.Module)
+    assert isinstance(test_model, ParentFusionModel)
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
+    assert hasattr(test_model, "mod1_layers")
+    assert test_model.mod1_layers["layer 1"][0].in_features == 10
+    assert hasattr(test_model, "mod2_layers")
+    assert test_model.mod2_layers["layer 1"][0].in_features == 14
+    assert hasattr(test_model, "mod3_layers")
+    assert test_model.mod3_layers["layer 1"][0].in_features == 20
+    assert hasattr(test_model, "fused_dim")
+    assert (
+        test_model.fused_dim
+        == test_model.mod1_layers["layer 5"][0].out_features
+        + test_model.mod2_layers["layer 5"][0].out_features
+    )
+    assert hasattr(test_model, "fused_layers")
+    assert hasattr(test_model, "final_prediction")
+    assert hasattr(test_model, "forward")
+    assert hasattr(test_model, "main_modality")
+    assert test_model.main_modality == 1
+    assert hasattr(test_model, "attention_modality")
+    assert test_model.attention_modality == 2
+
+    # forward pass
+    test_model.attention_reduction_ratio = 2
+    test_input = (torch.randn(8, 10), torch.randn(8, 14), torch.randn(8, 20))
+    test_output = test_model.forward(*test_input)
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
 
 
 def test_AttentionWeightedGNN():

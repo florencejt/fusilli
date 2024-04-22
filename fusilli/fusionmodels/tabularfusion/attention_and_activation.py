@@ -32,6 +32,12 @@ class AttentionAndSelfActivation(ParentFusionModel, nn.Module):
     mod2_layers : nn.ModuleDict
         Dictionary containing the layers of the second modality. Calculated in the
         :meth:`~ParentFusionModel.set_mod2_layers` method.
+    main_modality: int
+        Which modality is the modality that has its feature maps concatenated with the fused feature map? 1, 2, or 3 depending on which modality is the main one.
+    attention_modality: int
+        Which modality is the attention modality? 1, 2, or 3 depending on which modality has the self-attention function applied to it.
+    mod3_layers : nn.ModuleDict (optional)
+        Dictionary containing the layers of the 3rd type of tabular data. If 3 tabular data are not provided, this is not used.
     fused_dim : int
         Number of features of the fused layers. In this method, it's the size of the tabular 1
         layers output plus the size of the tabular 2 layers output.
@@ -52,6 +58,8 @@ class AttentionAndSelfActivation(ParentFusionModel, nn.Module):
     modality_type = "tabular_tabular"
     #: str: Type of fusion.
     fusion_type = "operation"
+    #: str: Available for three tabular modalities.
+    three_modalities = True
 
     def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
@@ -73,6 +81,14 @@ class AttentionAndSelfActivation(ParentFusionModel, nn.Module):
         self.attention_reduction_ratio = 16
         self.set_mod1_layers()
         self.set_mod2_layers()
+        if self.data_dims["mod3_dim"] is not None:
+            self.set_mod3_layers()
+
+        self.main_modality = 1  # Which modality has its feature maps concatenated with the fused feature map
+
+        self.attention_modality = (
+            2  # Which modality has the self-attention function applied to it
+        )
 
         self.get_fused_dim()
         self.set_fused_layers(self.fused_dim)
@@ -86,7 +102,10 @@ class AttentionAndSelfActivation(ParentFusionModel, nn.Module):
         """
         mod1_output_dim = list(self.mod1_layers.values())[-1][0].out_features
         mod2_output_dim = list(self.mod2_layers.values())[-1][0].out_features
-        # New fused dimension is the sum of mod1 and mod2 output dimensions
+        if self.data_dims["mod3_dim"] is not None:
+            mod3_output_dim = list(self.mod3_layers.values())[-1][0].out_features
+        # New fused dimension is the sum of the output feature map dimensions of one of the modalities (doesn't matter which one because they are the same)
+        # And adding the feature map dimension of the "main" modality, again, doesn't matter which one because they are the same
         self.fused_dim = mod1_output_dim + mod2_output_dim
 
     def calc_fused_layers(self):
@@ -107,8 +126,19 @@ class AttentionAndSelfActivation(ParentFusionModel, nn.Module):
         mod2_output_dim = list(self.mod2_layers.values())[-1][0].out_features
         if mod1_output_dim != mod2_output_dim:
             raise UserWarning(
-                "The number of output features of mod1_layers and mod2_layers must be the same for ActivationandSelfAttention. Please change the final layers in the modality layers to have the same number of output features as each other."
+                "The number of output features of the modality layers must be the same for Activation fusion. Please change the final layers in the modality layers to have the same number of output features as each other."
             )
+
+        # And if there are 3 modalities, check the third one
+        if self.data_dims["mod3_dim"] is not None:
+            check_model_validity.check_dtype(
+                self.mod3_layers, nn.ModuleDict, "mod3_layers"
+            )
+            mod3_output_dim = list(self.mod3_layers.values())[-1][0].out_features
+            if mod1_output_dim != mod3_output_dim or mod2_output_dim != mod3_output_dim:
+                raise UserWarning(
+                    "The number of output features of the modality layers must be the same for Activation fusion. Please change the final layers in the modality layers to have the same number of output features as each other."
+                )
 
         self.get_fused_dim()
         self.fused_layers, out_dim = check_model_validity.check_fused_layers(
@@ -118,7 +148,7 @@ class AttentionAndSelfActivation(ParentFusionModel, nn.Module):
         # setting final prediction layers with final out features of fused layers
         self.set_final_pred_layers(out_dim)
 
-    def forward(self, x1, x2):
+    def forward(self, x1, x2, x3=None):
         """
         Forward pass of the model.
 
@@ -128,6 +158,8 @@ class AttentionAndSelfActivation(ParentFusionModel, nn.Module):
             Input tensor of the first modality.
         x2 : torch.Tensor
             Input tensor of the second modality.
+        x3 : torch.Tensor or None
+            Input tensor of the third modality. Default is None.
 
         Returns
         -------
@@ -142,29 +174,56 @@ class AttentionAndSelfActivation(ParentFusionModel, nn.Module):
         x_tab1 = x1
         x_tab2 = x2
 
-        num_channels = x_tab2.size(1)
+        inputs = [x_tab1, x_tab2]
+        if x3 is not None:
+            check_model_validity.check_model_input(x3)
+            x_tab3 = x3
+            inputs.append(x_tab3)
 
-        # Channel attention
+        # Get the number of channels of the main modality
+        num_channels = inputs[self.attention_modality - 1].size(1)
+        # print("Num channels", num_channels)
+
+        # Channel attention on the main modality
         channel_attention = ChannelAttentionModule(
             num_features=num_channels, reduction_ratio=self.attention_reduction_ratio
         )
-        x_tab2 = channel_attention(x_tab2)
+        attention_out = channel_attention(inputs[self.attention_modality - 1])
 
+        if self.attention_modality == 1:
+            x_tab1 = attention_out
         for layer in self.mod1_layers.values():
             x_tab1 = layer(x_tab1)
 
+        if self.attention_modality == 2:
+            x_tab2 = attention_out
         for layer in self.mod2_layers.values():
             x_tab2 = layer(x_tab2)
+
+        if x3 is not None:
+            if self.attention_modality == 3:
+                x_tab3 = attention_out
+            for layer in self.mod3_layers.values():
+                x_tab3 = layer(x_tab3)
+            x_tab3 = torch.squeeze(x_tab3, 1)
 
         x_tab1 = torch.squeeze(x_tab1, 1)
         x_tab2 = torch.squeeze(x_tab2, 1)
 
         out_fuse = torch.mul(x_tab1, x_tab2)
 
+        if x3 is not None:
+            out_fuse = torch.mul(out_fuse, x_tab3)
+
+        outputs = [x_tab1, x_tab2]
+        if x3 is not None:
+            outputs.append(x_tab3)
+
         out_fuse = torch.tanh(out_fuse)
         out_fuse = torch.sigmoid(out_fuse)
 
-        out_fuse = torch.cat((out_fuse, x_tab1), dim=1)
+        # Concatenate the output of the
+        out_fuse = torch.cat((out_fuse, outputs[self.main_modality - 1]), dim=1)
 
         out_fuse = self.fused_layers(out_fuse)
 
@@ -203,7 +262,7 @@ class ChannelAttentionModule(nn.Module):
 
         if num_features // reduction_ratio < 1:
             raise UserWarning(
-                "first tabular modality dimensions // attention_reduction_ratio < 1. This will cause an error in the model."
+                "Modality dimensions // attention_reduction_ratio < 1. This will cause an error in the model."
             )
 
         self.fc1 = nn.Linear(num_features, num_features // reduction_ratio, bias=False)
