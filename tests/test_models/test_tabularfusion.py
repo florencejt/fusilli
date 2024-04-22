@@ -534,8 +534,6 @@ def test_EdgeCorrGNN():
 
 
 def test_ActivationFusion():
-    # TODO add test for three modalities
-    # TODO add test for choosing the "main modality"
     test_model = fusion_model_dict["ActivationFusion"]
 
     # attributes available pre-initialisation
@@ -574,6 +572,41 @@ def test_ActivationFusion():
     # forward pass
     test_input = (torch.randn(8, 10), torch.randn(8, 14))
     test_output = test_model.forward(test_input[0], test_input[1])
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
+
+    # Three modalities
+
+    # initialising
+    test_model = fusion_model_dict["ActivationFusion"]
+    test_model = test_model(
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": 20, "img_dim": None},
+        multiclass_dimensions=None,
+    )
+    assert isinstance(test_model, nn.Module)
+    assert isinstance(test_model, ParentFusionModel)
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
+    assert hasattr(test_model, "mod1_layers")
+    assert test_model.mod1_layers["layer 1"][0].in_features == 10
+    assert hasattr(test_model, "mod2_layers")
+    assert test_model.mod2_layers["layer 1"][0].in_features == 14
+    assert hasattr(test_model, "mod3_layers")
+    assert test_model.mod3_layers["layer 1"][0].in_features == 20
+    assert hasattr(test_model, "fused_dim")
+    assert (
+        test_model.fused_dim
+        == test_model.mod1_layers["layer 5"][0].out_features
+        + test_model.mod2_layers["layer 5"][0].out_features
+    )
+    assert hasattr(test_model, "fused_layers")
+    assert hasattr(test_model, "final_prediction")
+    assert hasattr(test_model, "forward")
+
+    # forward pass
+    test_input = (torch.randn(8, 10), torch.randn(8, 14), torch.randn(8, 20))
+    test_output = test_model.forward(*test_input)
     assert isinstance(test_output, torch.Tensor)
     assert test_output.shape == torch.Size([8, 1])
 
