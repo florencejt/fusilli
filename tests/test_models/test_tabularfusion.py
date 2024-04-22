@@ -30,9 +30,13 @@ def test_ConcatTabularFeatureMaps():
     assert test_model.modality_type == "tabular_tabular"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
+    assert hasattr(test_model, "three_modalities")
+    assert test_model.three_modalities == True
 
     test_model = test_model(
-        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": None, "img_dim": None},
+        multiclass_dimensions=None,
     )
 
     # initialising
@@ -60,6 +64,42 @@ def test_ConcatTabularFeatureMaps():
     assert isinstance(test_output, torch.Tensor)
     assert test_output.shape == torch.Size([8, 1])
 
+    # Three tabular modalities
+    test_model = fusion_model_dict["ConcatTabularFeatureMaps"]
+    test_model = test_model(
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": 20, "img_dim": None},
+        multiclass_dimensions=None,
+    )
+
+    # initialising
+    assert isinstance(test_model, nn.Module)
+    assert isinstance(test_model, ParentFusionModel)
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
+    assert hasattr(test_model, "mod1_layers")
+    assert test_model.mod1_layers["layer 1"][0].in_features == 10
+    assert hasattr(test_model, "mod2_layers")
+    assert test_model.mod2_layers["layer 1"][0].in_features == 14
+    assert hasattr(test_model, "mod3_layers")
+    assert test_model.mod3_layers["layer 1"][0].in_features == 20
+    assert hasattr(test_model, "fused_dim")
+    assert (
+        test_model.fused_dim
+        == test_model.mod1_layers["layer 5"][0].out_features
+        + test_model.mod2_layers["layer 5"][0].out_features
+        + test_model.mod3_layers["layer 5"][0].out_features
+    )
+    assert hasattr(test_model, "fused_layers")
+    assert hasattr(test_model, "final_prediction")
+    assert hasattr(test_model, "forward")
+
+    # forward pass
+    test_input = (torch.randn(8, 10), torch.randn(8, 14), torch.randn(8, 20))
+    test_output = test_model.forward(test_input[0], test_input[1], test_input[2])
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
+
 
 # fusilli.fusionmodels.tabularfusion.concat_data.ConcatTabularData
 def test_ConcatTabularData():
@@ -72,9 +112,13 @@ def test_ConcatTabularData():
     assert test_model.modality_type == "tabular_tabular"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
+    assert hasattr(test_model, "three_modalities")
+    assert test_model.three_modalities == True
 
     test_model = test_model(
-        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": None, "img_dim": None},
+        multiclass_dimensions=None,
     )
 
     # initialising
@@ -97,11 +141,41 @@ def test_ConcatTabularData():
     assert isinstance(test_output, torch.Tensor)
     assert test_output.shape == torch.Size([8, 1])
 
+    # Three tabular modalities
+    test_model = fusion_model_dict["ConcatTabularData"]
+    test_model = test_model(
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": 20, "img_dim": None},
+        multiclass_dimensions=None,
+    )
+
+    # initialising
+    assert isinstance(test_model, nn.Module)
+    assert isinstance(test_model, ParentFusionModel)
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
+    assert hasattr(test_model, "mod1_layers") == False
+    assert hasattr(test_model, "mod2_layers") == False
+    assert hasattr(test_model, "mod3_layers") == False
+    assert hasattr(test_model, "fused_dim")
+    assert test_model.fused_dim == 10 + 14 + 20
+    assert hasattr(test_model, "fused_layers")
+    assert hasattr(test_model, "final_prediction")
+    assert hasattr(test_model, "forward")
+
+    # forward pass
+    test_input = (torch.randn(8, 10), torch.randn(8, 14), torch.randn(8, 20))
+    test_output = test_model.forward(test_input[0], test_input[1], test_input[2])
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
+
 
 # fusilli.fusionmodels.tabularfusion.channelwise_att.TabularChannelWiseMultiAttention
 
 
 def test_TabularChannelWiseMultiAttention():
+
+    # TODO add test for choosing the "main modality"
     test_model = fusion_model_dict["TabularChannelWiseMultiAttention"]
 
     # attributes available pre-initialisation
@@ -111,9 +185,13 @@ def test_TabularChannelWiseMultiAttention():
     assert test_model.modality_type == "tabular_tabular"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "attention"
+    assert hasattr(test_model, "three_modalities")
+    assert test_model.three_modalities == True
 
     test_model = test_model(
-        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": None, "img_dim": None},
+        multiclass_dimensions=None,
     )
 
     # initialising
@@ -126,7 +204,7 @@ def test_TabularChannelWiseMultiAttention():
     assert hasattr(test_model, "mod2_layers")
     assert test_model.mod2_layers["layer 1"][0].in_features == 14
     assert hasattr(test_model, "fused_dim")
-    assert test_model.fused_dim == test_model.mod2_layers["layer 5"][0].out_features
+    assert test_model.fused_dim == test_model.mod1_layers["layer 5"][0].out_features
     assert hasattr(test_model, "fused_layers")
     assert (
         test_model.fused_layers[0].in_features
@@ -141,9 +219,47 @@ def test_TabularChannelWiseMultiAttention():
     assert isinstance(test_output, torch.Tensor)
     assert test_output.shape == torch.Size([8, 1])
 
+    # Three modalities
+    test_model = fusion_model_dict["TabularChannelWiseMultiAttention"]
+    test_model = test_model(
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": 20, "img_dim": None},
+        multiclass_dimensions=None,
+    )
+
+    # initialising
+    assert isinstance(test_model, nn.Module)
+    assert isinstance(test_model, ParentFusionModel)
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
+
+    assert hasattr(test_model, "mod1_layers")
+    assert test_model.mod1_layers["layer 1"][0].in_features == 10
+    assert hasattr(test_model, "mod2_layers")
+    assert test_model.mod2_layers["layer 1"][0].in_features == 14
+    assert hasattr(test_model, "mod3_layers")
+    assert test_model.mod3_layers["layer 1"][0].in_features == 20
+
+    assert hasattr(test_model, "fused_dim")
+    assert test_model.fused_dim == test_model.mod1_layers["layer 5"][0].out_features
+    assert hasattr(test_model, "fused_layers")
+    assert (
+        test_model.fused_layers[0].in_features
+        == test_model.mod1_layers["layer 5"][0].out_features
+    )
+    assert hasattr(test_model, "final_prediction")
+    assert hasattr(test_model, "forward")
+
+    # forward pass
+    test_input = (torch.randn(8, 10), torch.randn(8, 14), torch.randn(8, 20))
+    test_output = test_model.forward(test_input[0], test_input[1], test_input[2])
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
+
 
 # fusilli.fusionmodels.tabularfusion.crossmodal_att.TabularCrossmodalMultiheadAttention
 def test_TabularCrossmodalMultiheadAttention():
+    # TODO add test for three modalities
     test_model = fusion_model_dict["TabularCrossmodalMultiheadAttention"]
 
     # attributes available pre-initialisation
@@ -155,7 +271,9 @@ def test_TabularCrossmodalMultiheadAttention():
     assert test_model.fusion_type == "attention"
 
     test_model = test_model(
-        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": None, "img_dim": None},
+        multiclass_dimensions=None,
     )
 
     # initialising
@@ -184,6 +302,7 @@ def test_TabularCrossmodalMultiheadAttention():
 
 
 def test_TabularDecision():
+    # TODO add test for three modalities
     test_model = fusion_model_dict["TabularDecision"]
 
     # attributes available pre-initialisation
@@ -195,7 +314,9 @@ def test_TabularDecision():
     assert test_model.fusion_type == "operation"
 
     test_model = test_model(
-        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": None, "img_dim": None},
+        multiclass_dimensions=None,
     )
 
     # initialising
@@ -213,15 +334,55 @@ def test_TabularDecision():
     assert hasattr(test_model, "fusion_operation")
     # asserting that the default fusion operation is a mean with a simple calculation
     assert test_model.fusion_operation(
-        torch.randn(8, 10), torch.randn(8, 10)
+        [torch.randn(8, 10), torch.randn(8, 10)]
     ).shape == torch.Size([8, 10])
     assert test_model.fusion_operation(
-        torch.Tensor([1.0]), torch.Tensor([2.0])
+        [torch.Tensor([1.0]), torch.Tensor([2.0])]
     ) == torch.Tensor([1.5])
 
     # forward pass
     test_input = (torch.randn(8, 10), torch.randn(8, 14))
     test_output = test_model.forward(test_input[0], test_input[1])
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
+
+    # Three modalities
+    test_model = fusion_model_dict["TabularDecision"]
+    test_model = test_model(
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": 20, "img_dim": None},
+        multiclass_dimensions=None,
+    )
+
+    assert isinstance(test_model, nn.Module)
+    assert isinstance(test_model, ParentFusionModel)
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
+
+    assert hasattr(test_model, "mod1_layers")
+    assert test_model.mod1_layers["layer 1"][0].in_features == 10
+    assert hasattr(test_model, "mod2_layers")
+    assert test_model.mod2_layers["layer 1"][0].in_features == 14
+    assert hasattr(test_model, "mod3_layers")
+    assert test_model.mod3_layers["layer 1"][0].in_features == 20
+
+    assert hasattr(test_model, "final_prediction_tab1")
+    assert hasattr(test_model, "final_prediction_tab2")
+    assert hasattr(test_model, "final_prediction_tab3")
+
+    assert hasattr(test_model, "forward")
+    assert hasattr(test_model, "fusion_operation")
+    # asserting that the default fusion operation is a mean with a simple calculation
+    assert test_model.fusion_operation(
+        [torch.randn(8, 10), torch.randn(8, 10), torch.randn(8, 10)]
+    ).shape == torch.Size([8, 10])
+    assert test_model.fusion_operation(
+        [torch.Tensor([1.0]), torch.Tensor([2.0]), torch.Tensor([3.0])]
+    ) == torch.Tensor([2.0])
+
+    # forward pass
+    test_input = (torch.randn(8, 10), torch.randn(8, 14), torch.randn(8, 20))
+    test_output = test_model.forward(*test_input)
     assert isinstance(test_output, torch.Tensor)
     assert test_output.shape == torch.Size([8, 1])
 
@@ -291,7 +452,9 @@ def test_EdgeCorrGNN():
     test_graph_data = (node_features, edge_index, edge_attr)
 
     test_model = test_model(
-        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": None, "img_dim": None},
+        multiclass_dimensions=None,
     )
 
     # initialising
@@ -322,6 +485,8 @@ def test_EdgeCorrGNN():
 
 
 def test_ActivationFusion():
+    # TODO add test for three modalities
+    # TODO add test for choosing the "main modality"
     test_model = fusion_model_dict["ActivationFusion"]
 
     # attributes available pre-initialisation
@@ -333,7 +498,9 @@ def test_ActivationFusion():
     assert test_model.fusion_type == "operation"
 
     test_model = test_model(
-        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": None, "img_dim": None},
+        multiclass_dimensions=None,
     )
 
     # initialising
@@ -363,6 +530,8 @@ def test_ActivationFusion():
 
 
 def test_AttentionAndSelfActivation():
+    # TODO add test for three modalities
+    # TODO add test for choosing the "main modality"
     test_model = fusion_model_dict["AttentionAndSelfActivation"]
 
     # attributes available pre-initialisation
@@ -374,7 +543,9 @@ def test_AttentionAndSelfActivation():
     assert test_model.fusion_type == "operation"
 
     test_model = test_model(
-        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": None, "img_dim": None},
+        multiclass_dimensions=None,
     )
 
     # initialising
@@ -435,7 +606,9 @@ def test_AttentionWeightedGNN():
     test_graph_data = (node_features, edge_index, edge_attr)
 
     test_model = test_model(
-        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": None, "img_dim": None},
+        multiclass_dimensions=None,
     )
 
     # initialising

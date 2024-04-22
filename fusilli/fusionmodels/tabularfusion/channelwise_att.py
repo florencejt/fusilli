@@ -39,6 +39,10 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
 
     Attributes
     ----------
+    main_modality : int
+        Which modality is the main one? 1, 2, or 3 depending on which modality is the main one.
+        This means that the main modality will be the one that the other modalities are multiplied into at each layer.
+        Default is 2.
     mod1_layers : nn.ModuleDict
       Dictionary containing the layers of the 1st type of tabular data.
     mod2_layers : nn.ModuleDict
@@ -90,7 +94,7 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
             self.set_mod3_layers()
 
         # Which modality is the main one?
-        self.main_modality = 1  # 1, 2, or 3 depending on which modality is the main one
+        self.main_modality = 2  # 1, 2, or 3 depending on which modality is the main one
 
         self.get_fused_dim()
         self.set_fused_layers(self.fused_dim)

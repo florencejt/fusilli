@@ -135,7 +135,7 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
         self.prediction_task = prediction_task
 
         self.graph_conv_layers = nn.Sequential(
-            GCNConv(self.mod2_dim, 64),
+            GCNConv(self.data_dims["mod2_dim"], 64),
             GCNConv(64, 128),
             GCNConv(128, 256),
             GCNConv(256, 256),
@@ -169,7 +169,7 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
 
         # make sure the first layer takes in the number of features of the second tabular modality
         self.graph_conv_layers[0] = GCNConv(
-            self.mod2_dim, self.graph_conv_layers[0].out_channels
+            self.data_dims["mod2_dim"], self.graph_conv_layers[0].out_channels
         )
 
         self.fused_dim = self.graph_conv_layers[-1].out_channels

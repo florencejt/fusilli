@@ -515,7 +515,7 @@ class AttentionWeightedGNN(ParentFusionModel, nn.Module):
         self.prediction_task = prediction_task
 
         self.graph_conv_layers = nn.Sequential(
-            ChebConv(self.mod2_dim, 64, K=3),
+            ChebConv(self.data_dims["mod2_dim"], 64, K=3),
             ChebConv(64, 128, K=3),
             ChebConv(128, 256, K=3),
             ChebConv(256, 256, K=3),
