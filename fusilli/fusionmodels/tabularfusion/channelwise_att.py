@@ -2,11 +2,6 @@
 Channel-wise multiplication fusion model for tabular data.
 """
 
-# TODO make 3-tabular data work
-
-# TODO add argument to say which tabular modality is the main one
-
-
 import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 from fusilli.utils import check_model_validity
@@ -48,14 +43,14 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
       Dictionary containing the layers of the 1st type of tabular data.
     mod2_layers : nn.ModuleDict
       Dictionary containing the layers of the 2nd type of tabular data.
-    match_dim_layers : nn.ModuleDict
-      Module dictionary containing the linear layers to make the dimensions of the two types of
-      tabular data the same. This is done to ensure that the channel-wise multiplication can be
-      performed. This doesn't change the mod1_layers or mod2_layers, it just makes the outputs
-      multipliable.
+    mod3_layers : nn.ModuleDict (optional)
+        Dictionary containing the layers of the 3rd type of tabular data. If 3 tabular data are not provided, this is not used.
+    match_dim_layers: dict
+        Dictionary containing module dictionaries of linear layers to make the dimensions of the types of tabular data the same at each layer.
+        This is done to ensure that the channel-wise multiplication can be performed and does not alter the original layers.
     fused_dim : int
       Number of features of the fused layers. This is the output size of the
-      2nd type of tabular data's layers.
+      final main tabular data's layers.
     fused_layers : nn.Sequential
       Sequential layer containing the fused layers.
     final_prediction : nn.Sequential
@@ -69,6 +64,8 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
     modality_type = "tabular_tabular"
     #: str: Type of fusion.
     fusion_type = "attention"
+    #: str: Available for three tabular modalities.
+    three_modalities = True
 
     def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
@@ -79,7 +76,7 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         data_dims : list
           List containing the dimensions of the data.
         multiclass_dimensions : int
-            Number of classes in the dataset.
+                Number of classes in the dataset.
         """
         ParentFusionModel.__init__(
             self, prediction_task, data_dims, multiclass_dimensions
@@ -89,6 +86,11 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
 
         self.set_mod1_layers()
         self.set_mod2_layers()
+        if self.data_dims["mod3_dim"] is not None:
+            self.set_mod3_layers()
+
+        # Which modality is the main one?
+        self.main_modality = 1  # 1, 2, or 3 depending on which modality is the main one
 
         self.get_fused_dim()
         self.set_fused_layers(self.fused_dim)
@@ -103,11 +105,21 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         -------
         None.
         """
-        self.fused_dim = list(self.mod2_layers.values())[-1][0].out_features
+
+        if self.main_modality == 1:
+            self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
+        elif self.main_modality == 2:
+            self.fused_dim = list(self.mod2_layers.values())[-1][0].out_features
+        elif self.main_modality == 3:
+            self.fused_dim = list(self.mod3_layers.values())[-1][0].out_features
+        else:
+            raise ValueError("main_modality must be 1, 2, or 3")
+
+        # self.fused_dim = list(self.mod2_layers.values())[-1][0].out_features
 
     def calc_fused_layers(self):
         """
-        Calculates the fusion layers.
+        Calculates the fusion layers and creates layer groups to match the dimensions of the tabular data.
 
         Returns
         -------
@@ -120,76 +132,180 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         ValueError
           If dtype of the layers is not nn.ModuleDict.
         """
-        # if mod1 and mod2 have a different number of layers, return error
 
         check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
         check_model_validity.check_dtype(self.mod2_layers, nn.ModuleDict, "mod2_layers")
 
-        if len(self.mod1_layers) != len(self.mod2_layers):
-            raise ValueError(
-                "The number of layers in the two modalities must be the same."
+        # if we've got a 3rd tabular modality
+        if self.data_dims["mod3_dim"] is not None:
+
+            # check the layers are valid (if they've been changed)
+            check_model_validity.check_dtype(
+                self.mod3_layers, nn.ModuleDict, "mod3_layers"
             )
 
+            # check that the number of layers in each modality is the same
+            if (
+                len(self.mod1_layers) != len(self.mod2_layers)
+                or len(self.mod1_layers) != len(self.mod3_layers)
+                or len(self.mod2_layers) != len(self.mod3_layers)
+            ):
+                raise ValueError(
+                    "The number of layers in the three modalities must be the same."
+                )
+        else:
+            # check that the number of layers in each modality is the same if we don't have a 3rd modality
+            if len(self.mod1_layers) != len(self.mod2_layers):
+                raise ValueError(
+                    "The number of layers in the two modalities must be the same."
+                )
+
+        # get the fused dimension from the output of the last layer of the main modality
         self.get_fused_dim()
+        # check the fused layers are valid
         self.fused_layers, out_dim = check_model_validity.check_fused_layers(
             self.fused_layers, self.fused_dim
         )
+        # set the final prediction layers
         self.set_final_pred_layers(out_dim)
 
-        # create a dictionary of linear layers to make the dimensions of the two types of tabular data the same
-        self.match_dim_layers = nn.ModuleDict()
+        ############################################################
+        # Creating extra layers to match the dimensions of the tabular data at each method step
+        ############################################################
 
-        # Iterate through your ModuleDict keys
+        self.main_mod_layers = getattr(self, f"mod{self.main_modality}_layers")
+        self.match_dim_layers = {
+            "1_to_2": nn.ModuleDict(),
+            "1_to_3": nn.ModuleDict(),
+            "2_to_1": nn.ModuleDict(),
+            "2_to_3": nn.ModuleDict(),
+            "3_to_1": nn.ModuleDict(),
+            "3_to_2": nn.ModuleDict(),
+        }
+
         for key in self.mod1_layers.keys():
-            layer_mod1 = self.mod1_layers[key]
-            layer_mod2 = self.mod2_layers[key]
+            # get output sizes of each modality
+            layer1 = self.mod1_layers[key]
+            layer2 = self.mod2_layers[key]
+            layer3 = (
+                self.mod3_layers[key]
+                if self.data_dims["mod3_dim"] is not None
+                else None
+            )
 
-            layer_mod1_out = layer_mod1[0].out_features
-            layer_mod2_out = layer_mod2[0].out_features
+            layer1_out = layer1[0].out_features
+            layer2_out = layer2[0].out_features
+            layer3_out = layer3[0].out_features if layer3 is not None else None
 
-            # Check if the output sizes are different and create linear layer if needed
-            if layer_mod1_out != layer_mod2_out:
-                self.match_dim_layers[key] = nn.Linear(layer_mod1_out, layer_mod2_out)
+            # check if the output sizes are different and create linear layer if needed
+            if layer1_out != layer2_out:
+                self.match_dim_layers["1_to_2"][key] = nn.Linear(layer1_out, layer2_out)
+                self.match_dim_layers["2_to_1"][key] = nn.Linear(layer2_out, layer1_out)
             else:
-                self.match_dim_layers[key] = nn.Identity()
+                self.match_dim_layers["1_to_2"][key] = nn.Identity()
+                self.match_dim_layers["2_to_1"][key] = nn.Identity()
 
-    def forward(self, x1, x2):
+            if self.data_dims["mod3_dim"] is not None:
+                if layer1_out != layer3_out:
+                    self.match_dim_layers["1_to_3"][key] = nn.Linear(
+                        layer1_out, layer3_out
+                    )
+                    self.match_dim_layers["3_to_1"][key] = nn.Linear(
+                        layer3_out, layer1_out
+                    )
+                else:
+                    self.match_dim_layers["1_to_3"][key] = nn.Identity()
+                    self.match_dim_layers["3_to_1"][key] = nn.Identity()
+
+                if layer2_out != layer3_out:
+                    self.match_dim_layers["2_to_3"][key] = nn.Linear(
+                        layer2_out, layer3_out
+                    )
+                    self.match_dim_layers["3_to_2"][key] = nn.Linear(
+                        layer3_out, layer2_out
+                    )
+                else:
+                    self.match_dim_layers["2_to_3"][key] = nn.Identity()
+                    self.match_dim_layers["3_to_2"][key] = nn.Identity()
+
+    def forward(self, x1, x2, x3=None):
         """
         Forward pass of the model.
 
         Parameters
         ----------
         x1 : torch.Tensor
-          1st modality of tabular data.
+            1st modality of tabular data.
         x2 : torch.Tensor
-          2nd modality of tabular data.
+            2nd modality of tabular data.
+        x3 : torch.Tensor
+            Input tensor for the third modality. Default is None.
 
         Returns
         -------
         torch.Tensor
-          Output tensor of the model.
+            Output tensor of the model.
         """
 
         # ~~ Checks ~~
         check_model_validity.check_model_input(x1)
         check_model_validity.check_model_input(x2)
+        if x3 is not None:
+            check_model_validity.check_model_input(x3)
 
-        x_tab1 = x1
-        x_tab2 = x2
+        # which input is the main one?
+        if self.main_modality == 1:
+            x_main = x1
 
-        for i, (k, layer) in enumerate(self.mod1_layers.items()):
-            x_tab1 = layer(x_tab1)
-            x_tab2 = self.mod2_layers[k](x_tab2)
+            for i, (k, layer) in enumerate(self.mod1_layers.items()):
+                x_main = layer(x_main)
 
-            # layer to get the feature maps to be the same size if they have been modified to not be
-            if x_tab1.shape[1] != x_tab2.shape[1]:
-                # layer to make tab1 output the same size as tab2
-                new_x_tab1 = self.match_dim_layers[k](x_tab1)
-                x_tab2 = x_tab2 * new_x_tab1
-            else:
-                x_tab2 = x_tab2 * x_tab1
+                x2 = self.mod2_layers[k](x2)
+                # layer to get the tab2 feature maps to be the same size as tab1
+                new_x2 = self.match_dim_layers["2_to_1"][k](x2)
+                x_main = x_main * new_x2
 
-        out_fuse = x_tab2
+                if x3 is not None:
+                    x3 = self.mod3_layers[k](x3)
+                    # layer to get the tab3 feature maps to be the same size as tab1
+                    new_x3 = self.match_dim_layers["3_to_1"][k](x3)
+                    x_main = x_main * new_x3
+
+        elif self.main_modality == 2:
+            x_main = x2
+
+            for i, (k, layer) in enumerate(self.mod2_layers.items()):
+                x_main = layer(x_main)
+
+                x1 = self.mod1_layers[k](x1)
+                # layer to get the tab1 feature maps to be the same size as tab2
+                new_x1 = self.match_dim_layers["1_to_2"][k](x1)
+                x_main = x_main * new_x1
+
+                if x3 is not None:
+                    x3 = self.mod3_layers[k](x3)
+                    # layer to get the tab3 feature maps to be the same size as tab2
+                    new_x3 = self.match_dim_layers["3_to_2"][k](x3)
+                    x_main = x_main * new_x3
+
+        elif self.main_modality == 3:
+            x_main = x3
+
+            for i, (k, layer) in enumerate(self.mod3_layers.items()):
+                x_main = layer(x_main)
+
+                x1 = self.mod1_layers[k](x1)
+                x2 = self.mod2_layers[k](x2)
+
+                # layer to get the tab1 feature maps to be the same size as tab3
+                new_x1 = self.match_dim_layers["1_to_3"][k](x1)
+                x_main = x_main * new_x1
+
+                # layer to get the tab2 feature maps to be the same size as tab3
+                new_x2 = self.match_dim_layers["2_to_3"][k](x2)
+                x_main = x_main * new_x2
+
+        out_fuse = x_main
 
         out_fuse = self.fused_layers(out_fuse)
 

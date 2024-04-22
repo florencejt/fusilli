@@ -3,16 +3,20 @@ This module implements the MCVAE (multi-channel variational autoencoder) model f
 two types of tabular data.
 """
 
-# TODO make 3-tabular data work
-
 import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch
-from fusilli.utils.mcvae.src.mcvae.models import Mcvae
+
+# from fusilli.utils.mcvae.src.mcvae.models import Mcvae
+
+# FOR LOCAL INSTALL - CHANGE WHEN PUSHING TO RELEASE
+from mcvae.models import Mcvae
+
 import contextlib
 import pandas as pd
 import numpy as np
 from fusilli.utils.training_utils import get_checkpoint_filenames_for_subspace_models
+import sys
 
 from fusilli.utils import check_model_validity
 
@@ -135,15 +139,28 @@ class MCVAESubspaceMethod:
         new_checkpoint_path = checkpoint_path[0][: -len(".ckpt")]
         checkpoint = torch.load(new_checkpoint_path)
 
-        init_dict = {
-            "n_channels": 2,
-            "lat_dim": self.num_latent_dims,
-            "n_feats": tuple(
+        if self.datamodule.data_dims["mod3_dim"] is not None:
+            n_channels = 3
+            n_features = tuple(
+                [
+                    self.datamodule.data_dims["mod1_dim"],
+                    self.datamodule.data_dims["mod2_dim"],
+                    self.datamodule.data_dims["mod3_dim"],
+                ]
+            )
+        else:
+            n_channels = 2
+            n_features = tuple(
                 [
                     self.datamodule.data_dims["mod1_dim"],
                     self.datamodule.data_dims["mod2_dim"],
                 ]
-            ),
+            )
+
+        init_dict = {
+            "n_channels": n_channels,
+            "lat_dim": self.num_latent_dims,
+            "n_feats": n_features,
         }
 
         self.fit_model = Mcvae(**init_dict, sparse=True)
@@ -176,31 +193,44 @@ class MCVAESubspaceMethod:
         Parameters
         ----------
         dataset : list
-            List containing the two types of tabular data.
+            List containing the types of tabular data.
 
         Returns
         -------
         mean_latents : np.array
             Array containing the mean latents of the dataset.
         """
-        # getting mean latent space
+
+        # how many channels are in this method (2 or 3, equal to number of tabular modalities)
+        num_channels = len(dataset)
 
         q = self.fit_model.encode(dataset)
 
         latent_vars_ch0 = q[0].loc.detach().cpu()
         latent_vars_ch1 = q[1].loc.detach().cpu()
+        if num_channels == 3:
+            latent_vars_ch2 = q[2].loc.detach().cpu()
         latents = []
 
         n_dims = latent_vars_ch0.shape[1]
 
         for i in range(n_dims):
-            latent_temp = np.vstack([latent_vars_ch0[:, i], latent_vars_ch1[:, i]])
+            if num_channels == 3:
+                latent_temp = np.vstack(
+                    [
+                        latent_vars_ch0[:, i],
+                        latent_vars_ch1[:, i],
+                        latent_vars_ch2[:, i],
+                    ]
+                )
+            else:
+                latent_temp = np.vstack([latent_vars_ch0[:, i], latent_vars_ch1[:, i]])
             latents.append(np.mean(latent_temp, axis=0))
 
         indices = [i for i in range(self.num_latent_dims)]
         latents = [latents[i] for i in indices]
 
-        mean_latents = np.vstack([latents]).transpose()  # 43 people
+        mean_latents = np.vstack([latents]).transpose()
 
         return mean_latents
 
@@ -224,25 +254,33 @@ class MCVAESubspaceMethod:
         """
         tab1 = train_dataset[:][0]
         tab2 = train_dataset[:][1]
-        labels = train_dataset[:][2]
+        if len(train_dataset[:]) == 4:
+            tab3 = train_dataset[:][2]
+        labels = train_dataset[:][-1]
 
         # turn tab1 into a tensor
         tab1 = torch.Tensor(tab1).to(self.device)
         tab2 = torch.Tensor(tab2).to(self.device)
+        mcvae_training_data = [tab1.to(self.device), tab2.to(self.device)]
+
+        if len(train_dataset[:]) == 4:
+            tab3 = torch.Tensor(tab3).to(self.device)
+            mcvae_training_data.append(tab3.to(self.device))
 
         # send tab1 to device and everything in tab1
         # for i in range(len(tab1)):
         #     tab1[i] = tab1[i].to(self.device)
         #     tab2[i] = tab2[i].to(self.device)
 
-        mcvae_training_data = [tab1.to(self.device), tab2.to(self.device)]
+        # mcvae_training_data = [tab1.to(self.device), tab2.to(self.device)]
+
+        num_channels = len(mcvae_training_data)
+        num_features = [mcvae_training_data[i].shape[1] for i in range(num_channels)]
 
         init_dict = {
-            "n_channels": 2,
+            "n_channels": num_channels,
             "lat_dim": self.num_latent_dims,
-            "n_feats": tuple(
-                [mcvae_training_data[0].shape[1], mcvae_training_data[1].shape[1]]
-            ),
+            "n_feats": num_features,
         }
         mcvae_fit = Mcvae(**init_dict, sparse=True)
 
@@ -317,15 +355,23 @@ class MCVAESubspaceMethod:
         """
         tab1 = test_dataset[:][0]
         tab2 = test_dataset[:][1]
-        labels = test_dataset[:][2]
         mcvae_test_data = [tab1.to(self.device), tab2.to(self.device)]
+        if len(test_dataset[:]) == 4:
+            tab3 = test_dataset[:][2]
+            mcvae_test_data.append(tab3.to(self.device))
+        labels = test_dataset[:][-1]
 
         test_mean_latents = self.get_latents(mcvae_test_data)
 
         return (
             torch.Tensor(test_mean_latents),
             pd.DataFrame(labels, columns=["prediction_label"]),
-            [self.num_latent_dims, None, None],
+            {
+                "mod1_dim": self.num_latent_dims,
+                "mod2_dim": None,
+                "mod3_dim": None,
+                "img_dim": None,
+            },
         )
 
 
@@ -372,6 +418,8 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
     fusion_type = "subspace"
     # class: Subspace method class.
     subspace_method = MCVAESubspaceMethod
+    #: str: Available for three tabular modalities.
+    three_modalities = True
 
     def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """

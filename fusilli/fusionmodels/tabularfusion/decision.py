@@ -83,6 +83,10 @@ class TabularDecision(ParentFusionModel, nn.Module):
         )
         check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
         check_model_validity.check_dtype(self.mod2_layers, nn.ModuleDict, "mod2_layers")
+        if self.data_dims["mod3_dim"] is not None:
+            check_model_validity.check_dtype(
+                self.mod3_layers, nn.ModuleDict, "mod3_layers"
+            )
 
         # Set the final prediction layers for each modality: tab1
         tab1_fused_dim = list(self.mod1_layers.values())[-1][0].out_features
