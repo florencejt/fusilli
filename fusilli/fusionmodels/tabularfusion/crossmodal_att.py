@@ -64,6 +64,8 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
     modality_type = "tabular_tabular"
     #: str: Type of fusion.
     fusion_type = "attention"
+    #: str: Available for three tabular modalities.
+    three_modalities = True
 
     def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
@@ -85,6 +87,9 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
 
         self.set_mod1_layers()
         self.set_mod2_layers()
+        if self.data_dims["mod3_dim"] is not None:
+            self.set_mod3_layers()
+
         self.calc_fused_layers()
 
         self.relu = nn.ReLU()
@@ -105,32 +110,58 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
             If dtype of the layers is not nn.ModuleDict.
 
         """
-        # if mod1 and mod2 have a different number of layers, return error
         check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
         check_model_validity.check_dtype(self.mod2_layers, nn.ModuleDict, "mod2_layers")
 
-        if len(self.mod1_layers) != len(self.mod2_layers):
-            raise ValueError(
-                "The number of layers in the two modalities must be the same."
+        # if we've got a 3rd tabular modality
+        if self.data_dims["mod3_dim"] is not None:
+
+            # check the layers are valid (if they've been changed)
+            check_model_validity.check_dtype(
+                self.mod3_layers, nn.ModuleDict, "mod3_layers"
             )
 
+            # check that the number of layers in each modality is the same
+            if (
+                len(self.mod1_layers) != len(self.mod2_layers)
+                or len(self.mod1_layers) != len(self.mod3_layers)
+                or len(self.mod2_layers) != len(self.mod3_layers)
+            ):
+                raise ValueError(
+                    "The number of layers in the three modalities must be the same."
+                )
+        else:
+            # check that the number of layers in each modality is the same if we don't have a 3rd modality
+            if len(self.mod1_layers) != len(self.mod2_layers):
+                raise ValueError(
+                    "The number of layers in the two modalities must be the same."
+                )
+
+        # Output size of the first tabular modality
         self.fused_dim = list(self.mod1_layers.values())[-1][0].out_features
 
-        # self.set_fused_layers(self.fused_dim)
+        mod1_output_size = list(self.mod1_layers.values())[-1][0].out_features
+        mod2_output_size = list(self.mod2_layers.values())[-1][0].out_features
 
-        self.tab1_to_embed_dim = nn.Linear(self.fused_dim, self.attention_embed_dim)
-        self.tab2_to_embed_dim = nn.Linear(
-            list(self.mod2_layers.values())[-1][0].out_features,
-            self.attention_embed_dim,
-        )
+        self.tab1_to_embed_dim = nn.Linear(mod1_output_size, self.attention_embed_dim)
+        self.tab2_to_embed_dim = nn.Linear(mod2_output_size, self.attention_embed_dim)
+
+        if self.data_dims["mod3_dim"] is not None:
+            mod3_output_size = list(self.mod3_layers.values())[-1][0].out_features
+            self.tab3_to_embed_dim = nn.Linear(
+                mod3_output_size, self.attention_embed_dim
+            )
 
         self.attention = nn.MultiheadAttention(
             embed_dim=self.attention_embed_dim, num_heads=2
         )
 
-        self.set_final_pred_layers(self.attention_embed_dim * 4)
+        if self.data_dims["mod3_dim"] is None:
+            self.set_final_pred_layers(self.attention_embed_dim * 2)
+        else:
+            self.set_final_pred_layers(self.attention_embed_dim * 6)
 
-    def forward(self, x1, x2):
+    def forward(self, x1, x2, x3=None):
         """
         Forward pass of the model.
 
@@ -140,6 +171,9 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
             Input tensor for the first modality.
         x2 : torch.Tensor
             Input tensor for the second modality.
+        x3 : torch.Tensor or None
+            Input tensor for the third modality. Default is None.
+
 
         Returns
         -------
@@ -150,33 +184,63 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
         # ~~ Checks ~~
         check_model_validity.check_model_input(x1)
         check_model_validity.check_model_input(x2)
+        if x3 is not None:
+            check_model_validity.check_model_input(x3)
 
-        x_tab1 = x1
-        x_tab2 = x2
+        # First step is to pass the tabular data through the layers
 
         for i, (k, layer) in enumerate(self.mod1_layers.items()):
-            x_tab1 = layer(x_tab1)
-            x_tab2 = self.mod2_layers[k](x_tab2)
+            x1 = layer(x1)
+            x2 = self.mod2_layers[k](x2)
+            if x3 is not None:
+                x3 = self.mod3_layers[k](x3)
 
-        out_tab2 = self.tab2_to_embed_dim(x_tab2)
+        # Self attention
+        out_tab1 = self.tab1_to_embed_dim(x1)
+        out_tab1 = self.relu(out_tab1)
+
+        out_tab2 = self.tab2_to_embed_dim(x2)
         out_tab2 = self.relu(out_tab2)
 
-        out_tab1 = self.tab1_to_embed_dim(x_tab1)
-        out_tab1 = self.relu(out_tab1)
+        if x3 is not None:
+            out_tab3 = self.tab3_to_embed_dim(x3)
+            out_tab3 = self.relu(out_tab3)
 
         # self attention
         tab2_att = self.attention(out_tab2, out_tab2, out_tab2)[0]
         tab1_att = self.attention(out_tab1, out_tab1, out_tab1)[0]
 
-        # cross modal attention
+        if x3 is not None:
+            tab3_att = self.attention(out_tab3, out_tab3, out_tab3)[0]
+
+        # cross modal attention between each pair of tabular data
+
         tab1_tab2_att = self.attention(tab1_att, tab2_att, tab2_att)[0]
         tab2_tab1_att = self.attention(tab2_att, tab1_att, tab1_att)[0]
 
         crossmodal_att = torch.concat((tab1_tab2_att, tab2_tab1_att), dim=-1)
 
-        # concatenate
-        merged = torch.concat((crossmodal_att, out_tab1, out_tab2), dim=-1)
+        if x3 is not None:
+            tab1_tab3_att = self.attention(tab1_att, tab3_att, tab3_att)[0]
+            tab2_tab3_att = self.attention(tab2_att, tab3_att, tab3_att)[0]
+            tab3_tab1_att = self.attention(tab3_att, tab1_att, tab1_att)[0]
+            tab3_tab2_att = self.attention(tab3_att, tab2_att, tab2_att)[0]
 
-        out_fuse = self.final_prediction(merged)
+            crossmodal_att = torch.concat(
+                (
+                    tab1_tab2_att,
+                    tab2_tab1_att,
+                    tab1_tab3_att,
+                    tab2_tab3_att,
+                    tab3_tab1_att,
+                    tab3_tab2_att,
+                ),
+                dim=-1,
+            )
+
+        # concatenate
+        # merged = torch.concat((crossmodal_att, out_tab1, out_tab2), dim=-1)
+
+        out_fuse = self.final_prediction(crossmodal_att)
 
         return out_fuse

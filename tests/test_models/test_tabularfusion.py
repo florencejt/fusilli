@@ -259,7 +259,6 @@ def test_TabularChannelWiseMultiAttention():
 
 # fusilli.fusionmodels.tabularfusion.crossmodal_att.TabularCrossmodalMultiheadAttention
 def test_TabularCrossmodalMultiheadAttention():
-    # TODO add test for three modalities
     test_model = fusion_model_dict["TabularCrossmodalMultiheadAttention"]
 
     # attributes available pre-initialisation
@@ -285,9 +284,20 @@ def test_TabularCrossmodalMultiheadAttention():
     assert test_model.mod1_layers["layer 1"][0].in_features == 10
     assert hasattr(test_model, "mod2_layers")
     assert test_model.mod2_layers["layer 1"][0].in_features == 14
+
+    # attention layers
+    assert hasattr(test_model, "tab1_to_embed_dim")
+    assert isinstance(test_model.tab1_to_embed_dim, nn.Linear)
+    assert hasattr(test_model, "tab2_to_embed_dim")
+    assert isinstance(test_model.tab2_to_embed_dim, nn.Linear)
+
     assert hasattr(test_model, "fused_dim")
     assert test_model.fused_dim == test_model.mod1_layers["layer 5"][0].out_features
     assert hasattr(test_model, "final_prediction")
+    # input dim is 2 times attention_embed_dim
+    assert (
+        test_model.final_prediction[0].in_features == 2 * test_model.attention_embed_dim
+    )
     assert hasattr(test_model, "forward")
     assert hasattr(test_model, "attention")
 
@@ -297,12 +307,51 @@ def test_TabularCrossmodalMultiheadAttention():
     assert isinstance(test_output, torch.Tensor)
     assert test_output.shape == torch.Size([8, 1])
 
+    # Three modalities
+
+    test_model = fusion_model_dict["TabularCrossmodalMultiheadAttention"]
+    test_model = test_model(
+        prediction_task="binary",
+        data_dims={"mod1_dim": 10, "mod2_dim": 14, "mod3_dim": 20, "img_dim": None},
+        multiclass_dimensions=None,
+    )
+
+    # initialising
+    assert isinstance(test_model, nn.Module)
+    assert isinstance(test_model, ParentFusionModel)
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
+
+    assert hasattr(test_model, "mod1_layers")
+    assert test_model.mod1_layers["layer 1"][0].in_features == 10
+    assert hasattr(test_model, "mod2_layers")
+    assert test_model.mod2_layers["layer 1"][0].in_features == 14
+    assert hasattr(test_model, "mod3_layers")
+    assert test_model.mod3_layers["layer 1"][0].in_features == 20
+
+    # attention layers
+    assert hasattr(test_model, "tab1_to_embed_dim")
+    assert isinstance(test_model.tab1_to_embed_dim, nn.Linear)
+    assert hasattr(test_model, "tab2_to_embed_dim")
+    assert isinstance(test_model.tab2_to_embed_dim, nn.Linear)
+    assert hasattr(test_model, "tab3_to_embed_dim")
+    assert isinstance(test_model.tab3_to_embed_dim, nn.Linear)
+
+    assert hasattr(test_model, "fused_dim")
+    assert test_model.fused_dim == test_model.mod1_layers["layer 5"][0].out_features
+    assert hasattr(test_model, "final_prediction")
+    # input dim is 6 times attention_embed_dim
+    assert (
+        test_model.final_prediction[0].in_features == 6 * test_model.attention_embed_dim
+    )
+    assert hasattr(test_model, "forward")
+    assert hasattr(test_model, "attention")
+
 
 # fusilli.fusionmodels.tabularfusion.decision.TabularDecision
 
 
 def test_TabularDecision():
-    # TODO add test for three modalities
     test_model = fusion_model_dict["TabularDecision"]
 
     # attributes available pre-initialisation
