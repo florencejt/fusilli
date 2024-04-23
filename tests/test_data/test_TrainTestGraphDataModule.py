@@ -25,11 +25,17 @@ def create_graph_data_module(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_2d = create_test_files["image_torch_file_2d"]
 
-    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+    sources = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
     batch_size = 23
 
     class example_fusion_model:
         modality_type = "tabular_tabular"
+        fusion_type = "graph"
+        three_modalities = False
 
         def __init__(self):
             pass
@@ -54,7 +60,12 @@ def test_prepare_data(create_graph_data_module):
 
     # Add assertions to check the expected behavior
     assert len(datamodule.dataset) > 0
-    assert datamodule.data_dims == [2, 2, None]  # Adjust based on your data dimensions
+    assert datamodule.data_dims == {
+        "mod1_dim": 2,
+        "mod2_dim": 2,
+        "mod3_dim": None,
+        "img_dim": None,
+    }
 
 
 def test_setup(create_graph_data_module, mocker):
@@ -108,7 +119,11 @@ def test_owntestindices(create_test_files_more_features):
     tabular2_csv = create_test_files_more_features["tabular2_csv"]
     image_torch_file_2d = create_test_files_more_features["image_torch_file_2d"]
 
-    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+    sources = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
     batch_size = 23
 
     # make test indices people 25 to 36
@@ -116,6 +131,8 @@ def test_owntestindices(create_test_files_more_features):
 
     class example_fusion_model:
         modality_type = "tabular_tabular"
+        three_modalities = False
+        fusion_type = "graph"
 
         def __init__(self):
             pass

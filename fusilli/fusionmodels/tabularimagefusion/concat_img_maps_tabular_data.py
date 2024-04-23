@@ -75,12 +75,14 @@ class ConcatImageMapsTabularData(ParentFusionModel, nn.Module):
         None
         """
 
-        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
+        dummy_conv_output = Variable(
+            torch.rand((1,) + tuple(self.data_dims["img_dim"]))
+        )
         for layer in self.img_layers.values():
             dummy_conv_output = layer(dummy_conv_output)
         flattened_img_size = dummy_conv_output.data.view(1, -1).size(1)
 
-        self.fused_dim = self.mod1_dim + flattened_img_size
+        self.fused_dim = self.data_dims["mod1_dim"] + flattened_img_size
 
     def calc_fused_layers(self):
         """
@@ -94,7 +96,9 @@ class ConcatImageMapsTabularData(ParentFusionModel, nn.Module):
         # ~~ Checks ~~
         check_model_validity.check_dtype(self.img_layers, nn.ModuleDict, "img_layers")
 
-        check_model_validity.check_img_dim(self.img_layers, self.img_dim, "img_layers")
+        check_model_validity.check_img_dim(
+            self.img_layers, self.data_dims["img_dim"], "img_layers"
+        )
 
         # check fused layers
         self.get_fused_dim()

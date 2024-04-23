@@ -95,7 +95,9 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         None
         """
 
-        dummy_conv_output = Variable(torch.rand((1,) + tuple(self.img_dim)))
+        dummy_conv_output = Variable(
+            torch.rand((1,) + tuple(self.data_dims["img_dim"]))
+        )
         for layer in self.img_layers.values():
             dummy_conv_output = layer(dummy_conv_output)
         flattened_img_output_size = dummy_conv_output.data.view(1, -1).size(1)
@@ -123,7 +125,9 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         check_model_validity.check_dtype(self.mod1_layers, nn.ModuleDict, "mod1_layers")
         check_model_validity.check_dtype(self.img_layers, nn.ModuleDict, "img_layers")
 
-        check_model_validity.check_img_dim(self.img_layers, self.img_dim, "img_layers")
+        check_model_validity.check_img_dim(
+            self.img_layers, self.data_dims["img_dim"], "img_layers"
+        )
         # if number of imaging layers does not equal number of tabular layers, return error
         if len(self.mod1_layers) != len(self.img_layers):
             raise ValueError(

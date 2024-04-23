@@ -162,7 +162,7 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
         None
         """
 
-        self.fused_dim = self.latent_dim + self.mod1_dim
+        self.fused_dim = self.latent_dim + self.data_dims["mod1_dim"]
 
     def calc_fused_layers(self):
         """

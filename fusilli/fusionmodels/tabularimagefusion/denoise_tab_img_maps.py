@@ -275,6 +275,7 @@ class ImgUnimodalDAE(pl.LightningModule):
         """
         super().__init__()
 
+        self.data_dims = data_dims
         self.img_dim = data_dims["img_dim"]
         # needed for ParentFusionModel
         self.multiclass_dimensions = multiclass_dimensions
@@ -737,7 +738,7 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         self.prediction_task = prediction_task
 
         self.fusion_layers = nn.Sequential(
-            nn.Linear(self.mod1_dim, 500),
+            nn.Linear(self.data_dims["mod1_dim"], 500),
             nn.ReLU(),
             nn.Linear(500, 100),
             nn.ReLU(),
@@ -757,7 +758,7 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         )
 
         self.fusion_layers[0] = nn.Linear(
-            self.mod1_dim, self.fusion_layers[0].out_features
+            self.data_dims["mod1_dim"], self.fusion_layers[0].out_features
         )
 
         self.set_final_pred_layers(self.fusion_layers[-1].out_features)

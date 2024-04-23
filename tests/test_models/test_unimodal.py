@@ -29,7 +29,13 @@ def test_Tabular1Unimodal():
     assert test_model.fusion_type == "unimodal"
 
     # attributes after initialising
-    test_model = test_model("binary", [10, None, None], {})
+    datadims = {
+        "mod1_dim": 10,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": None,
+    }
+    test_model = test_model("binary", datadims, {})
 
     assert isinstance(test_model, ParentFusionModel)
     assert isinstance(test_model, nn.Module)
@@ -64,7 +70,13 @@ def test_Tabular2Unimodal():
     assert test_model.fusion_type == "unimodal"
 
     # attributes after initialising
-    test_model = test_model("binary", [None, 15, None], {})
+    datadims = {
+        "mod1_dim": None,
+        "mod2_dim": 15,
+        "mod3_dim": None,
+        "img_dim": None,
+    }
+    test_model = test_model("binary", datadims, {})
 
     assert isinstance(test_model, ParentFusionModel)
     assert isinstance(test_model, nn.Module)
@@ -99,7 +111,13 @@ def test_ImgUnimodal():
     assert test_model.fusion_type == "unimodal"
 
     # attributes after initialising
-    test_model = test_model("binary", [None, None, (100, 100)], {})
+    datadims = {
+        "mod1_dim": None,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": (100, 100),
+    }
+    test_model = test_model("binary", datadims, {})
 
     assert isinstance(test_model, ParentFusionModel)
     assert isinstance(test_model, nn.Module)

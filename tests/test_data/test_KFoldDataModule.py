@@ -1,7 +1,11 @@
 import pytest
 import torch
 from fusilli.data import KFoldDataModule
-from .test_TrainTestDataModule import create_test_files, MockSubspaceMethod, create_test_files_more_features
+from .test_TrainTestDataModule import (
+    create_test_files,
+    MockSubspaceMethod,
+    create_test_files_more_features,
+)
 from unittest.mock import patch, Mock
 from sklearn.model_selection import KFold
 
@@ -18,7 +22,11 @@ def create_kfold_data_module(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_2d = create_test_files["image_torch_file_2d"]
 
-    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+    sources = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
     batch_size = 23
 
     example_fusion_model = Mock()
@@ -54,7 +62,12 @@ def test_data_preparation(create_kfold_data_module):
     data_module.prepare_data()
 
     # Add assertions for data preparation, e.g., check if data_dims, dataset, etc. are correctly set.
-    assert data_module.data_dims == [2, None, [100, 100]]
+    assert data_module.data_dims == {
+        "mod1_dim": 2,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": [100, 100],
+    }
     assert data_module.dataset is not None
 
 
@@ -74,10 +87,17 @@ def test_kfold_split_own_indices(create_test_files_more_features):
     prediction_task = "binary"
     multiclass_dimensions = None
 
-    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+    sources = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
 
     # specifying own kfold indices using a non random split
-    own_folds = [(train_index, test_index) for train_index, test_index in KFold(n_splits=5).split(range(36))]
+    own_folds = [
+        (train_index, test_index)
+        for train_index, test_index in KFold(n_splits=5).split(range(36))
+    ]
 
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular_image"
@@ -132,8 +152,8 @@ def test_val_dataloader(create_kfold_data_module):
 
 def test_setup_calls_subspace_method(create_kfold_data_module):
     with patch(
-            "fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.denoising_autoencoder_subspace_method",
-            return_value=MockSubspaceMethod(),
+        "fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.denoising_autoencoder_subspace_method",
+        return_value=MockSubspaceMethod(),
     ) as mock_subspace_method:
         # Initialize the KfoldDataModule
         data_module = create_kfold_data_module

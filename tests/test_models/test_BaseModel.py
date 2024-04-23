@@ -86,8 +86,9 @@ def test_get_data_from_batch(sample_model):
     batch = (torch.rand((10, 12)), torch.randint(1, (10,)))
     x, y = model.get_data_from_batch(batch)
 
-    assert isinstance(x, torch.Tensor)
-    assert x.shape == torch.Size([10, 12])
+    assert isinstance(x, tuple)
+    assert len(x) == 1
+    assert x[0].shape == torch.Size([10, 12])
     assert isinstance(y, torch.Tensor)
     assert y.shape == torch.Size([10])
 
@@ -104,21 +105,40 @@ def test_get_data_from_batch(sample_model):
     assert isinstance(y, torch.Tensor)
     assert y.shape == torch.Size([10])
 
-    # more than 2 modalities
+    # 3 modalities
     batch = (
         torch.rand((10, 12)),
         torch.rand((10, 15)),
         torch.rand((10, 18)),
         torch.randint(1, (10,)),
     )
+    x, y = model.get_data_from_batch(batch)
+    assert isinstance(x, tuple)
+    assert len(x) == 3
+    assert isinstance(x[0], torch.Tensor)
+    assert x[0].shape == torch.Size([10, 12])
+    assert isinstance(x[1], torch.Tensor)
+    assert x[1].shape == torch.Size([10, 15])
+    assert isinstance(x[2], torch.Tensor)
+    assert x[2].shape == torch.Size([10, 18])
+    assert isinstance(y, torch.Tensor)
+    assert y.shape == torch.Size([10])
+
+    # 4 modalities
     with pytest.raises(
         ValueError,
         match=re.escape(
-            "Batch size is not 2 (preds and labels) or 3 (2 pred data types "
-            "and "
-            "labels) modalities long"
+            "Batch size must be 2 (preds and labels), 3 (2 pred data types and labels), or 4 (3 pred data types and labels)"
         ),
     ):
+        # 4 modalities
+        batch = (
+            torch.rand((10, 12)),
+            torch.rand((10, 15)),
+            torch.rand((10, 18)),
+            torch.rand((10, 20)),
+            torch.randint(1, (10,)),
+        )
         x, y = model.get_data_from_batch(batch)
 
 
@@ -264,8 +284,10 @@ def test_metrics_exist(sample_model):
     "ignore:.*No positive samples in targets*.",
 )
 def test_training_step(sample_model):
+
     model = sample_model
-    batch = ((torch.rand((10, 12)), torch.rand((10, 15))), torch.randint(1, (10,)))
+    batch = (torch.rand((10, 12)), torch.rand((10, 15)), torch.randint(1, (10,)))
+
     loss = model.training_step(batch, batch_idx=0)
     assert isinstance(loss, torch.Tensor)
     assert loss.shape == torch.Size([])  # scalar
@@ -274,14 +296,14 @@ def test_training_step(sample_model):
 @pytest.mark.filterwarnings("ignore:.*You are trying to `self.log()`*.")
 def test_validation_step(sample_model):
     model = sample_model
-    batch = ((torch.rand((10, 12)), torch.rand((10, 15))), torch.randint(2, (10,)))
+    batch = (torch.rand((10, 12)), torch.rand((10, 15)), torch.randint(1, (10,)))
     model.validation_step(batch, batch_idx=0)
 
 
 @pytest.mark.filterwarnings("ignore:.*You are trying to `self.log()`*.")
 def test_predict_step(sample_model):
     model = sample_model
-    batch = ((torch.rand((10, 12)), torch.rand((10, 15))), torch.randint(2, (10,)))
+    batch = (torch.rand((10, 12)), torch.rand((10, 15)), torch.randint(1, (10,)))
     end_output, logits = model.predict_step(batch, batch_idx=0)
     assert isinstance(end_output, torch.Tensor)
     assert isinstance(logits, torch.Tensor)

@@ -476,7 +476,7 @@ class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
         None
         """
 
-        self.fused_dim = self.mod1_dim + self.mod2_dim
+        self.fused_dim = self.data_dims["mod1_dim"] + self.data_dims["mod2_dim"]
 
     def calc_fused_layers(self):
         """
@@ -488,7 +488,7 @@ class ConcatImgLatentTabDoubleTrain(ParentFusionModel, nn.Module):
         None
         """
 
-        self.latent_dim = self.mod2_dim
+        self.latent_dim = self.data_dims["mod2_dim"]
 
         self.enc_img_layer = nn.Linear(self.latent_dim, self.latent_dim)
 

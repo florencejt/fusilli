@@ -287,7 +287,12 @@ class AttentionWeightedGraphMaker:
         self.attention_MLP_test_size = 0.2
 
         # initialise MLP
-        data_dims = [self.dataset[:][0].shape[1], self.dataset[:][1].shape[1]]
+        data_dims = {
+            "mod1_dim": self.dataset[:][0].shape[1],
+            "mod2_dim": self.dataset[:][1].shape[1],
+            "mod3_dim": None,
+            "img_dim": None,
+        }
 
         if torch.is_floating_point(self.dataset[:][2][0]):
             prediction_task = "regression"

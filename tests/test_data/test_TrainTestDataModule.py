@@ -138,7 +138,11 @@ def test_train_dataloader(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_2d = create_test_files["image_torch_file_2d"]
 
-    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+    sources = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
     batch_size = 8
     test_size = 0.2
     prediction_task = "binary"
@@ -147,13 +151,15 @@ def test_train_dataloader(create_test_files):
     example_fusion_model.modality_type = "tabular1"
 
     # Initialize the TrainTestDataModule
-    datamodule = TrainTestDataModule(fusion_model=example_fusion_model,
-                                     sources=sources,
-                                     output_paths=None,
-                                     prediction_task=prediction_task,
-                                     batch_size=batch_size,
-                                     test_size=test_size,
-                                     multiclass_dimensions=None, )
+    datamodule = TrainTestDataModule(
+        fusion_model=example_fusion_model,
+        sources=sources,
+        output_paths=None,
+        prediction_task=prediction_task,
+        batch_size=batch_size,
+        test_size=test_size,
+        multiclass_dimensions=None,
+    )
 
     datamodule.prepare_data()
     datamodule.setup()
@@ -176,20 +182,26 @@ def test_val_dataloader(create_test_files):
     prediction_task = "binary"
     multiclass_dimensions = None
 
-    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+    sources = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
     batch_size = 23
 
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular_image"
 
     # Initialize the TrainTestDataModule
-    datamodule = TrainTestDataModule(fusion_model=example_fusion_model,
-                                     sources=sources,
-                                     output_paths=None,
-                                     prediction_task=prediction_task,
-                                     batch_size=batch_size,
-                                     test_size=test_size,
-                                     multiclass_dimensions=multiclass_dimensions, )
+    datamodule = TrainTestDataModule(
+        fusion_model=example_fusion_model,
+        sources=sources,
+        output_paths=None,
+        prediction_task=prediction_task,
+        batch_size=batch_size,
+        test_size=test_size,
+        multiclass_dimensions=multiclass_dimensions,
+    )
     datamodule.prepare_data()
     datamodule.setup()
 
@@ -224,31 +236,40 @@ def test_setup_calls_subspace_method(create_test_files):
     prediction_task = "binary"
     multiclass_dimensions = None
 
-    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+    sources = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
     batch_size = 23
 
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular_image"
 
     with patch(
-            "fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.denoising_autoencoder_subspace_method",
-            return_value=MockSubspaceMethod(),
+        "fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.denoising_autoencoder_subspace_method",
+        return_value=MockSubspaceMethod(),
     ) as mock_subspace_method:
         # Initialize the TrainTestDataModule
-        datamodule = TrainTestDataModule(fusion_model=example_fusion_model,
-                                         sources=sources,
-                                         output_paths=None,
-                                         prediction_task=prediction_task,
-                                         batch_size=batch_size,
-                                         test_size=test_size,
-                                         multiclass_dimensions=multiclass_dimensions,
-                                         subspace_method=mock_subspace_method)
+        datamodule = TrainTestDataModule(
+            fusion_model=example_fusion_model,
+            sources=sources,
+            output_paths=None,
+            prediction_task=prediction_task,
+            batch_size=batch_size,
+            test_size=test_size,
+            multiclass_dimensions=multiclass_dimensions,
+            subspace_method=mock_subspace_method,
+        )
         datamodule.prepare_data()
         datamodule.setup()
 
         # Assert that the subspace_method class was called
         mock_subspace_method.assert_called_once_with(
-            datamodule=datamodule, max_epochs=datamodule.max_epochs, k=None, train_subspace=True
+            datamodule=datamodule,
+            max_epochs=datamodule.max_epochs,
+            k=None,
+            train_subspace=True,
         )
 
 
@@ -262,7 +283,11 @@ def test_owntestindices(create_test_files_more_features):
     prediction_task = "binary"
     multiclass_dimensions = None
 
-    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+    sources = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
     batch_size = 23
 
     example_fusion_model = Mock()
@@ -271,14 +296,16 @@ def test_owntestindices(create_test_files_more_features):
     # make test indices people 25 to 36
     test_indices = list(range(25, 36))
 
-    datamodule = TrainTestDataModule(fusion_model=example_fusion_model,
-                                     sources=sources,
-                                     output_paths=None,
-                                     prediction_task=prediction_task,
-                                     batch_size=batch_size,
-                                     test_size=test_size,
-                                     multiclass_dimensions=multiclass_dimensions,
-                                     test_indices=test_indices)
+    datamodule = TrainTestDataModule(
+        fusion_model=example_fusion_model,
+        sources=sources,
+        output_paths=None,
+        prediction_task=prediction_task,
+        batch_size=batch_size,
+        test_size=test_size,
+        multiclass_dimensions=multiclass_dimensions,
+        test_indices=test_indices,
+    )
     datamodule.prepare_data()
     datamodule.setup()
 

@@ -22,7 +22,11 @@ def create_graph_data_module(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_2d = create_test_files["image_torch_file_2d"]
 
-    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+    sources = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular_tabular"
 
@@ -40,7 +44,12 @@ def test_prepare_data(create_graph_data_module):
     datamodule = create_graph_data_module
     datamodule.prepare_data()
     assert len(datamodule.dataset) > 0
-    assert datamodule.data_dims == [2, 2, None]  # Adjust based on your data dimensions
+    assert datamodule.data_dims == {
+        "mod1_dim": 2,
+        "mod2_dim": 2,
+        "mod3_dim": None,
+        "img_dim": None,
+    }
     assert datamodule.layer_mods == None
 
 
@@ -63,10 +72,17 @@ def test_kfold_split_own_indices(create_test_files_more_features):
     prediction_task = "binary"
     multiclass_dimensions = None
 
-    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+    sources = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
 
     # specifying own kfold indices using a non random split
-    own_folds = [(train_index, test_index) for train_index, test_index in KFold(n_splits=5).split(range(36))]
+    own_folds = [
+        (train_index, test_index)
+        for train_index, test_index in KFold(n_splits=5).split(range(36))
+    ]
 
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular_image"
@@ -123,5 +139,5 @@ def test_get_lightning_module(create_graph_data_module):
         assert lightning_module is not None
         assert lightning_module.data is not None
         assert (
-                type(lightning_module) == torch_geometric.data.lightning.LightningNodeData
+            type(lightning_module) == torch_geometric.data.lightning.LightningNodeData
         )

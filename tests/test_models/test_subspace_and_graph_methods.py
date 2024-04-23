@@ -6,6 +6,7 @@ import pandas as pd
 from unittest.mock import patch, Mock
 from unittest import mock
 import lightning.pytorch as pl
+
 # from lightning.pytorch.callbacks import EarlyStopping
 from torch import nn
 from torch_geometric.data import Data
@@ -16,19 +17,23 @@ from fusilli.data import CustomDataset
 from fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps import (
     DenoisingAutoencoder,
     ImgUnimodalDAE,
-    denoising_autoencoder_subspace_method
+    denoising_autoencoder_subspace_method,
 )
 from fusilli.fusionmodels.tabularfusion.edge_corr_gnn import EdgeCorrGraphMaker
 
 from ..test_data.test_TrainTestDataModule import create_test_files
 from fusilli.data import TrainTestDataModule
+
 # from fusilli.utils.mcvae.src.mcvae.models import Mcvae
 # from fusilli.utils.training_utils import init_trainer
 from fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain import (
-    concat_img_latent_tab_subspace_method, ImgLatentSpace
+    concat_img_latent_tab_subspace_method,
+    ImgLatentSpace,
 )
 
-from fusilli.fusionmodels.tabularfusion.attention_weighted_GNN import AttentionWeightedGraphMaker
+from fusilli.fusionmodels.tabularfusion.attention_weighted_GNN import (
+    AttentionWeightedGraphMaker,
+)
 
 
 class MockFusionModel:
@@ -52,14 +57,15 @@ def sample_datamodule(create_test_files):
     fusion_model = MockFusionModel()
 
     # Call the prepare_fusion_data function with custom fusion type (non-graph)
-    dm = TrainTestDataModule(fusion_model=MockFusionModel,
-                             sources=[tabular1_csv, tabular2_csv, image_torch_file_2d],
-                             output_paths=None,
-                             prediction_task="binary",
-                             batch_size=8,
-                             test_size=0.3,
-                             multiclass_dimensions=None,
-                             )
+    dm = TrainTestDataModule(
+        fusion_model=MockFusionModel,
+        sources=[tabular1_csv, tabular2_csv, image_torch_file_2d],
+        output_paths=None,
+        prediction_task="binary",
+        batch_size=8,
+        test_size=0.3,
+        multiclass_dimensions=None,
+    )
 
     # dm = prepare_fusion_data(fusion_model, params)
     dm.prepare_data()
@@ -71,6 +77,7 @@ def sample_datamodule(create_test_files):
 class MockFusionTabImgModel:
     fusion_type = "subspace"
     modality_type = "tabular_image"
+    three_modalities = False
 
     def __init__(self):
         pass
@@ -89,14 +96,19 @@ def sample_tabimg_datamodule(create_test_files):
     fusion_model = MockFusionTabImgModel()
 
     # Call the prepare_fusion_data function with custom fusion type (non-graph)
-    dm = TrainTestDataModule(fusion_model=MockFusionTabImgModel,
-                             sources=[tabular1_csv, tabular2_csv, image_torch_file_2d],
-                             output_paths=None,
-                             prediction_task="binary",
-                             batch_size=8,
-                             test_size=0.3,
-                             multiclass_dimensions=None,
-                             )
+    dm = TrainTestDataModule(
+        fusion_model=MockFusionTabImgModel,
+        sources={
+            "tabular1": tabular1_csv,
+            "tabular2": tabular2_csv,
+            "image": image_torch_file_2d,
+        },
+        output_paths=None,
+        prediction_task="binary",
+        batch_size=8,
+        test_size=0.3,
+        multiclass_dimensions=None,
+    )
 
     # dm = prepare_fusion_data(fusion_model, params)
     dm.prepare_data()
@@ -185,7 +197,12 @@ def sample_tabimg_datamodule(create_test_files):
 # DENOISING AUTOENCODER MODEL
 def test_denoising_autoencoder_initialisation():
     # Test the initialization of the DenoisingAutoencoder
-    data_dims = [128]  # Replace with actual data dimensions
+    data_dims = {
+        "mod1_dim": 128,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": None,
+    }
     model = DenoisingAutoencoder(data_dims)
 
     assert isinstance(model, pl.LightningModule)
@@ -197,33 +214,52 @@ def test_denoising_autoencoder_initialisation():
 
 def test_denoising_autoencoder_forward():
     # Test the forward method of the DenoisingAutoencoder
-    data_dims = [128]  # Replace with actual data dimensions
+    data_dims = {
+        "mod1_dim": 128,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": None,
+    }
     model = DenoisingAutoencoder(data_dims)
-    x = torch.randn(1, data_dims[0])  # Replace with actual input data
+    x = torch.randn(1, data_dims["mod1_dim"])  # Replace with actual input data
     output, x_before_dropout = model(x)
 
     assert output.shape == x.shape
     assert torch.eq(x, x_before_dropout).all()
 
 
-@pytest.mark.filterwarnings("ignore:.*You are trying to `self.log()`*.", )
+@pytest.mark.filterwarnings(
+    "ignore:.*You are trying to `self.log()`*.",
+)
 def test_denoising_autoencoder_training_step():
     # Test the training_step method of the DenoisingAutoencoder
-    data_dims = [128]  # Replace with actual data dimensions
+    data_dims = {
+        "mod1_dim": 128,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": None,
+    }
     model = DenoisingAutoencoder(data_dims)
-    x = torch.randn(1, data_dims[0])  # Replace with actual input data
+    x = torch.randn(1, data_dims["mod1_dim"])  # Replace with actual input data
     loss = model.training_step(x, 0)
 
     assert isinstance(loss, torch.Tensor)
     assert len(loss.shape) == 0
 
 
-@pytest.mark.filterwarnings("ignore:.*You are trying to `self.log()`*.", )
+@pytest.mark.filterwarnings(
+    "ignore:.*You are trying to `self.log()`*.",
+)
 def test_denoising_autoencoder_validation_step():
     # Test the validation_step method of the DenoisingAutoencoder
-    data_dims = [128]  # Replace with actual data dimensions
+    data_dims = {
+        "mod1_dim": 128,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": None,
+    }
     model = DenoisingAutoencoder(data_dims)
-    x = torch.randn(1, data_dims[0])  # Replace with actual input data
+    x = torch.randn(1, data_dims["mod1_dim"])  # Replace with actual input data
     loss = model.validation_step(x, 0)
 
     assert isinstance(loss, torch.Tensor)
@@ -233,7 +269,12 @@ def test_denoising_autoencoder_validation_step():
 # IMG LATENT SPACE MODEL
 def test_img_unimodal_dae_initialisation():
     # Test the initialization of the ImgUnimodalDAE
-    data_dims = [None, None, (100, 100)]
+    data_dims = {
+        "mod1_dim": None,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": (100, 100),
+    }
     pred_type = "multiclass"
     multiclass_dims = 3
     model = ImgUnimodalDAE(data_dims, pred_type, multiclass_dims)
@@ -250,25 +291,37 @@ def test_img_unimodal_dae_initialisation():
 
 def test_img_unimodal_dae_forward():
     # Test the forward method of the ImgUnimodalDAE
-    data_dims = [None, None, (100, 100)]
+    data_dims = {
+        "mod1_dim": None,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": (100, 100),
+    }
     pred_type = "multiclass"
     multiclass_dims = 3
     model = ImgUnimodalDAE(data_dims, pred_type, multiclass_dims)
-    image_data = torch.rand((1, 1, data_dims[2][0], data_dims[2][1]))
+    image_data = torch.rand((1, 1, data_dims["img_dim"][0], data_dims["img_dim"][1]))
     output = model(image_data)
 
     assert isinstance(output, torch.Tensor)
     assert output.shape == (1, multiclass_dims)
 
 
-@pytest.mark.filterwarnings("ignore:.*You are trying to `self.log()`*.", )
+@pytest.mark.filterwarnings(
+    "ignore:.*You are trying to `self.log()`*.",
+)
 def test_img_unimodal_dae_training_step():
     # Test the training_step method of the ImgUnimodalDAE
-    data_dims = [None, None, (100, 100)]
+    data_dims = {
+        "mod1_dim": None,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": (100, 100),
+    }
     pred_type = "multiclass"
     multiclass_dims = 3
     model = ImgUnimodalDAE(data_dims, pred_type, multiclass_dims)
-    image_data = torch.rand((3, 1, data_dims[2][0], data_dims[2][1]))
+    image_data = torch.rand((3, 1, data_dims["img_dim"][0], data_dims["img_dim"][1]))
     labels = torch.randint(0, multiclass_dims, (3,))
     batch = (torch.randn(1, 10), image_data, labels)
     loss = model.training_step(batch, 0)
@@ -277,14 +330,21 @@ def test_img_unimodal_dae_training_step():
     assert len(loss.shape) == 0
 
 
-@pytest.mark.filterwarnings("ignore:.*You are trying to `self.log()`*.", )
+@pytest.mark.filterwarnings(
+    "ignore:.*You are trying to `self.log()`*.",
+)
 def test_img_unimodal_dae_validation_step():
     # Test the validation_step method of the ImgUnimodalDAE
-    data_dims = [None, None, (100, 100)]
+    data_dims = {
+        "mod1_dim": None,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": (100, 100),
+    }
     pred_type = "multiclass"
     multiclass_dims = 3
     model = ImgUnimodalDAE(data_dims, pred_type, multiclass_dims)
-    image_data = torch.rand((3, 1, data_dims[2][0], data_dims[2][1]))
+    image_data = torch.rand((3, 1, data_dims["img_dim"][0], data_dims["img_dim"][1]))
     labels = torch.randint(0, multiclass_dims, (3,))
     batch = (torch.randn(1, 10), image_data, labels)
     loss = model.validation_step(batch, 0)
@@ -295,11 +355,16 @@ def test_img_unimodal_dae_validation_step():
 
 def test_img_unimodal_dae_get_intermediate_maps():
     # Test the get_intermediate_maps method of the ImgUnimodalDAE
-    data_dims = [None, None, (100, 100)]
+    data_dims = {
+        "mod1_dim": None,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": (100, 100),
+    }
     pred_type = "multiclass"
     multiclass_dims = 3
     model = ImgUnimodalDAE(data_dims, pred_type, multiclass_dims)
-    image_data = torch.rand((3, 1, data_dims[2][0], data_dims[2][1]))
+    image_data = torch.rand((3, 1, data_dims["img_dim"][0], data_dims["img_dim"][1]))
     labels = torch.randint(0, multiclass_dims, (3,))
     batch = (torch.randn(1, 10), image_data, labels)
     output = model.get_intermediate_featuremaps(image_data)
@@ -327,18 +392,27 @@ def fixture_mock_init():
     return _mock_init_trainer
 
 
-def test_denoising_autoencoder_subspace_method_init(sample_tabimg_datamodule, mock_init_trainer):
+def test_denoising_autoencoder_subspace_method_init(
+    sample_tabimg_datamodule, mock_init_trainer
+):
     # mock_init_trainer = mocker.patch("fusilli.utils.training_utils.init_trainer")
     # mock_init_trainer.return_value = 10
     mock_init_trainer = mock.create_autospec(mock_init_trainer)
-    mock_patch = ("fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.init_trainer")
+    mock_patch = (
+        "fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.init_trainer"
+    )
     with patch(mock_patch) as mck:
         mck.side_effect = mock_init_trainer
 
         assert hasattr(denoising_autoencoder_subspace_method, "subspace_models")
         assert len(denoising_autoencoder_subspace_method.subspace_models) == 2
-        assert denoising_autoencoder_subspace_method.subspace_models[0] == DenoisingAutoencoder
-        assert denoising_autoencoder_subspace_method.subspace_models[1] == ImgUnimodalDAE
+        assert (
+            denoising_autoencoder_subspace_method.subspace_models[0]
+            == DenoisingAutoencoder
+        )
+        assert (
+            denoising_autoencoder_subspace_method.subspace_models[1] == ImgUnimodalDAE
+        )
 
         dm = sample_tabimg_datamodule
 
@@ -369,18 +443,31 @@ def fixture_mock_torch_load():
     return _mock_torch_load
 
 
-def test_denoising_autoencoder_subspace_method_init_with_checkpoint(sample_tabimg_datamodule,
-                                                                    mock_load_from_checkpoint, mock_init_trainer,
-                                                                    mock_torch_load):
+def test_denoising_autoencoder_subspace_method_init_with_checkpoint(
+    sample_tabimg_datamodule,
+    mock_load_from_checkpoint,
+    mock_init_trainer,
+    mock_torch_load,
+):
     mock_load_from_checkpoint = mock.create_autospec(mock_load_from_checkpoint)
     mock_init_trainer = mock.create_autospec(mock_init_trainer)
-    mock_patch = ("fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.DenoisingAutoencoder."
-                  "load_state_dict")
-    mock_patch12 = ("fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.ImgUnimodalDAE."
-                    "load_state_dict")
-    mock_patch2 = ("fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.init_trainer")
-    mock_patch3 = ("fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.torch.load")
-    with patch(mock_patch) as mck, patch(mock_patch2) as mck2, patch(mock_patch12) as mck12, patch(mock_patch3) as mck3:
+    mock_patch = (
+        "fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.DenoisingAutoencoder."
+        "load_state_dict"
+    )
+    mock_patch12 = (
+        "fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.ImgUnimodalDAE."
+        "load_state_dict"
+    )
+    mock_patch2 = (
+        "fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.init_trainer"
+    )
+    mock_patch3 = (
+        "fusilli.fusionmodels.tabularimagefusion.denoise_tab_img_maps.torch.load"
+    )
+    with patch(mock_patch) as mck, patch(mock_patch2) as mck2, patch(
+        mock_patch12
+    ) as mck12, patch(mock_patch3) as mck3:
         mck.side_effect = mock_load_from_checkpoint
         mck12.side_effect = mock_load_from_checkpoint
         mck2.side_effect = mock_init_trainer
@@ -388,7 +475,9 @@ def test_denoising_autoencoder_subspace_method_init_with_checkpoint(sample_tabim
 
         dm = sample_tabimg_datamodule
 
-        dae_subspace_method = denoising_autoencoder_subspace_method(dm, train_subspace=False)
+        dae_subspace_method = denoising_autoencoder_subspace_method(
+            dm, train_subspace=False
+        )
 
         dae_subspace_method.load_ckpt(["path1", "path2"])
 
@@ -476,7 +565,9 @@ def test_edge_corr_graph_maker():
     assert (abs(graph_data.edge_attr - 1) >= edge_corr_graph_maker.threshold).all()
 
 
-@pytest.mark.filterwarnings("ignore:.*does not have many workers which may be a bottleneck*.", )
+@pytest.mark.filterwarnings(
+    "ignore:.*does not have many workers which may be a bottleneck*.",
+)
 def test_AttentionWeightedGraphMaker():
     # Create an instance of EdgeCorrGraphMaker
     attention_weighted_graph_maker = AttentionWeightedGraphMaker(dummy_dataset)
@@ -525,7 +616,12 @@ def test_AttentionWeightedGraphMaker():
 # concat img and tabular data latent space double train
 def test_ImgLatentSpace_init():
     # Test the initialization of the ImgLatentSpace
-    data_dims = [None, None, (100, 100)]
+    data_dims = {
+        "mod1_dim": None,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": (100, 100),
+    }
     model = ImgLatentSpace(data_dims)
 
     assert isinstance(model, pl.LightningModule)
@@ -537,33 +633,53 @@ def test_ImgLatentSpace_init():
 
 def test_ImgLatentSpace_forward():
     # Test the forward method of the ImgLatentSpace
-    data_dims = [None, None, (100, 100)]
+    data_dims = {
+        "mod1_dim": None,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": (100, 100),
+    }
     model = ImgLatentSpace(data_dims)
-    image_data = torch.rand((1, 1, data_dims[2][0], data_dims[2][1]))
+    image_data = torch.rand((1, 1, data_dims["img_dim"][0], data_dims["img_dim"][1]))
     output = model(image_data)
 
     assert isinstance(output, torch.Tensor)
     assert output.shape == image_data.shape
 
 
-@pytest.mark.filterwarnings("ignore:.*You are trying to `self.log()`*.", )
+@pytest.mark.filterwarnings(
+    "ignore:.*You are trying to `self.log()`*.",
+)
 def test_ImgLatentSpace_training_step():
     # Test the training_step method of the ImgLatentSpace
-    data_dims = [None, None, (100, 100)]
+    data_dims = {
+        "mod1_dim": None,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": (100, 100),
+    }
     model = ImgLatentSpace(data_dims)
-    image_data = torch.rand((5, 1, data_dims[2][0], data_dims[2][1]))
+    image_data = torch.rand((5, 1, data_dims["img_dim"][0], data_dims["img_dim"][1]))
     loss = model.training_step(image_data, 0)
 
     assert isinstance(loss, torch.Tensor)
     assert len(loss.shape) == 0
 
 
-@pytest.mark.filterwarnings("ignore:.*You are trying to `self.log()`*.", )
+@pytest.mark.filterwarnings(
+    "ignore:.*You are trying to `self.log()`*.",
+)
 def test_ImgLatentSpace_validation_step():
     # Test the training_step method of the ImgLatentSpace
-    data_dims = [None, None, (100, 100)]
+
+    data_dims = {
+        "mod1_dim": None,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": (100, 100),
+    }
     model = ImgLatentSpace(data_dims)
-    image_data = torch.rand((5, 1, data_dims[2][0], data_dims[2][1]))
+    image_data = torch.rand((5, 1, data_dims["img_dim"][0], data_dims["img_dim"][1]))
     loss = model.validation_step(image_data, 0)
 
     assert isinstance(loss, torch.Tensor)
@@ -572,26 +688,35 @@ def test_ImgLatentSpace_validation_step():
 
 def test_ImgLatentSpace_encode_image():
     # Test the encode_image method of the ImgLatentSpace
-    data_dims = [None, None, (100, 100)]
+    data_dims = {
+        "mod1_dim": None,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": (100, 100),
+    }
     model = ImgLatentSpace(data_dims)
-    image_data = torch.rand((5, 1, data_dims[2][0], data_dims[2][1]))
+    image_data = torch.rand((5, 1, data_dims["img_dim"][0], data_dims["img_dim"][1]))
     output = model.encode_image(image_data)
 
     assert isinstance(output, torch.Tensor)
     assert output.shape == (5, 64)
 
 
-def test_concat_img_latent_tab_subspace_method_init(sample_tabimg_datamodule, mock_init_trainer):
+def test_concat_img_latent_tab_subspace_method_init(
+    sample_tabimg_datamodule, mock_init_trainer
+):
     # mock_init_trainer = mocker.patch("fusilli.utils.training_utils.init_trainer")
     # mock_init_trainer.return_value = 10
     mock_init_trainer = mock.create_autospec(mock_init_trainer)
-    mock_patch = ("fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.init_trainer")
+    mock_patch = "fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.init_trainer"
     with patch(mock_patch) as mck:
         mck.side_effect = mock_init_trainer
 
         assert hasattr(concat_img_latent_tab_subspace_method, "subspace_models")
         assert len(concat_img_latent_tab_subspace_method.subspace_models) == 1
-        assert concat_img_latent_tab_subspace_method.subspace_models[0] == ImgLatentSpace
+        assert (
+            concat_img_latent_tab_subspace_method.subspace_models[0] == ImgLatentSpace
+        )
 
         dm = sample_tabimg_datamodule
 
@@ -604,23 +729,32 @@ def test_concat_img_latent_tab_subspace_method_init(sample_tabimg_datamodule, mo
         assert isinstance(img_latent_subspace_method.autoencoder, ImgLatentSpace)
 
 
-def test_concat_img_latent_tab_subspace_method_init_with_checkpoint(sample_tabimg_datamodule,
-                                                                    mock_load_from_checkpoint, mock_init_trainer,
-                                                                    mock_torch_load):
+def test_concat_img_latent_tab_subspace_method_init_with_checkpoint(
+    sample_tabimg_datamodule,
+    mock_load_from_checkpoint,
+    mock_init_trainer,
+    mock_torch_load,
+):
     mock_load_from_checkpoint = mock.create_autospec(mock_load_from_checkpoint)
     mock_init_trainer = mock.create_autospec(mock_init_trainer)
-    mock_patch = ("fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.ImgLatentSpace."
-                  "load_state_dict")
-    mock_patch2 = ("fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.init_trainer")
-    mock_patch3 = ("fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.torch.load")
-    with patch(mock_patch) as mck, patch(mock_patch2) as mck2, patch(mock_patch3) as mck3:
+    mock_patch = (
+        "fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.ImgLatentSpace."
+        "load_state_dict"
+    )
+    mock_patch2 = "fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.init_trainer"
+    mock_patch3 = "fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.torch.load"
+    with patch(mock_patch) as mck, patch(mock_patch2) as mck2, patch(
+        mock_patch3
+    ) as mck3:
         mck.side_effect = mock_load_from_checkpoint
         mck2.side_effect = mock_init_trainer
         mck3.side_effect = mock_torch_load
 
         dm = sample_tabimg_datamodule
 
-        img_latent_subspace = concat_img_latent_tab_subspace_method(dm, train_subspace=False)
+        img_latent_subspace = concat_img_latent_tab_subspace_method(
+            dm, train_subspace=False
+        )
 
         img_latent_subspace.load_ckpt(["path1"])
 
@@ -630,22 +764,28 @@ def test_concat_img_latent_tab_subspace_method_init_with_checkpoint(sample_tabim
         assert mock_load_from_checkpoint.call_count == 1
 
 
-def test_concat_img_latent_tab_subspace_method_train(sample_tabimg_datamodule, mock_init_trainer):
+def test_concat_img_latent_tab_subspace_method_train(
+    sample_tabimg_datamodule, mock_init_trainer
+):
     dm = sample_tabimg_datamodule
     train_dataset = dm.train_dataset
     test_dataset = dm.test_dataset
 
-    mock_patch = ("fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.init_trainer")
+    mock_patch = "fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain.init_trainer"
 
     class trainer:
         def __init__(self):
             pass
 
         def fit(self, *args, **kwargs):
-            return torch.randn(10, 7), pd.DataFrame([0] * 10, columns=["prediction_label"])
+            return torch.randn(10, 7), pd.DataFrame(
+                [0] * 10, columns=["prediction_label"]
+            )
 
         def validate(self, *args, **kwargs):
-            return torch.randn(10, 3), pd.DataFrame([0] * 10, columns=["prediction_label"])
+            return torch.randn(10, 3), pd.DataFrame(
+                [0] * 10, columns=["prediction_label"]
+            )
 
     with patch(mock_patch) as mck:
         mck.side_effect = mock_init_trainer
@@ -653,5 +793,9 @@ def test_concat_img_latent_tab_subspace_method_train(sample_tabimg_datamodule, m
         concat_img_latent_tab_subspace_method.subspace_models = [Subspace]
         img_latent_subspace_method = concat_img_latent_tab_subspace_method(dm)
 
-        mean_latents, labels = img_latent_subspace_method.train(train_dataset, test_dataset)
-        mean_latents_val, labels_val, data_dims = img_latent_subspace_method.convert_to_latent(test_dataset)
+        mean_latents, labels = img_latent_subspace_method.train(
+            train_dataset, test_dataset
+        )
+        mean_latents_val, labels_val, data_dims = (
+            img_latent_subspace_method.convert_to_latent(test_dataset)
+        )
