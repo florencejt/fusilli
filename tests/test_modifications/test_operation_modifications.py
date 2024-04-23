@@ -20,7 +20,9 @@ from fusilli.fusionmodels.tabularimagefusion.decision import ImageDecision
 from fusilli.fusionmodels.tabularfusion.decision import TabularDecision
 
 from fusilli.fusionmodels.tabularfusion.activation import ActivationFusion
-from fusilli.fusionmodels.tabularfusion.attention_and_activation import AttentionAndSelfActivation
+from fusilli.fusionmodels.tabularfusion.attention_and_activation import (
+    AttentionAndSelfActivation,
+)
 
 import torch
 
@@ -308,7 +310,7 @@ correct_modifications_2D = {
             nn.ReLU(),
         ),
         "attention_reduction_ratio": 2,
-    }
+    },
 }
 
 correct_modifications_3D = {
@@ -705,96 +707,140 @@ wrong_dtype_modifications = {
             }
         ),
         "attention_reduction_ratio": "two",
-    }
+    },
 }
 
 
 @pytest.fixture
 def model_instance_ConcatImageMapsTabularData_2D():
     pred_type = "regression"
-    data_dims = [10, None, [100, 100]]
-    params = {}
-    return ConcatImageMapsTabularData(pred_type, data_dims, params)
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": [100, 100],
+    }
+    return ConcatImageMapsTabularData(pred_type, data_dims, None)
 
 
 @pytest.fixture
 def model_instance_ConcatImageMapsTabularData_3D():
     pred_type = "regression"
-    data_dims = [10, None, [100, 100, 100]]
-    params = {}
-    return ConcatImageMapsTabularData(pred_type, data_dims, params)
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": [100, 100, 100],
+    }
+    return ConcatImageMapsTabularData(pred_type, data_dims, None)
 
 
 @pytest.fixture
 def model_instance_ConcatImageMapsTabularMaps_2D():
     pred_type = "regression"
-    data_dims = [10, None, [100, 100]]
-    params = {}
-    return ConcatImageMapsTabularMaps(pred_type, data_dims, params)
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": [100, 100],
+    }
+    return ConcatImageMapsTabularMaps(pred_type, data_dims, None)
 
 
 @pytest.fixture
 def model_instance_ConcatImageMapsTabularMaps_3D():
     pred_type = "regression"
-    data_dims = [10, None, [100, 100, 100]]
-    params = {}
-    return ConcatImageMapsTabularMaps(pred_type, data_dims, params)
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": [100, 100, 100],
+    }
+    return ConcatImageMapsTabularMaps(pred_type, data_dims, None)
 
 
 @pytest.fixture
 def model_instance_ImageDecision_2D():
     pred_type = "regression"
-    data_dims = [10, None, [100, 100]]
-    params = {}
-    return ImageDecision(pred_type, data_dims, params)
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": [100, 100],
+    }
+    return ImageDecision(pred_type, data_dims, None)
 
 
 @pytest.fixture
 def model_instance_ImageDecision_3D():
     pred_type = "regression"
-    data_dims = [10, None, [100, 100, 100]]
-    params = {}
-    return ImageDecision(pred_type, data_dims, params)
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": [100, 100, 100],
+    }
+    return ImageDecision(pred_type, data_dims, None)
 
 
 @pytest.fixture
 def model_instance_TabularDecision():
     pred_type = "regression"
-    data_dims = [10, 15, None]
-    params = {}
-    return TabularDecision(pred_type, data_dims, params)
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": 15,
+        "mod3_dim": None,
+        "img_dim": None,
+    }
+    return TabularDecision(pred_type, data_dims, None)
 
 
 @pytest.fixture
 def model_instance_ConcatTabularData():
     pred_type = "regression"
-    data_dims = [10, 15, None]
-    params = {}
-    return ConcatTabularData(pred_type, data_dims, params)
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": 15,
+        "mod3_dim": None,
+        "img_dim": None,
+    }
+    return ConcatTabularData(pred_type, data_dims, None)
 
 
 @pytest.fixture
 def model_instance_ConcatTabularFeatureMaps():
     pred_type = "regression"
-    data_dims = [10, 15, None]
-    params = {}
-    return ConcatTabularFeatureMaps(pred_type, data_dims, params)
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": 15,
+        "mod3_dim": None,
+        "img_dim": None,
+    }
+    return ConcatTabularFeatureMaps(pred_type, data_dims, None)
 
 
 @pytest.fixture
 def model_instance_ActivationFusion():
     pred_type = "regression"
-    data_dims = [10, 15, None]
-    params = {}
-    return ActivationFusion(pred_type, data_dims, params)
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": 15,
+        "mod3_dim": None,
+        "img_dim": None,
+    }
+    return ActivationFusion(pred_type, data_dims, None)
 
 
 @pytest.fixture
 def model_instance_AttentionAndSelfActivation():
     pred_type = "regression"
-    data_dims = [10, 15, None]
-    params = {}
-    return AttentionAndSelfActivation(pred_type, data_dims, params)
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": 15,
+        "mod3_dim": None,
+        "img_dim": None,
+    }
+    return AttentionAndSelfActivation(pred_type, data_dims, None)
 
 
 model_instances = [
@@ -840,8 +886,8 @@ def test_correct_modify_model_architecture(model_name, model_fixture, request):
     for key, modification in correct_modifications.get(model_name, {}).items():
         if hasattr(getattr(modified_model, key), "__code__"):
             assert (
-                    getattr(modified_model, key).__code__.co_code
-                    == modification.__code__.co_code
+                getattr(modified_model, key).__code__.co_code
+                == modification.__code__.co_code
             )
         else:
             assert getattr(modified_model, key) == modification
@@ -849,8 +895,8 @@ def test_correct_modify_model_architecture(model_name, model_fixture, request):
     # Ensure that the final prediction layer has been modified as expected but the output dim
     # has not
     assert (
-            modified_model.final_prediction[-1].out_features
-            == original_model.final_prediction[-1].out_features
+        modified_model.final_prediction[-1].out_features
+        == original_model.final_prediction[-1].out_features
     )
 
 
@@ -860,7 +906,7 @@ def test_correct_modify_model_architecture(model_name, model_fixture, request):
 # Test the modify_model_architecture function with incorrect data type for the modifications
 @pytest.mark.parametrize("model_name, model_fixture", model_instances)
 def test_wrong_data_type_modify_model_architecture_training(
-        model_name, model_fixture, request
+    model_name, model_fixture, request
 ):
     # iterate through the modifications to check each throws an error
     for key, modification in wrong_dtype_modifications.get(model_name, {}).items():
@@ -868,7 +914,7 @@ def test_wrong_data_type_modify_model_architecture_training(
         # Modify the model's architecture using the function
         print(individual_modification)
         with pytest.raises(
-                TypeError, match="Incorrect data type for the modifications"
+            TypeError, match="Incorrect data type for the modifications"
         ):
             model_modifier.modify_model_architecture(
                 request.getfixturevalue(model_fixture),
@@ -880,7 +926,7 @@ def test_wrong_data_type_modify_model_architecture_training(
 # Test the modify_model_architecture function with 3D conv layers with 2D data
 @pytest.mark.parametrize("model_name, model_fixture", model_instances)
 def test_wrong_img_dim_2D_modify_model_architecture_data(
-        model_name, model_fixture, request
+    model_name, model_fixture, request
 ):
     if "2D" in model_fixture:
         # using correct 3D modifications, which are incorrect for 2D images
@@ -906,7 +952,7 @@ def test_wrong_img_dim_2D_modify_model_architecture_data(
 # Test the modify_model_architecture function with 2D conv layers with 3D data
 @pytest.mark.parametrize("model_name, model_fixture", model_instances)
 def test_wrong_img_dim_3D_modify_model_architecture_data(
-        model_name, model_fixture, request
+    model_name, model_fixture, request
 ):
     if "3D" in model_fixture:
         listed_dict = correct_modifications_2D[model_name]

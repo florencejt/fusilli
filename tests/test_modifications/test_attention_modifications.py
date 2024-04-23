@@ -499,7 +499,12 @@ wrong_layer_type_modifications = {
 @pytest.fixture
 def model_instance_TabularChannelWiseMultiAttention():
     pred_type = "regression"
-    data_dims = [10, 15, None]
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": 15,
+        "mod3_dim": None,
+        "img_dim": None,
+    }
     params = {}
     return TabularChannelWiseMultiAttention(pred_type, data_dims, params)
 
@@ -507,7 +512,12 @@ def model_instance_TabularChannelWiseMultiAttention():
 @pytest.fixture
 def model_instance_ImageChannelWiseMultiAttention_2D():
     pred_type = "regression"
-    data_dims = [10, 15, [100, 100]]
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": 15,
+        "mod3_dim": None,
+        "img_dim": (100, 100),
+    }
     params = {}
     return ImageChannelWiseMultiAttention(pred_type, data_dims, params)
 
@@ -515,7 +525,12 @@ def model_instance_ImageChannelWiseMultiAttention_2D():
 @pytest.fixture
 def model_instance_ImageChannelWiseMultiAttention_3D():
     pred_type = "regression"
-    data_dims = [10, 15, [100, 100, 100]]
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": 15,
+        "mod3_dim": None,
+        "img_dim": (100, 100, 100),
+    }
     params = {}
     return ImageChannelWiseMultiAttention(pred_type, data_dims, params)
 
@@ -523,7 +538,12 @@ def model_instance_ImageChannelWiseMultiAttention_3D():
 @pytest.fixture
 def model_instance_TabularCrossmodalMultiheadAttention():
     pred_type = "regression"
-    data_dims = [10, 15, None]
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": 15,
+        "mod3_dim": None,
+        "img_dim": None,
+    }
     params = {}
     return TabularCrossmodalMultiheadAttention(pred_type, data_dims, params)
 
@@ -531,7 +551,12 @@ def model_instance_TabularCrossmodalMultiheadAttention():
 @pytest.fixture
 def model_instance_CrossmodalMultiheadAttention_2D():
     pred_type = "regression"
-    data_dims = [10, 15, [100, 100]]
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": 15,
+        "mod3_dim": None,
+        "img_dim": (100, 100),
+    }
     params = {}
     return CrossmodalMultiheadAttention(pred_type, data_dims, params)
 
@@ -539,7 +564,12 @@ def model_instance_CrossmodalMultiheadAttention_2D():
 @pytest.fixture
 def model_instance_CrossmodalMultiheadAttention_3D():
     pred_type = "regression"
-    data_dims = [10, 15, [100, 100, 100]]
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": 15,
+        "mod3_dim": None,
+        "img_dim": (100, 100, 100),
+    }
     params = {}
     return CrossmodalMultiheadAttention(pred_type, data_dims, params)
 

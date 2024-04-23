@@ -12,6 +12,7 @@ from fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubletrain i
     concat_img_latent_tab_subspace_method,
     ConcatImgLatentTabDoubleTrain,
 )
+
 # from fusilli.fusionmodels.tabularfusion.mcvae_model import (
 #     MCVAESubspaceMethod,
 #     MCVAE_tab,
@@ -530,6 +531,12 @@ wrong_layer_type_modifications = {
 def model_instance_DAETabImgMaps():
     prediction_task = "regression"
     data_dims = [10, 15, [100, 100]]
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": None,  # shouldn't this be none?
+        "mod3_dim": None,
+        "img_dim": [100, 100],
+    }
     multiclass_dimensions = None
     return DAETabImgMaps(prediction_task, data_dims, multiclass_dimensions)
 
@@ -537,17 +544,31 @@ def model_instance_DAETabImgMaps():
 @pytest.fixture
 def model_instance_ConcatImgLatentTabDoubleLoss():
     prediction_task = "regression"
-    data_dims = [10, None, [100, 100]]
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": None,
+        "mod3_dim": None,
+        "img_dim": [100, 100],
+    }
     multiclass_dimensions = None
-    return ConcatImgLatentTabDoubleLoss(prediction_task, data_dims, multiclass_dimensions)
+    return ConcatImgLatentTabDoubleLoss(
+        prediction_task, data_dims, multiclass_dimensions
+    )
 
 
 @pytest.fixture
 def model_instance_ConcatImgLatentTabDoubleTrain():
     prediction_task = "regression"
-    data_dims = [10, 15, None]  # represents mod1 dim and img latent space dim
+    data_dims = {
+        "mod1_dim": 10,
+        "mod2_dim": 15,  # shouldn't this be none?
+        "mod3_dim": None,
+        "img_dim": None,
+    }
     multiclass_dimensions = None
-    return ConcatImgLatentTabDoubleTrain(prediction_task, data_dims, multiclass_dimensions)
+    return ConcatImgLatentTabDoubleTrain(
+        prediction_task, data_dims, multiclass_dimensions
+    )
 
 
 # @pytest.fixture
@@ -569,7 +590,7 @@ model_instances_training = [
 # testing correct modifications: tabular-only or 2D
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_training)
 def test_correct_modify_model_architecture_2D_training(
-        model_name, model_fixture, request
+    model_name, model_fixture, request
 ):
     # "modification" may have been modified (ironically) by the calc_fused_layers method
     # in some of the models. This is to ensure that the input to the layers is consistent
@@ -605,15 +626,15 @@ def test_correct_modify_model_architecture_2D_training(
         # has not
         if hasattr(original_model, "final_prediction"):
             assert (
-                    modified_model.final_prediction[-1].out_features
-                    == original_model.final_prediction[-1].out_features
+                modified_model.final_prediction[-1].out_features
+                == original_model.final_prediction[-1].out_features
             )
 
 
 # testing correct modifications: tabular-only or 3D
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_training)
 def test_correct_modify_model_architecture_3D_training(
-        model_name, model_fixture, request
+    model_name, model_fixture, request
 ):
     # "modification" may have been modified (ironically) by the calc_fused_layers method
     # in some of the models. This is to ensure that the input to the layers is consistent
@@ -648,15 +669,15 @@ def test_correct_modify_model_architecture_3D_training(
         # Ensure that the final prediction layer has been modified as expected but the output dim has not
         if hasattr(original_model, "final_prediction"):
             assert (
-                    modified_model.final_prediction[-1].out_features
-                    == original_model.final_prediction[-1].out_features
+                modified_model.final_prediction[-1].out_features
+                == original_model.final_prediction[-1].out_features
             )
 
 
 # Test the modify_model_architecture function with incorrect data type for the modifications
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_training)
 def test_wrong_data_type_modify_model_architecture_training(
-        model_name, model_fixture, request
+    model_name, model_fixture, request
 ):
     # iterate through the modifications to check each throws an error
     for key, modification in wrong_layer_type_modifications.get(model_name, {}).items():
@@ -664,7 +685,7 @@ def test_wrong_data_type_modify_model_architecture_training(
 
         # Modify the model's architecture using the function
         with pytest.raises(
-                TypeError, match="Incorrect data type for the modifications"
+            TypeError, match="Incorrect data type for the modifications"
         ):
             model_modifier.modify_model_architecture(
                 request.getfixturevalue(model_fixture),
@@ -675,7 +696,7 @@ def test_wrong_data_type_modify_model_architecture_training(
 # Test the modify_model_architecture function with 3D conv layers with 2D data
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_training)
 def test_wrong_img_dim_2D_modify_model_architecture_training(
-        model_name, model_fixture, request
+    model_name, model_fixture, request
 ):
     if "2D" in model_fixture:
         # using correct 3D modifications, which are incorrect for 2D images
@@ -693,7 +714,7 @@ def test_wrong_img_dim_2D_modify_model_architecture_training(
 # Test the modify_model_architecture function with 2D conv layers with 3D data
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_training)
 def test_wrong_img_dim_3D_modify_model_architecture_training(
-        model_name, model_fixture, request
+    model_name, model_fixture, request
 ):
     if "3D" in model_fixture:
         # using correct 3D modifications, which are incorrect for 2D images
@@ -719,19 +740,26 @@ def model_instance_denoising_autoencoder_subspace_method_2D(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_2d = create_test_files["image_torch_file_2d"]
 
-    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+    sources = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
+
     batch_size = 8
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular_image"
 
     # Initialize the TrainTestDataModule
-    dm = TrainTestDataModule(example_fusion_model,
-                             sources,
-                             output_paths={"checkpoints": None},
-                             prediction_task="binary",
-                             batch_size=batch_size,
-                             test_size=0.2,
-                             multiclass_dimensions=None, )
+    dm = TrainTestDataModule(
+        example_fusion_model,
+        sources,
+        output_paths={"checkpoints": None},
+        prediction_task="binary",
+        batch_size=batch_size,
+        test_size=0.2,
+        multiclass_dimensions=None,
+    )
     dm.prepare_data()
     dm.setup()
 
@@ -744,19 +772,25 @@ def model_instance_denoising_autoencoder_subspace_method_3D(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_3d = create_test_files["image_torch_file_3d"]
 
-    sources = [tabular1_csv, tabular2_csv, image_torch_file_3d]
+    sources = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_3d,
+    }
     batch_size = 8
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular_image"
 
     # Initialize the TrainTestDataModule
-    dm = TrainTestDataModule(example_fusion_model,
-                             sources,
-                             output_paths={"checkpoints": None},
-                             prediction_task="binary",
-                             batch_size=batch_size,
-                             test_size=0.2,
-                             multiclass_dimensions=None, )
+    dm = TrainTestDataModule(
+        example_fusion_model,
+        sources,
+        output_paths={"checkpoints": None},
+        prediction_task="binary",
+        batch_size=batch_size,
+        test_size=0.2,
+        multiclass_dimensions=None,
+    )
     dm.prepare_data()
     dm.setup()
 
@@ -769,19 +803,25 @@ def model_instance_concat_img_latent_tab_subspace_method_2D(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_2d = create_test_files["image_torch_file_2d"]
 
-    sources = [tabular1_csv, tabular2_csv, image_torch_file_2d]
+    sources = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
     batch_size = 8
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular_image"
 
     # Initialize the TrainTestDataModule
-    dm = TrainTestDataModule(example_fusion_model,
-                             sources,
-                             output_paths={"checkpoints": None},
-                             prediction_task="binary",
-                             batch_size=batch_size,
-                             test_size=0.2,
-                             multiclass_dimensions=None, )
+    dm = TrainTestDataModule(
+        example_fusion_model,
+        sources,
+        output_paths={"checkpoints": None},
+        prediction_task="binary",
+        batch_size=batch_size,
+        test_size=0.2,
+        multiclass_dimensions=None,
+    )
     dm.prepare_data()
     dm.setup()
 
@@ -794,19 +834,25 @@ def model_instance_concat_img_latent_tab_subspace_method_3D(create_test_files):
     tabular2_csv = create_test_files["tabular2_csv"]
     image_torch_file_3d = create_test_files["image_torch_file_3d"]
 
-    sources = [tabular1_csv, tabular2_csv, image_torch_file_3d]
+    sources = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_3d,
+    }
     batch_size = 8
     example_fusion_model = Mock()
     example_fusion_model.modality_type = "tabular_image"
 
     # Initialize the TrainTestDataModule
-    datamodule = TrainTestDataModule(example_fusion_model,
-                                     sources,
-                                     output_paths={"checkpoints": None},
-                                     prediction_task="binary",
-                                     batch_size=batch_size,
-                                     test_size=0.2,
-                                     multiclass_dimensions=None, )
+    datamodule = TrainTestDataModule(
+        example_fusion_model,
+        sources,
+        output_paths={"checkpoints": None},
+        prediction_task="binary",
+        batch_size=batch_size,
+        test_size=0.2,
+        multiclass_dimensions=None,
+    )
     datamodule.prepare_data()
     datamodule.setup()
 
@@ -887,8 +933,8 @@ def test_correct_modify_model_architecture_2D_data(model_name, model_fixture, re
         # Ensure that the final prediction layer has been modified as expected but the output dim has not
         if hasattr(original_model, "final_prediction"):
             assert (
-                    modified_model.final_prediction[-1].out_features
-                    == original_model.final_prediction[-1].out_features
+                modified_model.final_prediction[-1].out_features
+                == original_model.final_prediction[-1].out_features
             )
 
 
@@ -920,22 +966,22 @@ def test_correct_modify_model_architecture_3D_data(model_name, model_fixture, re
         # Ensure that the final prediction layer has been modified as expected but the output dim has not
         if hasattr(original_model, "final_prediction"):
             assert (
-                    modified_model.final_prediction[-1].out_features
-                    == original_model.final_prediction[-1].out_features
+                modified_model.final_prediction[-1].out_features
+                == original_model.final_prediction[-1].out_features
             )
 
 
 # Test the modify_model_architecture function with incorrect data type for the modifications
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_data)
 def test_wrong_data_type_modify_model_architecture_data(
-        model_name, model_fixture, request
+    model_name, model_fixture, request
 ):
     for key, modification in wrong_layer_type_modifications.get(model_name, {}).items():
         individual_modification = {model_name: {key: modification}}
 
         # Modify the model's architecture using the function
         with pytest.raises(
-                TypeError, match="Incorrect data type for the modifications"
+            TypeError, match="Incorrect data type for the modifications"
         ):
             model_modifier.modify_model_architecture(
                 request.getfixturevalue(model_fixture),
@@ -946,7 +992,7 @@ def test_wrong_data_type_modify_model_architecture_data(
 # Test the modify_model_architecture function with 3D conv layers with 2D data
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_data)
 def test_wrong_img_dim_2D_modify_model_architecture_data(
-        model_name, model_fixture, request
+    model_name, model_fixture, request
 ):
     if "2D" in model_fixture:
         # using correct 3D modifications, which are incorrect for 2D images
@@ -972,7 +1018,7 @@ def test_wrong_img_dim_2D_modify_model_architecture_data(
 # Test the modify_model_architecture function with 2D conv layers with 3D data
 @pytest.mark.parametrize("model_name, model_fixture", model_instances_data)
 def test_wrong_img_dim_3D_modify_model_architecture_data(
-        model_name, model_fixture, request
+    model_name, model_fixture, request
 ):
     if "3D" in model_fixture:
         listed_dict = [correct_modifications_2D[k] for k in ("all", model_name)]
