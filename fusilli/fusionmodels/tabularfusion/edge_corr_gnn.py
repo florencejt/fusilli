@@ -116,6 +116,8 @@ class EdgeCorrGNN(ParentFusionModel, nn.Module):
     fusion_type = "graph"
     # class: Graph maker class.
     graph_maker = EdgeCorrGraphMaker
+    #: str: Available for three tabular modalities.
+    three_modalities = False
 
     def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """

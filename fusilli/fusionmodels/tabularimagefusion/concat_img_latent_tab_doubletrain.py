@@ -405,7 +405,13 @@ class concat_img_latent_tab_subspace_method:
         return (
             [tab_val, encoded_imgs.detach()],
             pd.DataFrame(label_val, columns=["prediction_label"]),
-            [tab_val.shape[1], encoded_imgs.shape[1], None],
+            {
+                "mod1_dim": tab_val.shape[1],
+                "mod2_dim": encoded_imgs.shape[1],
+                "mod3_dim": None,
+                "img_dim": None,
+            },
+            # [tab_val.shape[1], encoded_imgs.shape[1], None],
         )
 
 

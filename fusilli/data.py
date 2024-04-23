@@ -603,8 +603,12 @@ def _check_three_modalities_supported(fusion_model, sources):
     ValueError
         If the fusion model does not support three tabular modalities.
     """
-
-    if fusion_model.fusion_type != "unimodal":
+    # print("modality type:", fusion_model.modality_type)
+    # print("Image in fusion model:", "image" in fusion_model.modality_type)
+    if (
+        fusion_model.fusion_type != "unimodal"
+        and "image" not in fusion_model.modality_type
+    ):
         if fusion_model.three_modalities == False and sources.get("tabular3", "") != "":
             raise ValueError(
                 f"The fusion model {fusion_model.method_name} does not support three tabular modalities."

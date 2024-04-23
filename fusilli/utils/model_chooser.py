@@ -211,7 +211,8 @@ def get_models(
     valid_modality_types = [
         "tabular1",
         "tabular2",
-        "img",
+        "tabular3",
+        "image",
         "tabular_tabular",
         "tabular_image",
     ]
@@ -239,7 +240,8 @@ def get_models(
             if hasattr(fusion_models[i], "three_modalities")
             else (
                 fusion_models[i].fusion_type == "unimodal"
-                and fusion_models[i].modality_type != "img"
+                and "image" not in fusion_models[i].modality_type
+                # and (fusion_models[i].modality_type != "image"
             )
         )
         for i, model in enumerate(fusion_model_dict_without_skips)
@@ -342,7 +344,7 @@ def import_chosen_fusion_models(model_conditions, skip_models=None):
         Accepted features and accepted conditions:
 
         - "fusion_type": "unimodal", "operation", "attention", "subspace", "graph", or "all"
-        - "modality_type": "tabular1", "tabular2", "img", "tabular_tabular", "tabular_image", or "all"
+        - "modality_type": "tabular1", "tabular2", "image", "tabular_tabular", "tabular_image", or "all"
         - "method_name": any method name currently implemented (e.g. "Tabular decision"), or "all"
         - "class_name": any model name currently implemented (e.g. "TabularDecision"), or "all"
         - "three_tabular_modalities": True (for models that are available for three tabular modalities or unimodal)

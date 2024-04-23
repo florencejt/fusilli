@@ -7,13 +7,23 @@ from ..test_data.test_TrainTestDataModule import create_test_files
 import matplotlib.pyplot as plt
 
 
-@pytest.mark.filterwarnings("ignore:.*does not have many workers*.", )
+@pytest.mark.filterwarnings(
+    "ignore:.*does not have many workers*.",
+)
 @pytest.mark.filterwarnings("ignore:.*The number of training batches*.")
 @pytest.mark.filterwarnings("ignore:.*No positive samples in targets,*.")
 @pytest.mark.filterwarnings("ignore:.*No negative samples in targets,*.")
 @pytest.mark.filterwarnings("ignore:.*exists and is not empty*.")
 def test_5fold_cv(create_test_files, tmp_path):
-    model_conditions = {"modality_type": "all", }
+    model_conditions = {
+        "modality_type": [
+            "tabular1",
+            "tabular2",
+            "tabular_tabular",
+            "image",
+            "tabular_image",
+        ],
+    }
 
     tabular1_csv = create_test_files["tabular1_csv"]
     tabular2_csv = create_test_files["tabular2_csv"]
@@ -33,9 +43,7 @@ def test_5fold_cv(create_test_files, tmp_path):
     checkpoint_dir = tmp_path / "checkpoint_dir"
     checkpoint_dir.mkdir()
 
-    modifications = {
-        "AttentionAndSelfActivation": {"attention_reduction_ratio": 2}
-    }
+    modifications = {"AttentionAndSelfActivation": {"attention_reduction_ratio": 2}}
 
     params = {
         # "test_size": 0.2,
@@ -58,18 +66,30 @@ def test_5fold_cv(create_test_files, tmp_path):
         "losses": str(loss_log_dir),
     }
 
-    new_metrics = ["accuracy", "precision", "recall", "f1", "auroc", "auprc", "balanced_accuracy"]
+    new_metrics = [
+        "accuracy",
+        "precision",
+        "recall",
+        "f1",
+        "auroc",
+        "auprc",
+        "balanced_accuracy",
+    ]
 
-    fusion_models = import_chosen_fusion_models(model_conditions, skip_models=["MCVAE_tab"])
+    fusion_models = import_chosen_fusion_models(
+        model_conditions, skip_models=["MCVAE_tab"]
+    )
 
     for model in fusion_models:
         print("model", model)
-        dm = prepare_fusion_data(fusion_model=model,
-                                 data_paths=data_paths,
-                                 output_paths=output_paths,
-                                 layer_mods=modifications,
-                                 max_epochs=2,
-                                 **params)
+        dm = prepare_fusion_data(
+            fusion_model=model,
+            data_paths=data_paths,
+            output_paths=output_paths,
+            layer_mods=modifications,
+            max_epochs=2,
+            **params,
+        )
 
         single_model_list = train_and_save_models(
             data_module=dm,

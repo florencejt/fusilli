@@ -35,6 +35,17 @@ def create_test_files(tmp_path_factory):
     )
     tabular2_data.to_csv(tabular2_csv, index=False)
 
+    tabular3_csv = tmp_dir / "tabular3.csv"
+    tabular3_data = pd.DataFrame(
+        {
+            "ID": range(10),
+            "feature5": [3.0] * 10,
+            "feature6": [4.0] * 10,
+            "prediction_label": [1] * 10,
+        }
+    )
+    tabular3_data.to_csv(tabular3_csv, index=False)
+
     # Create a sample Torch file for image data
     image_data_2d = torch.randn(10, 1, 100, 100)
     image_torch_file_2d = tmp_dir / "image_data_2d.pt"
@@ -48,6 +59,7 @@ def create_test_files(tmp_path_factory):
     yield {
         "tabular1_csv": tabular1_csv,
         "tabular2_csv": tabular2_csv,
+        "tabular3_csv": tabular3_csv,
         "image_torch_file_2d": image_torch_file_2d,
         "image_torch_file_3d": image_torch_file_3d,
     }

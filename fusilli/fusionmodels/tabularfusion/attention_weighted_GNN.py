@@ -501,6 +501,9 @@ class AttentionWeightedGNN(ParentFusionModel, nn.Module):
     # class: Graph maker class.
     graph_maker = AttentionWeightedGraphMaker
 
+    #: str: Available for three tabular modalities.
+    three_modalities = False
+
     def __init__(self, prediction_task, data_dims, multiclass_dimensions):
         """
         Parameters

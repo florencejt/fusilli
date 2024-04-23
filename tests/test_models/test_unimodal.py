@@ -106,7 +106,7 @@ def test_ImgUnimodal():
     assert hasattr(test_model, "method_name")
     assert test_model.method_name == "Image unimodal"
     assert hasattr(test_model, "modality_type")
-    assert test_model.modality_type == "img"
+    assert test_model.modality_type == "image"
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "unimodal"
 

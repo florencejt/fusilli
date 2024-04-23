@@ -15,7 +15,15 @@ from datetime import datetime
 @pytest.mark.filterwarnings("ignore:.*No negative samples in targets,*.")
 @pytest.mark.filterwarnings("ignore:.*exists and is not empty*.")
 def test_train_and_test(create_test_files, tmp_path):
-    model_conditions = {"modality_type": "all"}
+    model_conditions = {
+        "modality_type": [
+            "tabular1",
+            "tabular2",
+            "tabular_tabular",
+            "image",
+            "tabular_image",
+        ],
+    }
     fusion_models = import_chosen_fusion_models(
         model_conditions, skip_models=["MCVAE_tab"]
     )

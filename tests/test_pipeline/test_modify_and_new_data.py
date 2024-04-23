@@ -638,28 +638,30 @@ layer_mods = {
         "dropout_prob": 0.4,
     },
     "AttentionWeightedGraphMaker": {
-        "early_stop_callback": EarlyStopping(monitor="val_loss", ),
+        "early_stop_callback": EarlyStopping(
+            monitor="val_loss",
+        ),
         "edge_probability_threshold": 80,
         "attention_MLP_test_size": 0.3,
-        "AttentionWeightingMLPInstance.weighting_layers": nn.ModuleDict({
-            "Layer 1": nn.Sequential(nn.Linear(25, 100),
-                                     nn.ReLU()),
-            "Layer 2": nn.Sequential(nn.Linear(100, 75),
-                                     nn.ReLU()),
-            "Layer 3": nn.Sequential(nn.Linear(75, 75),
-                                     nn.ReLU()),
-            "Layer 4": nn.Sequential(nn.Linear(75, 100),
-                                     nn.ReLU()),
-            "Layer 5": nn.Sequential(nn.Linear(100, 25),
-                                     nn.ReLU()),
-        })
+        "AttentionWeightingMLPInstance.weighting_layers": nn.ModuleDict(
+            {
+                "Layer 1": nn.Sequential(nn.Linear(25, 100), nn.ReLU()),
+                "Layer 2": nn.Sequential(nn.Linear(100, 75), nn.ReLU()),
+                "Layer 3": nn.Sequential(nn.Linear(75, 75), nn.ReLU()),
+                "Layer 4": nn.Sequential(nn.Linear(75, 100), nn.ReLU()),
+                "Layer 5": nn.Sequential(nn.Linear(100, 25), nn.ReLU()),
+            }
+        ),
     },
 }
 
 
 # Tests for adding modifications and evaluating on new data
 
-@pytest.mark.filterwarnings("ignore:.*does not have many workers*.", )
+
+@pytest.mark.filterwarnings(
+    "ignore:.*does not have many workers*.",
+)
 @pytest.mark.filterwarnings("ignore:.*The number of training batches*.")
 @pytest.mark.filterwarnings("ignore:.*No positive samples in targets,*.")
 @pytest.mark.filterwarnings("ignore:.*No negative samples in targets,*.")
@@ -667,8 +669,18 @@ layer_mods = {
 @pytest.mark.filterwarnings("ignore:.*Checkpoint directory.*exists and is not empty*.")
 @pytest.mark.filterwarnings("ignore:.*distutils Version classes are deprecated*.")
 def test_train_and_test(create_test_files_more_features, tmp_path):
-    model_conditions = {"fusion_type": "all"}
-    fusion_models = import_chosen_fusion_models(model_conditions, skip_models=["MCVAE_tab"])
+    model_conditions = {
+        "modality_type": [
+            "tabular1",
+            "tabular2",
+            "tabular_tabular",
+            "image",
+            "tabular_image",
+        ],
+    }
+    fusion_models = import_chosen_fusion_models(
+        model_conditions, skip_models=["MCVAE_tab"]
+    )
 
     tabular1_csv = create_test_files_more_features["tabular1_csv"]
     tabular2_csv = create_test_files_more_features["tabular2_csv"]
@@ -718,14 +730,15 @@ def test_train_and_test(create_test_files_more_features, tmp_path):
     }
 
     for model in fusion_models:
-        dm = prepare_fusion_data(fusion_model=model,
-                                 data_paths=data_paths,
-                                 output_paths=output_paths,
-                                 params=params,
-                                 layer_mods=layer_mods,
-                                 max_epochs=2,
-                                 **params
-                                 )
+        dm = prepare_fusion_data(
+            fusion_model=model,
+            data_paths=data_paths,
+            output_paths=output_paths,
+            params=params,
+            layer_mods=layer_mods,
+            max_epochs=2,
+            **params,
+        )
 
         single_model_list = train_and_save_models(
             data_module=dm,
@@ -745,8 +758,9 @@ def test_train_and_test(create_test_files_more_features, tmp_path):
         assert fig is not None
 
         if trained_model.model.fusion_type != "graph":
-            fig_new_data = ConfusionMatrix.from_new_data([trained_model], output_paths, test_data_paths,
-                                                         layer_mods=layer_mods)
+            fig_new_data = ConfusionMatrix.from_new_data(
+                [trained_model], output_paths, test_data_paths, layer_mods=layer_mods
+            )
             assert fig_new_data is not None
 
         plt.close("all")
@@ -754,7 +768,10 @@ def test_train_and_test(create_test_files_more_features, tmp_path):
 
 # kfold version
 
-@pytest.mark.filterwarnings("ignore:.*does not have many workers*.", )
+
+@pytest.mark.filterwarnings(
+    "ignore:.*does not have many workers*.",
+)
 @pytest.mark.filterwarnings("ignore:.*The number of training batches*.")
 @pytest.mark.filterwarnings("ignore:.*No positive samples in targets,*.")
 @pytest.mark.filterwarnings("ignore:.*No negative samples in targets,*.")
@@ -762,8 +779,18 @@ def test_train_and_test(create_test_files_more_features, tmp_path):
 @pytest.mark.filterwarnings("ignore:.*Checkpoint directory.*exists and is not empty*.")
 @pytest.mark.filterwarnings("ignore:.*distutils Version classes are deprecated*.")
 def test_kfold(create_test_files_more_features, tmp_path):
-    model_conditions = {"class_name": "all"}
-    fusion_models = import_chosen_fusion_models(model_conditions, skip_models=["MCVAE_tab"])
+    model_conditions = {
+        "modality_type": [
+            "tabular1",
+            "tabular2",
+            "tabular_tabular",
+            "image",
+            "tabular_image",
+        ],
+    }
+    fusion_models = import_chosen_fusion_models(
+        model_conditions, skip_models=["MCVAE_tab"]
+    )
 
     tabular1_csv = create_test_files_more_features["tabular1_csv"]
     tabular2_csv = create_test_files_more_features["tabular2_csv"]
@@ -815,14 +842,15 @@ def test_kfold(create_test_files_more_features, tmp_path):
 
     for model in fusion_models:
 
-        dm = prepare_fusion_data(fusion_model=model,
-                                 data_paths=data_paths,
-                                 output_paths=output_paths,
-                                 params=params,
-                                 layer_mods=layer_mods,
-                                 max_epochs=2,
-                                 **params
-                                 )
+        dm = prepare_fusion_data(
+            fusion_model=model,
+            data_paths=data_paths,
+            output_paths=output_paths,
+            params=params,
+            layer_mods=layer_mods,
+            max_epochs=2,
+            **params,
+        )
 
         single_model_list = train_and_save_models(
             data_module=dm,
@@ -843,8 +871,9 @@ def test_kfold(create_test_files_more_features, tmp_path):
         assert fig is not None
 
         if single_model_list[0].model.fusion_type != "graph":
-            fig_new_data = ConfusionMatrix.from_new_data(single_model_list, output_paths, test_data_paths,
-                                                         layer_mods=layer_mods)
+            fig_new_data = ConfusionMatrix.from_new_data(
+                single_model_list, output_paths, test_data_paths, layer_mods=layer_mods
+            )
             assert fig_new_data is not None
 
         plt.close("all")

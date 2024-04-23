@@ -29,7 +29,7 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
     #: str: Name of the method.
     method_name = "Image unimodal"
     #: str: Type of modality.
-    modality_type = "img"
+    modality_type = "image"
     #: str: Type of fusion.
     fusion_type = "unimodal"
 

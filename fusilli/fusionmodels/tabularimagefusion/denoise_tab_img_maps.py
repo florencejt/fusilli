@@ -689,7 +689,13 @@ class denoising_autoencoder_subspace_method:
         return (
             val_latent_image_space,
             pd.DataFrame(label_val, columns=["prediction_label"]),
-            [val_latent_image_space.shape[1], None, None],
+            {
+                "mod1_dim": val_latent_image_space.shape[1],
+                "mod2_dim": None,
+                "mod3_dim": None,
+                "img_dim": None,
+            },
+            # [val_latent_image_space.shape[1], None, None],
         )
 
 

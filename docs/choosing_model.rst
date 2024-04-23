@@ -24,7 +24,7 @@ For instance, to fetch models capable of fusing tabular and image data, use:
     from fusilli.utils.model_chooser import import_chosen_fusion_models
 
     criteria = {
-        "modality_type": ["tab_img"],
+        "modality_type": ["tabular_image"],
     }
 
     models = import_chosen_fusion_models(criteria)
@@ -39,7 +39,7 @@ Examples of Criteria
 .. code-block:: python
 
     criteria = {
-        "modality_type": ["tab_img"],
+        "modality_type": ["tabular_image"],
         "fusion_type": ["attention"],
     }
 
@@ -48,7 +48,7 @@ Examples of Criteria
 .. code-block:: python
 
     criteria = {
-        "modality_type": ["tab_img", "tabular1", "img"],
+        "modality_type": ["tabular_image", "tabular1", "image"],
         "fusion_type": ["operation", "attention"],
     }
 
