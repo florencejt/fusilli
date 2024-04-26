@@ -52,12 +52,14 @@ def get_file_suffix_from_dict(extra_log_string_dict):
     return extra_name_string, extra_tags
 
 
-def set_logger(fold,
-               project_name,
-               output_paths,
-               fusion_model,
-               extra_log_string_dict=None,
-               wandb_logging=False):
+def set_logger(
+    fold,
+    project_name,
+    output_paths,
+    fusion_model,
+    extra_log_string_dict=None,
+    wandb_logging=False,
+):
     """
     Set the logger for the current run. If wandb_logging is True, then the logger is set to
     WandbLogger, otherwise it is set to CSVLogger and the logs are saved to output_paths["losses"].
@@ -128,7 +130,7 @@ def set_logger(fold,
     else:  # if wandb_logging is False
         logger = CSVLogger(
             save_dir=output_paths["losses"],
-            name='',
+            name="",
             version=name,
         )
 
@@ -161,15 +163,15 @@ def set_checkpoint_name(fusion_model, fold=None, extra_log_string_dict=None):
     extra_name_string, extra_tags = get_file_suffix_from_dict(extra_log_string_dict)
     if fold is not None:
         checkpoint_filename = (
-                fusion_model.__name__
-                + "_fold_"
-                + str(fold)
-                + extra_name_string
-                + "_{epoch:02d}"
+            fusion_model.__name__
+            + "_fold_"
+            + str(fold)
+            + extra_name_string
+            + "_{epoch:02d}"
         )
     else:
         checkpoint_filename = (
-                str(fusion_model.__name__) + extra_name_string + "_{epoch:02d}"
+            str(fusion_model.__name__) + extra_name_string + "_{epoch:02d}"
         )
 
     return checkpoint_filename
@@ -230,7 +232,7 @@ def get_checkpoint_filenames_for_subspace_models(subspace_method, k=None):
 
 
 def get_checkpoint_filename_for_trained_fusion_model(
-        checkpoint_dir, model, checkpoint_file_suffix, fold=None
+    checkpoint_dir, model, checkpoint_file_suffix, fold=None
 ):
     """
     Gets the checkpoint filename for the trained fusion model using the model object.
@@ -264,10 +266,10 @@ def get_checkpoint_filename_for_trained_fusion_model(
         ckpt_path_beginning = model.model.__class__.__name__ + checkpoint_file_suffix
     else:
         ckpt_path_beginning = (
-                model.model.__class__.__name__
-                + "_fold_"
-                + str(fold)
-                + checkpoint_file_suffix
+            model.model.__class__.__name__
+            + "_fold_"
+            + str(fold)
+            + checkpoint_file_suffix
         )
 
     result = [
@@ -289,9 +291,7 @@ def get_checkpoint_filename_for_trained_fusion_model(
         )
     else:
         checkpoint_filename = result[0]
-        checkpoint_filename = os.path.join(
-            checkpoint_dir, checkpoint_filename
-        )
+        checkpoint_filename = os.path.join(checkpoint_dir, checkpoint_filename)
 
         return checkpoint_filename
 
@@ -315,13 +315,13 @@ class LitProgressBar(TQDMProgressBar):
 
 
 def init_trainer(
-        logger,
-        output_paths,
-        max_epochs=1000,
-        enable_checkpointing=True,
-        checkpoint_filename=None,
-        own_early_stopping_callback=None,
-        training_modifications=None,
+    logger,
+    output_paths,
+    max_epochs=1000,
+    enable_checkpointing=True,
+    checkpoint_filename=None,
+    own_early_stopping_callback=None,
+    training_modifications=None,
 ):
     """
     Initialise the pytorch lightning trainer object.
@@ -361,7 +361,20 @@ def init_trainer(
     """
 
     if own_early_stopping_callback is not None:
-        early_stop_callback = own_early_stopping_callback
+
+        # make min_delta negative if mode is "min"
+        if own_early_stopping_callback.mode == "min":
+            min_delta = -own_early_stopping_callback.min_delta
+
+        # make a new early stopping callback with the same elements as the own_early_stopping_callback
+        early_stop_callback = EarlyStopping(
+            monitor=own_early_stopping_callback.monitor,
+            min_delta=min_delta,
+            patience=own_early_stopping_callback.patience,
+            verbose=own_early_stopping_callback.verbose,
+            mode=own_early_stopping_callback.mode,
+        )
+
     else:
         early_stop_callback = EarlyStopping(
             monitor="val_loss",
@@ -379,7 +392,7 @@ def init_trainer(
         checkpoint_callback = ModelCheckpoint(
             filename=checkpoint_filename,
             dirpath=output_paths["checkpoints"],
-            enable_version_counter=False  # overwrites files with same name
+            enable_version_counter=False,  # overwrites files with same name
         )
         callbacks_list.append(checkpoint_callback)
 
