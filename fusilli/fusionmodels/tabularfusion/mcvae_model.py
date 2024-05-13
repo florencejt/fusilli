@@ -116,7 +116,44 @@ class MCVAESubspaceMethod:
         self.datamodule = datamodule
         self.device = torch.device("cpu")
 
+        # default latent dim
         self.num_latent_dims = 10
+        self.patience = 10
+        self.tolerance = 3
+        print("changed to have self.patience")
+        if self.datamodule.layer_mods is not None:
+            # if MCVAESubspaceMethod is in the keys
+            if "MCVAESubspaceMethod" in self.datamodule.layer_mods.keys():
+                if (
+                    "num_latent_dims"
+                    in self.datamodule.layer_mods["MCVAESubspaceMethod"]
+                ):
+                    self.num_latent_dims = self.datamodule.layer_mods[
+                        "MCVAESubspaceMethod"
+                    ]["num_latent_dims"]
+
+                # early stopping
+                # PATIENCE
+                if (
+                    "patience"
+                    in self.datamodule.layer_mods["MCVAESubspaceMethod"]
+                ):
+                    mcvae_patience = self.datamodule.layer_mods[
+                        "MCVAESubspaceMethod"
+                    ]["patience"]
+                    print("New patience:", mcvae_patience)
+
+                # TOLERANCE
+                if (
+                    "tolerance"
+                    in self.datamodule.layer_mods["MCVAESubspaceMethod"]
+                ):
+                    mcvae_tolerance = self.datamodule.layer_mods[
+                        "MCVAESubspaceMethod"
+                    ]["tolerance"]
+                    print("New tolerance:", mcvae_tolerance)
+
+        
         self.max_epochs = max_epochs
 
         self.checkpoint_filenames = get_checkpoint_filenames_for_subspace_models(
@@ -289,19 +326,31 @@ class MCVAESubspaceMethod:
         mcvae_fit.optimizer = torch.optim.Adam(mcvae_fit.parameters(), lr=0.001)
         mcvae_fit.to(self.device)
 
-        # if the kwargs has key mcvae_patience, use that as the patience
-        if "mcvae_patience" in self.datamodule.kwargs.keys():
-            print("Using mcvae_patience from prepare_fusion_data kwargs")
-            mcvae_patience = self.datamodule.kwargs["mcvae_patience"]
-        else:
-            mcvae_patience = 10
+        # # patience is in layer_mods, use that
+        # mcvae_patience = 10
+        # mcvae_tolerance = 3
+        # if self.datamodule.layer_mods is not None:
+        #     if "MCVAESubspaceMethod" in self.datamodule.layer_mods.keys():
+        #         # PATIENCE
+        #         if (
+        #             "patience"
+        #             in self.datamodule.layer_mods["MCVAESubspaceMethod"]
+        #         ):
+        #             mcvae_patience = self.datamodule.layer_mods[
+        #                 "MCVAESubspaceMethod"
+        #             ]["patience"]
+        #             print("New patience:", mcvae_patience)
 
-        # same with tolerance
-        if "mcvae_tolerance" in self.datamodule.kwargs.keys():
-            print("Using mcvae_tolerance from prepare_fusion_data kwargs")
-            mcvae_tolerance = self.datamodule.kwargs["mcvae_tolerance"]
-        else:
-            mcvae_tolerance = 3
+        #         # TOLERANCE
+        #         if (
+        #             "tolerance"
+        #             in self.datamodule.layer_mods["MCVAESubspaceMethod"]
+        #         ):
+        #             mcvae_tolerance = self.datamodule.layer_mods[
+        #                 "MCVAESubspaceMethod"
+        #             ]["tolerance"]
+        #             print("New tolerance:", mcvae_tolerance)
+        
 
         with contextlib.redirect_stdout(None):
             mcvae_fit.optimize(epochs=self.max_epochs, data=mcvae_training_data)

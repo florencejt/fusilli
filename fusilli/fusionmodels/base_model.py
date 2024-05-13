@@ -32,6 +32,8 @@ class BaseModel(pl.LightningModule):
         List of strings of names of metrics to use for model evaluation. Default None. If None, the metrics will be
         automatically selected based on the prediction task (AUROC, accuracy for binary/multiclass, R2 and MAE for
         regression).
+    new_optimiser : dict or None
+        Dictionary of optimiser options. Default None.
     train_mask : tensor
         Mask for training data, used for the graph fusion methods instead of train/val split.
         Indicates which nodes are training nodes.
@@ -69,7 +71,7 @@ class BaseModel(pl.LightningModule):
         Concatenated training preds for all batches. Accessed by Plotter class for plotting.
     """
 
-    def __init__(self, model, metrics_list=None):
+    def __init__(self, model, metrics_list=None, new_optimiser=None):
         """
         Parameters
         ----------
@@ -81,6 +83,10 @@ class BaseModel(pl.LightningModule):
             (AUROC, accuracy for binary/multiclass, R2 and MAE for regression).
             The first metric in the list will be used in the comparison evaluation figures to rank the models' performances.
             Length must be 2 or more.
+        new_optimiser : Dict or None
+            Dictionary of optimiser options. Default None.
+
+
 
         Returns
         -------
@@ -92,6 +98,8 @@ class BaseModel(pl.LightningModule):
         self.MetricsCalculator = MetricsCalculator(self)
         self.metrics_list = metrics_list
         self.set_metrics(metrics_list=metrics_list)
+
+        self.new_optimiser = new_optimiser
 
         if self.model.prediction_task == "multiclass":
             self.multiclass_dimensions = model.multiclass_dimensions
@@ -500,11 +508,47 @@ class BaseModel(pl.LightningModule):
 
         return end_output, logits
 
+    def make_new_optimiser(self):
+        """
+        From the user-provided optimiser options, create a new optimiser.
+        Keys should be "learning rate", "beta_one", "weight_decay", but may be None if using default values.
+        """
+
+        # check which keys are in the dictionary
+        keys = self.new_optimiser.keys()
+        if "learning rate" in keys:
+            lr = self.new_optimiser["learning rate"]
+        else:
+            lr = 1e-3
+
+        if "beta_one" in keys:
+            beta_one = self.new_optimiser["beta_one"]
+        else:
+            beta_one = 0.9
+
+        if "weight_decay" in keys:
+            weight_decay = self.new_optimiser["weight_decay"]
+        else:
+            weight_decay = 0
+
+        new_optimiser_instance = torch.optim.Adam(
+            self.parameters(), lr=lr, betas=(beta_one, 0.999), weight_decay=weight_decay
+        )
+
+        return new_optimiser_instance
+
     def configure_optimizers(self):
         """
         Configure optimizers.
+
+        If self.new_optimiser is None, use the default Adam optimizer.
+        Otherwise, use the optimizer options provided by the user.
         """
-        optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
+        if self.new_optimiser is not None:
+            optimizer = self.make_new_optimiser()
+            print("Changed optimiser to user-provided optimiser.")
+        else:
+            optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
         return optimizer
 
 

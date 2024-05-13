@@ -29,6 +29,7 @@ def train_and_test(
     project_name=None,
     training_modifications=None,
     metrics_list=None,
+    new_optimiser=None,
 ):
     """
     Trains and tests a model and, if k_fold trained, a fold.
@@ -76,6 +77,8 @@ def train_and_test(
         (AUROC, accuracy for binary/multiclass, R2 and MAE for regression).
         The first metric in the list will be used in the comparison evaluation figures to rank the models' performances.
         Length must be 2 or more.
+    new_optimiser : torch.optim or None
+        Optimiser to use. Default None.
 
     Returns
     -------
@@ -153,6 +156,7 @@ def train_and_test(
             multiclass_dimensions=data_module.multiclass_dimensions,
         ),
         metrics_list=metrics_list,
+        new_optimiser=new_optimiser,
     )
 
     # modify model architecture if layer_mods is not None
@@ -245,6 +249,7 @@ def train_and_save_models(
     show_loss_plot=False,
     project_name=None,
     metrics_list=None,
+    new_optimiser=None,
 ):
     """
     Trains/tests the model and saves the trained model to a dictionary for further analysis.
@@ -285,6 +290,8 @@ def train_and_save_models(
         (AUROC, accuracy for binary/multiclass, R2 and MAE for regression).
         The first metric in the list will be used in the comparison evaluation figures to rank the models' performances.
         Length must be 2 or more.
+    new_optimiser : torch.optim or None
+        Optimiser to use. Default None.
 
     Returns
     -------
@@ -328,6 +335,7 @@ def train_and_save_models(
                 wandb_logging=wandb_logging,
                 project_name=project_name,
                 metrics_list=metrics_list,
+                new_optimiser=new_optimiser,
             )
 
             trained_models_list.append(trained_model)
@@ -349,6 +357,7 @@ def train_and_save_models(
             wandb_logging=wandb_logging,
             project_name=project_name,
             metrics_list=metrics_list,
+            new_optimiser=new_optimiser,
         )
 
         trained_models_list.append(trained_model)
