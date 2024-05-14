@@ -178,14 +178,14 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         ############################################################
 
         self.main_mod_layers = getattr(self, f"mod{self.main_modality}_layers")
-        self.match_dim_layers = {
+        self.match_dim_layers = nn.ModuleDict({
             "1_to_2": nn.ModuleDict(),
             "1_to_3": nn.ModuleDict(),
             "2_to_1": nn.ModuleDict(),
             "2_to_3": nn.ModuleDict(),
             "3_to_1": nn.ModuleDict(),
             "3_to_2": nn.ModuleDict(),
-        }
+        })
 
         for key in self.mod1_layers.keys():
             # get output sizes of each modality
@@ -265,9 +265,12 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
                 x_main = layer(x_main)
 
                 x2 = self.mod2_layers[k](x2)
+
                 # layer to get the tab2 feature maps to be the same size as tab1
                 new_x2 = self.match_dim_layers["2_to_1"][k](x2)
                 x_main = x_main * new_x2
+
+        
 
                 if x3 is not None:
                     x3 = self.mod3_layers[k](x3)
@@ -283,6 +286,7 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
 
                 x1 = self.mod1_layers[k](x1)
                 # layer to get the tab1 feature maps to be the same size as tab2
+
                 new_x1 = self.match_dim_layers["1_to_2"][k](x1)
                 x_main = x_main * new_x1
 

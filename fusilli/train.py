@@ -78,7 +78,8 @@ def train_and_test(
         The first metric in the list will be used in the comparison evaluation figures to rank the models' performances.
         Length must be 2 or more.
     new_optimiser : torch.optim or None
-        Optimiser to use. Default None.
+        Dict for creating a new optimiser.
+        Keys should be "learning rate", "beta_one", "weight_decay", but may be None if using default values.
 
     Returns
     -------
@@ -148,6 +149,7 @@ def train_and_test(
         own_early_stopping_callback=data_module.own_early_stopping_callback,
         training_modifications=training_modifications,
     )  # init trainer
+
 
     pl_model = BaseModel(
         fusion_model(
@@ -250,6 +252,7 @@ def train_and_save_models(
     project_name=None,
     metrics_list=None,
     new_optimiser=None,
+    training_modifications=None,
 ):
     """
     Trains/tests the model and saves the trained model to a dictionary for further analysis.
@@ -291,7 +294,10 @@ def train_and_save_models(
         The first metric in the list will be used in the comparison evaluation figures to rank the models' performances.
         Length must be 2 or more.
     new_optimiser : torch.optim or None
-        Optimiser to use. Default None.
+        Dict for creating a new optimiser.
+        Keys should be "learning rate", "beta_one", "weight_decay", but may be None if using default values.
+    training_modifications : dict
+        Dictionary of training modifications. Used to modify the training process. Keys could be "accelerator", "devices"
 
     Returns
     -------
@@ -336,6 +342,7 @@ def train_and_save_models(
                 project_name=project_name,
                 metrics_list=metrics_list,
                 new_optimiser=new_optimiser,
+                training_modifications=training_modifications,
             )
 
             trained_models_list.append(trained_model)
@@ -358,6 +365,7 @@ def train_and_save_models(
             project_name=project_name,
             metrics_list=metrics_list,
             new_optimiser=new_optimiser,
+            training_modifications=training_modifications,
         )
 
         trained_models_list.append(trained_model)

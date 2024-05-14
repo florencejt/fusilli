@@ -77,6 +77,8 @@ class BaseModel(pl.LightningModule):
         ----------
         model : class
             Fusion model class.
+        device : torch.device
+            Device to run the model on.
         metrics_list : list or None
             List of metrics to use for model evaluation. Default None.
             If None, the metrics will be automatically selected based on the prediction task
@@ -367,6 +369,7 @@ class BaseModel(pl.LightningModule):
         """
 
         x, y = self.get_data_from_batch(batch)
+
 
         loss, end_output, logits = self.get_model_outputs_and_loss(x, y)
 
