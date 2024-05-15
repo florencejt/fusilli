@@ -90,6 +90,17 @@ class MCVAESubspaceMethod:
         Number of latent dimensions.
     fit_model : Mcvae object
         Mcvae object containing the fitted model.
+    device : torch.device
+        Device to run the model on.
+    max_epochs : int
+        Maximum number of epochs.
+    checkpoint_filenames : list
+        List containing the checkpoint filenames.
+    mcvae_patience : int
+        Number of epochs to wait before stopping training. By default, 10 but can be changed through the layer_mods dictionary input into ``prepare_fusion_data``.
+    mcvae_tolerance : int
+        Tolerance for loss. By default, 3 but can be changed through the layer_mods dictionary input into ``prepare_fusion_data``.
+
 
     """
 
@@ -112,6 +123,32 @@ class MCVAESubspaceMethod:
         self.device = torch.device("cpu")
 
         self.num_latent_dims = 10
+        self.patience = 10
+        self.tolerance = 3
+        if self.datamodule.layer_mods is not None:
+            # if MCVAESubspaceMethod is in the keys
+            if "MCVAESubspaceMethod" in self.datamodule.layer_mods.keys():
+                if (
+                    "num_latent_dims"
+                    in self.datamodule.layer_mods["MCVAESubspaceMethod"]
+                ):
+                    self.num_latent_dims = self.datamodule.layer_mods[
+                        "MCVAESubspaceMethod"
+                    ]["num_latent_dims"]
+
+                # early stopping
+                # PATIENCE
+                if "patience" in self.datamodule.layer_mods["MCVAESubspaceMethod"]:
+                    self.mcvae_patience = self.datamodule.layer_mods[
+                        "MCVAESubspaceMethod"
+                    ]["patience"]
+
+                # TOLERANCE
+                if "tolerance" in self.datamodule.layer_mods["MCVAESubspaceMethod"]:
+                    self.mcvae_tolerance = self.datamodule.layer_mods[
+                        "MCVAESubspaceMethod"
+                    ]["tolerance"]
+
         self.max_epochs = max_epochs
 
         self.checkpoint_filenames = get_checkpoint_filenames_for_subspace_models(
@@ -247,25 +284,11 @@ class MCVAESubspaceMethod:
         mcvae_fit.optimizer = torch.optim.Adam(mcvae_fit.parameters(), lr=0.001)
         mcvae_fit.to(self.device)
 
-        # if the kwargs has key mcvae_patience, use that as the patience
-        if "mcvae_patience" in self.datamodule.kwargs.keys():
-            print("Using mcvae_patience from prepare_fusion_data kwargs")
-            mcvae_patience = self.datamodule.kwargs["mcvae_patience"]
-        else:
-            mcvae_patience = 10
-
-        # same with tolerance
-        if "mcvae_tolerance" in self.datamodule.kwargs.keys():
-            print("Using mcvae_tolerance from prepare_fusion_data kwargs")
-            mcvae_tolerance = self.datamodule.kwargs["mcvae_tolerance"]
-        else:
-            mcvae_tolerance = 3
-
         with contextlib.redirect_stdout(None):
             mcvae_fit.optimize(epochs=self.max_epochs, data=mcvae_training_data)
             ideal_epoch = mcvae_early_stopping_tol(
-                tolerance=mcvae_tolerance,
-                patience=mcvae_patience,
+                tolerance=self.mcvae_tolerance,
+                patience=self.mcvae_patience,
                 loss_logs=mcvae_fit.loss["total"],
             )
 

@@ -1452,7 +1452,6 @@ def prepare_fusion_data(
     num_workers=0,
     test_indices=None,
     own_kfold_indices=None,
-    **kwargs,
 ):
     """
     Gets the data module for a specific fusion model and training protocol.
@@ -1503,8 +1502,6 @@ def prepare_fusion_data(
         List of indices to use for testing (default None). If None, then random split is used.
     own_kfold_indices : list or None
         List of indices to use for k-fold cross validation (default None). If None, then random split is used.
-    **kwargs : dict
-        Extra keyword arguments. Usable for extra arguments for the subspace method MCVAE's early stopping callback: "mcvae_patience" and "mcvae_tolerance".
 
 
     Returns
@@ -1512,8 +1509,6 @@ def prepare_fusion_data(
     dm : datamodule
         Datamodule for the specified fusion method.
     """
-
-    kwargs = {k: v for k, v in kwargs.items() if v is not None}
 
     if kfold and own_early_stopping_callback is not None:
         raise ValueError(
@@ -1598,7 +1593,6 @@ def prepare_fusion_data(
                 own_early_stopping_callback=own_early_stopping_callback,
                 num_workers=num_workers,
                 own_kfold_indices=own_kfold_indices,
-                kwargs=kwargs,
             )
         else:
             data_module = TrainTestDataModule(
@@ -1617,7 +1611,6 @@ def prepare_fusion_data(
                 own_early_stopping_callback=own_early_stopping_callback,
                 num_workers=num_workers,
                 test_indices=test_indices,
-                kwargs=kwargs,
             )
         data_module.prepare_data()
         data_module.setup(checkpoint_path=checkpoint_path)
