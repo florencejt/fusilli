@@ -123,8 +123,8 @@ class MCVAESubspaceMethod:
         self.device = torch.device("cpu")
 
         self.num_latent_dims = 10
-        self.patience = 10
-        self.tolerance = 3
+        self.mcvae_patience = 10
+        self.mcvae_tolerance = 3
         if self.datamodule.layer_mods is not None:
             # if MCVAESubspaceMethod is in the keys
             if "MCVAESubspaceMethod" in self.datamodule.layer_mods.keys():
