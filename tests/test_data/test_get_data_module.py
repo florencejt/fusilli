@@ -32,14 +32,22 @@ def test_get_data_module_custom(create_test_files):
         graph_maker=None,
     )
 
-    data_paths = {"tabular1": tabular1_csv,
-                  "tabular2": tabular2_csv,
-                  "image": image_torch_file_2d,
-                  }
+    data_paths = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
 
     # Call the prepare_fusion_data function with custom fusion type (non-graph)
-    dm = prepare_fusion_data(prediction_task="binary", fusion_model=fusion_model, data_paths=data_paths,
-                             output_paths=None, test_size=0.3, batch_size=8, multiclass_dims=None, )
+    dm = prepare_fusion_data(
+        prediction_task="binary",
+        fusion_model=fusion_model,
+        data_paths=data_paths,
+        output_paths=None,
+        test_size=0.3,
+        batch_size=8,
+        multiclass_dimensions=None,
+    )
 
     # Add assertions based on your expectations
     assert isinstance(dm, TrainTestDataModule)
@@ -59,10 +67,11 @@ def test_get_k_fold_data_module_custom(create_test_files):
         graph_maker=None,
     )
 
-    data_paths = {"tabular1": tabular1_csv,
-                  "tabular2": tabular2_csv,
-                  "image": image_torch_file_2d,
-                  }
+    data_paths = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
 
     # Call the prepare_fusion_data function with custom fusion type (non-graph)
     dm = prepare_fusion_data(
@@ -72,7 +81,8 @@ def test_get_k_fold_data_module_custom(create_test_files):
         output_paths=None,
         kfold=True,
         num_folds=7,
-        batch_size=16)
+        batch_size=16,
+    )
 
     # Add assertions based on your expectations
     assert isinstance(dm, KFoldDataModule)
@@ -91,19 +101,21 @@ def test_get_graph_data_module(create_test_files):
         graph_maker=MockGraphMakerModule,
     )
 
-    data_paths = {"tabular1": tabular1_csv,
-                  "tabular2": tabular2_csv,
-                  "image": image_torch_file_2d,
-                  }
+    data_paths = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
 
     # Call the prepare_fusion_data function with custom fusion type (non-graph)
-    dm = prepare_fusion_data(prediction_task="regression",
-                             fusion_model=fusion_model,
-                             data_paths=data_paths,
-                             output_paths=None,
-                             multiclass_dims=None,
-                             test_size=0.3,
-                             )
+    dm = prepare_fusion_data(
+        prediction_task="regression",
+        fusion_model=fusion_model,
+        data_paths=data_paths,
+        output_paths=None,
+        multiclass_dimensions=None,
+        test_size=0.3,
+    )
 
     # Add assertions based on your expectations
     assert isinstance(dm, LightningNodeData)
@@ -121,19 +133,22 @@ def test_get_kfold_graph_data_module(create_test_files):
         graph_maker=MockGraphMakerModule,
     )
 
-    data_paths = {"tabular1": tabular1_csv,
-                  "tabular2": tabular2_csv,
-                  "image": image_torch_file_2d,
-                  }
+    data_paths = {
+        "tabular1": tabular1_csv,
+        "tabular2": tabular2_csv,
+        "image": image_torch_file_2d,
+    }
 
     # Call the prepare_fusion_data function with custom fusion type (non-graph)
-    dm = prepare_fusion_data(prediction_task="regression",
-                             fusion_model=fusion_model,
-                             data_paths=data_paths,
-                             output_paths=None,
-                             kfold=True,
-                             num_folds=8,
-                             batch_size=16)
+    dm = prepare_fusion_data(
+        prediction_task="regression",
+        fusion_model=fusion_model,
+        data_paths=data_paths,
+        output_paths=None,
+        kfold=True,
+        num_folds=8,
+        batch_size=16,
+    )
 
     # Add assertions based on your expectations
     for fold_dm in dm:
