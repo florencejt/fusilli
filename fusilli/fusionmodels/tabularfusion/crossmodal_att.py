@@ -73,7 +73,9 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
-        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        ParentFusionModel.__init__(
+            self, prediction_task, data_dims, multiclass_dimensions
+        )
 
         self.prediction_task = prediction_task
         self.attention_embed_dim = 50
@@ -125,26 +127,29 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
 
         self.set_final_pred_layers(self.attention_embed_dim * 4)
 
-    def forward(self, x):
+    def forward(self, x1, x2):
         """
         Forward pass of the model.
 
         Parameters
         ----------
-        x : tuple
-            Tuple containing the input data.
+        x1 : torch.Tensor
+            Input tensor for the first modality.
+        x2 : torch.Tensor
+            Input tensor for the second modality.
 
         Returns
         -------
-        list
-            List containing the output of the model.
+        torch.Tensor
+            Output tensor.
         """
 
         # ~~ Checks ~~
-        check_model_validity.check_model_input(x)
+        check_model_validity.check_model_input(x1)
+        check_model_validity.check_model_input(x2)
 
-        x_tab1 = x[0]
-        x_tab2 = x[1]
+        x_tab1 = x1
+        x_tab2 = x2
 
         for i, (k, layer) in enumerate(self.mod1_layers.items()):
             x_tab1 = layer(x_tab1)
@@ -171,6 +176,4 @@ class TabularCrossmodalMultiheadAttention(ParentFusionModel, nn.Module):
 
         out_fuse = self.final_prediction(merged)
 
-        return [
-            out_fuse,
-        ]
+        return out_fuse

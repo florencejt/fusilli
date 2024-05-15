@@ -47,7 +47,9 @@ class ConcatTabularData(ParentFusionModel, nn.Module):
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
-        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        ParentFusionModel.__init__(
+            self, prediction_task, data_dims, multiclass_dimensions
+        )
 
         self.prediction_task = prediction_task
 
@@ -84,7 +86,7 @@ class ConcatTabularData(ParentFusionModel, nn.Module):
 
         self.set_final_pred_layers(out_dim)
 
-    def forward(self, x):
+    def forward(self, x1, x2):
         """
         Forward pass of the model.
 
@@ -95,19 +97,23 @@ class ConcatTabularData(ParentFusionModel, nn.Module):
 
         Returns
         -------
-        list
-            List containing the output of the model.
+        torch.Tensor
+            Prediction of the model.
         """
 
-        # ~~ Checks ~~
-        check_model_validity.check_model_input(x)
+        # print("List input", isinstance(x, list))
+        # print("x data type", type(x))
+        # print("x length", len(x))
 
-        x_fuse = torch.cat(x, -1)
+        # x = tuple(x) if isinstance(x, list) else x
+
+        # ~~ Checks ~~
+        # check_model_validity.check_model_input(x)
+
+        x_fuse = torch.cat((x1, x2), -1)
 
         out_fuse = self.fused_layers(x_fuse)
 
         out_pred = self.final_prediction(out_fuse)
 
-        return [
-            out_pred,
-        ]
+        return out_pred

@@ -58,7 +58,9 @@ class ImageDecision(ParentFusionModel, nn.Module):
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
-        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        ParentFusionModel.__init__(
+            self, prediction_task, data_dims, multiclass_dimensions
+        )
 
         self.prediction_task = prediction_task
 
@@ -97,26 +99,29 @@ class ImageDecision(ParentFusionModel, nn.Module):
         self.set_final_pred_layers(img_fusion_size)
         self.final_prediction_img = self.final_prediction
 
-    def forward(self, x):
+    def forward(self, x1, x2):
         """
         Forward pass of the model.
 
         Parameters
         ----------
-        x : tuple
-            Tuple containing the input data (tabular data batch, image data batch).
+        x1 : torch.Tensor
+            First tabular data input.
+        x2 : torch.Tensor
+            Image data input.
 
         Returns
         -------
-        list
-            List containing the output of the model.
+        torch.Tensor
+            Fused prediction.
         """
 
         # ~~ Checks ~~
-        check_model_validity.check_model_input(x)
+        check_model_validity.check_model_input(x1)
+        check_model_validity.check_model_input(x2)
 
-        x_tab1 = x[0].squeeze(dim=1)
-        x_img = x[1]
+        x_tab1 = x1.squeeze(dim=1)
+        x_img = x2
 
         for i, (k, layer) in enumerate(self.mod1_layers.items()):
             x_tab1 = layer(x_tab1)
@@ -136,6 +141,4 @@ class ImageDecision(ParentFusionModel, nn.Module):
 
         out_fuse = self.fusion_operation(pred_tab1, pred_img)
 
-        return [
-            out_fuse,
-        ]
+        return out_fuse

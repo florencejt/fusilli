@@ -11,9 +11,9 @@ from fusilli.utils import check_model_validity
 
 class ActivationFusion(ParentFusionModel, nn.Module):
     """
-    Performs an element wise product of the feature maps of the two tabular modalities, 
+    Performs an element wise product of the feature maps of the two tabular modalities,
     tanh activation function and sigmoid activation function. Afterwards the the first tabular modality feature
-    map is concatenated with the fused feature map. 
+    map is concatenated with the fused feature map.
 
     Attributes
     ----------
@@ -55,7 +55,9 @@ class ActivationFusion(ParentFusionModel, nn.Module):
         multiclass_dimensions : int
             Number of classes in the multiclass classification problem.
         """
-        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        ParentFusionModel.__init__(
+            self, prediction_task, data_dims, multiclass_dimensions
+        )
 
         self.prediction_task = prediction_task
 
@@ -94,7 +96,8 @@ class ActivationFusion(ParentFusionModel, nn.Module):
         mod2_output_dim = list(self.mod2_layers.values())[-1][0].out_features
         if mod1_output_dim != mod2_output_dim:
             raise UserWarning(
-                "The number of output features of mod1_layers and mod2_layers must be the same for Activation fusion. Please change the final layers in the modality layers to have the same number of output features as each other.")
+                "The number of output features of mod1_layers and mod2_layers must be the same for Activation fusion. Please change the final layers in the modality layers to have the same number of output features as each other."
+            )
 
         self.get_fused_dim()
         self.fused_layers, out_dim = check_model_validity.check_fused_layers(
@@ -104,50 +107,48 @@ class ActivationFusion(ParentFusionModel, nn.Module):
         # setting final prediction layers with final out features of fused layers
         self.set_final_pred_layers(out_dim)
 
-    def forward(self, x):
+    def forward(self, x1, x2):
         """
         Forward pass of the model.
 
         Parameters
         ----------
-        x : tuple
-            Tuple containing the input data.
+        x1 : torch.Tensor
+            Input tensor of the first modality.
+        x2 : torch.Tensor
+            Input tensor of the second modality.
 
         Returns
         -------
-        list
-            List containing the output of the model.
+        out : torch.Tensor
+            Fused prediction.
         """
 
         # ~~ Checks ~~
-        check_model_validity.check_model_input(x)
-
-        x_tab1 = x[0]
-        x_tab2 = x[1]
+        check_model_validity.check_model_input(x1)
+        check_model_validity.check_model_input(x2)
 
         for layer in self.mod1_layers.values():
-            x_tab1 = layer(x_tab1)
+            x1 = layer(x1)
 
         for layer in self.mod2_layers.values():
-            x_tab2 = layer(x_tab2)
+            x2 = layer(x2)
 
-        x_tab1 = torch.squeeze(x_tab1, 1)
-        x_tab2 = torch.squeeze(x_tab2, 1)
+        x1 = torch.squeeze(x1, 1)
+        x2 = torch.squeeze(x2, 1)
 
-        out_fuse = torch.mul(x_tab1, x_tab2)
+        out_fuse = torch.mul(x1, x2)
 
         out_fuse = torch.tanh(out_fuse)
         out_fuse = torch.sigmoid(out_fuse)
 
-        out_fuse = torch.cat((out_fuse, x_tab1), dim=1)
+        out_fuse = torch.cat((out_fuse, x1), dim=1)
 
         out_fuse = self.fused_layers(out_fuse)
 
         out = self.final_prediction(out_fuse)
 
-        return [
-            out,
-        ]
+        return out
 
 
 """

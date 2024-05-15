@@ -76,7 +76,9 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         multiclass_dimensions : int
             Number of classes in the dataset.
         """
-        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        ParentFusionModel.__init__(
+            self, prediction_task, data_dims, multiclass_dimensions
+        )
 
         self.prediction_task = prediction_task
 
@@ -146,26 +148,29 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
             else:
                 self.match_dim_layers[key] = nn.Identity()
 
-    def forward(self, x):
+    def forward(self, x1, x2):
         """
         Forward pass of the model.
 
         Parameters
         ----------
-        x : tuple
-          Tuple containing the input data.
+        x1 : torch.Tensor
+          1st modality of tabular data.
+        x2 : torch.Tensor
+          2nd modality of tabular data.
 
         Returns
         -------
-        list
-          List containing the output of the model.
+        torch.Tensor
+          Output tensor of the model.
         """
 
         # ~~ Checks ~~
-        check_model_validity.check_model_input(x)
+        check_model_validity.check_model_input(x1)
+        check_model_validity.check_model_input(x2)
 
-        x_tab1 = x[0]
-        x_tab2 = x[1]
+        x_tab1 = x1
+        x_tab2 = x2
 
         for i, (k, layer) in enumerate(self.mod1_layers.items()):
             x_tab1 = layer(x_tab1)
@@ -185,6 +190,4 @@ class TabularChannelWiseMultiAttention(ParentFusionModel, nn.Module):
 
         out = self.final_prediction(out_fuse)
 
-        return [
-            out,
-        ]
+        return out

@@ -9,13 +9,15 @@ import torch.nn as nn
 from fusilli.utils.model_chooser import import_chosen_fusion_models
 from fusilli.fusionmodels.base_model import ParentFusionModel
 
-fusion_models = import_chosen_fusion_models({
-    "modality_type": ["tabular_tabular"]
-}, skip_models=["MCVAE_tab"])
+fusion_models = import_chosen_fusion_models(
+    {"modality_type": ["tabular_tabular"]}, skip_models=["MCVAE_tab"]
+)
 
 fusion_model_names = [model.__name__ for model in fusion_models]
 # make into dict
-fusion_model_dict = {fusion_model_names[i]: fusion_models[i] for i in range(len(fusion_model_names))}
+fusion_model_dict = {
+    fusion_model_names[i]: fusion_models[i] for i in range(len(fusion_model_names))
+}
 
 
 def test_ConcatTabularFeatureMaps():
@@ -29,7 +31,9 @@ def test_ConcatTabularFeatureMaps():
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
-    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
+    test_model = test_model(
+        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+    )
 
     # initialising
     assert isinstance(test_model, nn.Module)
@@ -37,34 +41,24 @@ def test_ConcatTabularFeatureMaps():
     assert hasattr(test_model, "prediction_task")
     assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
-    assert test_model.mod1_layers['layer 1'][0].in_features == 10
+    assert test_model.mod1_layers["layer 1"][0].in_features == 10
     assert hasattr(test_model, "mod2_layers")
-    assert test_model.mod2_layers['layer 1'][0].in_features == 14
+    assert test_model.mod2_layers["layer 1"][0].in_features == 14
     assert hasattr(test_model, "fused_dim")
-    assert test_model.fused_dim == test_model.mod1_layers['layer 5'][0].out_features + test_model.mod2_layers[
-        'layer 5'][0].out_features
+    assert (
+        test_model.fused_dim
+        == test_model.mod1_layers["layer 5"][0].out_features
+        + test_model.mod2_layers["layer 5"][0].out_features
+    )
     assert hasattr(test_model, "fused_layers")
     assert hasattr(test_model, "final_prediction")
     assert hasattr(test_model, "forward")
 
     # forward pass
     test_input = (torch.randn(8, 10), torch.randn(8, 14))
-    test_output = test_model.forward(test_input)
-    assert isinstance(test_output, list)
-    assert test_output[0].shape == torch.Size([8, 1])
-    assert len(test_output) == 1
-
-    # wrong input
-    # - too many dimensions
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward((torch.randn(8, 10), torch.randn(8, 14), torch.randn(8, 10)))
-    # - too few dimensions
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward(())
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward(tuple(torch.randn(8, 10)))
-    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
-        test_model.forward(torch.randn(8, 10))
+    test_output = test_model.forward(test_input[0], test_input[1])
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
 
 
 # fusilli.fusionmodels.tabularfusion.concat_data.ConcatTabularData
@@ -79,7 +73,9 @@ def test_ConcatTabularData():
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
-    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
+    test_model = test_model(
+        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+    )
 
     # initialising
     assert isinstance(test_model, nn.Module)
@@ -97,25 +93,13 @@ def test_ConcatTabularData():
 
     # forward pass
     test_input = (torch.randn(8, 10), torch.randn(8, 14))
-    test_output = test_model.forward(test_input)
-    assert isinstance(test_output, list)
-    assert test_output[0].shape == torch.Size([8, 1])
-    assert len(test_output) == 1
-
-    # wrong input
-    # - too many dimensions
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward((torch.randn(8, 10), torch.randn(8, 14), torch.randn(8, 10)))
-    # - too few dimensions
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward(())
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward(tuple(torch.randn(8, 10)))
-    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
-        test_model.forward(torch.randn(8, 10))
+    test_output = test_model.forward(test_input[0], test_input[1])
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
 
 
 # fusilli.fusionmodels.tabularfusion.channelwise_att.TabularChannelWiseMultiAttention
+
 
 def test_TabularChannelWiseMultiAttention():
     test_model = fusion_model_dict["TabularChannelWiseMultiAttention"]
@@ -128,7 +112,9 @@ def test_TabularChannelWiseMultiAttention():
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "attention"
 
-    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
+    test_model = test_model(
+        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+    )
 
     # initialising
     assert isinstance(test_model, nn.Module)
@@ -136,34 +122,24 @@ def test_TabularChannelWiseMultiAttention():
     assert hasattr(test_model, "prediction_task")
     assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
-    assert test_model.mod1_layers['layer 1'][0].in_features == 10
+    assert test_model.mod1_layers["layer 1"][0].in_features == 10
     assert hasattr(test_model, "mod2_layers")
-    assert test_model.mod2_layers['layer 1'][0].in_features == 14
+    assert test_model.mod2_layers["layer 1"][0].in_features == 14
     assert hasattr(test_model, "fused_dim")
-    assert test_model.fused_dim == test_model.mod2_layers['layer 5'][0].out_features
+    assert test_model.fused_dim == test_model.mod2_layers["layer 5"][0].out_features
     assert hasattr(test_model, "fused_layers")
-    assert test_model.fused_layers[0].in_features == test_model.mod2_layers['layer 5'][0].out_features
+    assert (
+        test_model.fused_layers[0].in_features
+        == test_model.mod2_layers["layer 5"][0].out_features
+    )
     assert hasattr(test_model, "final_prediction")
     assert hasattr(test_model, "forward")
 
     # forward pass
     test_input = (torch.randn(8, 10), torch.randn(8, 14))
-    test_output = test_model.forward(test_input)
-    assert isinstance(test_output, list)
-    assert test_output[0].shape == torch.Size([8, 1])
-    assert len(test_output) == 1
-
-    # wrong input
-    # - too many dimensions
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward((torch.randn(8, 10), torch.randn(8, 14), torch.randn(8, 10)))
-    # - too few dimensions
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward(())
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward(tuple(torch.randn(8, 10)))
-    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
-        test_model.forward(torch.randn(8, 10))
+    test_output = test_model.forward(test_input[0], test_input[1])
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
 
 
 # fusilli.fusionmodels.tabularfusion.crossmodal_att.TabularCrossmodalMultiheadAttention
@@ -178,7 +154,9 @@ def test_TabularCrossmodalMultiheadAttention():
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "attention"
 
-    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
+    test_model = test_model(
+        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+    )
 
     # initialising
     assert isinstance(test_model, nn.Module)
@@ -186,36 +164,24 @@ def test_TabularCrossmodalMultiheadAttention():
     assert hasattr(test_model, "prediction_task")
     assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
-    assert test_model.mod1_layers['layer 1'][0].in_features == 10
+    assert test_model.mod1_layers["layer 1"][0].in_features == 10
     assert hasattr(test_model, "mod2_layers")
-    assert test_model.mod2_layers['layer 1'][0].in_features == 14
+    assert test_model.mod2_layers["layer 1"][0].in_features == 14
     assert hasattr(test_model, "fused_dim")
-    assert test_model.fused_dim == test_model.mod1_layers['layer 5'][0].out_features
+    assert test_model.fused_dim == test_model.mod1_layers["layer 5"][0].out_features
     assert hasattr(test_model, "final_prediction")
     assert hasattr(test_model, "forward")
     assert hasattr(test_model, "attention")
 
     # forward pass
     test_input = (torch.randn(8, 10), torch.randn(8, 14))
-    test_output = test_model.forward(test_input)
-    assert isinstance(test_output, list)
-    assert test_output[0].shape == torch.Size([8, 1])
-    assert len(test_output) == 1
-
-    # wrong input
-    # - too many dimensions
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward((torch.randn(8, 10), torch.randn(8, 14), torch.randn(8, 10)))
-    # - too few dimensions
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward(())
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward(tuple(torch.randn(8, 10)))
-    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
-        test_model.forward(torch.randn(8, 10))
+    test_output = test_model.forward(test_input[0], test_input[1])
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
 
 
 # fusilli.fusionmodels.tabularfusion.decision.TabularDecision
+
 
 def test_TabularDecision():
     test_model = fusion_model_dict["TabularDecision"]
@@ -228,7 +194,9 @@ def test_TabularDecision():
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
-    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
+    test_model = test_model(
+        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+    )
 
     # initialising
     assert isinstance(test_model, nn.Module)
@@ -236,35 +204,26 @@ def test_TabularDecision():
     assert hasattr(test_model, "prediction_task")
     assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
-    assert test_model.mod1_layers['layer 1'][0].in_features == 10
+    assert test_model.mod1_layers["layer 1"][0].in_features == 10
     assert hasattr(test_model, "mod2_layers")
-    assert test_model.mod2_layers['layer 1'][0].in_features == 14
+    assert test_model.mod2_layers["layer 1"][0].in_features == 14
     assert hasattr(test_model, "final_prediction_tab1")
     assert hasattr(test_model, "final_prediction_tab2")
     assert hasattr(test_model, "forward")
     assert hasattr(test_model, "fusion_operation")
     # asserting that the default fusion operation is a mean with a simple calculation
-    assert test_model.fusion_operation(torch.randn(8, 10), torch.randn(8, 10)).shape == torch.Size([8, 10])
-    assert test_model.fusion_operation(torch.Tensor([1.0]), torch.Tensor([2.0])) == torch.Tensor([1.5])
+    assert test_model.fusion_operation(
+        torch.randn(8, 10), torch.randn(8, 10)
+    ).shape == torch.Size([8, 10])
+    assert test_model.fusion_operation(
+        torch.Tensor([1.0]), torch.Tensor([2.0])
+    ) == torch.Tensor([1.5])
 
     # forward pass
     test_input = (torch.randn(8, 10), torch.randn(8, 14))
-    test_output = test_model.forward(test_input)
-    assert isinstance(test_output, list)
-    assert test_output[0].shape == torch.Size([8, 1])
-    assert len(test_output) == 1
-
-    # wrong input
-    # - too many dimensions
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward((torch.randn(8, 10), torch.randn(8, 14), torch.randn(8, 10)))
-    # - too few dimensions
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward(())
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward(tuple(torch.randn(8, 10)))
-    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
-        test_model.forward(torch.randn(8, 10))
+    test_output = test_model.forward(test_input[0], test_input[1])
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
 
 
 # fusilli.fusionmodels.tabularfusion.mcvae_model.MCVAE_tab
@@ -331,7 +290,9 @@ def test_EdgeCorrGNN():
     edge_attr = torch.randn(num_edges, edge_attr_dim)
     test_graph_data = (node_features, edge_index, edge_attr)
 
-    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
+    test_model = test_model(
+        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+    )
 
     # initialising
     assert isinstance(test_model, nn.Module)
@@ -345,9 +306,8 @@ def test_EdgeCorrGNN():
 
     # forward pass
     test_output = test_model.forward(test_graph_data)
-    assert isinstance(test_output, list)
-    assert test_output[0].shape == torch.Size([8, 1])
-    assert len(test_output) == 1
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
 
     # wrong input
     # type
@@ -360,6 +320,7 @@ def test_EdgeCorrGNN():
 
 # fusilli.fusionmodels.tabularfusion.activation.ActivationFusion
 
+
 def test_ActivationFusion():
     test_model = fusion_model_dict["ActivationFusion"]
 
@@ -371,7 +332,9 @@ def test_ActivationFusion():
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
-    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
+    test_model = test_model(
+        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+    )
 
     # initialising
     assert isinstance(test_model, nn.Module)
@@ -379,34 +342,24 @@ def test_ActivationFusion():
     assert hasattr(test_model, "prediction_task")
     assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
-    assert test_model.mod1_layers['layer 1'][0].in_features == 10
+    assert test_model.mod1_layers["layer 1"][0].in_features == 10
     assert hasattr(test_model, "mod2_layers")
-    assert test_model.mod2_layers['layer 1'][0].in_features == 14
+    assert test_model.mod2_layers["layer 1"][0].in_features == 14
     assert hasattr(test_model, "fused_dim")
-    assert test_model.fused_dim == test_model.mod1_layers['layer 5'][0].out_features + test_model.mod2_layers[
-        'layer 5'][0].out_features
+    assert (
+        test_model.fused_dim
+        == test_model.mod1_layers["layer 5"][0].out_features
+        + test_model.mod2_layers["layer 5"][0].out_features
+    )
     assert hasattr(test_model, "fused_layers")
     assert hasattr(test_model, "final_prediction")
     assert hasattr(test_model, "forward")
 
     # forward pass
     test_input = (torch.randn(8, 10), torch.randn(8, 14))
-    test_output = test_model.forward(test_input)
-    assert isinstance(test_output, list)
-    assert test_output[0].shape == torch.Size([8, 1])
-    assert len(test_output) == 1
-
-    # wrong input
-    # - too many dimensions
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward((torch.randn(8, 10), torch.randn(8, 14), torch.randn(8, 10)))
-    # - too few dimensions
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward(())
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward(tuple(torch.randn(8, 10)))
-    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
-        test_model.forward(torch.randn(8, 10))
+    test_output = test_model.forward(test_input[0], test_input[1])
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
 
 
 def test_AttentionAndSelfActivation():
@@ -420,7 +373,9 @@ def test_AttentionAndSelfActivation():
     assert hasattr(test_model, "fusion_type")
     assert test_model.fusion_type == "operation"
 
-    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
+    test_model = test_model(
+        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+    )
 
     # initialising
     assert isinstance(test_model, nn.Module)
@@ -428,38 +383,33 @@ def test_AttentionAndSelfActivation():
     assert hasattr(test_model, "prediction_task")
     assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
-    assert test_model.mod1_layers['layer 1'][0].in_features == 10
+    assert test_model.mod1_layers["layer 1"][0].in_features == 10
     assert hasattr(test_model, "mod2_layers")
-    assert test_model.mod2_layers['layer 1'][0].in_features == 14
+    assert test_model.mod2_layers["layer 1"][0].in_features == 14
     assert hasattr(test_model, "fused_dim")
-    assert test_model.fused_dim == test_model.mod1_layers['layer 5'][0].out_features + test_model.mod2_layers[
-        'layer 5'][0].out_features
+    assert (
+        test_model.fused_dim
+        == test_model.mod1_layers["layer 5"][0].out_features
+        + test_model.mod2_layers["layer 5"][0].out_features
+    )
     assert hasattr(test_model, "fused_layers")
     assert hasattr(test_model, "final_prediction")
     assert hasattr(test_model, "forward")
 
     # forward pass
-    test_input = (torch.randn(8, 10), torch.randn(8, 14))
     test_model.attention_reduction_ratio = 2
-    test_output = test_model.forward(test_input)
-    assert isinstance(test_output, list)
-    assert test_output[0].shape == torch.Size([8, 1])
-    assert len(test_output) == 1
+    test_input = (torch.randn(8, 10), torch.randn(8, 14))
+    test_output = test_model.forward(test_input[0], test_input[1])
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
 
     # wrong input
-    # - too many dimensions
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward((torch.randn(8, 10), torch.randn(8, 14), torch.randn(8, 10)))
-    # - too few dimensions
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward(())
-    with pytest.raises(ValueError, match=r"Wrong number of inputs"):
-        test_model.forward(tuple(torch.randn(8, 10)))
-    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
-        test_model.forward(torch.randn(8, 10))
-    with pytest.raises(UserWarning, match=r"first tabular modality dimensions // attention_reduction_ratio < 1"):
+    with pytest.raises(
+        UserWarning,
+        match=r"first tabular modality dimensions // attention_reduction_ratio < 1",
+    ):
         test_model.attention_reduction_ratio = 16
-        test_model.forward((torch.randn(8, 10), torch.randn(8, 14)))
+        test_model.forward(torch.randn(8, 10), torch.randn(8, 14))
 
 
 def test_AttentionWeightedGNN():
@@ -484,7 +434,9 @@ def test_AttentionWeightedGNN():
     edge_attr = torch.randn(num_edges, edge_attr_dim)
     test_graph_data = (node_features, edge_index, edge_attr)
 
-    test_model = test_model(prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None)
+    test_model = test_model(
+        prediction_task="binary", data_dims=[10, 14, None], multiclass_dimensions=None
+    )
 
     # initialising
     assert isinstance(test_model, nn.Module)
@@ -498,9 +450,8 @@ def test_AttentionWeightedGNN():
 
     # forward pass
     test_output = test_model.forward(test_graph_data)
-    assert isinstance(test_output, list)
-    assert test_output[0].shape == torch.Size([8, 1])
-    assert len(test_output) == 1
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
 
     # wrong input
     # type

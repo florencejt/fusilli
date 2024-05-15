@@ -1,6 +1,7 @@
 """
 Denoising autoencoder for tabular data concatenated with image feature maps
 """
+
 import torch.nn as nn
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch
@@ -502,11 +503,11 @@ class denoising_autoencoder_subspace_method:
     ]  # access later for loading checkpoint paths?
 
     def __init__(
-            self,
-            datamodule,
-            k=None,
-            max_epochs=1000,
-            train_subspace=True,
+        self,
+        datamodule,
+        k=None,
+        max_epochs=1000,
+        train_subspace=True,
     ):
         """
         Parameters
@@ -542,7 +543,6 @@ class denoising_autoencoder_subspace_method:
                 max_epochs=max_epochs,
                 checkpoint_filename=checkpoint_filenames[0],
                 own_early_stopping_callback=self.datamodule.own_early_stopping_callback,
-
             )
             self.img_unimodal_trainer = init_trainer(
                 logger=None,
@@ -731,7 +731,9 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
-        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        ParentFusionModel.__init__(
+            self, prediction_task, data_dims, multiclass_dimensions
+        )
         self.prediction_task = prediction_task
 
         self.fusion_layers = nn.Sequential(
@@ -771,16 +773,14 @@ class DAETabImgMaps(ParentFusionModel, nn.Module):
 
         Returns
         -------
-        list
-            List containing the output.
+        out : torch.Tensor
+            Output tensor.
         """
 
-        check_model_validity.check_model_input(x, uni_modal_flag=True)
+        check_model_validity.check_model_input(x)
 
         x = self.fusion_layers(x)
 
         out = self.final_prediction(x)
 
-        return [
-            out,
-        ]
+        return out

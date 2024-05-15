@@ -5,13 +5,18 @@ import torch.nn as nn
 from fusilli.utils.model_chooser import import_chosen_fusion_models
 from fusilli.fusionmodels.base_model import ParentFusionModel
 
-fusion_models = import_chosen_fusion_models({
-    "modality_type": ["tabular_image"],
-}, skip_models=["MCVAE_tab"])
+fusion_models = import_chosen_fusion_models(
+    {
+        "modality_type": ["tabular_image"],
+    },
+    skip_models=["MCVAE_tab"],
+)
 
 fusion_model_names = [model.__name__ for model in fusion_models]
 # make into dict
-fusion_model_dict = {fusion_model_names[i]: fusion_models[i] for i in range(len(fusion_model_names))}
+fusion_model_dict = {
+    fusion_model_names[i]: fusion_models[i] for i in range(len(fusion_model_names))
+}
 print(fusion_model_dict)
 
 
@@ -20,7 +25,9 @@ def test_ConcatImageMapsTabularData():
 
     # attributes before initialising
     assert hasattr(test_model, "method_name")
-    assert test_model.method_name == "Concatenating tabular data with image feature maps"
+    assert (
+        test_model.method_name == "Concatenating tabular data with image feature maps"
+    )
     assert hasattr(test_model, "modality_type")
     assert test_model.modality_type == "tabular_image"
     assert hasattr(test_model, "fusion_type")
@@ -36,26 +43,19 @@ def test_ConcatImageMapsTabularData():
     assert hasattr(test_model, "fused_layers")
     assert hasattr(test_model, "final_prediction")
     assert hasattr(test_model, "fused_dim")
-    assert test_model.fused_dim > 15  # 15 from tabular data, rest from image after layers and flattening
+    assert (
+        test_model.fused_dim > 15
+    )  # 15 from tabular data, rest from image after layers and flattening
 
     # test forward pass
     tabular_data = torch.rand((1, 15))
     image_data = torch.rand((1, 1, 100, 100))
     # forward pass
-    test_output = test_model.forward((tabular_data, image_data))
+    test_output = test_model.forward(tabular_data, image_data)
     # check output is correct size
-    assert isinstance(test_output, list)
-    assert len(test_output) == 1
-    assert isinstance(test_output[0], torch.Tensor)
-    assert test_output[0].shape == (1, 1)
-
-    # wrong number of modalities
-    with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
-        test_model.forward(tuple(tabular_data))
-    with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
-        test_model.forward((tabular_data, tabular_data, image_data))
-    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
-        test_model.forward(tabular_data)
+    assert isinstance(test_output, torch.Tensor)
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == (1, 1)
 
 
 def test_ConcatImageMapsTabularMaps():
@@ -78,26 +78,18 @@ def test_ConcatImageMapsTabularMaps():
     assert hasattr(test_model, "fused_layers")
     assert hasattr(test_model, "final_prediction")
     assert hasattr(test_model, "fused_dim")
-    assert test_model.fused_dim > 15  # 15 from tabular data, rest from image after layers and flattening
+    assert (
+        test_model.fused_dim > 15
+    )  # 15 from tabular data, rest from image after layers and flattening
 
     # test forward pass
     tabular_data = torch.rand((1, 15))
     image_data = torch.rand((1, 1, 100, 100))
     # forward pass
-    test_output = test_model.forward((tabular_data, image_data))
+    test_output = test_model.forward(tabular_data, image_data)
     # check output is correct size
-    assert isinstance(test_output, list)
-    assert len(test_output) == 1
-    assert isinstance(test_output[0], torch.Tensor)
-    assert test_output[0].shape == (1, 1)
-
-    # wrong number of modalities
-    with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
-        test_model.forward(tuple(tabular_data))
-    with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
-        test_model.forward((tabular_data, tabular_data, image_data))
-    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
-        test_model.forward(tabular_data)
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == (1, 1)
 
 
 def test_ImageChannelWiseMultiAttention():
@@ -126,20 +118,10 @@ def test_ImageChannelWiseMultiAttention():
     tabular_data = torch.rand((1, 15))
     image_data = torch.rand((1, 1, 100, 100))
     # forward pass
-    test_output = test_model.forward((tabular_data, image_data))
+    test_output = test_model.forward(tabular_data, image_data)
     # check output is correct size
-    assert isinstance(test_output, list)
-    assert len(test_output) == 1
-    assert isinstance(test_output[0], torch.Tensor)
-    assert test_output[0].shape == (1, 1)
-
-    # wrong number of modalities
-    with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
-        test_model.forward(tuple(tabular_data))
-    with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
-        test_model.forward((tabular_data, tabular_data, image_data))
-    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
-        test_model.forward(tabular_data)
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == (1, 1)
 
 
 def test_CrossmodalMultiheadAttention():
@@ -168,20 +150,10 @@ def test_CrossmodalMultiheadAttention():
     tabular_data = torch.rand((1, 15))
     image_data = torch.rand((1, 1, 100, 100))
     # forward pass
-    test_output = test_model.forward((tabular_data, image_data))
+    test_output = test_model.forward(tabular_data, image_data)
     # check output is correct size
-    assert isinstance(test_output, list)
-    assert len(test_output) == 1
-    assert isinstance(test_output[0], torch.Tensor)
-    assert test_output[0].shape == (1, 1)
-
-    # wrong number of modalities
-    with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
-        test_model.forward(tuple(tabular_data))
-    with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
-        test_model.forward((tabular_data, tabular_data, image_data))
-    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
-        test_model.forward(tabular_data)
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == (1, 1)
 
 
 def test_ImageDecision():
@@ -201,34 +173,28 @@ def test_ImageDecision():
     assert hasattr(test_model, "prediction_task")
     assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "mod1_layers")
-    assert test_model.mod1_layers['layer 1'][0].in_features == 15
+    assert test_model.mod1_layers["layer 1"][0].in_features == 15
     assert hasattr(test_model, "img_layers")
     assert hasattr(test_model, "final_prediction_tab1")
     assert hasattr(test_model, "final_prediction_img")
     assert hasattr(test_model, "forward")
     assert hasattr(test_model, "fusion_operation")
     # asserting that the default fusion operation is a mean with a simple calculation
-    assert test_model.fusion_operation(torch.randn(8, 10), torch.randn(8, 10)).shape == torch.Size([8, 10])
-    assert test_model.fusion_operation(torch.Tensor([1.0]), torch.Tensor([2.0])) == torch.Tensor([1.5])
+    assert test_model.fusion_operation(
+        torch.randn(8, 10), torch.randn(8, 10)
+    ).shape == torch.Size([8, 10])
+    assert test_model.fusion_operation(
+        torch.Tensor([1.0]), torch.Tensor([2.0])
+    ) == torch.Tensor([1.5])
 
     # test forward pass
     tabular_data = torch.rand((1, 15))
     image_data = torch.rand((1, 1, 100, 100))
     # forward pass
-    test_output = test_model.forward((tabular_data, image_data))
+    test_output = test_model.forward(tabular_data, image_data)
     # check output is correct size
-    assert isinstance(test_output, list)
-    assert len(test_output) == 1
-    assert isinstance(test_output[0], torch.Tensor)
-    assert test_output[0].shape == (1, 1)
-
-    # wrong number of modalities
-    with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
-        test_model.forward(tuple(tabular_data))
-    with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
-        test_model.forward((tabular_data, tabular_data, image_data))
-    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
-        test_model.forward(tabular_data)
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == (1, 1)
 
 
 def test_ConcatImgLatentTabDoubleTrain():
@@ -252,7 +218,9 @@ def test_ConcatImgLatentTabDoubleTrain():
     assert test_model.prediction_task == "binary"
     assert hasattr(test_model, "fused_layers")
     assert hasattr(test_model, "fused_dim")
-    assert test_model.fused_dim == 15 + 64  # 15 from tabular data, rest from image after layers and flattening
+    assert (
+        test_model.fused_dim == 15 + 64
+    )  # 15 from tabular data, rest from image after layers and flattening
     assert hasattr(test_model, "final_prediction")
     assert hasattr(test_model, "latent_dim")
     assert test_model.latent_dim == 64
@@ -261,20 +229,11 @@ def test_ConcatImgLatentTabDoubleTrain():
     tabular_data = torch.rand((1, 15))
     image_latent = torch.rand((1, 64))
     # forward pass
-    test_output = test_model.forward((tabular_data, image_latent))
+    test_output = test_model.forward(tabular_data, image_latent)
     # check output is correct size
-    assert isinstance(test_output, list)
-    assert len(test_output) == 1
-    assert isinstance(test_output[0], torch.Tensor)
-    assert test_output[0].shape == (1, 1)
 
-    # wrong number of modalities
-    with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
-        test_model.forward(tuple(tabular_data))
-    with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
-        test_model.forward((tabular_data, tabular_data, image_latent))
-    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
-        test_model.forward(tabular_data)
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == (1, 1)
 
 
 def test_ConcatImgLatentTabDoubleLoss():
@@ -308,7 +267,7 @@ def test_ConcatImgLatentTabDoubleLoss():
     tabular_data = torch.rand((1, 15))
     image_data = torch.rand((1, 1, 100, 100))
     # forward pass
-    test_output = test_model.forward((tabular_data, image_data))
+    test_output = test_model.forward(tabular_data, image_data)
     # check output is correct size
     assert isinstance(test_output, list)
     assert len(test_output) == 2  # we've got reconstructions now too
@@ -316,14 +275,6 @@ def test_ConcatImgLatentTabDoubleLoss():
     assert test_output[0].shape == (1, 1)
     assert isinstance(test_output[1], torch.Tensor)
     assert test_output[1].shape == (1, 1, 100, 100)
-
-    # wrong number of modalities
-    with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
-        test_model.forward(tuple(tabular_data))
-    with pytest.raises(ValueError, match=r"Wrong number of inputs for model!"):
-        test_model.forward((tabular_data, tabular_data, image_data))
-    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected tuple"):
-        test_model.forward(tabular_data)
 
 
 def test_DAETabImgMaps():
@@ -355,11 +306,11 @@ def test_DAETabImgMaps():
     test_output = test_model.forward(tabular_data)
 
     # check output is correct size
-    assert isinstance(test_output, list)
-    assert len(test_output) == 1
-    assert isinstance(test_output[0], torch.Tensor)
-    assert test_output[0].shape == (1, 1)
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == (1, 1)
 
     # wrong number of modalities
-    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected torch.Tensor"):
+    with pytest.raises(
+        TypeError, match=r"Wrong input type for model! Expected torch.Tensor"
+    ):
         test_model.forward([torch.randn(8, 25)])

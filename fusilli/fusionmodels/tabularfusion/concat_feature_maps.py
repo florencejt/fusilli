@@ -53,7 +53,9 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
-        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        ParentFusionModel.__init__(
+            self, prediction_task, data_dims, multiclass_dimensions
+        )
 
         self.prediction_task = prediction_task
 
@@ -75,8 +77,8 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
         """
 
         self.fused_dim = (
-                list(self.mod1_layers.values())[-1][0].out_features
-                + list(self.mod2_layers.values())[-1][0].out_features
+            list(self.mod1_layers.values())[-1][0].out_features
+            + list(self.mod2_layers.values())[-1][0].out_features
         )
 
     def calc_fused_layers(self):
@@ -100,26 +102,29 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
         # setting final prediction layers with final out features of fused layers
         self.set_final_pred_layers(out_dim)
 
-    def forward(self, x):
+    def forward(self, x1, x2):
         """
         Forward pass of the model.
 
         Parameters
         ----------
-        x : tuple
-            Tuple containing the input data.
+        x1 : torch.Tensor
+            Input tensor for the first modality.
+        x2 : torch.Tensor
+            Input tensor for the second modality.
 
         Returns
         -------
-        list
-            List containing the output of the model.
+        torch.Tensor
+            Fused prediction.
         """
 
         # ~~ Checks ~~
-        check_model_validity.check_model_input(x)
+        check_model_validity.check_model_input(x1)
+        check_model_validity.check_model_input(x2)
 
-        x_tab1 = x[0]
-        x_tab2 = x[1]
+        x_tab1 = x1
+        x_tab2 = x2
 
         for layer in self.mod1_layers.values():
             x_tab1 = layer(x_tab1)
@@ -133,9 +138,7 @@ class ConcatTabularFeatureMaps(ParentFusionModel, nn.Module):
 
         out = self.final_prediction(out_fuse)
 
-        return [
-            out,
-        ]
+        return out
 
 
 """
