@@ -5,6 +5,7 @@ This page will show you how to customise the training and evaluation of your fus
 
 We will cover the following topics:
 
+* Using GPU
 * Early stopping
 * Valildation metrics
 * Batch size
@@ -12,6 +13,38 @@ We will cover the following topics:
 * Checkpoint suffix modification
 * Number of workers in PyTorch DataLoader
 * Train/test and cross-validation splitting yourself
+
+Using GPU
+------------
+
+If you want to use a GPU to train your model, you can pass the ``training_modifications`` argument to the :func:`~.fusilli.data.prepare_fusion_data` and :func:`~.fusilli.train.train_and_save_models` functions. By default, the model will train on the CPU.
+
+For example, to train on a single GPU, you can do the following:
+
+.. code-block:: python
+
+    from fusilli.data import prepare_fusion_data
+    from fusilli.train import train_and_save_models
+
+    datamodule = prepare_fusion_data(
+            prediction_task="binary",
+            fusion_model=example_model,
+            data_paths=data_paths,
+            output_paths=output_path,
+        )
+
+    trained_model_list = train_and_save_models(
+            data_module=datamodule,
+            fusion_model=example_model,
+            training_modifications={"accelerator": "gpu", "devices": 1},
+        )
+
+.. warning::
+
+    This is currently not implemented for subspace-based models as of May 2024. 
+    When this is implemented, the documentation will be updated.
+
+
 
 Early stopping
 --------------

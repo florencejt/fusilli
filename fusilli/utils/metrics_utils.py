@@ -1,6 +1,7 @@
 """
 Calculates metrics of the models and houses list of the available metrics to use.
 """
+
 import torch
 import torchmetrics as tm
 
@@ -41,9 +42,11 @@ class MetricsCalculator:
         """
 
         if self.prediction_task == "binary":
-            auroc_equation = tm.AUROC(task="binary")
+            auroc_equation = tm.AUROC(task="binary").to(preds.device)
         elif self.prediction_task == "multiclass":
-            auroc_equation = tm.AUROC(num_classes=self.model.multiclass_dimensions, task="multiclass")
+            auroc_equation = tm.AUROC(
+                num_classes=self.model.multiclass_dimensions, task="multiclass"
+            ).to(preds.device)
         else:
             raise ValueError("Invalid prediction task for AUROC.")
 
@@ -71,11 +74,13 @@ class MetricsCalculator:
 
         if self.prediction_task == "binary":
             # do binary accuracy
-            accuracy_equation = tm.Accuracy(task="binary")
+            accuracy_equation = tm.Accuracy(task="binary").to(preds.device)
 
         elif self.prediction_task == "multiclass":
             # do multiclass accuracy
-            accuracy_equation = tm.Accuracy(num_classes=self.model.multiclass_dimensions, task="multiclass", top_k=1)
+            accuracy_equation = tm.Accuracy(
+                num_classes=self.model.multiclass_dimensions, task="multiclass", top_k=1
+            ).to(preds.device)
         else:
             raise ValueError("Invalid prediction task for accuracy.")
 
@@ -104,7 +109,7 @@ class MetricsCalculator:
         if self.prediction_task != "regression":
             raise ValueError("Invalid prediction task for R2.")
 
-        return tm.R2Score()(preds, labels)
+        return tm.R2Score().to(preds.device)(preds, labels)
 
     def mse(self, preds, labels, logits):
         """
@@ -128,7 +133,7 @@ class MetricsCalculator:
         if self.prediction_task != "regression":
             raise ValueError("Invalid prediction task for mse.")
 
-        return tm.MeanSquaredError()(preds, labels)
+        return tm.MeanSquaredError().to(preds.device)(preds, labels)
 
     def mae(self, preds, labels, logits):
         """
@@ -153,7 +158,7 @@ class MetricsCalculator:
         if self.prediction_task != "regression":
             raise ValueError("Invalid prediction task for mae.")
 
-        return tm.MeanAbsoluteError()(preds, labels)
+        return tm.MeanAbsoluteError().to(preds.device)(preds, labels)
 
     def recall(self, preds, labels, logits):
         """
@@ -176,9 +181,11 @@ class MetricsCalculator:
         """
 
         if self.prediction_task == "binary":
-            recall_equation = tm.Recall(task="binary")
+            recall_equation = tm.Recall(task="binary").to(preds.device)
         elif self.prediction_task == "multiclass":
-            recall_equation = tm.Recall(num_classes=self.model.multiclass_dimensions, task="multiclass")
+            recall_equation = tm.Recall(
+                num_classes=self.model.multiclass_dimensions, task="multiclass"
+            ).to(preds.device)
         else:
             raise ValueError("Invalid prediction task for recall.")
 
@@ -205,9 +212,11 @@ class MetricsCalculator:
         """
 
         if self.prediction_task == "binary":
-            specificity_equation = tm.Specificity(task="binary")
+            specificity_equation = tm.Specificity(task="binary").to(preds.device)
         elif self.prediction_task == "multiclass":
-            specificity_equation = tm.Specificity(num_classes=self.model.multiclass_dimensions, task="multiclass")
+            specificity_equation = tm.Specificity(
+                num_classes=self.model.multiclass_dimensions, task="multiclass"
+            ).to(preds.device)
         else:
             raise ValueError("Invalid prediction task for specificity.")
 
@@ -234,9 +243,11 @@ class MetricsCalculator:
         """
 
         if self.prediction_task == "binary":
-            precision_equation = tm.Precision(task="binary")
+            precision_equation = tm.Precision(task="binary").to(preds.device)
         elif self.prediction_task == "multiclass":
-            precision_equation = tm.Precision(num_classes=self.model.multiclass_dimensions, task="multiclass")
+            precision_equation = tm.Precision(
+                num_classes=self.model.multiclass_dimensions, task="multiclass"
+            ).to(preds.device)
         else:
             raise ValueError("Invalid prediction task for precision.")
 
@@ -263,9 +274,11 @@ class MetricsCalculator:
         """
 
         if self.prediction_task == "binary":
-            f1_equation = tm.F1Score(task="binary")
+            f1_equation = tm.F1Score(task="binary").to(preds.device)
         elif self.prediction_task == "multiclass":
-            f1_equation = tm.F1Score(num_classes=self.model.multiclass_dimensions, task="multiclass")
+            f1_equation = tm.F1Score(
+                num_classes=self.model.multiclass_dimensions, task="multiclass"
+            ).to(preds.device)
         else:
             raise ValueError("Invalid prediction task for F1.")
 
@@ -291,9 +304,11 @@ class MetricsCalculator:
         """
 
         if self.prediction_task == "binary":
-            auprc_equation = tm.AveragePrecision(task="binary")
+            auprc_equation = tm.AveragePrecision(task="binary").to(preds.device)
         elif self.prediction_task == "multiclass":
-            auprc_equation = tm.AveragePrecision(num_classes=self.model.multiclass_dimensions, task="multiclass")
+            auprc_equation = tm.AveragePrecision(
+                num_classes=self.model.multiclass_dimensions, task="multiclass"
+            ).to(preds.device)
         else:
             raise ValueError("Invalid prediction task for AUPRC.")
 
@@ -319,10 +334,15 @@ class MetricsCalculator:
         """
 
         if self.prediction_task == "binary":
-            balanced_accuracy_equation = tm.Accuracy(task='multiclass', num_classes=2, average='macro')
+            balanced_accuracy_equation = tm.Accuracy(
+                task="multiclass", num_classes=2, average="macro"
+            ).to(preds.device)
         elif self.prediction_task == "multiclass":
-            balanced_accuracy_equation = tm.Accuracy(task='multiclass', num_classes=self.model.multiclass_dimensions,
-                                                     average='macro')
+            balanced_accuracy_equation = tm.Accuracy(
+                task="multiclass",
+                num_classes=self.model.multiclass_dimensions,
+                average="macro",
+            ).to(preds.device)
         else:
             raise ValueError("Invalid prediction task for balanced accuracy.")
 

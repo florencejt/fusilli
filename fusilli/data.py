@@ -228,7 +228,9 @@ class LoadDatasets:
         if "ID" not in tab1_df.columns:
             raise ValueError("The CSV must have an index column named 'ID'.")
         if "prediction_label" not in tab1_df.columns:
-            raise ValueError("The CSV must have a label column named 'prediction_label'.")
+            raise ValueError(
+                "The CSV must have a label column named 'prediction_label'."
+            )
 
         # if tabular2_source exists, check it has the right columns
         if self.tabular2_source != "":
@@ -236,7 +238,9 @@ class LoadDatasets:
             if "ID" not in tab2_df.columns:
                 raise ValueError("The CSV must have an index column named 'ID'.")
             if "prediction_label" not in tab2_df.columns:
-                raise ValueError("The CSV must have a label column named 'prediction_label'.")
+                raise ValueError(
+                    "The CSV must have a label column named 'prediction_label'."
+                )
 
     def load_tabular1(self):
         """
@@ -337,11 +341,17 @@ class LoadDatasets:
         tab1_df.set_index("ID", inplace=True)
         tab2_df.set_index("ID", inplace=True)
 
-        tab1_pred_features = torch.Tensor(tab1_df.drop(columns=["prediction_label"]).values)
-        tab2_pred_features = torch.Tensor(tab2_df.drop(columns=["prediction_label"]).values)
+        tab1_pred_features = torch.Tensor(
+            tab1_df.drop(columns=["prediction_label"]).values
+        )
+        tab2_pred_features = torch.Tensor(
+            tab2_df.drop(columns=["prediction_label"]).values
+        )
 
         prediction_label = tab1_df[["prediction_label"]]
-        dataset = CustomDataset([tab1_pred_features, tab2_pred_features], prediction_label)
+        dataset = CustomDataset(
+            [tab1_pred_features, tab2_pred_features], prediction_label
+        )
 
         mod1_dim = tab1_pred_features.shape[1]
         mod2_dim = tab2_pred_features.shape[1]
@@ -430,23 +440,23 @@ class TrainTestDataModule(pl.LightningDataModule):
     """
 
     def __init__(
-            self,
-            fusion_model,
-            sources,
-            output_paths,
-            prediction_task,
-            batch_size,
-            test_size,
-            multiclass_dimensions,
-            subspace_method=None,
-            image_downsample_size=None,
-            layer_mods=None,
-            max_epochs=1000,
-            extra_log_string_dict=None,
-            own_early_stopping_callback=None,
-            num_workers=0,
-            test_indices=None,
-            kwargs=None,
+        self,
+        fusion_model,
+        sources,
+        output_paths,
+        prediction_task,
+        batch_size,
+        test_size,
+        multiclass_dimensions,
+        subspace_method=None,
+        image_downsample_size=None,
+        layer_mods=None,
+        max_epochs=1000,
+        extra_log_string_dict=None,
+        own_early_stopping_callback=None,
+        num_workers=0,
+        test_indices=None,
+        kwargs=None,
     ):
         """
         Parameters
@@ -539,8 +549,8 @@ class TrainTestDataModule(pl.LightningDataModule):
         self.dataset, self.data_dims = self.modality_methods[self.modality_type]()
 
     def setup(
-            self,
-            checkpoint_path=None,
+        self,
+        checkpoint_path=None,
     ):
         """
         Splits the data into train and test sets, and runs the subspace method if specified.
@@ -565,30 +575,31 @@ class TrainTestDataModule(pl.LightningDataModule):
                 self.dataset, [1 - self.test_size, self.test_size]
             )
         else:
-            self.test_dataset = torch.utils.data.Subset(
-                self.dataset, self.test_indices
-            )
+            self.test_dataset = torch.utils.data.Subset(self.dataset, self.test_indices)
 
             self.train_dataset = torch.utils.data.Subset(
-                self.dataset, list(set(range(len(self.dataset))) - set(self.test_indices))
+                self.dataset,
+                list(set(range(len(self.dataset))) - set(self.test_indices)),
             )
 
         if self.subspace_method is not None:  # if subspace method is specified
             if (
-                    checkpoint_path is None
+                checkpoint_path is None
             ):  # if no checkpoint path specified, train the subspace method
                 self.subspace_method_train = self.subspace_method(
                     datamodule=self,
                     max_epochs=self.max_epochs,
                     k=None,
-                    train_subspace=True
+                    train_subspace=True,
                 )
 
                 # modify the subspace method architecture if specified
                 if self.layer_mods is not None:
-                    self.subspace_method_train = model_modifier.modify_model_architecture(
-                        self.subspace_method_train,
-                        self.layer_mods,
+                    self.subspace_method_train = (
+                        model_modifier.modify_model_architecture(
+                            self.subspace_method_train,
+                            self.layer_mods,
+                        )
                     )
 
                 # train the subspace method and convert train dataset to the latent space
@@ -612,17 +623,16 @@ class TrainTestDataModule(pl.LightningDataModule):
                 # we have already trained the subspace method, so load it from the checkpoint
 
                 self.subspace_method_train = self.subspace_method(
-                    self,
-                    max_epochs=self.max_epochs,
-                    k=None,
-                    train_subspace=False
+                    self, max_epochs=self.max_epochs, k=None, train_subspace=False
                 )  # will return a init subspace method with the subspace models as instance attributes
 
                 # modify the subspace method architecture if specified
                 if self.layer_mods is not None:
-                    self.subspace_method_train = model_modifier.modify_model_architecture(
-                        self.subspace_method_train,
-                        self.layer_mods,
+                    self.subspace_method_train = (
+                        model_modifier.modify_model_architecture(
+                            self.subspace_method_train,
+                            self.layer_mods,
+                        )
                     )
 
                 # load checkpoint state dict
@@ -656,7 +666,10 @@ class TrainTestDataModule(pl.LightningDataModule):
             Dataloader for training.
         """
         return DataLoader(
-            self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.num_workers
+            self.train_dataset,
+            batch_size=self.batch_size,
+            shuffle=True,
+            num_workers=self.num_workers,
         )
 
     def val_dataloader(self):
@@ -669,7 +682,10 @@ class TrainTestDataModule(pl.LightningDataModule):
             Dataloader for validation.
         """
         return DataLoader(
-            self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=self.num_workers
+            self.test_dataset,
+            batch_size=self.batch_size,
+            shuffle=False,
+            num_workers=self.num_workers,
         )
 
 
@@ -728,23 +744,23 @@ class KFoldDataModule(pl.LightningDataModule):
     """
 
     def __init__(
-            self,
-            fusion_model,
-            sources,
-            output_paths,
-            prediction_task,
-            batch_size,
-            num_folds,
-            multiclass_dimensions,
-            subspace_method=None,
-            image_downsample_size=None,
-            layer_mods=None,
-            max_epochs=1000,
-            extra_log_string_dict=None,
-            own_early_stopping_callback=None,
-            num_workers=0,
-            own_kfold_indices=None,
-            kwargs=None,
+        self,
+        fusion_model,
+        sources,
+        output_paths,
+        prediction_task,
+        batch_size,
+        num_folds,
+        multiclass_dimensions,
+        subspace_method=None,
+        image_downsample_size=None,
+        layer_mods=None,
+        max_epochs=1000,
+        extra_log_string_dict=None,
+        own_early_stopping_callback=None,
+        num_workers=0,
+        own_kfold_indices=None,
+        kwargs=None,
     ):
         """
         Parameters
@@ -877,8 +893,8 @@ class KFoldDataModule(pl.LightningDataModule):
         return folds  # list of tuples of (train_dataset, test_dataset)
 
     def setup(
-            self,
-            checkpoint_path=None,
+        self,
+        checkpoint_path=None,
     ):
         """
         Splits the data into train and test sets, and runs the subspace method if specified
@@ -1014,7 +1030,10 @@ class KFoldDataModule(pl.LightningDataModule):
         self.train_dataset, self.test_dataset = self.folds[fold_idx]
 
         return DataLoader(
-            self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.num_workers
+            self.train_dataset,
+            batch_size=self.batch_size,
+            shuffle=True,
+            num_workers=self.num_workers,
         )
 
     def val_dataloader(self, fold_idx):
@@ -1034,7 +1053,10 @@ class KFoldDataModule(pl.LightningDataModule):
         self.train_dataset, self.test_dataset = self.folds[fold_idx]
 
         return DataLoader(
-            self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=self.num_workers
+            self.test_dataset,
+            batch_size=self.batch_size,
+            shuffle=False,
+            num_workers=self.num_workers,
         )
 
 
@@ -1078,15 +1100,15 @@ class TrainTestGraphDataModule:
     """
 
     def __init__(
-            self,
-            fusion_model,
-            sources,
-            graph_creation_method,
-            test_size,
-            image_downsample_size=None,
-            layer_mods=None,
-            extra_log_string_dict=None,
-            own_test_indices=None,
+        self,
+        fusion_model,
+        sources,
+        graph_creation_method,
+        test_size,
+        image_downsample_size=None,
+        layer_mods=None,
+        extra_log_string_dict=None,
+        own_test_indices=None,
     ):
         """
         Parameters
@@ -1174,9 +1196,7 @@ class TrainTestGraphDataModule:
             self.test_idxs = test_dataset.indices
         else:
             self.test_idxs = self.own_test_indices
-            self.train_idxs = list(
-                set(range(len(self.dataset))) - set(self.test_idxs)
-            )
+            self.train_idxs = list(set(range(len(self.dataset))) - set(self.test_idxs))
 
         # get the graph data structure
         self.graph_maker_instance = self.graph_creation_method(self.dataset)
@@ -1247,15 +1267,15 @@ class KFoldGraphDataModule:
     """
 
     def __init__(
-            self,
-            num_folds,
-            fusion_model,
-            sources,
-            graph_creation_method,
-            image_downsample_size=None,
-            layer_mods=None,
-            extra_log_string_dict=None,
-            own_kfold_indices=None,
+        self,
+        num_folds,
+        fusion_model,
+        sources,
+        graph_creation_method,
+        image_downsample_size=None,
+        layer_mods=None,
+        extra_log_string_dict=None,
+        own_kfold_indices=None,
     ):
         """
         Parameters
@@ -1369,7 +1389,7 @@ class KFoldGraphDataModule:
 
             # modify the graph maker architecture if specified
             if self.layer_mods is not None:
-                graph_maker = model_modifier.modify_model_architecture(
+                self.graph_maker_instance = model_modifier.modify_model_architecture(
                     self.graph_maker_instance,
                     self.layer_mods,
                 )
@@ -1414,25 +1434,25 @@ class KFoldGraphDataModule:
 
 
 def prepare_fusion_data(
-        prediction_task,
-        fusion_model,
-        data_paths,
-        output_paths,
-        kfold=False,
-        num_folds=None,
-        test_size=0.2,
-        batch_size=8,
-        multiclass_dimensions=None,
-        image_downsample_size=None,
-        layer_mods=None,
-        max_epochs=1000,
-        checkpoint_path=None,
-        extra_log_string_dict=None,
-        own_early_stopping_callback=None,
-        num_workers=0,
-        test_indices=None,
-        own_kfold_indices=None,
-        **kwargs,
+    prediction_task,
+    fusion_model,
+    data_paths,
+    output_paths,
+    kfold=False,
+    num_folds=None,
+    test_size=0.2,
+    batch_size=8,
+    multiclass_dimensions=None,
+    image_downsample_size=None,
+    layer_mods=None,
+    max_epochs=1000,
+    checkpoint_path=None,
+    extra_log_string_dict=None,
+    own_early_stopping_callback=None,
+    num_workers=0,
+    test_indices=None,
+    own_kfold_indices=None,
+    **kwargs,
 ):
     """
     Gets the data module for a specific fusion model and training protocol.
@@ -1497,7 +1517,8 @@ def prepare_fusion_data(
 
     if kfold and own_early_stopping_callback is not None:
         raise ValueError(
-            "Cannot use own early stopping callback with kfold cross validation yet. Working on fixing this currently (Nov 2023)")
+            "Cannot use own early stopping callback with kfold cross validation yet. Working on fixing this currently (Nov 2023)"
+        )
 
     # Getting the data paths from the data_paths dictionary into a list
     data_sources = [
@@ -1519,7 +1540,7 @@ def prepare_fusion_data(
                 image_downsample_size=image_downsample_size,
                 layer_mods=layer_mods,
                 extra_log_string_dict=extra_log_string_dict,
-                # here is where the kfold split will go
+                own_kfold_indices=own_kfold_indices,
             )
         else:
             graph_data_module = TrainTestGraphDataModule(
@@ -1543,7 +1564,9 @@ def prepare_fusion_data(
             for dm_instance in data_module:
                 dm_instance.data_dims = graph_data_module.data_dims
                 dm_instance.own_early_stopping_callback = own_early_stopping_callback
-                dm_instance.graph_maker_instance = graph_data_module.graph_maker_instance
+                dm_instance.graph_maker_instance = (
+                    graph_data_module.graph_maker_instance
+                )
                 dm_instance.output_paths = output_paths
                 dm_instance.num_folds = num_folds
                 dm_instance.prediction_task = prediction_task
