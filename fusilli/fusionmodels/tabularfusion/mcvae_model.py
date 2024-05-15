@@ -469,11 +469,11 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
 
         Returns
         -------
-        out_pred : list
-            List containing the predictions.
+        torch.Tensor
+            Tensor containing the predicted values.
         """
         # ~~ Checks ~~
-        check_model_validity.check_model_input(x, True)
+        check_model_validity.check_model_input(x)
 
         x_latent = x
 
@@ -484,6 +484,4 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
 
         out_pred = self.final_prediction(out_fuse)
 
-        return [
-            out_pred,
-        ]
+        return out_pred
