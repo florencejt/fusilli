@@ -363,8 +363,12 @@ def init_trainer(
     if own_early_stopping_callback is not None:
 
         # make min_delta negative if mode is "min"
-        if own_early_stopping_callback.mode == "min":
-            min_delta = -own_early_stopping_callback.min_delta
+        min_delta = -0.00  # Default value
+
+        if hasattr(own_early_stopping_callback, "min_delta"):
+            min_delta = own_early_stopping_callback.min_delta
+            if own_early_stopping_callback.mode == "min":
+                min_delta = -min_delta
 
         # make a new early stopping callback with the same elements as the own_early_stopping_callback
         early_stop_callback = EarlyStopping(

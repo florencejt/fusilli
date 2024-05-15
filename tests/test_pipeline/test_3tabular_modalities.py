@@ -43,7 +43,6 @@ def test_train_and_test(create_test_files, tmp_path):
         "prediction_task": "binary",
         "multiclass_dimensions": None,
         "kfold": False,
-        "wandb_logging": False,
     }
 
     data_paths = {
@@ -76,7 +75,6 @@ def test_train_and_test(create_test_files, tmp_path):
             fusion_model=model,
             data_paths=data_paths,
             output_paths=output_paths,
-            params=params,
             max_epochs=2,
             layer_mods=modifications,
             **params,
@@ -139,7 +137,6 @@ def test_kfold(create_test_files, tmp_path):
         "multiclass_dimensions": None,
         "kfold": True,
         "num_folds": 3,
-        "wandb_logging": False,
     }
 
     data_paths = {
@@ -172,7 +169,6 @@ def test_kfold(create_test_files, tmp_path):
             fusion_model=model,
             data_paths=data_paths,
             output_paths=output_paths,
-            params=params,
             max_epochs=2,
             layer_mods=modifications,
             **params,

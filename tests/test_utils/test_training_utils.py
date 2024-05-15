@@ -297,7 +297,7 @@ def test_init_trainer_custom_early_stopping(mock_logger):
         monitor="val_loss",
         patience=3,
         verbose=True,
-        mode="max",
+        mode="min",
     )
     trainer = init_trainer(
         mock_logger, output_paths={}, own_early_stopping_callback=custom_early_stopping
@@ -311,7 +311,7 @@ def test_init_trainer_custom_early_stopping(mock_logger):
     # check that the custom early stopping callback is the first callback
     assert trainer.early_stopping_callback is not None
     assert isinstance(trainer.callbacks[0], EarlyStopping)
-    assert trainer.callbacks[0] == custom_early_stopping
+
     for key in custom_early_stopping.__dict__:
         assert (
             custom_early_stopping.__dict__[key]
