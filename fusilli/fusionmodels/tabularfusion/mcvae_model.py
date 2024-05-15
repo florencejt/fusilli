@@ -11,6 +11,7 @@ import contextlib
 import pandas as pd
 import numpy as np
 from fusilli.utils.training_utils import get_checkpoint_filenames_for_subspace_models
+import sys
 
 from fusilli.utils import check_model_validity
 
@@ -136,7 +137,9 @@ class MCVAESubspaceMethod:
         init_dict = {
             "n_channels": 2,
             "lat_dim": self.num_latent_dims,
-            "n_feats": tuple([self.datamodule.data_dims[0], self.datamodule.data_dims[1]]),
+            "n_feats": tuple(
+                [self.datamodule.data_dims[0], self.datamodule.data_dims[1]]
+            ),
         }
 
         self.fit_model = Mcvae(**init_dict, sparse=True)
@@ -261,7 +264,9 @@ class MCVAESubspaceMethod:
         with contextlib.redirect_stdout(None):
             mcvae_fit.optimize(epochs=self.max_epochs, data=mcvae_training_data)
             ideal_epoch = mcvae_early_stopping_tol(
-                tolerance=mcvae_tolerance, patience=mcvae_patience, loss_logs=mcvae_fit.loss["total"]
+                tolerance=mcvae_tolerance,
+                patience=mcvae_patience,
+                loss_logs=mcvae_fit.loss["total"],
             )
 
         mcvae_esfit = Mcvae(**init_dict, sparse=True)
@@ -284,7 +289,9 @@ class MCVAESubspaceMethod:
         # getting mean latent space
         mean_latents = self.get_latents(mcvae_training_data)
 
-        return torch.Tensor(mean_latents), pd.DataFrame(labels, columns=["prediction_label"])
+        return torch.Tensor(mean_latents), pd.DataFrame(
+            labels, columns=["prediction_label"]
+        )
 
     def convert_to_latent(self, test_dataset):
         """
@@ -373,7 +380,9 @@ class MCVAE_tab(ParentFusionModel, nn.Module):
         multiclass_dimensions : int
             Number of classes in the multiclass classification task.
         """
-        ParentFusionModel.__init__(self, prediction_task, data_dims, multiclass_dimensions)
+        ParentFusionModel.__init__(
+            self, prediction_task, data_dims, multiclass_dimensions
+        )
 
         self.prediction_task = prediction_task
 
