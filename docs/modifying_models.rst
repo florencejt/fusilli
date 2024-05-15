@@ -472,6 +472,10 @@ Modifiable Attributes
     - Guidance
   * - :attr:`~.MCVAESubspaceMethod.num_latent_dims`
     - int
+  * - :attr:`~.MCVAESubspaceMethod.mcvae_tolerance`
+    - int
+  * - :attr:`~.MCVAESubspaceMethod.mcvae_patience`
+    - int
 
 ------
 
