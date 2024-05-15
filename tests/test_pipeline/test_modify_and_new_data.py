@@ -703,14 +703,6 @@ def test_train_and_test(create_test_files_more_features, tmp_path):
     checkpoint_dir = tmp_path / f"checkpoint_dir_{timestamp}"
     checkpoint_dir.mkdir()
 
-    params = {
-        "test_size": 0.2,
-        "prediction_task": "binary",
-        "multiclass_dimensions": None,
-        "kfold": False,
-        "wandb_logging": False,
-    }
-
     data_paths = {
         "tabular1": tabular1_csv,
         "tabular2": tabular2_csv,
@@ -734,10 +726,11 @@ def test_train_and_test(create_test_files_more_features, tmp_path):
             fusion_model=model,
             data_paths=data_paths,
             output_paths=output_paths,
-            params=params,
             layer_mods=layer_mods,
             max_epochs=2,
-            **params,
+            prediction_task="binary",
+            multiclass_dimensions=None,
+            kfold=False,
         )
 
         single_model_list = train_and_save_models(
@@ -819,7 +812,6 @@ def test_kfold(create_test_files_more_features, tmp_path):
         "multiclass_dimensions": None,
         "kfold": True,
         "num_folds": 3,
-        "wandb_logging": False,
     }
 
     data_paths = {
@@ -846,7 +838,6 @@ def test_kfold(create_test_files_more_features, tmp_path):
             fusion_model=model,
             data_paths=data_paths,
             output_paths=output_paths,
-            params=params,
             layer_mods=layer_mods,
             max_epochs=2,
             **params,

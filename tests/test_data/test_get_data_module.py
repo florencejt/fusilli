@@ -47,7 +47,7 @@ def test_get_data_module_custom(create_test_files):
         output_paths=None,
         test_size=0.3,
         batch_size=8,
-        multiclass_dims=None,
+        multiclass_dimensions=None,
     )
 
     # Add assertions based on your expectations
@@ -124,7 +124,7 @@ def test_get_graph_data_module(create_test_files):
         fusion_model=fusion_model,
         data_paths=data_paths,
         output_paths=None,
-        multiclass_dims=None,
+        multiclass_dimensions=None,
         test_size=0.3,
     )
 

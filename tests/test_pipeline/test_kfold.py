@@ -45,15 +45,6 @@ def test_5fold_cv(create_test_files, tmp_path):
 
     modifications = {"AttentionAndSelfActivation": {"attention_reduction_ratio": 2}}
 
-    params = {
-        # "test_size": 0.2,
-        "prediction_task": "binary",
-        "multiclass_dimensions": None,
-        "kfold": True,
-        "num_folds": 5,
-        "wandb_logging": False,
-    }
-
     data_paths = {
         "tabular1": tabular1_csv,
         "tabular2": tabular2_csv,
@@ -88,7 +79,10 @@ def test_5fold_cv(create_test_files, tmp_path):
             output_paths=output_paths,
             layer_mods=modifications,
             max_epochs=2,
-            **params,
+            prediction_task="binary",
+            multiclass_dimensions=None,
+            kfold=True,
+            num_folds=5,
         )
 
         single_model_list = train_and_save_models(

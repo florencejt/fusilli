@@ -5,7 +5,7 @@ Modify the Fusion Models
 
 The fusion models in ``fusilli`` can be customized by passing a dictionary of attributes into the :func:`fusilli.data.prepare_fusion_data` and :func:`fusilli.train.train_and_save_models` functions.
 
-Examples of how to modify the models can be found in the :ref:`advanced-examples` section.
+Examples of how to modify the models can be found in the :ref:`customising-examples` section.
 
 Below are the modifiable attributes with guidance on how they can be changed:
 
@@ -471,6 +471,10 @@ Modifiable Attributes
   * - Attribute
     - Guidance
   * - :attr:`~.MCVAESubspaceMethod.num_latent_dims`
+    - int
+  * - :attr:`~.MCVAESubspaceMethod.mcvae_tolerance`
+    - int
+  * - :attr:`~.MCVAESubspaceMethod.mcvae_patience`
     - int
 
 ------
