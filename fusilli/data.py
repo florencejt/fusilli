@@ -456,6 +456,7 @@ class TrainTestDataModule(pl.LightningDataModule):
         own_early_stopping_callback=None,
         num_workers=0,
         test_indices=None,
+        training_modifications=None,
         kwargs=None,
     ):
         """
@@ -496,6 +497,9 @@ class TrainTestDataModule(pl.LightningDataModule):
         test_indices : list
             List of indices to use for testing (default None). If None, the test indices are
             randomly selected using the test_size parameter.
+        training_modifications : dict
+            Dictionary of training modifications to make to the subspace method.
+            Keys are "accelerator" and "devices"
         kwargs : dict
             Dictionary of extra arguments for the subspace method class.
         """
@@ -530,6 +534,7 @@ class TrainTestDataModule(pl.LightningDataModule):
         self.own_early_stopping_callback = own_early_stopping_callback
         self.num_workers = num_workers
         self.test_indices = test_indices
+        self.training_modifications = training_modifications
         self.kwargs = kwargs
 
     def prepare_data(self):
@@ -591,6 +596,7 @@ class TrainTestDataModule(pl.LightningDataModule):
                     max_epochs=self.max_epochs,
                     k=None,
                     train_subspace=True,
+                    training_modifications=self.training_modifications,
                 )
 
                 # modify the subspace method architecture if specified
@@ -623,7 +629,7 @@ class TrainTestDataModule(pl.LightningDataModule):
                 # we have already trained the subspace method, so load it from the checkpoint
 
                 self.subspace_method_train = self.subspace_method(
-                    self, max_epochs=self.max_epochs, k=None, train_subspace=False
+                    self, max_epochs=self.max_epochs, k=None, train_subspace=False, training_modifications=self.training_modifications
                 )  # will return a init subspace method with the subspace models as instance attributes
 
                 # modify the subspace method architecture if specified
@@ -739,6 +745,9 @@ class KFoldDataModule(pl.LightningDataModule):
         List of indices to use for k-fold cross validation (default None). If None, the k-fold
         indices are randomly selected. Structure is a list of tuples of (train_indices,
         test_indices). Must be the same length as num_folds.
+    trainings_modifications : dict
+        Dictionary of training modifications to make to the subspace method.
+        Keys are "accelerator" and "devices"
     kwargs : dict
         Dictionary of extra arguments for the subspace method class.
     """
@@ -760,6 +769,7 @@ class KFoldDataModule(pl.LightningDataModule):
         own_early_stopping_callback=None,
         num_workers=0,
         own_kfold_indices=None,
+        training_modifications=None,
         kwargs=None,
     ):
         """
@@ -803,6 +813,9 @@ class KFoldDataModule(pl.LightningDataModule):
             List of indices to use for k-fold cross validation (default None). If None, the k-fold
             indices are randomly selected. Structure is a list of tuples of (train_indices,
             test_indices). Must be the same length as num_folds.
+        training_modifications : dict
+            Dictionary of training modifications to make to the subspace method.
+            Keys are "accelerator" and "devices"
         kwargs : dict
             Dictionary of extra arguments for the subspace method class.
         """
@@ -844,6 +857,7 @@ class KFoldDataModule(pl.LightningDataModule):
         self.own_early_stopping_callback = own_early_stopping_callback
         self.num_workers = num_workers
         self.own_kfold_indices = own_kfold_indices
+        self.training_modifications = training_modifications
         self.kwargs = kwargs
 
     def prepare_data(self):
@@ -929,6 +943,7 @@ class KFoldDataModule(pl.LightningDataModule):
                         k=k,
                         max_epochs=self.max_epochs,
                         train_subspace=True,
+                        training_modifications=self.training_modifications,
                     )
 
                     # modify the subspace method architecture if specified
@@ -977,6 +992,7 @@ class KFoldDataModule(pl.LightningDataModule):
                         k=k,
                         max_epochs=self.max_epochs,
                         train_subspace=False,
+                        training_modifications=self.training_modifications,
                         # checkpoint_path=checkpoint_path,
                     )
 
@@ -1452,6 +1468,7 @@ def prepare_fusion_data(
     num_workers=0,
     test_indices=None,
     own_kfold_indices=None,
+    training_modifications=None
 ):
     """
     Gets the data module for a specific fusion model and training protocol.
@@ -1502,7 +1519,9 @@ def prepare_fusion_data(
         List of indices to use for testing (default None). If None, then random split is used.
     own_kfold_indices : list or None
         List of indices to use for k-fold cross validation (default None). If None, then random split is used.
-
+    training_modifications : dict
+        Dictionary of training modifications. Used to modify the training process. Keys could be "accelerator", "devices"
+    
 
     Returns
     -------
@@ -1566,6 +1585,7 @@ def prepare_fusion_data(
                 dm_instance.num_folds = num_folds
                 dm_instance.prediction_task = prediction_task
                 dm_instance.multiclass_dimensions = multiclass_dimensions
+                dm_instance.training_modifications = training_modifications
         else:
             data_module.data_dims = graph_data_module.data_dims
             data_module.own_early_stopping_callback = own_early_stopping_callback
@@ -1573,6 +1593,7 @@ def prepare_fusion_data(
             data_module.output_paths = output_paths
             data_module.prediction_task = prediction_task
             data_module.multiclass_dimensions = multiclass_dimensions
+            data_module.training_modifications = training_modifications
 
     else:
         # another other than graph fusion
@@ -1593,6 +1614,7 @@ def prepare_fusion_data(
                 own_early_stopping_callback=own_early_stopping_callback,
                 num_workers=num_workers,
                 own_kfold_indices=own_kfold_indices,
+                training_modifications=training_modifications,
             )
         else:
             data_module = TrainTestDataModule(
@@ -1611,6 +1633,7 @@ def prepare_fusion_data(
                 own_early_stopping_callback=own_early_stopping_callback,
                 num_workers=num_workers,
                 test_indices=test_indices,
+                training_modifications=training_modifications,
             )
         data_module.prepare_data()
         data_module.setup(checkpoint_path=checkpoint_path)

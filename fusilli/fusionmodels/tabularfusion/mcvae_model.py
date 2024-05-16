@@ -106,7 +106,7 @@ class MCVAESubspaceMethod:
 
     subspace_models = [Mcvae]
 
-    def __init__(self, datamodule, k=None, max_epochs=5000, train_subspace=True):
+    def __init__(self, datamodule, k=None, max_epochs=5000, train_subspace=True, training_modifications=None):
         """
         Parameters
         ----------
@@ -120,7 +120,7 @@ class MCVAESubspaceMethod:
             Whether to train the subspace model, by default True.
         """
         self.datamodule = datamodule
-        self.device = torch.device("cpu")
+        self.device = torch.device(training_modifications["accelerator"])
 
         self.num_latent_dims = 10
         self.mcvae_patience = 10
