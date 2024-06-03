@@ -125,7 +125,10 @@ class MCVAESubspaceMethod:
             Whether to train the subspace model, by default True.
         """
         self.datamodule = datamodule
-        self.device = torch.device(training_modifications["accelerator"])
+        if training_modifications is not None:
+            self.device = torch.device(training_modifications["accelerator"])
+        else:
+            self.device = torch.device('cpu')
 
         # default latent dim
         self.num_latent_dims = 10
@@ -214,7 +217,7 @@ class MCVAESubspaceMethod:
         None
         """
 
-        check_model_validity.check_dtype(self.num_latent_dims, int, "num_latent_dims")
+        check_model_validity.check_dtype(self.num_latent_dims, (int, np.integer), "num_latent_dims")
 
         if self.num_latent_dims < 0:
             raise ValueError(

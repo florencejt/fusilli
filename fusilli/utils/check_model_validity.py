@@ -29,11 +29,15 @@ def check_dtype(attribute, correct_dtype, attribute_name):
     if not isinstance(
         attribute,
         correct_dtype,
-    ):
+    ):  
+        if isinstance(correct_dtype, tuple):
+            correct_dtypes = ", ".join([dtype.__name__ for dtype in correct_dtype])
+        else:
+            correct_dtypes = type(correct_dtype).__name__
         raise TypeError(
             (
                 f"Incorrect data type for the modifications: Attribute {attribute_name}"
-                f" must be of type {correct_dtype.__name__}, not dtype {type(attribute).__name__}.",
+                f" must be of type {correct_dtypes}, not dtype {type(attribute).__name__}.",
             )
         )
 

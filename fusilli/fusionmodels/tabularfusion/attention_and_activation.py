@@ -188,6 +188,7 @@ class AttentionAndSelfActivation(ParentFusionModel, nn.Module):
         channel_attention = ChannelAttentionModule(
             num_features=num_channels, reduction_ratio=self.attention_reduction_ratio
         )
+        channel_attention.to(inputs[self.attention_modality - 1].device)
         attention_out = channel_attention(inputs[self.attention_modality - 1])
 
         if self.attention_modality == 1:

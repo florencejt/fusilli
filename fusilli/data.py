@@ -603,8 +603,7 @@ def _check_three_modalities_supported(fusion_model, sources):
     ValueError
         If the fusion model does not support three tabular modalities.
     """
-    # print("modality type:", fusion_model.modality_type)
-    # print("Image in fusion model:", "image" in fusion_model.modality_type)
+
     if (
         fusion_model.fusion_type != "unimodal"
         and "image" not in fusion_model.modality_type
@@ -856,6 +855,7 @@ class TrainTestDataModule(pl.LightningDataModule):
 
             else:
                 # we have already trained the subspace method, so load it from the checkpoint
+
 
                 self.subspace_method_train = self.subspace_method(
                     self, max_epochs=self.max_epochs, k=None, train_subspace=False, training_modifications=self.training_modifications
