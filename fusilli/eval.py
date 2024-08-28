@@ -292,6 +292,7 @@ class ParentPlotter:
                 checkpoint_path=subspace_ckpts,
                 layer_mods=layer_mods,
                 training_modifications=training_modifications,
+                multiclass_dimensions=None,  # TODO
             )
 
             # just taking the first fold because we don't need to split the new data into folds
@@ -405,6 +406,7 @@ class ParentPlotter:
         checkpoint_file_suffix=None,
         layer_mods=None,
         training_modifications=None,
+        multiclass_dimensions=None,
     ):
         """
         Get new data by running through trained model for a train/test model.
@@ -455,7 +457,6 @@ class ParentPlotter:
         # ckpt_path = model[0][1]
         model = model_list[0]
 
-
         model.eval()
 
         if hasattr(model.model, "graph_maker"):
@@ -464,7 +465,7 @@ class ParentPlotter:
             )
 
         if model.model.subspace_method is not None:
-            
+
             subspace_ckpts = []
             for subspace_model in model.model.subspace_method.subspace_models:
                 subspace_ckpts.append(
@@ -490,6 +491,7 @@ class ParentPlotter:
             checkpoint_path=subspace_ckpts,
             layer_mods=layer_mods,
             training_modifications=training_modifications,
+            multiclass_dimensions=multiclass_dimensions,
         )
 
         # concatenating the train and test datasets because we want to get the predictions for all the data
@@ -530,7 +532,6 @@ class ParentPlotter:
         end_outputs_list = []
         logits_list = []
         reals_list = []
-
 
         for batch in dataloader:
             x, y = new_model.get_data_from_batch(batch)
@@ -583,7 +584,7 @@ class RealsVsPreds(ParentPlotter):
         test_data_paths,
         checkpoint_file_suffix=None,
         layer_mods=None,
-        training_modifications=None
+        training_modifications=None,
     ):
         """
 
@@ -644,7 +645,7 @@ class RealsVsPreds(ParentPlotter):
                 test_data_paths,
                 checkpoint_file_suffix,
                 layer_mods,
-                training_modifications
+                training_modifications,
             )
 
             figure = cls.reals_vs_preds_kfold(
@@ -671,7 +672,7 @@ class RealsVsPreds(ParentPlotter):
                 test_data_paths,
                 checkpoint_file_suffix,
                 layer_mods,
-                training_modifications
+                training_modifications,
             )
 
             # plot the figure
@@ -988,7 +989,8 @@ class ConfusionMatrix(ParentPlotter):
         test_data_paths,
         checkpoint_file_suffix=None,
         layer_mods=None,
-        training_modifications=None
+        training_modifications=None,
+        multiclass_dimensions=None,
     ):
         """
         Confusion matrix using new data (i.e. data that was not used to train or validate the model).
@@ -1010,7 +1012,9 @@ class ConfusionMatrix(ParentPlotter):
             Dictionary of the layer modifications to make to the model.
         training_modifications: dict, optional
             Dictionary of the training modifications to make to the model.
-            
+        multiclass_dimensions: int, optional
+            The number of classes for a multiclass classification task. Default is None.
+
 
         Returns
         -------
@@ -1051,7 +1055,8 @@ class ConfusionMatrix(ParentPlotter):
                 test_data_paths,
                 checkpoint_file_suffix,
                 layer_mods,
-                training_modifications
+                training_modifications,
+                multiclass_dimensions,
             )
 
             figure = cls.confusion_matrix_kfold(
@@ -1076,7 +1081,8 @@ class ConfusionMatrix(ParentPlotter):
                 test_data_paths,
                 checkpoint_file_suffix,
                 layer_mods,
-                training_modifications
+                training_modifications,
+                multiclass_dimensions,
             )
 
             # plot the figure
@@ -1483,7 +1489,8 @@ class ModelComparison(ParentPlotter):
         test_data_paths,
         checkpoint_file_suffix=None,
         layer_mods=None,
-        training_modifications=None
+        training_modifications=None,
+        multiclass_dimensions=None,
     ):
         """
         Plotting function for comparing models on metrics using new data (i.e. data that was not used to train or validate the model).
@@ -1505,6 +1512,10 @@ class ModelComparison(ParentPlotter):
             Default is None.
         layer_mods: dict, optional
             Dictionary of the layer modifications to make to the model.
+        training_modifications: dict, optional
+            Dictionary of the training modifications to make to the model.
+        multiclass_dimensions: int, optional
+            The number of classes for a multiclass classification task. Default is None.
 
         Returns
         -------
@@ -1582,7 +1593,8 @@ class ModelComparison(ParentPlotter):
                     test_data_paths,
                     checkpoint_file_suffix,
                     layer_mods,
-                    training_modifications
+                    training_modifications,
+                    multiclass_dimensions,
                 )
 
                 comparing_models_metrics[model_method_name] = metrics_per_fold
@@ -1632,7 +1644,8 @@ class ModelComparison(ParentPlotter):
                     test_data_paths,
                     checkpoint_file_suffix,
                     layer_mods,
-                    training_modifications
+                    training_modifications,
+                    multiclass_dimensions,
                 )
 
                 comparing_models_metrics[model_method_name] = metric_values

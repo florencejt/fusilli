@@ -150,7 +150,6 @@ def train_and_test(
         training_modifications=training_modifications,
     )  # init trainer
 
-
     pl_model = BaseModel(
         fusion_model(
             prediction_task=data_module.prediction_task,
