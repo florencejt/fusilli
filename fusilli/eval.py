@@ -548,9 +548,9 @@ class ParentPlotter:
         # get the train reals, train preds, val reals, val preds
         train_reals = model.train_reals.cpu()
         train_preds = model.train_preds.cpu()
-        val_preds = torch.cat(end_outputs_list, dim=-1)
-        val_reals = torch.cat(reals_list, dim=-1)
-        val_logits = torch.cat(logits_list, dim=0)
+        val_preds = torch.cat(end_outputs_list, dim=-1).cpu()
+        val_reals = torch.cat(reals_list, dim=-1).cpu()
+        val_logits = torch.cat(logits_list, dim=0).cpu()
 
         # get the metrics
         metric_values = {}
@@ -561,7 +561,9 @@ class ParentPlotter:
                 labels=new_model.safe_squeeze(val_reals),
                 logits=new_model.safe_squeeze(val_logits),
             )
-            metric_values[metric_name.lower()] = val_step_metric
+            metric_values[metric_name.lower()] = val_step_metric.cpu().detach().item()
+
+        print(metric_values)
 
         return train_reals, train_preds, val_reals, val_preds, metric_values
 
