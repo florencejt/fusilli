@@ -14,6 +14,30 @@ from sklearn.model_selection import KFold
 from torch.utils.data import DataLoader, Dataset
 from torch_geometric.data.lightning import LightningNodeData
 from fusilli.utils import model_modifier
+import warnings
+
+
+def check_for_unnamed_index_column(df):
+    """
+    Checks if there is a column named "Unnamed: 0" in the dataframe.
+    Returns a warning if there is. This column is often created when reading in a CSV file
+    with an unnamed index column.
+
+    To fix it, save the CSV with the index column named "ID". (Don't reset the index before saving.)
+
+    Parameters
+    ----------
+
+    df : dataframe
+        Dataframe to check for the column.
+
+    """
+
+    if "Unnamed: 0" in df.columns:
+
+        warnings.warn(
+            "Warning: The dataframe has a column named 'Unnamed: 0'. This column is often created when reading in a CSV file with an unnamed index column. To fix it, save the CSV with the index column named 'ID'. (Don't reset the index before saving.)"
+        )
 
 
 def downsample_img_batch(imgs, output_size):
@@ -298,6 +322,8 @@ class LoadDatasets:
         """
         tab_df = pd.read_csv(self.tabular1_source)
 
+        check_for_unnamed_index_column(tab_df)
+
         tab_df.set_index("ID", inplace=True)
 
         pred_features = torch.Tensor(tab_df.drop(columns=["prediction_label"]).values)
@@ -332,6 +358,7 @@ class LoadDatasets:
         """
 
         tab_df = pd.read_csv(self.tabular2_source)
+        check_for_unnamed_index_column(tab_df)
 
         tab_df.set_index("ID", inplace=True)
 
@@ -367,6 +394,7 @@ class LoadDatasets:
         """
 
         tab_df = pd.read_csv(self.tabular3_source)
+        check_for_unnamed_index_column(tab_df)
 
         tab_df.set_index("ID", inplace=True)
 
@@ -442,7 +470,9 @@ class LoadDatasets:
         """
 
         tab1_df = pd.read_csv(self.tabular1_source)
+        check_for_unnamed_index_column(tab1_df)
         tab2_df = pd.read_csv(self.tabular2_source)
+        check_for_unnamed_index_column(tab2_df)
 
         tab1_df.set_index("ID", inplace=True)
         tab2_df.set_index("ID", inplace=True)
@@ -486,8 +516,11 @@ class LoadDatasets:
         """
 
         tab1_df = pd.read_csv(self.tabular1_source)
+        check_for_unnamed_index_column(tab1_df)
         tab2_df = pd.read_csv(self.tabular2_source)
+        check_for_unnamed_index_column(tab2_df)
         tab3_df = pd.read_csv(self.tabular3_source)
+        check_for_unnamed_index_column(tab3_df)
 
         tab1_df.set_index("ID", inplace=True)
         tab2_df.set_index("ID", inplace=True)
@@ -535,6 +568,7 @@ class LoadDatasets:
         """
 
         tab1_df = pd.read_csv(self.tabular1_source)
+        check_for_unnamed_index_column(tab1_df)
 
         tab1_df.set_index("ID", inplace=True)
 
@@ -856,9 +890,12 @@ class TrainTestDataModule(pl.LightningDataModule):
             else:
                 # we have already trained the subspace method, so load it from the checkpoint
 
-
                 self.subspace_method_train = self.subspace_method(
-                    self, max_epochs=self.max_epochs, k=None, train_subspace=False, training_modifications=self.training_modifications
+                    self,
+                    max_epochs=self.max_epochs,
+                    k=None,
+                    train_subspace=False,
+                    training_modifications=self.training_modifications,
                 )  # will return a init subspace method with the subspace models as instance attributes
 
                 # modify the subspace method architecture if specified
@@ -1686,7 +1723,7 @@ def prepare_fusion_data(
     num_workers=0,
     test_indices=None,
     own_kfold_indices=None,
-    training_modifications=None
+    training_modifications=None,
 ):
     """
     Gets the data module for a specific fusion model and training protocol.
@@ -1739,7 +1776,7 @@ def prepare_fusion_data(
         List of indices to use for k-fold cross validation (default None). If None, then random split is used.
     training_modifications : dict
         Dictionary of training modifications. Used to modify the training process. Keys could be "accelerator", "devices"
-    
+
 
     Returns
     -------
