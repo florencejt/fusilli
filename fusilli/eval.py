@@ -110,7 +110,9 @@ class ParentPlotter:
                 logits=model_list[0].safe_squeeze(all_val_logits),
             )
 
-            overall_kfold_metrics[metric_name.lower()] = val_metric.cpu().detach().item()
+            overall_kfold_metrics[metric_name.lower()] = (
+                val_metric.cpu().detach().item()
+            )
 
         return (
             train_reals,
@@ -172,7 +174,12 @@ class ParentPlotter:
 
     @classmethod
     def get_new_kfold_data(
-            cls, model_list, output_paths, test_data_paths, checkpoint_file_suffix=None, layer_mods=None
+        cls,
+        model_list,
+        output_paths,
+        test_data_paths,
+        checkpoint_file_suffix=None,
+        layer_mods=None,
     ):
         """
         Get new data by running through trained model for a kfold model.
@@ -296,7 +303,7 @@ class ParentPlotter:
                     checkpoint_dir=output_paths["checkpoints"],
                     model=model,
                     checkpoint_file_suffix=checkpoint_file_suffix,
-                    fold=k
+                    fold=k,
                 )
             )
 
@@ -317,7 +324,9 @@ class ParentPlotter:
                     layer_mods,
                 )
             # load the state dict
-            new_model.load_state_dict(torch.load(trained_fusion_model_checkpoint)["state_dict"])
+            new_model.load_state_dict(
+                torch.load(trained_fusion_model_checkpoint)["state_dict"]
+            )
 
             new_model.eval()
 
@@ -370,7 +379,9 @@ class ParentPlotter:
                 logits=model_list[0].safe_squeeze(all_val_logits),
             )
 
-            overall_kfold_metrics[metric_name.lower()] = val_metric.cpu().detach().item()
+            overall_kfold_metrics[metric_name.lower()] = (
+                val_metric.cpu().detach().item()
+            )
 
         return (
             train_reals,
@@ -383,7 +394,12 @@ class ParentPlotter:
 
     @classmethod
     def get_new_tt_data(
-            cls, model_list, output_paths, test_data_paths, checkpoint_file_suffix=None, layer_mods=None
+        cls,
+        model_list,
+        output_paths,
+        test_data_paths,
+        checkpoint_file_suffix=None,
+        layer_mods=None,
     ):
         """
         Get new data by running through trained model for a train/test model.
@@ -495,7 +511,9 @@ class ParentPlotter:
                 layer_mods,
             )
         # load the state dict
-        new_model.load_state_dict(torch.load(trained_fusion_model_checkpoint)["state_dict"])
+        new_model.load_state_dict(
+            torch.load(trained_fusion_model_checkpoint)["state_dict"]
+        )
 
         new_model.eval()
         # get the predictions
@@ -545,7 +563,12 @@ class RealsVsPreds(ParentPlotter):
 
     @classmethod
     def from_new_data(
-            cls, model_list, output_paths, test_data_paths, checkpoint_file_suffix=None, layer_mods=None
+        cls,
+        model_list,
+        output_paths,
+        test_data_paths,
+        checkpoint_file_suffix=None,
+        layer_mods=None,
     ):
         """
 
@@ -601,7 +624,11 @@ class RealsVsPreds(ParentPlotter):
                 metrics_per_fold,
                 overall_kfold_metrics,
             ) = cls.get_new_kfold_data(
-                model_list, output_paths, test_data_paths, checkpoint_file_suffix, layer_mods
+                model_list,
+                output_paths,
+                test_data_paths,
+                checkpoint_file_suffix,
+                layer_mods,
             )
 
             figure = cls.reals_vs_preds_kfold(
@@ -623,7 +650,11 @@ class RealsVsPreds(ParentPlotter):
                 val_preds,
                 metric_values,
             ) = cls.get_new_tt_data(
-                model_list, output_paths, test_data_paths, checkpoint_file_suffix, layer_mods
+                model_list,
+                output_paths,
+                test_data_paths,
+                checkpoint_file_suffix,
+                layer_mods,
             )
 
             # plot the figure
@@ -731,12 +762,12 @@ class RealsVsPreds(ParentPlotter):
 
     @classmethod
     def reals_vs_preds_kfold(
-            cls,
-            model_list,
-            val_reals,
-            val_preds,
-            metrics_per_fold,
-            overall_kfold_metrics,
+        cls,
+        model_list,
+        val_reals,
+        val_preds,
+        metrics_per_fold,
+        overall_kfold_metrics,
     ):
         """
         Reals vs preds plot for a kfold model. This function should be called within the RealVsPreds class
@@ -854,7 +885,7 @@ class RealsVsPreds(ParentPlotter):
 
     @classmethod
     def reals_vs_preds_tt(
-            cls, model_list, train_reals, train_preds, val_reals, val_preds, metric_values
+        cls, model_list, train_reals, train_preds, val_reals, val_preds, metric_values
     ):
         """
         Reals vs preds plot for a train/test model. This function should be called within the RealVsPreds class
@@ -933,8 +964,14 @@ class ConfusionMatrix(ParentPlotter):
         super().__init__()
 
     @classmethod
-    def from_new_data(cls, model_list, output_paths, test_data_paths,
-                      checkpoint_file_suffix=None, layer_mods=None):
+    def from_new_data(
+        cls,
+        model_list,
+        output_paths,
+        test_data_paths,
+        checkpoint_file_suffix=None,
+        layer_mods=None,
+    ):
         """
         Confusion matrix using new data (i.e. data that was not used to train or validate the model).
 
@@ -984,7 +1021,13 @@ class ConfusionMatrix(ParentPlotter):
                 val_preds,
                 metrics_per_fold,
                 overall_kfold_metrics,
-            ) = cls.get_new_kfold_data(model_list, output_paths, test_data_paths, checkpoint_file_suffix, layer_mods)
+            ) = cls.get_new_kfold_data(
+                model_list,
+                output_paths,
+                test_data_paths,
+                checkpoint_file_suffix,
+                layer_mods,
+            )
 
             figure = cls.confusion_matrix_kfold(
                 model_list,
@@ -994,6 +1037,8 @@ class ConfusionMatrix(ParentPlotter):
                 overall_kfold_metrics,
             )
 
+            figure.suptitle("Evaluation: External Test Data")
+
         elif len(model_list) == 1:  # train/test model
 
             (
@@ -1002,13 +1047,20 @@ class ConfusionMatrix(ParentPlotter):
                 val_reals,
                 val_preds,
                 metric_values,
-            ) = cls.get_new_tt_data(model_list, output_paths, test_data_paths, checkpoint_file_suffix,
-                                    layer_mods)
+            ) = cls.get_new_tt_data(
+                model_list,
+                output_paths,
+                test_data_paths,
+                checkpoint_file_suffix,
+                layer_mods,
+            )
 
             # plot the figure
             figure = cls.confusion_matrix_tt(
                 model_list, val_reals, val_preds, metric_values
             )
+
+            figure.suptitle("Evaluation: External Test Data")
 
         else:
             raise ValueError("Argument 'model_list' is an empty list. ")
@@ -1145,12 +1197,12 @@ class ConfusionMatrix(ParentPlotter):
 
     @classmethod
     def confusion_matrix_kfold(
-            cls,
-            model_list,
-            val_reals,
-            val_preds,
-            metrics_per_fold,
-            overall_kfold_metrics,
+        cls,
+        model_list,
+        val_reals,
+        val_preds,
+        metrics_per_fold,
+        overall_kfold_metrics,
     ):
         """
         Confusion matrix for a kfold model. This function should be called within the ConfusionMatrix class
@@ -1397,15 +1449,19 @@ class ModelComparison(ParentPlotter):
                 comparing_models_metrics[model_method_name] = metric_values
 
             figure = cls.train_test_comparison_plot(comparing_models_metrics)
-            df = cls.get_performance_dataframe(
-                comparing_models_metrics, None, kfold
-            )
+            df = cls.get_performance_dataframe(comparing_models_metrics, None, kfold)
 
         return figure, df
 
     @classmethod
-    def from_new_data(cls, model_dict, output_paths, test_data_paths, checkpoint_file_suffix=None,
-                      layer_mods=None):
+    def from_new_data(
+        cls,
+        model_dict,
+        output_paths,
+        test_data_paths,
+        checkpoint_file_suffix=None,
+        layer_mods=None,
+    ):
         """
         Plotting function for comparing models on metrics using new data (i.e. data that was not used to train or validate the model).
         Produces a violin plot if kfold_flag is True and a bar plot if kfold_flag is False.
@@ -1497,8 +1553,13 @@ class ModelComparison(ParentPlotter):
                     val_preds,
                     metrics_per_fold,
                     overall_kfold_metrics,
-                ) = cls.get_new_kfold_data(model_list, output_paths, test_data_paths, checkpoint_file_suffix,
-                                           layer_mods)
+                ) = cls.get_new_kfold_data(
+                    model_list,
+                    output_paths,
+                    test_data_paths,
+                    checkpoint_file_suffix,
+                    layer_mods,
+                )
 
                 comparing_models_metrics[model_method_name] = metrics_per_fold
 
@@ -1541,14 +1602,18 @@ class ModelComparison(ParentPlotter):
                     val_reals,
                     val_preds,
                     metric_values,
-                ) = cls.get_new_tt_data(model_list, output_paths, test_data_paths, checkpoint_file_suffix, layer_mods)
+                ) = cls.get_new_tt_data(
+                    model_list,
+                    output_paths,
+                    test_data_paths,
+                    checkpoint_file_suffix,
+                    layer_mods,
+                )
 
                 comparing_models_metrics[model_method_name] = metric_values
 
             figure = cls.train_test_comparison_plot(comparing_models_metrics)
-            df = cls.get_performance_dataframe(
-                comparing_models_metrics, None, kfold
-            )
+            df = cls.get_performance_dataframe(comparing_models_metrics, None, kfold)
 
         return figure, df
 
@@ -1727,7 +1792,7 @@ class ModelComparison(ParentPlotter):
 
     @classmethod
     def get_performance_dataframe(
-            cls, comparing_models_metrics, overall_kfold_metrics_dict, kfold_flag
+        cls, comparing_models_metrics, overall_kfold_metrics_dict, kfold_flag
     ):
         """
         Get a dataframe of the performance metrics for each model.
@@ -1767,9 +1832,7 @@ class ModelComparison(ParentPlotter):
             num_folds = len(folds_df[metric_names[0]][0])
 
             for metric_name in metric_names:
-                fold_columns = [
-                    f"fold{i + 1}_{metric_name}" for i in range(num_folds)
-                ]
+                fold_columns = [f"fold{i + 1}_{metric_name}" for i in range(num_folds)]
 
                 for i, col in enumerate(fold_columns):
                     folds_df[fold_columns[i]] = folds_df[metric_name].apply(
