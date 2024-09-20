@@ -1069,6 +1069,8 @@ class ConfusionMatrix(ParentPlotter):
                 overall_kfold_metrics,
             )
 
+            figure.suptitle("Evaluation: External Test Data")
+
         elif len(model_list) == 1:  # train/test model
 
             (
@@ -1091,6 +1093,8 @@ class ConfusionMatrix(ParentPlotter):
             figure = cls.confusion_matrix_tt(
                 model_list, val_reals, val_preds, metric_values
             )
+
+            figure.suptitle("Evaluation: External Test Data")
 
         else:
             raise ValueError("Argument 'model_list' is an empty list. ")
