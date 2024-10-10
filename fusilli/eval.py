@@ -1614,6 +1614,8 @@ class ModelComparison(ParentPlotter):
             )
 
         else:
+            test_reals = {}
+            test_preds = {}
             for model in model_dict:
                 model_list = model_dict[model]  # list of length 1 of trained model
 
@@ -1654,12 +1656,15 @@ class ModelComparison(ParentPlotter):
                     multiclass_dimensions,
                 )
 
+                test_reals[model_method_name] = val_reals.cpu().detach().tolist()
+                test_preds[model_method_name] = val_preds.cpu().detach().tolist()
+
                 comparing_models_metrics[model_method_name] = metric_values
 
             figure = cls.train_test_comparison_plot(comparing_models_metrics)
             df = cls.get_performance_dataframe(comparing_models_metrics, None, kfold)
 
-        return figure, df
+        return figure, df, test_reals, test_preds
 
     @classmethod
     def kfold_comparison_plot(cls, comparing_models_metrics):
