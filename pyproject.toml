@@ -30,7 +30,8 @@ dependencies = [
     "torch-geometric~=2.0",
     "torchmetrics~=0.0",
     "tqdm~=4.0",
-    "wandb~=0.0",
+    "sentry-sdk>=1.0.0",
+    "urllib3==1.26.11", 
 ]
 optional-dependencies = { docs = [
     "protobuf~=3.0",

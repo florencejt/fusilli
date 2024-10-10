@@ -72,6 +72,8 @@ class ImgUnimodal(ParentFusionModel, nn.Module):
             )
             for layer in self.img_layers.values():
                 dummy_conv_output = layer(dummy_conv_output)
+        except:
+            pass
 
         flattened_img_output_size = dummy_conv_output.data.view(1, -1).size(1)
 

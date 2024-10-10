@@ -94,11 +94,14 @@ class ImageDecision(ParentFusionModel, nn.Module):
 
         # ~~ Image data ~~
 
-        dummy_conv_output = Variable(
-            torch.rand((1,) + tuple(self.data_dims["img_dim"]))
-        )
-        for layer in self.img_layers.values():
-            dummy_conv_output = layer(dummy_conv_output)
+        try:
+            dummy_conv_output = Variable(
+                torch.rand((1,) + tuple(self.data_dims["img_dim"]))
+            )
+            for layer in self.img_layers.values():
+                dummy_conv_output = layer(dummy_conv_output)
+        except:
+            pass
         img_fusion_size = dummy_conv_output.data.view(1, -1).size(1)
         self.set_final_pred_layers(img_fusion_size)
         self.final_prediction_img = self.final_prediction
