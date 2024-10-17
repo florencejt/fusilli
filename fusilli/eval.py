@@ -524,7 +524,7 @@ class ParentPlotter:
             )
         # load the state dict
         new_model.load_state_dict(
-            torch.load(trained_fusion_model_checkpoint)["state_dict"]
+            torch.load(trained_fusion_model_checkpoint, weights_only=False)["state_dict"]
         )
 
         new_model.eval()
