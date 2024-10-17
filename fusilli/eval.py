@@ -496,7 +496,7 @@ class ParentPlotter:
 
         # concatenating the train and test datasets because we want to get the predictions for all the data
         dataset = ConcatDataset([dm.train_dataset, dm.test_dataset])
-        dataloader = DataLoader(dataset, batch_size=len(dataset))
+        dataloader = DataLoader(dataset, batch_size=len(dataset), shuffle=False)
 
         # get ckpt_path from fusion name
         trained_fusion_model_checkpoint = (

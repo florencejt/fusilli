@@ -184,6 +184,11 @@ class AttentionAndSelfActivation(ParentFusionModel, nn.Module):
         num_channels = inputs[self.attention_modality - 1].size(1)
         # print("Num channels", num_channels)
 
+        # TODO take this out for future work
+        if num_channels // self.attention_reduction_ratio < 1:
+            # set attention reduction ratio to 2
+            self.attention_reduction_ratio = 2
+
         # Channel attention on the main modality
         channel_attention = ChannelAttentionModule(
             num_features=num_channels, reduction_ratio=self.attention_reduction_ratio
