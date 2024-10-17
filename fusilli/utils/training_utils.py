@@ -116,6 +116,7 @@ def set_logger(
         logger = WandbLogger(
             # save_dir=os.getcwd() + "/logs",
             save_dir=os.environ["WANDB_DIR"],
+            dir=os.environ["WANDB_DIR"],
             project=project_name,
             name=name,
             tags=tags,

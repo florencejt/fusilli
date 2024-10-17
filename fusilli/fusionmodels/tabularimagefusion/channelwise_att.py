@@ -95,11 +95,14 @@ class ImageChannelWiseMultiAttention(ParentFusionModel, nn.Module):
         None
         """
 
-        dummy_conv_output = Variable(
-            torch.rand((1,) + tuple(self.data_dims["img_dim"]))
-        )
-        for layer in self.img_layers.values():
-            dummy_conv_output = layer(dummy_conv_output)
+        try:
+            dummy_conv_output = Variable(
+                torch.rand((1,) + tuple(self.data_dims["img_dim"]))
+            )
+            for layer in self.img_layers.values():
+                dummy_conv_output = layer(dummy_conv_output)
+        except:
+            pass
         flattened_img_output_size = dummy_conv_output.data.view(1, -1).size(1)
 
         self.fused_dim = flattened_img_output_size
