@@ -181,6 +181,7 @@ class ParentPlotter:
         checkpoint_file_suffix=None,
         layer_mods=None,
         training_modifications=None,
+        image_downsample_size=None,
     ):
         """
         Get new data by running through trained model for a kfold model.
@@ -293,6 +294,7 @@ class ParentPlotter:
                 layer_mods=layer_mods,
                 training_modifications=training_modifications,
                 multiclass_dimensions=None,  # TODO
+                image_downsample_size=image_downsample_size,
             )
 
             # just taking the first fold because we don't need to split the new data into folds
@@ -330,7 +332,9 @@ class ParentPlotter:
                 )
             # load the state dict
             new_model.load_state_dict(
-                torch.load(trained_fusion_model_checkpoint, weights_only=False)["state_dict"]
+                torch.load(trained_fusion_model_checkpoint, weights_only=False)[
+                    "state_dict"
+                ]
             )
 
             new_model.eval()
@@ -407,6 +411,7 @@ class ParentPlotter:
         layer_mods=None,
         training_modifications=None,
         multiclass_dimensions=None,
+        image_downsample_size=None,
     ):
         """
         Get new data by running through trained model for a train/test model.
@@ -492,6 +497,7 @@ class ParentPlotter:
             layer_mods=layer_mods,
             training_modifications=training_modifications,
             multiclass_dimensions=multiclass_dimensions,
+            image_downsample_size=image_downsample_size,
         )
 
         # concatenating the train and test datasets because we want to get the predictions for all the data
@@ -524,7 +530,9 @@ class ParentPlotter:
             )
         # load the state dict
         new_model.load_state_dict(
-            torch.load(trained_fusion_model_checkpoint, weights_only=False)["state_dict"]
+            torch.load(trained_fusion_model_checkpoint, weights_only=False)[
+                "state_dict"
+            ]
         )
 
         new_model.eval()
@@ -587,6 +595,7 @@ class RealsVsPreds(ParentPlotter):
         checkpoint_file_suffix=None,
         layer_mods=None,
         training_modifications=None,
+        image_downsample_size=None,
     ):
         """
 
@@ -648,6 +657,7 @@ class RealsVsPreds(ParentPlotter):
                 checkpoint_file_suffix,
                 layer_mods,
                 training_modifications,
+                image_downsample_size=image_downsample_size,
             )
 
             figure = cls.reals_vs_preds_kfold(
@@ -675,6 +685,7 @@ class RealsVsPreds(ParentPlotter):
                 checkpoint_file_suffix,
                 layer_mods,
                 training_modifications,
+                image_downsample_size=image_downsample_size,
             )
 
             # plot the figure
@@ -993,6 +1004,7 @@ class ConfusionMatrix(ParentPlotter):
         layer_mods=None,
         training_modifications=None,
         multiclass_dimensions=None,
+        image_downsample_size=None,
     ):
         """
         Confusion matrix using new data (i.e. data that was not used to train or validate the model).
@@ -1059,6 +1071,7 @@ class ConfusionMatrix(ParentPlotter):
                 layer_mods,
                 training_modifications,
                 multiclass_dimensions,
+                image_downsample_size=image_downsample_size,
             )
 
             figure = cls.confusion_matrix_kfold(
@@ -1087,6 +1100,7 @@ class ConfusionMatrix(ParentPlotter):
                 layer_mods,
                 training_modifications,
                 multiclass_dimensions,
+                image_downsample_size=image_downsample_size,
             )
 
             # plot the figure
@@ -1497,6 +1511,7 @@ class ModelComparison(ParentPlotter):
         layer_mods=None,
         training_modifications=None,
         multiclass_dimensions=None,
+        image_downsample_size=None,
     ):
         """
         Plotting function for comparing models on metrics using new data (i.e. data that was not used to train or validate the model).
@@ -1601,6 +1616,7 @@ class ModelComparison(ParentPlotter):
                     layer_mods,
                     training_modifications,
                     multiclass_dimensions,
+                    image_downsample_size=image_downsample_size,
                 )
 
                 comparing_models_metrics[model_method_name] = metrics_per_fold
@@ -1654,6 +1670,7 @@ class ModelComparison(ParentPlotter):
                     layer_mods,
                     training_modifications,
                     multiclass_dimensions,
+                    image_downsample_size=image_downsample_size,
                 )
 
                 test_reals[model_method_name] = val_reals.cpu().detach().tolist()

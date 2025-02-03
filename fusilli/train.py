@@ -292,7 +292,7 @@ def train_and_save_models(
         (AUROC, accuracy for binary/multiclass, R2 and MAE for regression).
         The first metric in the list will be used in the comparison evaluation figures to rank the models' performances.
         Length must be 2 or more.
-    new_optimiser : torch.optim or None
+    new_optimiser : dict or None
         Dict for creating a new optimiser.
         Keys should be "learning rate", "beta_one", "weight_decay", but may be None if using default values.
     training_modifications : dict
