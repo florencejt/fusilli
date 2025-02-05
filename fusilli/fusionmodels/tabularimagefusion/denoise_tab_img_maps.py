@@ -15,7 +15,7 @@ from torch.autograd import Variable
 import pandas as pd
 from torch.nn import functional as F
 from fusilli.fusionmodels.base_model import BaseModel
-
+import numpy as np
 from fusilli.utils import check_model_validity
 
 
@@ -86,7 +86,9 @@ class DenoisingAutoencoder(pl.LightningModule):
 
         check_model_validity.check_dtype(self.upsampler, nn.Sequential, "upsampler")
         check_model_validity.check_dtype(self.downsampler, nn.Sequential, "downsampler")
-        check_model_validity.check_dtype(self.latent_dim, int, "latent_dim")
+        check_model_validity.check_dtype(
+            self.latent_dim, (int, np.integer), "latent_dim"
+        )
 
         if self.latent_dim < 1:
             raise ValueError(
@@ -313,7 +315,6 @@ class ImgUnimodalDAE(pl.LightningModule):
         Get the dimension of the fused layers.
 
         """
-
 
         try:
             dummy_conv_output = Variable(

@@ -19,14 +19,16 @@ def modify_model_architecture(model, architecture_modification):
         A dictionary containing architecture modifications.
         Input format {"model": {"layer_group": "modification"}, ...}.
         e.g. {"TabularCrossmodalAttention": {"mod1_layers": new mod 1 layers nn.ModuleDict}}
-    
+
     Returns
     -------
     nn.Module
         The modified deep learning model.
     """
+    print("model.__class__.__name__", model.__class__.__name__)
 
     for model_name, layer_groups in architecture_modification.items():
+        print("model_name", model_name)
         # Modify layers for all specified models
         if model_name == "all":
             for layer_group, modification in layer_groups.items():
@@ -76,7 +78,7 @@ def get_nested_attr(obj, attr_path):
         The object to retrieve the nested attribute from.
     attr_path : str
         Dot-separated path to the nested attribute.
-    
+
     Returns
     -------
     object

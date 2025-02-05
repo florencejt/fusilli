@@ -858,8 +858,10 @@ class TrainTestDataModule(pl.LightningDataModule):
                     max_epochs=self.max_epochs,
                     k=None,
                     train_subspace=True,
-                    training_modifications=self.training_modifications,
+                    # training_modifications=self.training_modifications,
                 )
+
+                print("self.layer_mods:", self.layer_mods)
 
                 # modify the subspace method architecture if specified
                 if self.layer_mods is not None:
@@ -895,7 +897,7 @@ class TrainTestDataModule(pl.LightningDataModule):
                     max_epochs=self.max_epochs,
                     k=None,
                     train_subspace=False,
-                    training_modifications=self.training_modifications,
+                    # training_modifications=self.training_modifications,
                 )  # will return a init subspace method with the subspace models as instance attributes
 
                 # modify the subspace method architecture if specified
