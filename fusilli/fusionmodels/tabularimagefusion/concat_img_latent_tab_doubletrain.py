@@ -7,6 +7,7 @@ img_latent_subspace_method class.
 import copy
 
 import pandas as pd
+import numpy as np
 import lightning.pytorch as pl
 import torch
 import torch.nn as nn
@@ -121,7 +122,9 @@ class ImgLatentSpace(pl.LightningModule):
 
         check_model_validity.check_dtype(self.encoder, nn.Sequential, "encoder")
         check_model_validity.check_dtype(self.decoder, nn.Sequential, "decoder")
-        check_model_validity.check_dtype(self.latent_dim, int, "latent dim")
+        check_model_validity.check_dtype(
+            self.latent_dim, (int, np.integer), "latent dim"
+        )
 
         check_model_validity.check_img_dim(self.encoder, self.img_dim, "encoder")
         check_model_validity.check_img_dim(self.decoder, self.img_dim, "encoder")

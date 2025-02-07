@@ -3,6 +3,7 @@ Concat image latent space with tabular data, trained altogether with a custom lo
 """
 
 import torch.nn as nn
+import numpy as np
 from fusilli.fusionmodels.base_model import ParentFusionModel
 import torch
 from torch.autograd import Variable
@@ -176,7 +177,9 @@ class ConcatImgLatentTabDoubleLoss(ParentFusionModel, nn.Module):
 
         check_model_validity.check_dtype(self.encoder, nn.Sequential, "encoder")
         check_model_validity.check_dtype(self.decoder, nn.Sequential, "decoder")
-        check_model_validity.check_dtype(self.latent_dim, int, "latent_dim")
+        check_model_validity.check_dtype(
+            self.latent_dim, (int, np.integer), "latent_dim"
+        )
 
         self.get_fused_dim()
 
