@@ -15,6 +15,8 @@ from torch.utils.data import DataLoader, Dataset
 from torch_geometric.data.lightning import LightningNodeData
 from fusilli.utils import model_modifier
 import warnings
+import matplotlib.pyplot as plt
+import os
 
 
 def check_for_unnamed_index_column(df):
@@ -131,10 +133,11 @@ class CustomDataset(Dataset):
         Tensor of predictive features for uni-modal data.
     labels : tensor
         Tensor of labels.
-
+    transforms : list or None
+        List of transforms to apply on the image. Will only be used for image-only (unimodal) data.
     """
 
-    def __init__(self, pred_features, labels):
+    def __init__(self, pred_features, labels, transforms=None):
         """
         Parameters
         ----------
@@ -144,6 +147,9 @@ class CustomDataset(Dataset):
             (i.e. tabular or image data without labels).
         labels : dataframe
             Dataframe of labels (column name must be "prediction_label").
+        transforms : list
+            List of transforms to apply to the images. Such as torchio.transforms functions with the corresponding arguments filled in.
+            (default None)
 
         Raises
         ------
@@ -185,6 +191,8 @@ class CustomDataset(Dataset):
         else:
             self.labels = self.labels.float()
 
+        self.transforms = transforms
+
     def __len__(self):
         """
         Returns the length of the dataset.
@@ -208,8 +216,22 @@ class CustomDataset(Dataset):
         idx : int
             Index of the item to return.
         """
+        # if self.multimodal_flag:
+        #     if self.three_modalities:
+        #         return (
+        #             self.dataset1[idx],
+        #             self.dataset2[idx],
+        #             self.dataset3[idx],
+        #             self.labels[idx],
+        #         )
+        #     else:
+        #         return self.dataset1[idx], self.dataset2[idx], self.labels[idx]
+        # else:
+        #     return self.dataset[idx], self.labels[idx]
+
         if self.multimodal_flag:
             if self.three_modalities:
+                # not doing any transforms for 3-modalities (all tabular)
                 return (
                     self.dataset1[idx],
                     self.dataset2[idx],
@@ -217,9 +239,56 @@ class CustomDataset(Dataset):
                     self.labels[idx],
                 )
             else:
-                return self.dataset1[idx], self.dataset2[idx], self.labels[idx]
+                # For 2-modality multimodal data, assume modality 2 is the image.
+                tabular = self.dataset1[idx]
+
+                image = self.dataset2[idx]
+
+                # Apply transforms to the image if provided.
+                # Transforms will only not be None when called from image-only or tabular-image dataloaders.
+                if self.transforms is not None:
+
+                    # self.save_middle_slice(image, idx, non_augment=True)
+
+                    for t in self.transforms:
+                        print("Transform being applied:", t)
+                        print("Image shape:", image.shape)
+                        image = t(image)
+
+                    # self.save_middle_slice(image, idx)
+
+                return tabular, image, self.labels[idx]
         else:
-            return self.dataset[idx], self.labels[idx]
+            # For unimodal (image-only) data.
+            sample = self.dataset[idx]
+            # Transforms will only not be None when called from image-only or tabular-image dataloaders.
+            if self.transforms is not None:
+                for t in self.transforms:
+                    print("Transform being applied:", t)
+                    sample = t(sample)
+
+            return sample, self.labels[idx]
+
+    def save_middle_slice(self, image, idx, non_augment=False):
+        """Saves the middle slice of a 3D image tensor as a PNG for debugging."""
+        image_np = image.numpy()  # Convert tensor to NumPy array
+        if image_np.ndim == 4:  # If shape is (C, D, H, W), remove channel dimension
+            image_np = image_np[0]
+
+        middle_slice = image_np[image_np.shape[0] // 2]  # Get middle slice
+        plt.imshow(middle_slice, cmap="gray")
+        plt.axis("off")
+        if non_augment:
+            plt.savefig(
+                f"/Users/florencetownend/Documents/Postgraduate/Data/imaging/augmentation/non_augmented_slice_{idx}.png",
+                bbox_inches="tight",
+            )
+        else:
+            plt.savefig(
+                f"/Users/florencetownend/Documents/Postgraduate/Data/imaging/augmentation/augmented_slice_{idx}.png",
+                bbox_inches="tight",
+            )
+        plt.close()
 
 
 class LoadDatasets:
@@ -238,9 +307,12 @@ class LoadDatasets:
         Size to downsample the images to (height, width, depth) or (height, width) for 2D
         images.
         None if not downsampling. (default None)
+    transforms : list
+        List of transforms to apply to the images. Such as torchio.transforms functions with the corresponding arguments filled in.
+        (default None)
     """
 
-    def __init__(self, sources, img_downsample_dims=None):
+    def __init__(self, sources, img_downsample_dims=None, transforms=None):
         """
         Parameters
         ----------
@@ -250,6 +322,9 @@ class LoadDatasets:
             Size to downsample the images to (height, width, depth) or (height, width) for 2D
             images.
             None if not downsampling. (default None)
+        transforms : list
+            List of transforms to apply to the images. Such as torchio.transforms functions with the corresponding arguments filled in.
+            (default None)
 
         Raises
         ------
@@ -271,6 +346,13 @@ class LoadDatasets:
         self.image_downsample_size = (
             img_downsample_dims  # can choose own image size here
         )
+
+        self.transforms = transforms
+
+        if self.transforms is not None:
+            print("Applying transforms:", self.transforms)
+        else:
+            print("No transforms applied.")
 
         def check_csv_columns(source_path):
             """
@@ -439,7 +521,9 @@ class LoadDatasets:
 
         prediction_label = label_df[["prediction_label"]]
 
-        dataset = CustomDataset(all_scans_ds, prediction_label)
+        dataset = CustomDataset(
+            all_scans_ds, prediction_label, transforms=self.transforms
+        )
 
         img_dim = list(all_scans_ds.shape[2:])  # not including batch size or channels
 
@@ -578,7 +662,9 @@ class LoadDatasets:
         imgs = torch.load(self.img_source)
         imgs = downsample_img_batch(imgs, self.image_downsample_size)
 
-        dataset = CustomDataset([tab1_features, imgs], label_df)
+        dataset = CustomDataset(
+            [tab1_features, imgs], label_df, transforms=self.transforms
+        )
 
         data_dims = {
             "mod1_dim": tab1_features.shape[1],
@@ -722,6 +808,7 @@ class TrainTestDataModule(pl.LightningDataModule):
         test_indices=None,
         training_modifications=None,
         kwargs=None,
+        transforms=None,
     ):
         """
         Parameters
@@ -764,6 +851,9 @@ class TrainTestDataModule(pl.LightningDataModule):
         training_modifications : dict
             Dictionary of training modifications to make to the subspace method.
             Keys are "accelerator" and "devices"
+        transforms : list
+            List of transforms to apply to the images. Such as torchio.transforms functions with the corresponding arguments filled in.
+            (default None)
         kwargs : dict
             Dictionary of extra arguments for the subspace method class.
         """
@@ -773,7 +863,7 @@ class TrainTestDataModule(pl.LightningDataModule):
         self.output_paths = output_paths
         self.extra_log_string_dict = extra_log_string_dict
 
-        dataset_loader = LoadDatasets(self.sources, image_downsample_size)
+        dataset_loader = LoadDatasets(self.sources, image_downsample_size, transforms)
         self.modality_methods = dataset_loader.get_methods_dict()
 
         self.fusion_model = fusion_model
@@ -1043,6 +1133,7 @@ class KFoldDataModule(pl.LightningDataModule):
         num_workers=0,
         own_kfold_indices=None,
         training_modifications=None,
+        transforms=None,
         kwargs=None,
     ):
         """
@@ -1089,6 +1180,9 @@ class KFoldDataModule(pl.LightningDataModule):
         training_modifications : dict
             Dictionary of training modifications to make to the subspace method.
             Keys are "accelerator" and "devices"
+        transforms : list
+            List of transforms to apply to the images. Such as torchio.transforms functions with the corresponding arguments filled in.
+            (default None)
         kwargs : dict
             Dictionary of extra arguments for the subspace method class.
         """
@@ -1099,7 +1193,8 @@ class KFoldDataModule(pl.LightningDataModule):
         self.output_paths = output_paths
         self.image_downsample_size = image_downsample_size
         self.extra_log_string_dict = extra_log_string_dict
-        dataset_loader = LoadDatasets(self.sources, image_downsample_size)
+
+        dataset_loader = LoadDatasets(self.sources, image_downsample_size, transforms)
         self.modality_methods = dataset_loader.get_methods_dict()
         self.prediction_task = prediction_task
         self.fusion_model = fusion_model
@@ -1726,6 +1821,7 @@ def prepare_fusion_data(
     test_indices=None,
     own_kfold_indices=None,
     training_modifications=None,
+    transforms=None,
 ):
     """
     Gets the data module for a specific fusion model and training protocol.
@@ -1778,7 +1874,9 @@ def prepare_fusion_data(
         List of indices to use for k-fold cross validation (default None). If None, then random split is used.
     training_modifications : dict
         Dictionary of training modifications. Used to modify the training process. Keys could be "accelerator", "devices"
-
+    transforms : list
+        List of transforms to apply to the images. Such as torchio.transforms functions with the corresponding arguments filled in.
+        (default None)
 
     Returns
     -------
@@ -1865,6 +1963,7 @@ def prepare_fusion_data(
                 num_workers=num_workers,
                 own_kfold_indices=own_kfold_indices,
                 training_modifications=training_modifications,
+                transforms=transforms,
             )
         else:
             data_module = TrainTestDataModule(
@@ -1884,6 +1983,7 @@ def prepare_fusion_data(
                 num_workers=num_workers,
                 test_indices=test_indices,
                 training_modifications=training_modifications,
+                transforms=transforms,
             )
         data_module.prepare_data()
         data_module.setup(checkpoint_path=checkpoint_path)
