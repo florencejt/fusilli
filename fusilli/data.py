@@ -255,7 +255,6 @@ class CustomDataset(Dataset):
                         # print("Image shape:", image.shape)
                         if len(image.shape) == 3: # channel x height x width
                             image = t(image.unsqueeze(-1)) # unsqueeze to make z dimension 1
-                            image = t(image)
                             # squeeze back to channel x height x width
                             image = image.squeeze(-1)
                         else:
