@@ -251,9 +251,15 @@ class CustomDataset(Dataset):
                     # self.save_middle_slice(image, idx, non_augment=True)
 
                     for t in self.transforms:
-                        print("Transform being applied:", t)
-                        print("Image shape:", image.shape)
-                        image = t(image)
+                        # print("Transform being applied:", t)
+                        # print("Image shape:", image.shape)
+                        if len(image.shape) == 3: # channel x height x width
+                            image = t(image.unsqueeze(-1)) # unsqueeze to make z dimension 1
+                            image = t(image)
+                            # squeeze back to channel x height x width
+                            image = image.squeeze(-1)
+                        else:
+                            image = t(image)
 
                     # self.save_middle_slice(image, idx)
 
@@ -264,8 +270,17 @@ class CustomDataset(Dataset):
             # Transforms will only not be None when called from image-only or tabular-image dataloaders.
             if self.transforms is not None:
                 for t in self.transforms:
-                    print("Transform being applied:", t)
-                    sample = t(sample)
+                    # print("Transform being applied:", t)
+                    # sample = t(sample)
+
+                    if len(sample.shape) == 3: # channel x height x width
+                        sample = t(sample.unsqueeze(-1)) # unsqueeze to make z dimension 1
+                        sample = t(sample)
+                        # squeeze back to channel x height x width
+                        sample = sample.squeeze(-1)
+                    else:
+                        sample = t(sample)
+
 
             return sample, self.labels[idx]
 
@@ -951,7 +966,7 @@ class TrainTestDataModule(pl.LightningDataModule):
                     # training_modifications=self.training_modifications,
                 )
 
-                print("self.layer_mods:", self.layer_mods)
+                # print("self.layer_mods:", self.layer_mods)
 
                 # modify the subspace method architecture if specified
                 if self.layer_mods is not None:

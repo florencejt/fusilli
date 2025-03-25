@@ -10,6 +10,7 @@ from torch.nn import functional as F
 
 from fusilli.utils.metrics_utils import MetricsCalculator
 
+import gc
 
 class BaseModel(pl.LightningModule):
     """Base pytorch lightning model for all fusion models.
@@ -498,6 +499,10 @@ class BaseModel(pl.LightningModule):
         self.batch_train_reals = []
         self.batch_train_preds = []
         self.batch_train_logits = []
+
+        # Perform garbage collection
+        gc.collect()
+        torch.cuda.empty_cache()
 
     def predict_step(self, batch: Any, batch_idx: int, dataloader_idx: int = 0) -> Any:
         self.model.eval()
