@@ -275,7 +275,6 @@ class CustomDataset(Dataset):
 
                     if len(sample.shape) == 3: # channel x height x width
                         sample = t(sample.unsqueeze(-1)) # unsqueeze to make z dimension 1
-                        sample = t(sample)
                         # squeeze back to channel x height x width
                         sample = sample.squeeze(-1)
                     else:
