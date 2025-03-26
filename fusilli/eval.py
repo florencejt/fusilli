@@ -119,6 +119,7 @@ class ParentPlotter:
             train_preds,
             val_reals,
             val_preds,
+            val_logits,
             metrics_per_fold,
             overall_kfold_metrics,
         )
@@ -164,13 +165,14 @@ class ParentPlotter:
         train_preds = model.train_preds.cpu()
         val_reals = model.val_reals.cpu()
         val_preds = model.val_preds.cpu()
+        val_logits = model.val_logits.cpu()
 
         # metrics
         metric_values = {}
         for i, metric in enumerate(model.metrics):
             metric_values[metric] = model.final_val_metrics[i]
 
-        return train_reals, train_preds, val_reals, val_preds, metric_values
+        return train_reals, train_preds, val_reals, val_preds, val_logits, metric_values
 
     @classmethod
     def get_new_kfold_data(
@@ -397,6 +399,7 @@ class ParentPlotter:
             train_preds,
             val_reals,
             val_preds,
+            val_logits,
             metrics_per_fold,
             overall_kfold_metrics,
         )
@@ -573,7 +576,7 @@ class ParentPlotter:
 
         print(metric_values)
 
-        return train_reals, train_preds, val_reals, val_preds, metric_values
+        return train_reals, train_preds, val_reals, val_preds, val_logits, metric_values
 
 
 class RealsVsPreds(ParentPlotter):
@@ -648,6 +651,7 @@ class RealsVsPreds(ParentPlotter):
                 train_preds,
                 val_reals,
                 val_preds,
+                val_logits,
                 metrics_per_fold,
                 overall_kfold_metrics,
             ) = cls.get_new_kfold_data(
@@ -677,6 +681,7 @@ class RealsVsPreds(ParentPlotter):
                 train_preds,
                 val_reals,
                 val_preds,
+                val_logits,
                 metric_values,
             ) = cls.get_new_tt_data(
                 model_list,
@@ -749,6 +754,7 @@ class RealsVsPreds(ParentPlotter):
                 train_preds,
                 val_reals,
                 val_preds,
+                val_logits,
                 metrics_per_fold,
                 overall_kfold_metrics,
             ) = cls.get_kfold_data_from_model(model_list)
@@ -771,6 +777,7 @@ class RealsVsPreds(ParentPlotter):
                 train_preds,
                 val_reals,
                 val_preds,
+                val_logits,
                 metric_values,
             ) = cls.get_tt_data_from_model(model_list)
 
@@ -1061,6 +1068,7 @@ class ConfusionMatrix(ParentPlotter):
                 train_preds,
                 val_reals,
                 val_preds,
+                val_logits,
                 metrics_per_fold,
                 overall_kfold_metrics,
             ) = cls.get_new_kfold_data(
@@ -1091,6 +1099,7 @@ class ConfusionMatrix(ParentPlotter):
                 train_preds,
                 val_reals,
                 val_preds,
+                val_logits,
                 metric_values,
             ) = cls.get_new_tt_data(
                 model_list,
@@ -1157,6 +1166,7 @@ class ConfusionMatrix(ParentPlotter):
                 train_preds,
                 val_reals,
                 val_preds,
+                val_logits,
                 metrics_per_fold,
                 overall_kfold_metrics,
             ) = cls.get_kfold_data_from_model(model_list)
@@ -1176,6 +1186,7 @@ class ConfusionMatrix(ParentPlotter):
                 train_preds,
                 val_reals,
                 val_preds,
+                val_logits,
                 metric_values,
             ) = cls.get_tt_data_from_model(model_list)
 
@@ -1458,6 +1469,7 @@ class ModelComparison(ParentPlotter):
                     train_preds,
                     val_reals,
                     val_preds,
+                    val_logits,
                     metrics_per_fold,
                     overall_kfold_metrics,
                 ) = cls.get_kfold_data_from_model(model_list)
@@ -1491,6 +1503,7 @@ class ModelComparison(ParentPlotter):
                     train_preds,
                     val_reals,
                     val_preds,
+                    val_logits,
                     metric_values,
                 ) = cls.get_tt_data_from_model(model_list)
 
@@ -1606,6 +1619,7 @@ class ModelComparison(ParentPlotter):
                     train_preds,
                     val_reals,
                     val_preds,
+                    val_logits,
                     metrics_per_fold,
                     overall_kfold_metrics,
                 ) = cls.get_new_kfold_data(
@@ -1632,6 +1646,7 @@ class ModelComparison(ParentPlotter):
         else:
             test_reals = {}
             test_preds = {}
+            test_logits = {}
             for model in model_dict:
                 model_list = model_dict[model]  # list of length 1 of trained model
 
@@ -1661,6 +1676,7 @@ class ModelComparison(ParentPlotter):
                     train_preds,
                     val_reals,
                     val_preds,
+                    val_logits,
                     metric_values,
                 ) = cls.get_new_tt_data(
                     model_list,
@@ -1675,13 +1691,14 @@ class ModelComparison(ParentPlotter):
 
                 test_reals[model_method_name] = val_reals.cpu().detach().tolist()
                 test_preds[model_method_name] = val_preds.cpu().detach().tolist()
+                test_logits[model_method_name] = val_logits.cpu().detach().tolist()
 
                 comparing_models_metrics[model_method_name] = metric_values
 
             figure = cls.train_test_comparison_plot(comparing_models_metrics)
             df = cls.get_performance_dataframe(comparing_models_metrics, None, kfold)
 
-        return figure, df, test_reals, test_preds
+        return figure, df, test_reals, test_preds, test_logits
 
     @classmethod
     def kfold_comparison_plot(cls, comparing_models_metrics):
