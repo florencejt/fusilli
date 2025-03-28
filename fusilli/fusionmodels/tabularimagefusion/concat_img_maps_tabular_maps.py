@@ -149,10 +149,8 @@ class ConcatImageMapsTabularMaps(ParentFusionModel, nn.Module):
 
         for layer in self.img_layers.values():
             x_img = layer(x_img)
-            print(x_img.shape)
 
         x_img = x_img.view(x_img.size(0), -1)
-        print(x_img.shape, "shape after flattening")
 
         out_fuse = torch.cat((x_tab1, x_img), dim=-1)
 
