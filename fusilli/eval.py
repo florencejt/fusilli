@@ -574,7 +574,9 @@ class ParentPlotter:
             )
             metric_values[metric_name.lower()] = val_step_metric.cpu().detach().item()
 
-        print(metric_values)
+        print("Test data metrics:")
+        for key, value in metric_values.items():
+            print(f"{key}: {value}")
 
         return train_reals, train_preds, val_reals, val_preds, val_logits, metric_values
 
