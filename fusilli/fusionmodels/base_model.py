@@ -12,6 +12,7 @@ from fusilli.utils.metrics_utils import MetricsCalculator
 
 import gc
 
+
 class BaseModel(pl.LightningModule):
     """Base pytorch lightning model for all fusion models.
 
@@ -153,6 +154,7 @@ class BaseModel(pl.LightningModule):
         self.val_logits = None
         self.train_reals = None
         self.train_preds = None
+        self.train_logits = None
 
     @staticmethod
     def safe_squeeze(tensor):
@@ -371,7 +373,6 @@ class BaseModel(pl.LightningModule):
 
         x, y = self.get_data_from_batch(batch)
 
-
         loss, end_output, logits = self.get_model_outputs_and_loss(x, y)
 
         self.log(
@@ -473,6 +474,7 @@ class BaseModel(pl.LightningModule):
         try:
             self.train_reals = torch.cat(self.batch_train_reals, dim=-1)
             self.train_preds = torch.cat(self.batch_train_preds, dim=-1)
+            self.train_logits = torch.cat(self.batch_train_logits, dim=0)
         except (
             RuntimeError
         ):  # if we're doing graph-based fusion and train/test doesn't work the same as normal
