@@ -183,6 +183,7 @@ class ParentPlotter:
         checkpoint_file_suffix=None,
         layer_mods=None,
         training_modifications=None,
+        multiclass_dimensions=None,
         image_downsample_size=None,
     ):
         """
@@ -295,7 +296,7 @@ class ParentPlotter:
                 checkpoint_path=subspace_ckpts,
                 layer_mods=layer_mods,
                 training_modifications=training_modifications,
-                multiclass_dimensions=None,  # TODO
+                multiclass_dimensions=multiclass_dimensions,  # TODO
                 image_downsample_size=image_downsample_size,
             )
 
@@ -1080,7 +1081,7 @@ class ConfusionMatrix(ParentPlotter):
                 checkpoint_file_suffix,
                 layer_mods,
                 training_modifications,
-                multiclass_dimensions,
+                multiclass_dimensions=multiclass_dimensions,
                 image_downsample_size=image_downsample_size,
             )
 
@@ -1110,7 +1111,7 @@ class ConfusionMatrix(ParentPlotter):
                 checkpoint_file_suffix,
                 layer_mods,
                 training_modifications,
-                multiclass_dimensions,
+                multiclass_dimensions=multiclass_dimensions,
                 image_downsample_size=image_downsample_size,
             )
 
