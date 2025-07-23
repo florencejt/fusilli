@@ -128,6 +128,8 @@ class ConcatImageMapsTabularData(ParentFusionModel, nn.Module):
             Tensor containing the predicted values.
         """
 
+        print("x1:", x1)
+
         # ~~ Checks ~~
         check_model_validity.check_model_input(x1)
         check_model_validity.check_model_input(x2)

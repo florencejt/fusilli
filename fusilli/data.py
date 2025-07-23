@@ -186,10 +186,11 @@ class CustomDataset(Dataset):
         # convert labels to tensor and correct dtype
         label_type = labels[["prediction_label"]].values.dtype
         self.labels = torch.tensor(labels[["prediction_label"]].to_numpy().reshape(-1))
-        if label_type == "int64":
-            self.labels = self.labels.long()
-        else:
-            self.labels = self.labels.float()
+        # if label_type == "int64":
+        #     self.labels = self.labels.long()
+        # else:
+
+        self.labels = self.labels.float()
 
         self.transforms = transforms
 
@@ -253,8 +254,10 @@ class CustomDataset(Dataset):
                     for t in self.transforms:
                         # print("Transform being applied:", t)
                         # print("Image shape:", image.shape)
-                        if len(image.shape) == 3: # channel x height x width
-                            image = t(image.unsqueeze(-1)) # unsqueeze to make z dimension 1
+                        if len(image.shape) == 3:  # channel x height x width
+                            image = t(
+                                image.unsqueeze(-1)
+                            )  # unsqueeze to make z dimension 1
                             # squeeze back to channel x height x width
                             image = image.squeeze(-1)
                         else:
@@ -272,13 +275,14 @@ class CustomDataset(Dataset):
                     # print("Transform being applied:", t)
                     # sample = t(sample)
 
-                    if len(sample.shape) == 3: # channel x height x width
-                        sample = t(sample.unsqueeze(-1)) # unsqueeze to make z dimension 1
+                    if len(sample.shape) == 3:  # channel x height x width
+                        sample = t(
+                            sample.unsqueeze(-1)
+                        )  # unsqueeze to make z dimension 1
                         # squeeze back to channel x height x width
                         sample = sample.squeeze(-1)
                     else:
                         sample = t(sample)
-
 
             return sample, self.labels[idx]
 
