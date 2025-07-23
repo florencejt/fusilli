@@ -127,9 +127,6 @@ class ConcatImageMapsTabularData(ParentFusionModel, nn.Module):
         out_pred : torch.Tensor
             Tensor containing the predicted values.
         """
-
-        print("x1:", x1)
-
         # ~~ Checks ~~
         check_model_validity.check_model_input(x1)
         check_model_validity.check_model_input(x2)

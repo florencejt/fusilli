@@ -306,24 +306,6 @@ class BaseModel(pl.LightningModule):
     def get_model_outputs_and_loss(self, x, y, train=True):
         """
         Get model outputs and loss.
-
-        Parameters
-        ----------
-        x : tensor
-            Input data.
-        y : tensor
-            Labels.
-        train : bool
-            Whether the data is training data.
-
-        Returns
-        -------
-        loss : tensor
-            Loss.
-        end_output : tensor
-            Final output.
-        logits : tensor
-            Logits.
         """
         logits, reconstructions = self.get_model_outputs(x)
 
@@ -331,9 +313,10 @@ class BaseModel(pl.LightningModule):
             logits
         )
 
-        # if we're doing graph-based fusion and train/test doesn't work the same as normal
-        if hasattr(self, "train_mask"):
+        # --- FIX: Only apply masking for graph-based fusion ---
+        if self.model.fusion_type == "graph":
             if train:
+                # This code will now only run for graph models
                 logits = logits[self.train_mask]
                 y = y[self.train_mask]
                 end_output = end_output[self.train_mask]
@@ -345,11 +328,7 @@ class BaseModel(pl.LightningModule):
         loss = self.loss_functions[self.model.prediction_task](logits, y)
 
         if reconstructions != [] and self.model.custom_loss is not None:
-            # changing reconstructions[0] to just reconstructions after changing the model inputs from tuple to two tensors
-            added_loss = self.model.custom_loss(
-                reconstructions, x[-1]
-            )  # x[-1] bc img is always last
-
+            added_loss = self.model.custom_loss(reconstructions, x[-1])
             loss += added_loss
 
         return loss, end_output, logits
