@@ -128,7 +128,7 @@ class BaseModel(pl.LightningModule):
         }
 
         self.output_activation_functions = {
-            "binary": torch.round,
+            "binary": lambda x: (torch.sigmoid(x) > 0.5).long(),
             "multiclass": lambda x: torch.argmax(nn.Softmax(dim=-1)(x), dim=-1),
             "regression": lambda x: x,
         }
@@ -609,7 +609,9 @@ class ParentFusionModel:
         """
         # final predictions
         if self.prediction_task == "binary":
-            self.final_prediction = nn.Sequential(nn.Linear(input_dim, 1), nn.Sigmoid())
+            self.final_prediction = nn.Sequential(nn.Linear(input_dim, 1)
+            )
+            # , nn.Sigmoid())
 
         elif self.prediction_task == "multiclass":
             self.final_prediction = nn.Sequential(
