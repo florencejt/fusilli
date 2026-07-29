@@ -10,7 +10,7 @@ from fusilli.utils.model_chooser import import_chosen_fusion_models
 from fusilli.fusionmodels.base_model import ParentFusionModel
 
 fusion_models = import_chosen_fusion_models(
-    {"modality_type": ["tabular_tabular"]}, skip_models=["MCVAE_tab"]
+    {"modality_type": ["tabular_tabular"]}
 )
 
 fusion_model_names = [model.__name__ for model in fusion_models]
@@ -437,45 +437,48 @@ def test_TabularDecision():
 
 
 # fusilli.fusionmodels.tabularfusion.mcvae_model.MCVAE_tab
-# def test_MCVAE_tab():
-#     # just looking at the forward function rather than subspace method too
-#     test_model = fusion_model_dict["MCVAE_tab"]
-#
-#     # attributes available pre-initialisation
-#     assert hasattr(test_model, "method_name")
-#     assert test_model.method_name == "MCVAE Tabular"
-#     assert hasattr(test_model, "modality_type")
-#     assert test_model.modality_type == "tabular_tabular"
-#     assert hasattr(test_model, "fusion_type")
-#     assert test_model.fusion_type == "subspace"
-#     assert hasattr(test_model, "subspace_method")
-#
-#     test_model = test_model(prediction_task="binary", data_dims=[25, None, None], multiclass_dimensions=None)
-#
-#     # initialising
-#     assert isinstance(test_model, nn.Module)
-#     assert isinstance(test_model, ParentFusionModel)
-#     assert hasattr(test_model, "prediction_task")
-#     assert test_model.prediction_task == "binary"
-#     assert hasattr(test_model, "latent_space_layers")
-#     assert test_model.latent_space_layers['layer 1'][0].in_features == 25
-#     assert hasattr(test_model, "fused_dim")
-#     assert test_model.fused_dim == test_model.latent_space_layers['layer 5'][0].out_features
-#     assert hasattr(test_model, "fused_layers")
-#     assert test_model.fused_layers[0].in_features == test_model.latent_space_layers['layer 5'][0].out_features
-#     assert hasattr(test_model, "final_prediction")
-#     assert hasattr(test_model, "forward")
-#
-#     # forward pass
-#     test_input = torch.randn(8, 25)
-#     test_output = test_model.forward(test_input)
-#     assert isinstance(test_output, list)
-#     assert test_output[0].shape == torch.Size([8, 1])
-#     assert len(test_output) == 1
-#
-#     # wrong input
-#     with pytest.raises(TypeError, match=r"Wrong input type for model! Expected torch.Tensor"):
-#         test_model.forward([torch.randn(8, 25)])
+def test_MCVAE_tab():
+    # just looking at the forward function rather than subspace method too
+    test_model = fusion_model_dict["MCVAE_tab"]
+
+    # attributes available pre-initialisation
+    assert hasattr(test_model, "method_name")
+    assert test_model.method_name == "MCVAE Tabular"
+    assert hasattr(test_model, "modality_type")
+    assert test_model.modality_type == "tabular_tabular"
+    assert hasattr(test_model, "fusion_type")
+    assert test_model.fusion_type == "subspace"
+    assert hasattr(test_model, "subspace_method")
+
+    test_model = test_model(
+        prediction_task="binary",
+        data_dims={"mod1_dim": 25, "mod2_dim": None, "mod3_dim": None, "img_dim": None},
+        multiclass_dimensions=None,
+    )
+
+    # initialising
+    assert isinstance(test_model, nn.Module)
+    assert isinstance(test_model, ParentFusionModel)
+    assert hasattr(test_model, "prediction_task")
+    assert test_model.prediction_task == "binary"
+    assert hasattr(test_model, "latent_space_layers")
+    assert test_model.latent_space_layers['layer 1'][0].in_features == 25
+    assert hasattr(test_model, "fused_dim")
+    assert test_model.fused_dim == test_model.latent_space_layers['layer 5'][0].out_features
+    assert hasattr(test_model, "fused_layers")
+    assert test_model.fused_layers[0].in_features == test_model.latent_space_layers['layer 5'][0].out_features
+    assert hasattr(test_model, "final_prediction")
+    assert hasattr(test_model, "forward")
+
+    # forward pass
+    test_input = torch.randn(8, 25)
+    test_output = test_model.forward(test_input)
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
+
+    # wrong input
+    with pytest.raises(TypeError, match=r"Wrong input type for model! Expected torch.Tensor"):
+        test_model.forward([torch.randn(8, 25)])
 
 
 def test_EdgeCorrGNN():
@@ -660,13 +663,12 @@ def test_AttentionAndSelfActivation():
     assert isinstance(test_output, torch.Tensor)
     assert test_output.shape == torch.Size([8, 1])
 
-    # wrong input
-    with pytest.raises(
-        UserWarning,
-        match=r"Modality dimensions // attention_reduction_ratio < 1",
-    ):
-        test_model.attention_reduction_ratio = 16
-        test_model.forward(torch.randn(8, 10), torch.randn(8, 14))
+    # reduction ratio too big for the data: auto-corrected to 2 instead of erroring
+    test_model.attention_reduction_ratio = 16
+    test_output = test_model.forward(torch.randn(8, 10), torch.randn(8, 14))
+    assert test_model.attention_reduction_ratio == 2
+    assert isinstance(test_output, torch.Tensor)
+    assert test_output.shape == torch.Size([8, 1])
 
     # Three modalities
     test_model = fusion_model_dict["AttentionAndSelfActivation"]

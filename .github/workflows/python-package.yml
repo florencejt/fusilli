@@ -20,6 +20,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        submodules: recursive
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
@@ -32,4 +34,4 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest pytest-cov pytest-mock
-        pytest ./tests/ --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+        pytest ./tests/ --doctest-modules --junitxml=junit/test-results.xml --cov=fusilli --cov-report=xml --cov-report=html

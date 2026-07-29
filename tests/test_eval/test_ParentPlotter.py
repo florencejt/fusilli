@@ -56,6 +56,7 @@ def sample_kfold_model_data():
         "train_preds": [torch.tensor([1, 0, 1]), torch.tensor([0, 1, 0])],
         "val_reals": [torch.tensor([1, 0, 1]), torch.tensor([0, 1, 0])],
         "val_preds": [torch.tensor([1, 0, 1]), torch.tensor([0, 1, 0])],
+        "val_logits": [torch.tensor([1, 0, 1]), torch.tensor([0, 1, 0])],
         "metrics_per_fold": {"metric1": [torch.tensor(0.85), torch.tensor(0.78)],
                              "metric2": [torch.tensor(0.92), torch.tensor(0.88)]},
         "overall_kfold_metrics": {"metric1": torch.tensor(0.85), "metric2": torch.tensor(0.92)},
@@ -84,6 +85,7 @@ def sample_train_test_model_data():
         "train_preds": torch.tensor([1, 0, 1]),
         "val_reals": torch.tensor([1, 0, 1]),
         "val_preds": torch.tensor([1, 0, 1]),
+        "val_logits": torch.tensor([1, 0, 1]),
         "metric_values": {"metric1": torch.tensor(0.85), "metric2": torch.tensor(0.92)},
     }
 
@@ -129,6 +131,7 @@ def test_get_kfold_data_from_model_called(sample_kfold_model_data, mocker):
             sample_kfold_model_data.train_preds,
             sample_kfold_model_data.val_reals,
             sample_kfold_model_data.val_preds,
+            sample_kfold_model_data.val_logits,
             sample_kfold_model_data.metrics_per_fold,
             sample_kfold_model_data.overall_kfold_metrics,
         ),
@@ -160,6 +163,7 @@ def test_get_new_kfold_data_called(sample_kfold_model_data, mocker):
             sample_kfold_model_data.train_preds,
             sample_kfold_model_data.val_reals,
             sample_kfold_model_data.val_preds,
+            sample_kfold_model_data.val_logits,
             sample_kfold_model_data.metrics_per_fold,
             sample_kfold_model_data.overall_kfold_metrics,
         ),
@@ -190,6 +194,7 @@ def test_get_tt_data_from_model_called(sample_train_test_model_data, mocker):
             sample_train_test_model_data.train_preds,
             sample_train_test_model_data.val_reals,
             sample_train_test_model_data.val_preds,
+            sample_train_test_model_data.val_logits,
             sample_train_test_model_data.metric_values,
         ),
     )
@@ -220,6 +225,7 @@ def test_get_new_tt_data_called(sample_train_test_model_data, mocker):
             sample_train_test_model_data.train_preds,
             sample_train_test_model_data.val_reals,
             sample_train_test_model_data.val_preds,
+            sample_train_test_model_data.val_logits,
             sample_train_test_model_data.metric_values,
         ),
     )

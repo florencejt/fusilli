@@ -454,9 +454,11 @@ class BaseModel(pl.LightningModule):
             self.train_reals = torch.cat(self.batch_train_reals, dim=-1)
             self.train_preds = torch.cat(self.batch_train_preds, dim=-1)
             self.train_logits = torch.cat(self.batch_train_logits, dim=0)
-        except (
-            RuntimeError
-        ):  # if we're doing graph-based fusion and train/test doesn't work the same as normal
+        except (RuntimeError, ValueError):
+            # RuntimeError: graph-based fusion, where train/test doesn't work the same as normal.
+            # ValueError: batch_train_* lists are empty, e.g. when this runs via a standalone
+            # trainer.validate() call with no training_step in between (train_reals/train_preds
+            # from the last training epoch remain valid, so there's nothing to recompute).
             pass
 
         for metric_name, metric_func in self.metrics.items():

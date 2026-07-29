@@ -27,7 +27,7 @@ class SampleFusionModel(ParentFusionModel, nn.Module):
             "binary",
             {"mod1_dim": 10, "mod2_dim": 11, "mod3_dim": 12, "img_dim": (100, 100)},
             None,
-            nn.Sequential(nn.Linear(100, 1), nn.Sigmoid()),
+            nn.Sequential(nn.Linear(100, 1)),
         ),
         (
             "multiclass",

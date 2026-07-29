@@ -294,7 +294,14 @@ class concat_img_latent_tab_subspace_method:
 
     subspace_models = [ImgLatentSpace]
 
-    def __init__(self, datamodule, k=None, max_epochs=1000, train_subspace=True):
+    def __init__(
+        self,
+        datamodule,
+        k=None,
+        max_epochs=1000,
+        train_subspace=True,
+        training_modifications=None,
+    ):
         """
         Parameters
         ----------
@@ -308,6 +315,9 @@ class concat_img_latent_tab_subspace_method:
             Whether to train the latent image space or not.
             Default is True. If False, a new trainer will not be created. Then
             load_ckpt() must be called to load the checkpoint of the latent image space.
+        training_modifications : dict or None
+            Not used by this subspace method. Accepted for a consistent interface with
+            other subspace methods (e.g. the mcvae subspace method). Default is None.
         """
         self.datamodule = datamodule
 

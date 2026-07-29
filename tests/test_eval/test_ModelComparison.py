@@ -57,6 +57,7 @@ def test_get_kfold_data_from_model_called(sample_kfold_model_data, mocker):
             sample_kfold_model_data.train_preds,
             sample_kfold_model_data.val_reals,
             sample_kfold_model_data.val_preds,
+            sample_kfold_model_data.val_logits,
             sample_kfold_model_data.metrics_per_fold,
             sample_kfold_model_data.overall_kfold_metrics,
         ),
@@ -88,6 +89,7 @@ def test_get_tt_data_from_model_called(sample_train_test_model_data, mocker):
             sample_train_test_model_data.train_preds,
             sample_train_test_model_data.val_reals,
             sample_train_test_model_data.val_preds,
+            sample_train_test_model_data.val_logits,
             sample_train_test_model_data.metric_values,
         ),
     )

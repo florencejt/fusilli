@@ -186,11 +186,10 @@ class CustomDataset(Dataset):
         # convert labels to tensor and correct dtype
         label_type = labels[["prediction_label"]].values.dtype
         self.labels = torch.tensor(labels[["prediction_label"]].to_numpy().reshape(-1))
-        # if label_type == "int64":
-        #     self.labels = self.labels.long()
-        # else:
-
-        self.labels = self.labels.float()
+        if label_type == "int64":
+            self.labels = self.labels.long()
+        else:
+            self.labels = self.labels.float()
 
         self.transforms = transforms
 

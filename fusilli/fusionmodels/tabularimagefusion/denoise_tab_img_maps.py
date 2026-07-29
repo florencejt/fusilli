@@ -516,6 +516,7 @@ class denoising_autoencoder_subspace_method:
         k=None,
         max_epochs=1000,
         train_subspace=True,
+        training_modifications=None,
     ):
         """
         Parameters
@@ -528,6 +529,9 @@ class denoising_autoencoder_subspace_method:
             Maximum number of epochs. Default is 1000.
         train_subspace : bool
             Whether to train the subspace models. Default is True.
+        training_modifications : dict or None
+            Not used by this subspace method. Accepted for a consistent interface with
+            other subspace methods (e.g. the mcvae subspace method). Default is None.
         """
 
         self.datamodule = datamodule

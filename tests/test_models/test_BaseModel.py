@@ -207,10 +207,10 @@ def test_get_model_outputs_and_loss(sample_model, sample_model_recon):
     assert isinstance(loss, torch.Tensor)
     assert loss.shape == torch.Size([])  # scalar
     assert isinstance(end_output, torch.Tensor)
-    assert end_output.shape == torch.Size([1, 10])
+    assert end_output.shape == torch.Size([10])
     assert torch.all(torch.logical_or(end_output == 0, end_output == 1))
     assert torch.all(torch.logical_and(logits >= 0, logits <= 1))
-    assert logits.shape == torch.Size([1, 10])
+    assert logits.shape == torch.Size([10])
 
     # with reconstructions
     model2 = sample_model_recon
@@ -222,10 +222,10 @@ def test_get_model_outputs_and_loss(sample_model, sample_model_recon):
     assert isinstance(loss, torch.Tensor)
     assert loss.shape == torch.Size([])  # scalar
     assert isinstance(end_output, torch.Tensor)
-    assert end_output.shape == torch.Size([1, 10])
+    assert end_output.shape == torch.Size([10])
     assert torch.all(torch.logical_or(end_output == 0, end_output == 1))
     assert torch.all(torch.logical_and(logits >= 0, logits <= 1))
-    assert logits.shape == torch.Size([1, 10])
+    assert logits.shape == torch.Size([10])
     model2.model.custom_loss.assert_called_once()
 
 

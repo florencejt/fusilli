@@ -33,7 +33,7 @@ def check_dtype(attribute, correct_dtype, attribute_name):
         if isinstance(correct_dtype, tuple):
             correct_dtypes = ", ".join([dtype.__name__ for dtype in correct_dtype])
         else:
-            correct_dtypes = type(correct_dtype).__name__
+            correct_dtypes = correct_dtype.__name__
         raise TypeError(
             (
                 f"Incorrect data type for the modifications: Attribute {attribute_name}"
