@@ -31,7 +31,7 @@ dependencies = [
     "torchmetrics~=0.0",
     "tqdm~=4.0",
     "sentry-sdk>=1.0.0",
-    "urllib3==1.26.11", 
+    "urllib3>=2.5.0",
 ]
 optional-dependencies = { docs = [
     "protobuf~=3.0",

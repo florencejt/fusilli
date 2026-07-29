@@ -9,7 +9,6 @@ from fusilli.utils.training_utils import (
     set_logger,
     set_checkpoint_name,
 )
-import wandb
 from fusilli.utils import model_modifier
 from lightning.pytorch.loggers import CSVLogger
 from fusilli.utils.csv_loss_plotter import plot_loss_curve
@@ -347,6 +346,8 @@ def train_and_save_models(
             trained_models_list.append(trained_model)
 
             if wandb_logging:
+                import wandb
+
                 wandb.finish()
 
     else:
@@ -370,6 +371,8 @@ def train_and_save_models(
         trained_models_list.append(trained_model)
 
         if wandb_logging:
+            import wandb
+
             wandb.finish()
 
     return trained_models_list

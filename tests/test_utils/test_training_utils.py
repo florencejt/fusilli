@@ -9,7 +9,6 @@ from fusilli.utils.training_utils import (
     get_final_val_metrics,
 )
 from unittest.mock import Mock
-import wandb
 import os
 import tempfile
 import lightning.pytorch as pl
