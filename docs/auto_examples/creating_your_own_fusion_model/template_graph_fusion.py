@@ -1,4 +1,0 @@
-"""
-Graph fusion template
-=====================
-"""

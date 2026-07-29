@@ -28,7 +28,7 @@ anybody to compare different methods against each other.
 
 Fusilli is built using PyTorch Lightning and PyTorch Geometric, and it currently supports the following scenarios:
 
-1. **Tabular-Tabular** **Fusion**: Combine two different types of tabular data.
+1. **Tabular-Tabular** **Fusion**: Combine two (or, for most methods, three) different types of tabular data.
 2. **Tabular-Image** **Fusion**: Combine one type of tabular data with image data (2D or 3D).
 
 Fusilli supports a range of prediction tasks, including **regression**, **binary classification**, and **multi-class
@@ -56,8 +56,8 @@ values.
     from fusilli.eval import RealsVsPreds
     import matplotlib.pyplot as plt
 
-    # Import the example fusion model
-    from fusilli.fusionmodels.tabularfusion.example_model import ExampleModel
+    # Import a fusion model
+    from fusilli.fusionmodels.tabularfusion.concat_data import ConcatTabularData as ExampleModel
 
     data_paths = {
         "tabular1": "path/to/tabular_1.csv",  

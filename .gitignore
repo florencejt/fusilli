@@ -74,6 +74,15 @@ instance/
 # Sphinx documentation
 docs/_build/
 
+# sphinx-gallery generated output (regenerated from docs/examples and
+# docs/how_to_contribute on every build)
+docs/auto_examples/
+docs/contributing_examples/
+docs/sg_execution_times.rst
+
+# sphinx.ext.autosummary generated output (autosummary_generate = True)
+docs/autosummary/
+
 # PyBuilder
 .pybuilder/
 target/

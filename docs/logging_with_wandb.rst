@@ -36,7 +36,7 @@ For instance, consider specifying ``extra_log_string_dict`` in :func:`~fusilli.t
     extra_string_for_wandb = {"dropout_prob": 0.2}
 
     trained_model = train_and_save_models(
-        datamodule=datamodule,
+        data_module=datamodule,
         fusion_model=fusion_model,
         extra_log_string_dict=extra_string_for_wandb,
         layer_mods=modification
