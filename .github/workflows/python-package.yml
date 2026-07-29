@@ -33,5 +33,5 @@ jobs:
         python -m pip install .
     - name: Test with pytest
       run: |
-        pip install pytest pytest-cov pytest-mock
+        pip install pytest pytest-cov pytest-mock wandb
         pytest ./tests/ --doctest-modules --junitxml=junit/test-results.xml --cov=fusilli --cov-report=xml --cov-report=html
