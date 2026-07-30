@@ -6,15 +6,26 @@ Everything below covers all unreleased work since the last published version, v1
 
 ### Breaking changes
 
+If you use `prepare_fusion_data` and `train_and_save_models` to run your experiments, most of this doesn't affect
+you. The changes below are in the lower-level classes that those functions call internally.
+
 - `data_dims` and data `sources` are now dictionaries (e.g. `{"mod1_dim": ..., "mod2_dim": ...}`) instead of lists,
-  to support a variable number of tabular modalities. Anything calling the lower-level classes directly with the
-  old list format will need updating; `prepare_fusion_data` users are unaffected.
+  to support a variable number of tabular modalities. `prepare_fusion_data`'s own `data_paths` argument was already
+  a dictionary before and after this change. This only matters if your code constructs `LoadDatasets`,
+  `TrainTestDataModule`, `KFoldDataModule`, or a fusion model class directly with the old list format (for example,
+  if you followed the "creating your own fusion model" template) - that code will need updating to the dictionary
+  format.
 - Fusion model `forward()` methods now take modalities as separate tensor arguments and return a single tensor,
-  instead of taking/returning lists. This makes model outputs compatible with libraries like SHAP that expect a
-  single tensor in, single tensor out.
-- The binary classification final layer no longer applies `Sigmoid` internally; the loss function now uses
-  `BCEWithLogitsLoss` on raw logits directly (more numerically stable). `preds` are still thresholded probabilities
-  as before, computed via `sigmoid(logits) > 0.5`.
+  instead of taking/returning lists. `forward()` is called internally during training and validation, so this only
+  matters if you call a model's `.forward()` or `model(x)` directly yourself, e.g. for custom inference or a custom
+  fusion model.
+- The binary classification final layer no longer applies `Sigmoid` internally, and the loss function now uses
+  `BCEWithLogitsLoss` on raw logits directly (more numerically stable). The built-in evaluation classes
+  (`RealsVsPreds`, `ConfusionMatrix`, `ModelComparison`) already account for this and don't need any changes. But
+  if you use the `logits` returned from a trained model yourself - for your own metrics, manual thresholding, or
+  feeding into another library like SHAP - be aware they're no longer bounded between 0 and 1 the way they used to
+  be. Thresholding at 0.5 or treating them as probabilities directly will now give wrong results; use
+  `sigmoid(logits)` first if you need a probability.
 
 ### New features
 
