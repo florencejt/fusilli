@@ -296,7 +296,7 @@ class ParentPlotter:
                 checkpoint_path=subspace_ckpts,
                 layer_mods=layer_mods,
                 training_modifications=training_modifications,
-                multiclass_dimensions=multiclass_dimensions,  # TODO
+                multiclass_dimensions=multiclass_dimensions,
                 image_downsample_size=image_downsample_size,
             )
 

@@ -1,11 +1,7 @@
 """
-Using activation functions to fuse tabular data, with self-attention on the second tabular modality.
+Using activation functions to fuse tabular data, with self-attention on a configurable modality
+(:attr:`~.AttentionAndSelfActivation.attention_modality`).
 """
-
-# TODO make 3-tabular data work
-
-# TODO add argument to say which tabular modality is the best one
-
 
 import torch.nn as nn
 
