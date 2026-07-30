@@ -1,0 +1,840 @@
+{
+ ".AttentionWeightedGNN.dropout_prob": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": ".AttentionWeightedGNN",
+   "module_short": ".AttentionWeightedGNN",
+   "name": "dropout_prob"
+  }
+ ],
+ ".AttentionWeightedGNN.graph_conv_layers": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": ".AttentionWeightedGNN",
+   "module_short": ".AttentionWeightedGNN",
+   "name": "graph_conv_layers"
+  }
+ ],
+ ".AttentionWeightedGraphMaker.AttentionWeightingMLPInstance.fused_layers": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": ".AttentionWeightedGraphMaker.AttentionWeightingMLPInstance",
+   "module_short": ".AttentionWeightedGraphMaker.AttentionWeightingMLPInstance",
+   "name": "fused_layers"
+  }
+ ],
+ ".AttentionWeightedGraphMaker.AttentionWeightingMLPInstance.weighting_layers": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": ".AttentionWeightedGraphMaker.AttentionWeightingMLPInstance",
+   "module_short": ".AttentionWeightedGraphMaker.AttentionWeightingMLPInstance",
+   "name": "weighting_layers"
+  }
+ ],
+ ".AttentionWeightedGraphMaker.attention_MLP_test_size": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": ".AttentionWeightedGraphMaker",
+   "module_short": ".AttentionWeightedGraphMaker",
+   "name": "attention_MLP_test_size"
+  }
+ ],
+ ".AttentionWeightedGraphMaker.early_stop_callback": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": ".AttentionWeightedGraphMaker",
+   "module_short": ".AttentionWeightedGraphMaker",
+   "name": "early_stop_callback"
+  }
+ ],
+ ".AttentionWeightedGraphMaker.edge_probability_threshold": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": ".AttentionWeightedGraphMaker",
+   "module_short": ".AttentionWeightedGraphMaker",
+   "name": "edge_probability_threshold"
+  }
+ ],
+ "AttentionWeightedGNN": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.tabularfusion.attention_weighted_GNN",
+   "module_short": "fusilli.fusionmodels.tabularfusion.attention_weighted_GNN",
+   "name": "AttentionWeightedGNN"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.tabularfusion",
+   "module_short": "fusilli.fusionmodels.tabularfusion",
+   "name": "AttentionWeightedGNN"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels",
+   "module_short": "fusilli.fusionmodels",
+   "name": "AttentionWeightedGNN"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "AttentionWeightedGNN"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.base_model",
+   "module_short": "fusilli.fusionmodels.base_model",
+   "name": "ParentFusionModel"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels",
+   "module_short": "fusilli.fusionmodels",
+   "name": "ParentFusionModel"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "ParentFusionModel"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.module",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Module"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.tabularfusion.attention_weighted_GNN",
+   "module_short": "fusilli.fusionmodels.tabularfusion.attention_weighted_GNN",
+   "name": "AttentionWeightedGNN"
+  }
+ ],
+ "ChebConv": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch_geometric.nn.conv.cheb_conv",
+   "module_short": "torch_geometric.nn",
+   "name": "ChebConv"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch_geometric.nn.conv",
+   "module_short": "torch_geometric.nn",
+   "name": "ChebConv"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch_geometric.nn",
+   "module_short": "torch_geometric.nn",
+   "name": "ChebConv"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch_geometric",
+   "module_short": "torch_geometric",
+   "name": "ChebConv"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch_geometric.nn.conv.message_passing",
+   "module_short": "torch_geometric.nn",
+   "name": "MessagePassing"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch_geometric.nn.conv",
+   "module_short": "torch_geometric.nn",
+   "name": "MessagePassing"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch_geometric.nn",
+   "module_short": "torch_geometric.nn",
+   "name": "MessagePassing"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch_geometric",
+   "module_short": "torch_geometric",
+   "name": "MessagePassing"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.module",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Module"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch_geometric.nn",
+   "module_short": "torch_geometric.nn",
+   "name": "ChebConv"
+  }
+ ],
+ "ConcatTabularFeatureMaps": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.tabularfusion.concat_feature_maps",
+   "module_short": "fusilli.fusionmodels.tabularfusion.concat_feature_maps",
+   "name": "ConcatTabularFeatureMaps"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.tabularfusion",
+   "module_short": "fusilli.fusionmodels.tabularfusion",
+   "name": "ConcatTabularFeatureMaps"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels",
+   "module_short": "fusilli.fusionmodels",
+   "name": "ConcatTabularFeatureMaps"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "ConcatTabularFeatureMaps"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.base_model",
+   "module_short": "fusilli.fusionmodels.base_model",
+   "name": "ParentFusionModel"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels",
+   "module_short": "fusilli.fusionmodels",
+   "name": "ParentFusionModel"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "ParentFusionModel"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.module",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Module"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.tabularfusion.concat_feature_maps",
+   "module_short": "fusilli.fusionmodels.tabularfusion.concat_feature_maps",
+   "name": "ConcatTabularFeatureMaps"
+  }
+ ],
+ "data_paths": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "datamodule": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.data",
+   "module_short": "fusilli.data",
+   "name": "TrainTestDataModule"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "TrainTestDataModule"
+  }
+ ],
+ "datamodule.graph_maker_instance.AttentionWeightingMLPInstance": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.data",
+   "module_short": "fusilli.data",
+   "name": "TrainTestDataModule"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "TrainTestDataModule"
+  }
+ ],
+ "dir": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "file": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "fusilli.fusionmodels.tabularfusion.attention_weighted_GNN.AttentionWeightedGNN": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "fusilli.fusionmodels.tabularfusion.attention_weighted_GNN",
+   "module_short": "fusilli.fusionmodels.tabularfusion.attention_weighted_GNN",
+   "name": "AttentionWeightedGNN"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "fusilli.fusionmodels.tabularfusion.attention_weighted_GNN",
+   "module_short": "fusilli.fusionmodels.tabularfusion.attention_weighted_GNN",
+   "name": "AttentionWeightedGNN"
+  }
+ ],
+ "fusilli.fusionmodels.tabularfusion.attention_weighted_GNN.AttentionWeightedGraphMaker": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "fusilli.fusionmodels.tabularfusion.attention_weighted_GNN",
+   "module_short": "fusilli.fusionmodels.tabularfusion.attention_weighted_GNN",
+   "name": "AttentionWeightedGraphMaker"
+  }
+ ],
+ "fusilli.fusionmodels.tabularfusion.concat_feature_maps.ConcatTabularFeatureMaps": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "fusilli.fusionmodels.tabularfusion.concat_feature_maps",
+   "module_short": "fusilli.fusionmodels.tabularfusion.concat_feature_maps",
+   "name": "ConcatTabularFeatureMaps"
+  }
+ ],
+ "layer_mods": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "nn.Linear": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.linear",
+   "module_short": "torch.nn",
+   "name": "Linear"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Linear"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Linear"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Linear"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.module",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Module"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Linear"
+  }
+ ],
+ "nn.ModuleDict": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.container",
+   "module_short": "torch.nn",
+   "name": "ModuleDict"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "ModuleDict"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "ModuleDict"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "ModuleDict"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.module",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Module"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "ModuleDict"
+  }
+ ],
+ "nn.ReLU": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.activation",
+   "module_short": "torch.nn",
+   "name": "ReLU"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "ReLU"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "ReLU"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "ReLU"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.module",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Module"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "ReLU"
+  }
+ ],
+ "nn.Sequential": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.container",
+   "module_short": "torch.nn",
+   "name": "Sequential"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Sequential"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Sequential"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Sequential"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.module",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Module"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Sequential"
+  }
+ ],
+ "os.listdir": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "os",
+   "module_short": "os",
+   "name": "listdir"
+  }
+ ],
+ "os.makedirs": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "os",
+   "module_short": "os",
+   "name": "makedirs"
+  }
+ ],
+ "os.path.join": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "os.path",
+   "module_short": "os.path",
+   "name": "join"
+  }
+ ],
+ "os.remove": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "os",
+   "module_short": "os",
+   "name": "remove"
+  }
+ ],
+ "os.rmdir": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "os",
+   "module_short": "os",
+   "name": "rmdir"
+  }
+ ],
+ "output_paths": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "output_paths.values": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  }
+ ],
+ "prediction_task": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "prepare_fusion_data": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.data",
+   "module_short": "fusilli.data",
+   "name": "prepare_fusion_data"
+  }
+ ],
+ "train_and_save_models": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.train",
+   "module_short": "fusilli.train",
+   "name": "train_and_save_models"
+  }
+ ],
+ "trained_model_list": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "list"
+  }
+ ]
+}

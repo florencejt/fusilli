@@ -1,0 +1,575 @@
+{
+ "ConfusionMatrix.from_final_val_data": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.eval",
+   "module_short": "fusilli.eval",
+   "name": "ConfusionMatrix.from_final_val_data"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "ConfusionMatrix.from_final_val_data"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.eval",
+   "module_short": "fusilli.eval",
+   "name": "ParentPlotter.from_final_val_data"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "ParentPlotter.from_final_val_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.eval.ConfusionMatrix",
+   "module_short": "fusilli.eval.ConfusionMatrix",
+   "name": "from_final_val_data"
+  }
+ ],
+ "ModelComparison.from_final_val_data": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.eval",
+   "module_short": "fusilli.eval",
+   "name": "ModelComparison.from_final_val_data"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "ModelComparison.from_final_val_data"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.eval",
+   "module_short": "fusilli.eval",
+   "name": "ParentPlotter.from_final_val_data"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "ParentPlotter.from_final_val_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.eval.ModelComparison",
+   "module_short": "fusilli.eval.ModelComparison",
+   "name": "from_final_val_data"
+  }
+ ],
+ "all_trained_models": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "all_trained_models.items": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  }
+ ],
+ "batch_size": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "comparison_plot": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure"
+  }
+ ],
+ "data_module": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.data",
+   "module_short": "fusilli.data",
+   "name": "KFoldDataModule"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "KFoldDataModule"
+  }
+ ],
+ "data_paths": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "dir": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "fig": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure"
+  }
+ ],
+ "file": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "fusilli.utils.model_chooser.get_models": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "fusilli.utils.model_chooser",
+   "module_short": "fusilli.utils.model_chooser",
+   "name": "get_models"
+  }
+ ],
+ "fusion_model": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.tabularfusion.activation",
+   "module_short": "fusilli.fusionmodels.tabularfusion.activation",
+   "name": "ActivationFusion"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.tabularfusion",
+   "module_short": "fusilli.fusionmodels.tabularfusion",
+   "name": "ActivationFusion"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels",
+   "module_short": "fusilli.fusionmodels",
+   "name": "ActivationFusion"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "ActivationFusion"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.base_model",
+   "module_short": "fusilli.fusionmodels.base_model",
+   "name": "ParentFusionModel"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels",
+   "module_short": "fusilli.fusionmodels",
+   "name": "ParentFusionModel"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "ParentFusionModel"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.module",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Module"
+  }
+ ],
+ "fusion_model.__name__": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "fusion_model_name": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "fusion_models": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "list"
+  }
+ ],
+ "i": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "import_chosen_fusion_models": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.utils.model_chooser",
+   "module_short": "fusilli.utils.model_chooser",
+   "name": "import_chosen_fusion_models"
+  }
+ ],
+ "importlib.import_module": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "importlib",
+   "module_short": "importlib",
+   "name": "import_module"
+  }
+ ],
+ "kfold": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "bool"
+  }
+ ],
+ "metrics_dataframe": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pandas.core.frame",
+   "module_short": "pandas.core.frame",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pandas.core",
+   "module_short": "pandas.core",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "DataFrame"
+  }
+ ],
+ "model_conditions": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "model_list": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "list"
+  }
+ ],
+ "model_name": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "num_folds": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "number_of_classes": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "os.listdir": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "os",
+   "module_short": "os",
+   "name": "listdir"
+  }
+ ],
+ "os.makedirs": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "os",
+   "module_short": "os",
+   "name": "makedirs"
+  }
+ ],
+ "os.path.join": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "os.path",
+   "module_short": "os.path",
+   "name": "join"
+  }
+ ],
+ "os.remove": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "os",
+   "module_short": "os",
+   "name": "remove"
+  }
+ ],
+ "os.rmdir": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "os",
+   "module_short": "os",
+   "name": "rmdir"
+  }
+ ],
+ "output_paths": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "plt.close": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "close"
+  }
+ ],
+ "plt.show": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "show"
+  }
+ ],
+ "prediction_task": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "prepare_fusion_data": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.data",
+   "module_short": "fusilli.data",
+   "name": "prepare_fusion_data"
+  }
+ ],
+ "single_model_list": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "list"
+  }
+ ],
+ "train_and_save_models": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.train",
+   "module_short": "fusilli.train",
+   "name": "train_and_save_models"
+  }
+ ]
+}

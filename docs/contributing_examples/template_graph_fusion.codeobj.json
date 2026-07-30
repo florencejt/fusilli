@@ -1,0 +1,115 @@
+{
+ ".KFoldGraphDataModule.setup": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": ".KFoldGraphDataModule",
+   "module_short": ".KFoldGraphDataModule",
+   "name": "setup"
+  }
+ ],
+ ".TrainTestGraphDataModule.setup": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": ".TrainTestGraphDataModule",
+   "module_short": ".TrainTestGraphDataModule",
+   "name": "setup"
+  }
+ ],
+ ".prepare_fusion_data": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "",
+   "module_short": "",
+   "name": "prepare_fusion_data"
+  }
+ ],
+ "Data": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch_geometric.data",
+   "module_short": "torch_geometric.data",
+   "name": "Data"
+  }
+ ],
+ "GCNConv": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch_geometric.nn",
+   "module_short": "torch_geometric.nn",
+   "name": "GCNConv"
+  }
+ ],
+ "ParentFusionModel": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.base_model",
+   "module_short": "fusilli.fusionmodels.base_model",
+   "name": "ParentFusionModel"
+  }
+ ],
+ "ParentFusionModel.__init__": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.base_model.ParentFusionModel",
+   "module_short": "fusilli.fusionmodels.base_model.ParentFusionModel",
+   "name": "__init__"
+  }
+ ],
+ "fusilli.fusionmodels.tabularfusion.edge_corr_gnn.EdgeCorrGNN": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "fusilli.fusionmodels.tabularfusion.edge_corr_gnn",
+   "module_short": "fusilli.fusionmodels.tabularfusion.edge_corr_gnn",
+   "name": "EdgeCorrGNN"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "fusilli.fusionmodels.tabularfusion.edge_corr_gnn",
+   "module_short": "fusilli.fusionmodels.tabularfusion.edge_corr_gnn",
+   "name": "EdgeCorrGNN"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "fusilli.fusionmodels.tabularfusion.edge_corr_gnn",
+   "module_short": "fusilli.fusionmodels.tabularfusion.edge_corr_gnn",
+   "name": "EdgeCorrGNN"
+  }
+ ],
+ "fusilli.fusionmodels.tabularfusion.edge_corr_gnn.EdgeCorrGraphMaker": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "fusilli.fusionmodels.tabularfusion.edge_corr_gnn",
+   "module_short": "fusilli.fusionmodels.tabularfusion.edge_corr_gnn",
+   "name": "EdgeCorrGraphMaker"
+  }
+ ],
+ "nn.Module": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  }
+ ],
+ "nn.Sequential": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Sequential"
+  }
+ ]
+}

@@ -1,0 +1,1168 @@
+{
+ ".concat_img_latent_tab_subspace_method": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "",
+   "module_short": "",
+   "name": "concat_img_latent_tab_subspace_method"
+  }
+ ],
+ ".get_checkpoint_filenames_for_subspace_models": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "",
+   "module_short": "",
+   "name": "get_checkpoint_filenames_for_subspace_models"
+  }
+ ],
+ ".init_trainer": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "",
+   "module_short": "",
+   "name": "init_trainer"
+  }
+ ],
+ ".prepare_fusion_data": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "",
+   "module_short": "",
+   "name": "prepare_fusion_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "",
+   "module_short": "",
+   "name": "prepare_fusion_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "",
+   "module_short": "",
+   "name": "prepare_fusion_data"
+  }
+ ],
+ "DataLoader": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.utils.data.dataloader",
+   "module_short": "torch.utils.data",
+   "name": "DataLoader"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.utils.data",
+   "module_short": "torch.utils.data",
+   "name": "DataLoader"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.utils",
+   "module_short": "torch.utils",
+   "name": "DataLoader"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "DataLoader"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "typing",
+   "module_short": "typing",
+   "name": "Generic"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch.utils.data",
+   "module_short": "torch.utils.data",
+   "name": "DataLoader"
+  }
+ ],
+ "ParentFusionModel": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.base_model",
+   "module_short": "fusilli.fusionmodels.base_model",
+   "name": "ParentFusionModel"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels",
+   "module_short": "fusilli.fusionmodels",
+   "name": "ParentFusionModel"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "ParentFusionModel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.base_model",
+   "module_short": "fusilli.fusionmodels.base_model",
+   "name": "ParentFusionModel"
+  }
+ ],
+ "ParentFusionModel.__init__": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.fusionmodels.base_model.ParentFusionModel",
+   "module_short": "fusilli.fusionmodels.base_model.ParentFusionModel",
+   "name": "__init__"
+  }
+ ],
+ "TemplateSubspaceMethod": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "__main__",
+   "module_short": "__main__",
+   "name": "TemplateSubspaceMethod"
+  }
+ ],
+ "TemplateSubspaceModel": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "__main__",
+   "module_short": "__main__",
+   "name": "TemplateSubspaceModel"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core.module",
+   "module_short": "lightning",
+   "name": "LightningModule"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core",
+   "module_short": "lightning",
+   "name": "LightningModule"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch",
+   "module_short": "lightning",
+   "name": "LightningModule"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning",
+   "module_short": "lightning",
+   "name": "LightningModule"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.fabric.utilities.device_dtype_mixin",
+   "module_short": "lightning.fabric.utilities.device_dtype_mixin",
+   "name": "_DeviceDtypeModuleMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.fabric.utilities",
+   "module_short": "lightning.fabric.utilities",
+   "name": "_DeviceDtypeModuleMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.fabric",
+   "module_short": "lightning.fabric",
+   "name": "_DeviceDtypeModuleMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning",
+   "module_short": "lightning",
+   "name": "_DeviceDtypeModuleMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core.mixins.hparams_mixin",
+   "module_short": "lightning.pytorch.core.mixins",
+   "name": "HyperparametersMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core.mixins",
+   "module_short": "lightning.pytorch.core.mixins",
+   "name": "HyperparametersMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core",
+   "module_short": "lightning.pytorch.core",
+   "name": "HyperparametersMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch",
+   "module_short": "lightning.pytorch",
+   "name": "HyperparametersMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning",
+   "module_short": "lightning",
+   "name": "HyperparametersMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core.hooks",
+   "module_short": "lightning.pytorch.core.hooks",
+   "name": "ModelHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core",
+   "module_short": "lightning.pytorch.core",
+   "name": "ModelHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch",
+   "module_short": "lightning.pytorch",
+   "name": "ModelHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning",
+   "module_short": "lightning",
+   "name": "ModelHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core.hooks",
+   "module_short": "lightning.pytorch.core.hooks",
+   "name": "DataHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core",
+   "module_short": "lightning.pytorch.core",
+   "name": "DataHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch",
+   "module_short": "lightning.pytorch",
+   "name": "DataHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning",
+   "module_short": "lightning",
+   "name": "DataHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core.hooks",
+   "module_short": "lightning.pytorch.core.hooks",
+   "name": "CheckpointHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core",
+   "module_short": "lightning.pytorch.core",
+   "name": "CheckpointHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch",
+   "module_short": "lightning.pytorch",
+   "name": "CheckpointHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning",
+   "module_short": "lightning",
+   "name": "CheckpointHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.module",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Module"
+  }
+ ],
+ "fusilli.fusionmodels.tabularfusion.denoise_tab_img_maps.DAETabImgMaps": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "fusilli.fusionmodels.tabularfusion.denoise_tab_img_maps",
+   "module_short": "fusilli.fusionmodels.tabularfusion.denoise_tab_img_maps",
+   "name": "DAETabImgMaps"
+  }
+ ],
+ "fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubleloss.ConcatImgLatentTabDoubleLoss": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubleloss",
+   "module_short": "fusilli.fusionmodels.tabularimagefusion.concat_img_latent_tab_doubleloss",
+   "name": "ConcatImgLatentTabDoubleLoss"
+  }
+ ],
+ "get_checkpoint_filenames_for_subspace_models": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.utils.training_utils",
+   "module_short": "fusilli.utils.training_utils",
+   "name": "get_checkpoint_filenames_for_subspace_models"
+  }
+ ],
+ "init_trainer": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.utils.training_utils",
+   "module_short": "fusilli.utils.training_utils",
+   "name": "init_trainer"
+  }
+ ],
+ "nn.Linear": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.linear",
+   "module_short": "torch.nn",
+   "name": "Linear"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Linear"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Linear"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Linear"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.module",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Module"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Linear"
+  }
+ ],
+ "nn.MSELoss": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.loss",
+   "module_short": "torch.nn",
+   "name": "MSELoss"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "MSELoss"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "MSELoss"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "MSELoss"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.loss",
+   "module_short": "torch.nn.modules.loss",
+   "name": "_Loss"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn.modules",
+   "name": "_Loss"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "_Loss"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "_Loss"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.module",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Module"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "MSELoss"
+  }
+ ],
+ "nn.Module": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.module",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Module"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  }
+ ],
+ "nn.ReLU": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.activation",
+   "module_short": "torch.nn",
+   "name": "ReLU"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "ReLU"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "ReLU"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "ReLU"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.module",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Module"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "ReLU"
+  }
+ ],
+ "nn.Sequential": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.container",
+   "module_short": "torch.nn",
+   "name": "Sequential"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Sequential"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Sequential"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Sequential"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.module",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Module"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Sequential"
+  }
+ ],
+ "pd.DataFrame": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core.frame",
+   "module_short": "pandas.core.frame",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core",
+   "module_short": "pandas.core",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core.generic",
+   "module_short": "pandas.core.generic",
+   "name": "NDFrame"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core",
+   "module_short": "pandas.core",
+   "name": "NDFrame"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "NDFrame"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core.arraylike",
+   "module_short": "pandas.core.arraylike",
+   "name": "OpsMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core",
+   "module_short": "pandas.core",
+   "name": "OpsMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "OpsMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core.base",
+   "module_short": "pandas.core.base",
+   "name": "PandasObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core",
+   "module_short": "pandas.core",
+   "name": "PandasObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "PandasObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core.indexing",
+   "module_short": "pandas.core.indexing",
+   "name": "IndexingMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core",
+   "module_short": "pandas.core",
+   "name": "IndexingMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "IndexingMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core.accessor",
+   "module_short": "pandas.core.accessor",
+   "name": "DirNamesMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core",
+   "module_short": "pandas.core",
+   "name": "DirNamesMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "DirNamesMixin"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "DataFrame"
+  }
+ ],
+ "pl.LightningModule": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core.module",
+   "module_short": "lightning",
+   "name": "LightningModule"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core",
+   "module_short": "lightning",
+   "name": "LightningModule"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch",
+   "module_short": "lightning",
+   "name": "LightningModule"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning",
+   "module_short": "lightning",
+   "name": "LightningModule"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.fabric.utilities.device_dtype_mixin",
+   "module_short": "lightning.fabric.utilities.device_dtype_mixin",
+   "name": "_DeviceDtypeModuleMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.fabric.utilities",
+   "module_short": "lightning.fabric.utilities",
+   "name": "_DeviceDtypeModuleMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.fabric",
+   "module_short": "lightning.fabric",
+   "name": "_DeviceDtypeModuleMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning",
+   "module_short": "lightning",
+   "name": "_DeviceDtypeModuleMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core.mixins.hparams_mixin",
+   "module_short": "lightning.pytorch.core.mixins",
+   "name": "HyperparametersMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core.mixins",
+   "module_short": "lightning.pytorch.core.mixins",
+   "name": "HyperparametersMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core",
+   "module_short": "lightning.pytorch.core",
+   "name": "HyperparametersMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch",
+   "module_short": "lightning.pytorch",
+   "name": "HyperparametersMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning",
+   "module_short": "lightning",
+   "name": "HyperparametersMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core.hooks",
+   "module_short": "lightning.pytorch.core.hooks",
+   "name": "ModelHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core",
+   "module_short": "lightning.pytorch.core",
+   "name": "ModelHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch",
+   "module_short": "lightning.pytorch",
+   "name": "ModelHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning",
+   "module_short": "lightning",
+   "name": "ModelHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core.hooks",
+   "module_short": "lightning.pytorch.core.hooks",
+   "name": "DataHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core",
+   "module_short": "lightning.pytorch.core",
+   "name": "DataHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch",
+   "module_short": "lightning.pytorch",
+   "name": "DataHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning",
+   "module_short": "lightning",
+   "name": "DataHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core.hooks",
+   "module_short": "lightning.pytorch.core.hooks",
+   "name": "CheckpointHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch.core",
+   "module_short": "lightning.pytorch.core",
+   "name": "CheckpointHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning.pytorch",
+   "module_short": "lightning.pytorch",
+   "name": "CheckpointHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "lightning",
+   "module_short": "lightning",
+   "name": "CheckpointHooks"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules.module",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn.modules",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.nn",
+   "module_short": "torch.nn",
+   "name": "Module"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Module"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "lightning.pytorch",
+   "module_short": "lightning",
+   "name": "LightningModule"
+  }
+ ],
+ "torch.cat": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "cat"
+  }
+ ],
+ "torch.load": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "load"
+  }
+ ],
+ "torch.optim.Adam": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.optim.adam",
+   "module_short": "torch.optim",
+   "name": "Adam"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.optim",
+   "module_short": "torch.optim",
+   "name": "Adam"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Adam"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.optim.optimizer",
+   "module_short": "torch.optim",
+   "name": "Optimizer"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch.optim",
+   "module_short": "torch.optim",
+   "name": "Optimizer"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "torch",
+   "module_short": "torch",
+   "name": "Optimizer"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "torch.optim",
+   "module_short": "torch.optim",
+   "name": "Adam"
+  }
+ ]
+}
