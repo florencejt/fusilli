@@ -50,4 +50,4 @@ Additional Notes
 
 Thank you for your interest in contributing to Fusilli! Your contributions are highly appreciated.
 
-For any further assistance or queries, feel free to reach out to florence.townend.21@ucl.ac.uk
+For any further assistance or queries, please open an issue on the `GitHub issues page <https://github.com/florencejt/fusilli/issues>`_.

@@ -77,8 +77,12 @@ Modifiable Attributes
     - ``nn.ModuleDict``
   * - :attr:`~.ActivationFusion.mod2_layers`
     - ``nn.ModuleDict``
+  * - :attr:`~.ActivationFusion.mod3_layers`
+    - ``nn.ModuleDict``. Only used if a third tabular modality is provided.
   * - :attr:`~.ActivationFusion.fused_layers`
     - ``nn.Sequential``
+  * - :attr:`~.ActivationFusion.main_modality`
+    - int (1, 2, or 3). Which modality's feature maps get concatenated with the fused feature map.
 
 :class:`.AttentionAndSelfActivation`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -94,10 +98,16 @@ Modifiable Attributes
     - ``nn.ModuleDict``
   * - :attr:`~.AttentionAndSelfActivation.mod2_layers`
     - ``nn.ModuleDict``
+  * - :attr:`~.AttentionAndSelfActivation.mod3_layers`
+    - ``nn.ModuleDict``. Only used if a third tabular modality is provided.
   * - :attr:`~.AttentionAndSelfActivation.fused_layers`
     - ``nn.Sequential``
   * - :attr:`~.AttentionAndSelfActivation.attention_reduction_ratio`
     - int
+  * - :attr:`~.AttentionAndSelfActivation.main_modality`
+    - int (1, 2, or 3). Which modality's feature maps get concatenated with the fused feature map.
+  * - :attr:`~.AttentionAndSelfActivation.attention_modality`
+    - int (1, 2, or 3). Which modality the channel attention is applied to.
 
 
 :class:`.AttentionWeightedGNN`
@@ -268,6 +278,8 @@ Modifiable Attributes
     - ``nn.ModuleDict``
   * - :attr:`~.ConcatTabularFeatureMaps.mod2_layers`
     - ``nn.ModuleDict``
+  * - :attr:`~.ConcatTabularFeatureMaps.mod3_layers`
+    - ``nn.ModuleDict``. Only used if a third tabular modality is provided.
   * - :attr:`~.ConcatTabularFeatureMaps.fused_layers`
     - ``nn.Sequential``
 
@@ -498,10 +510,12 @@ Modifiable Attributes
       * Overrides modification of ``mod1_layers`` made to "all"
       * Must have same number of layers as :attr:`~.TabularCrossmodalMultiheadAttention.mod2_layers`
   * - :attr:`~.TabularCrossmodalMultiheadAttention.mod2_layers`
-    - 
+    -
       * ``nn.ModuleDict``
       * Overrides modification of ``mod2_layers`` made to "all"
       * Must have same number of layers as :attr:`.TabularCrossmodalMultiheadAttention.mod1_layers`
+  * - :attr:`~.TabularCrossmodalMultiheadAttention.mod3_layers`
+    - ``nn.ModuleDict``. Only used if a third tabular modality is provided.
 
 ------
 
@@ -562,10 +576,12 @@ Modifiable Attributes
       * Overrides modification of ``mod1_layers`` made to "all"
       * Must have same number of layers as :attr:`~.TabularChannelWiseMultiheadAttention.mod2_layers`
   * - :attr:`~.TabularChannelWiseMultiAttention.mod2_layers`
-    - 
+    -
       * ``nn.ModuleDict``
       * Overrides modification of ``mod1_layers`` made to "all"
       * Must have same number of layers as :attr:`~.TabularChannelWiseMultiheadAttention.mod1_layers`
+  * - :attr:`~.TabularChannelWiseMultiAttention.mod3_layers`
+    - ``nn.ModuleDict``. Only used if a third tabular modality is provided.
   * - :attr:`~.TabularChannelWiseMultiAttention.fused_layers`
     - ``nn.Sequential``
 
@@ -587,8 +603,10 @@ Modifiable Attributes
       * ``nn.ModuleDict``
       * Overrides modification of ``mod1_layers`` made to "all"
   * - :attr:`~.TabularDecision.mod2_layers`
-    - 
+    -
       * ``nn.ModuleDict``
       * Overrides modification of ``mod2_layers`` made to "all"
+  * - :attr:`~.TabularDecision.mod3_layers`
+    - ``nn.ModuleDict``. Only used if a third tabular modality is provided.
   * - :attr:`~.TabularDecision.fusion_operation`
     - Function (such as mean, median, etc.). Should act on the 1st dimension.

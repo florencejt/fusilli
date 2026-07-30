@@ -33,8 +33,7 @@ Templates and specific guidance on how to do this are in :ref:`contributing`.
 Contact
 --------
 
-If you have any questions, please feel free to contact me at florence.townend.21@ucl.ac.uk or on Twitter:
-`@FlorenceTownend <https://twitter.com/florencetownend>`_.
+If you have any questions, please open an issue on the `GitHub issues page <https://github.com/florencejt/fusilli/issues>`_.
 
 
 

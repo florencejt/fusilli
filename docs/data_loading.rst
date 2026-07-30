@@ -3,7 +3,7 @@
 Loading your Data
 ==================
 
-``fusilli`` facilitates fusion of **tabular data with tabular data** or **tabular data with images**.
+``fusilli`` facilitates fusion of **tabular data with tabular data** (two or three modalities) or **tabular data with images**.
 
 Data Format Requirements
 ----------------------------
@@ -17,6 +17,7 @@ The paths to the data source files must be in a dictionary before being passed t
     data_paths = {
         "tabular1": "path/to/tabular1_data.csv",
         "tabular2": "path/to/tabular2_data.csv",
+        "tabular3": "path/to/tabular3_data.csv",
         "image": "path/to/image_data.pt",
     }
 
@@ -25,6 +26,12 @@ The paths to the data source files must be in a dictionary before being passed t
     If you are not using a particular data source, set the value to ``""``.
 
     For example, if you are not using ``tabular2``, set ``tabular2`` in the dictionary to ``""``.
+
+.. note::
+
+    ``tabular3`` is optional. Most tabular-tabular fusion methods support a third tabular modality, but not all of
+    them do, and it isn't supported for tabular-image fusion. See :ref:`choosing-a-model` for how to filter for
+    models that support three tabular modalities.
 
 Tabular and Tabular Data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -51,6 +58,27 @@ Columns named ``ID`` and ``prediction_label`` are required:
 
     data_module = prepare_fusion_data(prediction_task=...,
                                       fusion_model=some_example_model,
+                                      data_paths=data_paths,
+                                      output_paths=...)
+
+**Example of loading three tabular modalities:**
+
+Most tabular-tabular fusion methods also accept a third tabular modality. Just add a ``tabular3`` key with
+the same CSV format (``ID`` and ``prediction_label`` columns) as the other tabular sources.
+
+.. code-block:: python
+
+    from fusilli.data import prepare_fusion_data
+
+    data_paths = {
+        "tabular1": "path/to/tabular1_data.csv",
+        "tabular2": "path/to/tabular2_data.csv",
+        "tabular3": "path/to/tabular3_data.csv",
+        "image": "",
+    }
+
+    data_module = prepare_fusion_data(prediction_task=...,
+                                      fusion_model=some_example_model_with_3_modalities,
                                       data_paths=data_paths,
                                       output_paths=...)
 
@@ -96,6 +124,32 @@ To downsample images before model input, use the ``image_downsample_size`` param
                                       data_paths=data_paths,
                                       output_paths=...,
                                       image_downsample_size=(16, 16))
+
+Applying Image Transforms
+*********************************
+
+To apply data augmentation or preprocessing transforms to your images, use the ``transforms`` parameter in the
+:func:`fusilli.data.prepare_fusion_data` function. Pass a list of ``torchio.transforms`` functions with their
+arguments already filled in - each one is applied to every image in turn. (For 2D images, ``fusilli`` handles adding
+and removing the extra depth dimension that ``torchio`` expects internally, so you don't need to worry about that
+yourself.)
+
+**Example of applying a random flip and a random affine transform:**
+
+.. code-block:: python
+
+    import torchio.transforms as T
+
+    my_transforms = [
+        T.RandomFlip(axes=(0,), flip_probability=0.5),
+        T.RandomAffine(degrees=10),
+    ]
+
+    data_module = prepare_fusion_data(prediction_task=...,
+                                      fusion_model=some_example_model,
+                                      data_paths=data_paths,
+                                      output_paths=...,
+                                      transforms=my_transforms)
 
 
 -----

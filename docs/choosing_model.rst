@@ -1,3 +1,5 @@
+.. _choosing-a-model:
+
 Trait-Driven Model Imports
 ============================
 
@@ -67,4 +69,38 @@ Examples of Criteria
 
     criteria = {
         "class_name": ["Tabular1Unimodal", "Tabular2Unimodal", "ConcatTabularData"],
+    }
+
+- **Models That Support Three Tabular Modalities**:
+
+.. code-block:: python
+
+    criteria = {
+        "three_tabular_modalities": True,
+        "modality_type": "tabular_tabular",  # exclude the tabular unimodal models
+    }
+
+Choosing the "Main" Modality for Attention-Based Models
+---------------------------------------------------------
+
+Some attention-based tabular-tabular models (:class:`.ActivationFusion` and :class:`.AttentionAndSelfActivation`)
+let you choose which modality is treated as the "main" one - i.e. whose feature maps get concatenated with the
+fused output, and (for :class:`.AttentionAndSelfActivation`) which modality the channel attention is applied to.
+By default this is modality 1. You can change it either directly on an instantiated model:
+
+.. code-block:: python
+
+    model = ActivationFusion(prediction_task=..., data_dims=..., multiclass_dimensions=...)
+    model.main_modality = 2  # 1, 2, or 3
+
+or via the layer modification dictionary passed to :func:`fusilli.data.prepare_fusion_data` and
+:func:`fusilli.train.train_and_save_models` (see :ref:`modifying-models`):
+
+.. code-block:: python
+
+    layer_mods = {
+        "AttentionAndSelfActivation": {
+            "main_modality": 2,
+            "attention_modality": 3,
+        },
     }

@@ -102,8 +102,8 @@ the [contributions documentation](https://fusilli.readthedocs.io/en/latest/contr
 
 `fusilli` is authored by Florence J Townend, James Chapman, and James H Cole.
 
-Florence J Townend is supported by a UCL UKRI Centre for Doctoral Training in AI-enabled Healthcare studentship (
-EP/S021612/1).
+Florence J Townend was supported by a UCL UKRI Centre for Doctoral Training in AI-enabled Healthcare studentship (
+EP/S021612/1) during the initial development of this software.
 
 ## License
 
