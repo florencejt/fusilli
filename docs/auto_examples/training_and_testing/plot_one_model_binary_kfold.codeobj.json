@@ -1,4 +1,20 @@
 {
+ ".ConcatTabularData": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "",
+   "module_short": "",
+   "name": "ConcatTabularData"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "",
+   "module_short": "",
+   "name": "ConcatTabularData"
+  }
+ ],
  ".ConfusionMatrix": [
   {
    "is_class": false,
@@ -15,87 +31,34 @@
    "name": "ConfusionMatrix"
   }
  ],
- ".TabularCrossmodalMultiheadAttention": [
-  {
-   "is_class": false,
-   "is_explicit": true,
-   "module": "",
-   "module_short": "",
-   "name": "TabularCrossmodalMultiheadAttention"
-  },
-  {
-   "is_class": false,
-   "is_explicit": true,
-   "module": "",
-   "module_short": "",
-   "name": "TabularCrossmodalMultiheadAttention"
-  }
- ],
- "ConfusionMatrix.from_final_val_data": [
+ "ConcatTabularData": [
   {
    "is_class": true,
    "is_explicit": false,
-   "module": "fusilli.eval",
-   "module_short": "fusilli.eval",
-   "name": "ConfusionMatrix.from_final_val_data"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "fusilli",
-   "module_short": "fusilli",
-   "name": "ConfusionMatrix.from_final_val_data"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "fusilli.eval",
-   "module_short": "fusilli.eval",
-   "name": "ParentPlotter.from_final_val_data"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "fusilli",
-   "module_short": "fusilli",
-   "name": "ParentPlotter.from_final_val_data"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "fusilli.eval.ConfusionMatrix",
-   "module_short": "fusilli.eval.ConfusionMatrix",
-   "name": "from_final_val_data"
-  }
- ],
- "TabularCrossmodalMultiheadAttention": [
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "fusilli.fusionmodels.tabularfusion.crossmodal_att",
-   "module_short": "fusilli.fusionmodels.tabularfusion.crossmodal_att",
-   "name": "TabularCrossmodalMultiheadAttention"
+   "module": "fusilli.fusionmodels.tabularfusion.concat_data",
+   "module_short": "fusilli.fusionmodels.tabularfusion.concat_data",
+   "name": "ConcatTabularData"
   },
   {
    "is_class": true,
    "is_explicit": false,
    "module": "fusilli.fusionmodels.tabularfusion",
    "module_short": "fusilli.fusionmodels.tabularfusion",
-   "name": "TabularCrossmodalMultiheadAttention"
+   "name": "ConcatTabularData"
   },
   {
    "is_class": true,
    "is_explicit": false,
    "module": "fusilli.fusionmodels",
    "module_short": "fusilli.fusionmodels",
-   "name": "TabularCrossmodalMultiheadAttention"
+   "name": "ConcatTabularData"
   },
   {
    "is_class": true,
    "is_explicit": false,
    "module": "fusilli",
    "module_short": "fusilli",
-   "name": "TabularCrossmodalMultiheadAttention"
+   "name": "ConcatTabularData"
   },
   {
    "is_class": true,
@@ -149,9 +112,46 @@
   {
    "is_class": false,
    "is_explicit": false,
-   "module": "fusilli.fusionmodels.tabularfusion.crossmodal_att",
-   "module_short": "fusilli.fusionmodels.tabularfusion.crossmodal_att",
-   "name": "TabularCrossmodalMultiheadAttention"
+   "module": "fusilli.fusionmodels.tabularfusion.concat_data",
+   "module_short": "fusilli.fusionmodels.tabularfusion.concat_data",
+   "name": "ConcatTabularData"
+  }
+ ],
+ "ConfusionMatrix.from_final_val_data": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.eval",
+   "module_short": "fusilli.eval",
+   "name": "ConfusionMatrix.from_final_val_data"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "ConfusionMatrix.from_final_val_data"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli.eval",
+   "module_short": "fusilli.eval",
+   "name": "ParentPlotter.from_final_val_data"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "fusilli",
+   "module_short": "fusilli",
+   "name": "ParentPlotter.from_final_val_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "fusilli.eval.ConfusionMatrix",
+   "module_short": "fusilli.eval.ConfusionMatrix",
+   "name": "from_final_val_data"
   }
  ],
  "batch_size": [
@@ -260,30 +260,30 @@
   {
    "is_class": true,
    "is_explicit": false,
-   "module": "fusilli.fusionmodels.tabularfusion.crossmodal_att",
-   "module_short": "fusilli.fusionmodels.tabularfusion.crossmodal_att",
-   "name": "TabularCrossmodalMultiheadAttention"
+   "module": "fusilli.fusionmodels.tabularfusion.concat_data",
+   "module_short": "fusilli.fusionmodels.tabularfusion.concat_data",
+   "name": "ConcatTabularData"
   },
   {
    "is_class": true,
    "is_explicit": false,
    "module": "fusilli.fusionmodels.tabularfusion",
    "module_short": "fusilli.fusionmodels.tabularfusion",
-   "name": "TabularCrossmodalMultiheadAttention"
+   "name": "ConcatTabularData"
   },
   {
    "is_class": true,
    "is_explicit": false,
    "module": "fusilli.fusionmodels",
    "module_short": "fusilli.fusionmodels",
-   "name": "TabularCrossmodalMultiheadAttention"
+   "name": "ConcatTabularData"
   },
   {
    "is_class": true,
    "is_explicit": false,
    "module": "fusilli",
    "module_short": "fusilli",
-   "name": "TabularCrossmodalMultiheadAttention"
+   "name": "ConcatTabularData"
   },
   {
    "is_class": true,

@@ -3,7 +3,7 @@ Train/Test split: Regression
 ======================================================
 
 🚀 In this tutorial, we'll explore regression using a train/test split.
-Specifically, we're using the :class:`~.TabularCrossmodalMultiheadAttention` model.
+Specifically, we're using the :class:`~.ConcatTabularData` model.
 
 Data:
 
@@ -33,12 +33,12 @@ from fusilli.train import train_and_save_models
 # %%
 # 1. Import the fusion model 🔍
 # --------------------------------
-# We're importing only one model for this example, the :class:`~.TabularCrossmodalMultiheadAttention` model.
+# We're importing only one model for this example, the :class:`~.ConcatTabularData` model.
 # Instead of using the :func:`~fusilli.utils.model_chooser.import_chosen_fusion_models` function, we're importing the model directly like with any other library method.
 
 
-from fusilli.fusionmodels.tabularfusion.crossmodal_att import (
-    TabularCrossmodalMultiheadAttention,
+from fusilli.fusionmodels.tabularfusion.concat_data import (
+    ConcatTabularData,
 )
 
 # %%
@@ -115,7 +115,7 @@ data_paths = {
 # We're not using checkpointing for this example, so we set ``enable_checkpointing=False``. We're also setting ``show_loss_plot=True`` to plot the loss curve.
 
 
-fusion_model = TabularCrossmodalMultiheadAttention
+fusion_model = ConcatTabularData
 
 print("method_name:", fusion_model.method_name)
 print("modality_type:", fusion_model.modality_type)

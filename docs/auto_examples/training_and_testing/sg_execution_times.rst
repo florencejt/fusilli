@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:31.843** total execution time for 3 files **from auto_examples/training_and_testing**:
+**00:56.321** total execution time for 3 files **from auto_examples/training_and_testing**:
 
 .. container::
 
@@ -33,11 +33,11 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_one_model_binary_kfold.py` (``plot_one_model_binary_kfold.py``)
-     - 00:19.302
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_using_external_data.py` (``plot_using_external_data.py``)
-     - 00:07.766
+     - 00:36.548
      - 0.0
    * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_one_model_regression_traintest.py` (``plot_one_model_regression_traintest.py``)
-     - 00:04.776
+     - 00:19.772
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_using_external_data.py` (``plot_using_external_data.py``)
+     - 00:00.000
      - 0.0

@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**06:45.865** total execution time for 9 files **from all galleries**:
+**00:56.321** total execution time for 9 files **from all galleries**:
 
 .. container::
 
@@ -32,28 +32,28 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_auto_examples_model_comparison_plot_model_comparison_loop_kfold.py` (``examples/model_comparison/plot_model_comparison_loop_kfold.py``)
-     - 05:46.370
-     - 0.0
    * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_one_model_binary_kfold.py` (``examples/training_and_testing/plot_one_model_binary_kfold.py``)
-     - 00:19.302
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_model_comparison_plot_two_models_traintest.py` (``examples/model_comparison/plot_two_models_traintest.py``)
-     - 00:18.484
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_customising_behaviour_plot_modify_layer_sizes.py` (``examples/customising_behaviour/plot_modify_layer_sizes.py``)
-     - 00:09.167
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_using_external_data.py` (``examples/training_and_testing/plot_using_external_data.py``)
-     - 00:07.766
+     - 00:36.548
      - 0.0
    * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_one_model_regression_traintest.py` (``examples/training_and_testing/plot_one_model_regression_traintest.py``)
-     - 00:04.776
+     - 00:19.772
      - 0.0
-   * - :ref:`sphx_glr_contributing_examples_plot_template_subspace_fusion.py` (``how_to_contribute/plot_template_subspace_fusion.py``)
-     - 00:00.002
+   * - :ref:`sphx_glr_auto_examples_customising_behaviour_plot_modify_layer_sizes.py` (``examples/customising_behaviour/plot_modify_layer_sizes.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_model_comparison_plot_model_comparison_loop_kfold.py` (``examples/model_comparison/plot_model_comparison_loop_kfold.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_model_comparison_plot_two_models_traintest.py` (``examples/model_comparison/plot_two_models_traintest.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_training_and_testing_plot_using_external_data.py` (``examples/training_and_testing/plot_using_external_data.py``)
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_contributing_examples_A_template_other_fusion.py` (``how_to_contribute/A_template_other_fusion.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_contributing_examples_plot_template_subspace_fusion.py` (``how_to_contribute/plot_template_subspace_fusion.py``)
      - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_contributing_examples_template_graph_fusion.py` (``how_to_contribute/template_graph_fusion.py``)

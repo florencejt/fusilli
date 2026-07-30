@@ -29,7 +29,7 @@ These are examples of how to train and validate fusion models with Fusilli.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="🚀 In this tutorial, we&#x27;ll explore binary classification using K-fold cross validation.  We&#x27;ll show you how to train a fusion model using K-Fold cross-validation with multimodal tabular data.  Specifically, we&#x27;re using the TabularCrossmodalMultiheadAttention model.">
+    <div class="sphx-glr-thumbcontainer" tooltip="🚀 In this tutorial, we&#x27;ll explore binary classification using K-fold cross validation.  We&#x27;ll show you how to train a fusion model using K-Fold cross-validation with multimodal tabular data.  Specifically, we&#x27;re using the ConcatTabularData model.">
 
 .. only:: html
 
@@ -46,7 +46,7 @@ These are examples of how to train and validate fusion models with Fusilli.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="🚀 In this tutorial, we&#x27;ll explore regression using a train/test split. Specifically, we&#x27;re using the TabularCrossmodalMultiheadAttention model.">
+    <div class="sphx-glr-thumbcontainer" tooltip="🚀 In this tutorial, we&#x27;ll explore regression using a train/test split. Specifically, we&#x27;re using the ConcatTabularData model.">
 
 .. only:: html
 
