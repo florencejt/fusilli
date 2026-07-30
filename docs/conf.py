@@ -69,7 +69,7 @@ extensions = [
 #     return name.startswith('_')
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "examples", "how_to_contribute"]
 
 autodoc_default_options = {
     "members": True,

@@ -80,6 +80,7 @@ For 100 3D 32x32x32 RGB images, my images.pt file would have the dimensions ``(1
                                       fusion_model=some_example_model,
                                       data_paths=data_paths,
                                       output_paths=...)
+
 Downsampling Images
 *********************
 
